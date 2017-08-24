@@ -17,7 +17,8 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('Dep_AgentCommRate') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustCommRate') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_CustCommRate') = 0 RETURN	
+	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN		
 	
 	CREATE TABLE #tempAgent (CustID INT PRIMARY KEY)	
 	CREATE TABLE #tempMem   (CustID INT PRIMARY KEY)	
