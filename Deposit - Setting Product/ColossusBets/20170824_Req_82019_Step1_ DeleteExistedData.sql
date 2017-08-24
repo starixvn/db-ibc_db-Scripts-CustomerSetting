@@ -17,18 +17,23 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('Dep_AgentCommRate') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustCommRate') = 0 RETURN			
+	IF dbo.f_CheckRepTable('Dep_CustCommRate') = 0 RETURN		
+	
+	CREATE TABLE #temp (CustID INT PRIMARY KEY)	
+	INSERT INTO #temp(CustID)
+	SELECT CustID 
+	FROM  custInfo c WITH(NOLOCK) 
+		WHERE srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
+											WHERE cs.site IN ('Leon','Sungame'))
 	DELETE cg
 	FROM Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
-															WHERE cs.site IN ('Leon','Sungame'))
+	INNER JOIN #temp c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE SportType = 204 
 						
 	DELETE cg
 	FROM Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		
-	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
-															WHERE cs.site IN  ('Leon','Sungame'))
+	INNER JOIN #temp c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE SportType = 204 
 	
 END	
 GO
