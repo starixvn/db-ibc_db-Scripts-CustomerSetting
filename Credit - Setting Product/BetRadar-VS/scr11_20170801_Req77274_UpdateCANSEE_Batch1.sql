@@ -27,6 +27,13 @@ FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
 WHERE SportType = 190
 
+--Offer site BEST-ODDS, UUS
+UPDATE ps
+SET ps.IsLaunched = 1,
+	currency = 20
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+WHERE SportType = 190 AND siteid = 1
+
 SELECT *
 FROM ProductLaunchedSiteCurrency WITH (NOLOCK)
 WHERE SportType = 190
