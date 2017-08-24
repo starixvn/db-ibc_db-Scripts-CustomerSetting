@@ -25,14 +25,14 @@ BEGIN
 
 	INSERT INTO #tempAgent(CustID)
 	SELECT DISTINCT c.CustID 
-	FROM Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)		
+	FROM Dep_AgentCommRate cg WITH(NOLOCK)		
 	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
 	WHERE c.roleid IN(2,3,4) AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
 															WHERE cs.site IN  ('Leon','Sungame'))
 
 	INSERT INTO #tempMem(CustID)
 	SELECT DISTINCT c.CustID 
-	FROM Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		
+	FROM Dep_CustCommRate cg WITH(NOLOCK)		
 	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
 	WHERE c.roleid =1 AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
 															WHERE cs.site IN  ('Leon','Sungame'))
