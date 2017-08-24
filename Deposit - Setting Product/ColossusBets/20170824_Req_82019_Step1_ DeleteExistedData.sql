@@ -21,7 +21,7 @@ BEGIN
 	
 	CREATE TABLE #temp (CustID INT PRIMARY KEY)	
 	INSERT INTO #temp(CustID)
-	SELECT CustID 
+	SELECT DISTINCT CustID 
 	FROM  custInfo c WITH(NOLOCK) 
 		WHERE srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
 											WHERE cs.site IN ('Leon','Sungame'))
