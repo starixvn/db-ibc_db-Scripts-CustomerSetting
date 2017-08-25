@@ -25,20 +25,20 @@ BEGIN
 		RETURN		
 	
 		
-	INSERT INTO Dep_AgentCommRate 
+	INSERT INTO dbo.Dep_AgentCommRate 
 			   ([CustID]
 			   ,[SportType]
 			   ,[BetType]
 			   ,[CommRate])
-	SELECT  custid,204,18001,0.1215 FROM custInfo a WITH(NOLOCK) 
+	SELECT  custid,204,18001,0.1215 FROM dbo.custInfo a WITH(NOLOCK) 
 	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid IN(2,3,4) AND Enabled=1
 
 	UNION ALL
-	SELECT  custid,204,18002,0.45 FROM custInfo a WITH(NOLOCK) 
+	SELECT  custid,204,18002,0.45 FROM dbo.custInfo a WITH(NOLOCK) 
 	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid IN(2,3,4) AND Enabled=1
 
 
-	INSERT INTO [Dep_CustCommRate]
+	INSERT INTO dbo.[Dep_CustCommRate]
 			   ([CustId]
 			   ,[Sporttype]
 			   ,[Bettype]
@@ -46,10 +46,10 @@ BEGIN
 			   ,[adiscount]
 			   ,[discount]
 			   ,[playerdiscount])    
-	SELECT  a.custid,204,18001,0.1215,0.1215,0.1215,0 FROM custInfo a WITH(NOLOCK) 
+	SELECT  a.custid,204,18001,0.1215,0.1215,0.1215,0 FROM dbo.custInfo a WITH(NOLOCK) 
 	 WHERE srecommend = @srecommend AND  custid <= @maxcustid AND a.roleid =1	AND Enabled=1
 	UNION ALL
-	SELECT  a.custid,204,18002,0.45,0.45,0.45,0 FROM custInfo a WITH(NOLOCK) 
+	SELECT  a.custid,204,18002,0.45,0.45,0.45,0 FROM dbo.custInfo a WITH(NOLOCK) 
 	 WHERE srecommend = @srecommend AND  custid <= @maxcustid AND a.roleid =1	AND Enabled=1
 END
 GO
@@ -68,8 +68,8 @@ SELECT @max_custid= xx
 
 INSERT INTO #supers(custid)
 SELECT custid
-FROM custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
+FROM dbo.custInfo WITH(NOLOCK)
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
 	AND site in ('Leon','Sungame') )	 
 	AND Enabled=1
 
@@ -103,8 +103,8 @@ SELECT @max_custid= xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
-FROM custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
+FROM dbo.custInfo WITH(NOLOCK)
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
 	AND site in ('Leon','Sungame') )	 
 	AND Enabled=1
 

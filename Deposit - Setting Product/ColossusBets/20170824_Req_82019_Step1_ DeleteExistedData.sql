@@ -21,31 +21,33 @@ BEGIN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN		
 	
 	CREATE TABLE #tempAgent (CustID INT PRIMARY KEY)	
-	CREATE TABLE #tempMem   (CustID INT PRIMARY KEY)	
+	CREATE TABLE #tempMem   (CustID INT PRIMARY KEY)
+	DECLARE @Sporttype INT
+	SELECT 	@Sporttype=204
 
 	INSERT INTO #tempAgent(CustID)
 	SELECT DISTINCT c.CustID 
-	FROM Dep_AgentCommRate cg WITH(NOLOCK)		
-	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE c.roleid IN(2,3,4) AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
+	FROM dbo.Dep_AgentCommRate cg WITH(NOLOCK)		
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE c.roleid IN(2,3,4) AND SportType = @Sporttype AND srecommend IN (SELECT custid FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
 															WHERE cs.site IN  ('Leon','Sungame'))
 
 	INSERT INTO #tempMem(CustID)
 	SELECT DISTINCT c.CustID 
-	FROM Dep_CustCommRate cg WITH(NOLOCK)		
-	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE c.roleid =1 AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							
+	FROM dbo.Dep_CustCommRate cg WITH(NOLOCK)		
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE c.roleid =1 AND SportType = @Sporttype AND srecommend IN (SELECT custid FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
 															WHERE cs.site IN  ('Leon','Sungame'))
 
 	DELETE cg
-	FROM Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)	
+	FROM dbo.Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN #tempAgent c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE SportType = 204 
+	WHERE SportType = @Sporttype 
 						
 	DELETE cg
-	FROM Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		
+	FROM dbo.Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		
 	INNER JOIN #tempMem c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE SportType = 204 
+	WHERE SportType = @Sporttype 
 	
 END	
 GO

@@ -21,7 +21,7 @@ BEGIN
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 			
 			)
 		RETURN		
-	UPDATE custInfo WITH(ROWLOCK,UPDLOCK)	
+	UPDATE dbo.custInfo WITH(ROWLOCK,UPDLOCK)	
 	SET DisableColossusBet=0,HideColossusBet=0
 	WHERE srecommend=@srecommend AND Enabled=1
 END
@@ -41,8 +41,8 @@ SELECT @max_custid= xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
-FROM custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
+FROM dbo.custInfo WITH(NOLOCK)
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
 	AND site in ('Leon','Sungame') )	 
 	AND Enabled=1
 WHILE (1 = 1)
@@ -71,12 +71,12 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xx
+SELECT @max_custid= xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
-FROM custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
+FROM dbo.custInfo WITH(NOLOCK)
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
 	AND site in ('Leon','Sungame') )	 
 	AND Enabled=1
 

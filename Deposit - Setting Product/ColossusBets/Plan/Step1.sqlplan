@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ShowPlanXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.1" Build="10.50.4000.0" xmlns="http://schemas.microsoft.com/sqlserver/2004/07/showplan">
+  <BatchSequence>
+    <Batch>
+      <Statements>
+        <StmtSimple StatementCompId="21" StatementEstRows="402.722" StatementId="10" StatementOptmLevel="FULL" StatementOptmEarlyAbortReason="GoodEnoughPlanFound" StatementSubTreeCost="0.11545" StatementText="INSERT INTO #tempAgent(CustID)&#xD;&#xA;	SELECT DISTINCT c.CustID &#xD;&#xA;	FROM Dep_AgentCommRate cg WITH(NOLOCK)		&#xA;	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	&#xA;	WHERE c.roleid IN(2,3,4) AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							&#xA;															WHERE cs.site IN  ('Leon','Sungame'))&#xD;&#xA;&#xD;&#xA;" StatementType="INSERT" QueryHash="0xCDAA6DB7AB330B9F" QueryPlanHash="0xF15E2AAB06711F01">
+          <StatementSetOptions ANSI_NULLS="true" ANSI_PADDING="true" ANSI_WARNINGS="true" ARITHABORT="true" CONCAT_NULL_YIELDS_NULL="true" NUMERIC_ROUNDABORT="false" QUOTED_IDENTIFIER="true" />
+          <QueryPlan DegreeOfParallelism="1" MemoryGrant="1024" CachedPlanSize="56" CompileTime="58" CompileCPU="58" CompileMemory="1616">
+            <RelOp AvgRowSize="9" EstimateCPU="0.000402722" EstimateIO="0.01" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="402.722" LogicalOp="Insert" NodeId="0" Parallel="false" PhysicalOp="Clustered Index Insert" EstimatedTotalSubtreeCost="0.11545">
+              <OutputList />
+              <RunTimeInformation>
+                <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+              </RunTimeInformation>
+              <Update DMLRequestSort="false">
+                <Object Database="[tempdb]" Schema="[dbo]" Table="[#tempAgent]" Index="[PK__#tempAge__049E3A894DBBCE78]" />
+                <SetPredicate>
+                  <ScalarOperator ScalarString="[#tempAgent].[CustID] = [CustDB].[dbo].[custInfo].[custid] as [c].[custid]">
+                    <ScalarExpressionList>
+                      <ScalarOperator>
+                        <MultipleAssign>
+                          <Assign>
+                            <ColumnReference Table="[#tempAgent]" Column="CustID" />
+                            <ScalarOperator>
+                              <Identifier>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                              </Identifier>
+                            </ScalarOperator>
+                          </Assign>
+                        </MultipleAssign>
+                      </ScalarOperator>
+                    </ScalarExpressionList>
+                  </ScalarOperator>
+                </SetPredicate>
+                <RelOp AvgRowSize="11" EstimateCPU="4.02722E-05" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="402.722" LogicalOp="Top" NodeId="1" Parallel="false" PhysicalOp="Top" EstimatedTotalSubtreeCost="0.105047">
+                  <OutputList>
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                  </OutputList>
+                  <RunTimeInformation>
+                    <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                  </RunTimeInformation>
+                  <Top RowCount="true" IsPercent="false" WithTies="false">
+                    <TopExpression>
+                      <ScalarOperator ScalarString="(0)">
+                        <Const ConstValue="(0)" />
+                      </ScalarOperator>
+                    </TopExpression>
+                    <RelOp AvgRowSize="11" EstimateCPU="0.0351829" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="255.486" LogicalOp="Inner Join" NodeId="3" Parallel="false" PhysicalOp="Hash Match" EstimatedTotalSubtreeCost="0.105007">
+                      <OutputList>
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                      </OutputList>
+                      <MemoryFractions Input="0" Output="0" />
+                      <RunTimeInformation>
+                        <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                      </RunTimeInformation>
+                      <Hash>
+                        <DefinedValues />
+                        <HashKeysBuild>
+                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                        </HashKeysBuild>
+                        <HashKeysProbe>
+                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                        </HashKeysProbe>
+                        <RelOp AvgRowSize="11" EstimateCPU="0.000850797" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="527.594" LogicalOp="Aggregate" NodeId="4" Parallel="false" PhysicalOp="Stream Aggregate" EstimatedTotalSubtreeCost="0.00820994">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="572" ActualEndOfScans="1" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <StreamAggregate>
+                            <DefinedValues />
+                            <GroupBy>
+                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                            </GroupBy>
+                            <RelOp AvgRowSize="13" EstimateCPU="0.0014484" EstimateIO="0.00534722" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1174" LogicalOp="Clustered Index Scan" NodeId="5" Parallel="false" PhysicalOp="Clustered Index Scan" EstimatedTotalSubtreeCost="0.00679562" TableCardinality="1174">
+                              <OutputList>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                              </OutputList>
+                              <RunTimeInformation>
+                                <RunTimeCountersPerThread Thread="0" ActualRows="1144" ActualEndOfScans="1" ActualExecutions="1" />
+                              </RunTimeInformation>
+                              <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                                <DefinedValues>
+                                  <DefinedValue>
+                                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                                  </DefinedValue>
+                                </DefinedValues>
+                                <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Index="[PK_Dep_AgentCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                                <Predicate>
+                                  <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_AgentCommRate].[SportType] as [cg].[SportType]=(204)">
+                                    <Compare CompareOp="EQ">
+                                      <ScalarOperator>
+                                        <Identifier>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                                        </Identifier>
+                                      </ScalarOperator>
+                                      <ScalarOperator>
+                                        <Const ConstValue="(204)" />
+                                      </ScalarOperator>
+                                    </Compare>
+                                  </ScalarOperator>
+                                </Predicate>
+                              </IndexScan>
+                            </RelOp>
+                          </StreamAggregate>
+                        </RelOp>
+                        <RelOp AvgRowSize="11" EstimateCPU="0.0110491" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="2643.31" LogicalOp="Inner Join" NodeId="7" Parallel="false" PhysicalOp="Nested Loops" EstimatedTotalSubtreeCost="0.0616113">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="39" ActualEndOfScans="1" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <NestedLoops Optimized="false">
+                            <OuterReferences>
+                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                            </OuterReferences>
+                            <RelOp AvgRowSize="11" EstimateCPU="0.0001702" EstimateIO="0.003125" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="12" LogicalOp="Index Seek" NodeId="8" Parallel="false" PhysicalOp="Index Seek" EstimatedTotalSubtreeCost="0.0032952" TableCardinality="1141">
+                              <OutputList>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                              </OutputList>
+                              <RunTimeInformation>
+                                <RunTimeCountersPerThread Thread="0" ActualRows="12" ActualEndOfScans="1" ActualExecutions="1" />
+                              </RunTimeInformation>
+                              <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                                <DefinedValues>
+                                  <DefinedValue>
+                                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                  </DefinedValue>
+                                </DefinedValues>
+                                <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Index="[IX_Site]" Alias="[cs]" IndexKind="NonClustered" />
+                                <SeekPredicates>
+                                  <SeekPredicateNew>
+                                    <SeekKeys>
+                                      <Prefix ScanType="EQ">
+                                        <RangeColumns>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="site" />
+                                        </RangeColumns>
+                                        <RangeExpressions>
+                                          <ScalarOperator ScalarString="'Leon'">
+                                            <Const ConstValue="'Leon'" />
+                                          </ScalarOperator>
+                                        </RangeExpressions>
+                                      </Prefix>
+                                    </SeekKeys>
+                                  </SeekPredicateNew>
+                                  <SeekPredicateNew>
+                                    <SeekKeys>
+                                      <Prefix ScanType="EQ">
+                                        <RangeColumns>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="site" />
+                                        </RangeColumns>
+                                        <RangeExpressions>
+                                          <ScalarOperator ScalarString="'Sungame'">
+                                            <Const ConstValue="'Sungame'" />
+                                          </ScalarOperator>
+                                        </RangeExpressions>
+                                      </Prefix>
+                                    </SeekKeys>
+                                  </SeekPredicateNew>
+                                </SeekPredicates>
+                              </IndexScan>
+                            </RelOp>
+                            <RelOp AvgRowSize="11" EstimateCPU="0.000399304" EstimateIO="0.00386574" EstimateRebinds="11" EstimateRewinds="0" EstimateRows="220.276" LogicalOp="Index Seek" NodeId="9" Parallel="false" PhysicalOp="Index Seek" EstimatedTotalSubtreeCost="0.047267" TableCardinality="1002720">
+                              <OutputList>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                              </OutputList>
+                              <RunTimeInformation>
+                                <RunTimeCountersPerThread Thread="0" ActualRows="39" ActualEndOfScans="12" ActualExecutions="12" />
+                              </RunTimeInformation>
+                              <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                                <DefinedValues>
+                                  <DefinedValue>
+                                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                                  </DefinedValue>
+                                </DefinedValues>
+                                <Object Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Index="[IX_srecommend]" Alias="[c]" IndexKind="NonClustered" />
+                                <SeekPredicates>
+                                  <SeekPredicateNew>
+                                    <SeekKeys>
+                                      <Prefix ScanType="EQ">
+                                        <RangeColumns>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="srecommend" />
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="roleid" />
+                                        </RangeColumns>
+                                        <RangeExpressions>
+                                          <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_CustSuper].[custid] as [cs].[custid]">
+                                            <Identifier>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                            </Identifier>
+                                          </ScalarOperator>
+                                          <ScalarOperator ScalarString="(2)">
+                                            <Const ConstValue="(2)" />
+                                          </ScalarOperator>
+                                        </RangeExpressions>
+                                      </Prefix>
+                                    </SeekKeys>
+                                  </SeekPredicateNew>
+                                  <SeekPredicateNew>
+                                    <SeekKeys>
+                                      <Prefix ScanType="EQ">
+                                        <RangeColumns>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="srecommend" />
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="roleid" />
+                                        </RangeColumns>
+                                        <RangeExpressions>
+                                          <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_CustSuper].[custid] as [cs].[custid]">
+                                            <Identifier>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                            </Identifier>
+                                          </ScalarOperator>
+                                          <ScalarOperator ScalarString="(3)">
+                                            <Const ConstValue="(3)" />
+                                          </ScalarOperator>
+                                        </RangeExpressions>
+                                      </Prefix>
+                                    </SeekKeys>
+                                  </SeekPredicateNew>
+                                  <SeekPredicateNew>
+                                    <SeekKeys>
+                                      <Prefix ScanType="EQ">
+                                        <RangeColumns>
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="srecommend" />
+                                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="roleid" />
+                                        </RangeColumns>
+                                        <RangeExpressions>
+                                          <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_CustSuper].[custid] as [cs].[custid]">
+                                            <Identifier>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                            </Identifier>
+                                          </ScalarOperator>
+                                          <ScalarOperator ScalarString="(4)">
+                                            <Const ConstValue="(4)" />
+                                          </ScalarOperator>
+                                        </RangeExpressions>
+                                      </Prefix>
+                                    </SeekKeys>
+                                  </SeekPredicateNew>
+                                </SeekPredicates>
+                              </IndexScan>
+                            </RelOp>
+                          </NestedLoops>
+                        </RelOp>
+                      </Hash>
+                    </RelOp>
+                  </Top>
+                </RelOp>
+              </Update>
+            </RelOp>
+          </QueryPlan>
+        </StmtSimple>
+      </Statements>
+    </Batch>
+    <Batch>
+      <Statements>
+        <StmtSimple StatementCompId="22" StatementEstRows="1920.31" StatementId="11" StatementOptmLevel="FULL" StatementOptmEarlyAbortReason="TimeOut" StatementSubTreeCost="0.972362" StatementText="INSERT INTO #tempMem(CustID)&#xD;&#xA;	SELECT DISTINCT c.CustID &#xD;&#xA;	FROM Dep_CustCommRate cg WITH(NOLOCK)		&#xA;	INNER JOIN custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	&#xA;	WHERE c.roleid =1 AND SportType = 204 AND srecommend IN (SELECT custid FROM Dep_CustSuper cs WITH(NOLOCK)							&#xA;															WHERE cs.site IN  ('Leon','Sungame'))&#xD;&#xA;&#xD;&#xA;" StatementType="INSERT" QueryHash="0x265C4DA59A47F542" QueryPlanHash="0x1F856A7A9AA81A55">
+          <StatementSetOptions ANSI_NULLS="true" ANSI_PADDING="true" ANSI_WARNINGS="true" ARITHABORT="true" CONCAT_NULL_YIELDS_NULL="true" NUMERIC_ROUNDABORT="false" QUOTED_IDENTIFIER="true" />
+          <QueryPlan DegreeOfParallelism="1" MemoryGrant="1024" CachedPlanSize="32" CompileTime="62" CompileCPU="61" CompileMemory="1504">
+            <MissingIndexes>
+              <MissingIndexGroup Impact="42.867">
+                <MissingIndex Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]">
+                  <ColumnGroup Usage="EQUALITY">
+                    <Column Name="[SportType]" ColumnId="2" />
+                  </ColumnGroup>
+                  <ColumnGroup Usage="INCLUDE">
+                    <Column Name="[CustID]" ColumnId="1" />
+                  </ColumnGroup>
+                </MissingIndex>
+              </MissingIndexGroup>
+            </MissingIndexes>
+            <RelOp AvgRowSize="9" EstimateCPU="0.00192031" EstimateIO="0.0206658" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1920.31" LogicalOp="Insert" NodeId="0" Parallel="false" PhysicalOp="Clustered Index Insert" EstimatedTotalSubtreeCost="0.972362">
+              <OutputList />
+              <RunTimeInformation>
+                <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+              </RunTimeInformation>
+              <Update DMLRequestSort="true">
+                <Object Database="[tempdb]" Schema="[dbo]" Table="[#tempMem]" Index="[PK__#tempMem__049E3A89518C5F5C]" />
+                <SetPredicate>
+                  <ScalarOperator ScalarString="[#tempMem].[CustID] = [CustDB].[dbo].[custInfo].[custid] as [c].[custid]">
+                    <ScalarExpressionList>
+                      <ScalarOperator>
+                        <MultipleAssign>
+                          <Assign>
+                            <ColumnReference Table="[#tempMem]" Column="CustID" />
+                            <ScalarOperator>
+                              <Identifier>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                              </Identifier>
+                            </ScalarOperator>
+                          </Assign>
+                        </MultipleAssign>
+                      </ScalarOperator>
+                    </ScalarExpressionList>
+                  </ScalarOperator>
+                </SetPredicate>
+                <RelOp AvgRowSize="11" EstimateCPU="0.000192031" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1920.31" LogicalOp="Top" NodeId="1" Parallel="false" PhysicalOp="Top" EstimatedTotalSubtreeCost="0.949776">
+                  <OutputList>
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                  </OutputList>
+                  <RunTimeInformation>
+                    <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                  </RunTimeInformation>
+                  <Top RowCount="true" IsPercent="false" WithTies="false">
+                    <TopExpression>
+                      <ScalarOperator ScalarString="(0)">
+                        <Const ConstValue="(0)" />
+                      </ScalarOperator>
+                    </TopExpression>
+                    <RelOp AvgRowSize="11" EstimateCPU="0.251074" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1911.29" LogicalOp="Left Semi Join" NodeId="3" Parallel="false" PhysicalOp="Merge Join" EstimatedTotalSubtreeCost="0.949393">
+                      <OutputList>
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                      </OutputList>
+                      <RunTimeInformation>
+                        <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                      </RunTimeInformation>
+                      <Merge ManyToMany="false">
+                        <InnerSideJoinColumns>
+                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                        </InnerSideJoinColumns>
+                        <OuterSideJoinColumns>
+                          <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                        </OuterSideJoinColumns>
+                        <Residual>
+                          <ScalarOperator ScalarString="[CustDB].[dbo].[custInfo].[custid] as [c].[custid]=[CustDB].[dbo].[Dep_CustCommRate].[CustID] as [cg].[CustID]">
+                            <Compare CompareOp="EQ">
+                              <ScalarOperator>
+                                <Identifier>
+                                  <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                                </Identifier>
+                              </ScalarOperator>
+                              <ScalarOperator>
+                                <Identifier>
+                                  <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                                </Identifier>
+                              </ScalarOperator>
+                            </Compare>
+                          </ScalarOperator>
+                        </Residual>
+                        <RelOp AvgRowSize="11" EstimateCPU="0.0469773" EstimateIO="0.0112613" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="2643.31" LogicalOp="Sort" NodeId="4" Parallel="false" PhysicalOp="Sort" EstimatedTotalSubtreeCost="0.11985">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                          </OutputList>
+                          <MemoryFractions Input="1" Output="1" />
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRebinds="1" ActualRewinds="0" ActualRows="1234" ActualEndOfScans="1" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <Sort Distinct="false">
+                            <OrderBy>
+                              <OrderByColumn Ascending="true">
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                              </OrderByColumn>
+                            </OrderBy>
+                            <RelOp AvgRowSize="11" EstimateCPU="0.0110491" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="2643.31" LogicalOp="Inner Join" NodeId="5" Parallel="false" PhysicalOp="Nested Loops" EstimatedTotalSubtreeCost="0.0616113">
+                              <OutputList>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                              </OutputList>
+                              <RunTimeInformation>
+                                <RunTimeCountersPerThread Thread="0" ActualRows="1234" ActualEndOfScans="1" ActualExecutions="1" />
+                              </RunTimeInformation>
+                              <NestedLoops Optimized="false">
+                                <OuterReferences>
+                                  <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                </OuterReferences>
+                                <RelOp AvgRowSize="11" EstimateCPU="0.0001702" EstimateIO="0.003125" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="12" LogicalOp="Index Seek" NodeId="6" Parallel="false" PhysicalOp="Index Seek" EstimatedTotalSubtreeCost="0.0032952" TableCardinality="1141">
+                                  <OutputList>
+                                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                  </OutputList>
+                                  <RunTimeInformation>
+                                    <RunTimeCountersPerThread Thread="0" ActualRows="12" ActualEndOfScans="1" ActualExecutions="1" />
+                                  </RunTimeInformation>
+                                  <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                                    <DefinedValues>
+                                      <DefinedValue>
+                                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                      </DefinedValue>
+                                    </DefinedValues>
+                                    <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Index="[IX_Site]" Alias="[cs]" IndexKind="NonClustered" />
+                                    <SeekPredicates>
+                                      <SeekPredicateNew>
+                                        <SeekKeys>
+                                          <Prefix ScanType="EQ">
+                                            <RangeColumns>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="site" />
+                                            </RangeColumns>
+                                            <RangeExpressions>
+                                              <ScalarOperator ScalarString="'Leon'">
+                                                <Const ConstValue="'Leon'" />
+                                              </ScalarOperator>
+                                            </RangeExpressions>
+                                          </Prefix>
+                                        </SeekKeys>
+                                      </SeekPredicateNew>
+                                      <SeekPredicateNew>
+                                        <SeekKeys>
+                                          <Prefix ScanType="EQ">
+                                            <RangeColumns>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="site" />
+                                            </RangeColumns>
+                                            <RangeExpressions>
+                                              <ScalarOperator ScalarString="'Sungame'">
+                                                <Const ConstValue="'Sungame'" />
+                                              </ScalarOperator>
+                                            </RangeExpressions>
+                                          </Prefix>
+                                        </SeekKeys>
+                                      </SeekPredicateNew>
+                                    </SeekPredicates>
+                                  </IndexScan>
+                                </RelOp>
+                                <RelOp AvgRowSize="11" EstimateCPU="0.000399304" EstimateIO="0.00386574" EstimateRebinds="11" EstimateRewinds="0" EstimateRows="220.276" LogicalOp="Index Seek" NodeId="7" Parallel="false" PhysicalOp="Index Seek" EstimatedTotalSubtreeCost="0.047267" TableCardinality="1002720">
+                                  <OutputList>
+                                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                                  </OutputList>
+                                  <RunTimeInformation>
+                                    <RunTimeCountersPerThread Thread="0" ActualRows="1234" ActualEndOfScans="12" ActualExecutions="12" />
+                                  </RunTimeInformation>
+                                  <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                                    <DefinedValues>
+                                      <DefinedValue>
+                                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="custid" />
+                                      </DefinedValue>
+                                    </DefinedValues>
+                                    <Object Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Index="[IX_srecommend]" Alias="[c]" IndexKind="NonClustered" />
+                                    <SeekPredicates>
+                                      <SeekPredicateNew>
+                                        <SeekKeys>
+                                          <Prefix ScanType="EQ">
+                                            <RangeColumns>
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="srecommend" />
+                                              <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[custInfo]" Alias="[c]" Column="roleid" />
+                                            </RangeColumns>
+                                            <RangeExpressions>
+                                              <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_CustSuper].[custid] as [cs].[custid]">
+                                                <Identifier>
+                                                  <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustSuper]" Alias="[cs]" Column="custid" />
+                                                </Identifier>
+                                              </ScalarOperator>
+                                              <ScalarOperator ScalarString="(1)">
+                                                <Const ConstValue="(1)" />
+                                              </ScalarOperator>
+                                            </RangeExpressions>
+                                          </Prefix>
+                                        </SeekKeys>
+                                      </SeekPredicateNew>
+                                    </SeekPredicates>
+                                  </IndexScan>
+                                </RelOp>
+                              </NestedLoops>
+                            </RelOp>
+                          </Sort>
+                        </RelOp>
+                        <RelOp AvgRowSize="13" EstimateCPU="0.125731" EstimateIO="0.39794" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="114158" LogicalOp="Clustered Index Scan" NodeId="8" Parallel="false" PhysicalOp="Clustered Index Scan" EstimatedTotalSubtreeCost="0.523671" TableCardinality="114158">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="112709" ActualEndOfScans="0" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                            <DefinedValues>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                              </DefinedValue>
+                            </DefinedValues>
+                            <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Index="[PK_Dep_CustCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                            <Predicate>
+                              <ScalarOperator ScalarString="[CustDB].[dbo].[Dep_CustCommRate].[SportType] as [cg].[SportType]=(204)">
+                                <Compare CompareOp="EQ">
+                                  <ScalarOperator>
+                                    <Identifier>
+                                      <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                                    </Identifier>
+                                  </ScalarOperator>
+                                  <ScalarOperator>
+                                    <Const ConstValue="(204)" />
+                                  </ScalarOperator>
+                                </Compare>
+                              </ScalarOperator>
+                            </Predicate>
+                          </IndexScan>
+                        </RelOp>
+                      </Merge>
+                    </RelOp>
+                  </Top>
+                </RelOp>
+              </Update>
+            </RelOp>
+          </QueryPlan>
+        </StmtSimple>
+      </Statements>
+    </Batch>
+    <Batch>
+      <Statements>
+        <StmtSimple StatementCompId="23" StatementEstRows="1" StatementId="12" StatementOptmLevel="FULL" StatementOptmEarlyAbortReason="GoodEnoughPlanFound" StatementSubTreeCost="0.0188588" StatementText="DELETE cg&#xD;&#xA;	FROM Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)	&#xD;&#xA;	INNER JOIN #tempAgent c WITH(NOLOCK) ON cg.CustID=c.custid	&#xD;&#xA;	WHERE SportType = 204 &#xD;&#xA;						&#xD;&#xA;" StatementType="DELETE" QueryHash="0x11361E2522A66E14" QueryPlanHash="0xBF7C191C639F6D22">
+          <StatementSetOptions ANSI_NULLS="true" ANSI_PADDING="true" ANSI_WARNINGS="true" ARITHABORT="true" CONCAT_NULL_YIELDS_NULL="true" NUMERIC_ROUNDABORT="false" QUOTED_IDENTIFIER="true" />
+          <QueryPlan DegreeOfParallelism="1" CachedPlanSize="24" CompileTime="3" CompileCPU="3" CompileMemory="216">
+            <RelOp AvgRowSize="9" EstimateCPU="1E-06" EstimateIO="0.01" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Delete" NodeId="0" Parallel="false" PhysicalOp="Clustered Index Delete" EstimatedTotalSubtreeCost="0.0188588">
+              <OutputList />
+              <RunTimeInformation>
+                <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+              </RunTimeInformation>
+              <Update DMLRequestSort="false">
+                <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Index="[PK_Dep_AgentCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                <RelOp AvgRowSize="15" EstimateCPU="1E-07" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Top" NodeId="1" Parallel="false" PhysicalOp="Top" EstimatedTotalSubtreeCost="0.0088578">
+                  <OutputList>
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="BetType" />
+                  </OutputList>
+                  <RunTimeInformation>
+                    <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                  </RunTimeInformation>
+                  <Top RowCount="true" IsPercent="false" WithTies="false">
+                    <TopExpression>
+                      <ScalarOperator ScalarString="(0)">
+                        <Const ConstValue="(0)" />
+                      </ScalarOperator>
+                    </TopExpression>
+                    <RelOp AvgRowSize="15" EstimateCPU="6.27E-05" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Inner Join" NodeId="2" Parallel="false" PhysicalOp="Nested Loops" EstimatedTotalSubtreeCost="0.0088577">
+                      <OutputList>
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="BetType" />
+                      </OutputList>
+                      <RunTimeInformation>
+                        <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                      </RunTimeInformation>
+                      <NestedLoops Optimized="false">
+                        <OuterReferences>
+                          <ColumnReference Table="#tempAgent" Alias="[c]" Column="CustID" />
+                        </OuterReferences>
+                        <RelOp AvgRowSize="11" EstimateCPU="0.0001735" EstimateIO="0.003125" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="15" LogicalOp="Clustered Index Scan" NodeId="3" Parallel="false" PhysicalOp="Clustered Index Scan" EstimatedTotalSubtreeCost="0.0032985" TableCardinality="15">
+                          <OutputList>
+                            <ColumnReference Table="#tempAgent" Alias="[c]" Column="CustID" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <IndexScan Ordered="false" ForcedIndex="false" NoExpandHint="false">
+                            <DefinedValues>
+                              <DefinedValue>
+                                <ColumnReference Table="#tempAgent" Alias="[c]" Column="CustID" />
+                              </DefinedValue>
+                            </DefinedValues>
+                            <Object Database="[tempdb]" Schema="[dbo]" Table="[#tempAgent]" Index="[PK__#tempAge__049E3A894DBBCE78]" Alias="[c]" />
+                          </IndexScan>
+                        </RelOp>
+                        <RelOp AvgRowSize="15" EstimateCPU="0.0001581" EstimateIO="0.003125" EstimateRebinds="14" EstimateRewinds="0" EstimateRows="1" LogicalOp="Clustered Index Seek" NodeId="4" Parallel="false" PhysicalOp="Clustered Index Seek" EstimatedTotalSubtreeCost="0.0054965" TableCardinality="1174">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="BetType" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="0" ActualExecutions="0" />
+                          </RunTimeInformation>
+                          <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                            <DefinedValues>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                              </DefinedValue>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                              </DefinedValue>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="BetType" />
+                              </DefinedValue>
+                            </DefinedValues>
+                            <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Index="[PK_Dep_AgentCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                            <SeekPredicates>
+                              <SeekPredicateNew>
+                                <SeekKeys>
+                                  <Prefix ScanType="EQ">
+                                    <RangeColumns>
+                                      <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="CustID" />
+                                      <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_AgentCommRate]" Alias="[cg]" Column="SportType" />
+                                    </RangeColumns>
+                                    <RangeExpressions>
+                                      <ScalarOperator ScalarString="#tempAgent.[CustID] as [c].[CustID]">
+                                        <Identifier>
+                                          <ColumnReference Table="#tempAgent" Alias="[c]" Column="CustID" />
+                                        </Identifier>
+                                      </ScalarOperator>
+                                      <ScalarOperator ScalarString="(204)">
+                                        <Const ConstValue="(204)" />
+                                      </ScalarOperator>
+                                    </RangeExpressions>
+                                  </Prefix>
+                                </SeekKeys>
+                              </SeekPredicateNew>
+                            </SeekPredicates>
+                          </IndexScan>
+                        </RelOp>
+                      </NestedLoops>
+                    </RelOp>
+                  </Top>
+                </RelOp>
+              </Update>
+            </RelOp>
+          </QueryPlan>
+        </StmtSimple>
+      </Statements>
+    </Batch>
+    <Batch>
+      <Statements>
+        <StmtSimple StatementCompId="24" StatementEstRows="1" StatementId="13" StatementOptmLevel="FULL" StatementOptmEarlyAbortReason="GoodEnoughPlanFound" StatementSubTreeCost="0.0165715" StatementText="DELETE cg&#xD;&#xA;	FROM Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		&#xD;&#xA;	INNER JOIN #tempMem c WITH(NOLOCK) ON cg.CustID=c.custid	&#xD;&#xA;	WHERE SportType = 204 &#xD;&#xA;	&#xD;" StatementType="DELETE" QueryHash="0x72F2A3E93D86C941" QueryPlanHash="0x33588C850287A279">
+          <StatementSetOptions ANSI_NULLS="true" ANSI_PADDING="true" ANSI_WARNINGS="true" ARITHABORT="true" CONCAT_NULL_YIELDS_NULL="true" NUMERIC_ROUNDABORT="false" QUOTED_IDENTIFIER="true" />
+          <QueryPlan DegreeOfParallelism="1" CachedPlanSize="24" CompileTime="1" CompileCPU="1" CompileMemory="216">
+            <RelOp AvgRowSize="9" EstimateCPU="1E-06" EstimateIO="0.01" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Delete" NodeId="0" Parallel="false" PhysicalOp="Clustered Index Delete" EstimatedTotalSubtreeCost="0.0165715">
+              <OutputList />
+              <RunTimeInformation>
+                <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+              </RunTimeInformation>
+              <Update DMLRequestSort="false">
+                <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Index="[PK_Dep_CustCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                <RelOp AvgRowSize="15" EstimateCPU="1E-07" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Top" NodeId="1" Parallel="false" PhysicalOp="Top" EstimatedTotalSubtreeCost="0.00657048">
+                  <OutputList>
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                    <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="BetType" />
+                  </OutputList>
+                  <RunTimeInformation>
+                    <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                  </RunTimeInformation>
+                  <Top RowCount="true" IsPercent="false" WithTies="false">
+                    <TopExpression>
+                      <ScalarOperator ScalarString="(0)">
+                        <Const ConstValue="(0)" />
+                      </ScalarOperator>
+                    </TopExpression>
+                    <RelOp AvgRowSize="15" EstimateCPU="4.18E-06" EstimateIO="0" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Inner Join" NodeId="2" Parallel="false" PhysicalOp="Nested Loops" EstimatedTotalSubtreeCost="0.00657038">
+                      <OutputList>
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                        <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="BetType" />
+                      </OutputList>
+                      <RunTimeInformation>
+                        <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                      </RunTimeInformation>
+                      <NestedLoops Optimized="false">
+                        <OuterReferences>
+                          <ColumnReference Table="#tempMem" Alias="[c]" Column="CustID" />
+                        </OuterReferences>
+                        <RelOp AvgRowSize="11" EstimateCPU="0.0001581" EstimateIO="0.003125" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Clustered Index Scan" NodeId="3" Parallel="false" PhysicalOp="Clustered Index Scan" EstimatedTotalSubtreeCost="0.0032831" TableCardinality="0">
+                          <OutputList>
+                            <ColumnReference Table="#tempMem" Alias="[c]" Column="CustID" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="1" ActualExecutions="1" />
+                          </RunTimeInformation>
+                          <IndexScan Ordered="false" ForcedIndex="false" NoExpandHint="false">
+                            <DefinedValues>
+                              <DefinedValue>
+                                <ColumnReference Table="#tempMem" Alias="[c]" Column="CustID" />
+                              </DefinedValue>
+                            </DefinedValues>
+                            <Object Database="[tempdb]" Schema="[dbo]" Table="[#tempMem]" Index="[PK__#tempMem__049E3A89518C5F5C]" Alias="[c]" />
+                          </IndexScan>
+                        </RelOp>
+                        <RelOp AvgRowSize="15" EstimateCPU="0.0001581" EstimateIO="0.003125" EstimateRebinds="0" EstimateRewinds="0" EstimateRows="1" LogicalOp="Clustered Index Seek" NodeId="4" Parallel="false" PhysicalOp="Clustered Index Seek" EstimatedTotalSubtreeCost="0.0032831" TableCardinality="112710">
+                          <OutputList>
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                            <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="BetType" />
+                          </OutputList>
+                          <RunTimeInformation>
+                            <RunTimeCountersPerThread Thread="0" ActualRows="0" ActualEndOfScans="0" ActualExecutions="0" />
+                          </RunTimeInformation>
+                          <IndexScan Ordered="true" ScanDirection="FORWARD" ForcedIndex="false" ForceSeek="false" NoExpandHint="false">
+                            <DefinedValues>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                              </DefinedValue>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                              </DefinedValue>
+                              <DefinedValue>
+                                <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="BetType" />
+                              </DefinedValue>
+                            </DefinedValues>
+                            <Object Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Index="[PK_Dep_CustCommRate]" Alias="[cg]" IndexKind="Clustered" />
+                            <SeekPredicates>
+                              <SeekPredicateNew>
+                                <SeekKeys>
+                                  <Prefix ScanType="EQ">
+                                    <RangeColumns>
+                                      <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="CustID" />
+                                      <ColumnReference Database="[CustDB]" Schema="[dbo]" Table="[Dep_CustCommRate]" Alias="[cg]" Column="SportType" />
+                                    </RangeColumns>
+                                    <RangeExpressions>
+                                      <ScalarOperator ScalarString="#tempMem.[CustID] as [c].[CustID]">
+                                        <Identifier>
+                                          <ColumnReference Table="#tempMem" Alias="[c]" Column="CustID" />
+                                        </Identifier>
+                                      </ScalarOperator>
+                                      <ScalarOperator ScalarString="(204)">
+                                        <Const ConstValue="(204)" />
+                                      </ScalarOperator>
+                                    </RangeExpressions>
+                                  </Prefix>
+                                </SeekKeys>
+                              </SeekPredicateNew>
+                            </SeekPredicates>
+                          </IndexScan>
+                        </RelOp>
+                      </NestedLoops>
+                    </RelOp>
+                  </Top>
+                </RelOp>
+              </Update>
+            </RelOp>
+          </QueryPlan>
+        </StmtSimple>
+      </Statements>
+    </Batch>
+  </BatchSequence>
+</ShowPlanXML>
