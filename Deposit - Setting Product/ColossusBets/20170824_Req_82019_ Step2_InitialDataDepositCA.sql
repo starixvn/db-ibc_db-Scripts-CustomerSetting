@@ -78,7 +78,7 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xx
+SELECT @max_custid= xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
@@ -113,7 +113,7 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= 26797982
+SELECT @max_custid= xxx
 
 INSERT INTO #supers(custid)
 SELECT custid

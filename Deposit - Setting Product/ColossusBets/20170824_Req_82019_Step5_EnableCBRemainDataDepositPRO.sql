@@ -7,7 +7,7 @@
 
 ------------------------------------------------------
 DECLARE @maxcustid INT
-SELECT @maxcustid= xx
+SELECT @maxcustid= xxx
 
 UPDATE dbo.custInfo WITH(ROWLOCK,UPDLOCK)	
 	SET DisableColossusBet=0,HideColossusBet=0
