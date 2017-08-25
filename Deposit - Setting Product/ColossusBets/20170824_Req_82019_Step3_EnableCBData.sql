@@ -21,9 +21,16 @@ BEGIN
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 			
 			)
 		RETURN		
-	UPDATE dbo.custInfo WITH(ROWLOCK,UPDLOCK)	
-	SET DisableColossusBet=0,HideColossusBet=0
+	CREATE TABLE #temp (CustID INT PRIMARY KEY)
+
+	INSERT INTO #temp(CustID)
+	SELECT CustID FROM dbo.custInfo WITH(NOLOCK)		
 	WHERE srecommend=@srecommend AND Enabled=1
+
+	UPDATE c
+	SET DisableColossusBet=0,HideColossusBet=0
+	FROM	dbo.custInfo c WITH(ROWLOCK,UPDLOCK)	
+	INNER JOIN #temp t ON c.custid=t.CustID	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
