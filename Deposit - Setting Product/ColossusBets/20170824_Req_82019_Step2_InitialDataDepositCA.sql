@@ -19,25 +19,42 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at DBCUST only
 	
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
-			AND dbo.f_CheckRepTable('DEP_AgentCommRate') = 1
-			AND dbo.f_CheckRepTable('DEP_CustCommRate') = 1
+			AND dbo.f_CheckRepTable('Dep_AgentCommRate') = 1
+			AND dbo.f_CheckRepTable('Dep_CustCommRate') = 1
 			)
 		RETURN		
 	
+	CREATE TABLE #tempAgent (CustID INT PRIMARY KEY)
+	CREATE TABLE #tempMem (CustID INT PRIMARY KEY)
+	CREATE TABLE #tempBettype(bettype INT, Rate DECIMAL(9,8))
+	DECLARE @Sporttype SMALLINT
+
+	SELECT @Sporttype = 204
+
+	INSERT INTO #tempBettype(bettype,Rate)
+	VALUES (18001,0.1215)
+	INSERT INTO #tempBettype(bettype,Rate)
+	VALUES (18002,0.45)
+	 
+	INSERT INTO #tempAgent(CustID)
+	SELECT a.Custid
+	FROM dbo.custInfo a WITH(NOLOCK) 
+	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid IN(2,3,4) AND Enabled = 1
+
+	INSERT INTO #tempMem(CustID)
+	SELECT a.Custid
+	FROM dbo.custInfo a WITH(NOLOCK) 
+	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid = 1 AND Enabled = 1
 		
 	INSERT INTO dbo.Dep_AgentCommRate 
 			   ([CustID]
 			   ,[SportType]
 			   ,[BetType]
 			   ,[CommRate])
-	SELECT  custid,204,18001,0.1215 FROM dbo.custInfo a WITH(NOLOCK) 
-	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid IN(2,3,4) AND Enabled=1
-
-	UNION ALL
-	SELECT  custid,204,18002,0.45 FROM dbo.custInfo a WITH(NOLOCK) 
-	WHERE a.srecommend = @srecommend AND  a.custid <= @maxcustid AND a.roleid IN(2,3,4) AND Enabled=1
-
-
+	SELECT  custid,@Sporttype,bettype,Rate
+	FROM #tempAgent
+		CROSS APPLY #tempBettype
+	
 	INSERT INTO dbo.[Dep_CustCommRate]
 			   ([CustId]
 			   ,[Sporttype]
@@ -46,11 +63,9 @@ BEGIN
 			   ,[adiscount]
 			   ,[discount]
 			   ,[playerdiscount])    
-	SELECT  a.custid,204,18001,0.1215,0.1215,0.1215,0 FROM dbo.custInfo a WITH(NOLOCK) 
-	 WHERE srecommend = @srecommend AND  custid <= @maxcustid AND a.roleid =1	AND Enabled=1
-	UNION ALL
-	SELECT  a.custid,204,18002,0.45,0.45,0.45,0 FROM dbo.custInfo a WITH(NOLOCK) 
-	 WHERE srecommend = @srecommend AND  custid <= @maxcustid AND a.roleid =1	AND Enabled=1
+	SELECT  custid,@Sporttype,bettype,Rate,Rate,Rate,0
+	FROM #tempMem
+		CROSS APPLY #tempBettype
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
@@ -64,13 +79,12 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xx
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
 FROM dbo.custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
-	AND site in ('Leon','Sungame') )	 
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid AND site IN ('Leon','Sungame','SSSSEA'))	 
 	AND Enabled=1
 
 WHILE (1 = 1)
@@ -99,13 +113,12 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xxx
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
 FROM dbo.custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
-	AND site in ('Leon','Sungame') )	 
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid AND site IN ('Leon','Sungame','SSSSEA'))	 
 	AND Enabled=1
 
 WHILE (1 = 1)

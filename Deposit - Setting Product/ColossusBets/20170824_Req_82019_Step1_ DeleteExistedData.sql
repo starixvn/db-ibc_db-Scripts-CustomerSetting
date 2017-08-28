@@ -5,8 +5,6 @@
 	DB: DBCUST/CustDB
 */ 
 
-
- 
 ALTER PROCEDURE [dbo].Acc_CustSetting3rd_19
 	@target VARCHAR(20)
 AS
@@ -22,31 +20,36 @@ BEGIN
 	
 	CREATE TABLE #tempAgent (CustID INT PRIMARY KEY)	
 	CREATE TABLE #tempMem   (CustID INT PRIMARY KEY)
-	DECLARE @Sporttype INT
-	SELECT 	@Sporttype=204
+	DECLARE @Sporttype SMALLINT
+
+	SELECT 	@Sporttype = 204
 
 	INSERT INTO #tempAgent(CustID)
 	SELECT DISTINCT c.CustID 
 	FROM dbo.Dep_AgentCommRate cg WITH(NOLOCK)		
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE c.roleid IN(2,3,4) AND SportType = @Sporttype AND srecommend IN (SELECT custid FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
-															WHERE cs.site IN  ('Leon','Sungame'))
+		INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE c.roleid IN(2,3,4) AND SportType = @Sporttype 
+		AND srecommend IN (	SELECT custid 
+							FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
+							WHERE cs.site IN  ('Leon','Sungame','SSSSEA'))
 
 	INSERT INTO #tempMem(CustID)
 	SELECT DISTINCT c.CustID 
 	FROM dbo.Dep_CustCommRate cg WITH(NOLOCK)		
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
-	WHERE c.roleid =1 AND SportType = @Sporttype AND srecommend IN (SELECT custid FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
-															WHERE cs.site IN  ('Leon','Sungame'))
+		INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cg.CustID=c.custid	
+	WHERE c.roleid =1 AND SportType = @Sporttype 
+		AND srecommend IN (	SELECT custid 
+							FROM dbo.Dep_CustSuper cs WITH(NOLOCK)							
+							WHERE cs.site IN  ('Leon','Sungame','SSSSEA'))
 
 	DELETE cg
 	FROM dbo.Dep_AgentCommRate cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN #tempAgent c WITH(NOLOCK) ON cg.CustID=c.custid	
+		INNER JOIN #tempAgent c WITH(NOLOCK) ON cg.CustID=c.custid	
 	WHERE SportType = @Sporttype 
 						
 	DELETE cg
 	FROM dbo.Dep_CustCommRate cg WITH(UPDLOCK,ROWLOCK)		
-	INNER JOIN #tempMem c WITH(NOLOCK) ON cg.CustID=c.custid	
+		INNER JOIN #tempMem c WITH(NOLOCK) ON cg.CustID=c.custid	
 	WHERE SportType = @Sporttype 
 	
 END	

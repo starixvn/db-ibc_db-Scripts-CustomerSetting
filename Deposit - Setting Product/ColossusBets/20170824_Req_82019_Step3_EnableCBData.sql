@@ -7,7 +7,7 @@
 
 ------------------------------------------------------
 
-ALTER PROCEDURE [dbo].Acc_CustomerInfo_Execrep_09
+ALTER PROCEDURE [dbo].Acc_ExecRep_Cust_09
 	@srecommend INT	
 	,@target VARCHAR(30)
 	,@maxcustid INT
@@ -23,7 +23,7 @@ BEGIN
 		RETURN			
 
 	UPDATE c
-	SET DisableColossusBet=0,HideColossusBet=0
+	SET DisableColossusBet = 0, HideColossusBet = 0
 	FROM	dbo.custInfo c WITH(ROWLOCK,UPDLOCK)	
 	WHERE srecommend=@srecommend AND Enabled=1
 END
@@ -39,14 +39,14 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid= xxx
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT custid
 FROM dbo.custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
-	AND site in ('Leon','Sungame') )	 
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid AND site IN ('Leon','Sungame','SSSSEA'))	 
 	AND Enabled=1
+
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -56,7 +56,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.Acc_CustomerInfo_Execrep_09 @srecommend = @srecommend
+	EXEC dbo.Acc_ExecRep_Cust_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 	
@@ -78,8 +78,7 @@ SELECT @max_custid= xxx
 INSERT INTO #supers(custid)
 SELECT custid
 FROM dbo.custInfo WITH(NOLOCK)
-WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid	
-	AND site in ('Leon','Sungame') )	 
+WHERE custid IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK) WHERE custid <= @max_custid AND site IN ('Leon','Sungame','SSSSEA'))	 
 	AND Enabled=1
 
 WHILE (1 = 1)
@@ -91,7 +90,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.Acc_CustomerInfo_Execrep_09 @srecommend = @srecommend
+	EXEC dbo.Acc_ExecRep_Cust_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 	
