@@ -235,6 +235,16 @@ FROM #MemberTemp ci WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
 
+/*******************************CUST PRODUCT STATUS TABLE*******************************/	
+DECLARE @BitmapOrder TINYINT = 11
+	
+--Member level
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
 DROP TABLE #DestinationSportBetType		

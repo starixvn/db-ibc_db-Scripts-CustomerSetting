@@ -43,50 +43,50 @@ BEGIN
 	INTO #CustPT_Agent
 	FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 						
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Member
 	FROM CustPTSetting3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 		
 	SELECT DISTINCT cg.AgentID AS CustID
 	INTO #CustPTGroup_Member
 	FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 				
 	SELECT DISTINCT cg.custid 
 	INTO #CustBet_Agent
 	FROM CustBetSetting3rd_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustBet_Member
 	FROM CustBetSetting3rd_Member cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustWinLoss_Agent
 	FROM dbo.CustWinLossLimit_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustWinLoss_Member
 	FROM dbo.CustWinLossLimit_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = 220
-		AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend)
 
 	DELETE cg
 	FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)		

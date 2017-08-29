@@ -24,6 +24,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
 	AND ci.currency <> 20
+	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,1469577,6911902,7178175,7178176,7178178,7178179,7178181,21278849,21278858) -- dummy account	
 
 DECLARE @ProductID TINYINT = 28
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT)
@@ -170,8 +171,33 @@ FROM #MemberTemp ci WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
 
+/*******************************CUST PRODUCT STATUS TABLE*******************************/	
+DECLARE @BitmapOrder TINYINT = 11
+--Member of cross site batch 1
+SELECT ci.custid
+INTO #MemberBatch1
+FROM dbo.custInfo ci WITH (NOLOCK)
+	INNER JOIN #supers s ON ci.srecommend = s.custid
+WHERE ((mrecommend IN (40958, 45638, 60349, 63971, 167860, 244268, 272369, 620479, 771534, 832960, 852273, 861558, 891798, 913666, 916007, 929428, 971014, 979669, 981513, 997587, 2006349, 2087760)
+			AND roleid = 1)
+		OR (recommend IN (8346,104769) AND roleid = 1))	
+	AND ci.custid > @MaxCustID
+	AND ci.srecommend IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601) --super of cross site batch 1
+	
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #MemberBatch1 ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
-DROP TABLE #DestinationSportBetType		
+DROP TABLE #DestinationSportBetType	
 
 PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

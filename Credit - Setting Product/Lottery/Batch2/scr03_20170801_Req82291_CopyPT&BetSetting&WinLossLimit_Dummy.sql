@@ -63,7 +63,7 @@ BEGIN
 	CREATE TABLE #DirectMasterBatch1 (CustID INT PRIMARY KEY,roleid INT)
 	CREATE TABLE #DirectAgentBatch1 (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
 	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)	
-	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY)
+	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid INT)
 
 	IF @srecommend IN (2,3,4,5,12,13,15)
 	BEGIN
@@ -101,7 +101,7 @@ BEGIN
 			AND ci.Enabled=1
 
 		----------- For SMA  -----------
-		INSERT INTO #DummyBatch1 (CustID)
+		INSERT INTO #DummyBatch1 (CustID,roleid)
 		SELECT @srecommend, 4 -- Super
 		UNION ALL
 		-----------------------Master--------------------------------------		
@@ -192,9 +192,9 @@ BEGIN
 		INNER JOIN #DirectAgent a ON ci.recommend = a.CustID
 	WHERE ci.roleid = 1 AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
 	-- Direct member		
-	UNION ALL
+	UNION 
 	SELECT ci.custid
-	FROM #DirectMember ci
+	FROM #DirectMember ci	
 
 	DECLARE @MaxPT TINYINT, @Currency INT--, @MaxComm DECIMAL(9,8)
 	SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
@@ -374,7 +374,7 @@ GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
@@ -414,4 +414,4 @@ BEGIN
 	waitfor delay '00:00:0.280'
 END
 
-PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

@@ -138,7 +138,7 @@ BEGIN
 		INNER JOIN #DirectAgent a ON ci.recommend = a.CustID
 	WHERE ci.roleid = 1 AND ci.Enabled = 1 			
 	-- Direct member		
-	UNION ALL
+	UNION 
 	SELECT ci.custid
 	FROM #DirectMember ci
 
