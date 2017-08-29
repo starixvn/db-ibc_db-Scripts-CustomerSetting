@@ -194,6 +194,9 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
+	AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
+	AND ci.currency <> 20
+
 	
 WHILE (1 = 1)
 BEGIN
@@ -241,6 +244,8 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
+	AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
+	AND ci.currency <> 20
 	
 WHILE (1 = 1)
 BEGIN
