@@ -23,9 +23,9 @@ CREATE TABLE #SMATemp
 	roleid TINYINT
 )
 	
-CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT,currency INT)
-CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid INT,currency INT)
-CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT,currency INT)			
+CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid TINYINT,currency INT)
+CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT,currency INT)
+CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT,currency INT)			
 --- get direct master
 INSERT INTO #DirectMaster (CustID,roleid,currency)
 SELECT ci.custid, ci.roleid,c.currency

@@ -57,13 +57,13 @@ BEGIN
 		CustID INT PRIMARY KEY CLUSTERED,
 		roleid TINYINT
 	)
-	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT)
-	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
-	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)	
-	CREATE TABLE #DirectMasterBatch1 (CustID INT PRIMARY KEY,roleid INT)
-	CREATE TABLE #DirectAgentBatch1 (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
-	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)	
-	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid INT)
+	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid TINYINT)
+	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
+	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
+	CREATE TABLE #DirectMasterBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)
+	CREATE TABLE #DirectAgentBatch1 (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
+	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
+	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)
 
 	IF @srecommend IN (2,3,4,5,12,13,15)
 	BEGIN

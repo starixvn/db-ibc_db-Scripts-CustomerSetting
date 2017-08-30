@@ -35,9 +35,9 @@ CREATE TABLE #SMATemp
 	roleid TINYINT
 )
 	
-CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT)
-CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
-CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)			
+CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid TINYINT)
+CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
+CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)			
 --- get direct master
 INSERT INTO #DirectMaster (CustID,roleid)
 SELECT ci.custid, ci.roleid
