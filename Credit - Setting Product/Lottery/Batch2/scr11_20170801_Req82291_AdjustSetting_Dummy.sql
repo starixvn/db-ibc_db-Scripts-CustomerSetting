@@ -51,7 +51,7 @@ BEGIN
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
 	FROM dbo.Customer ci WITH(NOLOCK)
-	WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,1469577,6911902,7178175,7178176,7178178,7178179,7178181,21278849,21278858) -- dummy account		
+	WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account		
 	
 	INSERT INTO #OfferedSite (site)
 	VALUES  ('033333'), ('611111'), ('722222'), ('766666'), ('789y'), ('7aa666'), ('BEST-ODDS'), ('JPNIBC'), ('XYZBET')	    
@@ -125,6 +125,11 @@ BEGIN
 	UNION 
 	SELECT d.CustID, 2 -- Direct Agent
 	FROM #DirectAgent D
+	UNION ALL
+	--dummy account don't have member enabled
+	SELECT ci.custid
+	FROM Custinfo ci WITH (NOLOCK)
+	WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
 
 	---------- For members ---------
 	INSERT INTO #MemberTemp (CustID)
@@ -321,8 +326,8 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
-PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 11: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
 EXEC dbo.Acc_DynamicCustSetting3rd_09 
 
-PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 11: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'

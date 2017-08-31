@@ -39,18 +39,29 @@ BEGIN
 			INNER JOIN #SMABatch1 s ON s.custid = ci.custid
 		WHERE ci.srecommend = @Custid
 
-		UPDATE cs
-		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #CustListDirect ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		IF @Custid IN (2042873,17721601)
+		BEGIN
+			UPDATE cs
+			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #CustListDirect ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		END
+		ELSE
+		BEGIN
+			UPDATE cs
+			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #CustListDirect ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		END
 	END
 	ELSE
 	BEGIN
 		SELECT custid, ci.roleid
 		INTO #CustList
 		FROM dbo.custInfo ci WITH (NOLOCK)
-		WHERE ci.srecommend = @Custid
+		WHERE ci.srecommend = @Custid AND roleid BETWEEN 2 AND 4
 		
 		IF EXISTS (	SELECT cu.custid 
 					FROM custaccount cu WITH(NOLOCK)
@@ -112,7 +123,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
 	AND ci.currency <> 20
-	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,1469577,6911902,7178175,7178176,7178178,7178179,7178181,21278849,21278858) -- dummy account	
+	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
 
 INSERT INTO #supers(custid)
 SELECT custid
@@ -186,7 +197,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
 	AND ci.currency <> 20
-	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,1469577,6911902,7178175,7178176,7178178,7178179,7178181,21278849,21278858) -- dummy account
+	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
 
 INSERT INTO #supers(custid)
 SELECT custid

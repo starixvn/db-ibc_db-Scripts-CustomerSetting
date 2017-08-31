@@ -38,7 +38,6 @@ BEGIN
 	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid TINYINT)
 	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
 	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)
-	CREATE TABLE #DirectMasterBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)
 	CREATE TABLE #DirectAgentBatch1 (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
 	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
 	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)	
@@ -55,18 +54,7 @@ BEGIN
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
 	FROM customer ci WITH (NOLOCK) 		
-	WHERE ci.custid IN (2,3,4,5,12,13,15) -- dummy super of batch 1
-
-	--- get direct master
-	INSERT INTO #DirectMasterBatch1 (CustID,roleid)
-	SELECT ci.custid, ci.roleid
-	FROM Customer ci with(nolock)
-		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid
-	WHERE  EXISTS (SELECT 1 FROM #OfferedSiteBatch1 WHERE site = ci.site)
-		AND  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
-		AND ci.roleid=3 
-		AND c.Enabled=1
+	WHERE ci.custid IN (2,3,4,5,12,13,15) -- dummy super of batch 1	
 		
 	--- get direct agent
 	INSERT INTO #DirectAgentBatch1 (CustID,mrecommend,roleid)
@@ -159,7 +147,12 @@ BEGIN
 	UNION 
 	SELECT d.CustID, 2 -- Direct Agent
 	FROM #DirectAgent D
-	 	
+	UNION ALL
+	--dummy account don't have member enabled
+	SELECT ci.custid
+	FROM Custinfo ci WITH (NOLOCK)
+	WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
+
 	--Delete dummy account has setting in batch1
 	DELETE s
 	FROM #SMATemp s
