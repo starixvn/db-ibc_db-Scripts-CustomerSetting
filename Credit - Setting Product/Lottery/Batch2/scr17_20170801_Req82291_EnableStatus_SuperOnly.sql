@@ -10,7 +10,7 @@ GO
 SELECT custid
 INTO #EnableSuperOnly
 FROM custInfo WITH (NOLOCK) 
-WHERE username IN ('SCHK','SCM','SCAI','SCI','SCDH','SCDK','TP','TH','TY','TF','TC','TD','TZ','EEM','EEH','EED','EEK')
+WHERE username IN ('SCS','SCSM','SCH','SCAH','SCBH','SCHI','SBRR','WPR')
 
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
 DECLARE @BitmapOrder TINYINT = 11
