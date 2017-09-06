@@ -1,9 +1,8 @@
 /*
-	Created: 20180825@Helen
-	Task: insert the Setting of VS of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/81549
-			 https://nexdev.net/issues/81550
-			 https://nexdev.net/issues/81551
+	Created: 20170906@Elodie
+	Task: insert the Setting of BetRadar of new licensees into the DCS database.
+	Redmine: https://nexdev.net/issues/82676
+			 https://nexdev.net/issues/82684
 	DB: DBCUST/CUSTDB
 */ 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
@@ -22,7 +21,8 @@ BEGIN
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at DBCUST only
-		
+	
+	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0
@@ -42,22 +42,23 @@ BEGIN
 		RETURN
 	
 	DECLARE @ProductProfileList VARCHAR(200) 
-		, @ProductID INT 
-		, @SportType SMALLINT 
-		-- For ProductStatus param
-		, @bitmapOrder INT
-		-- For PT param
-		, @SuperPT SMALLMONEY
+	, @ProductID INT
+	, @SportType SMALLINT 
+	-- For ProductStatus param
+	, @bitmapOrder INT
+	
+	-- For PT param
+	, @SuperPT SMALLMONEY = 85
+			
+	SET @ProductProfileList = '12,13,14'
+	SET @ProductID = 27 -- VS
+	SET @SportType = 190
+	SET @SuperPT = 85
+	
+	SET @bitmapOrder = (SELECT bitmapOrder FROM dbo.Dep_ProductStatusProfile WITH(NOLOCK) WHERE Sporttype =  @SportType )
 	
 	DECLARE @bitmap_0 BINARY(32)
 	
-	SET @ProductProfileList  = '9,10,11'
-	SET @ProductID = 5 -- VS
-	SET @SportType  = 180
-	SET @SuperPT  = 85
-	
-	SET @bitmapOrder = (SELECT bitmapOrder FROM dbo.Dep_ProductStatusProfile WITH(NOLOCK) WHERE Sporttype =  @SportType )
-			
 	-- Calculating bitmap value 
 	SET @bitmap_0 =  dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)
 		
@@ -146,7 +147,7 @@ BEGIN
 		SET bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (t.bitmapIsDisabled, @bitmapOrder,0)) 
 									
 		, bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (t.bitmapIsHidden, @bitmapOrder,0))
-			
+	
 	FROM [dbo].[Dep_CustProductStatus] T WITH (ROWLOCK,UPDLOCK)
 		INNER JOIN #tblCust_sma C  WITH (NOLOCK) ON C.custid = T.custid
 		
@@ -165,24 +166,24 @@ BEGIN
 	---------------------------------- END OF PROCESSING FOR SMA ONLY---------------------------------------------------------------
 		
 	-- 0. PT Group for Members
-	INSERT INTO Dep_CustSettingMode (CustID,IsGroupedPT)
+	INSERT INTO dbo.Dep_CustSettingMode (CustID,IsGroupedPT)
 	SELECT c.custid,1
 	FROM #tblCust_member C WITH (NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSettingMode C1 WITH (NOLOCK) WHERE C1.CustID = C.custid)
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode C1 WITH (NOLOCK) WHERE C1.CustID = C.custid)
 
 	-- 1. Product Status
 	UPDATE T 
 		SET bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (t.bitmapIsDisabled, @bitmapOrder,0)) 
 									
 		, bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (t.bitmapIsHidden, @bitmapOrder,0))
-			
+		
 	FROM [dbo].[Dep_CustProductStatus] T WITH (ROWLOCK,UPDLOCK)
 		INNER JOIN #tblCust_member C  WITH (NOLOCK) ON C.custid = T.custid
 		
 	INSERT INTO [dbo].[Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
 	SELECT	c.custid
-		, @bitmap_0 AS bitmapIsDisabled
-		, @bitmap_0 AS bitmapIsHidden -- Always Hide = 0 for Betradar VS
+			, @bitmap_0 AS bitmapIsDisabled
+			, @bitmap_0 AS bitmapIsHidden -- Always Hide = 0 for Betradar VS
 	FROM #tblCust_member C WITH (NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] C1 WITH (NOLOCK) WHERE C1.CustID = C.custid)
 	
@@ -209,19 +210,17 @@ GO
 --------------------------------------------------------------------------------------
 DECLARE @ProductID INT 
 DECLARE @super_cnt INT, @index INT 
-DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
 DECLARE @msg NVARCHAR(200) 
 DECLARE @msg_total NVARCHAR(200) 
+DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
 
 CREATE TABLE #supers (custid INT,  minbet MONEY, maxbet MONEY, maxpermatch MONEY, isfinished BIT DEFAULT(0))
 CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
 CREATE TABLE #Supers_Offered (custid INT)
 
 SELECT  @max_custid= xxx ---input maxcustid
-
+SET @ProductID = 27
 SET @index = 0
-SET @ProductID = 5
-
 SET @msg = 'Currently at order %d, SuperID: %d.'
 SET @msg_total = 'Total of supers: %d.'
 
@@ -245,7 +244,7 @@ FROM dbo.Dep_LicenseeProductSetting lds WITH (NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
 	INNER JOIN dbo.Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
 	INNER JOIN dbo.Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType IN (180,181,182,183,184,185,186) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
+WHERE PSD.SportType IN (190,191,199) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
 
 INSERT INTO #supers(custid, minbet , maxbet , maxpermatch)
 SELECT CS.custid, BS.minbet , BS.maxbet , BS.maxpermatch
@@ -257,7 +256,7 @@ WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
 	AND CS.currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 
 -- For deployer info
-SET @super_cnt = (SELECT COUNT(*) FROM #supers WITH (NOLOCK))
+SET @super_cnt = (SELECT COUNT(*) FROM #supers WITH (NOLOCK) )
 
 RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
@@ -294,19 +293,17 @@ GO
 -------------------------------------------------
 DECLARE @ProductID INT 
 DECLARE @super_cnt INT, @index INT 
-DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
 DECLARE @msg NVARCHAR(200) 
 DECLARE @msg_total NVARCHAR(200) 
+DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
 
 CREATE TABLE #supers (custid INT,  minbet MONEY, maxbet MONEY, maxpermatch MONEY, isfinished BIT DEFAULT(0))
 CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
 CREATE TABLE #Supers_Offered (custid INT)
 
 SELECT  @max_custid= xxx ---input maxcustid
-
+SET @ProductID = 27
 SET @index = 0
-SET @ProductID = 5
-
 SET @msg = 'Currently at order %d, SuperID: %d.'
 SET @msg_total = 'Total of supers: %d.'
 
@@ -330,7 +327,7 @@ FROM dbo.Dep_LicenseeProductSetting lds WITH (NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
 	INNER JOIN dbo.Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
 	INNER JOIN dbo.Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType IN (180,181,182,183,184,185,186) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
+WHERE PSD.SportType IN (190,191,199) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
 
 INSERT INTO #supers(custid, minbet , maxbet , maxpermatch)
 SELECT CS.custid, BS.minbet , BS.maxbet , BS.maxpermatch
@@ -342,7 +339,7 @@ WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
 	AND CS.currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 
 -- For deployer info
-SET @super_cnt = (SELECT COUNT(*) FROM #supers WITH (NOLOCK))
+SET @super_cnt = (SELECT COUNT(*) FROM #supers WITH (NOLOCK) )
 
 RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 

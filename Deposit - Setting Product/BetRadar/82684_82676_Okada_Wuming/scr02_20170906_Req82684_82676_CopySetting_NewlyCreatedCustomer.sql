@@ -10,8 +10,8 @@ DECLARE @max_custid INT, @srecommend INT,  @currency int ,@SportType INT , @bitm
 DECLARE @bitmap_0 BINARY(32)
 -- Calculating bitmap value 
 SELECT  @max_custid= xxx ---input maxcustid
-SET @ProductID = 5
-SET @SportType = 180
+SET @ProductID = 27
+SET @SportType = 190
 
 SET @bitmapOrder = (SELECT bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHERE Sporttype =  @SportType )
 
