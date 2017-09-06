@@ -91,7 +91,7 @@ WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
 DECLARE @BitmapOrder TINYINT = 11
 	
-SELECT custid 
+SELECT custid, roleid
 INTO #DisabledList
 FROM dbo.custInfo WITH (NOLOCK)
 WHERE username IN (	--Sheet 1: MBC Disable
@@ -122,13 +122,36 @@ SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProduct
 	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-WHERE NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = ci.CustID)
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
+WHERE NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.mrecommend AND roleid = 3)
+	AND NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.recommend AND roleid = 2)
+	AND NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.custid AND roleid = 1)
 
 UPDATE cs
 SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
 	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN #DisabledList d WITH(NOLOCK) ON cs.CustID = d.CustID
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
+	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.mrecommend = d.CustID
+WHERE d.roleid = 3
+
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
+	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.recommend = d.CustID
+WHERE d.roleid = 2
+
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
+	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.custid = d.CustID
+WHERE d.roleid = 1
 
 PRINT N'Step 14: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
