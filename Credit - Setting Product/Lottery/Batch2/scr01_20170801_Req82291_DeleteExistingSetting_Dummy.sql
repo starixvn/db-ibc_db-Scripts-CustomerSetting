@@ -149,7 +149,7 @@ BEGIN
 	FROM #DirectAgent D
 	UNION ALL
 	--dummy account don't have member enabled
-	SELECT ci.custid
+	SELECT ci.custid, ci.roleid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
 
