@@ -19,7 +19,7 @@ SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
-	AND s.site IN ('755555', 'Koribc', 'Indo', '733333')
+	AND s.site IN ('Koribc', 'Indo', '733333', '755555')
 
 UPDATE ps
 SET ps.IsLaunched = 1
