@@ -43,7 +43,7 @@ FROM dbo.Dep_ProductSetting ps WITH (NOLOCK)
 WHERE ps.ProductID= @ProductID AND SettingType = 2
 
 INSERT INTO #tblCust_member (custid,agentid,roleid,currency,srecommend,site)			
-SELECT ci.custid,ci.recommend,roleid,ci.currency, ci.srecommend, site
+SELECT ci.custid,ci.recommend,roleid,ci.currency, ci.srecommend, cs.site
 FROM dbo.custInfo CI WITH(NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper CS WITH(NOLOCK) ON ci.srecommend = cs.custid
 	INNER JOIN #OfferedSites s ON cs.site = s.site

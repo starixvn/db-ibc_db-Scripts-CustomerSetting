@@ -21,19 +21,19 @@ CREATE TABLE #supers (custid int, currency int, isfinished bit default(0))
 CREATE TABLE #tblCust_member (custid int,agentid int, roleid int,currency INT,srecommend INT,site VARCHAR(200)) 
 CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
 
-INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID )
+INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID)
 VALUES
-('KGvip',20,100000,1000000,13), -- RMB
-('KGvip',1,100,1000,20),       -- UUS
+	('Okada',1000,500000,1500000,45), -- KRW
+	('Okada',10,100,1000,20), -- UUS
 
-('Sunriseb2b',1,3000,10000,13), -- RMB
-('Sunriseb2b',1,500,1500,3),   -- US$
-('Sunriseb2b',1,500,1500,6), -- EUR
-('Sunriseb2b',1,1500,5000,2),  -- RM
-('Sunriseb2b',1,500,1500,20) , -- UUS
+	('Wuming',5,3000,10000,13), -- RMB	
+	('Wuming',10,100,1000,20)  -- UUS
 
-('Jinyazhou',10,3000,10000,13),  -- RMB
-('Jinyazhou',10,1000,10000,20)  -- UUS
+SELECT site
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 1
+	AND s.site IN ('Okada','Wuming')
 
 SELECT psd.SportType,psd.BetType
 INTO #ProductSettingDetail_tmp
@@ -42,13 +42,13 @@ FROM dbo.Dep_ProductSetting ps WITH (NOLOCK)
 WHERE ps.ProductID= @ProductID AND SettingType = 2
 
 INSERT INTO #tblCust_member (custid,agentid,roleid,currency,srecommend,site)			
-SELECT ci.custid,ci.recommend,roleid,ci.currency, ci.srecommend, site
+SELECT ci.custid,ci.recommend,roleid,ci.currency, ci.srecommend, cs.site
 FROM dbo.custInfo CI WITH(NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper CS WITH(NOLOCK) ON ci.srecommend = cs.custid
+	INNER JOIN #OfferedSites s ON cs.site = s.site
 WHERE ci.mrecommend NOT IN (SELECT custid FROM dbo.custinfo cs1 WITH(NOLOCK)
 						   WHERE cs1.srecommend=ci.srecommend and cs1.username like '%Acc%' and cs1.roleid=3 )
 	AND ci.custid > @max_custid
-	AND cs.site in ('KGvip','Sunriseb2b','Jinyazhou')
 	AND ci.roleid = 1
 	AND CS.currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 						   

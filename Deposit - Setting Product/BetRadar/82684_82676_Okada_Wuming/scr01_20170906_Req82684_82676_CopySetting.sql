@@ -226,17 +226,17 @@ SET @msg_total = 'Total of supers: %d.'
 
 INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID )
 VALUES
-	('KGvip',20,100000,1000000,13), -- RMB
-	('KGvip',1,100,1000,20),       -- UUS
+	('Okada',1000,500000,1500000,45), -- KRW
+	('Okada',10,100,1000,20), -- UUS
 
-	('Sunriseb2b',1,3000,10000,13), -- RMB
-	('Sunriseb2b',1,500,1500,3),   -- US$
-	('Sunriseb2b',1,500,1500,6), -- EUR
-	('Sunriseb2b',1,1500,5000,2),  -- RM
-	('Sunriseb2b',1,500,1500,20) , -- UUS
+	('Wuming',5,3000,10000,13), -- RMB	
+	('Wuming',10,100,1000,20)  -- UUS
 
-	('Jinyazhou',10,3000,10000,13),  -- RMB
-	('Jinyazhou',10,1000,10000,20)  -- UUS
+SELECT site
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 1
+	AND s.site IN ('Okada','Wuming')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
@@ -244,14 +244,15 @@ FROM dbo.Dep_LicenseeProductSetting lds WITH (NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
 	INNER JOIN dbo.Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
 	INNER JOIN dbo.Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType IN (190,191,199) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
+	INNER JOIN #OfferedSites s ON c.site = s.site
+WHERE PSD.SportType IN (190,191,199)
 
 INSERT INTO #supers(custid, minbet , maxbet , maxpermatch)
 SELECT CS.custid, BS.minbet , BS.maxbet , BS.maxpermatch
 FROM  dbo.Dep_CustSuper CS WITH(NOLOCK) 
 	INNER JOIN #Betsetting BS WITH (NOLOCK) ON CS.site = BS.Site AND CS.currency = BS.exchangeID
+	INNER JOIN #OfferedSites s ON cs.site = s.site
 WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
-	AND CS.site in ('KGvip','Sunriseb2b','Jinyazhou')
 	AND CS.custid <= @max_custid
 	AND CS.currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 
@@ -309,17 +310,17 @@ SET @msg_total = 'Total of supers: %d.'
 
 INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID )
 VALUES
-	('KGvip',20,100000,1000000,13), -- RMB
-	('KGvip',1,100,1000,20),       -- UUS
+	('Okada',1000,500000,1500000,45), -- KRW
+	('Okada',10,100,1000,20), -- UUS
 
-	('Sunriseb2b',1,3000,10000,13), -- RMB
-	('Sunriseb2b',1,500,1500,3),   -- US$
-	('Sunriseb2b',1,500,1500,6), -- EUR
-	('Sunriseb2b',1,1500,5000,2),  -- RM
-	('Sunriseb2b',1,500,1500,20) , -- UUS
+	('Wuming',5,3000,10000,13), -- RMB	
+	('Wuming',10,100,1000,20)  -- UUS
 
-	('Jinyazhou',10,3000,10000,13),  -- RMB
-	('Jinyazhou',10,1000,10000,20)  -- UUS
+SELECT site
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 1
+	AND s.site IN ('Okada','Wuming')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
@@ -327,14 +328,15 @@ FROM dbo.Dep_LicenseeProductSetting lds WITH (NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
 	INNER JOIN dbo.Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
 	INNER JOIN dbo.Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType IN (190,191,199) AND C.site in ('KGvip','Sunriseb2b','Jinyazhou')
+	INNER JOIN #OfferedSites s ON c.site = s.site
+WHERE PSD.SportType IN (190,191,199)
 
 INSERT INTO #supers(custid, minbet , maxbet , maxpermatch)
 SELECT CS.custid, BS.minbet , BS.maxbet , BS.maxpermatch
 FROM  dbo.Dep_CustSuper CS WITH(NOLOCK) 
 	INNER JOIN #Betsetting BS WITH (NOLOCK) ON CS.site = BS.Site AND CS.currency = BS.exchangeID
+	INNER JOIN #OfferedSites s ON cs.site = s.site
 WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
-	AND CS.site in ('KGvip','Sunriseb2b','Jinyazhou')
 	AND CS.custid <= @max_custid
 	AND CS.currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 
