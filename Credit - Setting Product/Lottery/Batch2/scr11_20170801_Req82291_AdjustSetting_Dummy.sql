@@ -195,7 +195,7 @@ BEGIN
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
 	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
 	FROM dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK)
-		INNER JOIN #SMATemp s WITH (NOLOCK) ON csa.custid = s.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON csa.custid = s.custid
 	WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 			AND (
 				csa.MasterPT > csa.SuperPT
