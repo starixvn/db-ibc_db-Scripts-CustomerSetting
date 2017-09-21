@@ -1,6 +1,6 @@
 /*
 	Created: 20170608@Helen
-	Task: Betradar Virtual Sports  -Integration for Cash
+	Task: Lottery  -Integration for Cash
 	DB:DBCUST/CUSTDB
 		
 */
