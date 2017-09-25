@@ -1,8 +1,7 @@
 /*
-	Created: 20170906@Elodie
+	Created: 20170925@Elodie
 	Task: insert the Setting of BetRadar of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/82676
-			 https://nexdev.net/issues/82684
+	Redmine: https://nexdev.net/issues/83698
 	DB: DBCUST/CUSTDB
 */ 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running

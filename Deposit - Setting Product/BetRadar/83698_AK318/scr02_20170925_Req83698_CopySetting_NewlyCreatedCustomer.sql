@@ -1,7 +1,7 @@
 /*
-	Created: 20170626@Helen
-	Task: insert the Setting of Voidbridge of new licensees into the DCS database.
-	Redmine: https://redmine.nexcel.vn/issues/77274
+	Created: 20170925@Elodie
+	Task: insert the Setting of BetRadar of new licensees into the DCS database.
+	Redmine: https://nexdev.net/issues/83698
 	DB: DBCUST/CUSTDB
 */  
 ------------------------------------------------------

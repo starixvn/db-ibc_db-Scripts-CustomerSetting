@@ -1,8 +1,7 @@
 /*
 	Created: 20170906@Elodie
 	Task: insert the Setting of VS of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/82676
-			 https://nexdev.net/issues/82684
+	Redmine: https://nexdev.net/issues/83698
 	DB: DBCUST/CUSTDB
 */
 ------------------------------------------------------
