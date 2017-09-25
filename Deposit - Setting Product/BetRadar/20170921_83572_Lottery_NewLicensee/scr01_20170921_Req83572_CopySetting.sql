@@ -9,11 +9,7 @@
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend INT
 	, @max_custid INT 
-	, @target VARCHAR(20) 
-	, @minbet MONEY
-	, @maxbet MONEY
-	, @maxpermatch MONEY
-	
+	, @target VARCHAR(20) 		
 AS
 BEGIN	
 	SET NOCOUNT ON
@@ -158,10 +154,11 @@ BEGIN
 	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] C1 WITH (NOLOCK) WHERE C1.CustID = C.custid)
 	
 	INSERT INTO dbo.Dep_CustBetSetting_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, psd.sporttype, psd.bettype, @Minbet,@Maxbet,@MaxPerMatch					 
+	SELECT ci.custid, psd.sporttype, psd.bettype, Minbet,Maxbet,MaxPerMatch					 
 	FROM #tblCust_sma ci WITH (NOLOCK)
-       CROSS JOIN #ProductSettingDetail_tmp psd WITH (NOLOCK)
-	WHERE psd.SettingType = 2 
+		INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = ci.custid
+		CROSS JOIN #ProductSettingDetail_tmp psd WITH (NOLOCK)
+	WHERE psd.SettingType = 2 AND cs.SportType = 180 
 	---------------------------------- END OF PROCESSING FOR SMA ONLY---------------------------------------------------------------
 		
 	-- 0. PT Group for Members
@@ -190,10 +187,11 @@ BEGIN
 	--Member Level
 	
 	INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, psd.sporttype, psd.bettype, @Minbet,@Maxbet,@MaxPerMatch					 
+	SELECT ci.custid, psd.sporttype, psd.bettype, Minbet,Maxbet,MaxPerMatch					 
 	FROM #tblCust_member ci WITH (NOLOCK)
-	  CROSS JOIN #ProductSettingDetail_tmp psd WITH (NOLOCK)
-	WHERE psd.SettingType = 2 
+		INNER JOIN dbo.Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = ci.custid
+		CROSS JOIN #ProductSettingDetail_tmp psd WITH (NOLOCK)
+	WHERE psd.SettingType = 2 AND cs.SportType = 180
 			   
 	---------------------------------- END OF BATCH BY BATCH PROCESSING ---------------------------------------------------------------
 	DROP TABLE #ProductSettingDetail_tmp
@@ -211,7 +209,7 @@ DECLARE @ProductID INT
 DECLARE @super_cnt INT, @index INT 
 DECLARE @msg NVARCHAR(200) 
 DECLARE @msg_total NVARCHAR(200) 
-DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
+DECLARE @max_custid INT, @srecommend INT
 
 CREATE TABLE #supers (custid INT,  minbet MONEY, maxbet MONEY, maxpermatch MONEY, isfinished BIT DEFAULT(0))
 CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
@@ -267,10 +265,7 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@srecommend = custid
-		,@minbet = minbet
-		,@maxbet = maxbet
-		,@maxpermatch = maxpermatch
+		,@srecommend = custid	
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -279,7 +274,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @minbet=@minbet, @maxbet = @maxbet, @maxpermatch = @maxpermatch,@max_custid=@max_custid,@target = 'REPLICATED' 	
+	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = 'REPLICATED' 	
 				
 	WAITFOR DELAY '00:00:00.280'			
 END	
@@ -298,7 +293,7 @@ DECLARE @ProductID INT
 DECLARE @super_cnt INT, @index INT 
 DECLARE @msg NVARCHAR(200) 
 DECLARE @msg_total NVARCHAR(200) 
-DECLARE @max_custid INT, @srecommend INT, @minbet MONEY, @maxbet MONEY, @maxpermatch MONEY
+DECLARE @max_custid INT, @srecommend INT
 
 CREATE TABLE #supers (custid INT,  minbet MONEY, maxbet MONEY, maxpermatch MONEY, isfinished BIT DEFAULT(0))
 CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
@@ -354,10 +349,7 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@srecommend = custid
-		,@minbet = minbet
-		,@maxbet = maxbet
-		,@maxpermatch = maxpermatch
+		,@srecommend = custid		
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK

@@ -19,18 +19,6 @@ SET @bitmap_0 =  dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 
 CREATE TABLE #supers (custid int, currency int, isfinished bit default(0))
 CREATE TABLE #tblCust_member (custid int,agentid int, roleid int,currency INT,srecommend INT,site VARCHAR(200)) 
-CREATE TABLE #Betsetting (Site VARCHAR(50), minbet MONEY, maxbet MONEY, maxpermatch MONEY, exchangeID INT)
-
-INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID )
-SELECT site, bs.minbet, maxbet, MaxPerMatch, exchangeid
-FROM Dep_LicenseeProductSetting ls WITH (NOLOCK)
- INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON ls.ProductSettingID = ps.ProductSettingID
- INNER JOIN Dep_CustBetSetting_Agent bs WITH (NOLOCK) ON bs.custid = ls.CustID
- INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.custid = ls.CustID
- INNER JOIN Exchange e WITH (NOLOCK) ON s.currency = e.exchangeid
-WHERE site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
-	and ProductID = 5 and settingtype = 2
-	and SportType = 180
 
 SELECT site
 INTO #OfferedSites
@@ -82,11 +70,12 @@ WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] T (NOLOCK) WHERE t
 PRINT 'Betting Limit'
 
 INSERT INTO Dep_CustBetSetting_Member (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-SELECT c.custid, csla.sporttype, csla.bettype, BS.minbet, BS.maxbet, BS.MaxPerMatch
+SELECT c.custid, csla.sporttype, csla.bettype, minbet, maxbet, MaxPerMatch
 FROM #tblCust_member C WITH (NOLOCK)
-	INNER JOIN #Betsetting AS BS WITH (NOLOCK) ON BS.Site = C.site AND BS.exchangeID = C.currency
+	INNER JOIN dbo.Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = c.custid
 	CROSS JOIN #ProductSettingDetail_tmp csla
 WHERE NOT EXISTS (SELECT 1 FROM Dep_CustBetSetting_Member cslm WITH (NOLOCK) WHERE cslm.CustID = C.custid AND cslm.SportType = csla.SportType AND cslm.BetType = csla.BetType)
+	AND cs.SportType = 180
 	
 DROP TABLE #tblCust_member
 
