@@ -128,6 +128,14 @@ SELECT 783, 4028,'0.1','20',0.1,20,NULL UNION ALL
 SELECT 783, 4029,'0.5','100',0.5,100,NULL UNION ALL 
 SELECT 783, 4030,'0.15','30',0.15,30,NULL 
 
+----------------LossLimit_GlobalSetting-----------------(already run)
+--INSERT INTO dbo.LossLimit_GlobalSetting	(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
+--SELECT 6,@currency,150,30000 UNION ALL 
+--SELECT 21,@currency,100,122400 UNION ALL 
+--SELECT 22,@currency,150,30000 UNION ALL 
+--SELECT 24,@currency,100,22300 UNION ALL 
+--SELECT 28,@currency,100,22300 
+
 --------------PlayCurrencySetting-----------------
 INSERT INTO dbo.PlayCurrencySetting(SiteId, SiteName, SportType, MemberCurrency, PlayCurrency, FromDate, ToDate)
 SELECT @site,'Y987',211,74,5,GETDATE(),'2050-01-01'
