@@ -1,7 +1,7 @@
 /*
-	Created: 20170324@Helen
-	Task: insert the Setting of Voidbridge of new licensees into the DCS database.
-	Redmine: https://redmine.nexcel.vn/issues/73801
+	Created: 20170929@Elodie
+	Task: insert the Setting of Lottery of Athena licensees into the DCS database.
+	Redmine: https://redmine.nexcel.vn/issues/81078
 */ 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ------------------------------------------------------
@@ -211,7 +211,7 @@ INSERT INTO #supers(custid,currency)
 SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
-	AND site in ('spondemo')
+	AND site in ('Athena000')
 	AND custid <= @max_custid
 	--AND currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 	AND currency = 20
@@ -278,7 +278,7 @@ INSERT INTO #supers(custid,currency)
 SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE custid NOT IN (SELECT custid FROM #Supers_Offered)
-	AND site in ('spondemo')
+	AND site in ('Athena000')
 	AND custid <= @max_custid
 	--AND currency NOT IN (27) -- Currency H - it is just test currency, used once in a while 
 	AND currency = 20
