@@ -34,3 +34,5 @@ GO
 ALTER TABLE [dbo].LimitLoss_HeadlineSetting ADD  CONSTRAINT [DF_LimitLoss_HeadlineSetting_LevelID]  DEFAULT ((0)) FOR [LevelID]
 GO
 
+
+ALTER TABLE LimitLoss_Setting ALTER COLUMN MaxLoss MONEY NULL
