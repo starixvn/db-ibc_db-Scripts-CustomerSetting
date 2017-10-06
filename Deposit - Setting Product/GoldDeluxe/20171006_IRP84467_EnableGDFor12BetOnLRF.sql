@@ -16,17 +16,25 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductSetting') = 0 RETURN
 	
 	DECLARE @productID  INT
 	SELECT @productID = 11
-	
+		
+	SELECT custid
+		INTO #tmpMaster
+	FROM dbo.customer with(NOLOCK)
+	WHERE srecommend = @srecommend
+		AND roleid = 3
+		AND username like '%ACC%'
+		
 	INSERT INTO Dep_CustProductSetting(CustID,ProductId,IsEnabled)
 	SELECT ci.Custid, @ProductId, 1
 	FROM dbo.CustInfo ci WITH(NOLOCK)
 		LEFT JOIN dbo.Dep_CustProductSetting cs WITH(NOLOCK) ON ci.custid = cs.custid AND cs.productID = @ProductID--GoldDeluxe ID on lrf
 	WHERE ci.srecommend = @srecommend 
-		AND ci.username NOT LIKE '%12bet%'+'ACC%'
+		AND ci.mrecommend NOT IN (SELECT custid FROM #tmpMaster)
 		AND cs.custid IS NULL
 END
 GO
