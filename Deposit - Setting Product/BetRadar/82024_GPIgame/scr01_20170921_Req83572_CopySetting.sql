@@ -1,9 +1,9 @@
 /*
-	Created: 20170921@Elodie
+	Created: 20171003@Elodie
 	Task: insert the Setting of BetRadar of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/83572
+	Redmine: https://nexdev.net/issues/82024
 	DB: DBCUST/CUSTDB
-*/ 
+*/
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
@@ -228,7 +228,7 @@ FROM Dep_LicenseeProductSetting ls WITH (NOLOCK)
  INNER JOIN Dep_CustBetSetting_Agent bs WITH (NOLOCK) ON bs.custid = ls.CustID
  INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.custid = ls.CustID
  INNER JOIN Exchange e WITH (NOLOCK) ON s.currency = e.exchangeid
-WHERE site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
+WHERE site IN ('GPIgame')
 	and ProductID = 5 and settingtype = 2
 	and SportType = 180
 
@@ -236,7 +236,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
+	AND s.site IN ('GPIgame')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
@@ -312,7 +312,7 @@ FROM Dep_LicenseeProductSetting ls WITH (NOLOCK)
  INNER JOIN Dep_CustBetSetting_Agent bs WITH (NOLOCK) ON bs.custid = ls.CustID
  INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.custid = ls.CustID
  INNER JOIN Exchange e WITH (NOLOCK) ON s.currency = e.exchangeid
-WHERE site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
+WHERE site IN ('GPIgame')
 	and ProductID = 5 and settingtype = 2
 	and SportType = 180
 
@@ -320,7 +320,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
+	AND s.site IN ('GPIgame')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID

@@ -1,7 +1,7 @@
 /*
-	Created: 20170921@Helen
+	Created: 20171003@Elodie
 	Task: insert the Setting of BetRadar of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/83572
+	Redmine: https://nexdev.net/issues/82024
 	DB: DBCUST/CUSTDB
 */  
 ------------------------------------------------------
@@ -24,7 +24,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('Longbao', 'SSSSEA', '818Bet', 'IGPTech', 'TGame', 'Heaven')
+	AND s.site IN ('GPIgame')
 
 SELECT psd.SportType,psd.BetType
 INTO #ProductSettingDetail_tmp
