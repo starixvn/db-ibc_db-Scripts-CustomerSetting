@@ -36,6 +36,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend 
 		AND ci.mrecommend NOT IN (SELECT custid FROM #tmpMaster)
 		AND cs.custid IS NULL
+		AND ci.roleid = 1
 END
 GO
 
