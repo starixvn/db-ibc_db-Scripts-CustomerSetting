@@ -7,10 +7,12 @@
 USE CustDB
 GO
 
-SELECT custid
+SELECT ci.custid
 INTO #SuperList
-FROM dbo.Dep_CustSuper WITH (NOLOCK)
-WHERE site = 'Avia' AND currency = 2
+FROM dbo.Dep_CustSuper s WITH (NOLOCK)
+	INNER JOIN Custinfo ci WITH (NOLOCK) ON s.custid = ci.srecommend
+WHERE site = 'Avia' AND s.currency = 2
+	AND ci.roleid BETWEEN 2 AND 4
 
 UPDATE cs
 SET cs.MinBet = 1,	
