@@ -1,7 +1,7 @@
 /*
-	Created: 20171005@Elodie
+	Created: 20171012@Elodie
 	Task: insert the Setting of VS of new licensees into the DCS database.
-	Redmine: https://nexdev.net/issues/82024
+	Redmine: https://nexdev.net/issues/84715
 	DB: DBCUST/CUSTDB
 */ 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
@@ -225,15 +225,14 @@ SET @msg_total = 'Total of supers: %d.'
 
 INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID)
 VALUES
-	('GPIgame',1,15000,50000,4), -- TB
-	('GPIgame',1,5000,15000,15), -- IDR
-	('GPIgame',1,10000,50000,51) -- INH
+	('99UU',1,10,10,20), -- UUS
+	('99UU',1,3000,10000,13) -- RM
 
 SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('GPIgame')
+	AND s.site IN ('99UU')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
@@ -309,15 +308,14 @@ SET @msg_total = 'Total of supers: %d.'
 
 INSERT INTO #Betsetting (Site, minbet , maxbet , maxpermatch, exchangeID)
 VALUES
-	('GPIgame',1,15000,50000,4), -- TB
-	('GPIgame',1,5000,15000,15), -- IDR
-	('GPIgame',1,10000,50000,51) -- INH
+	('99UU',1,10,10,20), -- UUS
+	('99UU',1,3000,10000,13) -- RM
 
 SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('GPIgame')
+	AND s.site IN ('99UU')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
