@@ -24,7 +24,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','e8casino','GPIGame','Sunriseb2b','KGVIP','Opal88','K8Sports','OPEBet','Bobo88','Jinyazhou','Okada')
+	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','GPIGame','Sunriseb2b','KGVIP','OPEBet','Bobo88','Jinyazhou','Okada')
 
 SELECT psd.SportType,psd.BetType
 INTO #ProductSettingDetail_tmp

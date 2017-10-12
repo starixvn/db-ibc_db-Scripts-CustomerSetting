@@ -228,7 +228,7 @@ FROM Dep_LicenseeProductSetting ls WITH (NOLOCK)
  INNER JOIN Dep_CustBetSetting_Agent bs WITH (NOLOCK) ON bs.custid = ls.CustID
  INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.custid = ls.CustID
  INNER JOIN Exchange e WITH (NOLOCK) ON s.currency = e.exchangeid
-WHERE site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','e8casino','GPIGame','Sunriseb2b','KGVIP','Opal88','K8Sports','OPEBet','Bobo88','Jinyazhou','Okada')
+WHERE site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','GPIGame','Sunriseb2b','KGVIP','OPEBet','Bobo88','Jinyazhou','Okada')
 	and ProductID = 5 and settingtype = 2
 	and SportType = 180
 
@@ -236,7 +236,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','e8casino','GPIGame','Sunriseb2b','KGVIP','Opal88','K8Sports','OPEBet','Bobo88','Jinyazhou','Okada')
+	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','GPIGame','Sunriseb2b','KGVIP','OPEBet','Bobo88','Jinyazhou','Okada')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
@@ -312,7 +312,7 @@ FROM Dep_LicenseeProductSetting ls WITH (NOLOCK)
  INNER JOIN Dep_CustBetSetting_Agent bs WITH (NOLOCK) ON bs.custid = ls.CustID
  INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.custid = ls.CustID
  INNER JOIN Exchange e WITH (NOLOCK) ON s.currency = e.exchangeid
-WHERE site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','e8casino','GPIGame','Sunriseb2b','KGVIP','Opal88','K8Sports','OPEBet','Bobo88','Jinyazhou','Okada')
+WHERE site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','GPIGame','Sunriseb2b','KGVIP','OPEBet','Bobo88','Jinyazhou','Okada')
 	and ProductID = 5 and settingtype = 2
 	and SportType = 180
 
@@ -320,7 +320,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','e8casino','GPIGame','Sunriseb2b','KGVIP','Opal88','K8Sports','OPEBet','Bobo88','Jinyazhou','Okada')
+	AND s.site IN ('IGPTech','Swin','UN168','Wuming','GOAB88','396Club','Mybet88','GPIGame','Sunriseb2b','KGVIP','OPEBet','Bobo88','Jinyazhou','Okada')
 
 INSERT INTO #Supers_Offered (custid)
 SELECT lds.CustID
