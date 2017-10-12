@@ -1,21 +1,32 @@
 /*
 	Created: Elodie 
-	Task: Insert CanSee Lottery for batch 1
+	Task: Insert CanSee Lottery for batch 2
 	DB: DBCUST/CustDB
-	Date: 20170801
+	Date: 20171012
 */ 
 USE CustDB
 GO
 
-DECLARE @Sporttype SMALLINT
-SELECT @Sporttype = 220
-
-DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
-
-INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, 0 AS Currency, s.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest
+--Import sites which offered Lottery for batch 2
+SELECT siteid
+INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('789y','XYZBET','611111','722222','spotico','033333','JPNIBC','IMBC','766666','7aa666')
 
+UPDATE ps
+SET ps.IsLaunched = 1
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
+WHERE SportType = 220
 
+--Offer site BEST-ODDS all currency
+UPDATE ps
+SET ps.IsLaunched = 1,
+	currency = 0
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+WHERE SportType = 220 AND siteid = 1
 
+SELECT *
+FROM ProductLaunchedSiteCurrency WITH (NOLOCK)
+WHERE SportType = 220
