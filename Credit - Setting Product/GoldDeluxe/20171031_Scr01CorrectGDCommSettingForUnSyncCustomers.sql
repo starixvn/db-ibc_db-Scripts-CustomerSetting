@@ -14,9 +14,113 @@ BEGIN
 		
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN--GD
+	IF dbo.f_CheckRepTable('CustOverrideGame') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 		
+	DECLARE @bitmapOrderAB INT,
+			@bitmapOrderVB INT
+	
+	CREATE TABLE #UnSyncCust (CustID INT PRIMARY KEY, UplineID INT, roleid TINYINT, SyncGD BIT, SyncAB BIT, SyncVB BIT)
+	
+	SELECT @bitmapOrderAB = MAX(CASE WHEN sporttype= 211 THEN bitmapOrder ELSE 0 END ),
+			@bitmapOrderVB = MAX(CASE WHEN sporttype= 212 THEN bitmapOrder ELSE 0 END)		
+	FROM dbo.ProductStatusProfile WITH(NOLOCK)
+	WHERE sporttype IN (211,212)
+	
+	INSERT INTO #UnSyncCust(custid,UplineID,roleid,SyncGD,syncAB,SyncVB)
+	SELECT ci.custID,CASE WHEN roleid = 1 THEN recommend
+						WHEN roleid = 2 THEN mrecommend
+						WHEN roleid = 3 THEN srecommend END,
+			roleid,
+			CASE WHEN HideGoldDeluxe = 1 THEN 0 ELSE 1 END,
+			dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
+			dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
+	FROM dbo.CustInfo ci WITH(NOLOCK)
+		INNER JOIN dbo.CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.srecommend = @srecommend
+		AND roleid < 4
+		AND enabled=1
+		AND (dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB)= 0
+			OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0
+			OR HideGoldDeluxe = 1
+		)
+		
+	--reset setting for un-sync customers for GD
+	UPDATE cs
+	SET minpositiontaking =0		
+	FROM dbo.CustOverrideGame cs WITH(UPDLOCK,ROWLOCK) 
+	WHERE custid IN (SELECT custid FROM #UnSyncCust WHERE syncGD = 0 AND roleid > 1)
+		AND sporttype = 255
+		AND bettype =1701	
+		
+	UPDATE cs
+	SET spositiontaking = CASE WHEN roleid = 3 THEN upline.minpositiontaking ELSE 0 END,
+		mpositiontaking = CASE WHEN roleid = 2 THEN upline.minpositiontaking ELSE 0 END,
+		apositiontaking = CASE WHEN roleid = 1 THEN upline.minpositiontaking ELSE 0 END,
+		isautopositiontaking=0,
+		isautompositiontaking=0,
+		autopositiontaking=0,
+		autompositiontaking=0
+	FROM dbo.CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #UnSyncCust t ON cs.custid = t.custID
+		INNER JOIN dbo.CustOverrideGame upline WITH(NOLOCK) ON upline.custID = t.UplineID
+																AND upline.sporttype = cs.sporttype
+																AND upline.bettype = cs.bettype	
+	WHERE syncGD = 0
+		AND cs.sporttype = 255
+		AND cs.bettype =1701
+	
+	--VB,AB	
+	UPDATE cs
+	SET MinPT =0
+	FROM dbo.CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN (SELECT custid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid > 1
+					UNION ALL SELECT custid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid > 1
+					)t ON cs.custid = t.custid
+						AND cs.sporttype=t.sporttype
+	
+	UPDATE cs
+	SET cs.superPT = CASE WHEN t.roleid = 3 THEN upline.MinPT ELSE 0 END,
+		cs.MasterPT = CASE WHEN t.roleid = 2 THEN upline.MinPT ELSE 0 END,
+		cs.AgentPT = 0,
+		cs.IsAutoMasterPT =0,
+		cs.AutoMasterPT =0,
+		cs.IsAutoSuperPT =0,
+		cs.AutoSuperPT =0
+	FROM dbo.CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN (SELECT custid, uplineID, roleid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid > 1
+					UNION ALL 
+					SELECT custid, uplineID, roleid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid > 1
+					)t ON cs.custid = t.custid
+						AND cs.sporttype=t.sporttype
+		INNER JOIN dbo.CustPTSetting3rd_Agent upline WITH(NOLOCK) ON upline.custID = t.UplineID
+																	AND upline.sporttype = cs.sporttype
+																	AND upline.bettype = cs.bettype
+						
+	UPDATE cs
+	SET cs.superPT = 0,
+		cs.MasterPT = 0,
+		cs.AgentPT = upline.minPT,
+		cs.IsAutoMasterPT =0,
+		cs.AutoMasterPT =0,
+		cs.IsAutoSuperPT =0,
+		cs.AutoSuperPT =0
+	FROM dbo.CustPTSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN (SELECT custid, uplineID, roleid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid = 1
+					UNION ALL 
+					SELECT custid, uplineID, roleid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid = 1
+					)t ON cs.custid = t.custid
+						AND cs.sporttype=t.sporttype
+		INNER JOIN dbo.CustPTSetting3rd_Agent upline WITH(NOLOCK) ON upline.custID = t.UplineID
+																	AND upline.sporttype = cs.sporttype
+																	AND upline.bettype = cs.bettype
+			
+						
 	--GD
-	SELECT ci.custid, cs.sdiscount, cs.adiscount, cs.discount, scs.sdiscount as superDiscount, mcs.adiscount as masterDiscount, cs.discount as agentDiscount
+	SELECT ci.custid, cs.sdiscount, cs.adiscount, cs.discount, scs.sdiscount as superDiscount, mcs.adiscount as masterDiscount, acs.discount as agentDiscount
 	INTO #tmpSetting
 	FROM dbo.CustInfo ci WITH(NOLOCK)
 		INNER JOIN dbo.CustSettingGame cs WITH(NOLOCK) ON ci.custid = cs.CustID
@@ -50,7 +154,8 @@ BEGIN
 	WHERE cs.sporttype= 255
 		AND cs.bettype=1701
 
-	DROP TABLE #tmpSetting		
+	DROP TABLE #tmpSetting	
+	DROP TABLE #UnSyncCust	
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -69,7 +174,8 @@ INSERT INTO #Super(custid)
 SELECT custid 
 FROM dbo.custInfo WITH (Nolock) 
 WHERE roleid = 4
-	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
+	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
 	AND Enabled = 1
 	
 WHILE (1 = 1)
@@ -104,6 +210,7 @@ SELECT custid
 FROM dbo.custInfo WITH (Nolock) 
 WHERE roleid = 4
 	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
 	AND Enabled = 1
 	
 WHILE (1 = 1)
