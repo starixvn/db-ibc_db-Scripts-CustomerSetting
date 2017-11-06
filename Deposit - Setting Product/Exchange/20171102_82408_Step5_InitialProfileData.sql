@@ -12,8 +12,7 @@ GO
 
 DECLARE @MaxProductSettingID INT
 
-SELECT @MaxProductSettingID=MAX(ProductSettingID)
-FROM [Dep_ProductSetting] WITH(NOLOCK)
+SELECT @MaxProductSettingID=19
 
 INSERT INTO [dbo].[Dep_ProductSetting]
            ([ProductSettingID]
