@@ -3,122 +3,7 @@
 	Task : Correct comm setting for un-sync customers for GD
 	DB:  DBCUST/CustDB
 */
- 
- ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
-	@srecommend INT, 
-	@target VARCHAR(20)	
-AS
-BEGIN
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
-		
-	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN--GD
-	IF dbo.f_CheckRepTable('CustOverrideGame') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
-		
-	DECLARE @bitmapOrderAB INT,
-			@bitmapOrderVB INT
-	
-	CREATE TABLE #UnSyncCust (CustID INT PRIMARY KEY, UplineID INT, roleid TINYINT, SyncGD BIT, SyncAB BIT, SyncVB BIT)
-	
-	SELECT @bitmapOrderAB = MAX(CASE WHEN sporttype= 211 THEN bitmapOrder ELSE 0 END ),
-			@bitmapOrderVB = MAX(CASE WHEN sporttype= 212 THEN bitmapOrder ELSE 0 END)		
-	FROM dbo.ProductStatusProfile WITH(NOLOCK)
-	WHERE sporttype IN (211,212)
-	
-	INSERT INTO #UnSyncCust(custid,UplineID,roleid,SyncGD,syncAB,SyncVB)
-	SELECT ci.custID,CASE WHEN roleid = 1 THEN recommend
-						WHEN roleid = 2 THEN mrecommend
-						WHEN roleid = 3 THEN srecommend END,
-			roleid,
-			CASE WHEN HideGoldDeluxe = 1 THEN 0 ELSE 1 END,
-			dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
-			dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
-	FROM dbo.CustInfo ci WITH(NOLOCK)
-		INNER JOIN dbo.CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.srecommend = @srecommend
-		AND roleid < 4
-		AND enabled=1
-		AND (dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB)= 0
-			OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0
-			OR HideGoldDeluxe = 1
-		)
-		
-	--reset setting for un-sync customers for GD
-	UPDATE cs
-	SET minpositiontaking =0		
-	FROM dbo.CustOverrideGame cs WITH(UPDLOCK,ROWLOCK) 
-	WHERE custid IN (SELECT custid FROM #UnSyncCust WHERE syncGD = 0 AND roleid > 1)
-		AND sporttype = 255
-		AND bettype =1701	
-		
-	UPDATE cs
-	SET spositiontaking = CASE WHEN roleid = 3 THEN upline.minpositiontaking ELSE 0 END,
-		mpositiontaking = CASE WHEN roleid = 2 THEN upline.minpositiontaking ELSE 0 END,
-		apositiontaking = CASE WHEN roleid = 1 THEN upline.minpositiontaking ELSE 0 END,
-		isautopositiontaking=0,
-		isautompositiontaking=0,
-		autopositiontaking=0,
-		autompositiontaking=0
-	FROM dbo.CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #UnSyncCust t ON cs.custid = t.custID
-		INNER JOIN dbo.CustOverrideGame upline WITH(NOLOCK) ON upline.custID = t.UplineID
-																AND upline.sporttype = cs.sporttype
-																AND upline.bettype = cs.bettype	
-	WHERE syncGD = 0
-		AND cs.sporttype = 255
-		AND cs.bettype =1701
-	
-	--VB,AB	
-	UPDATE cs
-	SET MinPT =0
-	FROM dbo.CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN (SELECT custid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid > 1
-					UNION ALL SELECT custid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid > 1
-					)t ON cs.custid = t.custid
-						AND cs.sporttype=t.sporttype
-	
-	UPDATE cs
-	SET cs.superPT = CASE WHEN t.roleid = 3 THEN upline.MinPT ELSE 0 END,
-		cs.MasterPT = CASE WHEN t.roleid = 2 THEN upline.MinPT ELSE 0 END,
-		cs.AgentPT = 0,
-		cs.IsAutoMasterPT =0,
-		cs.AutoMasterPT =0,
-		cs.IsAutoSuperPT =0,
-		cs.AutoSuperPT =0
-	FROM dbo.CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN (SELECT custid, uplineID, roleid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid > 1
-					UNION ALL 
-					SELECT custid, uplineID, roleid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid > 1
-					)t ON cs.custid = t.custid
-						AND cs.sporttype=t.sporttype
-		INNER JOIN dbo.CustPTSetting3rd_Agent upline WITH(NOLOCK) ON upline.custID = t.UplineID
-																	AND upline.sporttype = cs.sporttype
-																	AND upline.bettype = cs.bettype
-						
-	UPDATE cs
-	SET cs.superPT = 0,
-		cs.MasterPT = 0,
-		cs.AgentPT = upline.minPT,
-		cs.IsAutoMasterPT =0,
-		cs.AutoMasterPT =0,
-		cs.IsAutoSuperPT =0,
-		cs.AutoSuperPT =0
-	FROM dbo.CustPTSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN (SELECT custid, uplineID, roleid, 211 as Sporttype FROM #UnSyncCust WHERE syncAB =0 AND roleid = 1
-					UNION ALL 
-					SELECT custid, uplineID, roleid, 212 as Sporttype FROM #UnSyncCust WHERE syncVB =0 AND roleid = 1
-					)t ON cs.custid = t.custid
-						AND cs.sporttype=t.sporttype
-		INNER JOIN dbo.CustPTSetting3rd_Agent upline WITH(NOLOCK) ON upline.custID = t.UplineID
-																	AND upline.sporttype = cs.sporttype
-																	AND upline.bettype = cs.bettype
-			
-						
+ 		
 	--GD
 	SELECT ci.custid, cs.sdiscount, cs.adiscount, cs.discount, scs.sdiscount as superDiscount, mcs.adiscount as masterDiscount, acs.discount as agentDiscount
 	INTO #tmpSetting
@@ -126,7 +11,7 @@ BEGIN
 		INNER JOIN dbo.CustSettingGame cs WITH(NOLOCK) ON ci.custid = cs.CustID
 																AND cs.sporttype = 255
 																AND cs.bettype =1701
-		INNER JOIN dbo.CustSettingGame scs WITH(NOLOCK) ON scs.custid = @srecommend
+		INNER JOIN dbo.CustSettingGame scs WITH(NOLOCK) ON scs.custid = ci.srecommend
 														AND scs.sporttype = cs.sporttype
 														AND scs.bettype = cs.bettype
 		INNER JOIN dbo.CustSettingGame mcs WITH(NOLOCK) ON mcs.custid = ci.mrecommend
@@ -135,16 +20,567 @@ BEGIN
 		INNER JOIN dbo.CustSettingGame acs WITH(NOLOCK) ON acs.custid = ci.recommend
 														AND acs.sporttype = cs.sporttype
 														AND acs.bettype = cs.bettype												
-	WHERE srecommend = @srecommend
-		AND roleid = 1
+	WHERE roleid = 1
 		AND enabled = 1		
 		AND (cs.sdiscount <> scs.sdiscount
 			OR cs.adiscount <> mcs.adiscount
 			OR cs.discount <> acs.discount)
-	
-	IF @@ROWCOUNT = 0
-		RETURN;
-	
+		AND ci.custid IN (
+		24660159	,--	8RMRG6A611222
+		24660177	,--	8RMM6HK68
+		24661003	,--	8RMS6BP1500
+		24661013	,--	8RMS312RMBTHF7666
+		24824254	,--	8RMS69HJGG1000
+		24930897	,--	8RMS312RMB0E55
+		24938227	,--	8RMFNUDR01
+		25007043	,--	8RMCV8611
+		25081994	,--	8RMS69RAC00
+		25091738	,--	8RMS6H9301
+		25148305	,--	8RMTKH40801
+		25269263	,--	8RMS7WSLOZ0FP
+		25269283	,--	8RMMFRMB01164
+		25269295	,--	8RMM69ETR
+		25269307	,--	8RMS312RMB0Z30
+		25288536	,--	8RMLHM81111
+		25326502	,--	8RMS69R73H2
+		25326521	,--	8RMJGBP55
+		25393879	,--	8RMS6HNT01
+		25404574	,--	8RMWMSUD5
+		25413651	,--	8RMWBRKK8
+		25413668	,--	8RMS312RMB0D22
+		25606130	,--	8RMMOTRMB88JS9
+		25625498	,--	8RMMOTRMBHG123
+		25630245	,--	8RMMC21599
+		25641202	,--	8RMD-S69
+		25641221	,--	8RMD-S305
+		25641237	,--	8RMD-S31B
+		25641257	,--	8RMD-CKSE
+		25641262	,--	8RMD-NC11
+		25641272	,--	8RMD-FNM
+		25641309	,--	8RMD-LHR
+		25641712	,--	8RMS6EU2907362
+		25661924	,--	8RMD-S56
+		25757962	,--	8RMD-SG2M
+		25758404	,--	8RMD-HPM
+		25773867	,--	8RMWKRKG06669
+		25818351	,--	8RMEURASIA
+		25868085	,--	8RMD-S56L
+		25868689	,--	8RMD-S69L
+		25868702	,--	8RMD-PYYL
+		25868712	,--	8RMD-LHRL
+		25868721	,--	8RMD-PORL
+		25868732	,--	8RMD-XCNL
+		25875356	,--	8RMD-PYY
+		25932088	,--	8RMD-CKSBE
+		25942962	,--	8RMD-SSYHL
+		25951474	,--	8RMM7RRMBDQ
+		25951490	,--	8RMS69H88CR
+		25951494	,--	8RMS69NTCF03
+		25951504	,--	8RMS69RF781
+		25955459	,--	8RMD-S69D
+		25955472	,--	8RMD-S305D
+		25955482	,--	8RMD-S31BD
+		25955490	,--	8RMD-CKSED
+		25955502	,--	8RMD-LHRD
+		25955509	,--	8RMD-NC11D
+		25955523	,--	8RMD-FNMD
+		25955530	,--	8RMD-S56D
+		25955536	,--	8RMD-PYYD
+		25955545	,--	8RMD-PORD
+		25955556	,--	8RMD-XCND
+		25955569	,--	8RMD-CKSBED
+		25972396	,--	8RMD-WPRRB
+		25981332	,--	8RMD-DTB11N
+		26001473	,--	8RMFNGDR01999
+		26008743	,--	8RMMOWRMB2A
+		26013369	,--	8RMMPH89
+		26013371	,--	8RMS6EU2903152
+		26013376	,--	8RMVQ99VV
+		26041696	,--	8RMMC08PC
+		26043531	,--	8RMTHB
+		26057707	,--	8RMD-MC3D
+		26057731	,--	8RMD-MC3L
+		26072320	,--	8RMS81R0J11
+		26111999	,--	8RMSUSPENDER
+		26133803	,--	8RMKY1II00
+		26318665	,--	8RMS6CN1701
+		26392299	,--	8RMSSFKS1NK
+		26392312	,--	8RMS120SYANM
+		27148941	,--	8RMRory800
+		24660159	,--	8RMRG6A611222
+		24660177	,--	8RMM6HK68
+		24661003	,--	8RMS6BP1500
+		24661013	,--	8RMS312RMBTHF7666
+		24824254	,--	8RMS69HJGG1000
+		24930897	,--	8RMS312RMB0E55
+		24938227	,--	8RMFNUDR01
+		25007043	,--	8RMCV8611
+		25081994	,--	8RMS69RAC00
+		25091738	,--	8RMS6H9301
+		25148305	,--	8RMTKH40801
+		25269263	,--	8RMS7WSLOZ0FP
+		25269283	,--	8RMMFRMB01164
+		25269295	,--	8RMM69ETR
+		25269307	,--	8RMS312RMB0Z30
+		25288536	,--	8RMLHM81111
+		25326502	,--	8RMS69R73H2
+		25326521	,--	8RMJGBP55
+		25393879	,--	8RMS6HNT01
+		25404574	,--	8RMWMSUD5
+		25413651	,--	8RMWBRKK8
+		25413668	,--	8RMS312RMB0D22
+		25606130	,--	8RMMOTRMB88JS9
+		25625498	,--	8RMMOTRMBHG123
+		25630245	,--	8RMMC21599
+		25641202	,--	8RMD-S69
+		25641221	,--	8RMD-S305
+		25641237	,--	8RMD-S31B
+		25641257	,--	8RMD-CKSE
+		25641262	,--	8RMD-NC11
+		25641272	,--	8RMD-FNM
+		25641309	,--	8RMD-LHR
+		25641712	,--	8RMS6EU2907362
+		25661924	,--	8RMD-S56
+		25757962	,--	8RMD-SG2M
+		25758404	,--	8RMD-HPM
+		25773867	,--	8RMWKRKG06669
+		25818351	,--	8RMEURASIA
+		25868085	,--	8RMD-S56L
+		25868689	,--	8RMD-S69L
+		25868702	,--	8RMD-PYYL
+		25868712	,--	8RMD-LHRL
+		25868721	,--	8RMD-PORL
+		25868732	,--	8RMD-XCNL
+		25875356	,--	8RMD-PYY
+		25932088	,--	8RMD-CKSBE
+		25942962	,--	8RMD-SSYHL
+		25951474	,--	8RMM7RRMBDQ
+		25951490	,--	8RMS69H88CR
+		25951494	,--	8RMS69NTCF03
+		25951504	,--	8RMS69RF781
+		25955459	,--	8RMD-S69D
+		25955472	,--	8RMD-S305D
+		25955482	,--	8RMD-S31BD
+		25955490	,--	8RMD-CKSED
+		25955502	,--	8RMD-LHRD
+		25955509	,--	8RMD-NC11D
+		25955523	,--	8RMD-FNMD
+		25955530	,--	8RMD-S56D
+		25955536	,--	8RMD-PYYD
+		25955545	,--	8RMD-PORD
+		25955556	,--	8RMD-XCND
+		25955569	,--	8RMD-CKSBED
+		25972396	,--	8RMD-WPRRB
+		25981332	,--	8RMD-DTB11N
+		26001473	,--	8RMFNGDR01999
+		26008743	,--	8RMMOWRMB2A
+		26013369	,--	8RMMPH89
+		26013371	,--	8RMS6EU2903152
+		26013376	,--	8RMVQ99VV
+		26041696	,--	8RMMC08PC
+		26043531	,--	8RMTHB
+		26057707	,--	8RMD-MC3D
+		26057731	,--	8RMD-MC3L
+		26072320	,--	8RMS81R0J11
+		26111999	,--	8RMSUSPENDER
+		26133803	,--	8RMKY1II00
+		26318665	,--	8RMS6CN1701
+		26392299	,--	8RMSSFKS1NK
+		26392312	,--	8RMS120SYANM
+		27148941	,--	8RMRory800
+		24660159	,--	8RMRG6A611222
+		24660177	,--	8RMM6HK68
+		24661003	,--	8RMS6BP1500
+		24661013	,--	8RMS312RMBTHF7666
+		24824254	,--	8RMS69HJGG1000
+		24930897	,--	8RMS312RMB0E55
+		24938227	,--	8RMFNUDR01
+		25007043	,--	8RMCV8611
+		25081994	,--	8RMS69RAC00
+		25091738	,--	8RMS6H9301
+		25148305	,--	8RMTKH40801
+		25269263	,--	8RMS7WSLOZ0FP
+		25269283	,--	8RMMFRMB01164
+		25269295	,--	8RMM69ETR
+		25269307	,--	8RMS312RMB0Z30
+		25288536	,--	8RMLHM81111
+		25326502	,--	8RMS69R73H2
+		25326521	,--	8RMJGBP55
+		25393879	,--	8RMS6HNT01
+		25404574	,--	8RMWMSUD5
+		25413651	,--	8RMWBRKK8
+		25413668	,--	8RMS312RMB0D22
+		25606130	,--	8RMMOTRMB88JS9
+		25625498	,--	8RMMOTRMBHG123
+		25630245	,--	8RMMC21599
+		25641202	,--	8RMD-S69
+		25641221	,--	8RMD-S305
+		25641237	,--	8RMD-S31B
+		25641257	,--	8RMD-CKSE
+		25641262	,--	8RMD-NC11
+		25641272	,--	8RMD-FNM
+		25641309	,--	8RMD-LHR
+		25641712	,--	8RMS6EU2907362
+		25661924	,--	8RMD-S56
+		25757962	,--	8RMD-SG2M
+		25758404	,--	8RMD-HPM
+		25773867	,--	8RMWKRKG06669
+		25818351	,--	8RMEURASIA
+		25868085	,--	8RMD-S56L
+		25868689	,--	8RMD-S69L
+		25868702	,--	8RMD-PYYL
+		25868712	,--	8RMD-LHRL
+		25868721	,--	8RMD-PORL
+		25868732	,--	8RMD-XCNL
+		25875356	,--	8RMD-PYY
+		25932088	,--	8RMD-CKSBE
+		25942962	,--	8RMD-SSYHL
+		25951474	,--	8RMM7RRMBDQ
+		25951490	,--	8RMS69H88CR
+		25951494	,--	8RMS69NTCF03
+		25951504	,--	8RMS69RF781
+		25955459	,--	8RMD-S69D
+		25955472	,--	8RMD-S305D
+		25955482	,--	8RMD-S31BD
+		25955490	,--	8RMD-CKSED
+		25955502	,--	8RMD-LHRD
+		25955509	,--	8RMD-NC11D
+		25955523	,--	8RMD-FNMD
+		25955530	,--	8RMD-S56D
+		25955536	,--	8RMD-PYYD
+		25955545	,--	8RMD-PORD
+		25955556	,--	8RMD-XCND
+		25955569	,--	8RMD-CKSBED
+		25972396	,--	8RMD-WPRRB
+		25981332	,--	8RMD-DTB11N
+		26001473	,--	8RMFNGDR01999
+		26008743	,--	8RMMOWRMB2A
+		26013369	,--	8RMMPH89
+		26013371	,--	8RMS6EU2903152
+		26013376	,--	8RMVQ99VV
+		26041696	,--	8RMMC08PC
+		26043531	,--	8RMTHB
+		26057707	,--	8RMD-MC3D
+		26057731	,--	8RMD-MC3L
+		26072320	,--	8RMS81R0J11
+		26111999	,--	8RMSUSPENDER
+		26133803	,--	8RMKY1II00
+		26318665	,--	8RMS6CN1701
+		26392299	,--	8RMSSFKS1NK
+		26392312	,--	8RMS120SYANM
+		27148941	,--	8RMRory800
+		24699650	,--	PH-Sophara
+		24700110	,--	PH-PHC
+		24700129	,--	PH-Kelvin
+		24700148	,--	PH-Kimtai
+		24700156	,--	PH-HonHeng
+		24700182	,--	PH-Ralph
+		24700204	,--	PH-Keong
+		24700214	,--	PH-Jinho
+		24700233	,--	PH-SK
+		24700248	,--	PH-Dazai
+		24700259	,--	PH-Vivian
+		24700268	,--	PH-Robin
+		24700295	,--	PH-Shaun
+		24700305	,--	PH-GaChun
+		24700312	,--	PH-Nicole
+		24700323	,--	PH-Jack
+		24700349	,--	PH-Edwen
+		24700363	,--	PH-Norman
+		24700371	,--	PH-Franco
+		24700382	,--	PH-Omega
+		24735833	,--	PH-Joy
+		24735842	,--	PH-Katie
+		24735857	,--	PH-Britney
+		24735866	,--	PH-Karla
+		24735870	,--	PH-Hana
+		24735882	,--	PH-Dallas
+		24735894	,--	PH-Lucas
+		24735912	,--	PH-Seven
+		24735922	,--	PH-Tevez
+		24735927	,--	PH-Sheamus
+		24735951	,--	PH-Shelly
+		24735958	,--	PH-Crystal
+		24735963	,--	PH-Trevor
+		24735975	,--	PH-Terry
+		24735984	,--	PH-Stella
+		24735993	,--	PH-Tapo
+		24736003	,--	PH-Dante
+		24736015	,--	PH-Levi
+		24736019	,--	PH-Eto
+		24736029	,--	PH-Njay
+		24736042	,--	PH-Daniel
+		24736136	,--	PH-Sharly
+		24736155	,--	PH-Eason
+		24736164	,--	PH-Rory
+		24736169	,--	PH-Boston
+		24736171	,--	PH-Marvin
+		24736177	,--	PH-Benny
+		24736180	,--	PH-Nike
+		24736188	,--	PH-Jolie
+		25334264	,--	PH-James
+		25334281	,--	PH-San
+		25782129	,--	MTDL-James
+		25782400	,--	MTDL-Hubert
+		26556848	,--	Lg-Boon
+		26584467	,--	PH-KSS
+		26639957	,--	NSD-LIM
+		26639962	,--	NSD-JEAN
+		26639969	,--	NSD1
+		26639973	,--	NSD2
+		26639979	,--	NSD-JOKER
+		27002361	,--	MTD-Wei
+		27787818	,--	MTD-Stock
+		27788325	,--	MTDL-Stock
+		27788339	,--	PH-Stock
+		27788352	,--	1x2-Stock
+		27789224	,--	HMTD-Bao
+		27789287	,--	HMTD-Boy
+		27789309	,--	HMTD-BRIAN
+		27789324	,--	HMTD-Feibee
+		27789343	,--	HMTD-FLin
+		27789706	,--	HMTD-Foo
+		27792202	,--	HMTD-Kelvin
+		27792214	,--	HMTD-Kuan
+		27792227	,--	HMTD-LSoon
+		27792235	,--	HMTD-RICHIE
+		27792252	,--	HMTD-TKee
+		27792261	,--	HMTD-VINH
+		27792268	,--	HMTD-Wei
+		27792283	,--	HMTD-Xu
+		27792288	,--	HMTD-Yakushi
+		24699650	,--	PH-Sophara
+		24700110	,--	PH-PHC
+		24700129	,--	PH-Kelvin
+		24700148	,--	PH-Kimtai
+		24700156	,--	PH-HonHeng
+		24700182	,--	PH-Ralph
+		24700204	,--	PH-Keong
+		24700214	,--	PH-Jinho
+		24700233	,--	PH-SK
+		24700248	,--	PH-Dazai
+		24700259	,--	PH-Vivian
+		24700268	,--	PH-Robin
+		24700295	,--	PH-Shaun
+		24700305	,--	PH-GaChun
+		24700312	,--	PH-Nicole
+		24700323	,--	PH-Jack
+		24700349	,--	PH-Edwen
+		24700363	,--	PH-Norman
+		24700371	,--	PH-Franco
+		24700382	,--	PH-Omega
+		24735833	,--	PH-Joy
+		24735842	,--	PH-Katie
+		24735857	,--	PH-Britney
+		24735866	,--	PH-Karla
+		24735870	,--	PH-Hana
+		24735882	,--	PH-Dallas
+		24735894	,--	PH-Lucas
+		24735912	,--	PH-Seven
+		24735922	,--	PH-Tevez
+		24735927	,--	PH-Sheamus
+		24735951	,--	PH-Shelly
+		24735958	,--	PH-Crystal
+		24735963	,--	PH-Trevor
+		24735975	,--	PH-Terry
+		24735984	,--	PH-Stella
+		24735993	,--	PH-Tapo
+		24736003	,--	PH-Dante
+		24736015	,--	PH-Levi
+		24736019	,--	PH-Eto
+		24736029	,--	PH-Njay
+		24736042	,--	PH-Daniel
+		24736136	,--	PH-Sharly
+		24736155	,--	PH-Eason
+		24736164	,--	PH-Rory
+		24736169	,--	PH-Boston
+		24736171	,--	PH-Marvin
+		24736177	,--	PH-Benny
+		24736180	,--	PH-Nike
+		24736188	,--	PH-Jolie
+		25334264	,--	PH-James
+		25334281	,--	PH-San
+		25782129	,--	MTDL-James
+		25782400	,--	MTDL-Hubert
+		26556848	,--	Lg-Boon
+		26584467	,--	PH-KSS
+		26639957	,--	NSD-LIM
+		26639962	,--	NSD-JEAN
+		26639969	,--	NSD1
+		26639973	,--	NSD2
+		26639979	,--	NSD-JOKER
+		27002361	,--	MTD-Wei
+		27787818	,--	MTD-Stock
+		27788325	,--	MTDL-Stock
+		27788339	,--	PH-Stock
+		27788352	,--	1x2-Stock
+		27789224	,--	HMTD-Bao
+		27789287	,--	HMTD-Boy
+		27789309	,--	HMTD-BRIAN
+		27789324	,--	HMTD-Feibee
+		27789343	,--	HMTD-FLin
+		27789706	,--	HMTD-Foo
+		27792202	,--	HMTD-Kelvin
+		27792214	,--	HMTD-Kuan
+		27792227	,--	HMTD-LSoon
+		27792235	,--	HMTD-RICHIE
+		27792252	,--	HMTD-TKee
+		27792261	,--	HMTD-VINH
+		27792268	,--	HMTD-Wei
+		27792283	,--	HMTD-Xu
+		27792288	,--	HMTD-Yakushi
+		24699650	,--	PH-Sophara
+		24700110	,--	PH-PHC
+		24700129	,--	PH-Kelvin
+		24700148	,--	PH-Kimtai
+		24700156	,--	PH-HonHeng
+		24700182	,--	PH-Ralph
+		24700204	,--	PH-Keong
+		24700214	,--	PH-Jinho
+		24700233	,--	PH-SK
+		24700248	,--	PH-Dazai
+		24700259	,--	PH-Vivian
+		24700268	,--	PH-Robin
+		24700295	,--	PH-Shaun
+		24700305	,--	PH-GaChun
+		24700312	,--	PH-Nicole
+		24700323	,--	PH-Jack
+		24700349	,--	PH-Edwen
+		24700363	,--	PH-Norman
+		24700371	,--	PH-Franco
+		24700382	,--	PH-Omega
+		24735833	,--	PH-Joy
+		24735842	,--	PH-Katie
+		24735857	,--	PH-Britney
+		24735866	,--	PH-Karla
+		24735870	,--	PH-Hana
+		24735882	,--	PH-Dallas
+		24735894	,--	PH-Lucas
+		24735912	,--	PH-Seven
+		24735922	,--	PH-Tevez
+		24735927	,--	PH-Sheamus
+		24735951	,--	PH-Shelly
+		24735958	,--	PH-Crystal
+		24735963	,--	PH-Trevor
+		24735975	,--	PH-Terry
+		24735984	,--	PH-Stella
+		24735993	,--	PH-Tapo
+		24736003	,--	PH-Dante
+		24736015	,--	PH-Levi
+		24736019	,--	PH-Eto
+		24736029	,--	PH-Njay
+		24736042	,--	PH-Daniel
+		24736136	,--	PH-Sharly
+		24736155	,--	PH-Eason
+		24736164	,--	PH-Rory
+		24736169	,--	PH-Boston
+		24736171	,--	PH-Marvin
+		24736177	,--	PH-Benny
+		24736180	,--	PH-Nike
+		24736188	,--	PH-Jolie
+		25334264	,--	PH-James
+		25334281	,--	PH-San
+		25782129	,--	MTDL-James
+		25782400	,--	MTDL-Hubert
+		26556848	,--	Lg-Boon
+		26584467	,--	PH-KSS
+		26639957	,--	NSD-LIM
+		26639962	,--	NSD-JEAN
+		26639969	,--	NSD1
+		26639973	,--	NSD2
+		26639979	,--	NSD-JOKER
+		27002361	,--	MTD-Wei
+		27787818	,--	MTD-Stock
+		27788325	,--	MTDL-Stock
+		27788339	,--	PH-Stock
+		27788352	,--	1x2-Stock
+		27789224	,--	HMTD-Bao
+		27789287	,--	HMTD-Boy
+		27789309	,--	HMTD-BRIAN
+		27789324	,--	HMTD-Feibee
+		27789343	,--	HMTD-FLin
+		27789706	,--	HMTD-Foo
+		27792202	,--	HMTD-Kelvin
+		27792214	,--	HMTD-Kuan
+		27792227	,--	HMTD-LSoon
+		27792235	,--	HMTD-RICHIE
+		27792252	,--	HMTD-TKee
+		27792261	,--	HMTD-VINH
+		27792268	,--	HMTD-Wei
+		27792283	,--	HMTD-Xu
+		27792288	,--	HMTD-Yakushi
+		26959721	,--	6hk2501070
+		26959731	,--	6hk2501076
+		26959744	,--	6hk2501077
+		26959757	,--	6hk2501079
+		26959721	,--	6hk2501070
+		26959731	,--	6hk2501076
+		26959744	,--	6hk2501077
+		26959757	,--	6hk2501079
+		14731679	,--	KP270909009
+		13944569	,--	KP2735CH000
+		14823449	,--	KP2735CH001
+		15194116	,--	KP2735CH002
+		13947246	,--	KP2735D1001
+		13947262	,--	KP2735D1002
+		13947273	,--	KP2735D1003
+		13947283	,--	KP2735D1004
+		13947295	,--	KP2735D1005
+		13947302	,--	KP2735D1006
+		13947310	,--	KP2735D1007
+		13947345	,--	KP2735D1008
+		13947352	,--	KP2735D1009
+		13947366	,--	KP2735D1010
+		13947393	,--	KP2735D1011
+		13947410	,--	KP2735D1012
+		13947421	,--	KP2735D1014
+		13947426	,--	KP2735D1015
+		13947433	,--	KP2735D1016
+		14000306	,--	KP2735D1017
+		14019861	,--	KP2735D1018
+		14049981	,--	KP2735D1019
+		14099604	,--	KP2735D1020
+		13959694	,--	KP2735D2001
+		13959702	,--	KP2735D2002
+		13974109	,--	KP2735D2003
+		13974115	,--	KP2735D2004
+		13974122	,--	KP2735D2005
+		14345035	,--	KP2735D2006
+		14345068	,--	KP2735D2007
+		14345101	,--	KP2735D2008
+		14345129	,--	KP2735D2009
+		13944586	,--	KP2735H1000
+		13952105	,--	KP2735T1000
+		13952147	,--	KP2735T1001
+		14248259	,--	KP2735T1002
+		14737674	,--	KP2735T1003
+		14737676	,--	KP2735T1004
+		14737682	,--	KP2735T1005
+		14737685	,--	KP2735T1006
+		16006298	,--	KP2735T1007
+		16059028	,--	KP2735T1008
+		16176164	,--	KP2735T1009
+		16182847	,--	KP2735T100A
+		16215491	,--	KP2735T100B
+		13952944	,--	KP2735U1001
+		13952959	,--	KP2735U1002
+		13952969	,--	KP2735U1004
+		13952982	,--	KP2735U1005
+		13964222	,--	KP2735U1011
+		14523807	,--	KP2735U1006
+		14538318	,--	KP2735U1007
+		15615136	,--	KP291902008
+		15615136	,--	KP291902008
+		15603945	,--	KP30H110444
+		15603945	,--	KP30H110444
+		15595516	,--	KP33K3H1111
+		15595516	,--	KP33K3H1111
+		15609739	,--	KP39MCZ2001
+		15625918	,--	KP39MCZ2002
+		15609739	,--	KP39MCZ2001
+		15625918	--	KP39MCZ2002
+				)	
+			
 	UPDATE cs
 	SET cs.sdiscount = CASE WHEN cs.sdiscount <> t.superDiscount THEN t.superDiscount ELSE cs.sdiscount END,
 		cs.adiscount = CASE WHEN cs.adiscount <> t.masterDiscount THEN t.masterDiscount ELSE cs.adiscount END,
@@ -153,80 +589,3 @@ BEGIN
 		INNER JOIN #tmpSetting t ON cs.custid = t.custid
 	WHERE cs.sporttype= 255
 		AND cs.bettype=1701
-
-	DROP TABLE #tmpSetting	
-	DROP TABLE #UnSyncCust	
-END	
-GO
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
-
-
----
----
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
---------------------------------------------------------------------------------------
-DECLARE @srecommend INT
-
-CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
-
-INSERT INTO #Super(custid)
-SELECT custid 
-FROM dbo.custInfo WITH (Nolock) 
-WHERE roleid = 4
-	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
-	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
-	AND Enabled = 1
-	
-WHILE (1 = 1)
-BEGIN
-	UPDATE TOP (1) #Super
-	SET isfinished = 1
-		,@srecommend = custid			
-	WHERE isfinished = 0
-	
-	IF @@ROWCOUNT = 0 BREAK
-
-	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend			
-			,@target = 'REPLICATED'
-	
-	waitfor delay '00:00:0.280'
-END			
-GO	
-
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (/06/DBTP) -----
------------------------------------------------------------------------------------	
-
----
----
--- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
---------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------	
-DECLARE @srecommend INT
-CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
-
-INSERT INTO #Super(custid)
-SELECT custid 
-FROM dbo.custInfo WITH (Nolock) 
-WHERE roleid = 4
-	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
-	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
-	AND Enabled = 1
-	
-WHILE (1 = 1)
-BEGIN
-	UPDATE TOP (1) #Super
-	SET isfinished = 1
-		,@srecommend = custid			
-	WHERE isfinished = 0
-	
-	IF @@ROWCOUNT = 0 BREAK
-
-	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend			
-			,@target = 'DBCUST'
-	
-	waitfor delay '00:00:0.280'
-END			
-GO	
--- END STEP 3: RUN THIS SCRIPT AT DBCUST -----
------------------------------------------------------------------------------------
