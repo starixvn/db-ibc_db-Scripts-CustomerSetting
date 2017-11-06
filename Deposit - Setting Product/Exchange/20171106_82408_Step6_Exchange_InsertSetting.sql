@@ -26,24 +26,27 @@ BEGIN
 		OR dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 		
 		OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 
+		OR dbo.f_CheckRepTable('Dep_CustDiscountSetting_Agent') = 0 
 	   )
 		RETURN
 
 	CREATE TABLE #tblCust (custid INT, roleid INT)
 	DECLARE @SportType SMALLINT = 221 -- just for get bitmapOrder for ProductStatus
+	DECLARE @ProductProfileList VARCHAR(200) = '19,20'
+	, @ProductID INT = 31 
 	-- For ProductStatus param
 	, @bitmapOrder INT=0
 
-
 	SET @bitmapOrder = (SELECT bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHERE Sporttype =  @SportType )	
 
-	INSERT INTO #tblCust (custid)			
-	SELECT custid
+	INSERT INTO #tblCust (custid,roleid)			
+	SELECT custid,roleid
 	FROM custInfo WITH(NOLOCK)
 	WHERE srecommend =@srecommend
 		AND mrecommend NOT IN (SELECT custid FROM custinfo WITH(NOLOCK)
 							   WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
 		AND custid <= @max_custid	
+
 	-- Status Process
 	UPDATE T 
 			SET bitmapIsDisabled = (SELECT * FROM f_CustSetting_GenerateProductStatus (t.bitmapIsDisabled, @bitmapOrder,0))
@@ -51,6 +54,26 @@ BEGIN
 				
 	FROM [dbo].[Dep_CustProductStatus] T (ROWLOCK)
 		INNER JOIN #tblCust C ON C.custid = T.custid
+
+	INSERT INTO [dbo].[Dep_CustDiscountSetting_Agent]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[Discount])
+	SELECT c.custid,221,8001,0.05
+	FROM #tblCust c WITH(NOLOCK)
+	WHERE c.roleid IN(2,3,4)
+
+		-- Licensee profile list
+	IF NOT EXISTS (SELECT 1 
+				   FROM Dep_LicenseeProductSetting lps WITH (NOLOCK)
+						INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lps.ProductSettingID = ps.ProductSettingID
+				   WHERE CustID = @srecommend AND ps.ProductID= @ProductID)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting (CustID,ProductSettingID)
+		SELECT @srecommend, t.val
+		FROM dbo.strSplit(@ProductProfileList,',') t
+	END	
 
 END	
 
@@ -65,6 +88,15 @@ CREATE TABLE #supers (custid INT, currency INT, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT, @site VARCHAR (50), @currency INT 
 SELECT  @max_custid= xxx ---input maxcustid
+DECLARE @ProductID INT = 31
+CREATE TABLE #Supers_Offered (custid INT)
+INSERT INTO #Supers_Offered (custid)
+SELECT DISTINCT lds.CustID
+FROM Dep_LicenseeProductSetting lds WITH (NOLOCK)
+	INNER JOIN Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
+	INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
+	INNER JOIN Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
+WHERE PSD.SportType = 221
 
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
@@ -72,7 +104,7 @@ FROM  Dep_CustSuper with(nolock)
 WHERE site in ('alog','12bet')
 	AND custid <= @max_custid
 	AND currency IN (3,20,61)
-
+	AND custid NOT IN (SELECT custid FROM #Supers_Offered)
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -119,12 +151,23 @@ CREATE TABLE #supers (custid INT, currency INT, isfinished BIT DEFAULT(0))
 DECLARE @max_custid INT, @srecommend INT, @site VARCHAR (50), @currency INT 
 SELECT  @max_custid= xxx ---input maxcustid
 
+DECLARE @ProductID INT = 31
+CREATE TABLE #Supers_Offered (custid INT)
+INSERT INTO #Supers_Offered (custid)
+SELECT DISTINCT lds.CustID
+FROM Dep_LicenseeProductSetting lds WITH (NOLOCK)
+	INNER JOIN Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
+	INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
+	INNER JOIN Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
+WHERE PSD.SportType = 221
+
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE  site in ('alog','12bet')
 	AND custid <= @max_custid
 	AND currency IN (3,20,61) -- Currency H - it is just test currency, used once in a while 
+	AND custid NOT IN (SELECT custid FROM #Supers_Offered)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

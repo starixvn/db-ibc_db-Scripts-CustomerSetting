@@ -74,15 +74,6 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ,8001
            ,0        
            ,0)
-INSERT INTO [dbo].[Dep_LicenseeProductSetting]
-           ([CustID]
-           ,[ProductSettingID])
-SELECT custid,@MaxProductSettingID+2 FROM Dep_CustSuper WITH(NOLOCK) WHERE Site IN ('12Bet', 'alog') AND Currency IN(3,20,61)
-
-INSERT INTO [dbo].[Dep_LicenseeProductSetting]
-           ([CustID]
-           ,[ProductSettingID])
-SELECT custid,@MaxProductSettingID+1 FROM Dep_CustSuper WITH(NOLOCK) WHERE Site IN ('12Bet', 'alog') AND Currency IN(3,20,61)
 
 INSERT INTO [dbo].[Dep_ProductStatusProfile]
            ([Sporttype]
