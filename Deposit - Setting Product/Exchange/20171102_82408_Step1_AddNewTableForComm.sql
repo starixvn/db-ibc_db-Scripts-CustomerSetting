@@ -2,7 +2,7 @@
 	Created by: Winnie
 	Created Date: 20171103
 	Description: DCS - Deposit - Add new table Dep_CustDiscountSetting_Agent 
-	Database: DBCUST/CustDB
+	Database: DBCUST/CustDB. ADD THIS TABLE TO REPLICATION PUB: CustDB_CustSetting
 		
 */
 USE CUSTDB
