@@ -43,12 +43,16 @@ DECLARE @srecommend INT
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #Super(custid)
-SELECT custid 
-FROM dbo.custInfo WITH (Nolock) 
-WHERE roleid = 4
-	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
-	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
-	AND Enabled = 1
+SELECT ci.custid 
+FROM dbo.customer c WITH (Nolock) 
+	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
+WHERE ci.roleid = 4
+	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
+	AND ci.custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
+	AND ci.Enabled = 1
+	AND s.islicensee = 0
+	AND c.username NOT LIKE '3rdSuper%'
 	
 WHILE (1 = 1)
 BEGIN
@@ -78,12 +82,16 @@ DECLARE @srecommend INT
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #Super(custid)
-SELECT custid 
-FROM dbo.custInfo WITH (Nolock) 
-WHERE roleid = 4
-	AND custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
-	AND custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
-	AND Enabled = 1
+SELECT ci.custid 
+FROM dbo.customer c WITH (Nolock) 
+	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
+WHERE ci.roleid = 4
+	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
+	AND ci.custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
+	AND ci.Enabled = 1
+	AND s.islicensee = 0
+	AND c.username NOT LIKE '3rdSuper%'
 	
 WHILE (1 = 1)
 BEGIN
