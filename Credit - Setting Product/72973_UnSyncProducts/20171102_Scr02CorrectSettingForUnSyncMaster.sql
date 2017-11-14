@@ -25,7 +25,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	
-	CREATE TABLE #tmpMasters (CustID INT PRIMARY KEY, isDirectAccount BIT, SyncGD BIT, SyncAB BIT, SyncVB BIT, xmlStrDisabled XML, xmlStrSynced XML)
+	CREATE TABLE #tmpMasters (CustID INT PRIMARY KEY, isDirectAccount BIT, SyncGD BIT, SyncAB BIT, SyncVB BIT)
 	
 	DECLARE @bitmapOrderVB TINYINT,
 			@bitmapOrderAB TINYINT						
@@ -150,32 +150,7 @@ BEGIN
 		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
 							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
 				)	
-	
-	
-	UPDATE t
-	SET xmlStrDisabled = (SELECT 
-					 (SELECT bitmapOrder as '@b', 1 as '@s'
-					 FROM dbo.ProductStatusProfile WITH(NOLOCK)
-					 where 1=case when (syncVB = 0 AND Sporttype = 212 ) or (syncAB = 0 AND Sporttype = 211) then 1 ELSE 0 end
-					  for XML path('r'),TYPE) 
-					FOR XML PATH('root'), TYPE
-				),
-		xmlStrSynced = (SELECT 
-					 (SELECT bitmapOrder as '@b', 1 as '@s'
-					 FROM dbo.ProductStatusProfile WITH(NOLOCK)
-					 where 1=case when (syncVB = 0 AND Sporttype = 212 ) or (syncAB = 0 AND Sporttype = 211) then 1 ELSE 0 end
-					  for XML path('r'),TYPE) 
-					FOR XML PATH('root'), TYPE
-				)	
-	FROM #tmpMasters t
-	
-	UPDATE cs	
-	SET bitmapHasSynced =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapHasSynced, CONVERT(VARCHAR(MAX),t.xmlStrSynced))),
-		bitmapIsDisabled =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapHasSynced, CONVERT(VARCHAR(MAX),t.xmlStrDisabled)))
-	FROM dbo.CustProductStatus cs WITH (ROWLOCK,UPDLOCK)
-		INNER JOIN #tmpMasters t ON cs.custID = t.custID
-	WHERE syncAB = 0 OR syncVB = 0
-	
+			
 	DROP TABLE #tmpMasters
 END	
 GO
@@ -184,7 +159,7 @@ GO
 
 ---
 ---
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @srecommend INT
 
@@ -218,7 +193,7 @@ BEGIN
 END			
 GO	
 
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (/06/DBTP) -----
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
 -----------------------------------------------------------------------------------	
 
 ---

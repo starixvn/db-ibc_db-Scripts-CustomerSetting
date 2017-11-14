@@ -36,7 +36,7 @@ GO
 
 ---
 ---
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (052/053/054/06/DBTP) -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @srecommend INT
 
@@ -69,7 +69,7 @@ BEGIN
 	waitfor delay '00:00:0.280'
 END			
 GO	
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (052/053/054/06/DBTP) -----
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 -----------------------------------------------------------------------------------	
 
 ---
