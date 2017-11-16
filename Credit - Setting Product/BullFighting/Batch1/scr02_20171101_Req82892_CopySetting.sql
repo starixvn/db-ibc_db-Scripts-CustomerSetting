@@ -133,8 +133,8 @@ BEGIN
 	INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
 	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
 			CASE WHEN ci.roleid = 4 THEN ps.DefaultMinBet ELSE 0 END, 
-			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxBet ELSE 0 END, 
-			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0 END			
+			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxBet ELSE 0.1 END, 
+			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0.1 END			
 	FROM #SMATemp ci  
 		CROSS APPLY #DestinationSportBetType dest
 		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
@@ -142,7 +142,7 @@ BEGIN
 
 	--Member Level
 	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0				
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1				
 	FROM #MemberTemp ci
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 16

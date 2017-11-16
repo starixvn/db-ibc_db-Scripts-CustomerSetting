@@ -202,14 +202,14 @@ BEGIN
 	--------------------------------------Bet Setting-------------------------------------------------		
 	--Agent Level
 	INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0	
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1
 	FROM #SMATemp ci  
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 16
 
 	--Member Level
 	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0				
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1			
 	FROM #MemberTemp ci
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 16
