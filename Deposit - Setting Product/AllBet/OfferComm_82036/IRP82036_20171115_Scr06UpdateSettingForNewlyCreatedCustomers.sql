@@ -57,8 +57,8 @@ BEGIN
 		DELETE @BatchCust
 	END	
 	
-	DELETE #Super
-	DELETE #tblCust
+	DROP TABLE #Super
+	DROP TABLE #tblCust
 END		
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	

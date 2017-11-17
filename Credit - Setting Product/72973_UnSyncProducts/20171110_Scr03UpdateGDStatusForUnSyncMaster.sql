@@ -21,7 +21,7 @@ BEGIN
 		
 	UPDATE dbo.custinfo WITH(UPDLOCK,ROWLOCK)
 	SET HideGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 THEN 0 ELSE HideGoldDeluxe END,
-		DisableGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 AND 1 THEN DisableGoldDeluxe END,
+		DisableGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 THEN 1 ELSE DisableGoldDeluxe END,
 		SyncCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE SyncCasino END,
 		DisableCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE DisableCasino END
 	WHERE srecommend = @srecommend	

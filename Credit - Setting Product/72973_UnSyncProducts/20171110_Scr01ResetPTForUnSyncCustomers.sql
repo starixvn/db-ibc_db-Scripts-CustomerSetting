@@ -46,7 +46,7 @@ BEGIN
 			OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0)
 		
 	UPDATE t 
-	SET UplineSyncGD = ci.HideGoldDeluxe,
+	SET UplineSyncGD = CASE WHEN ci.HideGoldDeluxe = 1 THEN 0 ELSE 1 END,
 		UplineSyncAB = dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
 		UplineSyncVB = dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
 	FROM #tmpCust t
