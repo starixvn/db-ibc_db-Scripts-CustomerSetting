@@ -9,11 +9,11 @@ USE CustDB
 GO
 
 DECLARE @tbl_cust_updated TABLE(custid INT, roleid INT, username VARCHAR(255),
-								SRecommend int, MRecommend INT, Recommend INT,
-								OldVR INT, SiteID int)
+								SRecommend INT, MRecommend INT, Recommend INT,
+								OldVR INT, SiteID INT)
 DECLARE @var_str_xml VARCHAR(MAX)
 DECLARE @ErrCode INT
-DECLARE @ErrMsg VARCHAR(max)
+DECLARE @ErrMsg VARCHAR(MAX)
 DECLARE @var_profileId INT	
 
 SET @var_profileId = (SELECT profileID FROM DBCUST.CustDB.dbo.ProfileVirtualSetting WHERE sporttype = 1 AND bettype = 1 AND islive = 1)
@@ -46,7 +46,7 @@ SELECT @var_str_xml = CAST(
 				FOR XML PATH ('Rate'), type
 			) FOR XML PATH('ROOT'), type
 		) AS vrxmlgroup
-	) AS VARCHAR(max))
+	) AS VARCHAR(MAX))
 	
 EXEC  DBLOG.bodb_CustomerLog.dbo.NAP_UserLog_UpdateVirtualRateSettings
 				 @CreatorId	 =862400 

@@ -4,6 +4,8 @@
 	Task : Update VR to 200% for particular customers
 	DB: DBCUST/CustDB
 */
+USE CustDB
+GO
 
 DECLARE @tbl_cust_updated TABLE(custid INT, roleid INT, username VARCHAR(255))
 DECLARE @var_str_xml VARCHAR(MAX)
@@ -24,8 +26,7 @@ WHERE username IN('AVIARMB01132783','AVIARMB01136653','AVIARMB0148253','AVIARMB0
 SELECT @var_str_xml = COALESCE(@var_str_xml + ',', '') + CONVERT(VARCHAR(12),custid) FROM @tbl_cust_updated
 SELECT @var_str_xml = '<ROOT> <Rate CustIds="' + @var_str_xml +'" VirtualMultiplier="3" /></ROOT>'
 
-SELECT @var_str_xml
-     
+ 
 EXEC Acc_CustomerUpdVirtualMultiplier_Multiple
      @VirtualMultiplier=@var_str_xml
     , @UserID='862400'
