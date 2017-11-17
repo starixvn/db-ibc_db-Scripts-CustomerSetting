@@ -4,15 +4,11 @@
 	Date: 2017-11-17
 	Task : Update VR log
 	DB: DBCUST/CustDB
-	Original: New One
-
-	Revisions: 
-	Param's Explanation:  
 */
 DECLARE @tbl_cust_updated TABLE(custid INT, roleid INT, username VARCHAR(255),
 								SRecommend int, MRecommend INT, Recommend INT,
 								OldVR INT, SiteID int)
-DECLARE @var_str_xml NVARCHAR(max)
+DECLARE @var_str_xml VARCHAR(MAX)
 DECLARE @ErrCode INT
 DECLARE @ErrMsg VARCHAR(max)
 DECLARE @var_profileId INT	
@@ -23,7 +19,7 @@ SET @var_profileId = (SELECT profileID FROM DBCUST.CustDB.dbo.ProfileVirtualSett
 ------------------------get all custid that need to be updated, but not BA Account
 INSERT INTO @tbl_cust_updated ( custid, roleid,username, SRecommend, MRecommend, Recommend, OldVR,SiteID)
 SELECT ci.custid, ci.roleid,ci.username, ci.srecommend, ci.mrecommend, ci.recommend,
-		dbo.f_GetVirtualSetting(cvs.bitmapVirtual,@var_profileId),s.siteid
+		dbo.f_GetVirtualSetting(cvs.bitmapVirtual,@var_profileId) AS OldVR,s.siteid
 FROM   DBCUST.CustDB.dbo.Customer ci
 	INNER JOIN DBCUST.CustDB.dbo.CustVirtualSetting cvs ON cvs.custid = ci.custid AND cvs.seqNo = 1
 	LEFT JOIN DBLIC.bodb_licensee.dbo.[LicenseeBAHistory] BA ON BA.CustID = ci.custid AND BA.Status = 'Running'
@@ -37,25 +33,22 @@ SELECT @var_str_xml = CAST(
 	(
 	SELECT (
 		SELECT (
-				SELECT  custid AS '@CustID', 
-						'2017-11-17' AS '@ReportDate',
-						pvs1.SiteID
-							AS '@SiteID', 
+				SELECT  custid          AS '@CustID', 
+						'2017-11-17'    AS '@ReportDate',
+						pvs1.SiteID     AS '@SiteID', 
 						pvs1.SRecommend AS '@SRecommend', 
 						pvs1.MRecommend AS '@MRecommend',
-						pvs1.Recommend AS '@Recommend',
-						pvs1.OldVR AS '@OldVirtualRate',
-						'3' AS '@NewVirtualRate'
+						pvs1.Recommend  AS '@Recommend',
+						pvs1.OldVR      AS '@OldVirtualRate',
+						'3'             AS '@NewVirtualRate'
 				FROM @tbl_cust_updated pvs1
 				FOR XML PATH ('Rate'), type
 			) FOR XML PATH('ROOT'), type
 		) AS vrxmlgroup
-	) AS NVARCHAR(max))
+	) AS VARCHAR(max))
 
-
-	
 EXEC  DBLOG.bodb_CustomerLog.dbo.NAP_UserLog_UpdateVirtualRateSettings
-				,@CreatorId	 =862400 
+				 @CreatorId	 =862400 
 				,@PunterVRSettingsDoc=@var_str_xml
 				,@ServiceName='Soccer'
 				,@AdjustDate ='2017-11-17 00:15:00'
