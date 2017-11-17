@@ -52,7 +52,7 @@ EXEC  DBLOG.bodb_CustomerLog.dbo.NAP_UserLog_UpdateVirtualRateSettings
 				 @CreatorId	 =862400 
 				,@PunterVRSettingsDoc=@var_str_xml
 				,@ServiceName='Soccer'
-				,@AdjustDate ='2017-11-17 00:17:00'
+				,@AdjustDate ='2017-11-17 00:15:00'
 				,@ErrCode	 =@ErrCode
 				,@ErrMsg	 = @ErrMsg
 	 					
