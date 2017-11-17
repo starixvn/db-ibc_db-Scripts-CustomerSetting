@@ -14,12 +14,10 @@ DECLARE @tbl_cust_updated TABLE(custid INT, roleid INT, username VARCHAR(255),
 DECLARE @var_str_xml VARCHAR(MAX)
 DECLARE @ErrCode INT
 DECLARE @ErrMsg VARCHAR(MAX)
-DECLARE @var_profileId INT	
-
-SET @var_profileId = (SELECT profileID FROM DBCUST.CustDB.dbo.ProfileVirtualSetting WHERE sporttype = 1 AND bettype = 1 AND islive = 1)
 
 	 
 ------------------------get all custid that need to be updated, but not BA Account
+--82 affected rows
 INSERT INTO @tbl_cust_updated ( custid, roleid,username, SRecommend, MRecommend, Recommend, SiteID)
 SELECT ci.custid, ci.roleid,ci.username, ci.srecommend, ci.mrecommend, ci.recommend,s.siteid
 FROM   Customer ci
