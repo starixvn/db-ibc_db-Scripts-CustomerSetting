@@ -8,6 +8,7 @@
 
  ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
 	@srecommend INT		
+	,@max_custid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -24,7 +25,8 @@ BEGIN
 		DisableGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 THEN 1 ELSE DisableGoldDeluxe END,
 		SyncCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE SyncCasino END,
 		DisableCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE DisableCasino END
-	WHERE srecommend = @srecommend	
+	WHERE srecommend = @srecommend
+		AND custid <= @max_custid
 		AND roleid = 3
 		AND enabled = 1
 		AND (HideGoldDeluxe = 1 OR SyncCasino = 0)
@@ -38,9 +40,12 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @srecommend INT
+DECLARE @srecommend INT,
+	@max_custid INT
 
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+
+SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
 SELECT ci.custid 
@@ -63,7 +68,8 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend			
+	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend
+			,@max_custid = @max_custid
 			,@target = 'REPLICATED'
 	
 	waitfor delay '00:00:0.280'
@@ -77,9 +83,12 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------	
-DECLARE @srecommend INT
+DECLARE @srecommend INT,
+		@max_custid INT
 
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+
+SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
 SELECT ci.custid 
@@ -102,7 +111,8 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend			
+	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend	
+			,@max_custid = @max_custid
 			,@target = 'DBCUST'
 	
 	waitfor delay '00:00:0.280'

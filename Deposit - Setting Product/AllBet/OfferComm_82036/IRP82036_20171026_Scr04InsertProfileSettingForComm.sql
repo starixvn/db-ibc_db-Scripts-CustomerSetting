@@ -30,8 +30,7 @@ SELECT 18,211,2401,0,0,0
 INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT custid, 18
 FROM dbo.Dep_CustSuper WITH(NOLOCK)
-WHERE site IN ('Athena000'
-,'12Bet'
+WHERE site IN ('12Bet'
 ,'9bet'
 ,'ABB688'
 ,'Aoncash'
