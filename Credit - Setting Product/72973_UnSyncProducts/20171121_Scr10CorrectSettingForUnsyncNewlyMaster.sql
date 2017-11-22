@@ -48,6 +48,7 @@ WHERE srecommend IN (SELECT custid FROM #super)
 	AND roleid = 3
 	AND enabled = 1
 	AND (HideGoldDeluxe = 1
+		OR syncCasino = 0
 		OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB) = 0
 		OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0
 		)	
@@ -191,10 +192,13 @@ FROM dbo.CustProductStatus cs WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #tmpMasters t ON cs.custID = t.custID
 WHERE syncAB = 0 OR syncVB = 0		
 
-UPDATE dbo.custinfo WITH(UPDLOCK,ROWLOCK)
-SET HideGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 THEN 0 ELSE HideGoldDeluxe END,
-	DisableGoldDeluxe = CASE WHEN HideGoldDeluxe = 1 THEN 1 ELSE DisableGoldDeluxe END,
-	SyncCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE SyncCasino END,
-	DisableCasino = CASE WHEN SyncCasino = 0 THEN 1 ELSE DisableCasino END
-WHERE Custid IN (SELECT custid FROM #tmpMasters WHERE SyncGD = 0)	
-	AND (HideGoldDeluxe = 1 OR SyncCasino = 0)	
+UPDATE ci
+SET HideGoldDeluxe = CASE WHEN t.SyncGD = 0 THEN 0 ELSE HideGoldDeluxe END,
+	DisableGoldDeluxe = CASE WHEN t.SyncGD = 0 THEN 1 ELSE DisableGoldDeluxe END,
+	SyncCasino = CASE WHEN t.SyncCS = 0 THEN 1 ELSE SyncCasino END,
+	DisableCasino = CASE WHEN t.SyncCS = 0 THEN 1 ELSE DisableCasino END
+FROM dbo.custinfo ci WITH(UPDLOCK,ROWLOCK)	
+	INNER JOIN #tmpMasters t ON ci.custID = t.CustID
+WHERE SyncGD = 0 OR SyncCS = 0
+	
+	

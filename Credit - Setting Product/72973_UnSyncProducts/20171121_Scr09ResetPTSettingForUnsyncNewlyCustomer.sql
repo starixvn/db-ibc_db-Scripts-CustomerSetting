@@ -40,7 +40,7 @@ SELECT ci.custid, roleid, CASE WHEN roleid= 1 THEN recommend
 		dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
 FROM dbo.CustInfo ci (NOLOCK)
 	INNER JOIN dbo.CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
-WHERE srecommend IN (SELECT)
+WHERE srecommend IN (SELECT custid FROM #super)
 	AND ci.custid > @max_custid
 	AND enabled = 1
 	AND roleid IN (1,2)
