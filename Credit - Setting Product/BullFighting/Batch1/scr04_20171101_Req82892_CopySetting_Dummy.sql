@@ -281,6 +281,32 @@ BEGIN
 		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
 	WHERE ps.Currency = @Currency AND dest.SettingType = 16
 
+	--------------------------------------Commission Setting-------------------------------------------------		
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 3
+
+	--Agent Level
+	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+			CASE	WHEN roleid = 4 THEN cs.sdiscount
+					WHEN roleid = 3 THEN cs.adiscount
+					WHEN roleid = 2 THEN cs.discount END
+	FROM dbo.custSetting cs WITH(NOLOCK)
+		INNER JOIN #SMATemp ci  ON cs.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 3
+		 
+	--Member Level
+	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.playerdiscount, cs.discount, cs.adiscount, cs.sdiscount
+	FROM dbo.custSetting cs WITH(NOLOCK)
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 3
+
 	--------------------------------------Win Loss Limit-------------------------------------------------		
 	--Agent Level
 	INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
