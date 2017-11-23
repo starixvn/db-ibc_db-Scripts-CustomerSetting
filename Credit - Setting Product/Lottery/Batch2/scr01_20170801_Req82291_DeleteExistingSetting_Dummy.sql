@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
-	Date: 20171201
-	Task: Delete existing data of BullFighting
+	Date: 20170801
+	Task: Delete existing data of Lottery
 	DB: DBCust/CustDB
 */
  
@@ -21,8 +21,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN				
 
@@ -46,17 +44,17 @@ BEGIN
 	CREATE TABLE #supers (custid INT)
 	DECLARE @Sporttype SMALLINT 
 
-	SELECT @Sporttype = 207
+	SELECT @Sporttype = 220
 
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
+	VALUES  ('033333'), ('611111'), ('722222'), ('766666'), ('789y'), ('7aa666'), ('BEST-ODDS'), ('JPNIBC'), ('XYZBET')	          
 	INSERT INTO #OfferedSiteBatch1 (site)
-	VALUES  ('Indo'), ('KORIBC')
+	VALUES  ('755555'), ('Indo'), ('KORIBC'), ('733333'), ('222223'), ('222225'), ('222227')
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
 	FROM customer ci WITH (NOLOCK) 		
-	WHERE ci.custid IN (15) -- dummy super of batch 1	
+	WHERE ci.custid IN (2,3,4,5,12,13,15) -- dummy super of batch 1	
 		
 	--- get direct agent
 	INSERT INTO #DirectAgentBatch1 (CustID,mrecommend,roleid)
@@ -155,7 +153,7 @@ BEGIN
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
 
-	--Delete dummy account has setting in batch1 from temp table
+	--Delete dummy account has setting in batch1
 	DELETE s
 	FROM #SMATemp s
 	WHERE EXISTS (SELECT 1 FROM #DummyBatch1 WHERE CustID = s.custid)
@@ -212,20 +210,6 @@ BEGIN
 	WHERE SportType = @Sporttype
 
 	SELECT DISTINCT cg.custid 
-	INTO #CustDiscount_Agent
-	FROM dbo.CustDiscount3rd_Agent cg WITH(NOLOCK)	
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
-		INNER JOIN #SMATemp s ON ci.custid = s.custid
-	WHERE SportType = @Sporttype
-
-	SELECT DISTINCT cg.custid 
-	INTO #CustDiscount_Member
-	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)	
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
-		INNER JOIN #MemberTemp s ON ci.custid = s.custid
-	WHERE SportType = @Sporttype
-
-	SELECT DISTINCT cg.custid 
 	INTO #CustWinLoss_Agent
 	FROM dbo.CustWinLossLimit_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
@@ -262,16 +246,6 @@ BEGIN
 	DELETE cg
 	FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
 		INNER JOIN #CustBet_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
-
-	DELETE cg
-	FROM dbo.CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #CustDiscount_Agent ci ON ci.custid = cg.CustID			
-	WHERE SportType = @Sporttype
-
-	DELETE cg
-	FROM dbo.CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
-		INNER JOIN #CustDiscount_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
 
 	DELETE cg
