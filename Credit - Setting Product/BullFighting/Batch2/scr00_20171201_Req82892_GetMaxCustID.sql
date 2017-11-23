@@ -1,11 +1,11 @@
 USE bodb02
 GO
 /*
-	https://redmine.nexcel.vn/issues/82291
+	https://redmine.nexcel.vn/issues/82892
 	Get MaxCustID
 	Run on DB06
 */
 
 SELECT MAX(custid) as MaxCustID FROM custInfo WITH(NOLOCK)
-
+ 
 GO

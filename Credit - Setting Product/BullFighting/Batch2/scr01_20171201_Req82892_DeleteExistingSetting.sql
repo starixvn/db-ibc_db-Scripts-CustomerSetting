@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
-	Date: 20170801
-	Task: Delete existing data of Lottery
+	Date: 20171201
+	Task: Delete existing data of BullFighting
 	DB: DBCust/CustDB
 */
  
@@ -21,13 +21,15 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN				
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN					
 
 	DECLARE @Sporttype SMALLINT 
 	CREATE TABLE #supers (custid INT)
 
-	SELECT @Sporttype = 220
+	SELECT @Sporttype = 207
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -39,9 +41,9 @@ BEGIN
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
-		AND ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
+		AND ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
 		AND ci.currency <> 20
-		AND ci.custid NOT IN (2,3,4,5,12,13,15)
+		AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42)
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Agent
@@ -75,6 +77,20 @@ BEGIN
 	INTO #CustBet_Member
 	FROM CustBetSetting3rd_Member cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustDiscount_Agent
+	FROM dbo.CustDiscount3rd_Agent cg WITH(NOLOCK)	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustDiscount_Member
+	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
 
@@ -116,6 +132,16 @@ BEGIN
 	FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
 		INNER JOIN #CustBet_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #CustDiscount_Agent ci ON ci.custid = cg.CustID			
+	WHERE SportType = @SportType
+
+	DELETE cg
+	FROM dbo.CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN #CustDiscount_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @SportType
 
 	DELETE cg
 	FROM dbo.CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)		
