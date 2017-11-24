@@ -187,7 +187,7 @@ WHERE syncAB = 0 OR syncVB = 0
 
 UPDATE cs	
 SET bitmapHasSynced =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapHasSynced, CONVERT(VARCHAR(MAX),t.xmlStrSynced))),
-	bitmapIsDisabled =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapHasSynced, CONVERT(VARCHAR(MAX),t.xmlStrDisabled)))
+	bitmapIsDisabled =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapIsDisabled, CONVERT(VARCHAR(MAX),t.xmlStrDisabled)))
 FROM dbo.CustProductStatus cs WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #tmpMasters t ON cs.custID = t.custID
 WHERE syncAB = 0 OR syncVB = 0		

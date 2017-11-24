@@ -5,7 +5,8 @@
 */
  
  ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
-	@srecommend INT, 
+	@srecommend INT,
+	@max_custid INT,	
 	@target VARCHAR(20)	
 AS
 BEGIN
@@ -49,6 +50,7 @@ BEGIN
 		LEFT JOIN dbo.CustDirectAccount c WITH(NOLOCK) ON ci.custid = c.custid
 		INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
 	WHERE srecommend = @srecommend
+		AND ci.custid <= @max_custid
 		AND roleid = 2
 		AND enabled = 1
 		AND (HideGoldDeluxe = 1
@@ -168,9 +170,12 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @srecommend INT
+DECLARE @srecommend INT,
+		@max_custid INT
 
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+
+SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
 SELECT ci.custid 
@@ -193,7 +198,8 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend			
+	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend	
+			,@max_custid = @max_custid
 			,@target = 'REPLICATED'
 	
 	waitfor delay '00:00:0.280'
@@ -209,7 +215,11 @@ GO
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------	
 DECLARE @srecommend INT
+		,@max_custid INT
+		
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+
+SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
 SELECT ci.custid 
@@ -232,7 +242,8 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend			
+	EXEC dbo.[Acc_CustSetting3rd_19] @srecommend = @srecommend	
+			,@max_custid = @max_custid
 			,@target = 'DBCUST'
 	
 	waitfor delay '00:00:0.280'
