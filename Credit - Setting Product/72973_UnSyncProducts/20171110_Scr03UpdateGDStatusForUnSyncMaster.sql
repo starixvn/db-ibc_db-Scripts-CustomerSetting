@@ -58,6 +58,21 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
+
+;WITH t AS (
+SELECT DISTINCT ci.srecommend
+FROM dbo.CustInfo ci WITH(NOLOCK)	 
+	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+WHERE srecommend IN (SELECT custid FROM #super)
+	AND ci.custid <= @max_custid
+	AND roleid = 3
+	AND enabled = 1
+	AND (HideGoldDeluxe = 1 OR SyncCasino = 0)
+		
+)
+
+DELETE #Super
+WHERE custid NOT IN (SELECT srecommend FROM t)
 	
 WHILE (1 = 1)
 BEGIN
@@ -101,6 +116,22 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
+
+
+;WITH t AS (
+SELECT DISTINCT ci.srecommend
+FROM dbo.CustInfo ci WITH(NOLOCK)	 
+	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+WHERE srecommend IN (SELECT custid FROM #super)
+	AND ci.custid <= @max_custid
+	AND roleid = 3
+	AND enabled = 1
+	AND (HideGoldDeluxe = 1 OR SyncCasino = 0)
+		
+)
+
+DELETE #Super
+WHERE custid NOT IN (SELECT srecommend FROM t)
 	
 WHILE (1 = 1)
 BEGIN

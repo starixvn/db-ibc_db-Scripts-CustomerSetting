@@ -10,6 +10,16 @@ CREATE TABLE #Super(CustID INT)
 
 SELECT @max_custid = xxx
 
+CREATE TABLE #tmpMasters (CustID INT PRIMARY KEY, srecommend INT, isDirectAccount BIT, SyncGD BIT, SyncCS BIT, SyncAB BIT, SyncVB BIT, xmlStrDisabled XML, xmlStrSynced XML)
+	
+DECLARE @bitmapOrderVB TINYINT,
+		@bitmapOrderAB TINYINT						
+
+SELECT @bitmapOrderAB = MAX(CASE WHEN sporttype = 211 AND bettype = 2401 THEN bitmapOrder ELSE 0 END),		
+	@bitmapOrderVB = MAX(CASE WHEN sporttype = 212 AND bettype = 4001 THEN bitmapOrder ELSE 0 END)
+FROM dbo.ProductStatusProfile WITH(NOLOCK)
+WHERE sporttype IN (211,212)
+
 INSERT INTO #Super(custid)
 SELECT ci.custid 
 FROM dbo.customer c WITH (Nolock) 
@@ -22,15 +32,23 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
 
-CREATE TABLE #tmpMasters (CustID INT PRIMARY KEY, srecommend INT, isDirectAccount BIT, SyncGD BIT, SyncCS BIT, SyncAB BIT, SyncVB BIT, xmlStrDisabled XML, xmlStrSynced XML)
-	
-DECLARE @bitmapOrderVB TINYINT,
-		@bitmapOrderAB TINYINT						
+;WITH t AS (
+SELECT DISTINCT ci.srecommend
+FROM dbo.CustInfo ci WITH(NOLOCK)	 
+	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+WHERE srecommend IN (SELECT custid FROM #super)
+	AND ci.custid > @max_custid
+	AND roleid = 3
+	AND enabled = 1
+	AND (HideGoldDeluxe = 1
+		OR syncCasino = 0
+		OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB) = 0
+		OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0
+		)
+)
 
-SELECT @bitmapOrderAB = MAX(CASE WHEN sporttype = 211 AND bettype = 2401 THEN bitmapOrder ELSE 0 END),		
-	@bitmapOrderVB = MAX(CASE WHEN sporttype = 212 AND bettype = 4001 THEN bitmapOrder ELSE 0 END)
-FROM dbo.ProductStatusProfile WITH(NOLOCK)
-WHERE sporttype IN (211,212)
+DELETE #Super
+WHERE custid NOT IN (SELECT srecommend FROM t)
 
 --GD
 INSERT INTO #tmpMasters(custID, srecommend, IsDirectAccount, SyncGD, SyncCS, SyncAB, SyncVB)
