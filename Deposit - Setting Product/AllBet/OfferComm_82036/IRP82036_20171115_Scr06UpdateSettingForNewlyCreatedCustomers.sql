@@ -23,7 +23,7 @@ BEGIN
 	INSERT INTO #Super(custid)
 	SELECT custid
 	FROM dbo.Dep_CustSuper WITH(NOLOCK)
-	WHERE site IN ('Athena000','12Bet','9bet','ABB688','Aoncash','Aragon88','BE7','Bolanation','Brown888','GooBet','Indowin','ISC888','ITCBet','Liga','Lucky88','M8bola','Macaubet','May88','NBCbet','Q8bola','sbcbet','UN168','Unobet','Uwoniwin','Webet138')
+	WHERE site IN ('12Bet','9bet','ABB688','Aoncash','Aragon88','BE7','Bolanation','Brown888','GooBet','Indowin','ISC888','ITCBet','Liga','Lucky88','M8bola','Macaubet','NBCbet','Q8bola','sbcbet','UN168','Unobet','Uwoniwin','Webet138')
 
 	INSERT INTO #tblCust(Custid)
 	SELECT ci.custid
@@ -42,7 +42,7 @@ BEGIN
 		
 	WHILE (1=1)
 	BEGIN
-		DELETE TOP (20000) t
+		DELETE TOP (5000) t
 		OUTPUT deleted.custid INTO @BatchCust
 		FROM #tblCust t
 				

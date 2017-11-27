@@ -46,7 +46,7 @@ WHERE site IN ('12Bet'
 ,'Lucky88'
 ,'M8bola'
 ,'Macaubet'
-,'May88'
+--,'May88' --terminated
 ,'NBCbet'
 ,'Q8bola'
 ,'sbcbet'
