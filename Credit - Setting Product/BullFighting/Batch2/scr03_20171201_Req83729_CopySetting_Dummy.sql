@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Copy PT & Bet Setting & WinLossLimit for Lottery
+	Task: Copy PT & Bet Setting, Discount & WinLossLimit for BullFighting
 	DB: DBCUST/CustDB
-	Date: 20170801
+	Date: 20171201
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
@@ -16,36 +16,31 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
 	
-	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN			
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN		
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 
-	DECLARE @ProductID TINYINT = 28
+	DECLARE @ProductID TINYINT = 30
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT)
-	INSERT INTO #DestinationSportBetType
-	SELECT	202, 1501, SportType, BetType, 0, SettingType
+	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType)
+	SELECT	1, 5, SportType, BetType, 0, SettingType
 	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType IN (1,6)
-
-	INSERT INTO #DestinationSportBetType
-	SELECT	202, 15, SportType, BetType, 0, SettingType
-	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType IN (2)
+	WHERE ProductID = @ProductID AND SettingType IN (1,3,6,16)
 
 	CREATE TABLE #OfferedSite (site VARCHAR(10))
 	CREATE TABLE #OfferedSiteBatch1 (site VARCHAR(10))
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('033333'), ('611111'), ('722222'), ('766666'), ('789y'), ('7aa666'), ('BEST-ODDS'), ('JPNIBC'), ('XYZBET')	          
-	
+	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
 	INSERT INTO #OfferedSiteBatch1 (site)
-	VALUES  ('755555'), ('Indo'), ('KORIBC'), ('733333'), ('222223'), ('222225'), ('222227')
+	VALUES  ('Indo'), ('KORIBC')
 
 	CREATE TABLE #MemberTemp
 	(
@@ -64,7 +59,7 @@ BEGIN
 	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
 	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)
 
-	IF @srecommend IN (2,3,4,5,12,13,15)
+	IF @srecommend IN (15)
 	BEGIN
 		--- get direct agent
 		INSERT INTO #DirectAgentBatch1 (CustID,mrecommend,roleid)
@@ -203,20 +198,20 @@ BEGIN
 	--AGENT LEVEL
 	INSERT INTO dbo.CustPTSetting3rd_Agent
 		(	[CustID]
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		   ,[IsAutoMasterPT]
-		   ,[AutoMasterPT]
-		   ,[IsAutoSuperPT]
-		   ,[AutoSuperPT]
-		   ,[MinPT]
-		   ,[MaxPT])
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			,[IsAutoMasterPT]
+			,[AutoMasterPT]
+			,[IsAutoSuperPT]
+			,[AutoSuperPT]
+			,[MinPT]
+			,[MaxPT])
 	SELECT 
-		cs.custid, dest.tsporttype, dest.tbettype, dest.IsLive
+		cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
 		,cs.spositiontaking  *100
 		,cs.mpositiontaking  *100
 		,cs.apositiontaking  *100
@@ -226,9 +221,9 @@ BEGIN
 		,cs.autopositiontaking  *100
 		,co.minpositiontaking  *100
 		,@MaxPT
-	FROM dbo.custSettingGame cs WITH(NOLOCK) 
-		INNER JOIN dbo.CustOverrideGame co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
-		INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.custid = cs.custid
+	FROM dbo.custSetting cs WITH(NOLOCK) 
+		INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
+		INNER JOIN #SMATemp ci ON ci.custid = cs.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 		AND dest.SettingType = 1
@@ -236,18 +231,18 @@ BEGIN
 	--MEMBER LEVEL
 	INSERT INTO dbo.CustPTSetting3rd_Member
 		(	[custid]
-		  ,	[sporttype]
-		  ,	[bettype]
-		  ,	[islive]
-		  ,	[superPT]
-		  ,	[masterPT]
-		  ,	[agentPT]
-		  ,	[IsAutoMasterPT]
-		  ,	[AutoMasterPT]
-		  ,	[IsAutoSuperPT]
-		  ,	[AutoSuperPT])
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+			,	[IsAutoMasterPT]
+			,	[AutoMasterPT]
+			,	[IsAutoSuperPT]
+			,	[AutoSuperPT])
 	SELECT 
-		cs.custid, dest.tsporttype, dest.tbettype, dest.IsLive
+		cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
 		,cs.spositiontaking  *100
 		,cs.mpositiontaking  *100
 		,cs.apositiontaking  *100
@@ -255,40 +250,62 @@ BEGIN
 		,cs.autompositiontaking *100
 		,cs.isautopositiontaking 
 		,cs.autopositiontaking  *100
-	FROM dbo.custSettingGame cs WITH(NOLOCK)
-		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
+	FROM dbo.custSetting cs WITH(NOLOCK)
+		INNER JOIN #MemberTemp ci ON cs.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-		AND dest.SettingType = 1	
+		AND dest.SettingType = 1
 		
 	--------------------------------------Bet Setting-------------------------------------------------		
-	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
-	FROM #DestinationSportBetType		
-	WHERE SettingType = 2
-
 	--Agent Level
 	INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.minbet, cs.maxbet, cs.MaxPerGameType			
-	FROM dbo.CustGameType cs WITH(NOLOCK)
-		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+			CASE WHEN ci.roleid = 4 THEN ps.DefaultMinBet ELSE 0 END, 
+			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxBet ELSE 0.1 END, 
+			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0.1 END			
+	FROM #SMATemp ci  
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE cs.GameTypeID = @fBetType
-		AND dest.SettingType = 2
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
 
 	--Member Level
 	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.minbet, cs.maxbet, cs.MaxPerGameType					
-	FROM dbo.CustGameType cs WITH(NOLOCK)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1				
+	FROM #MemberTemp ci
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE dest.SettingType = 16
+	
+	--------------------------------------Commission Setting-------------------------------------------------		
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 3
+
+	--Agent Level
+	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+			CASE	WHEN roleid = 4 THEN cs.sdiscount
+					WHEN roleid = 3 THEN cs.adiscount
+					WHEN roleid = 2 THEN cs.discount END
+	FROM dbo.custSetting cs WITH(NOLOCK)
+		INNER JOIN #SMATemp ci  ON cs.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 3
+		 
+	--Member Level
+	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.playerdiscount, cs.discount, cs.adiscount, cs.sdiscount
+	FROM dbo.custSetting cs WITH(NOLOCK)
 		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE cs.GameTypeID = @fBetType
-		AND dest.SettingType = 2
-	
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 3
+
 	--------------------------------------Win Loss Limit-------------------------------------------------		
 	--Agent Level
 	INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
-	FROM #SMATemp ci WITH(NOLOCK) 
+	FROM #SMATemp ci  
 		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 		CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
 	WHERE dest.SettingType = 6 AND cs.ExchangeId = @Currency AND cs.ProductId = @ProductID
@@ -321,21 +338,21 @@ SELECT @max_custid = xxx
 --SELECT DISTINCT srecommend INTO #temp1
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
---WHERE ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
+--WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
 --	AND ci.roleid IN (2, 3) AND ci.currency <> 20
 --UNION 
 --SELECT DISTINCT ci.srecommend
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
 --	INNER JOIN customer ca WITH(NOLOCK) ON ci.recommend = ca.custid
---WHERE ci.site IN ('033333','611111','722222','766666','789y','7aa666','BEST-ODDS','JPNIBC','XYZBET')
+--WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
 --	AND ci.roleid IN (1) AND ci.currency <> 20
 --ORDER BY srecommend
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -379,7 +396,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
