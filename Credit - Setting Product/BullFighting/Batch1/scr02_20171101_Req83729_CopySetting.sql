@@ -218,6 +218,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'KORIBC')
+	AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -270,6 +271,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'KORIBC')
+	AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

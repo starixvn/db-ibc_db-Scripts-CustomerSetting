@@ -35,7 +35,8 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.site IN ('Indo', 'KORIBC')
-	
+		AND ci.currency <> 20
+
 	INSERT INTO #supers(custid)
 	SELECT custid
 	FROM CustInfo ci WITH (NOLOCK)

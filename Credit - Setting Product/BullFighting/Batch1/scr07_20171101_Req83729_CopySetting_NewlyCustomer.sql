@@ -23,6 +23,7 @@ WHERE ci.roleid = 4
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.site IN ('Indo', 'KORIBC')
+			AND ci.currency <> 20
 
 DECLARE @ProductID TINYINT = 30
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
