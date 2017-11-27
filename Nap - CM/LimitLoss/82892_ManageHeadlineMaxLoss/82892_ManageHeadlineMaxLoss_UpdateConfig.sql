@@ -24,9 +24,9 @@ VALUES  ( 3, -- ActionID - tinyint
 UPDATE c
 SET c.ActionID = 2
 FROM dbo.LimitLoss_ActionConfig c
-WHERE Value >=60 AND c.Value < 80
+WHERE Value >=60 --AND c.Value < 80
 
-UPDATE c
-SET c.ActionID = 3
-FROM dbo.LimitLoss_ActionConfig c
-WHERE Value >=80
+--UPDATE c
+--SET c.ActionID = 3
+--FROM dbo.LimitLoss_ActionConfig c
+--WHERE Value >=80
