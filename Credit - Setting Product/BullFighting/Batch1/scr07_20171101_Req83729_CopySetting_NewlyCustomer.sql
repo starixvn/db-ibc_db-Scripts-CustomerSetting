@@ -88,7 +88,7 @@ SELECT
 	,cs.autompositiontaking *100
 	,cs.isautopositiontaking 
 	,cs.autopositiontaking  *100
-	,co.minpositiontaking  *100
+	,CASE WHEN ci.roleid = 4 THEN 0 ELSE co.minpositiontaking  *100 END
 	,@MaxPT
 FROM dbo.custSetting cs WITH(NOLOCK) 
 	INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype

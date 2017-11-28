@@ -83,7 +83,7 @@ BEGIN
 				OR cs.AutoMPositionTaking * 100 <> csa.AutoMasterPT
 				OR cs.IsAutoPositionTaking <> csa.IsAutoSuperPT
 				OR cs.AutoPositionTaking * 100 <> csa.AutoSuperPT
-				OR co.MinPositionTaking  * 100 <> csa.MinPT 
+				OR (ci.roleid <> 4 AND co.MinPositionTaking  * 100 <> csa.MinPT)
 				)
 
 	--MEMBER LEVEL
