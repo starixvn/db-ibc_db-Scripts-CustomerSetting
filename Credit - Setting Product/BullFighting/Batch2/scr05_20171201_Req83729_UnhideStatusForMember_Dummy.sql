@@ -1,6 +1,6 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of Lottery for Credit customers
+	Task: Initialize Product Status of BullFighting for Credit customers
 	DB: DBCUST/CustDB
 	Date: 20170801
 */ 
@@ -24,7 +24,7 @@ BEGIN
 
 	CREATE TABLE #OfferedSite (site VARCHAR(10))
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('033333'), ('611111'), ('722222'), ('766666'), ('789y'), ('7aa666'), ('BEST-ODDS'), ('JPNIBC'), ('XYZBET')	
+	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
 	          
 	CREATE TABLE #MemberTemp
 	(
@@ -84,7 +84,7 @@ BEGIN
 	FROM #DirectMember ci	
 
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrder TINYINT = 11
+	DECLARE @BitmapOrder TINYINT = 12
 	
 	--Member level
 	UPDATE cs
@@ -109,7 +109,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -154,7 +154,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account		
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
 							
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

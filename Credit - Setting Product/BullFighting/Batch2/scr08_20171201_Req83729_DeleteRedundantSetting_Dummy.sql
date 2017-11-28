@@ -2,7 +2,7 @@
 	Created: Elodie
 	Task: Delete redundant setting
 	DB: DBCUST/CustDB
-	Date: 20170801
+	Date: 20171201
 */ 
 USE CustDB
 GO
@@ -15,7 +15,7 @@ SELECT @MaxCustID = xxx
 	
 CREATE TABLE #OfferedSite (site VARCHAR(10))
 INSERT INTO #OfferedSite (site)
-VALUES  ('033333'), ('611111'), ('722222'), ('766666'), ('789y'), ('7aa666'), ('BEST-ODDS'), ('JPNIBC'), ('XYZBET')	          
+VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
 
 CREATE TABLE #DummySupers (custid int)
 

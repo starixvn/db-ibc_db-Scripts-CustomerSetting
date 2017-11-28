@@ -1,6 +1,6 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product BullFighting of Lottery for Credit customers
+	Task: Initialize Product Status of BullFighting for Credit customers
 	DB: DBCUST/CustDB
 	Date: 20171201
 */ 
