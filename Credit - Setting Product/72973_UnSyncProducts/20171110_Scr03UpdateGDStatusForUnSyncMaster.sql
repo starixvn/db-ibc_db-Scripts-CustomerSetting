@@ -61,8 +61,7 @@ WHERE ci.roleid = 4
 
 ;WITH t AS (
 SELECT DISTINCT ci.srecommend
-FROM dbo.CustInfo ci WITH(NOLOCK)	 
-	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+FROM dbo.CustInfo ci WITH(NOLOCK)	 	
 WHERE srecommend IN (SELECT custid FROM #super)
 	AND ci.custid <= @max_custid
 	AND roleid = 3
@@ -120,8 +119,7 @@ WHERE ci.roleid = 4
 
 ;WITH t AS (
 SELECT DISTINCT ci.srecommend
-FROM dbo.CustInfo ci WITH(NOLOCK)	 
-	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+FROM dbo.CustInfo ci WITH(NOLOCK)	 	
 WHERE srecommend IN (SELECT custid FROM #super)
 	AND ci.custid <= @max_custid
 	AND roleid = 3
