@@ -24,14 +24,16 @@ WHERE ci.custid IN (15) -- dummy account
 CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
-	currency INT
+	currency INT,
+	Type BIT --0: Dummy account or Direct account, 1: Indirect account
 )
 
 CREATE TABLE #SMATemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
 	roleid TINYINT,
-	currency INT
+	currency INT,
+	Type BIT --0: Dummy account or Direct account, 1: Indirect account
 )
 	
 CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT,currency INT)
@@ -68,48 +70,48 @@ WHERE EXISTS (SELECT 1 FROM #OfferedSite WHERE site = ca.site)
 	AND ci.Enabled=1
 
 ----------- For SMA  -----------
-INSERT INTO #SMATemp (CustID,RoleID,currency)
+INSERT INTO #SMATemp (CustID,RoleID,currency, Type)
 -----------------------Master--------------------------------------
-SELECT d.CustID, 3, currency -- Direct Master 
+SELECT d.CustID, 3, currency, 0 -- Direct Master 
 FROM #DirectMaster d
 WHERE d.CustID > @MaxCustID	
 UNION 
-SELECT DISTINCT d.mrecommend, 3, currency -- Master of direct agent
+SELECT DISTINCT d.mrecommend, 3, currency, 0 -- Master of direct agent
 FROM #DirectAgent d
 WHERE d.mrecommend > @MaxCustID
 UNION 
-SELECT DISTINCT d.mrecommend, 3, currency -- Master of direct member
+SELECT DISTINCT d.mrecommend, 3, currency, 0 -- Master of direct member
 FROM #DirectMember D 	
 WHERE d.mrecommend > @MaxCustID
 UNION 
 -----------------------Agent--------------------------------------
-SELECT ci.CustID,2, ci.currency -- Agent of direct master
+SELECT ci.CustID,2, ci.currency, 1 -- Agent of direct master
 FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster D ON ci.mrecommend = d.CustID 
 WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid > @maxcustid 
 UNION
-SELECT DISTINCT d.recommend, 2, currency -- agent of direct member
+SELECT DISTINCT d.recommend, 2, currency, 0 -- agent of direct member
 FROM #DirectMember D 	
 WHERE d.recommend > @MaxCustID
 UNION 
-SELECT d.CustID, 2, currency -- Direct Agent
+SELECT d.CustID, 2, currency, 0 -- Direct Agent
 FROM #DirectAgent D
 WHERE d.CustID > @MaxCustID	
 	 	
 ---------- For members ---------
 INSERT INTO #MemberTemp (CustID, currency)
-SELECT  ci.custid, ci.currency -- member of direct master
+SELECT  ci.custid, ci.currency, 1 -- member of direct master
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
 WHERE ci.roleid = 1	AND ci.custid > @maxcustid AND ci.Enabled = 1 			
 UNION ALL -- member of direct agent
-SELECT  ci.custid, ci.currency
+SELECT  ci.custid, ci.currency, 1
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectAgent a ON ci.recommend = a.CustID
 WHERE ci.roleid = 1 AND ci.custid > @maxcustid AND ci.Enabled = 1 			
 -- Direct member		
 UNION ALL
-SELECT ci.custid, currency
+SELECT ci.custid, currency, 0
 FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID
 
@@ -153,7 +155,7 @@ SELECT
 	,cs.autompositiontaking *100
 	,cs.isautopositiontaking 
 	,cs.autopositiontaking  *100
-	,CASE WHEN ci.roleid = 4 THEN 0 ELSE co.minpositiontaking  *100 END
+	,CASE WHEN ci.Type = 0 THEN 0 ELSE co.minpositiontaking  *100 END
 	,@MaxPT
 FROM dbo.custSetting cs WITH(NOLOCK) 
 	INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype

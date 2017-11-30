@@ -42,12 +42,14 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
+		Type BIT --0: Dummy account or Direct account, 1: Indirect account
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT
+		roleid TINYINT,
+		Type BIT --0: Dummy account or Direct account, 1: Indirect account
 	)
 	
 	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT)
@@ -87,45 +89,45 @@ BEGIN
 		AND ci.Enabled=1
 
 	----------- For SMA  -----------
-	INSERT INTO #SMATemp (CustID,RoleID)
-	SELECT @srecommend, 4 -- Super
+	INSERT INTO #SMATemp (CustID, RoleID, Type)
+	SELECT @srecommend, 4, 0 -- Super
 	UNION ALL
 	-----------------------Master--------------------------------------
-	SELECT d.CustID, 3 -- Direct Master 
+	SELECT d.CustID, 3, 0 -- Direct Master 
 	FROM #DirectMaster d	
 	UNION 
-	SELECT DISTINCT d.mrecommend, 3 -- Master of direct agent
+	SELECT DISTINCT d.mrecommend, 3, 0 -- Master of direct agent
 	FROM #DirectAgent d
 	UNION 
-	SELECT DISTINCT d.mrecommend, 3 -- Master of direct member
+	SELECT DISTINCT d.mrecommend, 3, 0 -- Master of direct member
 	FROM #DirectMember D 	
 	UNION 
 	-----------------------Agent--------------------------------------
-	SELECT ci.CustID,2 -- Agent of direct master
+	SELECT ci.CustID, 2, 1 -- Agent of direct master
 	FROM custInfo ci WITH (NOLOCK)
 		INNER JOIN #DirectMaster D ON ci.mrecommend = d.CustID 
 	WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid <= @maxcustid 
 	UNION
-	SELECT DISTINCT d.recommend, 2 -- agent of direct member
+	SELECT DISTINCT d.recommend, 2, 0 -- agent of direct member
 	FROM #DirectMember D 	
 	UNION 
-	SELECT d.CustID, 2 -- Direct Agent
+	SELECT d.CustID, 2, 0 -- Direct Agent
 	FROM #DirectAgent D
 	 	
 	---------- For members ---------
-	INSERT INTO #MemberTemp (CustID)
-	SELECT  ci.custid -- member of direct master
+	INSERT INTO #MemberTemp (CustID, Type)
+	SELECT  ci.custid, 1 -- member of direct master
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
 	WHERE ci.roleid = 1	AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
 	UNION ALL -- member of direct agent
-	SELECT  ci.custid
+	SELECT  ci.custid, 1
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN #DirectAgent a ON ci.recommend = a.CustID
 	WHERE ci.roleid = 1 AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
 	-- Direct member		
 	UNION ALL
-	SELECT ci.custid
+	SELECT ci.custid, 0
 	FROM #DirectMember ci
 
 	DECLARE @MaxPT TINYINT, @Currency INT--, @MaxComm DECIMAL(9,8)
@@ -162,7 +164,7 @@ BEGIN
 		,cs.autompositiontaking *100
 		,cs.isautopositiontaking 
 		,cs.autopositiontaking  *100
-		,CASE WHEN ci.roleid = 4 THEN 0 ELSE co.minpositiontaking  *100 END
+		,CASE WHEN ci.Type = 0 THEN 0 ELSE co.minpositiontaking  *100 END
 		,@MaxPT
 	FROM dbo.custSetting cs WITH(NOLOCK) 
 		INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
