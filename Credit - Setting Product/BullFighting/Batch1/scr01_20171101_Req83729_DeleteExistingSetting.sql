@@ -43,6 +43,9 @@ BEGIN
 		AND s.islicensee = 0
 		AND ci.site IN ('Indo', 'KORIBC')
 		AND ci.currency <> 20
+	
+	INSERT INTO #supers(custid)
+	SELECT 15 -- dummy account	
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Agent
