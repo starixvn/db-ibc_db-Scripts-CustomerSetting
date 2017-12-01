@@ -12,14 +12,14 @@ SELECT @MaxCustID = xxx
 	
 CREATE TABLE #OfferedSite (site VARCHAR(10))
 INSERT INTO #OfferedSite (site)
-VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
+VALUES  ('755555'), ('789y')
 
 CREATE TABLE #DummySupers (custid int)
 
 INSERT INTO #DummySupers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (2,3,4,13,16,17,35,21278849,21278858) -- dummy account			
 				          
 CREATE TABLE #MemberTemp
 (
@@ -201,8 +201,8 @@ SELECT ci.custid, dest.tsporttype, dest.tbettype,
 		CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0.1 END			
 FROM #SMATemp ci  
 	CROSS APPLY #DestinationSportBetType dest
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-WHERE ps.Currency = @Currency AND dest.SettingType = 16
+	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype AND ps.Currency = ci.currency
+WHERE dest.SettingType = 16
 
 --Member Level
 INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)

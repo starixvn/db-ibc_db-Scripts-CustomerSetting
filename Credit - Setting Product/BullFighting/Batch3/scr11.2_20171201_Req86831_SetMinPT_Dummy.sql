@@ -7,18 +7,18 @@
 USE CustDB
 GO
 
-PRINT N'Step 10.1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+PRINT N'Step 10.2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
 CREATE TABLE #OfferedSite (site VARCHAR(10))
 INSERT INTO #OfferedSite (site)
-VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
+VALUES  ('755555'), ('789y')
 
 CREATE TABLE #DummySupers (custid int)
 
 INSERT INTO #DummySupers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (2,3,4,13,16,17,35,21278849,21278858) -- dummy account			
 				          
 CREATE TABLE #SMATemp
 (
@@ -100,4 +100,4 @@ WHERE dest.SettingType = 1
 DROP TABLE #SMATemp
 DROP TABLE #DestinationSportBetType		
 
-PRINT N'Step 10.1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 10.2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

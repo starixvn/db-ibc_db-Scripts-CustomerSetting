@@ -36,11 +36,13 @@ BEGIN
 	WHERE ProductID = @ProductID AND SettingType IN (1,3,6,16)
 
 	CREATE TABLE #OfferedSite (site VARCHAR(10))
-	CREATE TABLE #OfferedSiteBatch1 (site VARCHAR(10))
+	CREATE TABLE #OfferedSitePreviousBatch (site VARCHAR(10))
+
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
-	INSERT INTO #OfferedSiteBatch1 (site)
-	VALUES  ('Indo'), ('KORIBC')
+	VALUES  ('755555'), ('789y')
+	INSERT INTO #OfferedSitePreviousBatch (site)
+	VALUES  ('Indo'), ('KORIBC'), --Batch 1
+			('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet') --Batch 2	
 
 	CREATE TABLE #MemberTemp
 	(
@@ -58,48 +60,48 @@ BEGIN
 	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid TINYINT)
 	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
 	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
-	CREATE TABLE #DirectAgentBatch1 (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
-	CREATE TABLE #DirectMemberBatch1 (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
-	CREATE TABLE #DummyBatch1 (CustID INT PRIMARY KEY,roleid TINYINT)
+	CREATE TABLE #DirectAgentPreviousBatch (CustID INT PRIMARY KEY,mrecommend INT,roleid TINYINT)
+	CREATE TABLE #DirectMemberPreviousBatch (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid TINYINT)	
+	CREATE TABLE #DummyPreviousBatch (CustID INT PRIMARY KEY,roleid TINYINT)
 
-	IF @srecommend IN (15)
+	IF @srecommend IN (2,3,4,13,16,17,35)
 	BEGIN
 		--- get direct agent
-		INSERT INTO #DirectAgentBatch1 (CustID,mrecommend,roleid)
+		INSERT INTO #DirectAgentPreviousBatch (CustID,mrecommend,roleid)
 		SELECT ci.custid, ci.mrecommend,ci.roleid
 		FROM Customer ci WITH(NOLOCK)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
-		WHERE  EXISTS (SELECT 1 FROM #OfferedSiteBatch1 WHERE site = ci.site)
+		WHERE  EXISTS (SELECT 1 FROM #OfferedSitePreviousBatch WHERE site = ci.site)
 			AND  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 			and ci.roleid = 2 AND ci.srecommend = @srecommend 
 			AND ci.custid <= @maxcustid
 			AND c.Enabled=1
 
-		INSERT INTO #DirectMemberBatch1(CustID,recommend,mrecommend,roleid)
+		INSERT INTO #DirectMemberPreviousBatch(CustID,recommend,mrecommend,roleid)
 		SELECT c.custid, c.recommend,c.mrecommend,c.roleid
 		FROM Customer c WITH(NOLOCK)
 		INNER JOIN Customer ca (nolock) on c.recommend=ca.custid 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
-		WHERE EXISTS (SELECT 1 FROM #OfferedSiteBatch1 WHERE site = ca.site)
+		WHERE EXISTS (SELECT 1 FROM #OfferedSitePreviousBatch WHERE site = ca.site)
 			AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 			AND c.roleid=1 AND c.srecommend = @srecommend 		
 			AND c.custid <= @maxcustid 
 			AND ci.Enabled=1
 
 		----------- For SMA  -----------
-		INSERT INTO #DummyBatch1 (CustID,roleid)
+		INSERT INTO #DummyPreviousBatch (CustID,roleid)
 		SELECT @srecommend, 4 -- Super
 		UNION ALL
 		-----------------------Master--------------------------------------		
 		SELECT DISTINCT d.mrecommend, 3 -- Master of direct agent
-		FROM #DirectAgentBatch1 d
+		FROM #DirectAgentPreviousBatch d
 		UNION 
 		SELECT DISTINCT d.mrecommend, 3 -- Master of direct member
-		FROM #DirectMemberBatch1 D 	
+		FROM #DirectMemberPreviousBatch D 	
 		UNION 
 		-----------------------Agent--------------------------------------		
 		SELECT DISTINCT d.recommend, 2 -- agent of direct member
-		FROM #DirectMemberBatch1 D 			
+		FROM #DirectMemberPreviousBatch D 			
 	END
 			
 	--- get direct master
@@ -159,18 +161,12 @@ BEGIN
 	FROM #DirectMember D 	
 	UNION 
 	SELECT d.CustID, 2, 0 -- Direct Agent
-	FROM #DirectAgent D
-	UNION ALL
-	--dummy account don't have member enabled
-	SELECT ci.custid, ci.roleid, 0
-	FROM Custinfo ci WITH (NOLOCK)
-	WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
-		AND ci.srecommend = @srecommend
+	FROM #DirectAgent D	
 
 	--Delete dummy account has setting in batch1
 	DELETE s
 	FROM #SMATemp s
-	WHERE EXISTS (SELECT 1 FROM #DummyBatch1 WHERE CustID = s.custid)
+	WHERE EXISTS (SELECT 1 FROM #DummyPreviousBatch WHERE CustID = s.custid)
 
 	---------- For members ---------
 	INSERT INTO #MemberTemp (CustID, Type)
@@ -341,21 +337,21 @@ SELECT @max_custid = xxx
 --SELECT DISTINCT srecommend INTO #temp1
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
---WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
+--WHERE ci.site IN ('755555', '789y')
 --	AND ci.roleid IN (2, 3) AND ci.currency <> 20
 --UNION 
 --SELECT DISTINCT ci.srecommend
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
 --	INNER JOIN customer ca WITH(NOLOCK) ON ci.recommend = ca.custid
---WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
+--WHERE ci.site IN ('755555', '789y')
 --	AND ci.roleid IN (1) AND ci.currency <> 20
 --ORDER BY srecommend
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (2,3,4,13,16,17,35,21278849,21278858) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -399,7 +395,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (2,3,4,13,16,17,35,21278849,21278858) -- dummy account
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

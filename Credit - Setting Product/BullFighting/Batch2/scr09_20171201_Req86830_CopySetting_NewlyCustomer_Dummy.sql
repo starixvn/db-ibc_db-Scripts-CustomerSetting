@@ -201,8 +201,8 @@ SELECT ci.custid, dest.tsporttype, dest.tbettype,
 		CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0.1 END			
 FROM #SMATemp ci  
 	CROSS APPLY #DestinationSportBetType dest
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-WHERE ps.Currency = @Currency AND dest.SettingType = 16
+	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype AND ps.Currency = ci.currency
+WHERE dest.SettingType = 16
 
 --Member Level
 INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
