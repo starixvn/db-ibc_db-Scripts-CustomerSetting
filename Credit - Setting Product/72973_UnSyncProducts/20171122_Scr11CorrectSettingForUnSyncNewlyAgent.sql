@@ -34,7 +34,7 @@ WHERE sporttype IN (211,212)
 --GD
 INSERT INTO #tmpAgents(custID, mrecommend, IsDirectAccount, SyncGD, SyncCS, SyncAB, SyncVB)
 SELECT ci.custid, mrecommend, CASE WHEN c.CustID IS NULL THEN 0 ELSE 1 END,
-	CASE WHEN HideGoldDeluxe = 1 THEN 0 ELSE 1 END,
+	CASE WHEN HideGoldDeluxe = 1 AND ci.currency NOT IN (44,45,62) THEN 0 ELSE 1 END,
 	ci.SyncCasino,
 	dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
 	dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
