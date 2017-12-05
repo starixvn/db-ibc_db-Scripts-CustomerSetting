@@ -99,7 +99,7 @@ FROM #DirectAgent D
 WHERE d.CustID > @MaxCustID	
 	 	
 ---------- For members ---------
-INSERT INTO #MemberTemp (CustID, currency)
+INSERT INTO #MemberTemp (CustID, currency, Type)
 SELECT  ci.custid, ci.currency, 1 -- member of direct master
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
