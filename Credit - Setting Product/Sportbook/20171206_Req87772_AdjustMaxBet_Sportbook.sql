@@ -21,19 +21,17 @@ BEGIN
 
 	DECLARE @MaxBet MONEY = 10000
 
-	SELECT ci.custid 
+	SELECT ci.custid, cs.sporttype, cs.bettype
 	INTO #ListCust
 	FROM dbo.custSetting cs WITH (NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.srecommend = @srecommend
-		AND cs.maxbet > @MaxBet 
-		AND cs.maxbet <> 0
-		AND cs.maxbet <> 0.1
+		AND cs.maxbet > @MaxBet 		
 
 	UPDATE cs	
 	SET cs.maxbet = @MaxBet
 	FROM dbo.custSetting cs WITH (ROWLOCK,UPDLOCK)
-		INNER JOIN #ListCust ci WITH (NOLOCK) ON ci.custid = cs.custid
+		INNER JOIN #ListCust ci WITH (NOLOCK) ON ci.custid = cs.custid AND ci.bettype = cs.bettype AND ci.sporttype = cs.sporttype
 			
 END
 GO
