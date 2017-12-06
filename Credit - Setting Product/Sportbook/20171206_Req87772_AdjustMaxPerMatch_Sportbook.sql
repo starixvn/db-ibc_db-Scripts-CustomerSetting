@@ -21,31 +21,32 @@ BEGIN
 	DECLARE @MaxPerMatch MONEY = 30000
 
 	SELECT ci.custid,
-		CASE WHEN ci.maxpermatch > @MaxPerMatch AND ci.maxpermatch <> 0 AND ci.maxpermatch <> 0.1 THEN 1 ELSE 0 END AS Soccer,
-		CASE WHEN ci.MaxPerMatch1MP > @MaxPerMatch AND ci.MaxPerMatch1MP <> 0 AND ci.MaxPerMatch1MP <> 0.1 THEN 1 ELSE 0 END AS SoccerMP,
-		CASE WHEN ci.maxpermatch2 > @MaxPerMatch AND ci.maxpermatch2 <> 0 AND ci.maxpermatch2 <> 0.1 THEN 1 ELSE 0 END AS Basketball,
-		CASE WHEN ci.maxpermatch3 > @MaxPerMatch AND ci.maxpermatch3 <> 0 AND ci.maxpermatch3 <> 0.1 THEN 1 ELSE 0 END AS Football,
-		CASE WHEN ci.maxpermatch5 > @MaxPerMatch AND ci.maxpermatch5 <> 0 AND ci.maxpermatch5 <> 0.1 THEN 1 ELSE 0 END AS Tennis,
-		CASE WHEN ci.maxpermatch8 > @MaxPerMatch AND ci.maxpermatch8 <> 0 AND ci.maxpermatch8 <> 0.1 THEN 1 ELSE 0 END AS Baseball,
-		CASE WHEN ci.maxpermatch10 > @MaxPerMatch AND ci.maxpermatch10 <> 0 AND ci.maxpermatch10 <> 0.1 THEN 1 ELSE 0 END AS Golf,
-		CASE WHEN ci.maxpermatch11 > @MaxPerMatch AND ci.maxpermatch11 <> 0 AND ci.maxpermatch11 <> 0.1 THEN 1 ELSE 0 END AS MotoSports,
-		CASE WHEN ci.maxpermatch99 > @MaxPerMatch AND ci.maxpermatch99 <> 0 AND ci.maxpermatch99 <> 0.1 THEN 1 ELSE 0 END AS OtherSports,
-		CASE WHEN ci.MaxPerMatch99MP > @MaxPerMatch AND ci.MaxPerMatch99MP <> 0 AND ci.MaxPerMatch99MP <> 0.1 THEN 1 ELSE 0 END AS MixParlay, 
-		CASE WHEN ci.maxpermatch154 > @MaxPerMatch AND ci.maxpermatch154 <> 0 AND ci.maxpermatch154 <> 0.1 THEN 1 ELSE 0 END AS HRFixedOdds
+		CASE WHEN ci.maxpermatch > @MaxPerMatch THEN 1 ELSE 0 END AS Soccer,
+		CASE WHEN ci.MaxPerMatch1MP > @MaxPerMatch THEN 1 ELSE 0 END AS SoccerMP,
+		CASE WHEN ci.maxpermatch2 > @MaxPerMatch THEN 1 ELSE 0 END AS Basketball,
+		CASE WHEN ci.maxpermatch3 > @MaxPerMatch THEN 1 ELSE 0 END AS Football,
+		CASE WHEN ci.maxpermatch5 > @MaxPerMatch THEN 1 ELSE 0 END AS Tennis,
+		CASE WHEN ci.maxpermatch8 > @MaxPerMatch THEN 1 ELSE 0 END AS Baseball,
+		CASE WHEN ci.maxpermatch10 > @MaxPerMatch THEN 1 ELSE 0 END AS Golf,
+		CASE WHEN ci.maxpermatch11 > @MaxPerMatch THEN 1 ELSE 0 END AS MotoSports,
+		CASE WHEN ci.maxpermatch99 > @MaxPerMatch THEN 1 ELSE 0 END AS OtherSports,
+		CASE WHEN ci.MaxPerMatch99MP > @MaxPerMatch THEN 1 ELSE 0 END AS MixParlay, 
+		CASE WHEN ci.maxpermatch154 > @MaxPerMatch THEN 1 ELSE 0 END AS HRFixedOdds
 	INTO #ListCust
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @srecommend
-		AND ((ci.maxpermatch > @MaxPerMatch AND ci.maxpermatch <> 0 AND ci.maxpermatch <> 0.1)
-				OR (ci.MaxPerMatch1MP > @MaxPerMatch AND ci.MaxPerMatch1MP <> 0 AND ci.MaxPerMatch1MP <> 0.1)
-				OR (ci.maxpermatch2 > @MaxPerMatch AND ci.maxpermatch2 <> 0 AND ci.maxpermatch2 <> 0.1)
-				OR (ci.maxpermatch3 > @MaxPerMatch AND ci.maxpermatch3 <> 0 AND ci.maxpermatch3 <> 0.1)
-				OR (ci.maxpermatch5 > @MaxPerMatch AND ci.maxpermatch5 <> 0 AND ci.maxpermatch5 <> 0.1)
-				OR (ci.maxpermatch8 > @MaxPerMatch AND ci.maxpermatch8 <> 0 AND ci.maxpermatch8 <> 0.1)
-				OR (ci.maxpermatch10 > @MaxPerMatch AND ci.maxpermatch10 <> 0 AND ci.maxpermatch10 <> 0.1)
-				OR (ci.maxpermatch11 > @MaxPerMatch AND ci.maxpermatch11 <> 0 AND ci.maxpermatch11 <> 0.1)
-				OR (ci.maxpermatch99 > @MaxPerMatch AND ci.maxpermatch99 <> 0 AND ci.maxpermatch99 <> 0.1)
-				OR (ci.MaxPerMatch99MP > @MaxPerMatch AND ci.MaxPerMatch99MP <> 0 AND ci.MaxPerMatch99MP <> 0.1)
-				OR (ci.maxpermatch154 > @MaxPerMatch AND ci.maxpermatch154 <> 0 AND ci.maxpermatch154 <> 0.1)				
+		AND ci.Enabled = 1
+		AND (ci.maxpermatch > @MaxPerMatch
+				OR ci.MaxPerMatch1MP > @MaxPerMatch
+				OR ci.maxpermatch2 > @MaxPerMatch
+				OR ci.maxpermatch3 > @MaxPerMatch
+				OR ci.maxpermatch5 > @MaxPerMatch
+				OR ci.maxpermatch8 > @MaxPerMatch
+				OR ci.maxpermatch10 > @MaxPerMatch
+				OR ci.maxpermatch11 > @MaxPerMatch
+				OR ci.maxpermatch99 > @MaxPerMatch
+				OR ci.MaxPerMatch99MP > @MaxPerMatch
+				OR ci.maxpermatch154 > @MaxPerMatch				
 			)
 	
 	UPDATE c	
