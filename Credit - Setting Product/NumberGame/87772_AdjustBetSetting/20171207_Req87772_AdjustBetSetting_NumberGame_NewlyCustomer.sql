@@ -7,6 +7,7 @@
 
 DECLARE @MaxBet MONEY = 10000
 DECLARE @MaxPerMatch MONEY = 30000
+DECLARE @MaxPerBall MONEY = 10000
 DECLARE @Sporttype SMALLINT = 161
 
 CREATE TABLE #supers (custid int)
@@ -35,14 +36,17 @@ SET cs.maxbet = @MaxBet
 FROM dbo.custSetting3rd cs WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #ListCust ci WITH (NOLOCK) ON ci.custid = cs.custid AND ci.bettype = cs.bettype AND ci.sporttype = cs.sporttype
 			
-SELECT ci.custid
+SELECT ci.custid,
+	CASE WHEN ci.maxpermatch161 > @MaxPerMatch THEN 1 ELSE 0 END AS MaxPerMatch,
+	CASE WHEN ci.MaxPerBall161 > @MaxPerBall THEN 1 ELSE 0 END AS MaxPerBall
 INTO #ListCustInfo
 FROM dbo.custInfo ci WITH (NOLOCK)
 	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.maxpermatch161 > @MaxPerMatch		
+WHERE (ci.maxpermatch161 > @MaxPerMatch OR ci.MaxPerBall161 > @MaxPerBall)				
 		AND ci.custid > @max_custid
 
 UPDATE c	
-SET c.maxpermatch161 = @MaxPerMatch		
+SET c.maxpermatch161 = CASE WHEN ci.MaxPerMatch = 1 THEN @MaxPerMatch ELSE c.maxpermatch161 END,
+	c.MaxPerBall161 = CASE WHEN MaxPerBall = 1 THEN @MaxPerBall ELSE c.MaxPerBall161 END
 FROM dbo.custInfo c WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #ListCustInfo ci ON ci.custid = c.custid			
