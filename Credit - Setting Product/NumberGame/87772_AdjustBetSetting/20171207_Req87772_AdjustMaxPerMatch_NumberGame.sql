@@ -27,6 +27,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @srecommend
 		AND ci.Enabled = 1
+		AND ci.custid <= @maxcustid
 		AND (ci.maxpermatch161 > @MaxPerMatch OR ci.MaxPerBall161 > @MaxPerBall)				
 	
 	UPDATE c	

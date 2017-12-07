@@ -26,6 +26,7 @@ BEGIN
 	FROM dbo.custSetting3rd cs WITH (NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.srecommend = @srecommend
+		AND cs.custid <= @maxcustid
 		AND cs.sporttype = @Sporttype
 		AND cs.maxbet > @MaxBet 	
 		AND ci.Enabled = 1	

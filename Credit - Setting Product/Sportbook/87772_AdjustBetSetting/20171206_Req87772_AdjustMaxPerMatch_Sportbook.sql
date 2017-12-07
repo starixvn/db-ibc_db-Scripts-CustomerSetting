@@ -35,6 +35,7 @@ BEGIN
 	INTO #ListCust
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @srecommend
+		AND ci.custid <= @maxcustid
 		AND ci.Enabled = 1
 		AND (ci.maxpermatch > @MaxPerMatch
 				OR ci.MaxPerMatch1MP > @MaxPerMatch
