@@ -1,18 +1,16 @@
 /*
 	Created: Elodie
 	Task: Correct Dangerous value 
-	DB: DBLOG/bodb02
+	DB: DBTP/bodb02
 	Date: 20171208
 */ 
 USE bodb02
 GO
 
 CREATE TABLE #RawDataHistory (RowNo INT, CustID INT, LogDate DATETIME, HistoryDate DATETIME)
-CREATE TABLE #DataHistory (CustID INT, HistoryDate DATETIME, Danger TINYINT, Danger2 TINYINT, Danger3 TINYINT)
 CREATE TABLE #ListUpdate (CustID INT, HistoryDate DATETIME)
 CREATE TABLE #CustList (CustID INT PRIMARY KEY, LogDate DATETIME)
 CREATE TABLE #RawCustList (CustID INT, LogDate DATETIME)
-CREATE TABLE #TmpList (CustID INT, Danger TINYINT, Danger2 TINYINT, Danger3 TINYINT)
 
 SELECT ci.custid, ci.roleid, u.logdate
 INTO #RawDataLog

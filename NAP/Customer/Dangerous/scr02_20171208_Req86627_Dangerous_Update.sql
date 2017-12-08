@@ -6,6 +6,7 @@
 */ 
 USE CustDB
 GO 
+CREATE TABLE #TmpList (CustID INT, Danger TINYINT, Danger2 TINYINT, Danger3 TINYINT)
 
 WHILE (1=1)
 BEGIN
