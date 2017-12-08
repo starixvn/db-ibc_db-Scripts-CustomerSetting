@@ -76,28 +76,3 @@ INSERT INTO DataHistory_danielTmp (CustID, HistoryDate, Danger, Danger2, Danger3
 SELECT h.CustID, h.HistoryDate, ch.Danger, ch.Danger2, ch.Danger3
 FROM #ListUpdate h 
 	INNER JOIN bodb_CustHistory.dbo.CustInfo_History ch WITH (NOLOCK) ON h.custid = ch.custid AND h.HistoryDate = ch.Updatetime
-
-WHILE (1=1)
-BEGIN
-	INSERT INTO #TmpList (CustID, Danger, Danger2, Danger3)
-	SELECT TOP 5000 CustID, Danger, Danger2, Danger3
-	FROM #DataHistory
-
-	IF @@ROWCOUNT = 0
-		BREAK
-
-	UPDATE c
-	SET c.danger = tmp.Danger,
-		c.danger2 = tmp.Danger2,
-		c.danger3 = tmp.Danger3
-	FROM dbo.custInfo c WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #TmpList tmp ON c.custid = tmp.CustID
-
-	DELETE h
-	FROM #DataHistory h
-		INNER JOIN #TmpList tmp ON tmp.CustID = h.CustID
-	
-	DELETE FROM #TmpList
-
-	WAITFOR DELAY '00:00:0.300'
-END

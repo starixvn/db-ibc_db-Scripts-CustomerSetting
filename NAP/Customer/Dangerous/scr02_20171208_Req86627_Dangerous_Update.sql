@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Task: Correct Dangerous value 
-	DB: DBLOG/bodb02
+	DB: DBCUST/CustDB
 	Date: 20171208
 */ 
 USE CustDB
