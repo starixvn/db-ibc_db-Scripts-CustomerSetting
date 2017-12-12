@@ -1,7 +1,7 @@
 USE bodb02
 GO
 /*
-	https://redmine.nexcel.vn/issues/82892
+	https://redmine.nexcel.vn/issues/75597
 	Get MaxCustID
 	Run on DB06
 */

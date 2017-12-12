@@ -1,6 +1,6 @@
 /*
-	Created: 20171101@Elodie
-	Task: Update product profile for BullFighting
+	Created: 20171212@Elodie
+	Task: Update product profile for Lucky3
 	DB: DBCUST/CustDB
 */
 
@@ -10,4 +10,4 @@ GO
 UPDATE ps
 SET ps.SettingStatus = 0
 FROM dbo.ProductSettingDetail ps WITH(ROWLOCK,UPDLOCK)
-WHERE ProductID = 30
+WHERE ProductID = 26

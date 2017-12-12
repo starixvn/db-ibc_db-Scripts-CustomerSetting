@@ -1,12 +1,12 @@
 /*
 	Created: Elodie
-	Task: Update ProductStatusSiteCurrency for BullFighting
+	Task: Update ProductStatusSiteCurrency for Lucky3
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20171212
 */ 
  
 DECLARE @Sporttype INT, @Bettype INT
-SELECT @Sporttype = 207, @Bettype = 1004
+SELECT @Sporttype = 160, @Bettype = 1600
 	
 DELETE FROM ProductStatusSiteCurrency WHERE SportType=@Sporttype
 

@@ -2,7 +2,7 @@
 	Created: Elodie
 	Task: Copy Setting for newly created customer
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20171212
 */ 
 PRINT N'Step 9: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
@@ -115,204 +115,32 @@ SELECT ci.custid, currency, 0
 FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID
 
-DECLARE @ProductID TINYINT = 30
-CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
-INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-SELECT	1, 5, SportType, BetType, 0, SettingType, 0
+DECLARE @ProductID TINYINT = 26
+CREATE TABLE #DestinationSportBetType(tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
+INSERT INTO #DestinationSportBetType (tSportType, tBetType, IsLive, SettingType, IsFinished)
+SELECT	SportType, BetType, 0, SettingType, 0
 FROM dbo.ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SettingType IN (1,3,6,16)
+WHERE ProductID = @ProductID AND SettingType IN (14)
 
-DECLARE @MaxPT TINYINT--, @MaxComm DECIMAL(9,8), @Currency INT
-SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
---SELECT TOP 1 @MaxComm = MaxDiscount FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 3
-	
---------------------------------------PT Setting-------------------------------------------------	
-SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
-FROM #DestinationSportBetType		
-WHERE SettingType = 1
-
---AGENT LEVEL
-INSERT INTO dbo.CustPTSetting3rd_Agent
-	(	[CustID]
-		,[SportType]
-		,[BetType]
-		,[IsLive]
-		,[SuperPT]
-		,[MasterPT]
-		,[AgentPT]
-		,[IsAutoMasterPT]
-		,[AutoMasterPT]
-		,[IsAutoSuperPT]
-		,[AutoSuperPT]
-		,[MinPT]
-		,[MaxPT])
-SELECT 
-	cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
-	,cs.spositiontaking  *100
-	,cs.mpositiontaking  *100
-	,cs.apositiontaking  *100
-	,cs.isautompositiontaking
-	,cs.autompositiontaking *100
-	,cs.isautopositiontaking 
-	,cs.autopositiontaking  *100
-	,CASE WHEN ci.Type = 0 THEN 0 ELSE co.minpositiontaking  *100 END
-	,@MaxPT
-FROM dbo.custSetting cs WITH(NOLOCK) 
-	INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
-	INNER JOIN #SMATemp ci ON ci.custid = cs.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 1
-	
---MEMBER LEVEL
-INSERT INTO dbo.CustPTSetting3rd_Member
-	(	[custid]
-		,	[sporttype]
-		,	[bettype]
-		,	[islive]
-		,	[superPT]
-		,	[masterPT]
-		,	[agentPT]
-		,	[IsAutoMasterPT]
-		,	[AutoMasterPT]
-		,	[IsAutoSuperPT]
-		,	[AutoSuperPT])
-SELECT 
-	cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
-	,cs.spositiontaking  *100
-	,cs.mpositiontaking  *100
-	,cs.apositiontaking  *100
-	,cs.isautompositiontaking
-	,cs.autompositiontaking *100
-	,cs.isautopositiontaking 
-	,cs.autopositiontaking  *100
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #MemberTemp ci ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 1
-	
---------------------------------------Bet Setting-------------------------------------------------		
---Agent Level
-INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1	
-FROM #SMATemp ci  
-	CROSS APPLY #DestinationSportBetType dest
-WHERE dest.SettingType = 16
-
---Member Level
-INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1				
-FROM #MemberTemp ci
-	CROSS APPLY #DestinationSportBetType dest
-WHERE dest.SettingType = 16
-	
------Set global bet setting for dummy acounts,  direct Master, direct Agent and direct member level-----
---Update for dummy master of direct agent
-UPDATE cs
-SET cs.MinBet = ps.DefaultMinBet,
-	cs.MaxBet = ps.DefaultMaxBet,
-	cs.MaxPerMatch = ps.DefaultMaxPerMatch	
-FROM #DirectAgent ci  	 
-	INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.mrecommend	
-	INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	INNER JOIN #SMATemp c ON cs.CustID = c.CustID AND c.currency = ps.Currency
-WHERE dest.SettingType = 16
-
---Update for dummy master of direct member
-UPDATE cs
-SET cs.MinBet = ps.DefaultMinBet,
-	cs.MaxBet = ps.DefaultMaxBet,
-	cs.MaxPerMatch = ps.DefaultMaxPerMatch	
-FROM #DirectMember ci  
-	INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.mrecommend
-	INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	INNER JOIN #SMATemp c ON cs.CustID = c.CustID AND c.currency = ps.Currency
-WHERE dest.SettingType = 16
-
---Update for dummy agent
-UPDATE cs
-SET cs.MinBet = ps.DefaultMinBet,
-	cs.MaxBet = ps.DefaultMaxBet,
-	cs.MaxPerMatch = ps.DefaultMaxPerMatch	
-FROM #DirectMember ci  		
-	INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.recommend
-	INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	INNER JOIN #SMATemp c ON cs.CustID = c.CustID AND c.currency = ps.Currency
-WHERE dest.SettingType = 16
-
---Update for direct master, agent
-UPDATE cs
-SET cs.MinBet = ps.DefaultMinBet,
-	cs.MaxBet = ps.DefaultMaxBet,
-	cs.MaxPerMatch = ps.DefaultMaxPerMatch	
-FROM (SELECT custid FROM #DirectMaster UNION ALL SELECT custid FROM #DirectAgent) ci  
-	INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	INNER JOIN #SMATemp c ON cs.CustID = c.CustID AND c.currency = ps.Currency
-WHERE dest.SettingType = 16
-
---Update for direct member
-UPDATE cs
-SET cs.MinBet = ps.DefaultMinBet,
-	cs.MaxBet = ps.DefaultMaxBet,
-	cs.MaxPerMatch = ps.DefaultMaxPerMatch	
-FROM #DirectMember ci  
-	INNER JOIN dbo.CustBetSetting3rd_Member cs WITH (NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
-	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	INNER JOIN #MemberTemp c ON cs.CustID = c.CustID AND c.currency = ps.Currency
-WHERE dest.SettingType = 16
-	
---------------------------------------Commission Setting-------------------------------------------------		
-SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
-FROM #DestinationSportBetType		
-WHERE SettingType = 3
-
+DECLARE @TicketComm DECIMAL(9,8) = 0.1
+--------------------------------------Ticket Commission Setting-------------------------------------------------			
 --Agent Level
 INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
 SELECT ci.custid, dest.tsporttype, dest.tbettype, 
-		CASE	WHEN roleid = 4 THEN cs.sdiscount
-				WHEN roleid = 3 THEN cs.adiscount
-				WHEN roleid = 2 THEN cs.discount END
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #SMATemp ci  ON cs.CustID = ci.custid
+		CASE WHEN Type = 0 THEN @TicketComm ELSE 0 END
+FROM #SMATemp ci 
 	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 3
+WHERE dest.SettingType = 14
 		 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.playerdiscount, cs.discount, cs.adiscount, cs.sdiscount
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 3
-
---------------------------------------Win Loss Limit-------------------------------------------------		
---Agent Level
-INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
-FROM #SMATemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
-	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 	
-WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
-
---Member Level
-INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
+SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0, 0
 FROM #MemberTemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
-	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
-WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
+	CROSS APPLY #DestinationSportBetType dest
+WHERE dest.SettingType = 14
 
 /*******************************CUST PRODUCTSTATUS TABLE*******************************/	
-DECLARE @BitmapOrder TINYINT = 12
+DECLARE @BitmapOrder TINYINT = 9
 
 SELECT custid, roleid
 INTO #DisableLine

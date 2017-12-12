@@ -1,8 +1,8 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of BullFighting for Credit customers
+	Task: Initialize Product Status of Lucky3 for Credit customers
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20171212
 */ 
 USE CustDB
 GO
@@ -13,7 +13,7 @@ FROM custInfo WITH (NOLOCK)
 WHERE username IN ('SCHK','SCM','SCAI','SCI','SCDH','SCDK','TP','TH','TY','TF','TC','TD','TZ','EEM','EEH','EED','EEK')
 
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
-DECLARE @BitmapOrder TINYINT = 12
+DECLARE @BitmapOrder TINYINT = 9
 
 UPDATE cs
 SET bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0)) 

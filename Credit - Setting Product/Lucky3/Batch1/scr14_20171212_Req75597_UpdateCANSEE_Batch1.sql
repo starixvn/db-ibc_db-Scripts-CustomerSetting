@@ -1,14 +1,14 @@
 /*
 	Created: Elodie 
-	Task: Insert CanSee Lottery for batch 1
+	Task: Insert CanSee Lucky3 for batch 1
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20171212
 */ 
 USE CustDB
 GO
 
 DECLARE @Sporttype SMALLINT
-SELECT @Sporttype = 207
+SELECT @Sporttype = 160
 
 --Import sites which offered Lottery
 SELECT siteid

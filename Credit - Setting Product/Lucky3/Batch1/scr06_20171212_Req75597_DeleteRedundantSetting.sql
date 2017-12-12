@@ -2,14 +2,14 @@
 	Created: Elodie
 	Task: Delete redundant setting
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20171212
 */ 
 USE CustDB
 GO
 
 PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @SportType SMALLINT = 207
+DECLARE @SportType SMALLINT = 160
 DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
@@ -29,41 +29,6 @@ WHERE ci.roleid = 4
 			AND ci.currency <> 20
 
 DELETE cg
-FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid	
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-						
-DELETE cg
-FROM CustPTSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid	
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-		
-DELETE cg
-FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType = @SportType
-	AND c.custid > @maxcustID
-				
-DELETE cg
-FROM CustBetSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-
-DELETE cg
-FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid			
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-
-DELETE cg
 FROM CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
@@ -72,20 +37,6 @@ WHERE SportType = @SportType
 
 DELETE cg
 FROM CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid			
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-
-DELETE cg
-FROM CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType = @SportType
-	AND cg.custid > @maxcustID
-
-DELETE cg
-FROM CustWinLossLimit_Member cg WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
 WHERE SportType = @SportType
