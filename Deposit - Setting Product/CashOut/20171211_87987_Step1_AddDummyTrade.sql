@@ -37,7 +37,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC Acc_CustomerInsDummyTrade	@ProductID	=25	
+	EXEC Acc_CustomerInsDummyTradeCashOut	@ProductID	=25	
 										,@CustID	=@srecommend
 										,@UserID	=10278938
 
