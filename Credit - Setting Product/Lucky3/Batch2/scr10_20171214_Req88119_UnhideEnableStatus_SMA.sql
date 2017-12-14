@@ -1,8 +1,8 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of BullFighting for Credit customers
+	Task: Initialize Product Status of Lucky3 for Credit customers
 	DB: DBCUST/CustDB
-	Date: 20171201
+	Date: 20171214
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
@@ -22,7 +22,7 @@ BEGIN
 		RETURN
 				
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrder TINYINT = 12
+	DECLARE @BitmapOrder TINYINT = 9
 
 	IF @Custid IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601)
 	BEGIN	

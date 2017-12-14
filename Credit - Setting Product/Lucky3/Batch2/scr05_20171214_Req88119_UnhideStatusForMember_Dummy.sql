@@ -1,8 +1,8 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of BullFighting for Credit customers
+	Task: Initialize Product Status of Lucky3 for Credit customers
 	DB: DBCUST/CustDB
-	Date: 20170801
+	Date: 20171214
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
@@ -84,7 +84,7 @@ BEGIN
 	FROM #DirectMember ci	
 
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrder TINYINT = 12
+	DECLARE @BitmapOrder TINYINT = 9
 	
 	--Member level
 	UPDATE cs

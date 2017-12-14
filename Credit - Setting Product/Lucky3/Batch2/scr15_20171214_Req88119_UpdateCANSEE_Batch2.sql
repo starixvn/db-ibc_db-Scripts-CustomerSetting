@@ -1,13 +1,13 @@
 /*
 	Created: Elodie 
-	Task: Insert CanSee BullFighting for batch 2
+	Task: Insert CanSee Lucky3 for batch 2
 	DB: DBCUST/CustDB
-	Date: 20171201
+	Date: 20171214
 */ 
 USE CustDB
 GO
 
-DECLARE @Sporttype SMALLINT = 207
+DECLARE @Sporttype SMALLINT = 160
 
 --Import sites which offered BullFighting for batch 2
 SELECT siteid

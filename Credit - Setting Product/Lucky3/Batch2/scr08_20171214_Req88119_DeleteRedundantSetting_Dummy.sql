@@ -2,14 +2,14 @@
 	Created: Elodie
 	Task: Delete redundant setting
 	DB: DBCUST/CustDB
-	Date: 20171201
+	Date: 20171214
 */ 
 USE CustDB
 GO
 
 PRINT N'Step 8: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @Sporttype SMALLINT = 207
+DECLARE @Sporttype SMALLINT = 160
 DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
@@ -116,47 +116,12 @@ FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID	
 
 DELETE cg
-FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-						
-DELETE cg
-FROM CustPTSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
-	INNER JOIN #MemberTemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-		
-DELETE cg
-FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.AgentID = c.custid
-WHERE SportType = @Sporttype
-				
-DELETE cg
-FROM CustBetSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-
-DELETE cg
-FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN #MemberTemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-
-DELETE cg
 FROM dbo.CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.CustID = c.custid
 WHERE SportType = @Sporttype
 
 DELETE cg
 FROM dbo.CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN #MemberTemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-
-DELETE cg
-FROM CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)	
-	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.CustID = c.custid
-WHERE SportType = @Sporttype
-
-DELETE cg
-FROM CustWinLossLimit_Member cg WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN #MemberTemp c WITH (NOLOCK) ON cg.CustID = c.custid
 WHERE SportType = @Sporttype
 

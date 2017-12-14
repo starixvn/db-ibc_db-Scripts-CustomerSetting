@@ -1,7 +1,7 @@
 /*	
 	Creator: Elodie
-	Date: 20171201
-	Task: Copy permission BullFighting from Keno for Ext Group
+	Date: 20171214
+	Task: Copy permission Lucky3 from Keno for Ext Group
 	DB: DBEAS/bodb_EAS
 */
 --Reference f_SiteBySystem
