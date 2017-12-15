@@ -101,7 +101,7 @@ WHERE PSD.SportType = 221
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
-WHERE site in ('alog','12bet','spondemo')
+WHERE site in ('alog','12bet','spondemo','Athena000')
 	AND custid <= @max_custid
 	AND currency=20
 	AND custid NOT IN (SELECT custid FROM #Supers_Offered)
@@ -164,7 +164,7 @@ WHERE PSD.SportType = 221
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
-WHERE  site in ('alog','12bet','spondemo')
+WHERE  site in ('alog','12bet','spondemo','Athena000')
 	AND custid <= @max_custid
 	AND currency =20-- Currency H - it is just test currency, used once in a while 
 	AND custid NOT IN (SELECT custid FROM #Supers_Offered)

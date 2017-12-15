@@ -21,7 +21,7 @@ FROM custInfo CI WITH(NOLOCK)
 WHERE ci.mrecommend NOT IN (SELECT custid FROM custinfo cs1 WITH(NOLOCK)
 						   WHERE cs1.srecommend=ci.srecommend and cs1.username like '%Acc%' and cs1.roleid=3 )
 	AND ci.custid > @max_custid
-	AND site in ('alog','12bet','spondemo')	
+	AND site in ('alog','12bet','spondemo','Athena000')	
 	AND  cs.currency =20 -- Currency H - it is just test currency, used once in a while 
 
 -- Update if exists
