@@ -115,37 +115,16 @@ BEGIN
 	SELECT ci.custid
 	FROM #DirectMember ci
 	
-	SELECT custid
-	INTO #DisableLine
-	FROM custInfo WITH (NOLOCK) 
-	WHERE username IN (	'MMMRM','SBKHK','SBKRMB','SBKTB','MMPRM','SMM','SBKH','SBKT','SMH','SMMH','SMAH','SMAT','SMBT','SMBH','SMCH','SMK','M7RM','M7ARM','M7RMB','M7ARMB','M7BRMB',
-						'M7BRM','S7RMB','M7ZRMB','M7CRM','HK7','MQRM','MQARM','MQRMB','MQR','SQHH','SDRM','SDRMB','SDH','SDHA','S188R','S188RM','S188AR','S188BH','S188HK','S188HL',
-						'SV','S188M','M63H','M63IRMB','M63IHK','S63H','S63K','S63M','S70RMB','S70M','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','CKT',
-						'CKT1','CKT2','MKM','MK12','TH88','MK17','CK18','MKTB','MK13','MKM1','MK19','MK20','MK21','MK16','MK15','TH25','MK22','TH26','MK23','JC2','JC8','MKI',
-						'JC9','MK27','THM','JCM','JC10','TH89','MK31','MKM2','JC5','GAX','MK32','JC83','AK1','AKM1','MK33','MK35','MK36','TH3','M85TB','M85ATB','M85BTB','M85CTB',
-						'M85DTB','S85BR','S85H','S85T','S85GTH','KJH','KJHB','KJM','KJI','KJD','KJT','KJMB','KJE','KJB','KJC','KJF','KJMC','KJMA','KJG','KJMD','KJL','KJO','KJME',
-						'KJMF','KJMG','KJA','SZ','SBMW','YKM','CYKM','M822M','S822R','GEH','GFH','S822M','S822MA','GFJ','S822D','PPH','PPM','S27RMB','S27A','SADA','S9M','S9H',
-						'XKS','POB','POM','POH','POJ','VAG','PYM','PYC','AC1','AC2','ACK','AC3','AC4','AC7','AC8','AC9','AC11','AC12','AC14','ACK2','AC15','AC16','AC17','AC18',
-						'AC19','PPS','PPJ','PPN','PPQ','PPZ','PPP','PPA','PPT','PPU','TD1','TD2','TD3','TD4','TD5','TD6','YT1','TDA','TDB','YT2','TDC','TDD','YT3','DS1','DS2',
-						'DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12','DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','KDS','DS22','DS23','DS25','RC')
-		AND roleid <> 4
-
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
 	DECLARE @BitmapOrder TINYINT = 12
 	
 	--SMA Level
 	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0))
+	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN CustInfo c WITH (NOLOCK) ON c.custid = cs.CustID
 		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-
-	UPDATE cs
-	SET bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN CustInfo c WITH (NOLOCK) ON c.custid = cs.CustID
-		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	WHERE NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = c.mrecommend)
 
 	--Member level
 	UPDATE cs

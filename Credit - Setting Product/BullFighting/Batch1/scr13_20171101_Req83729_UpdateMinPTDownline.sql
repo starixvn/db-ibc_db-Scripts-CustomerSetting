@@ -1,6 +1,6 @@
 /*
 	Created: Elodie
-	Date: 20171101
+	Date: 20171201
 	Task: Change BullFighting MinPT of Super for 'SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC' line
 	DB: DBCUST/CustDB
 */
@@ -46,7 +46,7 @@ GO
 	INSERT INTO #supers (CustID)
 	select ci.CustID
 	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE username IN ('SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC')
+	WHERE username IN ('DADR')
 
 	SELECT cs.CustID,ci.recommend,ci.mrecommend,ci.srecommend, cs.SportType,cs.BetType,cs.IsLive,cs.SuperPT,cs.MasterPT,cs.AgentPT,cs.IsAutoMasterPT,cs.AutoMasterPT,cs.IsAutoSuperPT,cs.AutoSuperPT,0 IsGroup
 	INTO #MemberPT

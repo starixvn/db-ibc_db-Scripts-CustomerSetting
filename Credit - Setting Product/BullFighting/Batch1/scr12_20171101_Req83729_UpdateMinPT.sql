@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
-	Date: 20171101
-	Task: Change BullFighting MinPT of Super for 'SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC' line
+	Date: 20171201
+	Task: Change BullFighting MinPT of Super for 'DADR' line
 	DB: DBCUST/CustDB
 */
 USE CustDB
@@ -18,17 +18,8 @@ FROM dbo.custInfo ci WITH (NOLOCK)
 	INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.custid
 WHERE cs.SportType = @Sporttype
 	AND cs.MinPT <> cs.SuperPT
-	AND username IN ('MRTB','MKWRM','SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC')
+	AND username IN ('DADR')
 	AND ci.roleid = 4
-
-INSERT INTO #CustList (CustID, MaxPT)
-select ci.CustID, cs.MasterPT
-FROM dbo.custInfo ci WITH (NOLOCK)
-	INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.custid
-WHERE cs.SportType = @Sporttype
-	AND cs.MinPT <> cs.MasterPT
-	AND username IN ('MRTB','MKWRM','SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC')
-	AND ci.roleid = 3
 
 UPDATE cs
 SET cs.MinPT = s.MaxPT
