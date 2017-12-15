@@ -1,6 +1,6 @@
 /*
 	Created by: Winnie
-	Date: 2017-11-02
+	Date: 2017-12-15
 	Task: Initial setting data for Exchange Product - [Redmine: #66797]
 */ 
 
@@ -57,7 +57,7 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ,221
            ,8001
            ,0
-           ,0.06
+           ,0.07
            ,0
 		   ,0.02)
 
