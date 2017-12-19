@@ -1,8 +1,8 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of BullFighting for Credit customers
+	Task: Initialize Product Status of Lucky3 for Credit customers
 	DB: DBCUST/CustDB
-	Date: 20171201
+	Date: 20171214
 */ 
 PRINT N'Step 14: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
@@ -84,7 +84,7 @@ SELECT d.CustID, 2 -- Direct Agent
 FROM #DirectAgent D
 
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
-DECLARE @BitmapOrder TINYINT = 12
+DECLARE @BitmapOrder TINYINT = 9
 	
 SELECT custid, roleid
 INTO #DisabledList
