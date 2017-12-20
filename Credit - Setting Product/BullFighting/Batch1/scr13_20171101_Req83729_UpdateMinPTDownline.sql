@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Date: 20171201
-	Task: Change BullFighting MinPT of Super for 'SRRMB','SKWRMB','SRARMB','SRH','SRHK','SRMA','SRHKA','SRJ','SRKH','SRHH','SRK','SRHD','SRMC','SRQ','SRHC' line
+	Task: Change BullFighting MinPT of Super for 'DADR' line
 	DB: DBCUST/CustDB
 */
 USE CustDB
