@@ -103,7 +103,7 @@ SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE site in ('alog','12bet')
 	AND custid <= @max_custid
-	AND currency IN (3,20,61)
+	AND currency IN (3,61)
 	AND custid NOT IN (SELECT custid FROM #Supers_Offered)
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -166,7 +166,7 @@ SELECT custid,currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE  site in ('alog','12bet')
 	AND custid <= @max_custid
-	AND currency IN (3,20,61) -- Currency H - it is just test currency, used once in a while 
+	AND currency IN (3,61) -- Currency H - it is just test currency, used once in a while 
 	AND custid NOT IN (SELECT custid FROM #Supers_Offered)
 
 -- For deployer info

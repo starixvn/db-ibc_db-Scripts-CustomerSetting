@@ -22,7 +22,7 @@ WHERE ci.mrecommend NOT IN (SELECT custid FROM custinfo cs1 WITH(NOLOCK)
 						   WHERE cs1.srecommend=ci.srecommend and cs1.username like '%Acc%' and cs1.roleid=3 )
 	AND ci.custid > @max_custid
 	AND site in ('alog','12bet')	
-	AND  cs.currency IN (3,20,61)-- Currency H - it is just test currency, used once in a while 
+	AND  cs.currency IN (3,61)-- Currency H - it is just test currency, used once in a while 
 
 -- Update if exists
 UPDATE T 
