@@ -33,7 +33,7 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		Type BIT --0: Dummy account or Direct account, 1: Indirect account
+		Type TINYINT --0: member of direct master; 1: member of direct agent; 2: direct member
 	)
 
 	CREATE TABLE #SMATemp
@@ -107,7 +107,7 @@ BEGIN
 	 	
 	---------- For members ---------
 	INSERT INTO #MemberTemp (CustID, Type)
-	SELECT  ci.custid, 1 -- member of direct master
+	SELECT  ci.custid, 0 -- member of direct master
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
 	WHERE ci.roleid = 1	AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
@@ -118,13 +118,13 @@ BEGIN
 	WHERE ci.roleid = 1 AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
 	-- Direct member		
 	UNION ALL
-	SELECT ci.custid, 0
+	SELECT ci.custid, 2
 	FROM #DirectMember ci
 
 	DECLARE @TicketComm DECIMAL(9,8) = 0.1
 	
 	--------------------------------------Ticket Commission Setting-------------------------------------------------		
-	--Agent Level
+	--Agent Level: 0: Dummy account or Direct account, 1: Indirect account
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
 	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
 			CASE WHEN Type = 0 THEN @TicketComm ELSE 0 END
@@ -132,9 +132,13 @@ BEGIN
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 14
 		 
-	--Member Level
+	--Member Level: 0: member of direct master; 1: member of direct agent; 2: direct member
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0, 0
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+			0, 
+			CASE WHEN Type = 1 THEN @TicketComm ELSE 0 END, 
+			CASE WHEN Type = 2 THEN 0 ELSE @TicketComm END, 
+			CASE WHEN Type = 2 THEN 0 ELSE @TicketComm END
 	FROM #MemberTemp ci WITH(NOLOCK) 
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 14
