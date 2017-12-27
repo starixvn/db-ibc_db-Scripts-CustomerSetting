@@ -60,7 +60,7 @@ BEGIN
            ,[SportType]
            ,[BetType]
            ,[Discount])
-	SELECT c.custid,221,8001,0.05
+	SELECT c.custid,221,8001,0.02
 	FROM #tblCust c WITH(NOLOCK)
 	WHERE c.roleid IN(2,3,4)
 
