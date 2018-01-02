@@ -115,10 +115,8 @@ BEGIN
 		INNER JOIN dbo.CustPTSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend
 																AND mcs.sporttype = cs.sporttype
 																AND mcs.bettype = cs.bettype
-	WHERE cs.sporttype IN (211,212)		
-		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
-							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
-				)
+	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
+		OR (t.SyncVB = 0 AND cs.sporttype = 212) 
 	
 	
 	UPDATE cs
@@ -128,10 +126,8 @@ BEGIN
 		INNER JOIN dbo.CustDiscount3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend
 																AND mcs.sporttype = cs.sporttype
 																AND mcs.bettype = cs.bettype
-	WHERE cs.sporttype IN (211,212)		
-		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
-							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
-				)	
+	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
+		OR (t.SyncVB = 0 AND cs.sporttype = 212) 	
 	
 	UPDATE cs
 	SET MaxWinlimit = mcs.MaxWinlimit,

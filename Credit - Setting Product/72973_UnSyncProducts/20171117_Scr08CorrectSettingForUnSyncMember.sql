@@ -125,7 +125,8 @@ BEGIN
 						ORDER BY minstake , maxstake
 					) s													
 	WHERE syncGD = 0		
-		AND cs.GameTypeID IN (1701,1702)	
+		AND acs.GameTypeID IN (1701,1702)--optimize execution plan
+		AND acs.custid IN (SELECT recommend FROM #tmpMembers WHERE syncGD = 0)
 	
 	--AB, VB	
 	UPDATE cs
@@ -156,11 +157,8 @@ BEGIN
 		INNER JOIN dbo.CustPTSetting3rd_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
 																AND acs.sporttype = cs.sporttype
 																AND acs.bettype = cs.bettype														
-	WHERE cs.sporttype IN (211,212)		
-		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
-							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
-				)
-
+	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
+		OR (t.SyncVB = 0 AND cs.sporttype = 212)
 	
 	UPDATE cs
 	SET cs.SuperDiscount = scs.Discount,
@@ -178,10 +176,8 @@ BEGIN
 		INNER JOIN dbo.CustDiscount3rd_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
 																AND acs.sporttype = cs.sporttype
 																AND acs.bettype = cs.bettype														
-	WHERE cs.sporttype IN (211,212)		
-		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
-							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
-				)
+	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
+		OR (t.SyncVB = 0 AND cs.sporttype = 212) 
 				
 	UPDATE cs
 	SET MaxWinlimit = acs.MaxWinlimit,
@@ -192,10 +188,8 @@ BEGIN
 		INNER JOIN dbo.CustWinLossLimit_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
 																AND acs.sporttype = cs.sporttype
 																AND acs.bettype = cs.bettype
-	WHERE cs.sporttype IN (211,212)		
-		AND 1 = (CASE WHEN (t.SyncAB = 0 AND cs.sporttype = 211) 
-							OR (t.SyncVB = 0 AND cs.sporttype = 212) THEN 1 ELSE 0 END
-				)
+	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
+		OR (t.SyncVB = 0 AND cs.sporttype = 212) 
 			
 	UPDATE cs
 	SET stakeLevelList = s.StakeLevelList_Lowest
@@ -211,8 +205,8 @@ BEGIN
 						 WHERE MinStake <> 0 AND MaxStake <> 0
 						ORDER BY minstake , maxstake
 					) s																
-	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
-		OR (t.SyncVB = 0 AND cs.sporttype = 212) 
+	WHERE (t.SyncAB = 0 AND acs.sporttype = 211) --optimize execution plan
+		OR (t.SyncVB = 0 AND acs.sporttype = 212) 
 	
 	DROP TABLE #tmpMembers
 END

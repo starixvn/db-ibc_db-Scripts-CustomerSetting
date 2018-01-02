@@ -19,7 +19,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN--VB,AB
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 		
-	CREATE TABLE #tmpMembers (CustID INT PRIMARY KEY, SyncAB BIT, SyncVB BIT, xmlStrDisabled XML DEFAULT(''), xmlStrSynced XML DEFAULT(''))
+	DECLARE @tmpMembers TABLE(CustID INT PRIMARY KEY, SyncAB BIT, SyncVB BIT, xmlStrDisabled XML DEFAULT(''), xmlStrSynced XML DEFAULT(''))
 	
 	DECLARE @bitmapOrderVB TINYINT,
 			@bitmapOrderAB TINYINT						
@@ -29,20 +29,23 @@ BEGIN
 	FROM dbo.ProductStatusProfile WITH(NOLOCK)
 	WHERE sporttype IN (211,212)
 		
-	INSERT INTO #tmpMembers(custID, SyncAB, SyncVB)
-	SELECT ci.custid, 
-		dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
-		dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
-	FROM dbo.CustInfo ci WITH(NOLOCK)		
-		INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
+	INSERT INTO @tmpMembers(custID, SyncAB, SyncVB)
+	SELECT ci.custid,1,1 		
+	FROM dbo.CustInfo ci WITH(NOLOCK)				
 	WHERE srecommend = @srecommend
 		AND ci.custid <= @max_custid
 		AND roleid = 1
 		AND enabled = 1
-		AND (dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB) = 0
-			OR dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB) = 0
-			)
-			
+	
+	UPDATE t
+	SET syncAB = dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderAB),
+		syncVB = dbo.f_GetProductStatus(bitmapHasSynced,@bitmapOrderVB)
+	FROM @tmpMembers t
+		INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON t.custid = p.custid
+	
+	DELETE t
+	WHERE SyncAB = 1 AND SyncVB = 1
+	
 	UPDATE t
 	SET xmlStrDisabled = (SELECT 
 					 (SELECT bitmapOrder as '@b', 1 as '@s'
@@ -58,16 +61,15 @@ BEGIN
 					  for XML path('r'),TYPE) 
 					FOR XML PATH('root'), TYPE
 				)	
-	FROM #tmpMembers t
+	FROM @tmpMembers t
 	
 	UPDATE cs	
 	SET bitmapHasSynced =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapHasSynced, CONVERT(VARCHAR(MAX),t.xmlStrSynced))),
 		bitmapIsDisabled =(SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (bitmapIsDisabled, CONVERT(VARCHAR(MAX),t.xmlStrDisabled)))
 	FROM dbo.CustProductStatus cs WITH (ROWLOCK,UPDLOCK)
-		INNER JOIN #tmpMembers t ON cs.custID = t.custID
+		INNER JOIN @tmpMembers t ON cs.custID = t.custID
 	WHERE syncAB = 0 OR syncVB = 0
 	
-	DROP TABLE #tmpMembers
 END	
 GO
 
