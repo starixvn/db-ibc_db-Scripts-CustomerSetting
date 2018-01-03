@@ -49,7 +49,7 @@ BEGIN
 
 	-- Status Process
 	UPDATE T 
-			SET bitmapIsDisabled = (SELECT * FROM f_CustSetting_GenerateProductStatus (t.bitmapIsDisabled, @bitmapOrder,1))
+			SET bitmapIsDisabled = (SELECT * FROM f_CustSetting_GenerateProductStatus (t.bitmapIsDisabled, @bitmapOrder,0))
 			, bitmapIsHidden = (SELECT * FROM f_CustSetting_GenerateProductStatus (t.bitmapIsHidden, @bitmapOrder,0))		
 				
 	FROM [dbo].[Dep_CustProductStatus] T (ROWLOCK)
