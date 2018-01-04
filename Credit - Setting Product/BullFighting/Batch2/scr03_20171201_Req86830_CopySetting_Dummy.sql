@@ -38,7 +38,7 @@ BEGIN
 	CREATE TABLE #OfferedSite (site VARCHAR(10))
 	CREATE TABLE #OfferedSiteBatch1 (site VARCHAR(10))
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
+	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet'), ('755555'), ('789y')
 	INSERT INTO #OfferedSiteBatch1 (site)
 	VALUES  ('Indo'), ('KORIBC')
 
@@ -341,21 +341,21 @@ SELECT @max_custid = xxx
 --SELECT DISTINCT srecommend INTO #temp1
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
---WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
+--WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet', '755555', '789y')
 --	AND ci.roleid IN (2, 3) AND ci.currency <> 20
 --UNION 
 --SELECT DISTINCT ci.srecommend
 --FROM CustDirectAccount da WITH (NOLOCK)
 --	INNER JOIN customer ci WITH(NOLOCK) ON da.CustID = ci.custid
 --	INNER JOIN customer ca WITH(NOLOCK) ON ci.recommend = ca.custid
---WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
+--WHERE ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet', '755555', '789y')
 --	AND ci.roleid IN (1) AND ci.currency <> 20
 --ORDER BY srecommend
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -399,7 +399,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42) -- dummy account	
+WHERE ci.custid IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
