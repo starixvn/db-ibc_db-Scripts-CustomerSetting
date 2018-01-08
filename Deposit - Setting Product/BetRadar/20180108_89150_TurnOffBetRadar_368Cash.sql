@@ -32,7 +32,7 @@ SELECT site
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 1
-	AND s.site IN ('396Club')
+	AND s.site IN ('368Cash')
 
 INSERT INTO #supers(custid)
 SELECT CS.custid
