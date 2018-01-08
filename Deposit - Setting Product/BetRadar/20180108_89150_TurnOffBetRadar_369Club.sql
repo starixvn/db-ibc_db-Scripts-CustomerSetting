@@ -5,7 +5,7 @@
 	DB: DBCUST/CUSTDB
 */ 
 
-DECLARE @ProductID			INT = 5,
+DECLARE @ProductID			INT = 27,
 		@CustID				INT,
 		@IsDisabled			BIT = 1, 
 		@IsDisabledDownLine	BIT = 1, 
