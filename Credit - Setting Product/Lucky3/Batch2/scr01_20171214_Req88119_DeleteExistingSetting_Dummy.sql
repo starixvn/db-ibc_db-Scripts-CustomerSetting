@@ -42,7 +42,7 @@ BEGIN
 	SELECT @Sporttype = 160
 
 	INSERT INTO #OfferedSite (site)
-	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet')       
+	VALUES  ('733333'), ('222223'), ('222225'), ('222227'), ('033333'), ('JPNIBC'), ('611111'), ('722222'), ('766666'), ('7aa666'), ('BEST-ODDS'), ('XYZbet'), ('755555'), ('789y')       
 	INSERT INTO #OfferedSiteBatch1 (site)
 	VALUES  ('Indo'), ('KORIBC')
 

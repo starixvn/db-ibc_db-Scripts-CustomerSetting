@@ -19,7 +19,7 @@
 --	AND cs.isinternal = 0
 --	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 --	AND s.islicensee = 0
---	AND ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet')
+--	AND ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet', '755555', '789y')
 
 --SELECT  DISTINCT u.GroupName
 --FROM #supers c WITH(NOLOCK)
@@ -34,7 +34,7 @@ CREATE TABLE #PermissionMapping (PermissionFrom SMALLINT, PermissionTo SMALLINT)
 INSERT INTO #GroupExt (GroupID)
 SELECT GroupID
 FROM dbo.eaGroup WITH(NOLOCK)
-WHERE GroupName IN ('ACCYNG','ACCMMK','MKK99','ACCMKK')
+WHERE GroupName IN ('ACCYNG','ACCMMK','MKK99','ACCMKK','ACCTHAI','ACCYEN888','ACCTHAI2','ACCUSD','ACCUT2','ACCTHAI99','ACCUT','ACCUSDOTH','ACCIRR','ACCUUS','ACCYEN668','ACCYEN789','ACCTHAI56','ACCYEN889','ACCNTD','ACCYEN')
 
 --input Permission To
 INSERT INTO #PermissionMapping (PermissionFrom, PermissionTo)
