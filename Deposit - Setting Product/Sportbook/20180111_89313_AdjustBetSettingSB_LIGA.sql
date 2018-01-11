@@ -36,7 +36,7 @@ WHERE s.isActive = 1 AND s.isLicensee = 1
 
 INSERT INTO #supers(custid, Sporttype, Bettype)
 SELECT CS.custid, Sporttype, Bettype
-FROM  dbo.Dep_CustSuper CS WITH(NOLOCK) 
+FROM  dbo.Dep_CustSuper cs WITH(NOLOCK) 
 	INNER JOIN #OfferedSites s ON cs.site = s.site
 	CROSS JOIN (				  SELECT 1		AS sporttype, 1		AS bettype						
 						UNION ALL SELECT 2		AS sporttype, 1		AS bettype						
@@ -50,6 +50,7 @@ FROM  dbo.Dep_CustSuper CS WITH(NOLOCK)
 						UNION ALL SELECT 154	AS sporttype, 20	AS bettype
 						UNION ALL SELECT 44		AS sporttype, 3		AS bettype
 						) sb
+WHERE cs.currency = 15
 
 -- For deployer info
 SET @super_cnt = (SELECT COUNT(*) FROM #supers WITH (NOLOCK))
