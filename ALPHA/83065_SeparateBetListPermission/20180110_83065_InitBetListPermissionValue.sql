@@ -33,7 +33,7 @@ BEGIN
     IF @@ROWCOUNT = 0 BREAK;
 
 
-    UPDATE dbo.custSub with (rowlock)
+    UPDATE dbo.custSub WITH (rowlock)
     SET PageAccess = PageAccess + '[L]'
     WHERE subaccid IN (SELECT b.subaccid FROM #Batch AS b)
 
