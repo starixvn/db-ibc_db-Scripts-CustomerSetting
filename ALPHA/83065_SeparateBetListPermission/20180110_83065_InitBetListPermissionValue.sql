@@ -31,5 +31,3 @@ BEGIN
 		TRUNCATE TABLE #Batch
 	END
 END
-
-
