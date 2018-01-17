@@ -120,7 +120,7 @@ FROM dbo.CustGameType cs WITH(UPDLOCK,ROWLOCK)
 					  FROM dbo.strSplit(acs.StakeLevelList,','))cd
 						INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 					 WHERE MinStake <> 0 AND MaxStake <> 0
-					ORDER BY minstake , maxstake
+					ORDER BY maxstake ,minstake 
 				) s													
 WHERE syncGD = 0		
 	AND cs.GameTypeID IN (1701,1702)	
@@ -207,10 +207,25 @@ FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
 					  FROM dbo.strSplit(acs.StakeLevelList,','))cd
 						INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 					 WHERE MinStake <> 0 AND MaxStake <> 0
-					ORDER BY minstake , maxstake
+					ORDER BY maxstake ,minstake
 				) s																
 WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
-	OR (t.SyncVB = 0 AND cs.sporttype = 212) 
+	
+UPDATE cs
+SET stakeLevelList = s.StakeLevelList_Lowest
+FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN #tmpMembers t ON cs.custID = t.custID
+	INNER JOIN dbo.CustStakeLevel_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
+															AND acs.sporttype = cs.sporttype
+															AND acs.bettype = cs.bettype
+	CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),cd.val),'') AS StakeLevelList_Lowest
+				FROM (SELECT CAST(val AS INT) AS val
+					  FROM dbo.strSplit(acs.StakeLevelList,','))cd
+						INNER JOIN dbo.StakeLevelGroupDetail SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+					 WHERE MinStake <> 0 AND MaxStake <> 0
+					ORDER BY maxstake ,minstake
+				) s																
+WHERE (t.SyncVB = 0 AND cs.sporttype = 212) 
 
 ----------------------------------------------------------------------
 --Status for VB/AB

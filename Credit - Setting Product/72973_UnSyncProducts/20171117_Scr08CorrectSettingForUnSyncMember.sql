@@ -32,6 +32,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('StakeLevelGroupDetail') = 0 RETURN
 		
 	CREATE TABLE #tmpMembers (CustID INT PRIMARY KEY, srecommend INT, mrecommend INT, recommend INT, SyncGD BIT, SyncAB BIT, SyncVB BIT)
 	
@@ -122,7 +123,7 @@ BEGIN
 						  FROM dbo.strSplit(acs.StakeLevelList,','))cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY minstake , maxstake
+						ORDER BY maxstake , minstake
 					) s													
 	WHERE syncGD = 0		
 		AND acs.GameTypeID IN (1701,1702)--optimize execution plan
@@ -203,10 +204,25 @@ BEGIN
 						  FROM dbo.strSplit(acs.StakeLevelList,','))cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY minstake , maxstake
+						ORDER BY maxstake , minstake
 					) s																
 	WHERE (t.SyncAB = 0 AND acs.sporttype = 211) --optimize execution plan
-		OR (t.SyncVB = 0 AND acs.sporttype = 212) 
+	
+	UPDATE cs
+	SET stakeLevelList = s.StakeLevelList_Lowest
+	FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tmpMembers t ON cs.custID = t.custID
+		INNER JOIN dbo.CustStakeLevel_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
+																AND acs.sporttype = cs.sporttype
+																AND acs.bettype = cs.bettype
+		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),cd.val),'') AS StakeLevelList_Lowest
+					FROM (SELECT CAST(val AS INT) AS val
+						  FROM dbo.strSplit(acs.StakeLevelList,','))cd
+							INNER JOIN dbo.StakeLevelGroupDetail SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+						 WHERE MinStake <> 0 AND MaxStake <> 0
+						ORDER BY maxstake , minstake
+					) s																
+	WHERE (t.SyncVB = 0 AND acs.sporttype = 212) 
 	
 	DROP TABLE #tmpMembers
 END
