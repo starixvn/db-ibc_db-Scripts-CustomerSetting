@@ -44,6 +44,7 @@ BEGIN
 		INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON t.custid = p.custid
 	
 	DELETE t
+	FROM @tmpMembers t
 	WHERE SyncAB = 1 AND SyncVB = 1
 	
 	UPDATE t
