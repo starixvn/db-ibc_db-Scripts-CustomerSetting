@@ -192,6 +192,18 @@ BEGIN
 	WHERE (t.SyncAB = 0 AND cs.sporttype = 211) 
 		OR (t.SyncVB = 0 AND cs.sporttype = 212) 
 			
+	SELECT * INTO #StakeLevel
+	FROM StakeLevel WITH(NOLOCK)
+	WHERE GameTypeID IN (2401,2402,4001)
+	
+	UPDATE t
+	SET t.minstake = s.minstake,
+		t.maxstake = s.maxstake
+	FROM #stakelevel t 
+		INNER JOIN StakeLevelGroupDetail s WITH(NOLOCK) on s.stakelevelid = t.stakelevelid 
+															AND s.GameTypeID = t.GameTypeID
+	WHERE s.GameTypeID = 4001															
+			
 	UPDATE cs
 	SET stakeLevelList = s.StakeLevelList_Lowest
 	FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
@@ -202,27 +214,12 @@ BEGIN
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),cd.val),'') AS StakeLevelList_Lowest
 					FROM (SELECT CAST(val AS INT) AS val
 						  FROM dbo.strSplit(acs.StakeLevelList,','))cd
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+							INNER JOIN #StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
 						ORDER BY maxstake , minstake
 					) s																
 	WHERE (t.SyncAB = 0 AND acs.sporttype = 211) --optimize execution plan
-	
-	UPDATE cs
-	SET stakeLevelList = s.StakeLevelList_Lowest
-	FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tmpMembers t ON cs.custID = t.custID
-		INNER JOIN dbo.CustStakeLevel_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend
-																AND acs.sporttype = cs.sporttype
-																AND acs.bettype = cs.bettype
-		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),cd.val),'') AS StakeLevelList_Lowest
-					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(acs.StakeLevelList,','))cd
-							INNER JOIN dbo.StakeLevelGroupDetail SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
-						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake , minstake
-					) s																
-	WHERE (t.SyncVB = 0 AND acs.sporttype = 212) 
+		OR (t.SyncVB = 0 AND acs.sporttype = 212)  
 	
 	DROP TABLE #tmpMembers
 END
