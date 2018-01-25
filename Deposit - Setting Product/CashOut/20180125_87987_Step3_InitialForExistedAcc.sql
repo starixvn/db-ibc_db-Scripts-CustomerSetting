@@ -1,7 +1,7 @@
 
 /*
 	Created: Winnie	
-	Task:  ['Newhonbet','TGO'] Enable CashOut for existed customer
+	Task:  ['Newhonbet','TGO'] Enable CashOut for existed customer. [RedmineID:#90046]
 	DB: DBCUST/CustDB
 	Date: 20180125
 */ 
@@ -52,7 +52,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
 AND c.Enabled=1	
-AND ci.site IN   ('Newhonbet','TGO')
+AND ci.site IN   ('Newhonbet','TGO','Wuming','e8casino','HongChow','Swin','WM8888','AK318','Lucky88')
 AND c.custid<=@MaxCustId
 
 while 1 = 1
@@ -92,7 +92,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
 AND c.Enabled=1	
-AND ci.site IN  ('Newhonbet','TGO')
+AND ci.site IN  ('Newhonbet','TGO','Wuming','e8casino','HongChow','Swin','WM8888','AK318','Lucky88')
 AND c.custid<=@MaxCustId
 
 while 1 = 1

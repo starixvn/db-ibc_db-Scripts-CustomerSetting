@@ -1,7 +1,7 @@
   /*
 	Created: 20180125Winnie
 	Task : ['Newhonbet','TGO'] Initial data for CashOut. Add dummy trade
-	DB: DBCust/CustDB.	 [RedmineID: #87987]
+	DB: DBCust/CustDB.	 [RedmineID: #90046]
 */
 
 CREATE TABLE #supers (custid INT PRIMARY KEY, currency INT,isfinished bit default(0))
@@ -12,7 +12,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
 AND c.Enabled=1	
-AND ci.site IN ('Newhonbet','TGO')
+AND ci.site IN ('Newhonbet','TGO','Wuming','e8casino','HongChow','Swin','WM8888','AK318','Lucky88')
 
 DECLARE @srecommend INT
 WHILE (1 = 1)
