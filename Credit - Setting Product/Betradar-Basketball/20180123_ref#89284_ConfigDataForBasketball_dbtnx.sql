@@ -11,7 +11,7 @@ BEGIN
 	       (2807,'Winning Margin 6 Way',2807,2807),
 	       (2808,'1H Winning Margin 7 Way',2808,2808),
 	       (2809,'FT Race To X Points',2809,2809),
-	       (2810,'Highest Scoring Quarter',2810,2810),
+	       --(2810,'Highest Scoring Quarter',2810,2810),
 	       (2811,'Home Team Over/Under',2811,2811),
 	       (2812,'Away Team Over/Under',2812,2812)
 END	 
