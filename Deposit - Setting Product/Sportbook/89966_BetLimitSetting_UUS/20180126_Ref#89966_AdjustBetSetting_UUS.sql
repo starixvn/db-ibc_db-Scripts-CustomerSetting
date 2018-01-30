@@ -90,15 +90,15 @@ BEGIN
 	DECLARE @MaxPerMatch MONEY 	= 100
 	DECLARE @MaxPerBall MONEY 	= 100
 	
-	INSERT #Selected (custid)
-	SELECT custid
+	INSERT #Selected (custid,roleid)
+    SELECT custid, roleid
 	FROM dbo.custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND custid <= @maxcustid
 
 	WHILE 1 = 1
 	BEGIN
 		DELETE TOP (5000) #Selected
-		OUTPUT DELETED.custid INTO #Batch
+		OUTPUT DELETED.custid, DELETED.roleid INTO #Batch(custid,roleid)
 
 		IF @@ROWCOUNT = 0 BREAK
 			
