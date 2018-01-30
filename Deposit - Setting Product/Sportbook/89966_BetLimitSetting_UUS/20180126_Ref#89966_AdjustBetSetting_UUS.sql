@@ -4,6 +4,7 @@
 	DB: DBCUST/CustDB
 */
 
+-- BEGIN STEP 1: DEPLOY TWO SP on @DBCUST.CustDB --------
 -----------------------------Change SP Acc_CustomerInfo_Execrep_09 to update Customer INFO---------------------
 ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09]
 	@srecommend INT	
@@ -131,11 +132,11 @@ BEGIN
 	END 
 END
 GO
--- END STEP 1: DEPLOY TWO SP above on @DBCUST.CustDB --------
-------------------------------------------------------	
+----------------- END STEP 1 --------
+----------------------------------------------------------------	
+
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
---------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid INTEGER PRIMARY KEY, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
@@ -181,11 +182,12 @@ BEGIN
 	waitfor delay '00:00:0.100'
 END
 GO
+----------- END STEP 2 -----
+
+
 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
---------------------------------------------------------------------------------------
-
 CREATE TABLE #supers (custid INTEGER PRIMARY KEY, isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
@@ -230,4 +232,5 @@ BEGIN
 	waitfor delay '00:00:0.100'
 END
 GO
+------------ END STEP 3-----
 
