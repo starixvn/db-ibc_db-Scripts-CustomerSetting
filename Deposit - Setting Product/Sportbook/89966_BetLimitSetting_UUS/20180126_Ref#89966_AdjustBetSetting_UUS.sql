@@ -5,7 +5,7 @@
 */
 
 -----------------------------Change SP Acc_CustomerInfo_Execrep_09 to update Customer INFO---------------------
-ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09_UAT4]
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09]
 	@srecommend INT	
 	,@maxcustid INT
 	,@target VARCHAR(20)
@@ -65,7 +65,7 @@ GO
 
 
 -----------------------------Change SP Acc_DynamicCustSetting3rd_09 to update Customer BETSETTING---------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT4]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@srecommend INT	
 	,@maxcustid INT
 	,@target VARCHAR(20)
