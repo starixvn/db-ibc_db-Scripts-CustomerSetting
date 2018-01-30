@@ -179,7 +179,7 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 			
-	waitfor delay '00:00:0.100'
+	WAITFOR DELAY '00:00:0.100'
 END
 GO
 ----------- END STEP 2 -----
@@ -229,8 +229,9 @@ BEGIN
 			@srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
-	waitfor delay '00:00:0.100'
+			
+	WAITFOR DELAY '00:00:0.100'
 END
 GO
------------- END STEP 3-----
+------------ END STEP 3------------
 
