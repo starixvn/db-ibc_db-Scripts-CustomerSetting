@@ -59,7 +59,7 @@ SELECT @max_custid = xxx
 
 DECLARE @bitmapOrder TINYINT = 6			
 
-INSERT INTO #Super(custid)
+INSERT INTO #Supers(custid)
 SELECT ci.custid 
 FROM dbo.customer c WITH (Nolock) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
@@ -75,14 +75,14 @@ WHERE ci.roleid = 4
 SELECT DISTINCT ci.srecommend
 FROM dbo.CustInfo ci WITH(NOLOCK)	 
 	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
-WHERE srecommend IN (SELECT custid FROM #super)
+WHERE srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid <= @max_custid
 	AND enabled = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, @bitmapOrder)) = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @bitmapOrder)) = 1	
 )
 
-DELETE #Super
+DELETE #Supers
 WHERE custid NOT IN (SELECT srecommend FROM t)
 
 -- For deployer info
@@ -125,7 +125,7 @@ SELECT @max_custid = xxx
 
 DECLARE @bitmapOrder TINYINT = 6		
 
-INSERT INTO #Super(custid)
+INSERT INTO #Supers(custid)
 SELECT ci.custid 
 FROM dbo.customer c WITH (Nolock) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
@@ -141,14 +141,14 @@ WHERE ci.roleid = 4
 SELECT DISTINCT ci.srecommend
 FROM dbo.CustInfo ci WITH(NOLOCK)	 
 	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
-WHERE srecommend IN (SELECT custid FROM #super)
+WHERE srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid <= @max_custid
 	AND enabled = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, @bitmapOrder)) = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @bitmapOrder)) = 1	
 )
 
-DELETE #Super
+DELETE #Supers
 WHERE custid NOT IN (SELECT srecommend FROM t)
 
 -- For deployer info
