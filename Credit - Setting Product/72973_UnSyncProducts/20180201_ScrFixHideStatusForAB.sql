@@ -36,6 +36,7 @@ BEGIN
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 	WHERE (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, @BitmapOrder)) = 1	
+		AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @BitmapOrder)) = 1	
 
 	SELECT @BitmapOrder = 7
 	UPDATE cs
@@ -44,6 +45,7 @@ BEGIN
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 	WHERE (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, 6)) = 1	
+		AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @BitmapOrder)) = 1	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
