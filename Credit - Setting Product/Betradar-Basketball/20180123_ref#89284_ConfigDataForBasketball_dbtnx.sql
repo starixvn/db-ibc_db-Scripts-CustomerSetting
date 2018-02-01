@@ -24,6 +24,6 @@ END
 
 IF NOT EXISTS(SELECT 1 FROM [SportBettypeMatrix] WHERE SportType = 193)
 BEGIN
-	INSERT INTO DBTXN.bodb02.dbo.[SportBettypeMatrix] (SportType, BetType, IsLive, ProductID, [Enabled], IsTest, EventType, SubProduct, RefTable)
+	INSERT INTO SportBettypeMatrix (SportType, BetType, IsLive, ProductID, [Enabled], IsTest, EventType, SubProduct, RefTable)
 	VALUES                                            (193      , 2801   , 0     , 193      , 1        , 1     , 1        , ''        , 0       )  
 END
