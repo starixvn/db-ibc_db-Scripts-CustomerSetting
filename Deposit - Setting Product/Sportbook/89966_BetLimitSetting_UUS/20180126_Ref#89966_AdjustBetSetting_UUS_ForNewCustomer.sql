@@ -14,14 +14,20 @@ DECLARE @MaxBet MONEY       = 10
 DECLARE @MaxPerMatch MONEY  = 100
 DECLARE @MaxPerBall MONEY   = 100
 
-INSERT INTO @customer_new(custid)
-SELECT custid
-FROM dbo.customer c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
-WHERE   l.isActive = 1
-    AND l.isDeposit = 1
+CREATE TABLE #supers (custid INTEGER PRIMARY KEY, isfinished bit DEFAULT(0))
+
+INSERT INTO #supers(custid)
+SELECT custid 
+FROM dbo.Dep_CustSuper c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
+WHERE   l.isActive = 1 
     AND l.[LicenseeName] NOT IN ('haifa','BBin2') 
     AND c.currency = 20
-    AND c.custid > @max_custid
+
+
+INSERT INTO @customer_new(custid)
+SELECT custid
+FROM dbo.custinfo c
+WHERE c.custid > @max_custid AND c.srecommend IN (SELECT custid FROM #supers)
 
     
 SET @var_newcustomer_total = (SELECT COUNT(*) FROM @customer_new )
@@ -76,4 +82,5 @@ UPDATE dcm
 SET MinBet=@MinBet, MaxBet=@MaxBet, MaxPerMatch=@MaxPerMatch 
 FROM Dep_CustBetSetting_member dcm WITH (ROWLOCK, UPDLOCK)
 WHERE custid IN (SELECT b.custid FROM @customer_new AS b)
-      AND sporttype IN (180,181,182,183,184,185,186,190,191,199)      
+      AND sporttype IN (180,181,182,183,184,185,186,190,191,199) 
+      
