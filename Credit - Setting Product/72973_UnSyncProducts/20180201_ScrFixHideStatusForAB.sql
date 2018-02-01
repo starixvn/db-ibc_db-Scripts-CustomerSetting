@@ -73,8 +73,8 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
 
-;WITH t AS (
 SELECT DISTINCT ci.srecommend
+INTO #tmp
 FROM dbo.CustInfo ci WITH(NOLOCK)	 
 	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
@@ -82,10 +82,9 @@ WHERE srecommend IN (SELECT custid FROM #supers)
 	AND enabled = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, @bitmapOrder)) = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @bitmapOrder)) = 1	
-)
 
 DELETE #Supers
-WHERE custid NOT IN (SELECT srecommend FROM t)
+WHERE custid NOT IN (SELECT srecommend FROM #tmp)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -139,8 +138,8 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
 
-;WITH t AS (
 SELECT DISTINCT ci.srecommend
+INTO #tmp
 FROM dbo.CustInfo ci WITH(NOLOCK)	 
 	INNER JOIN dbo.CustProductStatus p WITH(NOLOCK) ON ci.custid = p.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
@@ -148,10 +147,9 @@ WHERE srecommend IN (SELECT custid FROM #supers)
 	AND enabled = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapHasSynced, @bitmapOrder)) = 1
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsHidden, @bitmapOrder)) = 1	
-)
 
 DELETE #Supers
-WHERE custid NOT IN (SELECT srecommend FROM t)
+WHERE custid NOT IN (SELECT srecommend FROM #tmp)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
