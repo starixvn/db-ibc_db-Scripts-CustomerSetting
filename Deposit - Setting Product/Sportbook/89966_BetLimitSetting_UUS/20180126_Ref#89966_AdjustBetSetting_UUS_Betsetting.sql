@@ -13,11 +13,11 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 AS
 BEGIN
     SET NOCOUNT ON
-    --vicky
+    
     RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
     
     IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST')  RETURN -- run at all replicated servers
-    IF (@target = 'DBCUST'     AND @@SERVERNAME <>'DBCUST')  RETURN -- run at dbtrans only
+    IF (@target = 'DBCUST'     AND @@SERVERNAME <>'DBCUST')  RETURN -- run at DBCUST only
     
     IF dbo.f_CheckRepTable('Dep_CustSetting')           = 0 RETURN
     IF dbo.f_CheckRepTable('Dep_CustSetting3rd')        = 0 RETURN
@@ -27,7 +27,6 @@ BEGIN
     RAISERROR ('Validate replicated table ok ', 0, 1) WITH NOWAIT
     
     CREATE TABLE #Selected (custid INTEGER PRIMARY KEY, roleid TINYINT, isSPUpdated TINYINT NOT NULL DEFAULT 0, isSMAVSUpdated TINYINT NOT NULL DEFAULT 0)
-    CREATE TABLE #tmp (custid INTEGER PRIMARY KEY)
     CREATE TABLE #Batch    (custid INTEGER PRIMARY KEY, roleid TINYINT)
 
     DECLARE @MinBet MONEY       = 1
@@ -59,6 +58,8 @@ BEGIN
         FROM Dep_CustSetting  dc WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT custid FROM #Batch) 
         
+        RAISERROR ('Row Effected: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
         TRUNCATE TABLE #Batch
     END 
     
@@ -77,11 +78,11 @@ BEGIN
         FROM Dep_CustBetSetting_Agent dca WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT b.custid FROM #Batch AS b)
               AND sporttype IN (180,181,182,183,184,185,186,190,191,199)
+              
+        RAISERROR ('Row Effected: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
         TRUNCATE TABLE #Batch
     END 
-
-
 
     WHILE 1 = 1
     BEGIN
@@ -95,14 +96,17 @@ BEGIN
         FROM Dep_CustSetting3rd  dc WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT b.custid FROM #Batch AS b)
               AND sporttype = 161
-              
+        
+        RAISERROR ('Row Effected: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
             
         --update virtual sport of Member
         UPDATE dcm SET MinBet=@MinBet, MaxBet=@MaxBet, MaxPerMatch=@MaxPerMatch 
         FROM Dep_CustBetSetting_member dcm WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT b.custid FROM #Batch AS b WHERE roleid = 1)
               AND sporttype IN (180,181,182,183,184,185,186,190,191,199)
-              
+        
+        RAISERROR ('Row Effected: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
         TRUNCATE TABLE #Batch
     END 
 END
@@ -113,24 +117,23 @@ GO
 
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+DECLARE @max_custid INT = xxx
+DECLARE @var_target VARCHAR(20) = 'REPLICATED'
+
 CREATE TABLE #supers (custid INTEGER PRIMARY KEY, isfinished bit DEFAULT(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @srecommend INT
 DECLARE @var_super_total INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
 DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 
-SELECT @max_custid = xxx
-
 INSERT INTO #supers(custid)
-SELECT DISTINCT srecommend 
-FROM customer c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
+SELECT custid 
+FROM dbo.Dep_CustSuper c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
 WHERE   l.isActive = 1 
-    AND l.isDeposit  = 1 
     AND l.[LicenseeName] NOT IN ('haifa','BBin2') 
     AND c.currency = 20
-    AND c.roleid=4
-    AND c.srecommend <= @max_custid
+    AND c.custid <= @max_custid
 
     
 SET @var_super_total = (SELECT COUNT(*) FROM #supers )
@@ -150,7 +153,7 @@ BEGIN
     EXEC dbo.Acc_DynamicCustSetting3rd_09 
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
-            ,@target = 'REPLICATED'
+            ,@target    = @var_target
             
     WAITFOR DELAY '00:00:0.100'
 END
@@ -161,24 +164,24 @@ GO
 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
+DECLARE @max_custid INT = xxx
+DECLARE @var_target VARCHAR(20) = 'DBCUST'
+
+
 CREATE TABLE #supers (custid INTEGER PRIMARY KEY, isfinished bit DEFAULT(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @srecommend INT
 DECLARE @var_super_total INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
 DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 
-SELECT @max_custid = xxx
-
 INSERT INTO #supers(custid)
-SELECT DISTINCT srecommend 
-FROM customer c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
+SELECT custid 
+FROM dbo.Dep_CustSuper c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[site] = l.[LicenseeName]
 WHERE   l.isActive = 1 
-    AND l.isDeposit  = 1 
     AND l.[LicenseeName] NOT IN ('haifa','BBin2') 
     AND c.currency = 20
-    AND c.roleid=4
-    AND c.srecommend <= @max_custid
+    AND c.custid <= @max_custid
 
     
 SET @var_super_total = (SELECT COUNT(*) FROM #supers )
@@ -198,7 +201,7 @@ BEGIN
     EXEC dbo.Acc_DynamicCustSetting3rd_09 
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
-            ,@target = 'DBCUST'
+            ,@target    = @var_target
             
     WAITFOR DELAY '00:00:0.100'
 END
