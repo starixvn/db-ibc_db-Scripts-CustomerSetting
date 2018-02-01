@@ -1,5 +1,10 @@
---DBTXN.bodb02
-IF NOT EXISTS(SELECT 1 FROM bettype WHERE typeid IN (2801,2802,2803,2804,2805,2806,2807,2808,2809,2810,2811,2812))
+/*
+    Created: 20180123@Vicky
+    Task: Insert product profile for Basketball
+    DB: DBTXN/bodb02
+*/
+
+IF NOT EXISTS(SELECT 1 FROM bettype WHERE typeid IN (2801,2802,2803,2804,2805,2806,2807,2808,2809,2811,2812))
 BEGIN
 	INSERT INTO bettype (typeid,typenamee,ParentTypeid,DisplayedTypeID)
 	VALUES (2801,'Match Winner',2801,2801),
@@ -17,7 +22,6 @@ BEGIN
 END	 
 
 
---DBTXN.bodb02
 IF NOT EXISTS(SELECT 1 FROM [SportBettypeMatrix] WHERE SportType = 193)
 BEGIN
 	INSERT INTO DBTXN.bodb02.dbo.[SportBettypeMatrix] (SportType, BetType, IsLive, ProductID, [Enabled], IsTest, EventType, SubProduct, RefTable)
