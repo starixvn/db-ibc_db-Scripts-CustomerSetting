@@ -13,11 +13,11 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 AS
 BEGIN
     SET NOCOUNT ON
+    --vicky
+    RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
     
     IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST')  RETURN -- run at all replicated servers
-    IF (@target = 'DBCUST'     AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
-    
-    RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
+    IF (@target = 'DBCUST'     AND @@SERVERNAME <>'DBCUST')  RETURN -- run at dbtrans only
     
     IF dbo.f_CheckRepTable('Dep_CustSetting')           = 0 RETURN
     IF dbo.f_CheckRepTable('Dep_CustSetting3rd')        = 0 RETURN
@@ -26,7 +26,8 @@ BEGIN
     
     RAISERROR ('Validate replicated table ok ', 0, 1) WITH NOWAIT
     
-    CREATE TABLE #Selected (custid INTEGER PRIMARY KEY, roleid TINYINT)
+    CREATE TABLE #Selected (custid INTEGER PRIMARY KEY, roleid TINYINT, isSPUpdated TINYINT NOT NULL DEFAULT 0, isSMAVSUpdated TINYINT NOT NULL DEFAULT 0)
+    CREATE TABLE #tmp (custid INTEGER PRIMARY KEY)
     CREATE TABLE #Batch    (custid INTEGER PRIMARY KEY, roleid TINYINT)
 
     DECLARE @MinBet MONEY       = 1
@@ -43,37 +44,65 @@ BEGIN
     SET @var_num_cust = (SELECT COUNT(*) FROM #Selected)
     RAISERROR ('Total customer: %d', 0, 1, @var_num_cust) WITH NOWAIT
     
+    
+    ---------update minbet/maxbet for sportbook------------
     WHILE 1 = 1
     BEGIN
-        DELETE TOP (5000) #Selected
+        UPDATE TOP (110) #Selected
+        SET isSPUpdated = 1
+        OUTPUT DELETED.custid INTO #Batch(custid)
+        WHERE isSPUpdated = 0
+        
+        IF @@ROWCOUNT = 0 BREAK
+        
+        UPDATE dc SET minbet=@MinBet, maxbet=@MaxBet 
+        FROM Dep_CustSetting  dc WITH (ROWLOCK, UPDLOCK)
+        WHERE custid IN (SELECT custid FROM #Batch) 
+        
+        TRUNCATE TABLE #Batch
+    END 
+    
+    
+    --update virtual sport of SMA
+    WHILE 1 = 1
+    BEGIN
+        UPDATE TOP (500) #Selected
+        SET isSMAVSUpdated = 1
+        OUTPUT DELETED.custid INTO #Batch(custid)
+        WHERE isSMAVSUpdated = 0 AND roleid <> 1
+
+        IF @@ROWCOUNT = 0 BREAK
+        
+        UPDATE dca SET MinBet=@MinBet, MaxBet=@MaxBet, MaxPerMatch=@MaxPerMatch
+        FROM Dep_CustBetSetting_Agent dca WITH (ROWLOCK, UPDLOCK)
+        WHERE custid IN (SELECT b.custid FROM #Batch AS b)
+              AND sporttype IN (180,181,182,183,184,185,186,190,191,199)
+        
+        TRUNCATE TABLE #Batch
+    END 
+
+
+
+    WHILE 1 = 1
+    BEGIN
+        DELETE TOP (500) #Selected
         OUTPUT DELETED.custid, DELETED.roleid INTO #Batch(custid,roleid)
 
         IF @@ROWCOUNT = 0 BREAK
-            
-        ---------update minbet/maxbet------------
-        --for sportbook
-        UPDATE dc SET minbet=@MinBet, maxbet=@MaxBet 
-        FROM Dep_CustSetting  dc WITH (ROWLOCK, UPDLOCK)
-        WHERE custid IN (SELECT b.custid FROM #Batch AS b) 
             
         --for number game
         UPDATE dc SET minbet=@MinBet, maxbet=@MaxBet 
         FROM Dep_CustSetting3rd  dc WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT b.custid FROM #Batch AS b)
               AND sporttype = 161
-            
-        --update virtual sport of SMA
-        UPDATE dca SET MinBet=@MinBet, MaxBet=@MaxBet, MaxPerMatch=@MaxPerMatch
-        FROM Dep_CustBetSetting_Agent dca WITH (ROWLOCK, UPDLOCK)
-        WHERE custid IN (SELECT b.custid FROM #Batch AS b WHERE roleid <> 1)
-              AND sporttype IN (180,181,182,183,184,185,186,190,191,199)
+              
             
         --update virtual sport of Member
         UPDATE dcm SET MinBet=@MinBet, MaxBet=@MaxBet, MaxPerMatch=@MaxPerMatch 
         FROM Dep_CustBetSetting_member dcm WITH (ROWLOCK, UPDLOCK)
         WHERE custid IN (SELECT b.custid FROM #Batch AS b WHERE roleid = 1)
               AND sporttype IN (180,181,182,183,184,185,186,190,191,199)
-            
+              
         TRUNCATE TABLE #Batch
     END 
 END

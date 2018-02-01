@@ -63,6 +63,8 @@ BEGIN
 			MaxPerBall161 	= @MaxPerBall
 		WHERE custid IN (SELECT b.custid FROM #Batch AS b)
 		
+		RAISERROR ('Total affected row : %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+		
 		TRUNCATE TABLE #Batch
 	END 
 END
