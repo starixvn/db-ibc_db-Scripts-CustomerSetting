@@ -28,7 +28,7 @@ BEGIN
 	SELECT custid, ci.roleid
 	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE ci.srecommend = @Custid AND ci.custid <= @maxcustid
+	WHERE ci.srecommend = @Custid AND ci.custid <= @maxcustid AND enabled = 1
 	
 	SELECT @BitmapOrder = 5
 	UPDATE cs
