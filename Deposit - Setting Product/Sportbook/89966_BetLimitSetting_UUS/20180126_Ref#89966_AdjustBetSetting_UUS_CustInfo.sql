@@ -60,6 +60,7 @@ BEGIN
             MaxPerMatch1MP  = @MaxPerMatch,
             MaxPerMatch154  = @MaxPerMatch,
             MaxPerMatch161  = @MaxPerMatch,
+            MaxPerMatch44   = @MaxPerMatch,
             MaxPerBall161   = @MaxPerBall
         WHERE custid IN (SELECT b.custid FROM @Batch AS b)
         
