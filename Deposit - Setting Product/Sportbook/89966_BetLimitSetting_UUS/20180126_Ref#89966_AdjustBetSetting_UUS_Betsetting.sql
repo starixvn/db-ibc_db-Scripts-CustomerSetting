@@ -133,6 +133,7 @@ FROM dbo.Dep_CustSuper c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[si
 WHERE   l.isActive = 1 
     AND l.[LicenseeName] NOT IN ('haifa','BBin2') 
     AND c.currency = 20
+    AND username <> 'ITSA'
     AND c.custid <= @max_custid
 
     
@@ -181,6 +182,7 @@ FROM dbo.Dep_CustSuper c INNER JOIN DBLIC.bodb_Licensee.dbo.Licensees l ON c.[si
 WHERE   l.isActive = 1 
     AND l.[LicenseeName] NOT IN ('haifa','BBin2') 
     AND c.currency = 20
+    AND username <> 'ITSA'
     AND c.custid <= @max_custid
 
     
