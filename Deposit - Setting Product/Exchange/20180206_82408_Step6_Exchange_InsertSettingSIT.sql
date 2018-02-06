@@ -70,13 +70,7 @@ DECLARE @max_custid INT, @srecommend INT, @site VARCHAR (50), @currency INT
 SELECT  @max_custid= xxx ---input maxcustid
 DECLARE @ProductID INT = 31
 CREATE TABLE #Supers_Offered (custid INT)
-INSERT INTO #Supers_Offered (custid)
-SELECT DISTINCT lds.CustID
-FROM Dep_LicenseeProductSetting lds WITH (NOLOCK)
-	INNER JOIN Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
-	INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
-	INNER JOIN Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType = 221
+
 
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
@@ -133,13 +127,7 @@ SELECT  @max_custid= xxx ---input maxcustid
 
 DECLARE @ProductID INT = 31
 CREATE TABLE #Supers_Offered (custid INT)
-INSERT INTO #Supers_Offered (custid)
-SELECT DISTINCT lds.CustID
-FROM Dep_LicenseeProductSetting lds WITH (NOLOCK)
-	INNER JOIN Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
-	INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= @ProductID
-	INNER JOIN Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType = 221
+
 
 INSERT INTO #supers(custid,currency)
 SELECT custid,currency
