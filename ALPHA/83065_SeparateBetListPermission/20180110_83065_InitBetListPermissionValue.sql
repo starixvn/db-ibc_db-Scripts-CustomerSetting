@@ -15,7 +15,7 @@ BEGIN
 	INSERT #Selected (subaccid)
 	SELECT subaccid
 	FROM dbo.custSub WITH (NOLOCK)
-	WHERE PageAccess LIKE '%[E]%' OR PageAccess LIKE '%[D]%'
+	WHERE (PageAccess LIKE '%[E]%' OR PageAccess LIKE '%[D]%') AND (PageAccess NOT LIKE '%[L]%')
 
 	SET @var_max_custsub_id = (SELECT TOP 1 subaccid FROM #Selected ORDER BY subaccid DESC)
 	
