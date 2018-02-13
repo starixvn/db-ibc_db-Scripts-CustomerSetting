@@ -37,3 +37,36 @@ WHERE IsLicensee = 0 AND isActive = 1
 
 INSERT INTO ProductSettingSystemDisplay(SystemID, ProductID, SettingType, DisplayMode)
 VALUES                                 (5       , 5        , 6          , 3)
+
+
+
+INSERT INTO Sport_Bettype_Reference_Setting
+(SportType, BetType, IsLicensee, isLive, Site, IsActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT,             StructureVerPT, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting,           StructureVerBetSetting)
+VALUES
+(193,       2801,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2802,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2803,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2804,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2805,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2806,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2807,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2808,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2809,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2811,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2812,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            193,                    2801,              'CustBetSetting3rd_Member',      'DCS'),
+(193,       2799,    0,          0,      'All', 0,       193,            2801,          0, 'CustPTSetting3rd_member', 'DCS',            199,                    2799,              'CustBetSetting3rd_Member',      'DCS'),
+
+(193,       2801,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2802,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2803,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2804,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2805,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2806,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2807,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2808,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2809,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2811,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2812,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           193,                    2801,              'Dep_CustBetSetting_Member',     'DCS'),
+(193,       2799,    1,          0,      'All', 0,       190,            2801,          0, 'Dep_CustPTSetting_member', 'DCS',           199,                    2799,              'Dep_CustBetSetting_Member',     'DCS')
+
+
