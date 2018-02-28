@@ -27,3 +27,6 @@ BEGIN
 	INSERT INTO SportBettypeMatrix (SportType, BetType, IsLive, ProductID, [Enabled], IsTest, EventType, SubProduct, RefTable)
 	VALUES                                            (193      , 2801   , 0     , 193      , 1        , 1     , 1        , ''        , 0       )  
 END
+
+
+UPDATE TABLE sports SET SportName='Virtual Soccer World Cup' WHERE SportType=192
