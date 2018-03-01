@@ -1,6 +1,6 @@
 /*
 	Created: 20180123@Vicky
-	Task: Insert product profile for Basketball
+	Task: Insert product profile for Virtual Basketball
 	DB: DBCUST/CustDB
 */
 
