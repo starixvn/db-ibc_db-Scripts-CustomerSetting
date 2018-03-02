@@ -1,6 +1,6 @@
 /*
-	Created: 20180123@Vicky
-	Task: Insert product profile for Virtual Basketball
+	Created: 20180223@Vicky
+	Task: Insert product profile for Virtual Soccer World Cup
 	DB: DBCUST/CustDB
 */
 
