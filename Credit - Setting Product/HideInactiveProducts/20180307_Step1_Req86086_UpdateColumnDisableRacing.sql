@@ -13,8 +13,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DB233\sqlserver2008r2') RETURN	-- run at all replicated servers
+	IF (@target = 'DB233\sqlserver2008r2' AND @@SERVERNAME <> 'DB233\sqlserver2008r2') RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Custinfo') = 0
 		RETURN	
@@ -25,7 +25,7 @@ BEGIN
 	SELECT ci.custid 
 	INTO #CustList
 	FROM dbo.Customer ci WITH (NOLOCK)
-	WHERE ci.custid <= @maxcustid AND roleid = 1 AND ci.srecommend=@srecommend
+	WHERE ci.custid <= @maxcustid AND ci.srecommend=@srecommend
 	AND ci.creatdate<=@EndOfSupportDate
 
 	WHILE (1=1)
