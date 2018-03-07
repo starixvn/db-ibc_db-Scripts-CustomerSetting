@@ -55,7 +55,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT c.custid
 FROM custInfo c WITH(NOLOCK)	
-WHERE c.roleid = 4
+WHERE c.roleid = 4 AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 
 WHILE (1 = 1)
 BEGIN
@@ -84,7 +84,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT c.custid
 FROM custInfo c WITH(NOLOCK)
-WHERE c.roleid = 4
+WHERE c.roleid = 4 AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 
 WHILE (1 = 1)
 BEGIN
