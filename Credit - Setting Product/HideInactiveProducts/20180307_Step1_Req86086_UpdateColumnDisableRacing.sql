@@ -8,7 +8,7 @@ ALTER PROCEDURE [dbo].Acc_CustomerInfo_Execrep_09
 	@srecommend INT	
 	,@maxcustid INT
 	,@target VARCHAR(20)	
-	,@EndOfSupportDate DATETIME
+	
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -18,17 +18,13 @@ BEGIN
 	
 	IF dbo.f_CheckRepTable('Custinfo') = 0
 		RETURN	
-	IF dbo.f_CheckRepTable('Customer') = 0
-		RETURN
 	DECLARE @Batch TABLE (custid INT PRIMARY KEY)
 	
 	SELECT ci.custid 
 	INTO #CustList
-	FROM dbo.Customer ci WITH (NOLOCK)
-		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
-	WHERE ci.custid <= @maxcustid AND ci.srecommend=@srecommend
-		AND ci.creatdate<=@EndOfSupportDate
-		AND (Disable152_AU=0 OR Disable152_UK=0 OR Disable153_AU=0 OR DisableOpenTote=0 OR DisableHorseRacing=0)
+	FROM dbo.custInfo ci WITH (NOLOCK)
+	WHERE ci.custid <= @maxcustid AND ci.srecommend=@srecommend		
+		AND roleid IN (2,3,4)
 
 	WHILE (1=1)
 	BEGIN
@@ -53,9 +49,8 @@ GO
 --------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE  @srecommend INT,@max_custid INT,@EndOfSupportDate DATETIME
+DECLARE  @srecommend INT,@max_custid INT
 SELECT @max_custid = xxx
-SELECT @EndOfSupportDate=xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
@@ -74,8 +69,7 @@ BEGIN
 	EXEC dbo.Acc_CustomerInfo_Execrep_09 
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
-		,@target = 'REPLICATED'
-		,@EndOfSupportDate=@EndOfSupportDate
+		,@target = 'REPLICATED'		
 	waitfor delay '00:00:0.280'
 END
 
@@ -83,9 +77,9 @@ END
 --------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE  @srecommend INT,@max_custid INT,@EndOfSupportDate DATETIME
+DECLARE  @srecommend INT,@max_custid INT
 SELECT @max_custid = xxx
-SELECT @EndOfSupportDate=xxx
+
 
 INSERT INTO #supers(custid)
 SELECT c.custid
@@ -104,8 +98,7 @@ BEGIN
 	EXEC dbo.Acc_CustomerInfo_Execrep_09 
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
-		,@target = 'DBCUST'	
-		,@EndOfSupportDate=@EndOfSupportDate				
+		,@target = 'DBCUST'			
 	waitfor delay '00:00:0.280'
 END
 
