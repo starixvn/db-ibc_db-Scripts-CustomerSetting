@@ -13,8 +13,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DB233\sqlserver2008r2') RETURN	-- run at all replicated servers
-	IF (@target = 'DB233\sqlserver2008r2' AND @@SERVERNAME <> 'DB233\sqlserver2008r2') RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Custinfo') = 0
 		RETURN	
@@ -25,8 +25,10 @@ BEGIN
 	SELECT ci.custid 
 	INTO #CustList
 	FROM dbo.Customer ci WITH (NOLOCK)
+		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 	WHERE ci.custid <= @maxcustid AND ci.srecommend=@srecommend
-	AND ci.creatdate<=@EndOfSupportDate
+		AND ci.creatdate<=@EndOfSupportDate
+		AND (Disable152_AU=0 OR Disable152_UK=0 OR Disable153_AU=0 OR DisableOpenTote=0 OR DisableHorseRacing=0)
 
 	WHILE (1=1)
 	BEGIN
@@ -39,7 +41,7 @@ BEGIN
 		SET	Disable151_AU=0
 		FROM CustInfo ci WITH (ROWLOCK,UPDLOCK) 
 			INNER JOIN @Batch b ON b.custid = ci.custid
-
+	
 		DELETE FROM @Batch
 	END
 END
