@@ -18,7 +18,8 @@ BEGIN
 	
 	IF dbo.f_CheckRepTable('Custinfo') = 0
 		RETURN	
-	
+	IF dbo.f_CheckRepTable('Customer') = 0
+		RETURN
 	DECLARE @Batch TABLE (custid INT PRIMARY KEY)
 	
 	SELECT ci.custid 
