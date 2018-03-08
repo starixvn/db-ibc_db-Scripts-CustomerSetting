@@ -262,21 +262,84 @@ BEGIN
 	--------------------------------------Bet Setting-------------------------------------------------		
 	--Agent Level
 	INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
-			CASE WHEN ci.roleid = 4 THEN ps.DefaultMinBet ELSE 0 END, 
-			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxBet ELSE 0.1 END, 
-			CASE WHEN ci.roleid = 4 THEN ps.DefaultMaxPerMatch ELSE 0.1 END			
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1
 	FROM #SMATemp ci  
 		CROSS APPLY #DestinationSportBetType dest
-		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
-	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+	WHERE dest.SettingType = 16
 
 	--Member Level
 	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1				
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1			
 	FROM #MemberTemp ci
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 16
+	
+	-----Set global bet setting for dummy acounts,  direct Master, direct Agent and direct member level-----
+	--Update for dummy super
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM dbo.CustBetSetting3rd_Agent cs 
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+		AND cs.CustID = @srecommend
+
+	--Update for dummy master of direct agent
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM #DirectAgent ci  
+		INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.mrecommend
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+
+	--Update for dummy master of direct member
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM #DirectMember ci  
+		INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.mrecommend
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+
+	--Update for dummy agent
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM #DirectMember ci  		
+		INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.recommend
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+
+	--Update for direct master, agent
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM (SELECT custid FROM #DirectMaster UNION ALL SELECT custid FROM #DirectAgent) ci  
+		INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.CustID
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
+
+	--Update for direct member
+	UPDATE cs
+	SET cs.MinBet = ps.DefaultMinBet,
+		cs.MaxBet = ps.DefaultMaxBet,
+		cs.MaxPerMatch = ps.DefaultMaxPerMatch	
+	FROM #DirectMember ci  
+		INNER JOIN dbo.CustBetSetting3rd_Member cs WITH (NOLOCK) ON cs.CustID = ci.CustID
+		INNER JOIN #DestinationSportBetType dest ON dest.tSportType = cs.Sporttype AND dest.tBetType = cs.Bettype
+		INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype
+	WHERE ps.Currency = @Currency AND dest.SettingType = 16
 	
 	--------------------------------------Commission Setting-------------------------------------------------		
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
