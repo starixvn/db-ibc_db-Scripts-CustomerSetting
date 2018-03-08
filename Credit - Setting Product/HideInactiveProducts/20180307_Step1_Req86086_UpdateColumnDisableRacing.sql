@@ -25,6 +25,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.custid <= @maxcustid AND ci.srecommend=@srecommend		
 		AND roleid IN (2,3,4)
+		AND ci.Disable151_AU=1
 
 	WHILE (1=1)
 	BEGIN
@@ -70,7 +71,7 @@ BEGIN
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
 		,@target = 'REPLICATED'		
-	waitfor delay '00:00:0.280'
+	
 END
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -99,6 +100,6 @@ BEGIN
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
 		,@target = 'DBCUST'			
-	waitfor delay '00:00:0.280'
+	
 END
 
