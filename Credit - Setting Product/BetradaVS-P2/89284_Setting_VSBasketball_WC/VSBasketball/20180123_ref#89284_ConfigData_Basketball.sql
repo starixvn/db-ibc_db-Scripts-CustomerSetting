@@ -20,7 +20,7 @@ SELECT                        193      , 2801   , exchangeid, 0     , 0    , 0  
 FROM exchange
 
 
-
+--copy loss limit from Allbet
 INSERT INTO [LossLimit_GlobalSetting] (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT                                 5        , ExchangeId, MinLossLimit, DefaultLossLimit
 FROM [LossLimit_GlobalSetting] WHERE ProductId = 21

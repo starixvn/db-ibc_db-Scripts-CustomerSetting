@@ -134,7 +134,7 @@ BEGIN
         INSERT INTO dbo.CustPTSetting3rd_Member (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
         SELECT ci.CustID, sb.SportType, sb.BetType, sb.IsLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
         FROM #Batch ci
-            INNER JOIN dbo.CustPTSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
+            INNER JOIN dbo.CustPTSetting3rd_Member cs WITH (UPDLOCK, NOLOCK) ON cs.CustID = ci.custid
             CROSS APPLY #SportBettypeFilter1 sb
         WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
         RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT

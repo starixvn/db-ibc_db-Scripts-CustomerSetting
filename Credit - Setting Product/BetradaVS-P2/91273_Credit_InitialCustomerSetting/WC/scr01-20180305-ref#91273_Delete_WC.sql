@@ -49,65 +49,48 @@ BEGIN
     RAISERROR ('Total member: %d', 0, 1, @var_num_cust) WITH NOWAIT
     
    --SMA LEVEL
-    WHILE 1 = 1
-    BEGIN
-        DELETE TOP (5000) #SMATemp
-        OUTPUT DELETED.CustID INTO #Batch
-        
-        IF @@ROWCOUNT = 0 BREAK
-        
-        --------------------------------------PT Setting------------------------------------------------- 
-        DELETE cg
-        FROM CustPTSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)        
-            INNER JOIN #Batch ci ON cg.custid = ci.custid
-        WHERE cg.SportType = @SporttypeWC
-        RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-        
-        DELETE cg
-        FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
-            INNER JOIN #Batch ci ON cg.AgentId = ci.custid
-        WHERE cg.SportType = @SporttypeWC
-        RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-        
-        ----------------------------------------Bet Game Setting-------------------------------------------------
-        DELETE cg
-        FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
-            INNER JOIN #Batch ci ON cg.custid = ci.custid
-        WHERE cg.SportType = @SporttypeWC
-        RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+    --------------------------------------PT Setting------------------------------------------------- 
+    DELETE cg
+    FROM CustPTSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)        
+        INNER JOIN #SMATemp ci ON cg.custid = ci.custid
+    WHERE cg.SportType = @SporttypeWC
+    RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+    
+    DELETE cg
+    FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
+        INNER JOIN #SMATemp ci ON cg.AgentId = ci.custid
+    WHERE cg.SportType = @SporttypeWC
+    RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+    
+    ----------------------------------------Bet Game Setting-------------------------------------------------
+    DELETE cg
+    FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
+        INNER JOIN #SMATemp ci ON cg.custid = ci.custid
+    WHERE cg.SportType = @SporttypeWC
+    RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
           
-        TRUNCATE TABLE #Batch
-    END
     
         
-    WHILE 1 = 1
-    BEGIN
-        DELETE TOP (5000) #MemberTemp
-        OUTPUT DELETED.CustID INTO #Batch
+    --Member
+    --------------------------------------PT Setting------------------------------------------------- 
+    DELETE cg
+    FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
+        INNER JOIN #Batch ci ON cg.custid = ci.custid
+    WHERE cg.SportType = @SporttypeWC
+    RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
-        IF @@ROWCOUNT = 0 BREAK
-    
-        --------------------------------------PT Setting------------------------------------------------- 
-        DELETE cg
-        FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
-            INNER JOIN #Batch ci ON cg.custid = ci.custid
-        WHERE cg.SportType = @SporttypeWC
-        RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-            
-        ----------------------------------------Bet Game Setting-------------------------------------------------
-        DELETE cg
-        FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
-            INNER JOIN #Batch ci ON cg.custid = ci.custid
-        WHERE cg.SportType = @SporttypeWC
-        RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+    ----------------------------------------Bet Game Setting-------------------------------------------------
+    DELETE cg
+    FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
+        INNER JOIN #Batch ci ON cg.custid = ci.custid
+    WHERE cg.SportType = @SporttypeWC
+    RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
-        
-        TRUNCATE TABLE #Batch
-    END
 END 
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------  
+
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
@@ -143,13 +126,11 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT3
+    EXEC dbo.Acc_DynamicCustSetting3rd_09
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
             
-    WAITFOR DELAY '00:00:0.100'
-    BREAK
 END
 GO
 
@@ -188,12 +169,10 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT3
+    EXEC dbo.Acc_DynamicCustSetting3rd_09
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
             
-    WAITFOR DELAY '00:00:0.100'
-    break
 END
 GO
