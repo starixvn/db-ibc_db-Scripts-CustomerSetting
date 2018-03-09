@@ -71,7 +71,7 @@ BEGIN
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
 		,@target = 'REPLICATED'		
-	
+	waitfor delay '00:00:0.100'
 END
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -100,6 +100,6 @@ BEGIN
 		@srecommend = @srecommend
 		,@maxcustid = @max_custid
 		,@target = 'DBCUST'			
-	
+	waitfor delay '00:00:0.100'
 END
 
