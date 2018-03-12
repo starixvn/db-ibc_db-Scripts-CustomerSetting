@@ -4,47 +4,45 @@
     DB: DBCUST/CustDB
 */
 
-    
-    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED)
+    DECLARE @maxcustid INT = xxx
+    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED, currency INT)
+    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, currency INT)
 
-    DECLARE @ProductID INT, @currency INT, @SporttypeVSBasketBall INT, @SporttypeVS INT,
+    DECLARE @ProductID INT, @Sporttype INT, @SporttypeDelegate INT,
             @SportTypeRef SMALLINT, @BetTypeRef SMALLINT, @IsLiveRef BIT
     
             
     SELECT  @ProductID      = 5, 
-            @SporttypeVSBasketBall = 193, 
-            @SporttypeVS    = 180,
+            @Sporttype      = 193, 
+            @SporttypeDelegate    = 180,
             @SportTypeRef   = 180,    
             @BetTypeRef     = 1201,   
             @IsLiveRef      = 0
     
-    SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
     SELECT t.* 
     INTO #SportBettypeFilter1
     FROM ProductSettingDetail t WITH (NOLOCK)
-    WHERE t.SettingType = 1 AND t.ProductID = @ProductID AND t.SportType = @SporttypeVSBasketBall
+    WHERE t.SettingType = 1 AND t.ProductID = @ProductID AND t.SportType = @Sporttype
 
     SELECT t.* 
     INTO #SportBettypeFilter2
     FROM ProductSettingDetail t WITH (NOLOCK)
-    WHERE t.SettingType = 2 AND t.ProductID = @ProductID AND t.SportType = @SporttypeVSBasketBall
+    WHERE t.SettingType = 2 AND t.ProductID = @ProductID AND t.SportType = @Sporttype
 
     SELECT t.* 
     INTO #SportBettypeFilter6
     FROM ProductSettingDetail t WITH (NOLOCK)
-    WHERE t.SettingType = 6 AND t.ProductID = @ProductID AND t.SportType = @SporttypeVS
+    WHERE t.SettingType = 6 AND t.ProductID = @ProductID AND t.SportType = @SporttypeDelegate
 
     
-    INSERT INTO #MemberTemp (CustID)
-    SELECT custid
+    INSERT INTO #MemberTemp (CustID, currency)
+    SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
-        
     WHERE roleid = 1 AND custid > @maxcustid
     
-    INSERT INTO #SMATemp (CustID)
-    SELECT custid
+    INSERT INTO #SMATemp (CustID, currency)
+    SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
     WHERE roleid IN (2,3,4) AND custid > @maxcustid 
 
@@ -59,9 +57,8 @@
     SELECT ci.CustID, sb.SportType, sb.BetType, sb.IsLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT, cs.MinPT, cs.MaxPT
     FROM #SMATemp ci
         INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) ON cs.custid = ci.custid
-        LEFT JOIN dbo.CustPTSetting3rd_Agent csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY #SportBettypeFilter1 sb
-    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef AND csCheckExisted.custid IS NULL
+    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
     RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     --group
@@ -69,9 +66,8 @@
     SELECT ci.CustID, sb.SportType, sb.BetType, sb.IsLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
     FROM #SMATemp ci
         INNER JOIN dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK) ON cs.agentid = ci.custid
-        LEFT JOIN dbo.CustPTGroupSetting3rd_Member csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY #SportBettypeFilter1 sb 
-    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef AND csCheckExisted.custid IS NULL
+    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
     RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     ----------------------------------------Bet Game Setting-------------------------------------------------
@@ -79,7 +75,6 @@
     SELECT ci.custid, sb.SportType, sb.BetType, cs.MinBet, MaxBet, MaxPerMatch
     FROM #SMATemp ci
         INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK) ON cs.CustID = ci.custid
-        LEFT JOIN dbo.CustBetSetting3rd_Agent csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY #SportBettypeFilter2 sb
     WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
     RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
@@ -88,10 +83,9 @@
     INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
     SELECT ci.custid, sb.SportType, sb.BetType, 0, cs.MinLossLimit, 1
     FROM #SMATemp ci
-        LEFT JOIN dbo.CustBetSetting3rd_Agent csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
         CROSS APPLY #SportBettypeFilter6 sb
-    WHERE cs.ExchangeId = @currency AND cs.ProductId = @ProductID AND csCheckExisted.custid IS NULL 
+    WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID 
     RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
         
@@ -103,9 +97,8 @@
     SELECT ci.CustID, sb.SportType, sb.BetType, sb.IsLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
     FROM #MemberTemp ci
         INNER JOIN dbo.CustPTSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
-        LEFT JOIN dbo.CustPTSetting3rd_Member csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY #SportBettypeFilter1 sb
-    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef AND csCheckExisted.custid IS NULL
+    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
     RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     ----------------------------------------Bet Game Setting-------------------------------------------------
@@ -113,19 +106,17 @@
     SELECT ci.custid, sb.SportType, sb.BetType, MinBet, MaxBet, MaxPerMatch
     FROM #MemberTemp ci
         INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
-        LEFT JOIN dbo.CustPTSetting3rd_Member csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY #SportBettypeFilter2 sb
-    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef AND csCheckExisted.custid IS NULL 
+    WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef 
     RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     ----------------------------------------WinLoss Limit Setting-------------------------------------------------
     INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
     SELECT ci.custid, sb.SportType, sb.BetType, 0, 0, 1
     FROM #MemberTemp ci
-        LEFT JOIN dbo.CustPTSetting3rd_Member csCheckExisted WITH(NOLOCK) ON (csCheckExisted.custid = ci.custid AND csCheckExisted.SportType = @SporttypeVSBasketBall)
         CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
         CROSS APPLY #SportBettypeFilter6 sb
-    WHERE cs.ExchangeId = @currency AND cs.ProductId = @ProductID AND csCheckExisted.custid IS NULL
+    WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
     RAISERROR ('Total affected row Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
    
@@ -135,5 +126,3 @@
     DROP TABLE #SportBettypeFilter1
     DROP TABLE #SportBettypeFilter2
     DROP TABLE #SportBettypeFilter6
-END
-GO

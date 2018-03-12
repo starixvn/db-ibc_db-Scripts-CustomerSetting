@@ -6,86 +6,63 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
  
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-    @srecommend INT 
-    ,@maxcustid INT
-    ,@target VARCHAR(20)
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT3]
+        @target VARCHAR(20)
 AS
-BEGIN
+BEGIN 
     SET NOCOUNT ON
     
-    RAISERROR ('Run at server: %s; srecommend: %d', 0, 1, @@SERVERNAME, @srecommend) WITH NOWAIT
+    RAISERROR ('Run at server: %s;', 0, 1, @@SERVERNAME) WITH NOWAIT
     
-    IF (@target = 'REPLICATED' AND @@SERVERNAME  = 'DBCUST') RETURN -- run at all replicated servers
-    IF (@target = 'DBCUST'     AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND (@@SERVERNAME = 'DB230\SQLSERVER2008R2' OR @@SERVERNAME = 'DB233' OR @@SERVERNAME = 'DBCUST' OR @@SERVERNAME = 'SITDBCUST')) RETURN -- run at all replicated servers
+    IF (@target = 'DBCUST'     AND (@@SERVERNAME = 'DB230\SQLSERVER2008R2' OR @@SERVERNAME = 'DB233' OR @@SERVERNAME = 'DBCUST' OR @@SERVERNAME = 'SITDBCUST')) RETURN -- run at dbcust only
     
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Member')  = 0 RETURN
     IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member')  = 0 RETURN
     IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent')  = 0 RETURN
     IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
-    IF dbo.f_CheckRepTable('CustWinLossLimit_Agent')   = 0 RETURN
-    IF dbo.f_CheckRepTable('CustWinLossLimit_Member')  = 0 RETURN
                 
-    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #Batch (CustID INTEGER PRIMARY KEY)
-    DECLARE @SporttypeWC INT    
+    DECLARE @Sporttype INT, @SporttypeDelegate INT    
             
-    SELECT  @SporttypeWC = 192
-    
-    INSERT INTO #SMATemp (CustID)
-    SELECT custid
-    FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
+    SELECT  @Sporttype              = 192, 
+            @SporttypeDelegate      = 180
             
-    INSERT INTO #MemberTemp (CustID)
-    SELECT custid
-    FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid = 1 AND custid <= @maxcustid
-    
-    DECLARE @var_num_cust INT
-    SET @var_num_cust = (SELECT COUNT(*) FROM #MemberTemp)
-    RAISERROR ('Total member: %d', 0, 1, @var_num_cust) WITH NOWAIT
+   
     
    --SMA LEVEL
     --------------------------------------PT Setting------------------------------------------------- 
     DELETE cg
     FROM CustPTSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)        
-        INNER JOIN #SMATemp ci ON cg.custid = ci.custid
-    WHERE cg.SportType = @SporttypeWC
+    WHERE cg.SportType = @Sporttype
     RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     DELETE cg
     FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
-        INNER JOIN #SMATemp ci ON cg.AgentId = ci.custid
-    WHERE cg.SportType = @SporttypeWC
+    WHERE cg.SportType = @Sporttype
     RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
     
     ----------------------------------------Bet Game Setting-------------------------------------------------
     DELETE cg
     FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
-        INNER JOIN #SMATemp ci ON cg.custid = ci.custid
-    WHERE cg.SportType = @SporttypeWC
+    WHERE cg.SportType = @Sporttype
     RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-          
     
-        
+    
+    
     --Member
     --------------------------------------PT Setting------------------------------------------------- 
     DELETE cg
     FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
-        INNER JOIN #Batch ci ON cg.custid = ci.custid
-    WHERE cg.SportType = @SporttypeWC
+    WHERE cg.SportType = @Sporttype
     RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
     ----------------------------------------Bet Game Setting-------------------------------------------------
     DELETE cg
     FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
-        INNER JOIN #Batch ci ON cg.custid = ci.custid
-    WHERE cg.SportType = @SporttypeWC
+    WHERE cg.SportType = @Sporttype
     RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-        
+          
 END 
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

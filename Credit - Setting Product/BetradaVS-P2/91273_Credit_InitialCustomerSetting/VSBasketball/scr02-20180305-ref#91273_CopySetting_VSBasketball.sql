@@ -1,12 +1,12 @@
 /*
     Created: 20180305@Vicky
-    Task: Initial Customer setting for WC
+    Task: Initial Customer setting for VSBasketball
     DB: DBCUST/CustDB
 */
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT4]
     @srecommend INT 
     ,@maxcustid INT
     ,@target VARCHAR(20)
@@ -16,8 +16,8 @@ BEGIN
     
     RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
     
-    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN   -- run at all replicated servers
-    IF (@target = 'DBCUST'     AND @@SERVERNAME<> 'DBCUST') RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
+    IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
     
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member')  = 0 RETURN
@@ -27,41 +27,51 @@ BEGIN
     IF dbo.f_CheckRepTable('CustWinLossLimit_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustWinLossLimit_Member')  = 0 RETURN
     
-    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #Batch (CustID INTEGER PRIMARY KEY)
-    DECLARE @ProductID INT, @currency INT, @SporttypeWC INT, 
-            @SportTypeRef SMALLINT, @BetTypeRef SMALLINT, @IsLiveRef BIT
+    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED, currency INT)
+    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, currency INT)
+    CREATE TABLE #Batch (CustID INTEGER PRIMARY KEY, currency INT)
     
+    DECLARE @ProductID INT, @IsLiveRef BIT,
+            @SporttypeDelegate INT,
+            @Sporttype INT, 
+            @SportTypeRef SMALLINT, @BetTypeRef SMALLINT 
             
-    SELECT  @ProductID      = 5, 
-            @SporttypeWC = 192, 
-            @SportTypeRef   = 191,    
-            @BetTypeRef     = 2701,   
-            @IsLiveRef      = 0
     
-    SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
-
+    SELECT  @ProductID      = 5, 
+            @Sporttype      = 193, 
+            @SporttypeDelegate    = 180,
+            @SportTypeRef   = 180,    
+            @BetTypeRef     = 1201,   
+            @IsLiveRef      = 0
+                    
+    
     SELECT t.* 
     INTO #SportBettypeFilter1
     FROM ProductSettingDetail t WITH (NOLOCK)
-    WHERE t.SettingType = 1 AND t.ProductID = @ProductID AND t.SportType = @SporttypeWC
+    WHERE t.SettingType = 1 AND t.ProductID = @ProductID AND t.SportType = @Sporttype
 
     SELECT t.* 
     INTO #SportBettypeFilter2
     FROM ProductSettingDetail t WITH (NOLOCK)
-    WHERE t.SettingType = 2 AND t.ProductID = @ProductID AND t.SportType = @SporttypeWC
+    WHERE t.SettingType = 2 AND t.ProductID = @ProductID AND t.SportType = @Sporttype
+
+    SELECT t.* 
+    INTO #SportBettypeFilter6
+    FROM ProductSettingDetail t WITH (NOLOCK)
+    WHERE t.SettingType = 6 AND t.ProductID = @ProductID AND t.SportType = @SporttypeDelegate
 
     
-    INSERT INTO #MemberTemp (CustID)
-    SELECT custid
+    INSERT INTO #MemberTemp (CustID, currency)
+    SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid = 1 AND custid <= @maxcustid
+    WHERE srecommend = @srecommend
+        AND roleid = 1 AND custid <= @maxcustid
     
-    INSERT INTO #SMATemp (CustID)
-    SELECT custid
+    INSERT INTO #SMATemp (CustID, currency)
+    SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
+    WHERE srecommend = @srecommend 
+        AND roleid IN (2,3,4) AND custid <= @maxcustid 
 
     DECLARE @var_num_cust INT
     SET @var_num_cust = (SELECT COUNT(*) FROM #MemberTemp)
@@ -70,8 +80,8 @@ BEGIN
     --SMA LEVEL
     WHILE 1 = 1
     BEGIN
-        DELETE TOP (5000) #SMATemp
-        OUTPUT DELETED.CustID INTO #Batch
+        DELETE TOP (4000) #SMATemp
+        OUTPUT DELETED.CustID, DELETED.currency INTO #Batch(CustID, currency)
         
         IF @@ROWCOUNT = 0 BREAK
         
@@ -91,7 +101,7 @@ BEGIN
             INNER JOIN dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK) ON cs.agentid = ci.custid
             CROSS APPLY #SportBettypeFilter1 sb
         WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
-        RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        RAISERROR ('Total affected row of SMA GROUP PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
         ----------------------------------------Bet Game Setting-------------------------------------------------
         INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
@@ -100,9 +110,17 @@ BEGIN
             INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK) ON cs.CustID = ci.custid
             CROSS APPLY #SportBettypeFilter2 sb
         WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
-        RAISERROR ('Total affected row of SMA Betsetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
-       
+        ----------------------------------------WinLoss Limit Setting-------------------------------------------------      
+        INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+        SELECT ci.custid, sb.SportType, sb.BetType, 0, cs.MinLossLimit, 1
+        FROM #Batch ci
+            CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
+            CROSS APPLY #SportBettypeFilter6 sb
+        WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID   
+        RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
         TRUNCATE TABLE #Batch
     END
     
@@ -111,8 +129,8 @@ BEGIN
     WHILE 1 = 1
     BEGIN
 
-        DELETE TOP (5000) #MemberTemp
-        OUTPUT DELETED.CustID INTO #Batch
+        DELETE TOP (4000) #MemberTemp
+        OUTPUT DELETED.CustID, DELETED.currency INTO #Batch(CustID, currency)
         
         IF @@ROWCOUNT = 0 BREAK
         
@@ -120,7 +138,7 @@ BEGIN
         INSERT INTO dbo.CustPTSetting3rd_Member (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
         SELECT ci.CustID, sb.SportType, sb.BetType, sb.IsLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
         FROM #Batch ci
-            INNER JOIN dbo.CustPTSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
+            INNER JOIN dbo.CustPTSetting3rd_Member cs WITH (NOLOCK) ON cs.CustID = ci.custid
             CROSS APPLY #SportBettypeFilter1 sb
         WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
         RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
@@ -134,7 +152,15 @@ BEGIN
         WHERE cs.SportType = @SportTypeRef AND cs.BetType = @BetTypeRef
         RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
-       
+        ----------------------------------------WinLoss Limit Setting-------------------------------------------------
+        INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+        SELECT ci.custid, sb.SportType, sb.BetType, 0, 0, 1
+        FROM #Batch ci
+            CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
+            CROSS APPLY #SportBettypeFilter6 sb
+        WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
+        RAISERROR ('Total affected row Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
         TRUNCATE TABLE #Batch
     END
     
@@ -143,6 +169,7 @@ BEGIN
     DROP TABLE #MemberTemp
     DROP TABLE #SportBettypeFilter1
     DROP TABLE #SportBettypeFilter2
+    DROP TABLE #SportBettypeFilter6
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -183,7 +210,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09
+    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT4
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
@@ -221,7 +248,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09
+    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT4
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
