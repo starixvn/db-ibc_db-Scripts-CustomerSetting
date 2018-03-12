@@ -6,7 +6,7 @@
 */ 
 
 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT2]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 AS
 BEGIN
     

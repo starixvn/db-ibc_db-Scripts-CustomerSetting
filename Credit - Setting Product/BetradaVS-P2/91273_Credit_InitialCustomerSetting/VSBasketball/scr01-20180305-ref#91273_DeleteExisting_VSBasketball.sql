@@ -7,7 +7,7 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
  
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT3]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
         @target VARCHAR(20)
 AS
 BEGIN 
@@ -86,9 +86,9 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT3 'REPLICATED'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 'REPLICATED'
 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT3 'DBCUST'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 'DBCUST'

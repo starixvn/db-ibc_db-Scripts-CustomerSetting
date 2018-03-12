@@ -6,7 +6,7 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
  
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT3]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
         @target VARCHAR(20)
 AS
 BEGIN 

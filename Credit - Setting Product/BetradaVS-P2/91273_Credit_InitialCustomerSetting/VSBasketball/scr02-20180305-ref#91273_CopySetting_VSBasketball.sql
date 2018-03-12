@@ -6,7 +6,7 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT4]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @srecommend INT 
     ,@maxcustid INT
     ,@target VARCHAR(20)
@@ -210,7 +210,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT4
+    EXEC dbo.Acc_DynamicCustSetting3rd_09
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
@@ -248,7 +248,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT4
+    EXEC dbo.Acc_DynamicCustSetting3rd_09
             @srecommend = @srecommend
             ,@maxcustid = @max_custid
             ,@target    = @var_target
