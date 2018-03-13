@@ -16,8 +16,8 @@ BEGIN
     
     RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
     
-    IF (@target = 'REPLICATED' AND (@@SERVERNAME = 'DB230\SQLSERVER2008R2' OR @@SERVERNAME = 'DB233' OR @@SERVERNAME = 'DBCUST' OR @@SERVERNAME = 'SITDBCUST')) RETURN -- run at all replicated servers
-    IF (@target = 'DBCUST'     AND (@@SERVERNAME = 'DB230\SQLSERVER2008R2' OR @@SERVERNAME = 'DB233' OR @@SERVERNAME = 'DBCUST' OR @@SERVERNAME = 'SITDBCUST')) RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
+    IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
     
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member')  = 0 RETURN
