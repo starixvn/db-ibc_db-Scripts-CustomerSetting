@@ -154,7 +154,7 @@ BEGIN
         
         ----------------------------------------WinLoss Limit Setting-------------------------------------------------
         INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-        SELECT ci.custid, sb.SportType, sb.BetType, 0, 0, 1
+        SELECT ci.custid, sb.SportType, sb.BetType, 0, cs.DefaultLossLimit, 1
         FROM #Batch ci
             CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
             CROSS APPLY #SportBettypeFilter6 sb
