@@ -20,7 +20,7 @@ BEGIN
     IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
     
     DECLARE @sportType SMALLINT = 192, 
-            @betType SMALLINT = 2801, 
+            @betType SMALLINT = 2701, 
             @sportTypeRef SMALLINT = 191, 
             @betTypeRef SMALLINT = 2701
 
