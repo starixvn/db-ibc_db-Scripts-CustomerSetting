@@ -40,11 +40,13 @@
     SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
     WHERE roleid = 1 AND custid > @maxcustid
+    OPTION(RECOMPILE)
     
     INSERT INTO #SMATemp (CustID, currency)
     SELECT custid, currency
     FROM Custinfo WITH (NOLOCK)
     WHERE roleid IN (2,3,4) AND custid > @maxcustid 
+    OPTION(RECOMPILE)
 
     DECLARE @var_num_cust INT
     SET @var_num_cust = (SELECT COUNT(*) FROM #MemberTemp)
