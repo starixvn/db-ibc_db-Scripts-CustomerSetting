@@ -5,7 +5,7 @@
     Date: 20180308
 */ 
 
--- BEGIN STEP 1: RUN THIS SCRIPT AT DBCUST SERVERS -----
+-- RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
 EXEC dbo.Acc_DynamicCustSetting3rd_09 
              @sportType = 193, @betType = 2801, @isLive = 0

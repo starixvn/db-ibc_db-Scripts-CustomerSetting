@@ -4,7 +4,7 @@
     DB: DBCUST/CustDB
 */
 
--- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+-- DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @maxcustid INT
@@ -150,7 +150,7 @@ BEGIN
             INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
             SELECT ci.custid, @sporttypeDelegate, @bettypeDelegate, 0, cs.DefaultLossLimit, 1
             FROM #Batch ci
-                CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
+                CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH (NOLOCK)
             WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
             RAISERROR ('Total affected row Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         END
@@ -164,6 +164,6 @@ BEGIN
     DROP TABLE #Batch
 END
 GO
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+-- DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------  
 

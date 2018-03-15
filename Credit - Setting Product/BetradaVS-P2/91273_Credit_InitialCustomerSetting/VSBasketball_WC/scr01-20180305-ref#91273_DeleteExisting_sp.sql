@@ -44,7 +44,7 @@ BEGIN
 		    FROM CustPTSetting3rd_Agent cg WITH (ROWLOCK)        
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType 
 		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId   
-		                      FROM CustPTSetting3rd_Agent csbatch
+		                      FROM CustPTSetting3rd_Agent csbatch WITH (NOLOCK)
 		                      WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
 		    SET @var_row_count = @@ROWCOUNT         
             IF @var_row_count = 0 BREAK
@@ -55,10 +55,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
+		    FROM CustPTGroupSetting3rd_Member cg WITH (ROWLOCK)        
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.AgentId IN (SELECT TOP 4000 csbatch.AgentId 
-                              FROM CustPTGroupSetting3rd_Member csbatch
+                              FROM CustPTGroupSetting3rd_Member csbatch WITH (NOLOCK)
                               WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT 
 		    IF @var_row_count = 0 BREAK
@@ -70,10 +70,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
+		    FROM CustPTSetting3rd_Member cg WITH (ROWLOCK)       
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
-                                 FROM CustPTSetting3rd_Member csbatch
+                                 FROM CustPTSetting3rd_Member csbatch WITH (NOLOCK)
                                  WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT                                  
 		    IF @var_row_count = 0 BREAK
@@ -89,10 +89,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
+		    FROM dbo.CustBetSetting3rd_Agent cg WITH (ROWLOCK)       
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.CustId IN (SELECT TOP 3000 csbatch.CustId  
-                                 FROM CustBetSetting3rd_Agent csbatch
+                                 FROM CustBetSetting3rd_Agent csbatch WITH (NOLOCK)
                                  WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT                                  
 		    IF @var_row_count = 0 BREAK
@@ -103,10 +103,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
+		    FROM dbo.CustBetSetting3rd_Member cg WITH (ROWLOCK)      
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
-                                 FROM CustBetSetting3rd_Member csbatch
+                                 FROM CustBetSetting3rd_Member csbatch WITH (NOLOCK)
                                  WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT                                  
 		    IF @var_row_count = 0 BREAK
@@ -122,10 +122,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM dbo.CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)        
+		    FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)        
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
-                                 FROM CustWinLossLimit_Agent csbatch
+                                 FROM CustWinLossLimit_Agent csbatch WITH (NOLOCK)
                                  WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT                                  
             IF @var_row_count = 0 BREAK
@@ -137,10 +137,10 @@ BEGIN
 	    WHILE 1 = 1
         BEGIN
 		    DELETE cg
-		    FROM dbo.CustWinLossLimit_Member cg WITH (UPDLOCK,ROWLOCK)       
+		    FROM dbo.CustWinLossLimit_Member cg WITH (ROWLOCK)       
 		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
 		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId 
-                                 FROM CustWinLossLimit_Member csbatch
+                                 FROM CustWinLossLimit_Member csbatch WITH (NOLOCK)
                                  WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
             SET @var_row_count = @@ROWCOUNT                                 
             IF @var_row_count = 0 BREAK

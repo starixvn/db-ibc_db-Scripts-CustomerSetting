@@ -5,7 +5,7 @@
     Date: 20180308
 */ 
 
--- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+-- DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     ,@sportType INT
