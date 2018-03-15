@@ -5,9 +5,9 @@
 */
 
 --**************** BEGIN STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVERS ****************
-EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @target='REPLICATED', @sporttype = 193, @betType = 2801, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 0 --VSBasketball
-EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @target='REPLICATED', @sporttype = 180, @betType = 1201, @isDelPT = 0, @isDelBetSetting = 0,@isDelWinLoss = 1 --VSBasketball
-EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @target='REPLICATED', @sporttype = 192, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 0 --WC
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target='REPLICATED', @sporttype = 193, @betType = 2801, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 0 --VSBasketball
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target='REPLICATED', @sporttype = 180, @betType = 1201, @isDelPT = 0, @isDelBetSetting = 0,@isDelWinLoss = 1 --VSBasketball
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target='REPLICATED', @sporttype = 192, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 0 --WC
 --**************** END STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVERS ****************
 
 

@@ -7,7 +7,7 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT4]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     ,@sportType INT
     ,@betType INT
     ,@isLive INT = 0

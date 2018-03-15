@@ -39,13 +39,13 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT2 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
              ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
              ,@SportType = 193, @BetType = 2801, @IsLive = 0
              ,@SportTypeRef = 180, @BetTypeRef = 1201
              ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT2 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
              ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
              ,@SportType = 192, @BetType = 2701, @IsLive = 0
              ,@SportTypeRef = 191, @BetTypeRef = 2701
