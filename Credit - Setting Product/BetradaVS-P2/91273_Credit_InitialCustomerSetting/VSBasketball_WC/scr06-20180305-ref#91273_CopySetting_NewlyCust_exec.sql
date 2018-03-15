@@ -7,13 +7,14 @@
 -- BEGIN STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
 --------------------------------------------------------------------------------------
 DECLARE @maxcustid INT = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = 'REPLICATED'
+DECLARE @target VARCHAR(20) = 'REPLICATED'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = @target
          ,@productId = 5, @sporttypeDelegate = 180, @bettypeDelegate = 1201 
          ,@sportType = 193, @betType = 2801, @isLive = 0
          ,@SportTypeRef = 180, @BetTypeRef = 1201
          ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = 'REPLICATED'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = @target
          ,@productId = 5, @sporttypeDelegate = 180, @bettypeDelegate = 1201 
          ,@sportType = 192, @betType = 2701, @isLive = 0
          ,@sportTypeRef = 191, @betTypeRef = 2701
@@ -24,14 +25,15 @@ EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = 'REPLIC
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 DECLARE @maxcustid INT = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target    = 'DBCUST'
-         ,@productId = 5, ,@sporttypeDelegate = 180, @bettypeDelegate = 1201 
+DECLARE @target VARCHAR(20) = 'DBCUST'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = @target
+         ,@productId = 5, @sporttypeDelegate = 180, @bettypeDelegate = 1201 
          ,@sportType = 193, @betType = 2801, @isLive = 0
-         ,@sportTypeRef = 180, @betTypeRef = 1201
+         ,@SportTypeRef = 180, @BetTypeRef = 1201
          ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target    = 'DBCUST'
-         ,@productId = 5, @sporttypeDelegate = 180,  @bettypeDelegate = 1201 
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @maxcustid = @maxcustid, @target = @target
+         ,@productId = 5, @sporttypeDelegate = 180, @bettypeDelegate = 1201 
          ,@sportType = 192, @betType = 2701, @isLive = 0
          ,@sportTypeRef = 191, @betTypeRef = 2701
          ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
