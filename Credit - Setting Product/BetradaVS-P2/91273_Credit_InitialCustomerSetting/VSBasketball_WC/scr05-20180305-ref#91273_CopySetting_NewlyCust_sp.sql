@@ -6,11 +6,12 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-    ,@maxcustid INT
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT3]
+    @maxcustid INT
     ,@target VARCHAR(20)
     ,@productId INT
     ,@sporttypeDelegate INT
+    ,@bettypeDelegate INT
     ,@sportType INT
     ,@betType INT
     ,@isLive INT
@@ -101,7 +102,7 @@ BEGIN
         IF (@isInsWinLoss = 1)
         BEGIN      
             INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-            SELECT ci.custid, @sporttype, @betType, 0, cs.MinLossLimit, 1
+            SELECT ci.custid,  @sporttypeDelegate, @bettypeDelegate, 0, cs.MinLossLimit, 1
             FROM #Batch ci
                 CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
             WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID   
@@ -136,10 +137,9 @@ BEGIN
         IF (@isInsBetSetting = 1)
         BEGIN
             INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-            SELECT ci.custid, sb.SportType, sb.BetType, MinBet, MaxBet, MaxPerMatch
+            SELECT ci.custid, @sporttype, @betType, MinBet, MaxBet, MaxPerMatch
             FROM #Batch ci
                 INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
-                CROSS APPLY #SportBettypeFilter2 sb
             WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
             RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         END
@@ -148,7 +148,7 @@ BEGIN
         IF (@isInsWinLoss = 1)
         BEGIN 
             INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-            SELECT ci.custid,  @sporttype, @betType, 0, cs.DefaultLossLimit, 1
+            SELECT ci.custid, @sporttypeDelegate, @bettypeDelegate, 0, cs.DefaultLossLimit, 1
             FROM #Batch ci
                 CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
             WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID

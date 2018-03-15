@@ -6,12 +6,13 @@
 
 -- DEPLOY THIS SP ON @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-    @srecommend VARCHAR(225) 
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT2]
+    @srecommendList VARCHAR(MAX) 
     ,@maxcustid INT
     ,@target VARCHAR(20)
     ,@productId INT
     ,@sporttypeDelegate INT
+    ,@betTypeDelegate INT
     ,@sportType INT
     ,@betType INT
     ,@isLive INT = 0
@@ -24,7 +25,7 @@ AS
 BEGIN
     SET NOCOUNT ON
     
-    RAISERROR ('Run at server: %s', 0, 1, @@SERVERNAME) WITH NOWAIT
+    RAISERROR ('Run at server: %s; srecommend: %s', 0, 1, @@SERVERNAME, @srecommendList) WITH NOWAIT
     
     IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
     IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN     -- run at dbcust only
@@ -41,15 +42,13 @@ BEGIN
     CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, currency INT)
     CREATE TABLE #Batch (CustID INTEGER PRIMARY KEY, currency INT)
     
+    
     DECLARE @strMaxCustId VARCHAR(20) = STR(@maxcustid)
     INSERT INTO #MemberTemp (CustID, currency)
-    SELECT custid, currency
-    EXECUTE('SELECT custid, currency FROM Custinfo WITH (NOLOCK) WHERE roleid = 1 AND custid <=' + @strMaxCustId + ' AND srecommend IN (' + @srecommend + ')')
+    EXECUTE('SELECT custid, currency FROM Custinfo WITH (NOLOCK) WHERE roleid = 1 AND custid <='+ @strMaxCustId  + ' AND srecommend IN (' + @srecommendList + ')')
 
-    
     INSERT INTO #SMATemp (CustID, currency)
-    SELECT custid, currency
-    EXECUTE('SELECT custid, currency FROM Custinfo WITH (NOLOCK) WHERE roleid IN (2,3,4) AND custid <=' + @strMaxCustId + ' AND srecommend IN (' + @srecommend + ')') 
+    EXECUTE('SELECT custid, currency FROM Custinfo WITH (NOLOCK) WHERE roleid IN (2,3,4) AND custid <=' + @strMaxCustId + ' AND srecommend IN (' + @srecommendList + ')')
 
 
     DECLARE @var_num_cust INT
@@ -67,45 +66,45 @@ BEGIN
         --------------------------------------PT Setting------------------------------------------------- 
         IF (@isInsPT = 1)
         BEGIN
-	        INSERT INTO dbo.CustPTSetting3rd_Agent (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT, MinPT, MaxPT)
-	        SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT, cs.MinPT, cs.MaxPT
-	        FROM #Batch ci
-	            INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) ON cs.custid = ci.custid
-	        WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
-	        RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	        
-	        --group
-	        INSERT INTO dbo.CustPTGroupSetting3rd_Member (AgentID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
-	        SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
-	        FROM #Batch ci
-	            INNER JOIN dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK) ON cs.agentid = ci.custid
-	        WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
-	        RAISERROR ('Total affected row of SMA GROUP PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            INSERT INTO dbo.CustPTSetting3rd_Agent (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT, MinPT, MaxPT)
+            SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT, cs.MinPT, cs.MaxPT
+            FROM #Batch ci
+                INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) ON cs.custid = ci.custid
+            WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
+            RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            
+            --group
+            INSERT INTO dbo.CustPTGroupSetting3rd_Member (AgentID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
+            SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
+            FROM #Batch ci
+                INNER JOIN dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK) ON cs.agentid = ci.custid
+            WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
+            RAISERROR ('Total affected row of SMA GROUP PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         END
         
         
         ----------------------------------------Bet Game Setting-------------------------------------------------
         IF (@isInsBetSetting = 1)
         BEGIN
-	        INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	        SELECT ci.custid, @Sporttype, @betType, cs.MinBet, MaxBet, MaxPerMatch
-	        FROM #Batch ci
-	            INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK) ON cs.CustID = ci.custid
-	        WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
-	        RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
+            SELECT ci.custid, @Sporttype, @betType, cs.MinBet, MaxBet, MaxPerMatch
+            FROM #Batch ci
+                INNER JOIN dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK) ON cs.CustID = ci.custid
+            WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
+            RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         END
         
         
         ----------------------------------------WinLoss Limit Setting-------------------------------------------------
         IF (@isInsWinLoss = 1)
         BEGIN      
-	        INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-	        SELECT ci.custid, @Sporttype, @betType, 0, cs.MinLossLimit, 1
-	        FROM #Batch ci
-	            CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
-	        WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID   
-	        RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	    END
+            INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+            SELECT ci.custid, @sporttypeDelegate, @betTypeDelegate, 0, cs.MinLossLimit, 1
+            FROM #Batch ci
+                CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
+            WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID   
+            RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        END
         
         TRUNCATE TABLE #Batch
     END
@@ -123,35 +122,35 @@ BEGIN
         --------------------------------------PT Setting------------------------------------------------- 
         IF (@isInsPT = 1)
         BEGIN
-	        INSERT INTO dbo.CustPTSetting3rd_Member (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
-	        SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
-	        FROM #Batch ci
-	            INNER JOIN dbo.CustPTSetting3rd_Member cs WITH (NOLOCK) ON cs.CustID = ci.custid
-	        WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
-	        RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            INSERT INTO dbo.CustPTSetting3rd_Member (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
+            SELECT ci.CustID, @Sporttype, @betType, @isLive, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT
+            FROM #Batch ci
+                INNER JOIN dbo.CustPTSetting3rd_Member cs WITH (NOLOCK) ON cs.CustID = ci.custid
+            WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
+            RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         END
         
         ----------------------------------------Bet Game Setting-------------------------------------------------
         IF (@isInsBetSetting = 1)
         BEGIN
-	        INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	        SELECT ci.custid, @Sporttype, @betType, MinBet, MaxBet, MaxPerMatch
-	        FROM #Batch ci
-	            INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
-	        WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
-	        RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	    END
+            INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
+            SELECT ci.custid, @Sporttype, @betType, MinBet, MaxBet, MaxPerMatch
+            FROM #Batch ci
+                INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON cs.CustID = ci.custid
+            WHERE cs.SportType = @sportTypeRef AND cs.BetType = @betTypeRef
+            RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        END
         
         ----------------------------------------WinLoss Limit Setting-------------------------------------------------
         IF (@isInsWinLoss = 1)
         BEGIN 
-	        INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-	        SELECT ci.custid,  @sportType, @betType, 0, cs.DefaultLossLimit, 1
-	        FROM #Batch ci
-	            CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
-	        WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
-	        RAISERROR ('Total affected row Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	    END
+            INSERT INTO dbo.CustWinLossLimit_Member(CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+            SELECT ci.custid,  @sporttypeDelegate, @betTypeDelegate, 0, cs.DefaultLossLimit, 1
+            FROM #Batch ci
+                CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
+            WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
+            RAISERROR ('Total affected row Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        END
         
         TRUNCATE TABLE #Batch
     END

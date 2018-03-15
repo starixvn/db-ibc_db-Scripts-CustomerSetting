@@ -11,7 +11,7 @@ DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'REPLICATED'
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
-DECLARE @srecommend INT
+DECLARE @srecommend VARCHAR(225)
 
 DECLARE @var_msg_index INT = 0, @var_msg_super_total INT = 0
 
@@ -31,21 +31,25 @@ RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
 WHILE (1 = 1)
 BEGIN
     UPDATE TOP (1) #Supers
-    SET isfinished = 1, @srecommend = custid   
+    SET isfinished = 1, @srecommend = STR(custid)   
     WHERE isfinished = 0
     
     IF @@ROWCOUNT = 0 BREAK
     
     SET @var_msg_index = @var_msg_index + 1
-    RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
+    RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@ProductId = 5, @SporttypeDelegate = 180, @SportType = 193, @BetType = 2801, @IsLive = 0
-             ,@SportTypeRef = 180, @BetTypeRef = 1201, @isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT2 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 193, @BetType = 2801, @IsLive = 0
+             ,@SportTypeRef = 180, @BetTypeRef = 1201
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@ProductId = 5, @SporttypeDelegate = 180, @SportType = 192, @BetType = 2701, @IsLive = 0
-             ,@SportTypeRef = 191, @BetTypeRef = 2701, @isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
+    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT2 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 192, @BetType = 2701, @IsLive = 0
+             ,@SportTypeRef = 191, @BetTypeRef = 2701
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
             
     WAITFOR DELAY '00:00:0.100'
 END
@@ -79,13 +83,17 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %d.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@productId = 5, @sporttypeDelegate = 180, @sportType = 193, @betType = 2801, @isLive = 0
-             ,@sportTypeRef = 180, @betTypeRef = 1201, @isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 193, @BetType = 2801, @IsLive = 0
+             ,@SportTypeRef = 180, @BetTypeRef = 1201
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@productId = 5, @sporttypeDelegate = 180, @sportType = 192, @betType = 2701, @isLive = 0
-             ,@sportTypeRef = 191, @betTypeRef = 2701, @isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 192, @BetType = 2701, @IsLive = 0
+             ,@SportTypeRef = 191, @BetTypeRef = 2701
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
              
     WAITFOR DELAY '00:00:0.100'
 END

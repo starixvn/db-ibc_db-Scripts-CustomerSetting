@@ -7,7 +7,7 @@
 -- DEPLOY THIS SP ON @DBCUST.CustDB ------
 ------------------------------------------------------
  
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT1]
         @target VARCHAR(20),
         @sporttype INT,
         @betType INT,
@@ -20,6 +20,7 @@ BEGIN
     SET NOCOUNT ON
     
     RAISERROR ('Run at server: %s;', 0, 1, @@SERVERNAME) WITH NOWAIT
+    DECLARE @var_row_count INT
     
     IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
     IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
@@ -31,58 +32,119 @@ BEGIN
     IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
     IF dbo.f_CheckRepTable('CustWinLossLimit_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustWinLossLimit_Member')  = 0 RETURN
-                
-    
-   --SMA LEVEL
+       
+    --SMA LEVEL
     --------------------------------------PT Setting------------------------------------------------- 
     IF (@isDelPT = 1)
     BEGIN
 	    --Agent
-	    DELETE cg
-	    FROM CustPTSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)        
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+	    BEGIN
+		    DELETE cg
+		    FROM CustPTSetting3rd_Agent cg WITH (ROWLOCK)        
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType 
+		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId   
+		                      FROM CustPTSetting3rd_Agent csbatch
+		                      WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+		    SET @var_row_count = @@ROWCOUNT         
+            IF @var_row_count = 0 BREAK
+            RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @var_row_count) WITH NOWAIT
+		END
 	    
-	    DELETE cg
-	    FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM CustPTGroupSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)        
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.AgentId IN (SELECT TOP 4000 csbatch.AgentId 
+                              FROM CustPTGroupSetting3rd_Member csbatch
+                              WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT 
+		    IF @var_row_count = 0 BREAK
+		    RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END
+	    
 	    
 	    --Member
-	    DELETE cg
-	    FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM CustPTSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)       
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
+                                 FROM CustPTSetting3rd_Member csbatch
+                                 WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT                                  
+		    IF @var_row_count = 0 BREAK
+		    RAISERROR ('Total affected row of PT: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END
+
     END
     
     ----------------------------------------Bet Game Setting-------------------------------------------------
     IF (@isDelBetSetting = 1)
     BEGIN
 	    --Agent
-	    DELETE cg
-	    FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM dbo.CustBetSetting3rd_Agent cg WITH (UPDLOCK,ROWLOCK)       
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.CustId IN (SELECT TOP 3000 csbatch.CustId  
+                                 FROM CustBetSetting3rd_Agent csbatch
+                                 WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT                                  
+		    IF @var_row_count = 0 BREAK
+		    RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END 
+
 	    
-	    DELETE cg
-	    FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM dbo.CustBetSetting3rd_Member cg WITH (UPDLOCK,ROWLOCK)      
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
+                                 FROM CustBetSetting3rd_Member csbatch
+                                 WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT                                  
+		    IF @var_row_count = 0 BREAK
+		    RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END 
+
     END
     
     ----------------------------------------WinLoss Limit Setting-------------------------------------------------
     IF (@isDelWinLoss = 1)
     BEGIN
 	    --Agent
-	    DELETE cg
-	    FROM dbo.CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)        
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM dbo.CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)        
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId  
+                                 FROM CustWinLossLimit_Agent csbatch
+                                 WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT                                  
+            IF @var_row_count = 0 BREAK
+            RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END 
+
 	    
 	    --Member
-	    DELETE cg
-	    FROM dbo.CustWinLossLimit_Member cg WITH (UPDLOCK,ROWLOCK)       
-	    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	    RAISERROR ('Total affected row of Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    WHILE 1 = 1
+        BEGIN
+		    DELETE cg
+		    FROM dbo.CustWinLossLimit_Member cg WITH (UPDLOCK,ROWLOCK)       
+		    WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+		          AND cg.CustId IN (SELECT TOP 4000 csbatch.CustId 
+                                 FROM CustWinLossLimit_Member csbatch
+                                 WHERE csbatch.SportType = @sporttype AND csbatch.BetType = @betType )
+            SET @var_row_count = @@ROWCOUNT                                 
+            IF @var_row_count = 0 BREAK
+            RAISERROR ('Total affected row of Winloss: %d', 0, 1, @var_row_count) WITH NOWAIT
+        END 
     END
 END
