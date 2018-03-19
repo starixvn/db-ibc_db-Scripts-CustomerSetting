@@ -1,6 +1,7 @@
 /*
     Created: 20180305@Vicky
-    Task: Initial Customer setting
+    Task: copy setting for newly created customer
+    DB: DBCUST/CustDB
 */
 
 
