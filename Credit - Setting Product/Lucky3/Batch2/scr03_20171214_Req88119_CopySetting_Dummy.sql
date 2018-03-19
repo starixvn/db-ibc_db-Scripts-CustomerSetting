@@ -36,7 +36,7 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		Type BIT --0: Dummy account or Direct account, 1: Indirect account
+		Type TINYINT --0: member of direct master; 1: member of direct agent; 2: direct member
 	)
 
 	CREATE TABLE #SMATemp
@@ -176,7 +176,7 @@ BEGIN
 	WHERE ci.roleid = 1 AND ci.custid <= @maxcustid AND ci.Enabled = 1 			
 	-- Direct member		
 	UNION 
-	SELECT ci.custid, 0
+	SELECT ci.custid, 2
 	FROM #DirectMember ci	
 
 	DECLARE @TicketComm DECIMAL(9,8) = 0.1
