@@ -5,6 +5,6 @@
 	DB: DBEAS/bodb_EAS
 */
 DELETE FROM eaFunction 
-WHERE FuncName IN('Racing','Live Casino','Racing Betting','LiveCasino Betting','Bingo','Bingo Betting'
+WHERE FuncName IN('Racing','Live Casino','Racing Bet Setting','LiveCasino Bet Setting','Bingo','Bingo Bet Setting'
 					,'Enable Racing','Enable Live Casino','Enable Bingo','Enable HR Fixed Odds'
 					,'Enable Cockfighting Status','Edit Cockfighting Setting','Poker','Enable Poker')
