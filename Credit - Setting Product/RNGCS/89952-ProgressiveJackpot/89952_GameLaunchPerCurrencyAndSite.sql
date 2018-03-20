@@ -1,3 +1,10 @@
+/*
+    Created: Vicky
+    Task: create table GameLaunchPerCurrency
+    DB: DBCUST/CustDB
+    Date: 20180220
+*/
+
 CREATE TABLE [dbo].[GameLaunchPerCurrency](
     [SportType] SMALLINT NOT NULL,
     [BetType] INT NOT NULL,
