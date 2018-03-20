@@ -1,6 +1,6 @@
 /*
     Created: Vicky
-    Task: create table GameLaunchPerCurrency
+    Task: create table GameLaunchPerCurrency [Redmine: #89952]
     DB: DBCUST/CustDB
     Date: 20180220
 */

@@ -1,6 +1,6 @@
 /*
     Created: Vicky
-    Task: init data to test
+    Task: init data to test [Redmine: #89952]
     DB: DBCUST/CustDB
     Date: 20180220
 */
