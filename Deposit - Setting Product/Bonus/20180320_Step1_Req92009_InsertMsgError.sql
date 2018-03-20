@@ -4,7 +4,7 @@
 	Redmine: https://nexdev.net/issues/92009
 	DB: DBCUST/CUSTDB
 */
-INSERT INTO [CustDB].[dbo].[MsgError]
+INSERT INTO [MsgError]
            ([MsgID]
            ,[MsgGroupID]
            ,[MsgNameEN]
@@ -15,6 +15,7 @@ INSERT INTO [CustDB].[dbo].[MsgError]
            ,[MsgNameKO]
            ,[MsgNameES]
            ,[MsgNameVI]
+		   ,[MsgNameCN]
            ,[IsActive])
      VALUES
            (200048
@@ -27,5 +28,7 @@ INSERT INTO [CustDB].[dbo].[MsgError]
            ,N'Cannot turn on BA for customers joining Bonus campaign.'
            ,N'Cannot turn on BA for customers joining Bonus campaign.'
            ,N'Cannot turn on BA for customers joining Bonus campaign.'
+		   ,N'无法替已参加红利活动的会员开启BA功能'
            ,1)
 GO
+
