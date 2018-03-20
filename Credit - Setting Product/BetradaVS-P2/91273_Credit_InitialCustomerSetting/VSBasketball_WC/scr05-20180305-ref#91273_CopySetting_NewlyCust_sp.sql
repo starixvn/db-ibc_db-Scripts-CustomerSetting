@@ -8,7 +8,6 @@
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @maxcustid INT
-    ,@target VARCHAR(20)
     ,@productId INT
     ,@sporttypeDelegate INT
     ,@bettypeDelegate INT
