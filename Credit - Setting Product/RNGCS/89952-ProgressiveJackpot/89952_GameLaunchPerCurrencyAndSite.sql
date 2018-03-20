@@ -16,7 +16,8 @@ CREATE TABLE [dbo].[GameLaunchPerCurrency](
     [Currency] ASC,
     [SportType] ASC,
     [BetType] ASC
-))
+)) ON DATA
+
 
 CREATE TABLE [dbo].[GameLaunchPerSite](
     [SportType] SMALLINT NOT NULL,
@@ -29,8 +30,8 @@ CREATE TABLE [dbo].[GameLaunchPerSite](
     [SiteID] ASC,
     [SportType] ASC,
     [BetType] ASC
+)) ON DATA
 
-))
 
 INSERT INTO GameLaunchPerCurrency(SportType,BetType,Currency,IsLaunched,IsTest)
 SELECT 208,2179,exchangeid,(CASE WHEN currency = 'HKK' THEN 0 ELSE 1 END),1
