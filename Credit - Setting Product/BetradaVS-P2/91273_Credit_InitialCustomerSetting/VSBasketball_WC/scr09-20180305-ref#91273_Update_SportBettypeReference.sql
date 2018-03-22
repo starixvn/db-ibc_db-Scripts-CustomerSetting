@@ -1,6 +1,6 @@
 /*
     Created: 20180320@Vicky 
-    Task: Update isActive = 1 for Sport_Bettype_Reference_Setting table
+    Task: Update isActive = 1 for VS Basketball && VSWC
     DB: DBTXN/bodb02
 */ 
 USE bodb02
