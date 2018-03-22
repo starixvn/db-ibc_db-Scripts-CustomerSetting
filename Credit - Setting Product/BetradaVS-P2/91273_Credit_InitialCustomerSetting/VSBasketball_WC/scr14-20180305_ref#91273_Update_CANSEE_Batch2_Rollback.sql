@@ -15,6 +15,7 @@ SELECT 193, s.site, 1
 FROM site s
 WHERE s.islicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo', 'KORIBC')
 
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 UPDATE ps
 SET ps.IsLaunched = 0

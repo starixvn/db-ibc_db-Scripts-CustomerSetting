@@ -11,7 +11,8 @@ DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50), isLau
 
 --Import sites which offered
 INSERT INTO @tbl_OfferedSites
-VALUES (193, 'Indo',1), (193, 'KORIBC', 1)
+VALUES (193, 'Indo',1), 
+       (193, 'KORIBC', 1)
 
 --Virtual Soccer World Cup: All credit sites
 INSERT INTO @tbl_OfferedSites
@@ -24,7 +25,7 @@ WHERE s.islicensee = 0 AND s.isActive = 1
 DELETE FROM ProductLaunchedSiteCurrency 
 WHERE SportType IN (SELECT DISTINCT SportType FROM @tbl_OfferedSites)
 
-INSERT INTO ProductLaunchedSiteCurrency (SportType,    Currency, SiteID,   IsLaunched,                 IsTest)
+INSERT INTO ProductLaunchedSiteCurrency (SportType,     Currency, SiteID,   IsLaunched,                 IsTest)
 SELECT                                   spt.SportType, 0,        s.siteid, COALESCE(os.isLaunched,0),  0
 FROM dbo.Site s
     CROSS JOIN (SELECT DISTINCT SportType FROM @tbl_OfferedSites ) AS spt
