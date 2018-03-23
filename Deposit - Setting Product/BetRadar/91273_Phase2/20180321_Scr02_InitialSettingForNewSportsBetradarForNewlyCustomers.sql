@@ -20,7 +20,7 @@
 	SELECT custid,roleid
 	FROM dbo.Customer WITH(NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM Dep_custSuper WITH(NOLOCK))
-		AND mrecommend NOT IN (SELECT custid FROM dbo.Customer WITH(NOLOCK)
+		AND mrecommend NOT IN (SELECT custid FROM dbo.CustInfo WITH(NOLOCK)
 							   WHERE srecommend IN (SELECT custid FROM Dep_custSuper WITH(NOLOCK))
 							    and username like '%Acc%' and roleid=3)
 		AND custid > @max_custid

@@ -37,9 +37,10 @@ BEGIN
 	SELECT custid,roleid
 	FROM dbo.Customer WITH(NOLOCK)
 	WHERE srecommend =@srecommend
-		AND mrecommend NOT IN (SELECT custid FROM dbo.Customer WITH(NOLOCK)
+		AND mrecommend NOT IN (SELECT custid FROM dbo.custinfo WITH(NOLOCK)
 							   WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
 		AND custid <= @max_custid
+	OPTION (OPTIMIZE FOR(@srecommend = 0))
 	
 	DELETE #tblCust
 	OUTPUT DELETED.custID
@@ -66,7 +67,7 @@ BEGIN
 	DECLARE @Threshold INT = 20000,@fromID INT , @toID INT, @maxID INT
 	
 	SELECT @maxID = max(ID) FROM #tblCust
-	SELECT @fromID = 0, @toID = @Threshold	
+	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
 		
 	WHILE(1=1)
 	BEGIN		
