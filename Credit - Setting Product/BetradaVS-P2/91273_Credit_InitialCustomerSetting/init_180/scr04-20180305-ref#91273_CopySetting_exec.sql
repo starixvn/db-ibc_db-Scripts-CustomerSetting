@@ -41,7 +41,7 @@ BEGIN
     EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
              ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
              ,@SportType = 180, @BetType = 1201, @IsLive = 0
-             ,@SportTypeRef = 44, @BetTypeRef = 3
+             ,@SportTypeRef = 207, @BetTypeRef = 1004
              ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
 
    --181
