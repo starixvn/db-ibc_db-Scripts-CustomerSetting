@@ -38,17 +38,17 @@ BEGIN
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 180, @betType = 1201, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 181, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 182, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 183, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 184, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 185, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 186, @betType = 1220, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 190, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 191, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 192, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 193, @betType = 2801, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 180, @betType = 1201, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 181, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 182, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 183, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 184, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 185, @betType = 1231, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 186, @betType = 1220, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 190, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 191, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 192, @betType = 2701, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid,@sporttype = 193, @betType = 2801, @isDelPT = 1, @isDelBetSetting = 1,@isDelWinLoss = 1
 
             
     WAITFOR DELAY '00:00:0.100'
