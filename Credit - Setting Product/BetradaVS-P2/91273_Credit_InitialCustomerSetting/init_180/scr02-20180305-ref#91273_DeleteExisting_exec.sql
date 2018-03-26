@@ -14,13 +14,13 @@ DECLARE @srecommend VARCHAR(225)
 
 DECLARE @var_msg_index INT = 0, @var_msg_super_total INT = 0
 
-INSERT INTO #supers(custid)
+/*INSERT INTO #supers(custid)
 SELECT c.custid
 FROM Customer c
     INNER JOIN CustPTSetting3rd_Agent csexist ON csexist.CustID = c.custid
     LEFT JOIN CustPTSetting3rd_Agent cs ON cs.CustID = c.custid and cs.SportType = 180
 WHERE c.roleid = 4  AND cs.CustID IS NULL AND c.custid <= @max_custid
-GROUP BY c.custid
+GROUP BY c.custid*/
     
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
