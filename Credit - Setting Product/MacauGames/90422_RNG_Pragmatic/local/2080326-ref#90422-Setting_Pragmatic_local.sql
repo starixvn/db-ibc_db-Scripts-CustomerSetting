@@ -36,4 +36,8 @@ VALUES(4101, '888 Dragons™'),
       (4119, 'Caishen’s Gold™'),
       (4120, 'Pixie Wings™')
 
+      
+INSERT INTO dbo.RefResource (RefId, ResourceId, Resource_en)
+VALUES ('StakeLevel_GG', 6, 'Level 1'),
+       ('StakeLevel_GG', 7, 'Level 2')
      
