@@ -13,8 +13,6 @@ UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 3 AND Sport
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 13 AND SportType = 212 AND BetType = 4001
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 6 AND SportType = 212 AND BetType = 4001
 
-INSERT INTO ProductSettingDetail (SettingLevel, SportType,      BetType,      IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus)
-                          VALUES (8,            @var_sportType, @var_bettype, 0,      22,        NULL,  NULL,        NULL,   NULL,     NULL,       2,            5,            1)
                           
 INSERT INTO [ProductLaunchedSiteCurrency]
        (SiteID, Currency, SportType,      IsLaunched, IsTest)

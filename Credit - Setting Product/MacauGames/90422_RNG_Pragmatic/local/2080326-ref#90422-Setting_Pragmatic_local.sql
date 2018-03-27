@@ -8,7 +8,6 @@
 DECLARE @var_sportType SMALLINT = 248,
         @var_bettype SMALLINT = 4101
         
---update level to product
 INSERT INTO Products (ProductID, ProductName, ProductPrefix, [Enabled])
 VALUES(32, 'PP', 'PP', 1)
 
