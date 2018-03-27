@@ -4,13 +4,12 @@
     Task: setting for Pragmatic game
     DB:DBCust/CustDB
 */
-DECLARE @var_settypeType TINYINT = 8,
-        @var_productId = 22,
+DECLARE @var_settypeType SMALLINT = 8,
+        @var_productId TINYINT = 22,
         @var_sportType SMALLINT = 248,
         @var_bettype SMALLINT = 4101,
-        @var_isLive = 0
-
-        
+        @var_isLive BIT = 0
+     
 DECLARE @var_tbl_gamegroup TABLE (GameGroupID INT, GameName NVARCHAR(100))
 DECLARE @var_tbl_StakeLevelGroupDetail TABLE (GameGroupID INT, ExchangeID INT, GameTypeID INT, 
                                               MinLabel NVARCHAR(50), MaxLabel NVARCHAR(50), 
@@ -51,8 +50,9 @@ VALUES (6,           20,         4101,       '2',        '500',      2.0,     50
 DELETE FROM StakeLevelGroupDetail WHERE StakeLevelID IN (SELECT StakeLevelID FROM StakeLevel WHERE GameTypeID = @var_bettype)
 DELETE FROM StakeLevel WHERE GameTypeID = @var_bettype
 DELETE FROM GameGroup WHERE GameGroupID IN (SELECT GameGroupID FROM @var_tbl_gamegroup)
+DELETE FROM ProductSettingDetail WHERE SettingType = @var_settypeType AND SportType = @var_sportType AND BetType =  @var_bettype AND IsLive = @var_isLive
 
-INSERT INTO ProductSettingDetail (SettingLevel,     SportType,      BetType,      IsLive,      ProductID,      MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus)
+INSERT INTO ProductSettingDetail (SettingType,      SportType,      BetType,      IsLive,      ProductID,      MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus)
                           VALUES (@var_settypeType, @var_sportType, @var_bettype, @var_isLive, @var_productId, NULL,  NULL,        NULL,   NULL,     NULL,       2,            5,            1)
 
                           

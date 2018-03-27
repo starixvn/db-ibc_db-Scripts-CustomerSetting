@@ -6,15 +6,18 @@
 */
 DECLARE @var_sportType SMALLINT = 248,
         @var_bettype SMALLINT = 4101
-        
+
+
 --update level to product
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 1 AND SportType = 212 AND BetType = 4001
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 3 AND SportType = 212 AND BetType = 4001
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 13 AND SportType = 212 AND BetType = 4001
 UPDATE ProductSettingDetail SET SettingLevel = 1 WHERE SettingType = 6 AND SportType = 212 AND BetType = 4001
 
-                          
-INSERT INTO [ProductLaunchedSiteCurrency]
+
+DELETE FROM ProductLaunchedSiteCurrency WHERE SportType =  @var_sportType
+
+INSERT INTO ProductLaunchedSiteCurrency
        (SiteID, Currency, SportType,      IsLaunched, IsTest)
 SELECT  siteId, 0       , @var_sportType, 0         , 1
 FROM   [site]
