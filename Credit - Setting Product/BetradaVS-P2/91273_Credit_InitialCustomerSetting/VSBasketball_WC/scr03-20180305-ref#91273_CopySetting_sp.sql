@@ -99,7 +99,7 @@ BEGIN
         IF (@isInsWinLoss = 1)
         BEGIN      
             INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-            SELECT ci.custid, @sporttypeDelegate, @betTypeDelegate, 0, cs.MinLossLimit, 1
+            SELECT ci.custid, @sporttypeDelegate, @betTypeDelegate, 0, cs.DefaultLossLimit, 1
             FROM #Batch ci
                 CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
             WHERE cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID   
