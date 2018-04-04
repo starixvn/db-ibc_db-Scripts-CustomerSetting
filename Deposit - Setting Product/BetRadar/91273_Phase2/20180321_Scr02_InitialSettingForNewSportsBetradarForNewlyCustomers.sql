@@ -4,7 +4,23 @@
 	Redmine: https://nexdev.net/issues/91273
 	DB: DBCUST/CUSTDB
 */
-
+	--step 0: insert profile for Dep_ProductSettingDetail
+	USE CUSTDB 
+	GO
+	
+	INSERT INTO [dbo].[Dep_ProductSettingDetail]
+           ([ProductSettingID]
+           ,[SportType]
+           ,[BetType]
+           ,[IsLive]
+           ,[MaxDefaultValue]
+           ,[SettingStatus]
+           ,[MinDefaultValue])
+	SELECT 13,192,2701,0,0,0,NULL
+	UNION SELECT 13,193,2801,0,0,0,NULL	
+	GO
+	
+	--step 2: Insert setting for newly customers	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY,roleid TINYINT)
 	DECLARE @tmpCust TABLE(CustID INT PRIMARY KEY)
 	DECLARE @sport TABLE(sporttype SMALLINT, bettype SMALLINT, fromSportType SMALLINT, fromBettype SMALLINT)
