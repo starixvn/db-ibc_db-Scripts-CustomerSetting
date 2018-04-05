@@ -14,10 +14,10 @@ DECLARE @tbl_cust_updated TABLE(custid INT, VRValue INT,
 DECLARE @var_str_xml VARCHAR(MAX)
 DECLARE @ErrCode INT
 DECLARE @ErrMsg VARCHAR(MAX)
-DECLARE @vr_old_value INT
-DECLARE @vr_new_value INT
+DECLARE @vr_old_value VARCHAR(5)
+DECLARE @vr_new_value VARCHAR(5)
 
-SELECT @vr_old_value = 3, @vr_new_value = 1
+SELECT @vr_old_value = '3', @vr_new_value = '1'
 
 
 ------------------------get all custid that need to be updated, but not BA Account
@@ -56,8 +56,8 @@ WHERE tblVRValue.val = 3
                         pvs1.SRecommend AS '@SRecommend', 
                         pvs1.MRecommend AS '@MRecommend',
                         pvs1.Recommend  AS '@Recommend',
-                        STR(@vr_old_value) AS '@OldVirtualRate',
-                        STR(@vr_new_value) AS '@NewVirtualRate'
+                        @vr_old_value   AS '@OldVirtualRate',
+                        @vr_new_value   AS '@NewVirtualRate'
                 FROM @tbl_cust_updated pvs1
                 FOR XML PATH ('Rate'), type
             ) FOR XML PATH('ROOT'), type
