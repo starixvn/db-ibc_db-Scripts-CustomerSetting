@@ -27,7 +27,7 @@ INSERT INTO @tbl_cust_updated
           SRecommend, MRecommend, Recommend, 
           isfinished, enableVirtualrate, siteid)
 
-SELECT cvs.custid, dbo.f_GetVirtualSetting(cvs.bitmapVirtual, pvs.profileID) AS VRValue
+SELECT cvs.custid, dbo.f_GetVirtualRateSetting(cvs.bitmapVirtual, pvs.profileID) AS VRValue
         , pvs.sporttype, pvs.bettype, pvs.islive
         , ci.srecommend, ci.mrecommend, ci.recommend
         , 0, ci.VirtualMultiplier,st.siteid
@@ -36,11 +36,12 @@ FROM dbo.CustVirtualSetting AS cvs WITH (NOLOCK)
     INNER JOIN CustInfo ci WITH (NOLOCK) ON ci.CustId = cvs.custId
     INNER JOIN Customer ct WITH (NOLOCK) ON ci.CustId = ct.custId
     INNER JOIN [Site] st WITH (NOLOCK) ON st.[site] = ct.[site]
-    LEFT JOIN DBLIC.bodb_licensee.dbo.[LicenseeBAHistory] WITH (NOLOCK) BA ON BA.CustID = ci.custid AND BA.Status = 'Running'
-WHERE dbo.f_GetVirtualSetting(cvs.bitmapVirtual, pvs.profileID) = 3
+    LEFT JOIN DBLIC.bodb_licensee.dbo.[LicenseeBAHistory] BA WITH (NOLOCK) ON BA.CustID = ci.custid AND BA.Status = 'Running'
+WHERE dbo.f_GetVirtualRateSetting(cvs.bitmapVirtual, pvs.profileID) = 3
     AND BA.CustID IS NULL
     AND ci.roleId= 1
 
+    
  ----------------------insert log
  SELECT @var_str_xml = CAST(
     (
@@ -77,6 +78,9 @@ DECLARE @var_custid INT,
 
 WHILE (1 = 1)
 BEGIN
+	
+	SET @var_str_xml = NULL
+	
     UPDATE TOP (1) @tbl_cust_updated
     SET isfinished = 1, @var_custid = custid   
     WHERE isfinished = 0
