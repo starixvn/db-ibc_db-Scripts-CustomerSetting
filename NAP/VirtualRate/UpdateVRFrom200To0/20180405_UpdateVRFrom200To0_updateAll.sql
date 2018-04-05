@@ -26,8 +26,6 @@ INSERT INTO @tbl_cust_updated
           sporttype, bettype, islive, 
           SRecommend, MRecommend, Recommend, 
           isfinished, enableVirtualrate, siteid)
-
-          
 SELECT cvs.custid, tblVRValue.val
         , pvs.sporttype, pvs.bettype, pvs.islive
         , ci.srecommend, ci.mrecommend, ci.recommend
