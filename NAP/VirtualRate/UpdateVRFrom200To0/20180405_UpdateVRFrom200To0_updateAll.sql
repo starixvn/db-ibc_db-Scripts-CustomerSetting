@@ -39,10 +39,10 @@ FROM dbo.CustVirtualSetting AS cvs WITH (NOLOCK)
     INNER JOIN [Site] st WITH (NOLOCK) ON st.[site] = ctAgent.[site]
     CROSS APPLY (SELECT val FROM [dbo].[f_GetVirtualRateSetting](cvs.bitmapVirtual, pvs.profileID)) as tblVRValue
     LEFT JOIN DBLIC.bodb_licensee.dbo.[LicenseeBAHistory] BA WITH (NOLOCK) ON BA.CustID = ci.custid AND BA.Status = 'Running'
-WHERE tblVRValue.val = 3
-    AND pvs.profileID = 2
-    AND BA.CustID IS NULL
-    AND ci.roleId= 1
+WHERE tblVRValue.val    = 3
+    AND pvs.profileID   = 2
+    AND BA.CustID       IS NULL
+    AND ci.roleId       = 1
     
 
  ----------------------insert log
@@ -65,12 +65,12 @@ WHERE tblVRValue.val = 3
     ) AS VARCHAR(MAX))
     
 EXEC  DBLOG.bodb_CustomerLog.dbo.NAP_UserLog_UpdateVirtualRateSettings
-                 @CreatorId   = 862400 
-                ,@PunterVRSettingsDoc = @var_str_xml
-                ,@ServiceName = 'Soccer'
-                ,@AdjustDate  = '2018-04-05 00:15:00'
-                ,@ErrCode     = @ErrCode
-                ,@ErrMsg      = @ErrMsg
+                 @CreatorId             = 862400 
+                ,@PunterVRSettingsDoc   = @var_str_xml
+                ,@ServiceName           = 'Soccer'
+                ,@AdjustDate            = '2018-04-05 00:15:00'
+                ,@ErrCode               = @ErrCode
+                ,@ErrMsg                = @ErrMsg
                         
 SELECT @ErrCode, @ErrMsg
 
@@ -78,16 +78,16 @@ SELECT @ErrCode, @ErrMsg
 -------------------------------change data-------------------------------------------------------
 SET @var_str_xml = NULL
 SELECT @var_str_xml = COALESCE(@var_str_xml + ',', '') + CONVERT(VARCHAR(12),custid) FROM @tbl_cust_updated
-SELECT @var_str_xml = '<ROOT> <Rate CustIds="' + @var_str_xml +'" VirtualMultiplier="' + @vr_new_value + '" /></ROOT>'
+SELECT @var_str_xml = '<ROOT> <Rate CustIds="' + @var_str_xml + '" VirtualMultiplier="' + @vr_new_value + '" /></ROOT>'
 
  
 EXEC Acc_CustomerUpdVirtualMultiplier_Multiple
-     @VirtualMultiplier=@var_str_xml
-    , @UserID='862400'
-    , @IP=''
-    , @SportType=1
-    , @ErrCode=@ErrCode
-    , @ErrMsg  = @ErrMsg
+     @VirtualMultiplier = @var_str_xml
+    , @UserID           = '862400'
+    , @IP               = ''
+    , @SportType        = 1
+    , @ErrCode          = @ErrCode
+    , @ErrMsg           = @ErrMsg
 SELECT @ErrCode, @ErrMsg
 
 
