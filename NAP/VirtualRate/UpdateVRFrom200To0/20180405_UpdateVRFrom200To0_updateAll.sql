@@ -43,7 +43,7 @@ WHERE tblVRValue.val    = 3
     AND ci.roleId       = 1
     
 
- ----------------------insert log
+ -------------------------insert log--------------------------------------------------------------
  SELECT @var_str_xml = CAST(
     (
     SELECT (
@@ -81,7 +81,7 @@ SELECT @var_str_xml = '<ROOT> <Rate CustIds="' + @var_str_xml + '" VirtualMultip
  
 EXEC Acc_CustomerUpdVirtualMultiplier_Multiple
      @VirtualMultiplier = @var_str_xml
-    , @UserID           = '862400'
+    , @UserID           = 862400
     , @IP               = ''
     , @SportType        = 1
     , @ErrCode          = @ErrCode
