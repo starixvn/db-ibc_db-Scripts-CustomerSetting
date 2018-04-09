@@ -24,87 +24,78 @@ BEGIN
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
 	DECLARE @BitmapOrder TINYINT = 12
 
-	IF @Custid IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601)
-	BEGIN	
-		SELECT custid
-		INTO #SMABatch1
-		FROM dbo.custInfo WITH (NOLOCK)
-		WHERE (mrecommend IN (40958, 45638, 60349, 63971, 167860, 244268, 272369, 620479, 771534, 832960, 852273, 861558, 891798, 913666, 916007, 929428, 971014, 979669, 981513, 997587, 2006349, 2087760)
-				AND roleid BETWEEN 2 AND 3)
-			OR (recommend IN (8346,104769) AND roleid = 2)
-
-		SELECT ci.custid, ci.roleid
-		INTO #CustListDirect
-		FROM dbo.custInfo ci WITH (NOLOCK)
-			INNER JOIN #SMABatch1 s ON s.custid = ci.custid
-		WHERE ci.srecommend = @Custid
-
-		IF @Custid IN (2042873,17721601)
-		BEGIN
-			UPDATE cs
-			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
-			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #CustListDirect ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-		END
-		ELSE
-		BEGIN
-			UPDATE cs
-			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #CustListDirect ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-		END
+	
+	SELECT custid, ci.roleid
+	INTO #CustList
+	FROM dbo.custInfo ci WITH (NOLOCK)
+	WHERE ci.srecommend = @Custid AND roleid BETWEEN 2 AND 4
+		
+	IF EXISTS (	SELECT cu.custid 
+				FROM custaccount cu WITH(NOLOCK)
+				WHERE groupid = 515 AND cu.custid = @Custid) --line THAUS
+		OR EXISTS (	SELECT 1
+					FROM dbo.custInfo WITH (NOLOCK)
+					WHERE username IN (	--Sheet 1: MBC Disable
+										'266HK','MMMRM','SBKHK','SBKRMB','SBKTB','MMPRM','SMM','SMSM','SBKH','MMSD','SBKT','SMH','SMMH','SBK','SMAH',
+										'SMMS','SMAT','SMR','MMRMB','SMMR','SMBT','SMBH','SSMS','SMCH','SMMP','SMK','M8HK','M8RMB','M7RM','M7ARM',
+										'M7SD','M7RMB','M7ARMB','M7BRMB','M7BRM','S7RMB','M7ZRMB','M7CRM','M926R','HK7','M789H','M57HK','S57R','S57H',
+										'M863HK','S863R','KM','KH','KR','KS','KT','KRC','KSD','KMM','KRR','KMA','KHH','KHK','KAR','KBR','KCR','KAM',
+										'KMAM','KMBM','KHAH','KHBH','KAT','KHCH','KDR','KER','KHT','KHDH','MQRM','MQARM','MQRMB','MQR','SQHH','MMYTB',
+										'SVM','SVR','SVS','SVH','SVUS','SVP','SVE','SVA','SVV','S80R','S80U','S80H','M47RMB','S47SD','S47RM','M47R',
+										'S47R','S47U','S47IR','S47DR','S47H','S47M','M50RM','S50RMB','S50R','SDRM','SDSD','SDRMB','SDARM','SDR','SDH',
+										'SDHK','SDHA','SDEU','SDBP','S188R','S188RM','S188ARM','M188SD','S188AR','S188H','S188AH','S188BH','S188US',
+										'S188HK','S188HL','SV','S188M','1188MR','S188HJ','M63H','M63IRMB','M63IHK','S63H','S63K','S63M','S90R','M90RM',
+										'S90AR','S90RM','S90H','S90C','M79BR','M79CR','79AH','79AR','SBSR','SBH','SBSU','SBS','SBM','SBU','SBHA','SBHB',
+										'SBHC','SBC','SBHD','MYM','SSF','SBHE','SBHF','SBHG','SBHJ','SBTB','SSG','M606HK','S59BR','S989R','S989M','S989H',
+										'SORM','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','CKT','CKT1','CKT2','MKM','MK12','TH88',
+										'MKS','MK17','CK18','MKTB','MK13','CKU','MKM1','MK19','MK20','MK21','MK16','MK15','TH25','MK22','MK30','TH26','MK23',
+										'JC1','JC7','JC2','JC8','MKI','JC6','JC81','JC3','JC9','MK27','TH28','TH29','THM','JCM','JC10','TH89','MK31','MKM2',
+										'JC5','JC82','MKS1','JCH','GAX','MK32','JC83','MKH','AK1','AKM1','MK33','MK35','MKHA','MK36','CKV','TH3','MKD','MKE',
+										'M113H','M85TB','M85ATB','S85RMB','M85BTB','S85RM','M85CTB','M85DTB','S85R','S85AR','S85BR','S85RR','S85H','S85S',
+										'S85M','S85T','S85GTH','S85A','WWR','WKR','FBR','FBM','SFB','FBH','FBB','KJH','KJHB','KJM','KJI','KJD','KJT','KJMB',
+										'KJK','KJE','KJB','KJC','KJF','KJMC','KJMA','KJG','KJMD','KJL','KJO','KJME','KJMF','KJMG','KJA','MR','MRU','MK','MCR',
+										'SZ','MA','SBMW','YKH','YKR','YKM','CYKM','M822M','S822R','GEH','GFH','S822M','S822MA','GFJ','S822D','M81ARMB','S81R',
+										'S81RA','S81RB','SBRR','PPH','PPM','SF8','POR','POT','U311','POK','POY','POB','POW','KTV','KTW','POG','POM','POH','POJ',
+										'POZ','POA','PON','PVV','POQ','VVG','SVVG','VAG','JTRIHK','JTRIEU','JTRIUSD','JTRIGBP','Pyy','PYH','PYT','PYU','PYM',
+										'PYG','PYR','PYA','PYB','PYC','PYD','PYE','AC1','AC2','ACK','ACH','ACH1','ACH2','ACH3','AC3','AC4','ACH4','ACH5','ACH6',
+										'AC7','AC8','AC9','AC11','ACH7','AC12','AC14','ACM1','ACM2','ACM3','ACM4','ACM5','ACK2','ACK3','ACK4','ACK5','AC15',
+										'AC16','AC17','AC18','AC19','ACK6','ACK7','ACK8','AC20','XKM','XKH','A68M','A68H','S68H','S68AH','S68M','S68BH',
+										'S68CH','WPR','LLKH','SMTG','D77','D78','D79','D80','D81','D82','D83','D85','D99','D66','DRM','DADR','DRN','DRP',
+										'DTH1','BB1','DMB','D96','BB9','DRQ','BB19','BB3','BB2','BB5','TF1','YT1','YT2','YT3','TD1','TD2','TD3','TD4','TD5',
+										'TD6','TDA','TDB','TDC','TDD','RS','RT','S42CH','DS1','DS2','DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12',
+										'DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','KDS','DS22','DS23','DS25','DS26','DS30','DS31','DS32',
+										'DS33','RC','VBH','VBR','CLM','147HKD','147RMB','JER','JES','JEY','JEH1','82H','HER1','M553R','M553AR','M553BR','M553H',
+										'M553AH','M553BH','M553CH','M553M','M553DH','S553H','S553M','S668M','S668H',
+										--Sheet 2: MBC Enable Super Level Only
+										'SCHK','SCM','SCS','SCSM','SCH','SCAH','SCAI','SCI','SCBH','SCHI','SCDH','SCDK','HIS','HIH','HIU','HAH','HIM','HIK','HIW',
+										'HIT','HIF','HIJ','HIC','S8T','S8R','S8U','S8KT','S8H','S8AR','S8AH','S8BR','S8BH','S8CR',
+										--Sheet 3: 789Y Disable
+										'SDD','SY1B','SDDTB','SDDT','SDT','SDE','SDU','SDM','SDY','SDV','SDW','SDX','SDZ','SDK','SDL','SDJ','SDO','SDP',
+										'SDB','SDC','SDF','SDG','SDI','SDN','SDY1','SYA','SYB','SYC','SYD','SYE','SYF','SYG','SYH','SYJ','SYK','SYL',
+										'SYN','SYO','SYP','SYQ','SYS','SYU','SYV','SYW','SYY','SDA','SYZ','SDY2','SQY','SYZ1','SDY3','SDY5','SDQ','SDS',
+										'SDY6','SYC2','SDY7','SDN1','SDN2','SDY8','UZA','SYC3','SDN3','SDY9','SQA','YDH','SDY11','SDY12','SYX','SCC',
+										'VIP','SKKS','SKS','SKT','VID','SKD','SKV','SKX','SKF','SKG','SKY','SKZ','SKI','SKJ','SKB','SKQ','SKK','VIU',
+										'skn','skp','SKAC','SKAD','SKAE','SKAF','SKAG','SKAH','SKAI','SKAJ','SKKA','QHN','QVN','SKAN','SHB','SKAO',
+										'SKAP','SHD','SKAR','SKAS','SKAT','skau','skav','skaw','skax','skay','skba','skbb','SKBF','skbg','SKBI',
+										'SKBL','SKBM','skbn','skbp','SKBR','SKBT','SKTB','SKTA','sktc','SKBQ','SKBV','SKBW','SKBX','skby','skbz',
+										'SKCA','skcb','SKCC','SKCD','SKCE','SKCF','SKCG','SKCI','SKCH','SKCJ','SKCK','M11HK','M11RMB','SPUS',
+										'M11AHK','M11SD','JWL','JWU','JWA','JWK','ABS','ABB','ABW','BBA','BBD','BBE','BBF','PZZ')
+							AND roleid = 4 AND custid = @Custid)
+	BEGIN
+		UPDATE cs
+		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 	END
 	ELSE
 	BEGIN
-		SELECT custid, ci.roleid
-		INTO #CustList
-		FROM dbo.custInfo ci WITH (NOLOCK)
-		WHERE ci.srecommend = @Custid AND roleid BETWEEN 2 AND 4
-		
-		IF EXISTS (	SELECT cu.custid 
-					FROM custaccount cu WITH(NOLOCK)
-					WHERE groupid = 515 AND cu.custid = @Custid) --line THAUS
-			OR EXISTS (	SELECT 1
-						FROM dbo.custInfo WITH (NOLOCK)
-						WHERE username IN (	--Sheet 1: MBC Disable
-											'266HK','SMSM','MMSD','SBK','SMMS','SMR','MMRMB','SMMR','SSMS','SMMP','CHITB','M8HK','M8RMB','M7SD','M926R','M58SD','M96RM','S96h','M863HK','S863R',
-											'S80R','S80U','S80H','M51SD','TAS51S','M51RMB','S51SM','S51R','M51H','S51H','S51AH','S51BH','S51CH','S51DH','S51EH','S51HA','SPA3M','S50R','S3AAR',
-											'S3AK','S3AG','SDSD','SDARM','SDR','SDHK','SDEU','SDBP','S188ARM','M188SD','S188H','S188AH','S188US','1188MR','3KHK','SEM','MSFR','M606HK','M818H',
-											'M818R','M818RA','M818BH','SORM','MKS','CKU','MK30','JC1','JC7','JC6','JC81','JC3','TH28','TH29','JC82','MKS1','JCH','MKH','MKHA','CKV','MKD','M113H',
-											'S85RMB','S85RM','S85R','S85AR','S85RR','S85S','S85M','S85A','STPH','SRRH','SRR','SRRR','SRUS','SRUN','SRMB','BBBU','SBBR','KJK','MR','MRU','MK','AHW',
-											'MA','YKH','YKR','M81ARMB','S81R','S81RA','S81RB','MLLRMB','S95H','SSN','SBTR','SBTY','S27HK','S27H','S27TK','MPKS','WVW','POR','POT','U311','POK','POY',
-											'POW','KTV','KTW','POG','POZ','POA','PON','VVG','SVVG','Pyy','PYH','PYT','PYU','PYG','PYR','PYA','PYB','PYD','TR','ACH','ACH1','ACH2','ACH3','ACH4',
-											'ACH5','ACH6','ACH7','ACM1','ACM2','ACM3','ACM4','ACM5','ACK3','ACK4','ACK5','ACK6','ACK7','ACK8','VKS','LLKH','SMTG','TF1','DKS','JER','JES','JEY',
-											'JEH1','WKM','MSWEU','M3BP','HER1',
-											--Sheet 2: MBC Enable Super Level Only
-											'SCS','SCSM','SCH','SCAH','SCBH','SCHI','SBRR','WPR',
-											--Sheet 3: 789Y Disable
-											'SDD','SY1B','SDDTB','SDDT','SDT','SDE','SDU','SDM','SDY','SDV','SDW','SDX','SDZ','SDK','SDL','SDJ','SDO','SDP','SDB','SDC','SDF','SDG','SDI','SDN',
-											'SDY1','SYA','SYB','SYC','SYD','SYE','SYF','SYG','SYH','SYJ','SYK','SYL','SYN','SYO','SYP','SYQ','SYS','SYU','SYV','SYW','SYY','SDA','SYZ','SDY2',
-											'SQY','SYZ1','SDY3','SDY5','SDQ','SDS','SDY6','SYC2','SDY7','SDN1','SDN2','SDY8','UZA','SYC3','SDN3','SDY9','SQA','YDH','SDY11','SDY12','SYX','SCC',
-											'VIP','SKKS','SKS','SKT','VID','SKD','SKV','KKKUSD','SKX','SKF','SKG','SKY','SKZ','SKI','SKJ','SKB','SKQ','SKK','VIU','skn','skp','SKAC','SKAD','SKAE',
-											'SKAF','SKAG','SKAH','SKAI','SKAJ','SKKA','QHN','QVN','SKAN','SHB','SKAO','SKAP','SHD','SKAR','SKAS','SKAT','skau','skav','skaw','skax','skay','skba',
-											'skbb','SKBF','skbg','SKBI','SKBL','SKBM','skbn','skbp','SKBR','SKBT','SKTB','SKTA','sktc','SKBQ','SKBV','SKBW','SKBX','skby','skbz','SKCA','skcb',
-											'SKCC','SKCD','Keonprovision','SKCE','SKCF','SKCG','SKCI','SKCH','SKCJ','SKCK','ABS','ABB','ABW','BBA','BBD','BBE','BBF','PZZ')
-								AND roleid = 4 AND custid = @Custid)
-		BEGIN
-			UPDATE cs
-			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
-			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-		END
-		ELSE
-		BEGIN
-			UPDATE cs
-			SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-				bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-			FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-		END
-	END	
+		UPDATE cs
+		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	END
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -115,25 +106,6 @@ GO
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT
-
---SELECT custid, roleid
---INTO #DisableLine
---FROM custInfo WITH (NOLOCK) 
---WHERE username IN (	'MMMRM','SBKHK','SBKRMB','SBKTB','MMPRM','SMM','SBKH','SBKT','SMH','SMMH','SMAH','SMAT','SMBT','SMBH','SMCH','SMK','M7RM','M7ARM','M7RMB','M7ARMB','M7BRMB',
---					'M7BRM','S7RMB','M7ZRMB','M7CRM','HK7','MQRM','MQARM','MQRMB','MQR','SQHH','SDRM','SDRMB','SDH','SDHA','S188R','S188RM','S188AR','S188BH','S188HK','S188HL',
---					'SV','S188M','M63H','M63IRMB','M63IHK','S63H','S63K','S63M','S70RMB','S70M','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','CKT',
---					'CKT1','CKT2','MKM','MK12','TH88','MK17','CK18','MKTB','MK13','MKM1','MK19','MK20','MK21','MK16','MK15','TH25','MK22','TH26','MK23','JC2','JC8','MKI',
---					'JC9','MK27','THM','JCM','JC10','TH89','MK31','MKM2','JC5','GAX','MK32','JC83','AK1','AKM1','MK33','MK35','MK36','TH3','M85TB','M85ATB','M85BTB','M85CTB',
---					'M85DTB','S85BR','S85H','S85T','S85GTH','KJH','KJHB','KJM','KJI','KJD','KJT','KJMB','KJE','KJB','KJC','KJF','KJMC','KJMA','KJG','KJMD','KJL','KJO','KJME',
---					'KJMF','KJMG','KJA','SZ','SBMW','YKM','CYKM','M822M','S822R','GEH','GFH','S822M','S822MA','GFJ','S822D','PPH','PPM','S27RMB','S27A','SADA','S9M','S9H',
---					'XKS','POB','POM','POH','POJ','VAG','PYM','PYC','AC1','AC2','ACK','AC3','AC4','AC7','AC8','AC9','AC11','AC12','AC14','ACK2','AC15','AC16','AC17','AC18',
---					'AC19','PPS','PPJ','PPN','PPQ','PPZ','PPP','PPA','PPT','PPU','TD1','TD2','TD3','TD4','TD5','TD6','YT1','TDA','TDB','YT2','TDC','TDD','YT3','DS1','DS2',
---					'DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12','DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','KDS','DS22','DS23','DS25','RC')
-
---SELECT custid
---INTO #EnableSuperOnly
---FROM custInfo WITH (NOLOCK) 
---WHERE username IN ('SCHK','SCM','SCAI','SCI','SCDH','SCDK','TP','TH','TY','TF','TC','TD','TZ','EEM','EEH','EED','EEK')
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -148,11 +120,6 @@ WHERE ci.roleid = 4
 	AND ci.site IN ('733333', '222223', '222225', '222227', '033333', 'JPNIBC', '611111', '722222', '766666', '7aa666', 'BEST-ODDS', 'XYZbet', '755555', '789y')
 	AND ci.currency <> 20
 	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account		
-
---INSERT INTO #supers(custid)
---SELECT custid
---FROM Custinfo ci WITH (NOLOCK)
---WHERE custid IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601) --super of cross site batch 1
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -190,25 +157,6 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT
 
---SELECT custid, roleid
---INTO #DisableLine
---FROM custInfo WITH (NOLOCK) 
---WHERE username IN (	'MMMRM','SBKHK','SBKRMB','SBKTB','MMPRM','SMM','SBKH','SBKT','SMH','SMMH','SMAH','SMAT','SMBT','SMBH','SMCH','SMK','M7RM','M7ARM','M7RMB','M7ARMB','M7BRMB',
---					'M7BRM','S7RMB','M7ZRMB','M7CRM','HK7','MQRM','MQARM','MQRMB','MQR','SQHH','SDRM','SDRMB','SDH','SDHA','S188R','S188RM','S188AR','S188BH','S188HK','S188HL',
---					'SV','S188M','M63H','M63IRMB','M63IHK','S63H','S63K','S63M','S70RMB','S70M','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','CKT',
---					'CKT1','CKT2','MKM','MK12','TH88','MK17','CK18','MKTB','MK13','MKM1','MK19','MK20','MK21','MK16','MK15','TH25','MK22','TH26','MK23','JC2','JC8','MKI',
---					'JC9','MK27','THM','JCM','JC10','TH89','MK31','MKM2','JC5','GAX','MK32','JC83','AK1','AKM1','MK33','MK35','MK36','TH3','M85TB','M85ATB','M85BTB','M85CTB',
---					'M85DTB','S85BR','S85H','S85T','S85GTH','KJH','KJHB','KJM','KJI','KJD','KJT','KJMB','KJE','KJB','KJC','KJF','KJMC','KJMA','KJG','KJMD','KJL','KJO','KJME',
---					'KJMF','KJMG','KJA','SZ','SBMW','YKM','CYKM','M822M','S822R','GEH','GFH','S822M','S822MA','GFJ','S822D','PPH','PPM','S27RMB','S27A','SADA','S9M','S9H',
---					'XKS','POB','POM','POH','POJ','VAG','PYM','PYC','AC1','AC2','ACK','AC3','AC4','AC7','AC8','AC9','AC11','AC12','AC14','ACK2','AC15','AC16','AC17','AC18',
---					'AC19','PPS','PPJ','PPN','PPQ','PPZ','PPP','PPA','PPT','PPU','TD1','TD2','TD3','TD4','TD5','TD6','YT1','TDA','TDB','YT2','TDC','TDD','YT3','DS1','DS2',
---					'DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12','DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','KDS','DS22','DS23','DS25','RC')
-
---SELECT custid
---INTO #EnableSuperOnly
---FROM custInfo WITH (NOLOCK) 
---WHERE username IN ('SCHK','SCM','SCAI','SCI','SCDH','SCDK','TP','TH','TY','TF','TC','TD','TZ','EEM','EEH','EED','EEK')
-
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
@@ -223,11 +171,6 @@ WHERE ci.roleid = 4
 	AND ci.currency <> 20
 	AND ci.custid NOT IN (1,2,3,4,5,6,9,12,13,15,16,17,22,30,32,33,34,35,36,41,42,21278849,21278858) -- dummy account	
 
---INSERT INTO #supers(custid)
---SELECT custid
---FROM Custinfo ci WITH (NOLOCK)
---WHERE custid IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601) --super of cross site batch 1
-							
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
