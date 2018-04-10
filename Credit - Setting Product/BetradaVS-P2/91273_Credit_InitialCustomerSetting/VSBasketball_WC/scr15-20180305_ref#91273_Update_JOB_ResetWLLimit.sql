@@ -26,9 +26,9 @@ SELECT @var_old_command = command
 FROM sysjobsteps
 WHERE step_id = @var_step_id AND step_name = @var_step_name AND job_id = @var_job_id
 
-SELECT @var_old_command = @var_old_command + ' 
-EXEC dbo.Task_BalanceGameResetYesterday @sporttype = ' + CONVERT(VARCHAR(10), @var_sporttype) 
-                                   + ', @bettype = ' + CONVERT(VARCHAR(10), @var_bettype)
+SELECT @var_old_command = @var_old_command + CHAR(13) + CHAR(10) 
+        + 'EXEC dbo.Task_BalanceGameResetYesterday @sporttype = ' + CONVERT(VARCHAR(10), @var_sporttype) 
+                                              + ', @bettype = ' + CONVERT(VARCHAR(10), @var_bettype)
 
 EXEC sp_update_jobstep @job_id  = @var_job_id, 
                        @step_id = @var_step_id, 
