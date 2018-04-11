@@ -79,7 +79,9 @@ BEGIN
 										'SKAP','SHD','SKAR','SKAS','SKAT','skau','skav','skaw','skax','skay','skba','skbb','SKBF','skbg','SKBI',
 										'SKBL','SKBM','skbn','skbp','SKBR','SKBT','SKTB','SKTA','sktc','SKBQ','SKBV','SKBW','SKBX','skby','skbz',
 										'SKCA','skcb','SKCC','SKCD','SKCE','SKCF','SKCG','SKCI','SKCH','SKCJ','SKCK','M11HK','M11RMB','SPUS',
-										'M11AHK','M11SD','JWL','JWU','JWA','JWK','ABS','ABB','ABW','BBA','BBD','BBE','BBF','PZZ')
+										'M11AHK','M11SD','JWL','JWU','JWA','JWK','ABS','ABB','ABW','BBA','BBD','BBE','BBF','PZZ',
+										--Add one more
+										'SKKC')
 							AND roleid = 4 AND custid = @Custid)
 	BEGIN
 		UPDATE cs
