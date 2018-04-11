@@ -5,6 +5,7 @@
 	DB: DBCUST/CUSTDB
 */
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY,roleid TINYINT)
+	DECLARE @super TABLE(custid INT)
 	
 	INSERT INTO @super
 	SELECT custid
