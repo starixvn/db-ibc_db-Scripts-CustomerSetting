@@ -24,6 +24,7 @@ WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
     AND c.custid <= @max_custid
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
@@ -74,6 +75,7 @@ WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
     AND c.custid <= @max_custid
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
