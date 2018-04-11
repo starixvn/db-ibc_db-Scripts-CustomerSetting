@@ -7,4 +7,4 @@
 
 
 
-DELETE StakeLevelGroupDetail WHERE GameTypeId between 3001 and 3030
+DELETE FROM StakeLevelGroupDetail WHERE GameTypeId between 3001 and 3030
