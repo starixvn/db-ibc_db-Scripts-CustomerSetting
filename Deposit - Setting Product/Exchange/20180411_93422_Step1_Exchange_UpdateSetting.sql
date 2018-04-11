@@ -13,7 +13,7 @@ FROM custInfo CI WITH(NOLOCK)
 	INNER JOIN Dep_CustSuper CS WITH(NOLOCK) ON ci.srecommend = cs.custid
 WHERE ci.mrecommend NOT IN (SELECT custid FROM custinfo cs1 WITH(NOLOCK)
 						   WHERE cs1.srecommend=ci.srecommend AND cs1.username LIKE '%Acc%' AND cs1.roleid=3 )
-
+	AND ci.Currency IN(3,61)
 	AND site IN ('alog')		
 	AND roleid IN(2,3,4)
 	
