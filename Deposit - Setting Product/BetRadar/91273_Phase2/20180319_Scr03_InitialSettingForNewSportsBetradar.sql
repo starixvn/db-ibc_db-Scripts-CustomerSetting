@@ -32,7 +32,8 @@ BEGIN
 	INSERT INTO @sport
 	SELECT 192 as sporttype, 2701 as bettype, 191 FromSport, 2701 FromBettype
 	UNION SELECT 193, 2801, 190, 2701
-
+	
+	--1k3 accounts affected	
 	INSERT INTO #tblCust (custid,roleid)			
 	SELECT custid,roleid
 	FROM dbo.Customer WITH(NOLOCK)
