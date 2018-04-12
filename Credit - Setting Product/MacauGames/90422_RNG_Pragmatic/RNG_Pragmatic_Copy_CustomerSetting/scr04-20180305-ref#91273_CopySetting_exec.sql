@@ -24,6 +24,7 @@ WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
     AND c.custid <= @max_custid
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
@@ -40,10 +41,16 @@ BEGIN
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
     EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@ProductId = 32
-             ,@SportType = 248, @BetType = 4101, @IsLive = 0
-             ,@SportTypeRef = 212, @BetTypeRef = 4001
-             ,@isInsPT = 0, @isInsBetSetting = 1, @isInsWinLoss = 0
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 193, @BetType = 2801, @IsLive = 0
+             ,@SportTypeRef = 180, @BetTypeRef = 1201
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
+    
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 192, @BetType = 2701, @IsLive = 0
+             ,@SportTypeRef = 191, @BetTypeRef = 2701
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
             
     WAITFOR DELAY '00:00:0.100'
 END
@@ -68,6 +75,7 @@ WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
     AND c.custid <= @max_custid
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
@@ -84,10 +92,16 @@ BEGIN
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
     EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
-             ,@ProductId = 32
-             ,@SportType = 248, @BetType = 4101, @IsLive = 0
-             ,@SportTypeRef = 212, @BetTypeRef = 4001
-             ,@isInsPT = 0, @isInsBetSetting = 1, @isInsWinLoss = 0
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 193, @BetType = 2801, @IsLive = 0
+             ,@SportTypeRef = 180, @BetTypeRef = 1201
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 1
+    
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommend, @maxcustid = @max_custid, @target = @var_target
+             ,@ProductId = 5, @SporttypeDelegate = 180, @betTypeDelegate = 1201
+             ,@SportType = 192, @BetType = 2701, @IsLive = 0
+             ,@SportTypeRef = 191, @BetTypeRef = 2701
+             ,@isInsPT = 1, @isInsBetSetting = 1, @isInsWinLoss = 0
             
     WAITFOR DELAY '00:00:0.100'
 END
