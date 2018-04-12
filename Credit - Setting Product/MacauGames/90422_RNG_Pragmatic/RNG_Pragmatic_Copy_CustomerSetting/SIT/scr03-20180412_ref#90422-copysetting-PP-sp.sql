@@ -19,6 +19,8 @@ BEGIN
     IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
     IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
     IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+    IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
+    
 
     ----------------------------------------------------------------------------------------------------------------------------
     DECLARE @exchangeID INT
