@@ -6,6 +6,16 @@
 */
 
 UPDATE GameLaunchPerSite
+SET IsTest = 0
+WHERE SportType = 208
+
+
+UPDATE GameLaunchPerCurrency
+SET IsTest = 0
+WHERE SportType = 208
+
+
+UPDATE GameLaunchPerSite
 SET IsLaunched = 1
 WHERE SportType = 208 AND 
       SiteID IN (SELECT siteid 
