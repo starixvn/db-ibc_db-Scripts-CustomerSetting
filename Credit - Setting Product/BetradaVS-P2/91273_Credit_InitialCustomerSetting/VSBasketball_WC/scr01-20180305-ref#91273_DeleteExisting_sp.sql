@@ -39,20 +39,23 @@ BEGIN
     --------------------------------------PT Setting------------------------------------------------- 
     IF (@isDelPT = 1)
     BEGIN
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid  
         INTO #CustPT_Agent
-        FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)     
-        WHERE cg.SportType = @sporttype
+        FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)  
+            INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
+        WHERE cg.SportType = @sporttype AND ci.currency <> 20
     
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid  
         INTO #CustPT_Member
-        FROM CustPTSetting3rd_Member cg WITH(NOLOCK)        
-        WHERE cg.SportType = @sporttype
+        FROM CustPTSetting3rd_Member cg WITH(NOLOCK)
+             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
+        WHERE cg.SportType = @sporttype  AND ci.currency <> 20
     
         SELECT DISTINCT cg.AgentID AS CustID
         INTO #CustPTGroup_Member
-        FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)       
-        WHERE cg.SportType = @sporttype
+        FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)    
+             INNER JOIN CustInfo ci ON ci.CustID = cg.AgentID        
+        WHERE cg.SportType = @sporttype  AND ci.currency <> 20
     
         --Agent
         WHILE 1 = 1
@@ -62,11 +65,11 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM CustPTSetting3rd_Agent cg WITH (ROWLOCK)      
-	              INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
-	         WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            DELETE cg
+            FROM CustPTSetting3rd_Agent cg WITH (ROWLOCK)      
+                  INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
+             WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of SMA PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
         
             TRUNCATE TABLE #Batch
         END     
@@ -79,11 +82,11 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
         
-	        DELETE cg
-	        FROM CustPTGroupSetting3rd_Member cg WITH (ROWLOCK)   
-	               INNER JOIN #Batch ctemp ON ctemp.custid = cg.AgentID
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            DELETE cg
+            FROM CustPTGroupSetting3rd_Member cg WITH (ROWLOCK)   
+                   INNER JOIN #Batch ctemp ON ctemp.custid = cg.AgentID
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of SMA Group PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
 
             TRUNCATE TABLE #Batch
         END         
@@ -96,11 +99,11 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM CustPTSetting3rd_Member cg WITH (ROWLOCK)     
-	               INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            DELETE cg
+            FROM CustPTSetting3rd_Member cg WITH (ROWLOCK)     
+                   INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of PT: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
 
             TRUNCATE TABLE #Batch
         END 
@@ -110,15 +113,17 @@ BEGIN
     IF (@isDelBetSetting = 1)
     BEGIN
         
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid  
         INTO #CustBet_Agent
-        FROM CustBetSetting3rd_Agent cg WITH(NOLOCK)        
-        WHERE cg.SportType = @sporttype
+        FROM CustBetSetting3rd_Agent cg WITH(NOLOCK)   
+            INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
+        WHERE cg.SportType = @sporttype AND ci.currency <> 20
     
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid  
         INTO #CustBet_Member
-        FROM CustBetSetting3rd_Member cg WITH(NOLOCK)       
-        WHERE cg.SportType = @sporttype
+        FROM CustBetSetting3rd_Member cg WITH(NOLOCK)   
+            INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
+        WHERE cg.SportType = @sporttype AND ci.currency <> 20
     
         --Agent
         WHILE 1 = 1
@@ -128,12 +133,12 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM dbo.CustBetSetting3rd_Agent cg WITH (ROWLOCK)     
-	               INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	        
+            DELETE cg
+            FROM dbo.CustBetSetting3rd_Agent cg WITH (ROWLOCK)     
+                   INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of SMA BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            
             TRUNCATE TABLE #Batch
         END 
  
@@ -144,12 +149,12 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM dbo.CustBetSetting3rd_Member cg WITH (ROWLOCK)      
-	               INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid     
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	        
+            DELETE cg
+            FROM dbo.CustBetSetting3rd_Member cg WITH (ROWLOCK)      
+                   INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid     
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of BetSetting: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            
             TRUNCATE TABLE #Batch
         END 
     END
@@ -158,31 +163,33 @@ BEGIN
     IF (@isDelWinLoss = 1)
     BEGIN
         
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid  
         INTO #CustWL_Agent
-        FROM CustWinLossLimit_Agent cg WITH(NOLOCK)        
-        WHERE cg.SportType = @sporttype
+        FROM CustWinLossLimit_Agent cg WITH(NOLOCK) 
+            INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
+        WHERE cg.SportType = @sporttype AND ci.currency <> 20
     
-        SELECT DISTINCT custid 
+        SELECT DISTINCT cg.custid 
         INTO #CustWL_Member
-        FROM CustWinLossLimit_Member cg WITH(NOLOCK)       
-        WHERE cg.SportType = @sporttype
+        FROM CustWinLossLimit_Member cg WITH(NOLOCK)     
+            INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
+        WHERE cg.SportType = @sporttype AND ci.currency <> 20
         
         --Agent
         WHILE 1 = 1
         BEGIN
-	        DELETE TOP (4000) #CustWL_Agent
+            DELETE TOP (4000) #CustWL_Agent
             OUTPUT DELETED.CustID INTO #Batch(CustID)
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM dbo.CustWinLossLimit_Agent cg WITH (ROWLOCK)
-	                INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	        
-	        TRUNCATE TABLE #Batch
+            DELETE cg
+            FROM dbo.CustWinLossLimit_Agent cg WITH (ROWLOCK)
+                    INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of SMA WinLoss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            
+            TRUNCATE TABLE #Batch
         END 
 
         
@@ -194,12 +201,12 @@ BEGIN
         
             IF @@ROWCOUNT = 0 BREAK
             
-	        DELETE cg
-	        FROM dbo.CustWinLossLimit_Member cg WITH (ROWLOCK)
-	                INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
-	        WHERE cg.SportType = @sporttype AND cg.BetType = @betType
-	        RAISERROR ('Total affected row of Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	        
+            DELETE cg
+            FROM dbo.CustWinLossLimit_Member cg WITH (ROWLOCK)
+                    INNER JOIN #Batch ctemp ON ctemp.custid = cg.custid
+            WHERE cg.SportType = @sporttype AND cg.BetType = @betType
+            RAISERROR ('Total affected row of Winloss: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+            
             TRUNCATE TABLE #Batch
         END 
     END
