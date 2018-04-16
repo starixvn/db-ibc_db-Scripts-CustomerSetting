@@ -1,6 +1,6 @@
 /*
     Created: Vicky
-    Task: release Batch 2 [Redmine: #89952]
+    Task: Batch 3 [Redmine: #89952]
     DB: DBCUST/CustDB
     Date: 20180413
 */
