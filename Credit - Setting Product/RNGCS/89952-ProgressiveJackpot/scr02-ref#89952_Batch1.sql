@@ -17,7 +17,7 @@ WHERE SportType = 208
 
 UPDATE GameLaunchPerSite
 SET IsLaunched = 0
-WHERE SportType = 208
+WHERE SportType = 208 AND IsLaunched = 1
 
 
 UPDATE GameLaunchPerSite
