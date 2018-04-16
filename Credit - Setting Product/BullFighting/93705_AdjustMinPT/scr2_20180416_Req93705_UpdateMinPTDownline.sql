@@ -1,0 +1,109 @@
+/*
+	Created: Elodie
+	Date: 20171201
+	Task: Change BullFighting MinPT of Super
+	DB: DBCUST/CustDB
+*/
+USE CustDB
+GO
+
+CREATE TABLE #Cust (custid INT, roleid TINYINT, srecommend INT, isfinished bit default(0)) 
+DECLARE @custid INT, @roleid TINYINT, @srecommend INT
+DECLARE @PT	VARCHAR(MAX)='<ROOT><PT SportType="207" BetType="1004" IsLive="0"/></ROOT>'
+
+INSERT INTO #Cust (custid, roleid, srecommend)
+	select ci.CustID, roleid, srecommend
+	FROM dbo.custInfo ci WITH (NOLOCK)
+	WHERE username IN ('BV12','BV16','BV19','BV26','BV27','BV28','BV36','BV38','BV42','BV44','BV47','BV48','BV49','BV51','BV52','BV53','BV55',
+						'BV57','BV59','BV60','BV61','BV62','BV65','BV66','BV67','BV68','BV69','BV70','BV73','BV75','BV76','BV77','BV79','BV8',
+						'BV80','BV81','BV82','BV84','BV85','BV87','BV88','BV89','BV9','BV90','BV91','BV93','BV94','BV98','BV99','CAT10','CAT11',
+						'CAT12','CAT14','CAT5','CP1','CP10','CP4','CP8','EL','EP','FC10','FC13','FC16','FC18','FC24','FC3','FC8','KP90','KP91',
+						'KP92','KP93','KP94','KP96','KP97','KX2','KX5','KX9','KY18','KY26','KY34','KY51','KY58','KY68','KY71','KY78','KY81',
+						'KY82','KY9','KY96','NC11','NC15','NC18','NC2','NC20','NC21','NC22','NC23','NC25','NC26','NC3','NC30','NC36','NC37',
+						'NC38','NC39','NC45','NC48','NC49','NC50','NC51','NC52','NC53','NC54','NC55','NC57','NC58','NC59','NC62','NC65','NC67',
+						'NC70','NC72','NC73','NC74','NC78','NC80','NC82','NC83','NC84','NC89','ND03','ND06','ND07','ND09','ND10','ND11','ND12',
+						'ND15','ND20','ND21','ND23','ND25','ND26','ND28','ND29','ND30','ND31','ND32','ND33','ND35','ND36','ND37','ND38','ND39',
+						'ND40','ND41','ND42','ND43','ND45','ND46','ND47','ND48','ND49','ND50','ND51','ND52','ND53','ND55','ND56','ND57','ND58',
+						'ND59','ND60','ND61','ND62','ND63','ND65','ND66','ND67','NE1','NE10','NE11','NE12','NE13','NE15','NE16','NE17','NE18',
+						'NE19','NE2','NE20','NE21','NE22','NE3','NE5','NE6','NE7','NE8','NE9','NW13','NW20','NW21','NW22','NW24','NW25','NW33',
+						'NW34','NW35','NW37','NW39','NW45','NW51','NW62','NW7','NW72','NW73','NW79','NW80','NW83','OP22','OP23','OP24','OP25',
+						'OP26','OP27','OP28','OP29','PS11','PS13','PS16','PS19','PS26','PS27','PS30','PS5','PS8','PS9','Q15','Q18','Q19','Q3',
+						'Q7','RRL11','RRL12','RRL15','RRL16','RRL2','RRL20','RRL21','RRL24','RRL3','RRL6','RRL9','TY05','TY09','TY16','TY22',
+						'TY28','TY33','TY41','TY50','TY55','TY56','TY67','TY68','TY81','TY83','TY85','TY86','TY87','TY94','TY95','XQ','XX',
+						'ZA13','ZA15','ZA17','ZA19','ZA2','ZA22','ZA33','ZA38','ZA41','ZA42','ZA46','ZA47','ZA57','ZA59','ZA60','ZA65','ZA67',
+						'ZA74','ZA78','ZA84','ZA88','ZA89','ZA9','ZA91','ZA94','ZA95','ZA97','ZA98','ZA99','ZX1','ZX11','ZX12','ZX13','ZX15',
+						'ZX16','ZX17','ZX2','ZX20','ZX21','ZX23','ZX24','ZX25','ZX27','ZX28','ZX3','ZX32','ZX33','ZX38','ZX4','ZX41','ZX42',
+						'ZX43','ZX44','ZX45','ZX46','ZX47','ZX48','ZX49','ZX5','ZX50','ZX6','ZX7','ZX8','ZX9','BV1','BV11','BV15','BV22',
+						'BV29','BV39','BV41','BV46','BV6','BV64','BV72','BV78','BV86','BV95','CAT3','CP7','ES','FC21','FC25','FC29','KY19',
+						'KY35','KY73','NC12','NC28','NC29','NC32','NC33','NC34','NC42','NC43','NC44','NC61','NC64','NC76','NC77','NC79','NC87',
+						'ND01','ND02','ND13','ND17','ND18','ND19','ND22','ND27','NW2','NW38','NW43','NW44','NW48','NW49','NW54','NW58','NW84',
+						'PS18','PS21','PS7','QE','RRL28','RRL8','TY15','TY19','TY36','TY61','TY89','TY97','XXQ','xxt','XZ','ZA1','ZA20','ZX10',
+						'ZX14','ZX26','ZX30','ZX31','ZX39','BV18','BV32','BV74','BV92','CAT6','EA5','EAJ','FC1','FC22','FC23','KP102','KP24',
+						'KP26','KP3','KP37','KP38','kp44','KP48','KP49','KP54','KP67','KP69','KP74','KP76','KX3','KX8','KY16','KY24','KY36',
+						'KY41','KY72','KY8','KY98','NC17','NC27','NW11','NW12','NW19','NW23','NW50','NW67','NW82','OP10','OP12','OP16','OP20',
+						'OP3','OP31','OP34','OP4','OP42','OP50','OP64','OP70','OP8','PS1','PS12','QF','RRL27','RRL30','SSB','TY03','TY12','TY14',
+						'TY34','TY52','TY57','TY70','TY74','TY75','TY77','TY82','TY96','ZA26','ZA3','ZA58','ZA72','ZA76','BV10','BV13','BV14',
+						'BV17','BV2','BV20','BV21','BV23','BV24','BV25','BV3','BV30','BV31','BV33','BV34','BV35','BV37','BV4','BV40','BV43',
+						'BV45','BV5','BV50','BV54','BV56','BV58','BV63','BV7','BV71','BV83','BV96','BV97','CAT1','CAT15','CAT16','CAT2','CAT4',
+						'CAT7','CAT8','CAT9','CP2','CP3','CP5','CP6','CP9','EA1','EA2','EA3','EA4','EA6','EA7','EA8','EA9','EAA','EAB','EAC',
+						'EAD','EAE','EAF','EAG','EAH','EAI','EAK','EBA','EBB','EBC','EBD','EBE','EBF','EBG','EBH','EBI','EBJ','EBK','EBL',
+						'EBM','EC','EEA','EF','EG','EI','EJ','EJA','ER','ET10','ET6','ET7','ET8','ET9','EU','EV','EY','FC11','FC12','FC14',
+						'FC15','FC17','FC19','FC2','FC20','FC26','FC27','FC28','FC30','FC4','FC5','FC6','FC7','FC9','KP1','KP101','KP2',
+						'KP21','KP22','KP23','KP25','KP27','KP28','KP29','KP30','KP31','KP32','KP33','KP34','KP35','KP36','KP39','KP4',
+						'KP40','KP41','KP42','kp43','kp45','kp46','KP47','KP5','KP50','KP51','KP52','KP53','KP6','KP68','KP7','KP70','KP71',
+						'KP72','KP73','KP75','KP78','KP79','KP8','KP81','KP82','KP83','KP84','KP9','KP95','KPA','KPB','KPC','KPD','KPE','KPF',
+						'KPG','KPH','KPI','KPJ','KX1','KX10','KX4','KX6','KX7','KY1','KY10','KY11','KY12','KY13','KY14','KY15','KY17','KY2',
+						'KY20','KY21','KY22','KY23','KY25','KY27','KY28','KY29','KY3','KY30','KY31','KY32','KY33','KY37','KY38','KY39','KY4',
+						'KY40','KY42','KY43','KY44','KY45','KY46','KY47','KY5','KY50','KY52','KY53','KY54','KY55','KY56','KY57','KY59','KY6',
+						'KY60','KY61','KY62','KY63','KY64','KY65','KY66','KY67','KY69','KY7','KY70','KY74','KY75','KY76','KY77','KY79','KY80',
+						'KY83','KY84','KY85','KY86','KY87','KY88','KY89','KY90','KY91','KY92','KY93','KY94','KY95','KY97','KY99','NC1','NC10',
+						'NC13','NC14','NC16','NC19','NC24','NC31','NC35','NC4','NC40','NC41','NC46','NC47','NC5','NC56','NC6','NC60','NC63',
+						'NC66','NC68','NC69','NC7','NC71','NC75','NC8','NC81','NC85','NC86','NC88','NC9','NC90','ND05','ND08','ND16','NW1',
+						'NW10','NW14','NW15','NW16','NW17','NW18','NW26','NW27','NW28','NW29','NW3','NW30','NW31','NW32','NW36','NW4','NW40',
+						'NW41','NW42','NW46','NW47','NW5','NW52','NW53','NW55','NW56','NW57','NW59','NW6','NW60','NW61','NW63','NW64','NW65',
+						'NW66','NW68','NW69','NW70','NW71','NW74','NW75','NW76','NW77','NW78','NW8','NW81','NW85','NW86','NW87','NW88','NW89',
+						'NW9','NW90','OP1','OP11','OP13','OP14','OP15','OP17','OP18','OP19','OP2','OP21','OP30','OP32','OP33','OP35','OP36',
+						'OP37','OP38','OP39','OP40','OP41','OP43','OP44','OP45','OP46','OP47','OP48','OP49','OP5','OP6','OP60','OP61','OP62',
+						'OP63','OP65','OP66','OP67','OP68','OP69','OP7','OP71','OP72','OP73','OP74','OP75','OP76','OP77','OP78','OP79','OP9',
+						'PS10','PS14','PS15','PS17','PS2','PS20','PS22','PS23','PS24','PS25','PS28','PS29','PS3','PS4','PS6','Q1','Q10','Q11',
+						'Q12','Q13','Q14','Q16','Q17','Q2','Q20','Q4','Q5','Q6','Q8','Q9','QD','QG','QJ','RRL1','RRL10','RRL13','RRL14','RRL17',
+						'RRL18','RRL19','RRL22','RRL23','RRL25','RRL26','RRL29','RRL4','RRL5','RRL7','SSA','SSC','SSE','TY01','TY02','TY04','TY06',
+						'TY07','TY08','TY10','TY11','TY13','TY17','TY18','TY20','TY21','TY23','TY24','TY25','TY26','TY27','TY29','TY30','TY31',
+						'TY32','TY35','TY37','TY38','TY39','TY40','TY42','TY43','TY44','TY45','TY46','TY47','TY48','TY49','TY51','TY53','TY54',
+						'TY58','TY59','TY60','TY62','TY63','TY64','TY65','TY66','TY69','TY71','TY72','TY73','TY76','TY78','TY79','TY80','TY84',
+						'TY88','TY90','TY91','TY92','TY93','TY98','TY99','XA','XB','XC','XD','XG','XM','XN','XO','XP','XR','XXD','XXE','XXG',
+						'XXH','XXJ','XXK','XXO','XXP','XXR','XXS','XY','ZA10','ZA11','ZA12','ZA14','ZA16','ZA18','ZA21','ZA23','ZA24','ZA25',
+						'ZA27','ZA28','ZA29','ZA30','ZA31','ZA32','ZA34','ZA35','ZA36','ZA37','ZA39','ZA4','ZA40','ZA43','ZA44','ZA45','ZA48',
+						'ZA49','ZA5','ZA50','ZA51','ZA52','ZA53','ZA54','ZA55','ZA56','ZA6','ZA61','ZA62','ZA63','ZA64','ZA66','ZA68','ZA69',
+						'ZA7','ZA70','ZA71','ZA73','ZA75','ZA77','ZA79','ZA8','ZA80','ZA81','ZA82','ZA83','ZA85','ZA86','ZA87','ZA90','ZA92',
+						'ZA93','ZA96','ZX18','ZX19','ZX22','ZX29','ZX34','ZX35','ZX36','ZX37','ZX40','KP90','KP91','KP92','KP93','KP94','KP96',
+						'KP97','OP22','OP23','OP24','OP25','OP26','OP27','OP28','OP29','KP102','KP24','KP26','KP3','KP37','KP38','kp44','KP48',
+						'KP49','KP54','KP67','KP69','KP74','KP76','OP10','OP12','OP16','OP20','OP3','OP31','OP34','OP4','OP42','OP50','OP64',
+						'OP70','OP8','KP1','KP101','KP2','KP21','KP22','KP23','KP25','KP27','KP28','KP29','KP30','KP31','KP32','KP33','KP34',
+						'KP35','KP36','KP39','KP4','KP40','KP41','KP42','kp43','kp45','kp46','KP47','KP5','KP50','KP51','KP52','KP53','KP6',
+						'KP68','KP7','KP70','KP71','KP72','KP73','KP75','KP78','KP79','KP8','KP81','KP82','KP83','KP84','KP9','KP95','KPA',
+						'KPB','KPC','KPD','KPE','KPF','KPG','KPH','KPI','KPJ','OP1','OP11','OP13','OP14','OP15','OP17','OP18','OP19','OP2',
+						'OP21','OP30','OP32','OP33','OP35','OP36','OP37','OP38','OP39','OP40','OP41','OP43','OP44','OP45','OP46','OP47',
+						'OP48','OP49','OP5','OP6','OP60','OP61','OP62','OP63','OP65','OP66','OP67','OP68','OP69','OP7','OP71','OP72','OP73',
+						'OP74','OP75','OP76','OP77','OP78','OP79','OP9','TY24','TY25','TY43')	
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Cust
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid
+		,@srecommend = srecommend
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	EXEC dbo.Acc_DynamicCustSetting3rd_04 
+		@SuperID = @custid
+		,@RoleID = 4
+		,@SportBettypeXML = @PT 
+
+	waitfor delay '00:00:0.100'
+END
+
+
