@@ -33,13 +33,13 @@ BEGIN
     INSERT INTO #SMATemp (CustID, roleid)
     SELECT custid, roleid
     FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
+    WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
 
     --select member
     INSERT INTO #MemberTemp (CustID)
     SELECT custid
     FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
+    WHERE srecommend = @srecommend AND roleid = 1  AND custid <= @maxcustid
     ------------------------------------------DELETE DATA-----------------------------
 
 
