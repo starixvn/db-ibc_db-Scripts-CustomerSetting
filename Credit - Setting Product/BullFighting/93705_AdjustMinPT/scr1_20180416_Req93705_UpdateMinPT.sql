@@ -13,12 +13,12 @@ CREATE TABLE #CustList (CustID INT, MinPT TINYINT)
 SELECT @Sporttype = 207
 
 INSERT INTO #CustList (CustID, MinPT)
-select ci.CustID, cso.minpositiontaking
+select ci.CustID, cso.minpositiontaking * 100
 FROM dbo.custInfo ci WITH (NOLOCK)
 	INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	INNER JOIN dbo.custOverride cso	WITH (NOLOCK) ON cso.custid = cs.CustID AND cso.bettype = 5 AND cso.sporttype = 1
 WHERE cs.SportType = @Sporttype
-	AND cs.MinPT <> cso.minpositiontaking
+	AND cs.MinPT <> cso.minpositiontaking * 100
 	AND username IN (	'BV12','BV16','BV19','BV26','BV27','BV28','BV36','BV38','BV42','BV44','BV47','BV48','BV49','BV51','BV52','BV53','BV55',
 						'BV57','BV59','BV60','BV61','BV62','BV65','BV66','BV67','BV68','BV69','BV70','BV73','BV75','BV76','BV77','BV79','BV8',
 						'BV80','BV81','BV82','BV84','BV85','BV87','BV88','BV89','BV9','BV90','BV91','BV93','BV94','BV98','BV99','CAT10','CAT11',
