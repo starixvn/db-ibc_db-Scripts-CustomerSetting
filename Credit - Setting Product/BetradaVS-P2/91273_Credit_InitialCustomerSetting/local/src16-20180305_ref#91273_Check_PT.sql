@@ -1,5 +1,5 @@
 
-alter PROCEDURE [dbo].[DBA_CheckPTGame_DCS]
+CREATE PROCEDURE dbo.[DBA_CheckPTGame_DCS]
      @srecommendList VARCHAR(MAX) 
     ,@SportType SMALLINT = 0
     ,@BetType   SMALLINT = 0
@@ -16,7 +16,6 @@ AS
 BEGIN
     SET NOCOUNT ON
     
-    CREATE TABLE #tmpCustPTError (CustID INT, RoleID SMALLINT, ErrorCode VARCHAR(50))
     CREATE TABLE #SuperTemp(CustID INT PRIMARY KEY CLUSTERED)
     IF OBJECT_ID('tempdb..##CheckPTResult_Credit') IS NULL
     BEGIN
@@ -568,3 +567,7 @@ BEGIN
     END  
 
 END
+
+
+
+

@@ -37,7 +37,7 @@ BEGIN
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
     exec dbo.[DBA_CheckPTGame_DCS] @srecommendList=@srecommend, @SportType = 193, @BetType = 2801
-            
-    WAITFOR DELAY '00:00:0.100'
+    exec dbo.[DBA_CheckPTGame_DCS] @srecommendList=@srecommend, @SportType = 192, @BetType = 2701
 END
-GO
+
+SELECT * FROM ##CheckPTResult_Credit
