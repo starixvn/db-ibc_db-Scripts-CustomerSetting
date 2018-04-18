@@ -2,10 +2,6 @@
 	Created: 20180411@Vicky
 	Task : check DCS PT Setting for Credit Customer 
 	DB: DBCUST/custDB
-	
-	
-	Param's Explanation:
-	Exameple: 
 */
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -13,6 +9,14 @@ DECLARE @srecommend VARCHAR(225)
 
 DECLARE @var_msg_index INT = 0, @var_msg_super_total INT = 0
 
+
+-------------------clear data-----------------------------------------------------------------------------
+IF OBJECT_ID('tempdb..##CheckPTResult_Credit') IS NOT NULL
+BEGIN
+    DELETE FROM ##CheckPTResult_Credit
+END
+----------------------------------------------------------------------------------------------------------
+    
 INSERT INTO #supers(custid)
 SELECT c.custid
 FROM customer c             WITH (NOLOCK) 

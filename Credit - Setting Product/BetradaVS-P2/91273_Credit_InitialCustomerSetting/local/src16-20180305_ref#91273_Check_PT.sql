@@ -1,5 +1,5 @@
 
-CREATE PROCEDURE dbo.[DBA_CheckPTGame_DCS]
+CREATE PROCEDURE dbo.[DBA_CheckPTGame_for_Line_DCS]
      @srecommendList VARCHAR(MAX) 
     ,@SportType SMALLINT = 0
     ,@BetType   SMALLINT = 0
@@ -11,7 +11,7 @@ AS
     
     
     Param's Explanation:
-    Exameple: 
+    Exameple: EXEC dbo.[DBA_CheckPTGame_for_Line_DCS] @srecommendList = '20', @SportType = 193, @BetType = 2801
 */
 BEGIN
     SET NOCOUNT ON
@@ -28,7 +28,6 @@ BEGIN
     SELECT RTRIM(LTRIM(val)) FROM dbo.strSplit(@srecommendList,',')
     
    
-    --------------------------------check cust have no setting-----------------------------------------------------------------------------------------
     CREATE TABLE #MemberPT (CustID INT, recommend INT, mrecommend INT, srecommend INT, sporttype SMALLINT, bettype SMALLINT, IsLive BIT, SuperPT SMALLINT, MasterPT SMALLINT, AgentPT SMALLINT, IsAutoMasterPT BIT, AutoMasterPT SMALLINT, IsAutoSuperPT BIT, AutoSuperPT SMALLINT, IsGroup BIT)
     CREATE TABLE #AgentPT (CustID INT, recommend INT, mrecommend INT, srecommend INT, sporttype SMALLINT, bettype SMALLINT, IsLive BIT, SuperPT SMALLINT, MasterPT SMALLINT, AgentPT SMALLINT, IsAutoMasterPT BIT, AutoMasterPT SMALLINT, IsAutoSuperPT BIT, AutoSuperPT SMALLINT, MinPT SMALLINT, MaxPT SMALLINT)
     CREATE TABLE #MasterPT (CustID INT, recommend INT, mrecommend INT, srecommend INT, sporttype SMALLINT, bettype SMALLINT, IsLive BIT, SuperPT SMALLINT, MasterPT SMALLINT, AgentPT SMALLINT, IsAutoMasterPT BIT, AutoMasterPT SMALLINT, IsAutoSuperPT BIT, AutoSuperPT SMALLINT, MinPT SMALLINT, MaxPT SMALLINT)
@@ -41,6 +40,7 @@ BEGIN
         INNER JOIN #SuperTemp s ON s.custid = ci.srecommend
         INNER JOIN CustPTSetting3rd_Member cs WITH (NOLOCK) ON ci.CustID = cs.CustID
     WHERE   ci.roleid = 1 AND cs.SportType = @SportType
+    
     
     INSERT INTO #MemberPT (CustID, recommend,mrecommend,srecommend,SportType,BetType,IsLive,SuperPT,MasterPT,AgentPT,IsAutoMasterPT,AutoMasterPT,IsAutoSuperPT,AutoSuperPT,IsGroup)
     SELECT ci.CustID,ci.recommend,ci.mrecommend,ci.srecommend, cs.SportType,cs.BetType,cs.IsLive,cs.SuperPT,cs.MasterPT,cs.AgentPT,cs.IsAutoMasterPT,cs.AutoMasterPT,cs.IsAutoSuperPT,cs.AutoSuperPT,1
@@ -56,8 +56,7 @@ BEGIN
     FROM CustInfo ci WITH (NOLOCK)
         INNER JOIN #SuperTemp s ON s.custid = ci.srecommend
         INNER JOIN CustPTSetting3rd_Agent cs WITH (NOLOCK) ON ci.CustID = cs.CustID
-    WHERE   ci.roleid = 2  
-            AND cs.SportType = @SportType
+    WHERE   ci.roleid = 2 AND cs.SportType = @SportType
 
     
     INSERT INTO #MasterPT (CustID, recommend,mrecommend,srecommend,SportType,BetType,IsLive,SuperPT,MasterPT,AgentPT,IsAutoMasterPT,AutoMasterPT,IsAutoSuperPT,AutoSuperPT,MinPT,MaxPT)         
@@ -86,7 +85,7 @@ BEGIN
     SELECT @var_total_sma = count(*) FROM #SuperPT
     RAISERROR ('Total member %d, sma: %d.', 0, 1, @var_total_member, @var_total_sma) WITH NOWAIT
     
-    
+    --------------------------------check rule-----------------------------------------------------------------------------------------
     ---- 1. S1 < 0 OR M1 < 0 OR A1 < 0  
     BEGIN  
         ----PRINT '1. S1 < 0 OR M1 < 0 OR A1 < 0 '  
