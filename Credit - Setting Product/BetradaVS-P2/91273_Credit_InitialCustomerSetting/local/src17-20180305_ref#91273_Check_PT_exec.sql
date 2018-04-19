@@ -31,8 +31,10 @@ RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-    UPDATE TOP (1) #Supers
-    SET isfinished = 1, @srecommend = STR(custid)   
+	SET @srecommend = NULL
+	
+    UPDATE TOP (100) #Supers
+    SET isfinished = 1, @srecommend = COALESCE(@srecommend + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     
     IF @@ROWCOUNT = 0 BREAK

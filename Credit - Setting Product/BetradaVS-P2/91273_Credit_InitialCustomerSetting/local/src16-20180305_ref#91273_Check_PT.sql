@@ -7,7 +7,7 @@ AS
 /*
     Created: 20180411@Vicky
     Task : check DCS PT Setting for Credit Customer 
-    DB: DBCUST/custDB
+    DB: DB06/bodb02
     
     
     Param's Explanation:
@@ -566,7 +566,8 @@ BEGIN
     END  
 
 END
-
-
+GO
+GRANT EXECUTE ON [dbo].[DBA_CheckPTGame_for_Line_DCS] TO [vnteam] AS [dbo]
+GO
 
 
