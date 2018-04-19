@@ -25,6 +25,3 @@ SET ps.SettingStatus = 0
 FROM dbo.ProductSettingDetail ps WITH (ROWLOCK,UPDLOCK)
     INNER JOIN @tbl_SportType spt ON (spt.settingType = ps.settingType AND spt.sportType = ps.sportType AND spt.betType = ps.betType) 
     
-UPDATE ProductLaunchedSiteCurrency 
-SET isTest = 0
-WHERE SportType IN (193, 192)
