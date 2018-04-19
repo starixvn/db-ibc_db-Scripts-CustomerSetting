@@ -43,8 +43,8 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommend) WITH NOWAIT
     
-    exec dbo.[DBA_CheckPTGame_DCS] @srecommendList=@srecommend, @SportType = 193, @BetType = 2801
-    exec dbo.[DBA_CheckPTGame_DCS] @srecommendList=@srecommend, @SportType = 192, @BetType = 2701
+    EXEC dbo.[DBA_CheckPTGame_for_Line_DCS] @srecommendList=@srecommend, @SportType = 193, @BetType = 2801
+    EXEC dbo.[DBA_CheckPTGame_for_Line_DCS] @srecommendList=@srecommend, @SportType = 192, @BetType = 2701
 END
 
 SELECT * FROM ##CheckPTResult_Credit
