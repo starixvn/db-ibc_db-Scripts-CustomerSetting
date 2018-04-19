@@ -12,4 +12,5 @@ DECLARE @sporttype INT = 180,
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SELECT TOP(1) * FROM BalancePendingCreditGame WHERE bettype = @bettype
+SELECT TOP(1) * FROM BalancePendingDebitGame WHERE bettype = @bettype
 ---DO NOT run the NEXT step until no Balance of Virtual Sport need to process

@@ -13,3 +13,4 @@ DECLARE @sporttype INT = 180,
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Please make sure no record of VS in table BalancePendingCreditGame before run this step
 DELETE FROM BalanceCreditGame WHERE bettype = @bettype
+DELETE FROM BalanceDebitGame WHERE bettype = @bettype
