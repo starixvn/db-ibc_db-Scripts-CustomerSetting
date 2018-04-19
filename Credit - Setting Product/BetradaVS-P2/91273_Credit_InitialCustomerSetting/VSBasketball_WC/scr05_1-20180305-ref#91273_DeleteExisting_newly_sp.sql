@@ -1,6 +1,6 @@
 /*
     Created: 20180305@Vicky
-    Task: delete Customer setting
+    Task: delete for newly Customer setting
     DB: DBCUST/CustDB
 */
 
@@ -14,16 +14,14 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
         @isLive INT = 0,
         @isDelPT TINYINT = 0,
         @isDelBetSetting TINYINT = 0,
-        @isDelWinLoss TINYINT = 0
+        @isDelWinLoss TINYINT = 0,
+        @MaxCustID INT
 AS
 BEGIN 
     SET NOCOUNT ON
     
     RAISERROR ('Run at server: %s;', 0, 1, @@SERVERNAME) WITH NOWAIT
-    DECLARE @var_row_count INT
-    
-    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
-    IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
+    DECLARE @var_row_count INT       
      
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent')   = 0 RETURN
     IF dbo.f_CheckRepTable('CustPTSetting3rd_Member')  = 0 RETURN
@@ -43,21 +41,21 @@ BEGIN
         INTO #CustPT_Agent
         FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)  
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
-        WHERE cg.SportType = @sporttype AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype AND cg.CustID > @MaxCustID
     
         SELECT DISTINCT cg.custid  
         INTO #CustPT_Member
         FROM CustPTSetting3rd_Member cg WITH(NOLOCK)
              INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
-        WHERE cg.SportType = @sporttype  AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype  AND cg.CustID > @MaxCustID
     
         SELECT DISTINCT cg.AgentID AS CustID
         INTO #CustPTGroup_Member
         FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)    
              INNER JOIN CustInfo ci ON ci.CustID = cg.AgentID        
-        WHERE cg.SportType = @sporttype  AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype  AND cg.AgentID > @MaxCustID
     
-        --Agent
+        --Agent 
         WHILE 1 = 1
         BEGIN
             DELETE TOP (4000) #CustPT_Agent
@@ -117,13 +115,13 @@ BEGIN
         INTO #CustBet_Agent
         FROM CustBetSetting3rd_Agent cg WITH(NOLOCK)   
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
-        WHERE cg.SportType = @sporttype AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype AND cg.CustID > @MaxCustID
     
         SELECT DISTINCT cg.custid  
         INTO #CustBet_Member
         FROM CustBetSetting3rd_Member cg WITH(NOLOCK)   
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
-        WHERE cg.SportType = @sporttype AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype AND cg.CustID > @MaxCustID
     
         --Agent
         WHILE 1 = 1
@@ -167,13 +165,13 @@ BEGIN
         INTO #CustWL_Agent
         FROM CustWinLossLimit_Agent cg WITH(NOLOCK) 
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
-        WHERE cg.SportType = @sporttype AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype AND cg.CustID > @MaxCustID
     
         SELECT DISTINCT cg.custid 
         INTO #CustWL_Member
         FROM CustWinLossLimit_Member cg WITH(NOLOCK)     
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID        
-        WHERE cg.SportType = @sporttype AND ci.currency <> 20
+        WHERE cg.SportType = @sporttype AND cg.CustID > @MaxCustID
         
         --Agent
         WHILE 1 = 1
