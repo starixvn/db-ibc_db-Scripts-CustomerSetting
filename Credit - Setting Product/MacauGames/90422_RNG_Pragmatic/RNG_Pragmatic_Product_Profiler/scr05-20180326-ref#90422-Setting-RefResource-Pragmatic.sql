@@ -12,4 +12,4 @@ DELETE FROM RefResource WHERE RefId = 'Product' AND ResourceId = 32
 INSERT INTO dbo.RefResource (RefId, ResourceId, Resource_en)
 VALUES ('StakeLevel_GG', 6, 'Level 1'),
        ('StakeLevel_GG', 7, 'Level 2'),
-       ('Product', 32, 'PP'),
+       ('Product', 32, 'PP')
