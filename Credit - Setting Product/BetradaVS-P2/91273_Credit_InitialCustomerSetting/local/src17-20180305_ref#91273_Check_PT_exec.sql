@@ -3,9 +3,10 @@
 	Task : check DCS PT Setting for Credit Customer 
 	DB: DBCUST/custDB
 */
-
+IF OBJECT_ID('tempdb..#supers') IS NOT NULL DROP TABLE #supers
+GO
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
-DECLARE @srecommend VARCHAR(225)
+DECLARE @srecommend VARCHAR(MAX)
 
 DECLARE @var_msg_index INT = 0, @var_msg_super_total INT = 0
 
