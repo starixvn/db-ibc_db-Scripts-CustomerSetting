@@ -6,8 +6,8 @@
 */  
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-    @srecommend INT 
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT2]
+    @srecommendList VARCHAR(MAX)
     ,@maxcustid INT
     ,@target VARCHAR(20)
     ,@sportType SMALLINT
@@ -25,41 +25,49 @@ BEGIN
     
 
     ----------------------------------------------------------------------------------------------------------------------------
-    DECLARE @exchangeID INT
-    DECLARE @StakeLevelList_SMA VARCHAR(100)
-    DECLARE @StakeLevelList_member VARCHAR(100)
+    DECLARE @SuperTemp TABLE (CustID INT, Currency INT)
+    DECLARE @Batch TABLE (CustID INT, StakeLevelList VARCHAR(50))
+    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED, StakeLevelList VARCHAR(50))
+    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, StakeLevelList VARCHAR(50))
+    CREATE TABLE #StakeLevelList_SMA_6_7(Currency INT PRIMARY KEY CLUSTERED, StakeLevelList VARCHAR(50))
 
-
-    CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #Batch(CustID INT PRIMARY KEY CLUSTERED)
-    CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT)
+    
+    INSERT INTO @SuperTemp (CustID)
+    SELECT RTRIM(LTRIM(val)) FROM dbo.strSplit(@srecommendList,',')
+    
+    UPDATE st
+    SET st.Currency = ci.Currency
+    FROM @SuperTemp st
+        INNER JOIN CustInfo ci ON ci.custid = st.custid
     
     
-    -------------------------------------------------------------------------------------------------
-    ---select exchangeID
-    SELECT @exchangeID = currency FROM dbo.custinfo WITH(NOLOCK) WHERE custid = @srecommend
+    INSERT INTO #StakeLevelList_SMA_6_7 (Currency, StakeLevelList)
+    SELECT distinct sl2.ExchangeId, 
+				    SUBSTRING(
+				        (
+				            SELECT ',' + CONVERT (VARCHAR(50), sl1.StakeLevelID)  AS [text()]
+				            FROM dbo.StakeLevel sl1
+				            WHERE sl1.ExchangeId = sl2.ExchangeId AND sl1.GameGroupID in (6,7)
+				            ORDER BY sl1.ExchangeId
+				            FOR XML PATH ('')
+				        ), 2, 1000) [sll]
+    FROM dbo.StakeLevel sl2
     
     --select member
-    INSERT INTO #MemberTemp (CustID)
-    SELECT custid
-    FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid = 1  AND custid <= @maxcustid
+    INSERT INTO #MemberTemp (CustID, StakeLevelList)
+    SELECT ci.custid,  CONVERT (VARCHAR(50), sl.StakeLevelID)
+    FROM Custinfo ci WITH (NOLOCK)
+        INNER JOIN @SuperTemp s ON s.custid = ci.srecommend 
+        INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
+    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid <= @maxcustid
     
     --select SMA
-    INSERT INTO #SMATemp (CustID, roleid)
-    SELECT custid, roleid
-    FROM Custinfo WITH (NOLOCK)
-    WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
-
-    --select stake level of SMA
-    SELECT @StakeLevelList_SMA = COALESCE(@StakeLevelList_SMA + ',','') +  CONVERT(VARCHAR(12),StakeLevelID) 
-    FROM dbo.StakeLevel WITH(NOLOCK) 
-    WHERE ExchangeId = @exchangeID AND GameGroupID IN (6, 7)
-    
-    --select stake level of Member
-    SELECT @StakeLevelList_member = StakeLevelID 
-    FROM dbo.StakeLevel WITH(NOLOCK) 
-    WHERE ExchangeId = @exchangeID AND GameGroupID  = 6
+    INSERT INTO #SMATemp (CustID, StakeLevelList)
+    SELECT ci.custid, sll.StakeLevelList
+    FROM Custinfo ci WITH (NOLOCK)
+        INNER JOIN @SuperTemp s ON s.custid = ci.srecommend
+        INNER JOIN #StakeLevelList_SMA_6_7 sll ON sll.Currency = s.Currency
+    WHERE roleid IN (2,3,4) AND ci.custid <= @maxcustid 
 
     
     ------------------------------------------INSERT DATA-----------------------------
@@ -67,31 +75,31 @@ BEGIN
     WHILE 1 = 1
     BEGIN
         DELETE TOP (4000) #SMATemp
-        OUTPUT DELETED.CustID INTO #Batch(CustID)
+        OUTPUT DELETED.CustID, DELETED.StakeLevelList INTO @Batch(CustID, StakeLevelList)
         
         IF @@ROWCOUNT = 0 BREAK
         
 	    INSERT INTO dbo.CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)    
-	    SELECT CustID, @SportType, @BetType, @StakeLevelList_SMA
-	    FROM #Batch 
-	    RAISERROR ('Total affected row of Member: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+	    SELECT CustID, @SportType, @BetType, StakeLevelList
+	    FROM @Batch 
+	    RAISERROR ('Total affected row of SMA: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
 	    
-	    TRUNCATE TABLE #Batch
+	    DELETE FROM @Batch
 	END
 
 	WHILE 1 = 1
     BEGIN
         DELETE TOP (4000) #MemberTemp
-        OUTPUT DELETED.CustID INTO #Batch(CustID)
+        OUTPUT DELETED.CustID, DELETED.StakeLevelList INTO @Batch(CustID, StakeLevelList)
         
         IF @@ROWCOUNT = 0 BREAK
         
 	    INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)   
-	    SELECT CustID, @SportType, @BetType, @StakeLevelList_member
-	    FROM #Batch
+	    SELECT CustID, @SportType, @BetType, StakeLevelList
+	    FROM @Batch
 	    RAISERROR ('Total affected row of Member: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
 	    
-	   TRUNCATE TABLE #Batch
+	   DELETE FROM @Batch
     END
     -----------------------------------------------------------------------------------
     

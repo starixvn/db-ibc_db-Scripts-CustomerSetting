@@ -9,10 +9,21 @@ GO
 DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50))
 
 
-INSERT INTO @tbl_OfferedSites
-SELECT 248, s.site, 1
-FROM site s
-WHERE s.islicensee = 0 AND s.isActive = 1 AND site NOT IN ('789Y', 'Thai')
+INSERT INTO @tbl_OfferedSites (SportType, siteName)
+VALUES (@var_sportType, 'Indo')
+      ,(@var_sportType, 'KORIBC')
+      ,(@var_sportType, '733333')
+      ,(@var_sportType, '222223')
+      ,(@var_sportType, '222225')
+      ,(@var_sportType, '222227')
+      ,(@var_sportType, '033333')
+      ,(@var_sportType, 'JPNIBC')
+      ,(@var_sportType, '611111')
+      ,(@var_sportType, '722222')
+      ,(@var_sportType, '766666')
+      ,(@var_sportType, '7aa666')
+      ,(@var_sportType, 'BEST-ODDS')
+      ,(@var_sportType, 'XYZbet')
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

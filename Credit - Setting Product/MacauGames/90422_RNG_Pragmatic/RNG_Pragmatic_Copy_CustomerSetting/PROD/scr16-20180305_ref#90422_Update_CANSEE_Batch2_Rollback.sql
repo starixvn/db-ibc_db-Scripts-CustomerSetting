@@ -9,9 +9,9 @@ GO
 DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50))
 
 
-INSERT INTO @tbl_OfferedSites
-VALUES  (248, '789Y' ,1) 
-       ,(248, 'Thai', 1)
+INSERT INTO @tbl_OfferedSites (SportType, siteName)
+VALUES (@var_sportType, '789Y')
+      ,(@var_sportType, '755555')
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

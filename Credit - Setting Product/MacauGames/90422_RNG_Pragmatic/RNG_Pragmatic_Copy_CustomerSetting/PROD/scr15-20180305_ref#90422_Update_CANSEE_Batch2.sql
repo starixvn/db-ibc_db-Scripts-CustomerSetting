@@ -8,14 +8,16 @@ GO
 
 DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50), isLaunched TINYINT)
 
-
---Virtual Basketball: all remaining sites
-INSERT INTO @tbl_OfferedSites
-VALUES  (248, '789Y' ,1) 
-       ,(248, 'Thai', 1)
+INSERT INTO @tbl_OfferedSites (SportType, siteName)
+VALUES (@var_sportType, '789Y')
+      ,(@var_sportType, '755555')
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE @tbl_OfferedSites
+SET isLaunched = 1
+
+
 UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
