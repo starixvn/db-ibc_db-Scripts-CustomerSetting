@@ -38,8 +38,16 @@ WHERE EXISTS (SELECT 1 FROM #OfferedSite WHERE site = ca.site)
 	AND c.roleid=1 AND c.srecommend = @srecommend 		
 	AND ci.Enabled=1
 
-SELECT * FROM #DirectAgent
+SELECT ci.username, ci.custid, ci.site, ci.currency
+FROM #DirectAgent da
+	INNER JOIN dbo.Customer ci WITH (NOLOCK) ON ci.custid = da.CustID
 
-SELECT * FROM #DirectMaster
+SELECT ci.username, ci.custid, ci.site, ci.currency
+FROM #DirectMaster da
+	INNER JOIN dbo.Customer ci WITH (NOLOCK) ON ci.custid = da.CustID
 
-SELECT * FROM #DirectMember
+SELECT ci.username, ci.custid, a.site, ci.currency
+FROM #DirectMember da
+	INNER JOIN dbo.Customer ci WITH (NOLOCK) ON ci.custid = da.CustID
+	INNER JOIN Customer a WITH (NOLOCK) ON ci.recommend = a.custid
+
