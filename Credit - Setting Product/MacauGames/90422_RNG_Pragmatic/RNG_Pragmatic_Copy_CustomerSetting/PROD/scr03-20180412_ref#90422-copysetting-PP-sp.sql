@@ -6,7 +6,7 @@
 */  
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT2]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @srecommendList VARCHAR(MAX)
     ,@maxcustid INT
     ,@target VARCHAR(20)

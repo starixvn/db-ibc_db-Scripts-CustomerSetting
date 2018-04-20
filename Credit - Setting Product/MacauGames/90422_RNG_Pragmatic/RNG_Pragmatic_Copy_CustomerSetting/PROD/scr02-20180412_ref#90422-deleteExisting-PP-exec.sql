@@ -44,7 +44,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommendList) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommendList, @target = @var_target, @sporttype = 248, @betType = 4101, @isLive = 0
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommendList, @target = @var_target, @sporttype = 248, @betType = 4101, @isLive = 0
     
     WAITFOR DELAY '00:00:0.100'
 END
@@ -92,7 +92,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommendList) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT1 @srecommendList = @srecommendList, @target = @var_target, @sporttype = 248, @betType = 4101, @isLive = 0
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommendList, @target = @var_target, @sporttype = 248, @betType = 4101, @isLive = 0
     
     WAITFOR DELAY '00:00:0.100'
 END

@@ -42,7 +42,7 @@ BEGIN
     SET @var_msg_index = @var_msg_index + 1
     RAISERROR ('Currently at order %d, SuperID: %s.', 0, 1, @var_msg_index, @srecommendList) WITH NOWAIT
     
-    EXEC dbo.Acc_DynamicCustSetting3rd_09_UAT3 @srecommendList = @srecommendList, @maxcustid = @max_custid, @SportType = 248, @BetType = 4101
+    EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommendList = @srecommendList, @maxcustid = @max_custid, @SportType = 248, @BetType = 4101
     
     WAITFOR DELAY '00:00:0.100'
 END
