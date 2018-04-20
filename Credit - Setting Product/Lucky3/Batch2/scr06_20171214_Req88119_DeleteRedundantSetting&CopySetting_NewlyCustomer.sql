@@ -98,21 +98,6 @@ WHERE dest.SettingType = 14
 
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
 DECLARE @BitmapOrder TINYINT = 9
---Member of cross site batch 1
-SELECT ci.custid
-INTO #MemberBatch1
-FROM dbo.custInfo ci WITH (NOLOCK)	
-WHERE ((mrecommend IN (40958, 45638, 60349, 63971, 167860, 244268, 272369, 620479, 771534, 832960, 852273, 861558, 891798, 913666, 916007, 929428, 971014, 979669, 981513, 997587, 2006349, 2087760)
-			AND roleid = 1)
-		OR (recommend IN (8346,104769) AND roleid = 1))	
-	AND ci.custid > @MaxCustID
-	AND ci.srecommend IN (324561, 395075, 506057, 674248, 796555, 993226, 1016771, 1036451, 1127269, 1156957, 1164457, 2042873, 2453866, 5005322, 17721601) --super of cross site batch 1
-	
-UPDATE cs
-SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #MemberBatch1 ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 	
 UPDATE cs
 SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
