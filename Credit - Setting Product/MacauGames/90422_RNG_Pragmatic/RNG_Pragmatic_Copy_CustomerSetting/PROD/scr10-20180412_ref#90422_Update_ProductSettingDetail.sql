@@ -10,7 +10,7 @@ DECLARE @tbl_SportType TABLE(settingType TINYINT, sportType SMALLINT, betType SM
 
 
 INSERT INTO @tbl_SportType(settingType, sportType, betType)
-VALUES (8, 248, 4101), 
+VALUES (8, 248, 4101)
        
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

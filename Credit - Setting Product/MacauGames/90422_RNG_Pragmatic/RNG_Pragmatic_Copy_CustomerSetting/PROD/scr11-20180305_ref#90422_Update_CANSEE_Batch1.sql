@@ -1,6 +1,6 @@
 /*
     Created: 20180320@Vicky 
-    Task: Insert CanSee for batch 1
+    Task: update CanSee for batch 1
     DB: DBCUST/CustDB
 */ 
 USE CustDB
