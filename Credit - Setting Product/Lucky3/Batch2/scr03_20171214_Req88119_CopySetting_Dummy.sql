@@ -146,7 +146,7 @@ BEGIN
 		INNER JOIN #DirectMaster D ON ci.mrecommend = d.CustID 
 	WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid <= @maxcustid 
 	UNION
-	SELECT DISTINCT d.recommend, 2, 0 -- agent of direct member
+	SELECT DISTINCT d.recommend, 2, 1 -- agent of direct member
 	FROM #DirectMember D 	
 	UNION 
 	SELECT d.CustID, 2, 0 -- Direct Agent

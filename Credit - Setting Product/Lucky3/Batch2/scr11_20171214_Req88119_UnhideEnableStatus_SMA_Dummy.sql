@@ -91,67 +91,11 @@ WHERE username IN ('WSNT','midrup','MLOTTO','MSSD')
 /*******************************CUST PRODUCT STATUS TABLE*******************************/	
 DECLARE @BitmapOrder TINYINT = 9
 	
-SELECT custid, roleid
-INTO #DisabledList
-FROM dbo.custInfo WITH (NOLOCK)
-WHERE username IN (	--Sheet 1: MBC Disable
-					'266HK','SMSM','MMSD','SBK','SMMS','SMR','MMRMB','SMMR','SSMS','SMMP','CHITB','M8HK','M8RMB','M7SD','M926R','M58SD','M96RM','S96h','M863HK','S863R',
-					'S80R','S80U','S80H','M51SD','TAS51S','M51RMB','S51SM','S51R','M51H','S51H','S51AH','S51BH','S51CH','S51DH','S51EH','S51HA','SPA3M','S50R','S3AAR',
-					'S3AK','S3AG','SDSD','SDARM','SDR','SDHK','SDEU','SDBP','S188ARM','M188SD','S188H','S188AH','S188US','1188MR','3KHK','SEM','MSFR','M606HK','M818H',
-					'M818R','M818RA','M818BH','SORM','MKS','CKU','MK30','JC1','JC7','JC6','JC81','JC3','TH28','TH29','JC82','MKS1','JCH','MKH','MKHA','CKV','MKD','M113H',
-					'S85RMB','S85RM','S85R','S85AR','S85RR','S85S','S85M','S85A','STPH','SRRH','SRR','SRRR','SRUS','SRUN','SRMB','BBBU','SBBR','KJK','MR','MRU','MK','AHW',
-					'MA','YKH','YKR','M81ARMB','S81R','S81RA','S81RB','MLLRMB','S95H','SSN','SBTR','SBTY','S27HK','S27H','S27TK','MPKS','WVW','POR','POT','U311','POK','POY',
-					'POW','KTV','KTW','POG','POZ','POA','PON','VVG','SVVG','Pyy','PYH','PYT','PYU','PYG','PYR','PYA','PYB','PYD','TR','ACH','ACH1','ACH2','ACH3','ACH4',
-					'ACH5','ACH6','ACH7','ACM1','ACM2','ACM3','ACM4','ACM5','ACK3','ACK4','ACK5','ACK6','ACK7','ACK8','VKS','LLKH','SMTG','TF1','DKS','JER','JES','JEY',
-					'JEH1','WKM','MSWEU','M3BP','HER1',
-					--Sheet 2: MBC Enable Super Level Only
-					'SCS','SCSM','SCH','SCAH','SCBH','SCHI','SBRR','WPR',
-					--Sheet 3: 789Y Disable
-					'SDD','SY1B','SDDTB','SDDT','SDT','SDE','SDU','SDM','SDY','SDV','SDW','SDX','SDZ','SDK','SDL','SDJ','SDO','SDP','SDB','SDC','SDF','SDG','SDI','SDN',
-					'SDY1','SYA','SYB','SYC','SYD','SYE','SYF','SYG','SYH','SYJ','SYK','SYL','SYN','SYO','SYP','SYQ','SYS','SYU','SYV','SYW','SYY','SDA','SYZ','SDY2',
-					'SQY','SYZ1','SDY3','SDY5','SDQ','SDS','SDY6','SYC2','SDY7','SDN1','SDN2','SDY8','UZA','SYC3','SDN3','SDY9','SQA','YDH','SDY11','SDY12','SYX','SCC',
-					'VIP','SKKS','SKS','SKT','VID','SKD','SKV','KKKUSD','SKX','SKF','SKG','SKY','SKZ','SKI','SKJ','SKB','SKQ','SKK','VIU','skn','skp','SKAC','SKAD','SKAE',
-					'SKAF','SKAG','SKAH','SKAI','SKAJ','SKKA','QHN','QVN','SKAN','SHB','SKAO','SKAP','SHD','SKAR','SKAS','SKAT','skau','skav','skaw','skax','skay','skba',
-					'skbb','SKBF','skbg','SKBI','SKBL','SKBM','skbn','skbp','SKBR','SKBT','SKTB','SKTA','sktc','SKBQ','SKBV','SKBW','SKBX','skby','skbz','SKCA','skcb',
-					'SKCC','SKCD','Keonprovision','SKCE','SKCF','SKCG','SKCI','SKCH','SKCJ','SKCK','ABS','ABB','ABW','BBA','BBD','BBE','BBF','PZZ')
-	AND roleid <> 4
-
 --SMA level
 UPDATE cs
 SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
-WHERE NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.mrecommend AND roleid = 3)
-	AND NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.recommend AND roleid = 2)
-	AND NOT EXISTS (SELECT 1 FROM #DisabledList WHERE custid = c.custid AND roleid = 1)
-
-UPDATE cs
-SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
 	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
-	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.mrecommend = d.CustID
-WHERE d.roleid = 3
-
-UPDATE cs
-SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
-	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.recommend = d.CustID
-WHERE d.roleid = 2
-
-UPDATE cs
-SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,1))
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	INNER JOIN dbo.custInfo c WITH(NOLOCK) ON cs.CustID = c.CustID
-	INNER JOIN #DisabledList d WITH(NOLOCK) ON c.custid = d.CustID
-WHERE d.roleid = 1
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID	
 
 PRINT N'Step 14: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
