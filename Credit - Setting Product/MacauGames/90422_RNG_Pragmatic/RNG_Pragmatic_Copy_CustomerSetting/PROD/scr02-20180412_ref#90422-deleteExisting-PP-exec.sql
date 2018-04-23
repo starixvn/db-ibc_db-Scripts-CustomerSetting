@@ -60,6 +60,7 @@ GO
 
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'DBCUST'
+DECLARE @num_line_exec INT = 100
 ------------------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))

@@ -34,7 +34,7 @@ BEGIN
     SELECT RTRIM(LTRIM(val)) FROM dbo.strSplit(@srecommendList,',')
     
     
-    --------------------------------------PT Setting------------------------------------------------- 
+    --------------------------------------Bet Setting------------------------------------------------- 
     BEGIN
         
         INSERT INTO #SMATemp(CustID)

@@ -15,8 +15,8 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 AS
 BEGIN
     SET NOCOUNT ON
-    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN  -- run at all replicated servers
-    IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST', 'SITDBCUST') RETURN  -- run at all replicated servers
+    IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST', 'SITDBCUST') RETURN -- run at dbcust only
     
     IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
     IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
