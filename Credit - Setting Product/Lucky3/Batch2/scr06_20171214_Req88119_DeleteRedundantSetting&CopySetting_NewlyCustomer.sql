@@ -91,7 +91,7 @@ WHERE dest.SettingType = 14
 		 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0, 0
+SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0, 0, @TicketComm
 FROM #MemberTemp ci WITH(NOLOCK) 
 	CROSS APPLY #DestinationSportBetType dest
 WHERE dest.SettingType = 14
