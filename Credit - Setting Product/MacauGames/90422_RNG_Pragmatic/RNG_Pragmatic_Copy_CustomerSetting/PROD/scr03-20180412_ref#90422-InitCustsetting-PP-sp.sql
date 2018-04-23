@@ -15,8 +15,8 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 AS
 BEGIN
     SET NOCOUNT ON
-    IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST', 'SITDBCUST') RETURN  -- run at all replicated servers
-    IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST', 'SITDBCUST') RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST', 'SITDBCUST')) RETURN  -- run at all replicated servers
+    IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST', 'SITDBCUST')) RETURN -- run at dbcust only
     
     IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
     IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
@@ -53,14 +53,7 @@ BEGIN
 				        ), 2, 1000) [sll]
     FROM dbo.Exchange sl2
     
-    --select member
-    INSERT INTO #MemberTemp (CustID, StakeLevelList)
-    SELECT ci.custid,  CONVERT (VARCHAR(50), sl.StakeLevelID)
-    FROM Custinfo ci WITH (NOLOCK)
-        INNER JOIN @SuperTemp s ON s.custid = ci.srecommend 
-        INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
-    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid <= @maxcustid
-    
+  
     --select SMA
     INSERT INTO #SMATemp (CustID, StakeLevelList)
     SELECT ci.custid, sll.StakeLevelList
@@ -69,8 +62,18 @@ BEGIN
         INNER JOIN #StakeLevelList_SMA_6_7 sll ON sll.Currency = s.Currency
     WHERE roleid IN (2,3,4) AND ci.custid <= @maxcustid 
 
+
+    --select member
+    INSERT INTO #MemberTemp (CustID, StakeLevelList)
+    SELECT ci.custid,  CONVERT (VARCHAR(50), sl.StakeLevelID)
+    FROM Custinfo ci WITH (NOLOCK)
+        INNER JOIN @SuperTemp s ON s.custid = ci.srecommend 
+        INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
+    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid <= @maxcustid
     
-    ------------------------------------------INSERT DATA-----------------------------
+    
+    
+    ------------------------------------------INSERT DATA----------------------------------------------
     --SMA LEVEL
     WHILE 1 = 1
     BEGIN
@@ -101,7 +104,7 @@ BEGIN
 	    
 	   DELETE FROM @Batch
     END
-    -----------------------------------------------------------------------------------
+    --------------------------------------------------------------------------------------------------
     
     DROP TABLE #SMATemp
     DROP TABLE #MemberTemp
