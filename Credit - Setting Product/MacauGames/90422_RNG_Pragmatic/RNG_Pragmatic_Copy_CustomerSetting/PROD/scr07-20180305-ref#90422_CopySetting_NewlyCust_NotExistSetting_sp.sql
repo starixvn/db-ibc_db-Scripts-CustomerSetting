@@ -39,16 +39,26 @@ BEGIN
         INNER JOIN CustInfo ci ON ci.custid = st.custid
     
     INSERT INTO #StakeLevelList_SMA_6_7 (Currency, StakeLevelList)
-    SELECT distinct sl2.ExchangeId, 
+    SELECT distinct ex.ExchangeId, 
                     SUBSTRING(
                         (
                             SELECT ',' + CONVERT (VARCHAR(50), sl1.StakeLevelID)  AS [text()]
                             FROM dbo.StakeLevel sl1
-                            WHERE sl1.ExchangeId = sl2.ExchangeId AND sl1.GameGroupID in (6,7)
+                            WHERE sl1.ExchangeId = ex.ExchangeId AND sl1.GameGroupID in (6,7)
                             ORDER BY sl1.ExchangeId
                             FOR XML PATH ('')
                         ), 2, 1000) [sll]
-    FROM dbo.StakeLevel sl2
+    FROM dbo.Exchange ex
+    
+     --select SMA
+    INSERT INTO #SMATemp (CustID, StakeLevelList)
+    SELECT ci.custid, sll.StakeLevelList
+    FROM Custinfo ci WITH (NOLOCK)
+        INNER JOIN #SuperTemp s ON s.custid = ci.srecommend
+        INNER JOIN #StakeLevelList_SMA_6_7 sll ON sll.Currency = s.Currency
+        LEFT JOIN CustStakeLevel_Agent cs ON cs.custid = ci.custid AND cs.StakeLevelList = sll.StakeLevelList
+    WHERE roleid IN (2,3,4) AND ci.custid > @maxcustid 
+    
     
     --select member
     INSERT INTO #MemberTemp (CustID, StakeLevelList)
@@ -56,15 +66,10 @@ BEGIN
     FROM Custinfo ci WITH (NOLOCK)
         INNER JOIN #SuperTemp s ON s.custid = ci.srecommend 
         INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
-    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid > @maxcustid
+        LEFT JOIN CustStakeLevel_Member cs ON cs.custid = ci.custid AND cs.StakeLevelList = CONVERT(VARCHAR(10), sl.StakeLevelID)
+    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid > @maxcustid AND cs.custid IS NULL
     
-    --select SMA
-    INSERT INTO #SMATemp (CustID, StakeLevelList)
-    SELECT ci.custid, sll.StakeLevelList
-    FROM Custinfo ci WITH (NOLOCK)
-        INNER JOIN #SuperTemp s ON s.custid = ci.srecommend
-        INNER JOIN #StakeLevelList_SMA_6_7 sll ON sll.Currency = s.Currency
-    WHERE roleid IN (2,3,4) AND ci.custid > @maxcustid 
+   
 
     
     ------------------------------------------INSERT DATA-----------------------------

@@ -39,16 +39,16 @@ BEGIN
         INNER JOIN CustInfo ci ON ci.custid = st.custid
     
     INSERT INTO #StakeLevelList_SMA_6_7 (Currency, StakeLevelList)
-    SELECT distinct sl2.ExchangeId, 
+    SELECT distinct ex.ExchangeId, 
                     SUBSTRING(
                         (
                             SELECT ',' + CONVERT (VARCHAR(50), sl1.StakeLevelID)  AS [text()]
                             FROM dbo.StakeLevel sl1
-                            WHERE sl1.ExchangeId = sl2.ExchangeId AND sl1.GameGroupID in (6,7)
+                            WHERE sl1.ExchangeId = ex.ExchangeId AND sl1.GameGroupID in (6,7)
                             ORDER BY sl1.ExchangeId
                             FOR XML PATH ('')
                         ), 2, 1000) [sll]
-    FROM dbo.StakeLevel sl2
+    FROM dbo.Exchange ex
     
     --select member
     INSERT INTO #MemberTemp (CustID, StakeLevelList)

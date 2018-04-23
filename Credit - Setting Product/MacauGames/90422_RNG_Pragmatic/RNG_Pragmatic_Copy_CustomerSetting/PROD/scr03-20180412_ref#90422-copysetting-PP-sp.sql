@@ -51,7 +51,7 @@ BEGIN
 				            ORDER BY sl1.ExchangeId
 				            FOR XML PATH ('')
 				        ), 2, 1000) [sll]
-    FROM dbo.StakeLevel sl2
+    FROM dbo.Exchange sl2
     
     --select member
     INSERT INTO #MemberTemp (CustID, StakeLevelList)
