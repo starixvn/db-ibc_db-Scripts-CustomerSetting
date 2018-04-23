@@ -50,14 +50,6 @@ BEGIN
                         ), 2, 1000) [sll]
     FROM dbo.Exchange ex
     
-    --select member
-    INSERT INTO #MemberTemp (CustID, StakeLevelList)
-    SELECT ci.custid,  CONVERT (VARCHAR(50), sl.StakeLevelID)
-    FROM Custinfo ci WITH (NOLOCK)
-        INNER JOIN #SuperTemp s ON s.custid = ci.srecommend 
-        INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
-    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid > @maxcustid
-    
     --select SMA
     INSERT INTO #SMATemp (CustID, StakeLevelList)
     SELECT ci.custid, sll.StakeLevelList
@@ -65,6 +57,14 @@ BEGIN
         INNER JOIN #SuperTemp s ON s.custid = ci.srecommend
         INNER JOIN #StakeLevelList_SMA_6_7 sll ON sll.Currency = s.Currency
     WHERE roleid IN (2,3,4) AND ci.custid > @maxcustid 
+    
+    --select member
+    INSERT INTO #MemberTemp (CustID, StakeLevelList)
+    SELECT ci.custid,  CONVERT (VARCHAR(50), sl.StakeLevelID)
+    FROM Custinfo ci WITH (NOLOCK)
+        INNER JOIN #SuperTemp s ON s.custid = ci.srecommend 
+        INNER JOIN dbo.StakeLevel sl ON sl.ExchangeId = s.currency
+    WHERE roleid = 1 AND sl.GameGroupID = 6 AND ci.custid > @maxcustid
 
     
     ------------------------------------------INSERT DATA-----------------------------
