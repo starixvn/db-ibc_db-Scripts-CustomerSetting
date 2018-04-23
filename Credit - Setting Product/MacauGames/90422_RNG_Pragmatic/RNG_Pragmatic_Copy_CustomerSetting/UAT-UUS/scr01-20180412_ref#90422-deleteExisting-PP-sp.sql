@@ -30,10 +30,10 @@ BEGIN
     DECLARE @Batch TABLE (CustID INT)
     CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
     CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT)
-    CREATE TABLE #SuperTemp(CustID INT PRIMARY KEY CLUSTERED)
+    DECLARE @SuperTemp TABLE (CustID INT)
     
 
-    INSERT INTO #SuperTemp (CustID)
+    INSERT INTO @SuperTemp (CustID)
     SELECT RTRIM(LTRIM(val)) FROM dbo.strSplit(@srecommendList,',')
     
     
@@ -44,7 +44,7 @@ BEGIN
         SELECT cg.custid
         FROM CustStakeLevel_Agent cg WITH(NOLOCK)  
             INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
-            INNER JOIN #SuperTemp s ON s.CustId = ci.srecommend
+            INNER JOIN @SuperTemp s ON s.CustId = ci.srecommend
         WHERE cg.SportType = @sporttype
     
         
@@ -52,7 +52,7 @@ BEGIN
         SELECT cg.custid
         FROM CustStakeLevel_member cg WITH(NOLOCK)
              INNER JOIN CustInfo ci ON ci.CustID = cg.CustID
-             INNER JOIN #SuperTemp s ON s.CustId = ci.srecommend
+             INNER JOIN @SuperTemp s ON s.CustId = ci.srecommend
         WHERE cg.SportType = @sporttype
     
 

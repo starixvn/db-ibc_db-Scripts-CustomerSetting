@@ -9,6 +9,7 @@ IF OBJECT_ID('tempdb..#supers') IS NOT NULL DROP TABLE #supers
 GO
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'REPLICATED'
+DECLARE @num_line_exec INT = 10
 ---------------------------------------------------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -34,7 +35,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (1) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     
@@ -58,6 +59,7 @@ GO
 
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'DBCUST'
+DECLARE @num_line_exec INT = 10
 -------------------------------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -83,7 +85,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (1) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     

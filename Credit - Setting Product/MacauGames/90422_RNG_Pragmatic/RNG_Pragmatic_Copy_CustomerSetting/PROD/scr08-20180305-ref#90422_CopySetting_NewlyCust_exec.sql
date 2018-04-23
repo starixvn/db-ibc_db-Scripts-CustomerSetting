@@ -9,6 +9,7 @@
 IF OBJECT_ID('tempdb..#supers') IS NOT NULL DROP TABLE #supers
 GO
 DECLARE @max_custid INT = xxx
+DECLARE @num_line_exec INT = 200
 --------------------------------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -33,7 +34,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (200) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     

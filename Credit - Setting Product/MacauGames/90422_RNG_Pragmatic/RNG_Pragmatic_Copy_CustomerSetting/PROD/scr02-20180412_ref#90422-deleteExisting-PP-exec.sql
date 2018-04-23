@@ -11,6 +11,7 @@ GO
 
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'REPLICATED'
+DECLARE @num_line_exec INT = 100
 ------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -35,7 +36,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (100) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     
@@ -83,7 +84,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (100) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     
