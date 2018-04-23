@@ -96,7 +96,7 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster D ON ci.mrecommend = d.CustID 
 WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid > @maxcustid	AND ci.custid <= @MaxCustID_New 
 UNION
-SELECT DISTINCT d.recommend, 2, 0 -- agent of direct member
+SELECT DISTINCT d.recommend, 2, 1 -- agent of direct member
 FROM #DirectMember D 	
 WHERE d.recommend > @MaxCustID	AND d.recommend <= @MaxCustID_New
 UNION 
