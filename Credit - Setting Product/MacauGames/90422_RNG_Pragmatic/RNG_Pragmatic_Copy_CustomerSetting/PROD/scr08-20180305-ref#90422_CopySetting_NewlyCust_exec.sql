@@ -33,7 +33,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (100) #Supers
+    UPDATE TOP (200) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     

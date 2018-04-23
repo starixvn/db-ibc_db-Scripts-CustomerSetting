@@ -5,7 +5,7 @@
     DB: DBCUST/CustDB
 */  
 
--- STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVER -----
+-- STEP 1: RUN THIS SCRIPT AT DBCUST SERVER -----
 IF OBJECT_ID('tempdb..#supers') IS NOT NULL DROP TABLE #supers
 GO
 DECLARE @max_custid INT = xxx
@@ -33,7 +33,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (100) #Supers
+    UPDATE TOP (200) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     

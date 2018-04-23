@@ -6,7 +6,7 @@
 */  
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09_UAT2]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @srecommendList VARCHAR(MAX)
     ,@maxcustid INT
     ,@target VARCHAR(20)
@@ -43,14 +43,14 @@ BEGIN
     
     INSERT INTO #StakeLevelList_SMA_6_7 (Currency, StakeLevelList)
     SELECT distinct sl2.ExchangeId, 
-				    SUBSTRING(
-				        (
-				            SELECT ',' + CONVERT (VARCHAR(50), sl1.StakeLevelID)  AS [text()]
-				            FROM dbo.StakeLevel sl1
-				            WHERE sl1.ExchangeId = sl2.ExchangeId AND sl1.GameGroupID in (6,7)
-				            ORDER BY sl1.ExchangeId
-				            FOR XML PATH ('')
-				        ), 2, 1000) [sll]
+                    SUBSTRING(
+                        (
+                            SELECT ',' + CONVERT (VARCHAR(50), sl1.StakeLevelID)  AS [text()]
+                            FROM dbo.StakeLevel sl1
+                            WHERE sl1.ExchangeId = sl2.ExchangeId AND sl1.GameGroupID in (6,7)
+                            ORDER BY sl1.ExchangeId
+                            FOR XML PATH ('')
+                        ), 2, 1000) [sll]
     FROM dbo.StakeLevel sl2
     
     --select member
@@ -79,27 +79,27 @@ BEGIN
         
         IF @@ROWCOUNT = 0 BREAK
         
-	    INSERT INTO dbo.CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)    
-	    SELECT CustID, @SportType, @BetType, StakeLevelList
-	    FROM @Batch 
-	    RAISERROR ('Total affected row of SMA: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	    
-	    DELETE FROM @Batch
-	END
+        INSERT INTO dbo.CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)    
+        SELECT CustID, @SportType, @BetType, StakeLevelList
+        FROM @Batch 
+        RAISERROR ('Total affected row of SMA: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
+        DELETE FROM @Batch
+    END
 
-	WHILE 1 = 1
+    WHILE 1 = 1
     BEGIN
         DELETE TOP (4000) #MemberTemp
         OUTPUT DELETED.CustID, DELETED.StakeLevelList INTO @Batch(CustID, StakeLevelList)
         
         IF @@ROWCOUNT = 0 BREAK
         
-	    INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)   
-	    SELECT CustID, @SportType, @BetType, StakeLevelList
-	    FROM @Batch
-	    RAISERROR ('Total affected row of Member: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
-	    
-	   DELETE FROM @Batch
+        INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)   
+        SELECT CustID, @SportType, @BetType, StakeLevelList
+        FROM @Batch
+        RAISERROR ('Total affected row of Member: %d', 0, 1, @@ROWCOUNT) WITH NOWAIT
+        
+       DELETE FROM @Batch
     END
     -----------------------------------------------------------------------------------
     
