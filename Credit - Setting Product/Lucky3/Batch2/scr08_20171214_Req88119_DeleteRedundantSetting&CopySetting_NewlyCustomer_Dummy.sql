@@ -106,7 +106,7 @@ WHERE d.CustID > @MaxCustID AND d.custid <= @MaxCustID_New
 	 	
 ---------- For members ---------
 INSERT INTO #MemberTemp (CustID, Type)
-SELECT  ci.custid, 1 -- member of direct master
+SELECT  ci.custid, 0 -- member of direct master
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
 WHERE ci.roleid = 1	AND ci.custid > @maxcustid AND ci.Enabled = 1 AND ci.custid <= @MaxCustID_New  			
@@ -117,7 +117,7 @@ FROM Custinfo ci WITH (NOLOCK)
 WHERE ci.roleid = 1 AND ci.custid > @maxcustid AND ci.Enabled = 1 AND ci.custid <= @MaxCustID_New  			
 -- Direct member		
 UNION ALL
-SELECT ci.custid, 0
+SELECT ci.custid, 2
 FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID AND ci.custid <= @MaxCustID_New 	
 
