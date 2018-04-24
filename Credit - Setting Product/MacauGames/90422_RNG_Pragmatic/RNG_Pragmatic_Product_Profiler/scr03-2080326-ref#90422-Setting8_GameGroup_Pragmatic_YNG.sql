@@ -54,20 +54,20 @@ WHERE  slv.MinLabel <> slvNew.MinLabel
     OR slv.MaxStake <> slvNew.MaxStake
 
     
---INSERT data is missing    
+--INSERT StakeLevel if not exist    
 INSERT INTO StakeLevel (GameTypeID,   ExchangeId,   GameGroupID)
 SELECT @var_bettype, ex.ExchangeID, tmpsld.GameGroupID
 FROM Exchange ex
-    INNER JOIN 
-        (
-            SELECT DISTINCT GameGroupID, CurrencyCode 
-            FROM @var_tbl_StakeLevelGroupDetail
-            WHERE StakeLevelId IS NULL
-        ) AS tmpsld ON tmpsld.CurrencyCode = ex.Code
+    INNER JOIN  (
+		            SELECT DISTINCT GameGroupID, CurrencyCode 
+		            FROM @var_tbl_StakeLevelGroupDetail
+		            WHERE StakeLevelId IS NULL
+		        ) AS tmpsld ON tmpsld.CurrencyCode = ex.Code
     LEFT JOIN StakeLevel slExist ON slExist.GameTypeID = @var_bettype AND slExist.ExchangeID = ex.ExchangeID AND slExist.GameGroupID = tmpsld.GameGroupID
 WHERE slExist.StakeLevelID IS NULL
     
 
+--INSERT StakeLevelGroupDetail if not exist
 INSERT INTO StakeLevelGroupDetail (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
 SELECT sl.StakeLevelID, sld.GameTypeID, sld.MinLabel, sld.MaxLabel, sld.MinStake, sld.MaxStake
 FROM @var_tbl_StakeLevelGroupDetail sld
