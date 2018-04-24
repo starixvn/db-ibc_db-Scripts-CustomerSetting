@@ -1,6 +1,6 @@
 /*
     Created: 20180320@Vicky 
-    Task: Update isActive = 1 for VS Basketball && VSWC
+    Task: Update isActive = 1 for PP
     DB: DBTXN/bodb02
 */ 
 USE bodb02

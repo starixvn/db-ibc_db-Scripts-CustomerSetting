@@ -32,8 +32,8 @@ VALUES
  (6, '4103', 'RON', '0.03', '3.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8))),
  (7, '4103', 'RON', '0.03', '3.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
  
- 
---insert for stake level group detail
+-------------------------------------------------------------------------------------------------------------------------------- 
+--find StakeLevelId
 UPDATE slvNew
 SET slvNew.StakeLevelId = slv.StakeLevelID
 FROM @var_tbl_StakeLevelGroupDetail slvNew
@@ -41,12 +41,36 @@ FROM @var_tbl_StakeLevelGroupDetail slvNew
     INNER JOIN StakeLevel sl ON sl.GameGroupId = slvNew.GameGroupID AND sl.ExchangeId = ex.ExchangeId 
     LEFT JOIN StakeLevelGroupDetail slv ON slv.GameTypeID = slvNew.GameTypeId AND slv.StakeLevelID = sl.StakeLevelId
     
-
+    
+--UPDATE data if data is exsit
 UPDATE slv
 SET slv.MinLabel = slvNew.MinLabel, slv.MaxLabel = slvNew.MaxLabel,
     slv.MinStake = slvNew.MinStake, slv.MaxStake = slvNew.MaxStake
 FROM StakeLevelGroupDetail slv
     INNER JOIN @var_tbl_StakeLevelGroupDetail slvNew ON slvNew.StakeLevelId = slv.StakeLevelId AND slvNew.GameTypeID = slv.GameTypeId
+WHERE  slv.MinLabel <> slvNew.MinLabel 
+    OR slv.MaxLabel <> slvNew.MaxLabel
+    OR slv.MinStake <> slvNew.MinStake 
+    OR slv.MaxStake <> slvNew.MaxStake
 
+    
+--INSERT data is missing    
+INSERT INTO StakeLevel (GameTypeID,   ExchangeId,   GameGroupID)
+SELECT @var_bettype, ex.ExchangeID, tmpsld.GameGroupID
+FROM Exchange ex
+    INNER JOIN 
+        (
+            SELECT DISTINCT GameGroupID, CurrencyCode 
+            FROM @var_tbl_StakeLevelGroupDetail
+            WHERE StakeLevelId IS NULL
+        ) AS tmpsld ON tmpsld.CurrencyCode = ex.Code
+    LEFT JOIN StakeLevel slExist ON slExist.GameTypeID = @var_bettype AND slExist.ExchangeID = ex.ExchangeID AND slExist.GameGroupID = tmpsld.GameGroupID
+WHERE slExist.StakeLevelID IS NULL
+    
 
-select * from StakeLevelGroupDetail where StakeLevelId in ( 5328,5389)
+INSERT INTO StakeLevelGroupDetail (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+SELECT sl.StakeLevelID, sld.GameTypeID, sld.MinLabel, sld.MaxLabel, sld.MinStake, sld.MaxStake
+FROM @var_tbl_StakeLevelGroupDetail sld
+    INNER JOIN Exchange ex ON ex.Code = sld.CurrencyCode
+    INNER JOIN StakeLevel sl ON sl.GameGroupID = sld.GameGroupID AND ex.ExchangeID = sl.ExChangeID 
+WHERE sld.StakeLevelId IS NULL

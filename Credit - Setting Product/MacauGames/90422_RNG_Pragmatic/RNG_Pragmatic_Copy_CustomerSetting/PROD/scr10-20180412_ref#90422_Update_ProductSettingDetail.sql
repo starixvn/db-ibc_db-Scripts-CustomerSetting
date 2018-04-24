@@ -1,6 +1,6 @@
 /*
     Created: 20180320@Vicky
-    Task: Update Setting Status to PROD for VS Basketball & VSWC
+    Task: Update Setting Status to PROD for PP
     DB: DBCUST/CustDB
 */
 USE CustDB
