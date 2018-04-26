@@ -37,6 +37,9 @@ VALUES --group 1
       ,('PS', 'USD')
       ,('NZD', 'USD')
       ,('PTU', 'USD')
+      ,('BND', 'USD')
+      ,('CAD', 'USD')
+      ,('CHF', 'USD')
       ,('UUS', 'USD')
       ,('YNG', 'USD')
       --group 3
