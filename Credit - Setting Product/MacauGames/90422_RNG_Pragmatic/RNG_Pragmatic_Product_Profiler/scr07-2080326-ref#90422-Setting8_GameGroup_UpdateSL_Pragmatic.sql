@@ -20,6 +20,14 @@ CREATE TABLE #var_tbl_StakeLevelGroupDetail (GameGroupID INT NOT NULL, CurrencyC
                                               StakeLevelId INT,
                                               PRIMARY KEY (GameGroupID, CurrencyCode, GameTypeID)
                                               )
+                                              
+CREATE TABLE #var_tbl_dataInsert (GameGroupID INT NOT NULL, Currency VARCHAR(3) NOT NULL, GameTypeID INT NOT NULL, 
+                                              MinLabel VARCHAR(50) NOT NULL, MaxLabel VARCHAR(50) NOT NULL, 
+                                              MinStake DECIMAL(19,8) NOT NULL, MaxStake DECIMAL(19,8) NOT NULL,
+                                              StakeLevelId INT,
+                                              PRIMARY KEY (GameGroupID, Currency, GameTypeID)
+                                              )
+                                              
 CREATE TABLE #var_tbl_ref_curr (CurrencyCode VARCHAR(3), 
                                 CurrencyCodeRef VARCHAR(3),
                                 PRIMARY KEY (CurrencyCode, CurrencyCodeRef)
@@ -68,20 +76,41 @@ DELETE FROM #var_tbl_StakeLevelGroupDetail
 WHERE CurrencyCode IN (SELECT CurrencyCode FROM #var_tbl_ref_curr) 
 
 
---Copy data for Ref Currency
-INSERT INTO #var_tbl_StakeLevelGroupDetail(GameGroupID, GameTypeID, CurrencyCode, MinLabel, MaxLabel, MinStake, MaxStake)
-SELECT sld.GameGroupID, sld.GameTypeID, ref.CurrencyCode, sld.MinLabel, sld.MaxLabel, sld.MinStake, sld.MaxStake
-FROM #var_tbl_StakeLevelGroupDetail sld
-    INNER JOIN #var_tbl_ref_curr ref ON ref.CurrencyCodeRef = sld.CurrencyCode
+--get all currency from code
+INSERT INTO #var_tbl_dataInsert(Currency, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+SELECT ex.Currency, tmpSld.GameTypeID, tmpSld.MinLabel, tmpSld.MaxLabel, tmpSld.MinStake, tmpSld.MaxStake
+FROM Exchange ex
+    INNER JOIN #var_tbl_StakeLevelGroupDetail tmpSld ON tmpSld.CurrencyCode = ex.Code
+  
 
-
+--Copy data for Ref Currency with only CODE
+INSERT INTO #var_tbl_dataInsert(Currency, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+SELECT ex.Currency, tmpSld.GameTypeID, tmpSld.MinLabel, tmpSld.MaxLabel, tmpSld.MinStake, tmpSld.MaxStake
+FROM #var_tbl_ref_curr refcur
+    INNER JOIN Exchange ex ON ex.code = refcur.CurrencyCode
+    INNER JOIN #var_tbl_StakeLevelGroupDetail tmpSld ON tmpSld.CurrencyCode = refcur.CurrencyCodeRef
+    
+    
+    
+--Update data for particular currency
+UPDATE dis  
+SET dis.MinLabel = tmpsld.MinLabel, dis.MaxLabel = tmpsld.MaxLabel,
+    dis.MinStake = tmpsld.MinStake, dis.MaxStake = tmpsld.MaxStake
+FROM #var_tbl_dataInsert dis
+    INNER JOIN #var_tbl_ref_curr currPar ON dis.currency = currPar.CurrencyCode
+    INNER JOIN #var_tbl_StakeLevelGroupDetail tmpsld ON tmpsld.CurrencyCode = currPar.CurrencyCodeRef
+    
+    
+    
+    
 --Find StakeLevelId that has been insert into DB and update into table
 UPDATE slvNew
 SET slvNew.StakeLevelId = slv.StakeLevelID
-FROM #var_tbl_StakeLevelGroupDetail slvNew
-    INNER JOIN Exchange ex ON ex.Code = slvNew.CurrencyCode
+FROM #var_tbl_dataInsert slvNew
+    INNER JOIN Exchange ex ON ex.currency = slvNew.Currency
     INNER JOIN StakeLevel sl ON sl.GameGroupId = slvNew.GameGroupID AND sl.ExchangeId = ex.ExchangeId 
     LEFT JOIN StakeLevelGroupDetail slv ON slv.GameTypeID = slvNew.GameTypeId AND slv.StakeLevelID = sl.StakeLevelId
+    
     
     
 --Update data
@@ -89,7 +118,7 @@ UPDATE slv
 SET slv.MinLabel = slvNew.MinLabel, slv.MaxLabel = slvNew.MaxLabel,
     slv.MinStake = slvNew.MinStake, slv.MaxStake = slvNew.MaxStake
 FROM StakeLevelGroupDetail slv
-    INNER JOIN #var_tbl_StakeLevelGroupDetail slvNew ON slvNew.StakeLevelId = slv.StakeLevelId AND slvNew.GameTypeID = slv.GameTypeId
+    INNER JOIN #var_tbl_dataInsert slvNew ON slvNew.StakeLevelId = slv.StakeLevelId AND slvNew.GameTypeID = slv.GameTypeId
 WHERE  slv.MinLabel <> slvNew.MinLabel 
     OR slv.MaxLabel <> slvNew.MaxLabel
     OR slv.MinStake <> slvNew.MinStake 
@@ -98,22 +127,24 @@ WHERE  slv.MinLabel <> slvNew.MinLabel
     
 --Insert data for StakeLevel 
 INSERT INTO StakeLevel (GameTypeID,   ExchangeId,   GameGroupID)
-SELECT @var_bettype, ex.ExchangeID, tmpsld.GameGroupID
-FROM Exchange ex
-    INNER JOIN 
-        (
-            SELECT DISTINCT GameGroupID, CurrencyCode 
-            FROM #var_tbl_StakeLevelGroupDetail
-            WHERE StakeLevelId IS NULL
-        ) AS tmpsld ON tmpsld.CurrencyCode = ex.Code
-    LEFT JOIN StakeLevel slExist ON slExist.GameTypeID = @var_bettype AND slExist.ExchangeID = ex.ExchangeID AND slExist.GameGroupID = tmpsld.GameGroupID
+SELECT @var_bettype, iSlv.Currency, iSlv.GameGroupID
+FROM (
+        SELECT DISTINCT GameGroupID, Currency
+        FROM #var_tbl_dataInsert
+        WHERE StakeLevelId IS NULL
+     ) AS iSlv 
+    LEFT JOIN StakeLevel slExist ON slExist.GameTypeID = @var_bettype AND slExist.ExchangeID = iSlv.Currency AND slExist.GameGroupID = iSlv.GameGroupID
 WHERE slExist.StakeLevelID IS NULL
     
 
+
 --Insert data for StakeLevelGroupDetail
 INSERT INTO StakeLevelGroupDetail (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-SELECT sl.StakeLevelID, sld.GameTypeID, sld.MinLabel, sld.MaxLabel, sld.MinStake, sld.MaxStake
-FROM Exchange ex
-    INNER JOIN #var_tbl_StakeLevelGroupDetail sld ON ex.Code = sld.CurrencyCode
-    INNER JOIN StakeLevel sl ON sl.GameGroupID = sld.GameGroupID AND ex.ExchangeID = sl.ExChangeID 
-WHERE sld.StakeLevelId IS NULL
+SELECT sl.StakeLevelID, iData.GameTypeID, iData.MinLabel, iData.MaxLabel, iData.MinStake, iData.MaxStake
+FROM #var_tbl_dataInsert iData
+    INNER JOIN Exchange ex ON iData.Currency = ex.currency
+    INNER JOIN StakeLevel sl ON sl.GameGroupID = iData.GameGroupID AND ex.exchangeid = sl.ExChangeID 
+WHERE iData.StakeLevelId IS NULL
+
+
+
