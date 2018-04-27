@@ -26,3 +26,4 @@ SET ps.IsLaunched = 0
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
     INNER JOIN site s ON s.siteId = ps.siteID
     INNER JOIN @tbl_OfferedSites os ON os.SportType = ps.SportType AND os.siteName = s.site
+WHERE ps.currency <> 20    
