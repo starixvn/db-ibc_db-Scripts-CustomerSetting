@@ -23,6 +23,12 @@ WHERE s.islicensee = 0 AND s.isActive = 1
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 UPDATE ps
+SET ps.IsTest = 0
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
+    INNER JOIN @tbl_OfferedSites os ON os.SportType = ps.SportType
+
+    
+UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
     INNER JOIN site s ON s.siteId = ps.siteID

@@ -9,16 +9,19 @@ GO
 DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50), isLaunched TINYINT)
 
 
---Virtual Basketball: all remaining sites
+--all sites
 INSERT INTO @tbl_OfferedSites
-SELECT 193, s.site, 1
-FROM site s
-WHERE s.islicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo', 'KORIBC')
+VALUES (193), 
+       (192)
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-UPDATE ps
-SET ps.IsLaunched = 1
-FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
-    INNER JOIN site s ON s.siteId = ps.siteID
-    INNER JOIN @tbl_OfferedSites os ON os.SportType = ps.SportType AND os.siteName = s.site
+DELETE FROM ProductLaunchedSiteCurrency 
+WHERE SportType IN (SELECT DISTINCT SportType FROM @tbl_OfferedSites)
+
+
+INSERT INTO ProductLaunchedSiteCurrency (SportType,     Currency,      SiteID,   IsLaunched, IsTest)
+SELECT                                   spt.SportType, ex.exchangeid, 0,        1,          0
+FROM dbo.Site s
+    CROSS JOIN (SELECT DISTINCT SportType FROM @tbl_OfferedSites ) AS spt
+WHERE s.isActive = 1 AND s.isLicensee = 0  
