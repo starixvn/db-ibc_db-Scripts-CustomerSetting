@@ -11,7 +11,7 @@ DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50))
 
 --for VSBasketball
 INSERT INTO @tbl_OfferedSites
-SELECT 193, s.site, 1
+SELECT 193, s.site
 FROM site s
 WHERE s.islicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo', 'KORIBC')
 
