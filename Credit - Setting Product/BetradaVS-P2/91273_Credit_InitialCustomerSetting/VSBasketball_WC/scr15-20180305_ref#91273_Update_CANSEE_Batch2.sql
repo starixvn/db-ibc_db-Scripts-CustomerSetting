@@ -10,7 +10,7 @@ DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50), isLau
 
 
 --all sites
-INSERT INTO @tbl_OfferedSites
+INSERT INTO @tbl_OfferedSites(SportType)
 VALUES (193), 
        (192)
 
@@ -21,7 +21,7 @@ WHERE SportType IN (SELECT DISTINCT SportType FROM @tbl_OfferedSites)
 
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType,     Currency,      SiteID,   IsLaunched, IsTest)
-SELECT                                   spt.SportType, ex.exchangeid, 0,        1,          0
+SELECT                                   spt.SportType, 0,             s.siteid, 1,          0
 FROM dbo.Site s
     CROSS JOIN (SELECT DISTINCT SportType FROM @tbl_OfferedSites ) AS spt
 WHERE s.isActive = 1 AND s.isLicensee = 0  
