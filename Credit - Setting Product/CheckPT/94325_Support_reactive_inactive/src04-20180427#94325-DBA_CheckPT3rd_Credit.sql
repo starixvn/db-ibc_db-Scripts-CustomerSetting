@@ -1,5 +1,10 @@
-
-
+SET NOCOUNT ON
+GO
+IF OBJECT_ID('tempdb..#tmp94325_DBA_CheckPT3rd_Credit') IS NOT NULL
+BEGIN
+    DROP PROC #tmp94325_DBA_CheckPT3rd_Credit
+END
+GO
 CREATE PROCEDURE #tmp94325_DBA_CheckPT3rd_Credit
 (   @srecommend INT
 )
@@ -935,7 +940,10 @@ END
 GO
 
 ---------------------------------------------END SP
-TRUNCATE TABLE ##CheckPTResult_Credit
+IF OBJECT_ID('tempdb..##CheckPTResult_Credit') IS NULL
+BEGIN
+    TRUNCATE TABLE ##CheckPTResult_Credit
+END
 EXEC #tmp94325_DBA_CheckPT3rd_Credit 25196224
 EXEC #tmp94325_DBA_CheckPT3rd_Credit 25196109
 EXEC #tmp94325_DBA_CheckPT3rd_Credit 25197906

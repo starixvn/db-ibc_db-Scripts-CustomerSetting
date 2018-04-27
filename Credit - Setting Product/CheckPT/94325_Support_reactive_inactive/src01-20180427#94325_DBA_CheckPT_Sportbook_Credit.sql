@@ -1,4 +1,4 @@
- SET NOCOUNT ON
+SET NOCOUNT ON
 GO
 IF OBJECT_ID('tempdb..#tmp94325_DBA_CheckPT_Sportbook_Credit') IS NOT NULL
 BEGIN
@@ -819,7 +819,10 @@ BEGIN
  END
  GO
  ---------------------------END SP------------------------
-TRUNCATE TABLE ##CheckPTResult_Credit
+IF OBJECT_ID('tempdb..##CheckPTResult_Credit') IS NULL
+BEGIN
+    TRUNCATE TABLE ##CheckPTResult_Credit
+END
 EXEC #tmp94325_DBA_CheckPT_Sportbook_Credit 25196224
 EXEC #tmp94325_DBA_CheckPT_Sportbook_Credit 25196109
 EXEC #tmp94325_DBA_CheckPT_Sportbook_Credit 25197906

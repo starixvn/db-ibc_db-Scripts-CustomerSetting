@@ -390,7 +390,10 @@ END
 END
 GO
 -----------------------------------------------------------------END SP--------------------------
-TRUNCATE TABLE ##CheckPTResult_Credit
+IF OBJECT_ID('tempdb..##CheckPTResult_Credit') IS NULL
+BEGIN
+    TRUNCATE TABLE ##CheckPTResult_Credit
+END
 EXEC #tmp94234DBA_CheckPTGame_Credit 25196224
 EXEC #tmp94234DBA_CheckPTGame_Credit 25196109
 EXEC #tmp94234DBA_CheckPTGame_Credit 25197906
