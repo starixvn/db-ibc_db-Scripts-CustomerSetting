@@ -22,12 +22,8 @@ WHERE s.islicensee = 0 AND s.isActive = 1
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-DELETE FROM ProductLaunchedSiteCurrency 
-WHERE SportType IN (SELECT DISTINCT SportType FROM @tbl_OfferedSites)
-
-INSERT INTO ProductLaunchedSiteCurrency (SportType,     Currency, SiteID,   IsLaunched,                 IsTest)
-SELECT                                   spt.SportType, 0,        s.siteid, COALESCE(os.isLaunched,0),  0
-FROM dbo.Site s
-    CROSS JOIN (SELECT DISTINCT SportType FROM @tbl_OfferedSites ) AS spt
-    LEFT JOIN @tbl_OfferedSites os ON s.site = os.siteName AND os.SportType = spt.SportType
-WHERE s.isActive = 1 AND s.isLicensee = 0
+UPDATE ps
+SET ps.IsLaunched = 1
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
+    INNER JOIN site s ON s.siteId = ps.siteID
+    INNER JOIN @tbl_OfferedSites os ON os.SportType = ps.SportType AND os.siteName = s.site
