@@ -25,7 +25,7 @@ WHERE s.islicensee = 0 AND s.isActive = 1
 UPDATE ps
 SET ps.IsTest = 0
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
-    INNER JOIN @tbl_OfferedSites os ON os.SportType = ps.SportType
+    INNER JOIN (SELECT DISTINCT SportType FROM @tbl_OfferedSites) os ON os.SportType = ps.SportType
 
     
 UPDATE ps
