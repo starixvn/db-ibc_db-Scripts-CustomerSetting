@@ -114,10 +114,12 @@ VALUES
 , (6, 'USD', 4149, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4150, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4151, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
+, (6, 'USD', 4164, '0.07', '70.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(70.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4142, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4160, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4131, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'USD', 4130, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
+, (6, 'USD', 4163, '0.05', '5.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4139, '0.30', '3.00', CAST(0.30000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4161, '0.10', '5.00', CAST(0.10000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'USD', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -165,14 +167,15 @@ VALUES
 , (7, 'USD', 4138, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4129, '0.05', '5.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4157, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
-, (7, 'USD', 4146, '0.15', '6.00', CAST(0.15000000 AS Decimal(19, 8)), CAST(6.00000000 AS Decimal(19, 8)))
-, (7, 'USD', 4152, '0.20', '8.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
 GO
 print 'Processed 100 total records'
 INSERT #var_tbl_StakeLevelGroupDetail
        (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'USD', 4134, '0.03', '15.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
+VALUES   
+
+ (7, 'USD', 4146, '0.15', '6.00', CAST(0.15000000 AS Decimal(19, 8)), CAST(6.00000000 AS Decimal(19, 8)))
+, (7, 'USD', 4152, '0.20', '8.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
+, (7, 'USD', 4134, '0.03', '15.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4158, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4143, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4162, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -181,10 +184,12 @@ VALUES
 , (7, 'USD', 4149, '0.20', '8.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4150, '0.20', '8.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4151, '0.20', '8.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
+, (7, 'USD', 4164, '0.07', '140.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(140.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4142, '0.25', '10.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4160, '0.25', '10.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4131, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4130, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
+, (7, 'USD', 4163, '0.05', '10.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4139, '0.30', '3.00', CAST(0.30000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4161, '0.10', '10.00', CAST(0.10000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'USD', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -243,10 +248,12 @@ VALUES
 , (6, 'GBP', 4149, '0.20', '2.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(2.00000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4150, '0.20', '2.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(2.00000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4151, '0.20', '2.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(2.00000000 AS Decimal(19, 8)))
+, (6, 'GBP', 4164, '0.07', '35.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(35.00000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4142, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4160, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4131, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4130, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
+, (6, 'GBP', 4163, '0.05', '2.50', CAST(0.05000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4139, '0.30', '3.00', CAST(0.30000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4161, '0.10', '2.00', CAST(0.10000000 AS Decimal(19, 8)), CAST(2.00000000 AS Decimal(19, 8)))
 , (6, 'GBP', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -267,18 +274,19 @@ VALUES
 , (7, 'GBP', 4109, '0.15', '6.00', CAST(0.15000000 AS Decimal(19, 8)), CAST(6.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4103, '0.03', '12.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(12.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4115, '0.25', '10.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
-, (7, 'GBP', 4104, '0.03', '15.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 200 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+
+ (7, 'GBP', 4104, '0.03', '15.00', CAST(0.03000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4113, '0.25', '10.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4120, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4102, '0.25', '100.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4114, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4118, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
-GO
-print 'Processed 200 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'GBP', 4110, '0.15', '3.00', CAST(0.15000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
+, (7, 'GBP', 4110, '0.15', '3.00', CAST(0.15000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4108, '0.09', '36.00', CAST(0.09000000 AS Decimal(19, 8)), CAST(36.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4116, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4112, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
@@ -310,10 +318,12 @@ VALUES
 , (7, 'GBP', 4149, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4150, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4151, '0.20', '4.00', CAST(0.20000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
+, (7, 'GBP', 4164, '0.07', '70.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(70.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4142, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4160, '0.25', '5.00', CAST(0.25000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4131, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4130, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
+, (7, 'GBP', 4163, '0.05', '5.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4139, '0.30', '3.00', CAST(0.30000000 AS Decimal(19, 8)), CAST(3.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4161, '0.10', '4.00', CAST(0.10000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (7, 'GBP', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -371,20 +381,23 @@ VALUES
 , (6, 'CNY', 4148, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (6, 'CNY', 4149, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (6, 'CNY', 4150, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4151, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4142, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4160, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4131, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4130, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4139, '0.90', '9.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(9.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4161, '0.60', '30.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 GO
 print 'Processed 300 total records'
 INSERT #var_tbl_StakeLevelGroupDetail
        (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'CNY', 4137, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+VALUES   
+
+ (6, 'CNY', 4151, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4164, '0.70', '140.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(140.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4142, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4160, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4131, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4130, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4163, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4139, '0.90', '9.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(9.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4161, '0.60', '30.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
+, (6, 'CNY', 4137, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'CNY', 4141, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'CNY', 4155, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'CNY', 4156, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
@@ -439,10 +452,12 @@ VALUES
 , (7, 'CNY', 4149, '0.40', '40.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(40.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4150, '0.40', '40.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(40.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4151, '0.40', '40.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(40.00000000 AS Decimal(19, 8)))
+, (7, 'CNY', 4164, '0.70', '280.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(280.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4142, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4160, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4131, '0.50', '20.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4130, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+, (7, 'CNY', 4163, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4139, '0.90', '9.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(9.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4161, '0.60', '60.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'CNY', 4140, '0.40', '8.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
@@ -473,7 +488,12 @@ VALUES
 , (6, 'MYR', 4108, '0.90', '90.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(90.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4116, '0.25', '2.50', CAST(0.25000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4112, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
-, (6, 'MYR', 4121, '0.50', '250.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 400 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (6, 'MYR', 4121, '0.50', '250.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4122, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4145, '0.26', '26.00', CAST(0.26000000 AS Decimal(19, 8)), CAST(26.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4125, '0.30', '15.00', CAST(0.30000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
@@ -485,12 +505,7 @@ VALUES
 , (6, 'MYR', 4123, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4144, '0.45', '9.00', CAST(0.45000000 AS Decimal(19, 8)), CAST(9.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4127, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 400 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'MYR', 4153, '0.40', '10.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+, (6, 'MYR', 4153, '0.40', '10.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4133, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4138, '0.50', '20.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4129, '0.50', '12.50', CAST(0.50000000 AS Decimal(19, 8)), CAST(12.50000000 AS Decimal(19, 8)))
@@ -506,10 +521,12 @@ VALUES
 , (6, 'MYR', 4149, '0.40', '10.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4150, '0.40', '10.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4151, '0.40', '10.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+, (6, 'MYR', 4164, '0.70', '175.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(175.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4142, '0.50', '12.50', CAST(0.50000000 AS Decimal(19, 8)), CAST(12.50000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4160, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4131, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4130, '0.50', '5.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
+, (6, 'MYR', 4163, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4139, '0.60', '6.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(6.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4161, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
 , (6, 'MYR', 4140, '0.40', '4.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(4.00000000 AS Decimal(19, 8)))
@@ -568,14 +585,21 @@ VALUES
 , (7, 'MYR', 4149, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4150, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4151, '0.40', '20.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
+, (7, 'MYR', 4164, '0.70', '350.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(350.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4142, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4160, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4131, '0.50', '20.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(20.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4130, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+, (7, 'MYR', 4163, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4139, '0.60', '6.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(6.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4161, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4140, '0.40', '8.00', CAST(0.40000000 AS Decimal(19, 8)), CAST(8.00000000 AS Decimal(19, 8)))
-, (7, 'MYR', 4137, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 500 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (7, 'MYR', 4137, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4141, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4155, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
 , (7, 'MYR', 4156, '0.50', '10.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
@@ -591,12 +615,7 @@ VALUES
 , (6, 'THB', 4119, '3.80', '38.00', CAST(3.80000000 AS Decimal(19, 8)), CAST(38.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4109, '3.00', '90.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(90.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4103, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 500 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'THB', 4115, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
+, (6, 'THB', 4115, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4104, '3.00', '450.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(450.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4113, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4120, '5.00', '100.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
@@ -635,10 +654,12 @@ VALUES
 , (6, 'THB', 4149, '4.00', '100.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4150, '4.00', '100.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4151, '4.00', '100.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
+, (6, 'THB', 4164, '7.00', '1,750.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(1750.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4142, '5.00', '125.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4160, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4131, '5.00', '100.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4130, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
+, (6, 'THB', 4163, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4139, '6.00', '60.00', CAST(6.00000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4161, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'THB', 4140, '4.00', '40.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(40.00000000 AS Decimal(19, 8)))
@@ -679,7 +700,12 @@ VALUES
 , (7, 'THB', 4159, '4.50', '180.00', CAST(4.50000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4154, '5.00', '400.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4123, '4.00', '80.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(80.00000000 AS Decimal(19, 8)))
-, (7, 'THB', 4144, '4.50', '180.00', CAST(4.50000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 600 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (7, 'THB', 4144, '4.50', '180.00', CAST(4.50000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4127, '4.00', '80.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(80.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4153, '4.00', '200.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4133, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
@@ -697,15 +723,12 @@ VALUES
 , (7, 'THB', 4149, '4.00', '200.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4150, '4.00', '200.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4151, '4.00', '200.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 600 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'THB', 4142, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
+, (7, 'THB', 4164, '7.00', '3,500.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(3500.00000000 AS Decimal(19, 8)))
+, (7, 'THB', 4142, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4160, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4131, '5.00', '200.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4130, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
+, (7, 'THB', 4163, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4139, '6.00', '60.00', CAST(6.00000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4161, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'THB', 4140, '4.00', '80.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(80.00000000 AS Decimal(19, 8)))
@@ -764,10 +787,12 @@ VALUES
 , (6, 'INH', 4149, '2.40', '60.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4150, '2.40', '60.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4151, '2.40', '60.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
+, (6, 'INH', 4164, '4.20', '1,050.00', CAST(4.20000000 AS Decimal(19, 8)), CAST(1050.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4142, '3.00', '75.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4160, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4131, '3.00', '60.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4130, '3.00', '30.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
+, (6, 'INH', 4163, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4139, '3.60', '36.00', CAST(3.60000000 AS Decimal(19, 8)), CAST(36.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4161, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (6, 'INH', 4140, '2.40', '24.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(24.00000000 AS Decimal(19, 8)))
@@ -781,7 +806,12 @@ VALUES
 , (7, 'INH', 4107, '1.26', '126.00', CAST(1.26000000 AS Decimal(19, 8)), CAST(126.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4106, '0.42', '16.80', CAST(0.42000000 AS Decimal(19, 8)), CAST(16.80000000 AS Decimal(19, 8)))
 , (7, 'INH', 4111, '1.20', '24.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(24.00000000 AS Decimal(19, 8)))
-, (7, 'INH', 4117, '3.00', '600.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(600.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 700 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (7, 'INH', 4117, '3.00', '600.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(600.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4101, '3.00', '3,000.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(3000.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4105, '3.00', '180.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4119, '2.28', '91.20', CAST(2.28000000 AS Decimal(19, 8)), CAST(91.20000000 AS Decimal(19, 8)))
@@ -803,12 +833,7 @@ VALUES
 , (7, 'INH', 4145, '1.56', '312.00', CAST(1.56000000 AS Decimal(19, 8)), CAST(312.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4125, '1.80', '180.00', CAST(1.80000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4126, '1.56', '312.00', CAST(1.56000000 AS Decimal(19, 8)), CAST(312.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 700 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'INH', 4124, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
+, (7, 'INH', 4124, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4136, '3.00', '60.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4159, '2.70', '108.00', CAST(2.70000000 AS Decimal(19, 8)), CAST(108.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4154, '3.00', '240.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(240.00000000 AS Decimal(19, 8)))
@@ -831,10 +856,12 @@ VALUES
 , (7, 'INH', 4149, '2.40', '120.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(120.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4150, '2.40', '120.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(120.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4151, '2.40', '120.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(120.00000000 AS Decimal(19, 8)))
+, (7, 'INH', 4164, '4.20', '2,100.00', CAST(4.20000000 AS Decimal(19, 8)), CAST(2100.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4142, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4160, '3.00', '300.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(300.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4131, '3.00', '120.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(120.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4130, '3.00', '30.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
+, (7, 'INH', 4163, '3.00', '300.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(300.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4139, '3.60', '36.00', CAST(3.60000000 AS Decimal(19, 8)), CAST(36.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4161, '3.00', '300.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(300.00000000 AS Decimal(19, 8)))
 , (7, 'INH', 4140, '2.40', '48.00', CAST(2.40000000 AS Decimal(19, 8)), CAST(48.00000000 AS Decimal(19, 8)))
@@ -885,7 +912,12 @@ VALUES
 , (6, 'IDR', 4146, '0.90', '18.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(18.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4152, '1.20', '30.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4134, '0.90', '45.00', CAST(0.90000000 AS Decimal(19, 8)), CAST(45.00000000 AS Decimal(19, 8)))
-, (6, 'IDR', 4158, '1.50', '15.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 800 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (6, 'IDR', 4158, '1.50', '15.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4143, '1.50', '30.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4162, '1.20', '24.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(24.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4147, '1.20', '30.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
@@ -893,10 +925,12 @@ VALUES
 , (6, 'IDR', 4149, '1.20', '30.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4150, '1.20', '30.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4151, '1.20', '30.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
+, (6, 'IDR', 4164, '2.10', '525.00', CAST(2.10000000 AS Decimal(19, 8)), CAST(525.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4142, '1.50', '37.50', CAST(1.50000000 AS Decimal(19, 8)), CAST(37.50000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4160, '1.50', '75.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4131, '1.50', '30.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4130, '1.50', '15.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
+, (6, 'IDR', 4163, '1.50', '75.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4139, '1.80', '18.00', CAST(1.80000000 AS Decimal(19, 8)), CAST(18.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4161, '1.50', '75.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (6, 'IDR', 4140, '1.20', '12.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(12.00000000 AS Decimal(19, 8)))
@@ -909,12 +943,7 @@ VALUES
 , (6, 'IDR', 4135, '1.50', '15.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4107, '0.63', '63.00', CAST(0.63000000 AS Decimal(19, 8)), CAST(63.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4106, '0.21', '8.40', CAST(0.21000000 AS Decimal(19, 8)), CAST(8.40000000 AS Decimal(19, 8)))
-GO
-print 'Processed 800 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'IDR', 4111, '0.60', '12.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(12.00000000 AS Decimal(19, 8)))
+, (7, 'IDR', 4111, '0.60', '12.00', CAST(0.60000000 AS Decimal(19, 8)), CAST(12.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4117, '1.50', '300.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(300.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4101, '1.50', '1,500.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(1500.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4105, '1.50', '90.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(90.00000000 AS Decimal(19, 8)))
@@ -960,10 +989,12 @@ VALUES
 , (7, 'IDR', 4149, '1.20', '60.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4150, '1.20', '60.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4151, '1.20', '60.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
+, (7, 'IDR', 4164, '2.10', '1,050.00', CAST(2.10000000 AS Decimal(19, 8)), CAST(1050.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4142, '1.50', '75.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4160, '1.50', '150.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4131, '1.50', '60.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4130, '1.50', '15.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(15.00000000 AS Decimal(19, 8)))
+, (7, 'IDR', 4163, '1.50', '150.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4139, '1.80', '18.00', CAST(1.80000000 AS Decimal(19, 8)), CAST(18.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4161, '1.50', '150.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
 , (7, 'IDR', 4140, '1.20', '24.00', CAST(1.20000000 AS Decimal(19, 8)), CAST(24.00000000 AS Decimal(19, 8)))
@@ -987,7 +1018,12 @@ VALUES
 , (6, 'KRW', 4104, '30.00', '15,000.00', CAST(30.00000000 AS Decimal(19, 8)), CAST(15000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4113, '250.00', '10,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4120, '500.00', '5,000.00', CAST(500.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
-, (6, 'KRW', 4102, '250.00', '50,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(50000.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 900 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (6, 'KRW', 4102, '250.00', '50,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(50000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4114, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4118, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4110, '150.00', '1,500.00', CAST(150.00000000 AS Decimal(19, 8)), CAST(1500.00000000 AS Decimal(19, 8)))
@@ -1015,22 +1051,19 @@ VALUES
 , (6, 'KRW', 4152, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4134, '30.00', '7,500.00', CAST(30.00000000 AS Decimal(19, 8)), CAST(7500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4158, '500.00', '2,500.00', CAST(500.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 900 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'KRW', 4143, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
+, (6, 'KRW', 4143, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4162, '200.00', '2,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(2000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4147, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4148, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4149, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4150, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4151, '200.00', '4,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(4000.00000000 AS Decimal(19, 8)))
+, (6, 'KRW', 4164, '70.00', '70,000.00', CAST(70.00000000 AS Decimal(19, 8)), CAST(70000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4142, '250.00', '5,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4160, '250.00', '5,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4131, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4130, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
+, (6, 'KRW', 4163, '50.00', '5,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4139, '150.00', '1,500.00', CAST(150.00000000 AS Decimal(19, 8)), CAST(1500.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4161, '100.00', '5,000.00', CAST(100.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (6, 'KRW', 4140, '200.00', '2,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(2000.00000000 AS Decimal(19, 8)))
@@ -1089,10 +1122,17 @@ VALUES
 , (7, 'KRW', 4149, '200.00', '8,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(8000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4150, '200.00', '8,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(8000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4151, '200.00', '8,000.00', CAST(200.00000000 AS Decimal(19, 8)), CAST(8000.00000000 AS Decimal(19, 8)))
+, (7, 'KRW', 4164, '70.00', '140,000.00', CAST(70.00000000 AS Decimal(19, 8)), CAST(140000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4142, '250.00', '10,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
-, (7, 'KRW', 4160, '250.00', '10,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 1000 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (7, 'KRW', 4160, '250.00', '10,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4131, '250.00', '5,000.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4130, '250.00', '2,500.00', CAST(250.00000000 AS Decimal(19, 8)), CAST(2500.00000000 AS Decimal(19, 8)))
+, (7, 'KRW', 4163, '50.00', '10,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4139, '300.00', '1,500.00', CAST(300.00000000 AS Decimal(19, 8)), CAST(1500.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4161, '100.00', '10,000.00', CAST(100.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
 , (7, 'KRW', 4140, '400.00', '2,000.00', CAST(400.00000000 AS Decimal(19, 8)), CAST(2000.00000000 AS Decimal(19, 8)))
@@ -1121,12 +1161,7 @@ VALUES
 , (6, 'INR', 4118, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4110, '7.50', '75.00', CAST(7.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4108, '4.50', '1,350.00', CAST(4.50000000 AS Decimal(19, 8)), CAST(1350.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 1000 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'INR', 4116, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
+, (6, 'INR', 4116, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4112, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4121, '2.50', '5,000.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4122, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
@@ -1156,10 +1191,12 @@ VALUES
 , (6, 'INR', 4149, '10.00', '200.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4150, '10.00', '200.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4151, '10.00', '200.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
+, (6, 'INR', 4164, '3.50', '3,500.00', CAST(3.50000000 AS Decimal(19, 8)), CAST(3500.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4142, '12.50', '250.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4160, '12.50', '250.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4131, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4130, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
+, (6, 'INR', 4163, '2.50', '250.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4139, '3.00', '30.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(30.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4161, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'INR', 4140, '4.00', '40.00', CAST(4.00000000 AS Decimal(19, 8)), CAST(40.00000000 AS Decimal(19, 8)))
@@ -1193,7 +1230,12 @@ VALUES
 , (7, 'INR', 4121, '2.50', '10,000.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4122, '12.50', '250.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4145, '6.50', '650.00', CAST(6.50000000 AS Decimal(19, 8)), CAST(650.00000000 AS Decimal(19, 8)))
-, (7, 'INR', 4125, '7.50', '600.00', CAST(7.50000000 AS Decimal(19, 8)), CAST(600.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 1100 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (7, 'INR', 4125, '7.50', '600.00', CAST(7.50000000 AS Decimal(19, 8)), CAST(600.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4126, '6.50', '650.00', CAST(6.50000000 AS Decimal(19, 8)), CAST(650.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4124, '12.50', '500.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4136, '12.50', '250.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
@@ -1218,21 +1260,18 @@ VALUES
 , (7, 'INR', 4149, '10.00', '400.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4150, '10.00', '400.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4151, '10.00', '400.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
+, (7, 'INR', 4164, '3.50', '7,000.00', CAST(3.50000000 AS Decimal(19, 8)), CAST(7000.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4142, '12.50', '500.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4160, '12.50', '500.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4131, '12.50', '250.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4130, '12.50', '125.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(125.00000000 AS Decimal(19, 8)))
+, (7, 'INR', 4163, '2.50', '500.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4139, '15.00', '60.00', CAST(15.00000000 AS Decimal(19, 8)), CAST(60.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4161, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4140, '20.00', '80.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(80.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4137, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4141, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 1100 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'INR', 4155, '12.50', '100.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
+, (7, 'INR', 4155, '12.50', '100.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4156, '12.50', '100.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4132, '25.00', '25.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
 , (7, 'INR', 4128, '12.50', '50.00', CAST(12.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
@@ -1285,17 +1324,24 @@ VALUES
 , (6, 'JPY', 4149, '20.00', '400.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4150, '20.00', '400.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4151, '20.00', '400.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
+, (6, 'JPY', 4164, '7.00', '7,000.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(7000.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4142, '25.00', '500.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4160, '25.00', '500.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4131, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4130, '25.00', '100.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
+, (6, 'JPY', 4163, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4139, '9.00', '90.00', CAST(9.00000000 AS Decimal(19, 8)), CAST(90.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4161, '10.00', '500.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4140, '12.00', '120.00', CAST(12.00000000 AS Decimal(19, 8)), CAST(120.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4137, '50.00', '500.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4141, '50.00', '500.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4155, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
-, (6, 'JPY', 4156, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
+GO
+print 'Processed 1200 total records'
+INSERT #var_tbl_StakeLevelGroupDetail
+       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
+VALUES   
+ (6, 'JPY', 4156, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4132, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4128, '2.50', '50.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (6, 'JPY', 4135, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
@@ -1333,12 +1379,7 @@ VALUES
 , (7, 'JPY', 4127, '20.00', '400.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(400.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4153, '20.00', '800.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(800.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4133, '25.00', '250.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
-GO
-print 'Processed 1200 total records'
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (7, 'JPY', 4138, '50.00', '1,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
+, (7, 'JPY', 4138, '50.00', '1,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4129, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4157, '50.00', '500.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4146, '15.00', '600.00', CAST(15.00000000 AS Decimal(19, 8)), CAST(600.00000000 AS Decimal(19, 8)))
@@ -1352,10 +1393,12 @@ VALUES
 , (7, 'JPY', 4149, '20.00', '800.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(800.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4150, '20.00', '800.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(800.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4151, '20.00', '800.00', CAST(20.00000000 AS Decimal(19, 8)), CAST(800.00000000 AS Decimal(19, 8)))
+, (7, 'JPY', 4164, '7.00', '14,000.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(14000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4142, '25.00', '1,000.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4160, '25.00', '1,000.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4131, '25.00', '500.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4130, '25.00', '200.00', CAST(25.00000000 AS Decimal(19, 8)), CAST(200.00000000 AS Decimal(19, 8)))
+, (7, 'JPY', 4163, '5.00', '1,000.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4139, '9.00', '180.00', CAST(9.00000000 AS Decimal(19, 8)), CAST(180.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4161, '10.00', '1,000.00', CAST(10.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4140, '12.00', '240.00', CAST(12.00000000 AS Decimal(19, 8)), CAST(240.00000000 AS Decimal(19, 8)))
@@ -1366,51 +1409,7 @@ VALUES
 , (7, 'JPY', 4132, '5.00', '50.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4128, '2.50', '100.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
 , (7, 'JPY', 4135, '5.00', '100.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(100.00000000 AS Decimal(19, 8)))
- 
-----------------------new game
-INSERT #var_tbl_StakeLevelGroupDetail
-       (GameGroupID, CurrencyCode, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake)
-VALUES
-  (6, 'USD', 4164, '0.07', '70.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(70.00000000 AS Decimal(19, 8)))
-, (6, 'USD', 4163, '0.05', '5.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
-, (7, 'USD', 4164, '0.07', '140.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(140.00000000 AS Decimal(19, 8)))
-, (7, 'USD', 4163, '0.05', '10.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(10.00000000 AS Decimal(19, 8)))
-, (6, 'GBP', 4164, '0.07', '35.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(35.00000000 AS Decimal(19, 8)))
-, (6, 'GBP', 4163, '0.05', '2.50', CAST(0.05000000 AS Decimal(19, 8)), CAST(2.50000000 AS Decimal(19, 8)))
-, (7, 'GBP', 4164, '0.07', '70.00', CAST(0.07000000 AS Decimal(19, 8)), CAST(70.00000000 AS Decimal(19, 8)))
-, (7, 'GBP', 4163, '0.05', '5.00', CAST(0.05000000 AS Decimal(19, 8)), CAST(5.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4164, '0.70', '140.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(140.00000000 AS Decimal(19, 8)))
-, (6, 'CNY', 4163, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
-, (7, 'CNY', 4164, '0.70', '280.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(280.00000000 AS Decimal(19, 8)))
-, (7, 'CNY', 4163, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
-, (6, 'MYR', 4164, '0.70', '175.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(175.00000000 AS Decimal(19, 8)))
-, (6, 'MYR', 4163, '0.50', '25.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(25.00000000 AS Decimal(19, 8)))
-, (7, 'MYR', 4164, '0.70', '350.00', CAST(0.70000000 AS Decimal(19, 8)), CAST(350.00000000 AS Decimal(19, 8)))
-, (7, 'MYR', 4163, '0.50', '50.00', CAST(0.50000000 AS Decimal(19, 8)), CAST(50.00000000 AS Decimal(19, 8)))
-, (6, 'THB', 4164, '7.00', '1,750.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(1750.00000000 AS Decimal(19, 8)))
-, (6, 'THB', 4163, '5.00', '250.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
-, (7, 'THB', 4164, '7.00', '3,500.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(3500.00000000 AS Decimal(19, 8)))
-, (7, 'THB', 4163, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
-, (6, 'INH', 4164, '4.20', '1,050.00', CAST(4.20000000 AS Decimal(19, 8)), CAST(1050.00000000 AS Decimal(19, 8)))
-, (6, 'INH', 4163, '3.00', '150.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
-, (7, 'INH', 4164, '4.20', '2,100.00', CAST(4.20000000 AS Decimal(19, 8)), CAST(2100.00000000 AS Decimal(19, 8)))
-, (7, 'INH', 4163, '3.00', '300.00', CAST(3.00000000 AS Decimal(19, 8)), CAST(300.00000000 AS Decimal(19, 8)))
-, (6, 'IDR', 4164, '2.10', '525.00', CAST(2.10000000 AS Decimal(19, 8)), CAST(525.00000000 AS Decimal(19, 8)))
-, (6, 'IDR', 4163, '1.50', '75.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(75.00000000 AS Decimal(19, 8)))
-, (7, 'IDR', 4164, '2.10', '1,050.00', CAST(2.10000000 AS Decimal(19, 8)), CAST(1050.00000000 AS Decimal(19, 8)))
-, (7, 'IDR', 4163, '1.50', '150.00', CAST(1.50000000 AS Decimal(19, 8)), CAST(150.00000000 AS Decimal(19, 8)))
-, (6, 'KRW', 4164, '70.00', '70,000.00', CAST(70.00000000 AS Decimal(19, 8)), CAST(70000.00000000 AS Decimal(19, 8)))
-, (6, 'KRW', 4163, '50.00', '5,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(5000.00000000 AS Decimal(19, 8)))
-, (7, 'KRW', 4164, '70.00', '140,000.00', CAST(70.00000000 AS Decimal(19, 8)), CAST(140000.00000000 AS Decimal(19, 8)))
-, (7, 'KRW', 4163, '50.00', '10,000.00', CAST(50.00000000 AS Decimal(19, 8)), CAST(10000.00000000 AS Decimal(19, 8)))
-, (6, 'INR', 4164, '3.50', '3,500.00', CAST(3.50000000 AS Decimal(19, 8)), CAST(3500.00000000 AS Decimal(19, 8)))
-, (6, 'INR', 4163, '2.50', '250.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(250.00000000 AS Decimal(19, 8)))
-, (7, 'INR', 4164, '3.50', '7,000.00', CAST(3.50000000 AS Decimal(19, 8)), CAST(7000.00000000 AS Decimal(19, 8)))
-, (7, 'INR', 4163, '2.50', '500.00', CAST(2.50000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
-, (6, 'JPY', 4164, '7.00', '7,000.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(7000.00000000 AS Decimal(19, 8)))
-, (6, 'JPY', 4163, '5.00', '500.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(500.00000000 AS Decimal(19, 8)))
-, (7, 'JPY', 4164, '7.00', '14,000.00', CAST(7.00000000 AS Decimal(19, 8)), CAST(14000.00000000 AS Decimal(19, 8)))
-, (7, 'JPY', 4163, '5.00', '1,000.00', CAST(5.00000000 AS Decimal(19, 8)), CAST(1000.00000000 AS Decimal(19, 8)))
+
 
 -------------------------------------------------------------------------------------------------------------------------------- 
 CREATE TABLE #var_tbl_data (Currency VARCHAR(10) NOT NULL, GameGroupID INT NOT NULL, GameTypeID INT NOT NULL, 
