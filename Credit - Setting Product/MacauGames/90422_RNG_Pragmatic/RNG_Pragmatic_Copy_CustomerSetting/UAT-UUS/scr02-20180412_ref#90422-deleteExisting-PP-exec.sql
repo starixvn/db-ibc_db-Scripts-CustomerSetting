@@ -11,6 +11,7 @@ GO
 
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'REPLICATED'
+DECLARE @num_line_exec INT = 100
 ------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -23,11 +24,10 @@ SELECT c.custid
 FROM customer c             WITH (NOLOCK) 
     INNER JOIN site s       WITH (NOLOCK) ON c.site = s.site
     INNER JOIN custsuper cs WITH (NOLOCK) ON c.custid = cs.custid
-    INNER JOIN exchange ex WITH (NOLOCK) ON ex.exchangeid = c.currency 
 WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
-    AND ex.code = 'USD'
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
@@ -36,7 +36,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (200) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     
@@ -60,6 +60,7 @@ GO
 
 DECLARE @max_custid INT = xxx
 DECLARE @var_target VARCHAR(20) = 'DBCUST'
+DECLARE @num_line_exec INT = 100
 ------------------------------------------------------------------------
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
@@ -72,11 +73,10 @@ SELECT c.custid
 FROM customer c             WITH (NOLOCK) 
     INNER JOIN site s       WITH (NOLOCK) ON c.site = s.site
     INNER JOIN custsuper cs WITH (NOLOCK) ON c.custid = cs.custid
-    INNER JOIN exchange ex WITH (NOLOCK) ON ex.exchangeid = c.currency 
 WHERE c.username NOT LIKE '3rdSuper%'
     AND cs.isinternal = 0
     AND s.islicensee = 0
-    AND ex.code = 'USD'
+    AND c.currency = 20
 
 SET @var_msg_super_total = (SELECT COUNT(*) FROM #supers )
 RAISERROR ('Total of supers: %d.', 0, 1, @var_msg_super_total) WITH NOWAIT
@@ -85,7 +85,7 @@ WHILE (1 = 1)
 BEGIN
     SET @srecommendList = NULL
     
-    UPDATE TOP (200) #Supers
+    UPDATE TOP (@num_line_exec) #Supers
     SET isfinished = 1, @srecommendList = COALESCE(@srecommendList + ',', '') + CONVERT(VARCHAR(12),custid)   
     WHERE isfinished = 0
     

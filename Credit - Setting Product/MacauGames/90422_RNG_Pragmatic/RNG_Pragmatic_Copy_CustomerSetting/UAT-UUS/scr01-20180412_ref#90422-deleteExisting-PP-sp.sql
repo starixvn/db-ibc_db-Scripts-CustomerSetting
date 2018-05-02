@@ -20,8 +20,8 @@ BEGIN
     RAISERROR ('Run at server: %s;', 0, 1, @@SERVERNAME) WITH NOWAIT
     DECLARE @var_row_count INT
     
-    IF (@target = 'REPLICATED' AND @@SERVERNAME = 'SITDBCUST') RETURN  -- run at all replicated servers
-    IF (@target = 'DBCUST' AND @@SERVERNAME <> 'SITDBCUST') RETURN -- run at dbcust only
+    IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST', 'SITDBCUST')) RETURN  -- run at all replicated servers
+    IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST', 'SITDBCUST')) RETURN -- run at dbcust only
     
     IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
     IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
@@ -37,7 +37,7 @@ BEGIN
     SELECT RTRIM(LTRIM(val)) FROM dbo.strSplit(@srecommendList,',')
     
     
-    --------------------------------------PT Setting------------------------------------------------- 
+    --------------------------------------Bet Setting------------------------------------------------- 
     BEGIN
         
         INSERT INTO #SMATemp (CustID)
