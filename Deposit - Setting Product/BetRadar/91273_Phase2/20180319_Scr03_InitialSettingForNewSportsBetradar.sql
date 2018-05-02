@@ -117,6 +117,7 @@ INSERT INTO #supers(custid)
 SELECT custid
 FROM  Dep_CustSuper with(nolock) 
 WHERE custid <= @max_custid
+	AND currency <> 20
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -164,6 +165,7 @@ INSERT INTO #supers(custid)
 SELECT custid
 FROM  Dep_CustSuper with(nolock) 
 WHERE custid <= @max_custid
+	AND currency <> 20
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
