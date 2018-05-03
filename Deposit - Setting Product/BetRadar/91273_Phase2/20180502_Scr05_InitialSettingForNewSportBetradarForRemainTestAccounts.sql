@@ -47,8 +47,7 @@ BEGIN
 		AND mrecommend NOT IN (SELECT custid FROM dbo.custinfo WITH(NOLOCK)
 							   WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
 		AND custid <= @max_custid
-	OPTION (OPTIMIZE FOR(@srecommend = 0))
-	
+		
 	DELETE #tblCust
 	OUTPUT DELETED.custID
 	INTO @tmpCust

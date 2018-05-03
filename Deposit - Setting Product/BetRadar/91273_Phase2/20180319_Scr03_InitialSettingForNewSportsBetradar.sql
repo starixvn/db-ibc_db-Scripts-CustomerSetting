@@ -23,7 +23,7 @@ BEGIN
 	   )
 	RETURN	
 			
-	CREATE TABLE #tblCust (custid INT PRIMARY KEY,roleid TINYINT, ID INT IDENTITY(1,1))
+	CREATE TABLE #tblCust (custid INT PRIMARY KEY,roleid TINYINT, mrecommend INT, ID INT IDENTITY(1,1))
 	DECLARE @tmpCust TABLE(CustID INT PRIMARY KEY)
 	DECLARE @sport TABLE(sporttype SMALLINT, bettype SMALLINT, fromSportType SMALLINT, fromBettype SMALLINT)
 
@@ -33,16 +33,19 @@ BEGIN
 	SELECT 192 as sporttype, 2701 as bettype, 191 FromSport, 2701 FromBettype
 	UNION SELECT 193, 2801, 190, 2701
 	
-	--1k3 accounts affected	
-	INSERT INTO #tblCust (custid,roleid)			
-	SELECT custid,roleid
+	INSERT INTO #tblCust (custid,roleid,mrecommend)			
+	SELECT custid,roleid,mrecommend
 	FROM dbo.Customer WITH(NOLOCK)
 	WHERE srecommend =@srecommend
-		AND mrecommend NOT IN (SELECT custid FROM dbo.custinfo WITH(NOLOCK)
-							   WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
 		AND custid <= @max_custid
-	OPTION (OPTIMIZE FOR(@srecommend = 0))
+	OPTION( optimize for (@srecommend = 0))		
 	
+	DELETE #tblCust 
+	WHERE mrecommend IN (SELECT custid 
+						FROM dbo.custinfo WITH(NOLOCK)
+						WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
+	OPTION( optimize for (@srecommend = 0))					
+			
 	DELETE #tblCust
 	OUTPUT DELETED.custID
 	INTO @tmpCust
