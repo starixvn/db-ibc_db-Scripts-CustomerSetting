@@ -142,7 +142,7 @@ CREATE TABLE #Supers(CustID INT, currency INT, isfinished BIT DEFAULT(0))
 SELECT * 
 INTO #StakeLevel
 FROM dbo.StakeLevel st WITH(NOLOCK)
-WHERE exchangeid IN (3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO,IRR, AUD, GBP, SD
+WHERE exchangeid IN (1,3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO,IRR, AUD, GBP, SD
 	AND GameTypeID IN (1701,1702)
 	AND 1 = CASE WHEN (MinStake = 100 AND MaxStake = 5000 )
 					OR (MinStake = 5 AND MaxStake = 5000) THEN 1 ELSE 0 END
@@ -158,7 +158,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency IN (3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
+	AND ci.currency IN (1,3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
 	
 INSERT INTO #supers(custid,currency)
 SELECT DISTINCT cs.custid, t.currency
@@ -215,7 +215,7 @@ CREATE TABLE #Supers(CustID INT, currency INT, isfinished BIT DEFAULT(0))
 SELECT * 
 INTO #StakeLevel
 FROM dbo.StakeLevel st WITH(NOLOCK)
-WHERE exchangeid IN (3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
+WHERE exchangeid IN (1,3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
 	AND GameTypeID IN (1701,1702)
 	AND 1 = CASE WHEN (MinStake = 100 AND MaxStake = 5000 )
 					OR (MinStake = 5 AND MaxStake = 5000) THEN 1 ELSE 0 END
@@ -231,7 +231,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency IN (3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
+	AND ci.currency IN (1,3,6,9,12,16,17,35,40,64,74)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD
 	
 INSERT INTO #supers(custid,currency)
 SELECT DISTINCT cs.custid, t.currency
