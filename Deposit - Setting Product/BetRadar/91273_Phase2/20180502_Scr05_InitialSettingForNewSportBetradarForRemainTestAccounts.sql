@@ -75,7 +75,7 @@ BEGIN
 																AND cb2.bettype = s.bettype
 	WHERE cb2.custID IS NULL																
 	
-	DECLARE @Threshold INT = 20000,@fromID INT , @toID INT, @maxID INT
+	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
 	
 	SELECT @maxID = max(ID) FROM #tblCust
 	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
