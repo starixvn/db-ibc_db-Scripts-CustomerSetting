@@ -5,7 +5,7 @@
 	Date: 20180503
 */ 
 
-ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
+ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
 	@srecommend INT
 	,@NewDiscount DECIMAL(9,8)
 	,@target VARCHAR(20) = ''
@@ -340,7 +340,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 			
-	EXEC dbo.Acc_ExecRep_Cust_09 @srecommend = @srecommend, @NewDiscount = 0.01
+	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend, @NewDiscount = 0.01
 			--,@maxcustid = @maxcustid
 			, @isExistDirectAccount = @isExistDirectAccount
 			,@target = 'REPLICATED'
@@ -399,7 +399,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.Acc_ExecRep_Cust_09 @srecommend = @srecommend, @NewDiscount = 0.01
+	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend, @NewDiscount = 0.01
 			--,@maxcustid = @maxcustid
 			, @isExistDirectAccount = @isExistDirectAccount
 			,@target = 'DBCUST'
