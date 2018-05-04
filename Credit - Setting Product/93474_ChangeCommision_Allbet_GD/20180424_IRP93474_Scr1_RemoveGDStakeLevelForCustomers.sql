@@ -60,8 +60,24 @@ BEGIN
 	SET cg.StakeLevelList_new = ISNULL(REVERSE(STUFF(REVERSE(REPLACE(cg.StakeLevelList+',',t.StakeLevelID_Exclude+',','')),1,1,'')),'')
 	FROM #CustGameTypeDownlines cg 
 		INNER JOIN @tmpStakeLevel_Exclude t ON cg.GameTypeID = t.GameTypeID
-			
-	--Apply lowest stakelevel if new stakelevel doesnt have any
+		
+	--Apply lowest stakelevel if new stakelevel doesnt have any	
+	UPDATE T
+		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
+	FROM #CustGameTypeDownlines T		
+		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
+					FROM dbo.StakeLevel SL WITH(NOLOCK) 
+					WHERE SL.GameTypeID = T.GameTypeID
+						AND exchangeid = @currency
+						AND StakeLevelID NOT IN (SELECT StakeLevelid FROM @tmpStakeLevel_Exclude)
+						AND MinStake <> 0 
+						AND MaxStake <> 0
+					ORDER BY minstake , maxstake
+					) T1 -- Direct Upline
+	WHERE t.roleid = 4
+		AND T.StakeLevelList_new = ''
+		AND T.StakeLevelList <> T.StakeLevelList_new--not empty at the begining
+		
 	UPDATE T
 		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
 	FROM #CustGameTypeDownlines T
@@ -194,8 +210,8 @@ BEGIN
 			@srecommend = @srecommend, 
 			@currency = @currency,
 			@target = 'REPLICATED' 	
-				
-	WAITFOR DELAY '00:00:00.280'			
+	--run in UM so dont need to delay 280ms			
+	WAITFOR DELAY '00:00:00.100'			
 END		
 GO	
 -- END STEP 2: Run this SP at replicated DB -----
@@ -268,7 +284,7 @@ BEGIN
 			@currency = @currency,
 			@target = 'DBCUST' 	
 				
-	WAITFOR DELAY '00:00:00.280'			
+	WAITFOR DELAY '00:00:00.100'			
 END		
 GO	
 
