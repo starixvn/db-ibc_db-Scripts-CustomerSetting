@@ -5,7 +5,7 @@
 	Date: 20180503
 */ 
 
-ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
+ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_18]
 	@srecommend INT
 	,@NewDiscount DECIMAL(9,8)
 	,@target VARCHAR(20) = ''
@@ -322,10 +322,16 @@ WHERE custid NOT IN (select custid from Acc_CustDirect WITH(NOLOCK))
 -- list of supers
 INSERT INTO #supers(custid,isExistDirectAccount)
 SELECT ci.custid,0
-FROM dbo.Customer ci WITH(NOLOCK)
+FROM dbo.customer c WITH (NOLOCK) 
+	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
 WHERE ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid NOT IN (SELECT custid FROM #supers_ExistingDirectAccount)
+		AND ci.custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
+		AND ci.Enabled = 1
+		AND s.islicensee = 0
+		AND c.username NOT LIKE '3rdSuper%'
 UNION ALL
 SELECT custid, 1
 FROM #supers_ExistingDirectAccount
@@ -340,7 +346,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 			
-	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend, @NewDiscount = 0.01
+	EXEC dbo.Acc_Custsetting3rd_18 @srecommend = @srecommend, @NewDiscount = 0.01
 			--,@maxcustid = @maxcustid
 			, @isExistDirectAccount = @isExistDirectAccount
 			,@target = 'REPLICATED'
@@ -380,10 +386,16 @@ WHERE custid NOT IN (select custid from Acc_CustDirect WITH(NOLOCK))
 -- list of supers
 INSERT INTO #supers(custid,isExistDirectAccount)
 SELECT ci.custid,0
-FROM dbo.Customer ci WITH(NOLOCK)
+FROM dbo.customer c WITH (NOLOCK) 
+	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
 WHERE ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid NOT IN (SELECT custid FROM #supers_ExistingDirectAccount)
+		AND ci.custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
+		AND ci.Enabled = 1
+		AND s.islicensee = 0
+		AND c.username NOT LIKE '3rdSuper%'
 UNION ALL
 SELECT custid, 1
 FROM #supers_ExistingDirectAccount
@@ -399,7 +411,7 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend, @NewDiscount = 0.01
+	EXEC dbo.Acc_Custsetting3rd_18 @srecommend = @srecommend, @NewDiscount = 0.01
 			--,@maxcustid = @maxcustid
 			, @isExistDirectAccount = @isExistDirectAccount
 			,@target = 'DBCUST'
