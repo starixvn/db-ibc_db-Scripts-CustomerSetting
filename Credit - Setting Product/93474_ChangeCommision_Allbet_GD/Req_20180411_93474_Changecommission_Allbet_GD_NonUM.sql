@@ -36,7 +36,7 @@ BEGIN
 	BEGIN	
 		INSERT INTO #Cust_tmp (CustID,roleID)
 		SELECT ci.custid,ci.roleid
-		FROM custInfo ci WITH (NOLOCK) 
+		FROM Customer ci WITH (NOLOCK) 
 		WHERE ci.srecommend = @srecommend AND ci.roleid = 1
 			
 		--Super
