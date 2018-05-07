@@ -69,7 +69,7 @@ BEGIN
 					FROM dbo.StakeLevel SL WITH(NOLOCK) 
 					WHERE SL.GameTypeID = T.GameTypeID
 						AND exchangeid = @currency
-						AND StakeLevelID NOT IN (SELECT StakeLevelid FROM @tmpStakeLevel_Exclude)
+						AND StakeLevelID NOT IN (SELECT StakeLevelid_Exclude FROM @tmpStakeLevel_Exclude)
 						AND MinStake <> 0 
 						AND MaxStake <> 0
 					ORDER BY minstake , maxstake
