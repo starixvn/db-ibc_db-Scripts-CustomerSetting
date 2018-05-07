@@ -397,8 +397,15 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND c.username NOT LIKE '3rdSuper%'
 UNION ALL
-SELECT custid, 1
-FROM #supers_ExistingDirectAccount
+SELECT s.custid, 1
+FROM #supers_ExistingDirectAccount s
+	INNER JOIN Custinfo ci WITH (NOLOCK) ON s.custid = ci.custid
+	INNER JOIN customer c WITH (NOLOCK) ON s.custid = c.custid
+	INNER JOIN dbo.site si WITH(NOLOCK) ON c.site = si.site
+WHERE ci.custid NOT IN (SELECT custid FROM dbo.CustSuper WITH(NOLOCK) WHERE isInternal = 1)
+		AND ci.Enabled = 1
+		AND si.islicensee = 0
+		AND c.username NOT LIKE '3rdSuper%'
 
 WHILE (1 = 1)
 BEGIN
