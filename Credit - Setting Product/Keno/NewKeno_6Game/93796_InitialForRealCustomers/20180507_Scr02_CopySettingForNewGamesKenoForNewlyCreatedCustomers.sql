@@ -87,10 +87,10 @@ INSERT INTO [dbo].[CustGameType]
 SELECT cg.[CustID]
    ,s.[GameTypeID]
    ,''[StakeLevelList]
-   ,[MaxPerGameType]
-   ,[MinBet]
-   ,[MaxBet]
-   ,[IsDisabled]   
+   ,cg.[MaxPerGameType]
+   ,cg.[MinBet]
+   ,cg.[MaxBet]
+   ,cg.[IsDisabled]   
 FROM dbo.CustGameType cg WITH(NOLOCK)
 	INNER JOIN #tblCust t ON cg.custid = t.custid			
 	INNER JOIN @tmpGameType s ON cg.GameTypeID = s.fromGameTypeID
