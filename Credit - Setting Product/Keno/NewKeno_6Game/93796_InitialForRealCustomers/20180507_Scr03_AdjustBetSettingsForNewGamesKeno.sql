@@ -20,7 +20,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 			
-	CREATE TABLE #tblCust (CustID INT PRIMARY KEY CLUSTERED,GameTypeID INT)	
+	CREATE TABLE #tblCust (CustID INT ,GameTypeID INT, PRIMARY KEY CLUSTERED(custid,GameTypeID))	
 	CREATE TABLE #Supers(CustID INT)
 	
 	INSERT INTO #Supers(custid)
