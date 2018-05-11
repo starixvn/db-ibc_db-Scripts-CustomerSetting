@@ -59,7 +59,7 @@ BEGIN
 	FROM dbo.CustGameType cg1 WITH(NOLOCK)
 		INNER JOIN #tblCust ci WITH(NOLOCK) ON cg1.custid = ci.custid
 												AND cg1.GameTypeID = 15
-		INNER JOIN dbo.CustGameType cg2 WITH(NOLOCK) ON cg2.custid = ci.custid
+		INNER JOIN dbo.CustGameType cg2 WITH(UPDLOCK,ROWLOCK) ON cg2.custid = ci.custid
 												AND cg2.GameTypeID = ci.GameTypeID
 	
 	DROP TABLE #Supers
