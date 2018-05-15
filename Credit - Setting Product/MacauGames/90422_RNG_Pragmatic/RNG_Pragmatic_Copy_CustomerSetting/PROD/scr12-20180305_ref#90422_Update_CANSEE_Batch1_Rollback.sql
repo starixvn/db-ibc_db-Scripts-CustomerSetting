@@ -7,7 +7,7 @@ USE CustDB
 GO
 
 DECLARE @tbl_OfferedSites TABLE (SportType SMALLINT, siteName VARCHAR(50))
-
+DECLARE @var_sportType INT = 248
 
 INSERT INTO @tbl_OfferedSites (SportType, siteName)
 VALUES (@var_sportType, 'Indo')
