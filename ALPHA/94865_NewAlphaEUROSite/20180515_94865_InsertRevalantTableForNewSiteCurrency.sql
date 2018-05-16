@@ -11,19 +11,19 @@ CREATE TABLE #TempReference (GameTypeID INT, ResourceId INT, GameGroupID INT, Ty
 
 SELECT @site = 294, @ToCurrency = 78, @FromCurrency = 6
 
---------------ProductBetSetting-----------------
+--------------ProductBetSetting(Virtual Sport, BetRadar, Keno, Bullfighting)-----------------
 INSERT INTO dbo.ProductBetSetting (Sporttype, Bettype, Currency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch)
 SELECT Sporttype, Bettype, @ToCurrency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch
 FROM ProductBetSetting WITH (NOLOCK)
 WHERE Currency = @FromCurrency AND Sporttype NOT BETWEEN 213 AND 218 AND Sporttype <> 206 --Cockfighting
 
-----------------StakeLevel-----------------
+----------------StakeLevel(GoldDeluxe, Macau, AllBet)-----------------
 INSERT INTO dbo.StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ExchangeId, ResourceId, GameGroupID)
 SELECT GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, @ToCurrency, ResourceId, GameGroupID
 FROM stakeLevel WITH (NOLOCK)
 WHERE exchangeid = @FromCurrency 
 
-----------------StakeLevelGroupDetail-----------------
+----------------StakeLevelGroupDetail(Macau, AllBet)-----------------
 INSERT INTO #TempReference (GameTypeID, ResourceId, GameGroupID, Type)
 --Macau
 SELECT 4001, NULL, 1, 1
@@ -82,11 +82,12 @@ BEGIN
 END
 
 
---------------PlayCurrencySetting-----------------
+--------------PlayCurrencySetting(AllBet)-----------------
 INSERT INTO dbo.PlayCurrencySetting(SiteId, SiteName, SportType, MemberCurrency, PlayCurrency, FromDate, ToDate)
 SELECT @site,'EU88',211,@ToCurrency,5,GETDATE(),'2050-01-01'
 
 --------------WinLimit_ProductSettingDetail-----------------
+--(All product apply CWL: Allbet,Bullfighting,Fishing World,Gold Deluxe,Keno,Lottery,Lucky 3,Macau Games,Number Game,Pragmatic,RNG Casino,Virtual Sports,Virtual Sports 2)
 INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
 SELECT ProductID, GroupID, @ToCurrency, @site, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
 FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
@@ -100,14 +101,14 @@ WHERE PSD.MaxWinLimit_RM IS NOT NULL
 		AND PSD.ExchangeID = @ToCurrency
 		AND PSD.SiteID = @Site
 
----------------GameLaunchPerSite/GameLaunchPerCurrency-------------------------
+---------------GameLaunchPerSite/GameLaunchPerCurrency(OneRNG Jackpot)-------------------------
 INSERT INTO GameLaunchPerSite(SportType, BetType, SiteID, IsLaunched, IsTest)
 SELECT 208, 2179, @Site, 1, 0
 
 INSERT INTO GameLaunchPerCurrency(SportType, BetType, Currency, IsLaunched, IsTest)
 SELECT 208, 2179, @ToCurrency, 1, 0
 
------------------LossLimit_GlobalSetting-------------------------
+-----------------LossLimit_GlobalSetting(Virtual Sports,RNG Casino,Allbet,Macau Games,Fishing World,Lottery,Bullfighting)-------------------------
 INSERT INTO LossLimit_GlobalSetting(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT ProductId, @ToCurrency, MinLossLimit, DefaultLossLimit
 FROM LossLimit_GlobalSetting WITH (NOLOCK)
