@@ -10,7 +10,7 @@ GO
 SELECT ci.custid INTO #AgentList
 FROM dbo.custInfo ci WITH (NOLOCK)
 	INNER JOIN dbo.Dep_CustSuper s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.mrecommend NOT IN (SELECT ci.custid FROM dbo.custInfo WITH (NOLOCK) WHERE roleid = 3 AND username LIKE '%Acc%')
+WHERE ci.mrecommend NOT IN (SELECT custid FROM dbo.custInfo WITH (NOLOCK) WHERE roleid = 3 AND username LIKE '%Acc%')
 	AND ci.roleid = 2
 
 SELECT DISTINCT cs.custid INTO #AgentMissing
