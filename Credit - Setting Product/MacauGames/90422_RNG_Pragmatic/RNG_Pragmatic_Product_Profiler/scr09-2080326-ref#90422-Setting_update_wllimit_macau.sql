@@ -1,6 +1,6 @@
 /*
     Created: Vicky
-    Date: 20180326
+    Date: 20180525
     Task: setting WL limit for Macau game [RedmineID: 90422]
     DB:DBCust/CustDB
 */
