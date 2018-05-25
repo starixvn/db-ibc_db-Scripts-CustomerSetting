@@ -1,7 +1,7 @@
 /*
     Created: Vicky
     Date: 20180326
-    Task: setting for WL limit for Macau game [RedmineID: 90422]
+    Task: setting WL limit for Macau game [RedmineID: 90422]
     DB:DBCust/CustDB
 */
 DECLARE @var_product SMALLINT = 22
