@@ -5,9 +5,9 @@
 */
 USE CustDB
 GO
-DECLARE @site INT, @ToCurrency INT
+DECLARE @site INT, @ToCurrency INT, @NewCurrency INT
 
-SELECT @site = 294, @ToCurrency = 3
+SELECT @site = 294, @ToCurrency = 3, @NewCurrency = 78
 
 --------------PlayCurrencySetting(AllBet)-----------------
 INSERT INTO dbo.PlayCurrencySetting(SiteId, SiteName, SportType, MemberCurrency, PlayCurrency, FromDate, ToDate)
@@ -15,6 +15,8 @@ SELECT @site,'EU88',211,@ToCurrency,5,GETDATE(),'2050-01-01'
 
 --------------WinLimit_ProductSettingDetail-----------------
 --(All product apply CWL: Allbet,Bullfighting,Fishing World,Gold Deluxe,Keno,Lottery,Lucky 3,Macau Games,Number Game,Pragmatic,RNG Casino,Virtual Sports,Virtual Sports 2)
+
+--Insert all currency for new site EU88
 DELETE WinLimit_ProductSettingDetail WHERE ExchangeID NOT IN (78,72,20) AND SiteID = @site
 
 INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
@@ -30,4 +32,6 @@ WHERE PSD.MaxWinLimit_RM IS NOT NULL
 		AND PSD.ExchangeID NOT IN (78,72,20)
 		AND PSD.SiteID = @Site
 
+--Insert all site for new currency EUR
+EXEC DBA_Task_CWL_InsertMissingSetting @Mode = 2, @currencies = '78'
 
