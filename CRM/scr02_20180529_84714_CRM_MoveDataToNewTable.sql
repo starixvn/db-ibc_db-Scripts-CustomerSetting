@@ -1,28 +1,36 @@
 /*
-Created: 20180528@Winnie
-Task: Move data to new table
+Created: 20180628@Winnie
+Task: Move data to new table RedmineID: #84714
 DB: DBCRM.bodb_CRM
 Revisions:
 Param's Explanation: 
 */
 
-USE [CheckResultDB]
+USE bodb_CRM
 GO
 
-DECLARE @CurrentDate DATETIME
-SELECT @CurrentDate=GETDATE() 
+INSERT INTO crmFeedbackSetting([FeedbackID],[SettingID],[SubSettingID],[SubSettingIDLevel3])
+SELECT FeedbackID,MainCategoryID, CASE WHEN SubCategoryID=0 THEN 4029 ELSE ISNULL(SubCategoryID,4029) END,0
+FROM crmFeedback WITH(NOLOCK)
+WHERE MainCategoryID IS NOT NULL 
 
-INSERT INTO CheckRecommendResult ([CustID],srecommend,mrecommend,recommend,CreatedDate)
-SELECT Custid,ci.srecommend,ci.mrecommend,ci.recommend,GETDATE()
-	FROM CheckCustDB.dbo.customer ci WITH(NOLOCK)
-WHERE ci.roleid=2 AND (ci.custid=ci.srecommend OR ci.custid=ci.mrecommend) AND (ci.creatdate<@CurrentDate)
+INSERT INTO crmFeedbackSetting([FeedbackID],[SettingID],[SubSettingID],[SubSettingIDLevel3])
+SELECT FeedbackID,
+	CASE WHEN ProductID=0 THEN 46004 ELSE ISNULL(ProductID,46004) END,
+	CASE WHEN SubProductID=0 THEN 8062 ELSE ISNULL(SubProductID,8062) END,
+	CASE WHEN BetTypeID=0 THEN 9145 ELSE ISNULL(BetTypeID,9145) END
+FROM crmFeedback WITH(NOLOCK)
+WHERE MainCategoryID IS NOT NULL 
 
-INSERT INTO CheckRecommendResult ([CustID],srecommend,mrecommend,recommend,CreatedDate)
-SELECT Custid,ci.srecommend,ci.mrecommend,ci.recommend,GETDATE()
-	FROM CheckCustDB.dbo.customer ci WITH(NOLOCK)
-WHERE ci.roleid=3 AND ci.custid=ci.srecommend AND (ci.creatdate<@CurrentDate)
+INSERT INTO crmFeedbackSetting([FeedbackID],[SettingID],[SubSettingID],[SubSettingIDLevel3])
+SELECT FeedbackID,
+	CASE WHEN CommunicationID=0 THEN 1005 ELSE ISNULL(CommunicationID,1005) END,0,0
+FROM crmFeedback WITH(NOLOCK)
+WHERE MainCategoryID IS NOT NULL 
 
-INSERT INTO CheckRecommendResult ([CustID],srecommend,mrecommend,recommend,CreatedDate)
-SELECT Custid,ci.srecommend,ci.mrecommend,ci.recommend,GETDATE()
-	FROM CheckCustDB.dbo.customer ci WITH(NOLOCK)
-WHERE ci.roleid=1 AND (ci.custid=ci.srecommend OR ci.custid=ci.mrecommend OR ci.custid=ci.recommend) AND (ci.creatdate<@CurrentDate)
+INSERT INTO crmFeedbackSetting([FeedbackID],[SettingID],[SubSettingID],[SubSettingIDLevel3])
+SELECT FeedbackID,
+	CASE WHEN StationID=0 THEN 2022 ELSE ISNULL(StationID,2022) END,0,0
+FROM crmFeedback WITH(NOLOCK)
+WHERE MainCategoryID IS NOT NULL 
+
