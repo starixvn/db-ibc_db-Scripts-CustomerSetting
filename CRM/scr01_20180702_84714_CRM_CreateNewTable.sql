@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[crmFeedbackSetting](
 	[SettingID] [int] NOT NULL,
 	[SubSettingID] [int] NOT NULL,
 	[SubSettingIDLevel3] [int] NOT NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_CRM_crmFeedbackSetting] PRIMARY KEY CLUSTERED 
 (
 	[FeedbackID] ASC,
 	[SettingID] ASC,
