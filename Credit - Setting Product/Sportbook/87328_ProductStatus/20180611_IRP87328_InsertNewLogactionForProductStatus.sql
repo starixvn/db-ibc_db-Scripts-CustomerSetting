@@ -4,7 +4,22 @@
 	Task: insert logaction for new product status
 	DB: DBLOG/bodb_Customerlog
 */
-UPDATE LogAction WITH(UPDLOC,ROWLOCK)
+--Step 1: grant permission for web on DBCUST/CUSTDB
+USE CUSTDB
+GO
+GRANT EXECUTE ON Acc_CustomerSelCheckAllowedDownlines TO bodbAdminNet
+GO
+GRANT EXECUTE ON Acc_CustomerSelCheckAllowedDownlines TO bodbExtAccNet
+GO
+GRANT EXECUTE ON Acc_CustomerSelCheckAllowedDownlines TO bodbDownlineNet
+GO
+
+
+--Step 2: insert new logaction on DBLOG/bodb_Customerlog
+USE bodb_Customerlog
+GO
+
+UPDATE LogAction WITH(UPDLOCK,ROWLOCK)
 SET ActionTypeID = 5
 WHERE actionID between 1100 AND 1199
 GO
