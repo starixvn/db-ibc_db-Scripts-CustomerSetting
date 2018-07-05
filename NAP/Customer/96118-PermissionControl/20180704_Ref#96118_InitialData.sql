@@ -4,54 +4,75 @@
     Task: initial setting for Manage Account Info permission
     DB: DBPOLICY/BODB02
 */ 
+DECLARE @FuncIdDeposit INT
+DECLARE @FuncIdCreadit INT
+DECLARE @ParentId INT,
+        @CREATOR  INT
+DECLARE @P11 NVARCHAR(200) 
+DECLARE @DisplayOrder INT
 
-DECLARE @FuncIdDesposit INT
-DECLARE @FuncIdCredit INT
-DECLARE @p10 INT, @parentID INT
-DECLARE @p11 NVARCHAR(200)
+SET @FuncIdDeposit=0
+SET @FuncIdCreadit=0 
 
-SET @parentID = (SELECT FuncID FROM acc_functioninfo WHERE FuncName ='[ViewInfo]' AND System = 'ACCOUNTING')
-SET @FuncIdDesposit=0
-SET @FuncIdCredit=0
+
+SELECT @parentid = funcid,
+       @creator =  creator,
+       @DisplayOrder = MAX(DisplayOrder) + 1
+FROM   acc_functioninfo
+WHERE  funcname ='[ViewInfo]' AND    SYSTEM = 'ACCOUNTING'
+GROUP BY funcid,creator
 
 --------------------------------------------------------------------
 
-SET @p10=0
-SET @p11=N''
+INSERT INTO ACC_FUNCTIONINFO
+            (funcname,       funcnote,funcdesc,         funcrender, createdate, modifydate, displayorder,   creator,    parentid,   filenames,  system)
+VALUES      ('[DepositSite]',N'',     N'Deposit Site',  3,          Getdate( ), Getdate( ), @DisplayOrder,  @creator,   @ParentId,  '',         N'ACCOUNTING')
+SELECT @FuncIdDeposit = @@IDENTITY
+
+
+
+INSERT INTO ACC_FUNCTIONINFO
+            (funcname,      funcnote,   funcdesc,       funcrender, createdate, modifydate, displayorder,       creator,    parentid,   filenames,  system)
+VALUES      ('[CreditSite]',N'',        N'Credit Site', 3,          Getdate( ), Getdate( ), @DisplayOrder + 1,  @creator,   @ParentId,  '',         N'ACCOUNTING')
+SELECT @FuncIdCreadit = @@IDENTITY
+
+SELECT @FuncIdDeposit AS FuncIdDeposit, @FuncIdCreadit AS FuncIdCredit, @ParentId AS ParentId
+
+
 ---create new function: credit site and deposit site
-EXEC Acc_Con_FuncInfoIns @FuncId=@FuncIdDesposit output,@FuncName=N'[DepositSite]',@FuncNote=N'',@FuncDesc=N'Deposit Site',@DisplayOrder=3,@ParentId=@parentID,@FileNames='',
-        @System=N'ACCOUNTING',@Language='E',@ErrCode=@p10 output,@ErrMsg=@p11 output,@UserID=8
-SELECT @FuncIdDesposit, @p10, @p11
+INSERT INTO ACC_GROUPPOLICY_1
+            (funcid,            groupid,    policy, createdate, modifydate, creator)
+SELECT       @FuncIdDeposit,    groupid,    policy, Getdate( ), Getdate( ), creator
+FROM   ACC_GROUPPOLICY_1 WITH (nolock)
+WHERE  funcid = @ParentId
+
+INSERT INTO ACC_GROUPPOLICY_1
+            (funcid,            groupid,    policy, createdate, modifydate,creator)
+SELECT       @FuncIdCreadit,    groupid,    policy, Getdate( ), Getdate( ),creator
+FROM   ACC_GROUPPOLICY_1 WITH (nolock)
+WHERE  funcid = @ParentId
 
 
-SET @p10=0
-SET @p11=N''
+--add list custid is used on parentid
+INSERT INTO ACC_MEMBERPOLICY_1
+            (custid,    funcid,             policy,     createdate,     modifydate, creator)
+SELECT       custid,    @FuncIdDeposit,     policy,     Getdate( ),     Getdate( ), Creator
+FROM   ACC_MEMBERPOLICY_1 WITH (nolock)
+WHERE  funcid = @ParentId 
 
-EXEC Acc_Con_FuncInfoIns @FuncId=@FuncIdCredit output,@FuncName=N'[CreditSite]',@FuncNote=N'',@FuncDesc=N'Credit Site',@DisplayOrder=3,@ParentId=@parentID,@FileNames='',
-        @System=N'ACCOUNTING',@Language='E',@ErrCode=@p10 output,@ErrMsg=@p11 output,@UserID=8
-SELECT @FuncIdCredit, @p10, @p11
 
-       
+
+INSERT INTO ACC_MEMBERPOLICY_1
+            (custid,    funcid,         policy, createdate, modifydate, creator)
+SELECT       custid,    @FuncIdCreadit, policy, Getdate( ), Getdate( ), Creator
+FROM   ACC_MEMBERPOLICY_1 WITH (nolock)
+WHERE  funcid = @ParentId 
+
+
+
 ---update View Account Info -> Manage Account Info      
-UPDATE acc_functioninfo
-SET FuncDesc = 'Manage Account Info'
-WHERE FuncID = @parentID
-
-
----update policy for member.
-UPDATE m
-SET m.Policy = mParent.Policy
-FROM acc_memberpolicy_1 m
-    INNER JOIN acc_memberpolicy_1 mParent ON m.CustId = mParent.CustID
-WHERE m.FuncID IN (@FuncIdDesposit, @FuncIdCredit) AND mParent.FuncID = @parentID
-
-
-
----update policy for group.
-UPDATE g
-SET g.Policy = gParent.Policy
-FROM acc_grouppolicy_1 g
-    INNER JOIN acc_grouppolicy_1 gParent ON g.groupid = gParent.groupid
-WHERE g.FuncID IN (@FuncIdDesposit, @FuncIdCredit) AND gParent.FuncID = @parentID
+UPDATE ACC_FUNCTIONINFO
+SET    funcdesc = 'Manage Account Info'
+WHERE  funcid = @parentID 
 
 
