@@ -30,6 +30,11 @@ WHERE mrecommend IN (SELECT custid
 					WHERE srecommend IN (SELECT custid FROM #supers) 
 						AND username like '%Acc%' 
 						AND roleid=3)
+
+--Delete Dep_LicenseeProductSetting
+DELETE Dep_LicenseeProductSetting WITH(UPDLOCK,ROWLOCK)
+WHERE ProductSettingID IN (21,22,23)--PP 
+	AND custid IN (SELECT custid FROM #tblCust WHERE roleid = 4)
 	
 --PT setting on SMA dummy
 DELETE dbo.Dep_CustPTSetting_Agent WITH(UPDLOCK,ROWLOCK)
