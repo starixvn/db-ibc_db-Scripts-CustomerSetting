@@ -6,12 +6,17 @@
 */
 DECLARE @max_custid INT = xxx
 
---pt setting on sma dummy
 SELECT custid 
 INTO #supers
 FROM dbo.Dep_CustSuper WITH(NOLOCK) 
 WHERE site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','Goobet','UNObet')
-					
+
+--profile setting Dep_LicenseeProductSetting					
+DELETE Dep_LicenseeProductSetting WITH(UPDLOCK,ROWLOCK)
+WHERE ProductSettingID IN (21,22,23)--PP
+	AND custid IN (SELECT custid FROM #supers)
+
+--pt setting on SMA dummy	
 SELECT cs.custid 
 	INTO #tmp
 FROM dbo.Dep_CustPTSetting_Agent cs WITH(NOLOCK)
