@@ -35,6 +35,13 @@ WHERE mrecommend IN (SELECT custid
 DELETE Dep_LicenseeProductSetting WITH(UPDLOCK,ROWLOCK)
 WHERE ProductSettingID IN (21,22,23)--PP 
 	AND custid IN (SELECT custid FROM #tblCust WHERE roleid = 4)
+
+INSERT INTO Dep_LicenseeProductSetting (CustID,ProductSettingID)	
+SELECT c.custID,ps.ProductSettingID
+FROM #tblCust c
+	CROSS APPLY dbo.Dep_ProductSetting ps WITH (NOLOCK)
+WHERE productid = 32
+	AND roleid = 4
 	
 --PT setting on SMA dummy
 DELETE dbo.Dep_CustPTSetting_Agent WITH(UPDLOCK,ROWLOCK)
