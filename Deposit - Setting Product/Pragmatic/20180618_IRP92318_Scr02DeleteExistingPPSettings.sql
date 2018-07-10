@@ -31,14 +31,14 @@ DROP TABLE #tmp
 SELECT cs.custid 
 	INTO #tmp
 FROM dbo.Dep_CustPTGroupSetting_Member cs WITH(NOLOCK)
-	INNER JOIN dbo.CustInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN dbo.CustInfo ci WITH(NOLOCK) ON cs.AgentID = ci.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
 	AND roleid = 2 
 	AND sporttype = 248
 	AND ci.custid <= @max_custid
 	
 DELETE dbo.Dep_CustPTGroupSetting_Member WITH(UPDLOCK,ROWLOCK)
-WHERE custid IN (SELECT custid FROM #tmp)
+WHERE AgentID IN (SELECT custid FROM #tmp)
 	AND sporttype = 248
 
 DROP TABLE #tmp

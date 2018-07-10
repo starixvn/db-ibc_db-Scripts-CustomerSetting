@@ -64,7 +64,7 @@ FROM #tblCust t
 
 --pt group on members ??? check current group if not have member downline
 DELETE dbo.Dep_CustPTGroupSetting_Member WITH(UPDLOCK,ROWLOCK)
-WHERE custid IN (SELECT custid FROM #tblCust WHERE roleid =2)
+WHERE AgentID IN (SELECT custid FROM #tblCust WHERE roleid =2)
 	AND sporttype = 248
 
 INSERT INTO [dbo].[Dep_CustPTGroupSetting_Member]
