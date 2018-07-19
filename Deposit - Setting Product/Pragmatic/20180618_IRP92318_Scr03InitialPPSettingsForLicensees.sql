@@ -130,13 +130,19 @@ BEGIN
 	--Initial status/stakelevel for member level	
 	WHILE(1=1)
 	BEGIN		
+		DELETE @tmpCust
+
+		DELETE #tblCust
+		OUTPUT DELETED.custID
+		INTO @tmpCust
+		WHERE ID BETWEEN @fromID AND @toID
+
 		--Enable for PP
 		UPDATE cs
 		SET bitmapIsHidden = dbo.f_GenerateProductStatus(bitmapIsHidden,@bitmapOrder,0),
 			bitmapIsDisabled = dbo.f_GenerateProductStatus(bitmapIsDisabled,@bitmapOrder,0)	
-		FROM dbo.Dep_CustProductStatus cs WITH(UPDLOCK,ROWLOCK)
-			INNER JOIN #tblCust t ON cs.custID = t.CustID
-		WHERE ID BETWEEN @fromID AND @toID	
+		FROM dbo.Dep_CustProductStatus cs WITH(UPDLOCK,ROWLOCK)			
+		WHERE custid IN (SELECT custid FROM @tmpCust)
 
 		--Initial stakelevel
 		INSERT INTO [dbo].[Dep_CustStakeLevel_Member]
@@ -146,9 +152,8 @@ BEGIN
            ,[StakeLevelList]
            ,[LastUpdated])
 		SELECT custID, 248 as sporttype, 4101 as BetType, @StakeLevelID, GetDate()
-		FROM #tblCust t
-		WHERE ID BETWEEN @fromID AND @toID
-		
+		FROM @tmpCust
+				
 		SELECT @fromID = @toID + 1,
 			@toID = @toID + @Threshold + 1
 
