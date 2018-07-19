@@ -12,9 +12,11 @@ TRUNCATE TABLE dbo.MsgCustReadStatus
 GO
 CREATE TABLE #supers (custid INT)
 CREATE TABLE #SubAccount (custid INT, SubAccID INT)
-DECLARE @max_custid INT, @ReleaseDate DATETIME
+DECLARE @max_custid INT, @max_custSubId INT, @ReleaseDate DATETIME
 
-SELECT @ReleaseDate = GETDATE(), @max_custid = xxx --SELECT MAX(custid) FROM bodb02.dbo.Custinfo WITH (NOLOCK)
+SELECT @ReleaseDate = GETDATE()
+SELECT @max_custid = xxx --SELECT MAX(custid) FROM bodb02.dbo.Custinfo WITH (NOLOCK)
+SELECT @max_custSubId = xxx --SELECT MAX(subaccid) FROM bodb02.dbo.CustSub WITH (NOLOCK)
 
 --Start: Main Account
 INSERT INTO #supers(custid)
@@ -44,7 +46,7 @@ FROM bodb02.dbo.CustInfo ci WITH (NOLOCK)
 	INNER JOIN bodb02.dbo.custSub cs WITH (NOLOCK) ON ci.custid = cs.custid	
 WHERE ci.roleid BETWEEN 2 AND 4
 	AND ci.Enabled = 1
-	AND ci.custid <= @max_custid
+	AND cs.subaccid <= @max_custSubId
 
 INSERT INTO dbo.MsgCustReadStatus (CustID, SubAccID, LastSeenNormalMsg, LastSeenPersonalMsg, LastSeenSpecialMsg, LastSeenSystemUpdMsg)
 SELECT custid, SubAccID, @ReleaseDate, @ReleaseDate, @ReleaseDate, @ReleaseDate

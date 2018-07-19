@@ -8,11 +8,17 @@ USE bodb_Message
 GO
 
 GO
+
 CREATE TABLE #supers (custid INT)
 CREATE TABLE #SubAccount (custid INT, SubAccID INT)
-DECLARE @max_custid INT, @ReleaseDate DATETIME
+DECLARE @max_custid INT, @max_custSubId INT, @ReleaseDate DATETIME
 
-SELECT @ReleaseDate = GETDATE(), @max_custid = xxx 
+SELECT @ReleaseDate = GETDATE()
+SELECT @max_custid = xxx 
+SELECT @max_custSubId = xxx 
+
+DELETE MsgCustReadStatus WHERE custid > @max_custid AND SubAccID = 0
+DELETE MsgCustReadStatus WHERE SubAccID > @max_custSubId
 
 --Start: Main Account
 INSERT INTO #supers(custid)
@@ -42,7 +48,7 @@ FROM bodb02.dbo.CustInfo ci WITH (NOLOCK)
 	INNER JOIN bodb02.dbo.custSub cs WITH (NOLOCK) ON ci.custid = cs.custid	
 WHERE ci.roleid BETWEEN 2 AND 4
 	AND ci.Enabled = 1
-	AND ci.custid > @max_custid
+	AND cs.custid > @max_custSubId
 
 INSERT INTO dbo.MsgCustReadStatus (CustID, SubAccID, LastSeenNormalMsg, LastSeenPersonalMsg, LastSeenSpecialMsg, LastSeenSystemUpdMsg)
 SELECT custid, SubAccID, @ReleaseDate, @ReleaseDate, @ReleaseDate, @ReleaseDate
