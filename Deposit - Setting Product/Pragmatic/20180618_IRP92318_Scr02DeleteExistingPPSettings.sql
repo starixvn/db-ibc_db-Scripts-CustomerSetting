@@ -34,7 +34,7 @@ DROP TABLE #tmp
 
 --pt group on members
 SELECT cs.AgentID 
-	INTO #tmp
+	INTO #tmp1
 FROM dbo.Dep_CustPTGroupSetting_Member cs WITH(NOLOCK)
 	INNER JOIN dbo.CustInfo ci WITH(NOLOCK) ON cs.AgentID = ci.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
@@ -43,14 +43,14 @@ WHERE srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid <= @max_custid
 	
 DELETE dbo.Dep_CustPTGroupSetting_Member WITH(UPDLOCK,ROWLOCK)
-WHERE AgentID IN (SELECT AgentID FROM #tmp)
+WHERE AgentID IN (SELECT AgentID FROM #tmp1)
 	AND sporttype = 248
 
-DROP TABLE #tmp
+DROP TABLE #tmp1
 
 --stakelevel on sma dummy
 SELECT cs.custid 
-	INTO #tmp
+	INTO #tmp2
 FROM dbo.Dep_CustStakeLevel_Agent cs WITH(NOLOCK)
 	INNER JOIN dbo.CustInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
@@ -59,14 +59,14 @@ WHERE srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid <= @max_custid
 	
 DELETE dbo.Dep_CustStakeLevel_Agent WITH(UPDLOCK,ROWLOCK)
-WHERE custid IN (SELECT custid FROM #tmp)
+WHERE custid IN (SELECT custid FROM #tmp2)
 	AND sporttype = 248
 
-DROP TABLE #tmp
+DROP TABLE #tmp2
 	
 --stakelevel on member level
 SELECT cs.custid 
-	INTO #tmp
+	INTO #tmp3
 FROM dbo.Dep_CustStakeLevel_Member cs WITH(NOLOCK)
 	INNER JOIN dbo.CustInfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 WHERE srecommend IN (SELECT custid FROM #supers)
@@ -75,8 +75,11 @@ WHERE srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid <= @max_custid
 	
 DELETE dbo.Dep_CustStakeLevel_Member WITH(UPDLOCK,ROWLOCK)
-WHERE custid IN (SELECT custid FROM #tmp)
+WHERE custid IN (SELECT custid FROM #tmp3)
 	AND sporttype = 248
 
-DROP TABLE #tmp	
+DROP TABLE #tmp3	
+
+
+
 	
