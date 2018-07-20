@@ -14,9 +14,9 @@ CREATE TABLE #supers (custid INT)
 CREATE TABLE #SubAccount (custid INT, SubAccID INT)
 DECLARE @max_custid INT, @max_custSubId INT, @ReleaseDate DATETIME
 
-SELECT @ReleaseDate = GETDATE()
-SELECT @max_custid = xxx --SELECT MAX(custid) FROM bodb02.dbo.Custinfo WITH (NOLOCK)
-SELECT @max_custSubId = xxx --SELECT MAX(subaccid) FROM bodb02.dbo.CustSub WITH (NOLOCK)
+SELECT @ReleaseDate = CAST (GETDATE() AS DATE)
+SELECT @max_custid = 31422729 --SELECT MAX(custid) FROM bodb02.dbo.Custinfo WITH (NOLOCK)
+SELECT @max_custSubId = 1090933 --SELECT MAX(subaccid) FROM bodb02.dbo.CustSub WITH (NOLOCK)
 
 --Start: Main Account
 INSERT INTO #supers(custid)
@@ -56,5 +56,5 @@ FROM #SubAccount
 DROP TABLE #supers
 DROP TABLE #SubAccount
 
---SELECT COUNT(1) FROM dbo.MsgCustReadStatus
+--SELECT TOP 100 * FROM dbo.MsgCustReadStatus
 

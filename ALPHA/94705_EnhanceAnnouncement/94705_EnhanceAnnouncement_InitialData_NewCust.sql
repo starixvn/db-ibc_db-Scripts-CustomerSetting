@@ -13,7 +13,7 @@ CREATE TABLE #supers (custid INT)
 CREATE TABLE #SubAccount (custid INT, SubAccID INT)
 DECLARE @max_custid INT, @max_custSubId INT, @ReleaseDate DATETIME
 
-SELECT @ReleaseDate = GETDATE()
+SELECT @ReleaseDate = CAST (GETDATE() AS DATE)
 SELECT @max_custid = xxx 
 SELECT @max_custSubId = xxx 
 
