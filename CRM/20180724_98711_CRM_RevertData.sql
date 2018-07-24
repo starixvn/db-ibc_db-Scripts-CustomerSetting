@@ -13,7 +13,7 @@ SELECT @FBFrom='2018-06-01'
 SELECT @FBTo='2018-06-30'
 SELECT @UserID=352362
 
-CREATE TABLE #tmpSingleUpdate(FeedbackID INT PRIMARY KEY)
+
 CREATE TABLE #tmpMultiUpdate(FeedbackID INT PRIMARY KEY)
 CREATE TABLE #tmpFB(FeedbackID INT ,[TitleID] [int] NULL,[FirstName] [nvarchar](50) NULL,[LastName] [nvarchar](50) NULL,[Phone] [nvarchar](50) NULL,[MobilePhone] [nvarchar](50) NULL,[Fax] [nvarchar](50) NULL,
 	[Email] [nvarchar](254) NULL,[LanguageID] [int] NULL,[CountryID] [int] NULL,[FeedbackDate] [datetime] NULL,[CommunicationID] [int] NULL,[StationID] [int] NULL,[MainCategoryID] [int] NULL,[SubCategoryID] [int] NULL,
@@ -24,20 +24,6 @@ CREATE TABLE #tmpFB(FeedbackID INT ,[TitleID] [int] NULL,[FirstName] [nvarchar](
 	[Phone3AreaCode] [nvarchar](20) NULL,[MobilePhoneCountryCode] [nvarchar](20) NULL,[MobilePhoneAreaCode] [nvarchar](20) NULL,[FaxCountryCode] [nvarchar](20) NULL,[FaxAreaCode] [nvarchar](20) NULL,
 	[Pic4] [nvarchar](100) NULL,[Passport] [nvarchar](100) NULL,[Birthday] [datetime] NULL,[RefCode2] [nvarchar](50) NULL,[IsVip] [bit] NULL,[WhatsApp] [nvarchar](100) NULL,[Line] [nvarchar](100) NULL,
 	[WeChat] [nvarchar](100) NULL,[Yahoo] [nvarchar](100) NULL,[BBM] [nvarchar](100) NULL,[LicenseeType] [int] NULL,[QQ] [nvarchar](100) NULL,[SubProductID] [int] NULL,RowNo INT)
-
-INSERT INTO #tmpSingleUpdate(FeedbackID)
-SELECT DISTINCT FeedbackID 
-FROM crmLogFeedback WITH(NOLOCK)
-WHERE ActionID=201
-	AND UserID = @UserID
-	AND Description IN(
-		SELECT Description
-		FROM crmLogFeedback l WITH(NOLOCK)	
-		WHERE ActionID = 201	
-		AND l.UserID = @UserID
-		AND LogDate BETWEEN @FromDate AND @ToDate
-		GROUP BY Description
-		HAVING COUNT (1) =1)
 
 INSERT INTO #tmpMultiUpdate(FeedbackID)
 SELECT Distinct FeedbackID 
@@ -53,10 +39,6 @@ WHERE ActionID=201
 		AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
 		GROUP BY Description
 		HAVING COUNT (1) >1)
-
-DELETE t
-FROM #tmpMultiUpdate t
-WHERE t.FeedbackID IN (SELECT FeedbackID FROM #tmpSingleUpdate)
 		
 INSERT INTO #tmpFB
 (
@@ -109,6 +91,5 @@ SET
 FROM crmFeedback fb WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #tmpFB t ON fb.FeedbackID=t.FeedbackID
 
-DROP TABLE #tmpSingleUpdate
 DROP TABLE #tmpMultiUpdate
 DROP TABLE #tmpFB
