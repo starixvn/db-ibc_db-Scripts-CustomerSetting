@@ -50,7 +50,7 @@ WHERE ActionID=201
 		WHERE ActionID = 201	
 		AND l.UserID = @UserID
 		AND LogDate BETWEEN @FromDate AND @ToDate
-		AND l.Doing.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
+		AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
 		GROUP BY Description
 		HAVING COUNT (1) >1)
 
@@ -66,25 +66,25 @@ INSERT INTO #tmpFB
 	[Phone3],[Phone3CountryCode],[Phone3AreaCode],[MobilePhoneCountryCode],[MobilePhoneAreaCode],[FaxCountryCode],[FaxAreaCode] ,[Pic4],[Passport],[Birthday],[RefCode2],[IsVip],[WhatsApp],[Line],
 	[WeChat],[Yahoo],[BBM],[LicenseeType] ,[QQ] ,[SubProductID],RowNo)
 
-SELECT t.FeedbackID,l.Doing.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/FirstName)[1]','NVARCHAR(50)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/LastName)[1]','NVARCHAR(50)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone)[1]','NVARCHAR(50)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/MobilePhone)[1]','NVARCHAR(50)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Fax)[1]','NVARCHAR(50)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Email)[1]','NVARCHAR(254)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/LanguageID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/CountryID)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME'),l.Doing.value('(/Acc_CRM_FeedbackUpd/CommunicationID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/StationID)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/MainCategoryID)[1]', 'INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/SubCategoryID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/SiteID)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/RoleID)[1]', 'INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/ProductID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/BetTypeID)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/ResponseID)[1]', 'INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/StatusID)[1]','INT'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Description)[1]','NVARCHAR(MAX)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Solution)[1]', 'NVARCHAR(MAX)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Review)[1]','NVARCHAR(MAX)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/ReviewerID)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Subject)[1]', 'NVARCHAR(200)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Skype)[1]','NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/MSN)[1]','NVARCHAR(100)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/ResolutionDate)[1]', 'DATETIME'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Pic1)[1]','NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Pic2)[1]','NVARCHAR(100)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Pic3)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/PhoneCountryCode)[1]','NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/PhoneAreaCode)[1]','NVARCHAR(20)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone2)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone2CountryCode)[1]','NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone2AreaCode)[1]','NVARCHAR(20)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone3)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone3CountryCode)[1]','NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Phone3AreaCode)[1]','NVARCHAR(20)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/MobilePhoneCountryCode)[1]', 'NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/MobilePhoneAreaCode)[1]','NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/FaxCountryCode)[1]','NVARCHAR(20)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/FaxAreaCode)[1]', 'NVARCHAR(20)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Pic4)[1]','NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Passport)[1]','NVARCHAR(100)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Birthday)[1]', 'DATETIME'),l.Doing.value('(/Acc_CRM_FeedbackUpd/RefCode2)[1]','NVARCHAR(50)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/IsVip)[1]','BIT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/WhatsApp)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/Line)[1]','NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/WeChat)[1]','NVARCHAR(100)')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/Yahoo)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/BBM)[1]','NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/LicenseeType)[1]','INT')
-,l.Doing.value('(/Acc_CRM_FeedbackUpd/QQ)[1]', 'NVARCHAR(100)'),l.Doing.value('(/Acc_CRM_FeedbackUpd/SubProductID)[1]','INT')
+SELECT t.FeedbackID,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FirstName)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LastName)[1]','NVARCHAR(50)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MobilePhone)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Fax)[1]','NVARCHAR(50)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Email)[1]','NVARCHAR(254)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LanguageID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/CountryID)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/CommunicationID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/StationID)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MainCategoryID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubCategoryID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SiteID)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/RoleID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ProductID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/BetTypeID)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ResponseID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/StatusID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Description)[1]','NVARCHAR(MAX)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Solution)[1]', 'NVARCHAR(MAX)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Review)[1]','NVARCHAR(MAX)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ReviewerID)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Subject)[1]', 'NVARCHAR(200)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Skype)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MSN)[1]','NVARCHAR(100)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ResolutionDate)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic1)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic2)[1]','NVARCHAR(100)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic3)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/PhoneCountryCode)[1]','NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/PhoneAreaCode)[1]','NVARCHAR(20)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone2)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone2CountryCode)[1]','NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone2AreaCode)[1]','NVARCHAR(20)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone3)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone3CountryCode)[1]','NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone3AreaCode)[1]','NVARCHAR(20)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MobilePhoneCountryCode)[1]', 'NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MobilePhoneAreaCode)[1]','NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FaxCountryCode)[1]','NVARCHAR(20)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FaxAreaCode)[1]', 'NVARCHAR(20)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic4)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Passport)[1]','NVARCHAR(100)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Birthday)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/RefCode2)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/IsVip)[1]','BIT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/WhatsApp)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Line)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/WeChat)[1]','NVARCHAR(100)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Yahoo)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/BBM)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LicenseeType)[1]','INT')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/QQ)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubProductID)[1]','INT')
 ,ROW_NUMBER() OVER(PARTITION BY t.FeedbackID ORDER BY logdate ASC)			
 from crmLogFeedback l (nolock)				
 inner join #tmpMultiUpdate t ON l.FeedbackID=t.FeedbackID
