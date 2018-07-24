@@ -104,7 +104,8 @@ SET
 	fb.[Phone2AreaCode]=t.Phone2AreaCode,fb.[Phone3]=t.Phone3,fb.[Phone3CountryCode]=t.Phone3CountryCode,fb.[Phone3AreaCode]=t.Phone3AreaCode,fb.[MobilePhoneCountryCode]=t.MobilePhoneCountryCode,
 	fb.[MobilePhoneAreaCode]=t.MobilePhoneAreaCode,fb.[FaxCountryCode]=t.FaxCountryCode,fb.[FaxAreaCode]=t.FaxAreaCode ,fb.[Pic4]=t.Pic4,fb.[Passport]=t.Passport,fb.[Birthday]=t.Birthday,
 	fb.[RefCode2]=t.RefCode2,fb.[IsVip]=t.IsVip,fb.[WhatsApp]=t.WhatsApp,fb.[Line]=t.Line,fb.[WeChat]=t.WeChat,fb.[Yahoo]=t.Yahoo,
-	fb.[BBM]=t.BBM,fb.[LicenseeType]=t.LicenseeType ,fb.[QQ]=t.QQ ,fb.[SubProductID]=t.SubProductID
+	fb.[BBM]=t.BBM,fb.[LicenseeType]=t.LicenseeType ,fb.[QQ]=t.QQ ,fb.[SubProductID]=t.SubProductID,
+	fb.[IsReviewed]=0
 FROM crmFeedback fb WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #tmpFB t ON fb.FeedbackID=t.FeedbackID
 
