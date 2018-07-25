@@ -69,7 +69,11 @@ SELECT t.FeedbackID,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/QQ)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubProductID)[1]','INT')
 ,ROW_NUMBER() OVER(PARTITION BY t.FeedbackID ORDER BY logdate ASC)			
 from crmLogFeedback l (nolock)				
-inner join #tmpMultiUpdate t ON l.FeedbackID=t.FeedbackID
+	INNER JOIN #tmpMultiUpdate t ON l.FeedbackID=t.FeedbackID
+WHERE ActionID = 201	
+	AND l.UserID = @UserID
+	AND LogDate BETWEEN @FromDate AND @ToDate
+	AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
 
 DELETE FROM #tmpFB WHERE RowNo>1
 
