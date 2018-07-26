@@ -7,7 +7,7 @@
 
 USE CUSTDB
 GO
-
+/*already intial on UAT
 --insert product setting
 INSERT INTO [dbo].[Dep_ProductSetting]
            ([ProductSettingID]
@@ -51,7 +51,7 @@ INSERT INTO [dbo].[GameGroup]
            ,[IsDeposit])
 SELECT 8,248,4101,'Level 1',1
 GO
-
+*/
 --Insert Dep_StakeLevel
 /*
 SELECT max(StakeLevelID)+1
@@ -98,7 +98,8 @@ UNION SELECT 	503	,	4101	,	8	,	13
 UNION SELECT 	504	,	4101	,	8	,	15
 UNION SELECT 	505	,	4101	,	8	,	16
 UNION SELECT 	506	,	4101	,	8	,	17
-UNION SELECT 	507	,	4101	,	8	,	20
+--exclude UUS, already initial on UAT
+--UNION SELECT 	507	,	4101	,	8	,	20
 UNION SELECT 	508	,	4101	,	8	,	21
 UNION SELECT 	509	,	4101	,	8	,	22
 UNION SELECT 	510	,	4101	,	8	,	27
