@@ -7,8 +7,8 @@
 */
 
 DECLARE @FromDate DATETIME,@ToDate DATETIME,@UserID INT,@FBFrom DATETIME,@FBTo DATETIME
-SELECT @FromDate='2018-07-15'
-SELECT @ToDate='2018-07-21'
+SELECT @FromDate='2018-06-01'
+SELECT @ToDate='2018-07-23'
 SELECT @FBFrom='2018-06-01'
 SELECT @FBTo='2018-07-01'
 SELECT @UserID=352362
@@ -37,6 +37,7 @@ WHERE ActionID=201
 		AND l.UserID = @UserID
 		AND LogDate BETWEEN @FromDate AND @ToDate
 		AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
+		AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MainCategoryID)[1]', 'INT') <> 3018
 		GROUP BY Description
 		HAVING COUNT (1) >1)
 		
@@ -74,6 +75,7 @@ WHERE ActionID = 201
 	AND l.UserID = @UserID
 	AND LogDate BETWEEN @FromDate AND @ToDate
 	AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME') BETWEEN @FBFrom AND @FBTo
+	AND l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MainCategoryID)[1]', 'INT') <> 3018
 
 DELETE FROM #tmpFB WHERE RowNo>1
 
