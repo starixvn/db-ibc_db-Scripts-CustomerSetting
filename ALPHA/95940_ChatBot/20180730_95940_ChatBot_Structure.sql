@@ -142,7 +142,7 @@ GO
 CREATE TABLE UserFunctionSetting(
 	UserId INT NOT NULL,
 	FunctionId INT NOT NULL,
-	Command VARCHAR(50) NOT NULL,
+	Command VARCHAR(50) NULL,
 	Enabled BIT NOT NULL
  CONSTRAINT [PK_UserFunctionSetting] PRIMARY KEY CLUSTERED 
 (
