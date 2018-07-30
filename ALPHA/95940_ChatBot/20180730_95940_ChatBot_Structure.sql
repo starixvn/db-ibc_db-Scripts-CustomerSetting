@@ -153,16 +153,16 @@ CREATE TABLE UserFunctionSetting(
 
 GO
 
-
 CREATE TABLE UserLogAction(
+	Date SMALLDATETIME NOT NULL,
 	UserId INT NOT NULL,
 	MessengerType TINYINT NOT NULL,
 	MessengerUsername VARCHAR(50) NOT NULL,
 	ActionId INT NOT NULL,
-	CountTimes TINYINT NOT NULL,
-	Date SMALLDATETIME NOT NULL
+	CountTimes TINYINT NOT NULL
  CONSTRAINT [PK_UserLogAction] PRIMARY KEY CLUSTERED 
 (
+	Date ASC,
 	UserId ASC,
 	MessengerType ASC,
 	MessengerUsername ASC
