@@ -48,7 +48,7 @@ FROM bodb02.dbo.CustInfo ci WITH (NOLOCK)
 	INNER JOIN bodb02.dbo.custSub cs WITH (NOLOCK) ON ci.custid = cs.custid	
 WHERE ci.roleid BETWEEN 2 AND 4
 	AND ci.Enabled = 1
-	AND cs.custid > @max_custSubId
+	AND cs.subaccid > @max_custSubId
 
 INSERT INTO dbo.MsgCustReadStatus (CustID, SubAccID, LastSeenNormalMsg, LastSeenPersonalMsg, LastSeenSpecialMsg, LastSeenSystemUpdMsg)
 SELECT custid, SubAccID, @ReleaseDate, @ReleaseDate, @ReleaseDate, @ReleaseDate
