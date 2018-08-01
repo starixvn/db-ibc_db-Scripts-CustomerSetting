@@ -98,6 +98,7 @@ CREATE TABLE MessageLog(
 	Sender INT NOT NULL,
 	Receiver INT NOT NULL,
 	FunctionId INT NULL,
+	MessengerUsername VARCHAR(50) NOT NULL,
 	MessengerType TINYINT NOT NULL,
 	Message NVARCHAR(4000) NOT NULL,
 	SentDate DATETIME NOT NULL,
@@ -154,15 +155,14 @@ CREATE TABLE UserFunctionSetting(
 GO
 
 CREATE TABLE UserLogAction(
-	Date SMALLDATETIME NOT NULL,
 	UserId INT NOT NULL,
 	MessengerType TINYINT NOT NULL,
 	MessengerUsername VARCHAR(50) NOT NULL,
 	ActionId INT NOT NULL,
-	CountTimes TINYINT NOT NULL
+	CountTimes TINYINT NOT NULL,
+	Date SMALLDATETIME NOT NULL
  CONSTRAINT [PK_UserLogAction] PRIMARY KEY CLUSTERED 
 (
-	Date ASC,
 	UserId ASC,
 	MessengerType ASC,
 	MessengerUsername ASC,
