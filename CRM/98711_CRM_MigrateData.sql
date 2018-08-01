@@ -98,7 +98,8 @@ GO
 
 -- Step2: Insert data into the table tmpFeedback
 INSERT INTO [dbo].[tmpFeedback]
-           ([CustID]
+           (FeedbackID
+		   ,[CustID]
            ,[TitleID]
            ,[FirstName]
            ,[LastName]
@@ -176,8 +177,9 @@ INSERT INTO [dbo].[tmpFeedback]
            ,[LicenseeType]
            ,[QQ]
            ,[SubProductID])
-	SELECT		
-			f.[CustID]
+	SELECT	
+			f.FeedbackID	
+		   ,f.[CustID]
            ,f.[TitleID]
            ,f.[FirstName]
            ,f.[LastName]
