@@ -256,7 +256,7 @@ INSERT INTO [dbo].[tmpFeedback]
            ,f.[QQ]
            ,f.[SubProductID]
 	FROM [dbo].[tmpFB__bk__001] t WITH(NOLOCK)
-		INNER JOIN tmpFeedback f WITH(NOLOCK) ON t.FeedbackId=f.FeedbackID
+		INNER JOIN crmFeedback f WITH(NOLOCK) ON t.FeedbackId=f.FeedbackID
 	WHERE t.FeedbackId<>533816
 
 -- Step3: Update data from table tmpFeedback on DB054 to table crmFeedback on DB052 by FeedbackID
