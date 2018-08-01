@@ -9,7 +9,7 @@ USE [bodb_CRM]
 GO
 --Step 1: create table tmpFeedback on DB054/bodb_CRM
 CREATE TABLE [dbo].[tmpFeedback](
-	[FeedbackID] [int] IDENTITY(1,1) NOT NULL,
+	[FeedbackID] [int]  NOT NULL,
 	[CustID] [int] NOT NULL,
 	[TitleID] [int] NULL,
 	[FirstName] [nvarchar](50) NULL,
