@@ -2,12 +2,12 @@
 	Created by: Winnie
 	Created Date: 20180801
 	Description: Roll back data for Multiple Review Incident RedmineID: #98711
-	Database: DB054/bodb_CRM
+	Database: DB054/bodb_CRM_20180725
 		
 */
 USE [bodb_CRM]
 GO
---Step 1: create table tmpFeedback on DB054/bodb_CRM
+--Step 1: create table tmpFeedback on DB054/bodb_CRM_20180725
 CREATE TABLE [dbo].[tmpFeedback](
 	[FeedbackID] [int]  NOT NULL,
 	[CustID] [int] NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE [dbo].[tmpFeedback](
 
 GO
 
--- Step2: Insert data into the table tmpFeedback
+-- Step2: Insert data into the table tmpFeedback  on DB054/bodb_CRM_20180725
 INSERT INTO [dbo].[tmpFeedback]
            (FeedbackID
 		   ,[CustID]
@@ -261,4 +261,87 @@ INSERT INTO [dbo].[tmpFeedback]
 		INNER JOIN crmFeedback f WITH(NOLOCK) ON t.FeedbackId=f.FeedbackID
 	WHERE t.FeedbackId<>533816
 
--- Step3: Update data from table tmpFeedback on DB054 to table crmFeedback on DB052 by FeedbackID
+-- Step3: Bring table tmpFeedback on DB054/bodb_CRM_20180725 to DB052/bodb_CRM 
+
+-- Step 4: Run on DB052/bodb_CRM
+UPDATE fb
+   SET fb.[CustID] = t.[CustID]
+      ,fb.[TitleID]=t.TitleID
+      ,fb.[FirstName] = t.[FirstName]
+      ,fb.[LastName] = t.[LastName]
+      ,fb.[Phone] = t.[Phone]
+      ,fb.[MobilePhone] = t.[MobilePhone]
+      ,fb.[Fax] = t.[Fax]
+      ,fb.[Email] = t.[Email]
+      ,fb.[LanguageID] = t.[LanguageID]
+      ,fb.[CountryID] = t.[CountryID]
+      ,fb.[CreateDate] = t.[CreateDate]
+      ,fb.[CreatorID] = t.[CreatorID]
+      ,fb.[FeedbackDate] = t.[FeedbackDate]
+      ,fb.[SolveDate] = t.[SolveDate]
+      ,fb.[CommunicationID] = t.[CommunicationID]
+      ,fb.[StationID] = t.[StationID]
+      ,fb.[MainCategoryID] = t.[MainCategoryID]
+      ,fb.[SubCategoryID] = t.[SubCategoryID]
+      ,fb.[SiteID] = t.[SiteID]
+      ,fb.[RoleID] = t.[RoleID]
+      ,fb.[ProductID] = t.[ProductID]
+      ,fb.[BetTypeID] = t.[BetTypeID]
+      ,fb.[ResponseID] = t.[ResponseID]
+      ,fb.[StatusID] = t.[StatusID]
+      ,fb.[Description] = t.[Description]
+      ,fb.[Solution] = t.[Solution]
+      ,fb.[IsReviewed] = t.[IsReviewed]
+      ,fb.[Review] = t.[Review]
+      ,fb.[ReviewerID] = t.[ReviewerID]
+      ,fb.[Subject] = t.[Subject]
+      ,fb.[Skype] = t.[Skype]
+      ,fb.[MSN] = t.[MSN]
+      ,fb.[ResolutionDate] = t.[ResolutionDate]
+      ,fb.[Pic1] = t.[Pic1]
+      ,fb.[Pic2] = t.[Pic2]
+      ,fb.[Pic3] = t.[Pic3]
+      ,fb.[PhoneCountryCode] = t.[PhoneCountryCode]
+      ,fb.[PhoneAreaCode] = t.[PhoneAreaCode]
+      ,fb.[Phone2] = t.[Phone2]
+      ,fb.[Phone2CountryCode] = t.[Phone2CountryCode]
+      ,fb.[Phone2AreaCode] = t.[Phone2AreaCode]
+      ,fb.[Phone3] = t.[Phone3]
+      ,fb.[Phone3CountryCode] = t.[Phone3CountryCode]
+      ,fb.[Phone3AreaCode] = t.[Phone3AreaCode]
+      ,fb.[MobilePhoneCountryCode] = t.[MobilePhoneCountryCode]
+      ,fb.[MobilePhoneAreaCode] = t.[MobilePhoneAreaCode]
+      ,fb.[FaxCountryCode] = t.[FaxCountryCode]
+      ,fb.[FaxAreaCode] = t.[FaxAreaCode]
+      ,fb.[Pic4] = t.[Pic4]
+      ,fb.[Passport] = t.[Passport]
+      ,fb.[Line1] = t.[Line1]
+      ,fb.[Line2] = t.[Line2]
+      ,fb.[Line3] = t.[Line3]
+      ,fb.[City] = t.[City]
+      ,fb.[Postcode] = t.[Postcode]
+      ,fb.[State] = t.[State]
+      ,fb.[BankLine1] = t.[BankLine1]
+      ,fb.[BankLine2] = t.[BankLine2]
+      ,fb.[BankLine3] = t.[BankLine3]
+      ,fb.[BankCity] = t.[BankCity]
+      ,fb.[BankCode] = t.[BankCode]
+      ,fb.[BankState] = t.[BankState]
+      ,fb.[Birthday] = t.[Birthday]
+      ,fb.[RefCode1] = t.[RefCode1]
+      ,fb.[RefCode2] = t.[RefCode2]
+      ,fb.[IsVip] = t.[IsVip]
+      ,fb.[Pic1Name] = t.[Pic1Name]
+      ,fb.[Pic2Name] = t.[Pic2Name]
+      ,fb.[Pic3Name] = t.[Pic3Name]
+      ,fb.[Pic4Name] = t.[Pic4Name]
+      ,fb.[WhatsApp] = t.[WhatsApp]
+      ,fb.[Line] = t.[Line]
+      ,fb.[WeChat] = t.[WeChat]
+      ,fb.[Yahoo] = t.[Yahoo]
+      ,fb.[BBM] = t.[BBM]
+      ,fb.[LicenseeType] = t.[LicenseeType]
+      ,fb.[QQ] = t.[QQ]
+      ,fb.[SubProductID] = t.[SubProductID]
+FROM crmfeedback fb WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN tmpFeedback t WITH(NOLOCK) ON t.feedbackID=fb.FeedbackID
