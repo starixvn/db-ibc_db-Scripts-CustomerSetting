@@ -261,10 +261,259 @@ INSERT INTO [dbo].[tmpFeedback]
 		INNER JOIN crmFeedback f WITH(NOLOCK) ON t.FeedbackId=f.FeedbackID
 	WHERE t.FeedbackId<>533816
 
--- Step3: Bring table tmpFeedback on DB054/bodb_CRM_20180725 to DB052/bodb_CRM 
-SELECT * INTO tmpFeedback FROM DB054.bodb_CRM_20180725.dbo.tmpFeedback
+--Step3:  create table tmpFeedback on DB052/bodb_CRM
+CREATE TABLE [dbo].[tmpFeedback](
+	[FeedbackID] [int]  NOT NULL,
+	[CustID] [int] NOT NULL,
+	[TitleID] [int] NULL,
+	[FirstName] [nvarchar](50) NULL,
+	[LastName] [nvarchar](50) NULL,
+	[Phone] [nvarchar](50) NULL,
+	[MobilePhone] [nvarchar](50) NULL,
+	[Fax] [nvarchar](50) NULL,
+	[Email] [nvarchar](254) NULL,
+	[LanguageID] [int] NULL,
+	[CountryID] [int] NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[CreatorID] [int] NULL,
+	[FeedbackDate] [datetime] NULL,
+	[SolveDate] [datetime] NULL,
+	[CommunicationID] [int] NULL,
+	[StationID] [int] NULL,
+	[MainCategoryID] [int] NULL,
+	[SubCategoryID] [int] NULL,
+	[SiteID] [int] NULL,
+	[RoleID] [int] NULL,
+	[ProductID] [int] NULL,
+	[BetTypeID] [int] NULL,
+	[ResponseID] [int] NULL,
+	[StatusID] [int] NULL,
+	[Description] [nvarchar](max) NULL,
+	[Solution] [nvarchar](max) NULL,
+	[IsReviewed] [bit] NOT NULL CONSTRAINT [DF_tmp_feedback_IsReviewed]  DEFAULT ((0)),
+	[Review] [nvarchar](max) NULL,
+	[ReviewerID] [int] NULL,
+	[Subject] [nvarchar](200) NULL,
+	[Skype] [nvarchar](100) NULL DEFAULT (NULL),
+	[MSN] [nvarchar](100) NULL DEFAULT (NULL),
+	[ResolutionDate] [datetime] NULL,
+	[Pic1] [nvarchar](100) NULL,
+	[Pic2] [nvarchar](100) NULL,
+	[Pic3] [nvarchar](100) NULL,
+	[PhoneCountryCode] [nvarchar](20) NULL,
+	[PhoneAreaCode] [nvarchar](20) NULL,
+	[Phone2] [nvarchar](100) NULL,
+	[Phone2CountryCode] [nvarchar](20) NULL,
+	[Phone2AreaCode] [nvarchar](20) NULL,
+	[Phone3] [nvarchar](100) NULL,
+	[Phone3CountryCode] [nvarchar](20) NULL,
+	[Phone3AreaCode] [nvarchar](20) NULL,
+	[MobilePhoneCountryCode] [nvarchar](20) NULL,
+	[MobilePhoneAreaCode] [nvarchar](20) NULL,
+	[FaxCountryCode] [nvarchar](20) NULL,
+	[FaxAreaCode] [nvarchar](20) NULL,
+	[Pic4] [nvarchar](100) NULL,
+	[Passport] [nvarchar](100) NULL,
+	[Line1] [nvarchar](100) NULL,
+	[Line2] [nvarchar](100) NULL,
+	[Line3] [nvarchar](100) NULL,
+	[City] [nvarchar](100) NULL,
+	[Postcode] [nvarchar](100) NULL,
+	[State] [nvarchar](100) NULL,
+	[BankLine1] [nvarchar](100) NULL,
+	[BankLine2] [nvarchar](100) NULL,
+	[BankLine3] [nvarchar](100) NULL,
+	[BankCity] [nvarchar](100) NULL,
+	[BankCode] [nvarchar](100) NULL,
+	[BankState] [nvarchar](100) NULL,
+	[Birthday] [datetime] NULL,
+	[RefCode1] [nvarchar](50) NULL,
+	[RefCode2] [nvarchar](50) NULL,
+	[IsVip] [bit] NULL,
+	[Pic1Name] [nvarchar](200) NULL,
+	[Pic2Name] [nvarchar](200) NULL,
+	[Pic3Name] [nvarchar](200) NULL,
+	[Pic4Name] [nvarchar](200) NULL,
+	[WhatsApp] [nvarchar](100) NULL,
+	[Line] [nvarchar](100) NULL,
+	[WeChat] [nvarchar](100) NULL,
+	[Yahoo] [nvarchar](100) NULL,
+	[BBM] [nvarchar](100) NULL,
+	[LicenseeType] [int] NULL,
+	[QQ] [nvarchar](100) NULL,
+	[SubProductID] [int] NULL,
+ CONSTRAINT [PK_tmp_Feedback] PRIMARY KEY CLUSTERED 
+(
+	[FeedbackID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [feedback_table]
+) ON [feedback_table] TEXTIMAGE_ON [feedback_table]
 
--- Step 4: Run on DB052/bodb_CRM
+GO
+
+-- Step4: Bring data table tmpFeedback on DB054/bodb_CRM_20180725 to DB052/bodb_CRM 
+INSERT INTO [dbo].[tmpFeedback]
+           (FeedbackID
+		   ,[CustID]
+           ,[TitleID]
+           ,[FirstName]
+           ,[LastName]
+           ,[Phone]
+           ,[MobilePhone]
+           ,[Fax]
+           ,[Email]
+           ,[LanguageID]
+           ,[CountryID]
+           ,[CreateDate]
+           ,[CreatorID]
+           ,[FeedbackDate]
+           ,[SolveDate]
+           ,[CommunicationID]
+           ,[StationID]
+           ,[MainCategoryID]
+           ,[SubCategoryID]
+           ,[SiteID]
+           ,[RoleID]
+           ,[ProductID]
+           ,[BetTypeID]
+           ,[ResponseID]
+           ,[StatusID]
+           ,[Description]
+           ,[Solution]
+           ,[IsReviewed]
+           ,[Review]
+           ,[ReviewerID]
+           ,[Subject]
+           ,[Skype]
+           ,[MSN]
+           ,[ResolutionDate]
+           ,[Pic1]
+           ,[Pic2]
+           ,[Pic3]
+           ,[PhoneCountryCode]
+           ,[PhoneAreaCode]
+           ,[Phone2]
+           ,[Phone2CountryCode]
+           ,[Phone2AreaCode]
+           ,[Phone3]
+           ,[Phone3CountryCode]
+           ,[Phone3AreaCode]
+           ,[MobilePhoneCountryCode]
+           ,[MobilePhoneAreaCode]
+           ,[FaxCountryCode]
+           ,[FaxAreaCode]
+           ,[Pic4]
+           ,[Passport]
+           ,[Line1]
+           ,[Line2]
+           ,[Line3]
+           ,[City]
+           ,[Postcode]
+           ,[State]
+           ,[BankLine1]
+           ,[BankLine2]
+           ,[BankLine3]
+           ,[BankCity]
+           ,[BankCode]
+           ,[BankState]
+           ,[Birthday]
+           ,[RefCode1]
+           ,[RefCode2]
+           ,[IsVip]
+           ,[Pic1Name]
+           ,[Pic2Name]
+           ,[Pic3Name]
+           ,[Pic4Name]
+           ,[WhatsApp]
+           ,[Line]
+           ,[WeChat]
+           ,[Yahoo]
+           ,[BBM]
+           ,[LicenseeType]
+           ,[QQ]
+           ,[SubProductID])
+SELECT 
+			FeedbackID
+		   ,[CustID]
+           ,[TitleID]
+           ,[FirstName]
+           ,[LastName]
+           ,[Phone]
+           ,[MobilePhone]
+           ,[Fax]
+           ,[Email]
+           ,[LanguageID]
+           ,[CountryID]
+           ,[CreateDate]
+           ,[CreatorID]
+           ,[FeedbackDate]
+           ,[SolveDate]
+           ,[CommunicationID]
+           ,[StationID]
+           ,[MainCategoryID]
+           ,[SubCategoryID]
+           ,[SiteID]
+           ,[RoleID]
+           ,[ProductID]
+           ,[BetTypeID]
+           ,[ResponseID]
+           ,[StatusID]
+           ,[Description]
+           ,[Solution]
+           ,[IsReviewed]
+           ,[Review]
+           ,[ReviewerID]
+           ,[Subject]
+           ,[Skype]
+           ,[MSN]
+           ,[ResolutionDate]
+           ,[Pic1]
+           ,[Pic2]
+           ,[Pic3]
+           ,[PhoneCountryCode]
+           ,[PhoneAreaCode]
+           ,[Phone2]
+           ,[Phone2CountryCode]
+           ,[Phone2AreaCode]
+           ,[Phone3]
+           ,[Phone3CountryCode]
+           ,[Phone3AreaCode]
+           ,[MobilePhoneCountryCode]
+           ,[MobilePhoneAreaCode]
+           ,[FaxCountryCode]
+           ,[FaxAreaCode]
+           ,[Pic4]
+           ,[Passport]
+           ,[Line1]
+           ,[Line2]
+           ,[Line3]
+           ,[City]
+           ,[Postcode]
+           ,[State]
+           ,[BankLine1]
+           ,[BankLine2]
+           ,[BankLine3]
+           ,[BankCity]
+           ,[BankCode]
+           ,[BankState]
+           ,[Birthday]
+           ,[RefCode1]
+           ,[RefCode2]
+           ,[IsVip]
+           ,[Pic1Name]
+           ,[Pic2Name]
+           ,[Pic3Name]
+           ,[Pic4Name]
+           ,[WhatsApp]
+           ,[Line]
+           ,[WeChat]
+           ,[Yahoo]
+           ,[BBM]
+           ,[LicenseeType]
+           ,[QQ]
+           ,[SubProductID]
+FROM DB054.bodb_CRM_20180725.dbo.tmpFeedback WITH(NOLOCK)
+
+-- Step 5: Run on DB052/bodb_CRM
 UPDATE fb
    SET fb.[CustID] = t.[CustID]
       ,fb.[TitleID]=t.TitleID
