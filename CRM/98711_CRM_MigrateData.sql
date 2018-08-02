@@ -262,6 +262,7 @@ INSERT INTO [dbo].[tmpFeedback]
 	WHERE t.FeedbackId<>533816
 
 -- Step3: Bring table tmpFeedback on DB054/bodb_CRM_20180725 to DB052/bodb_CRM 
+SELECT * INTO tmpFeedback FROM DB054.bodb_CRM_20180725.dbo.tmpFeedback
 
 -- Step 4: Run on DB052/bodb_CRM
 UPDATE fb
