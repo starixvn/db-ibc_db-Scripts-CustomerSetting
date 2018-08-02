@@ -5,8 +5,7 @@
 	Database: DB054/bodb_CRM_20180725
 		
 */
-USE [bodb_CRM]
-GO
+
 --Step 1: create table tmpFeedback on DB054/bodb_CRM_20180725
 CREATE TABLE [dbo].[tmpFeedback](
 	[FeedbackID] [int]  NOT NULL,
