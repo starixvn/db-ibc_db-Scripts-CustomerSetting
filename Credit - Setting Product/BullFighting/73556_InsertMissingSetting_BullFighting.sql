@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Copy PT & Bet Setting, Discount & WinLossLimit of BullFighting for OPS-GBP line
+	Task: Copy PT & Bet Setting, Discount & WinLossLimit of BullFighting for accounts miss data
 	DB: DBCUST/CustDB
-	Date: 20171201
+	Date: 20180803
 */
 CREATE TABLE #MissCust (CustId INT)
 INSERT INTO #MissCust (CustId) 
