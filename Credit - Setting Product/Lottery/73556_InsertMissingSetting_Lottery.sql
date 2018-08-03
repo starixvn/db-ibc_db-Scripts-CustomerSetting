@@ -50,26 +50,27 @@ WHERE ProductID = @ProductID AND SettingType IN (2)
 CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
+	currency INT
 )
 
 CREATE TABLE #SMATemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
-	roleid TINYINT
+	roleid TINYINT,
+	currency INT
 )
 	
-INSERT INTO #MemberTemp (CustID)
-SELECT custid
+INSERT INTO #MemberTemp (CustID, currency)
+SELECT custid, currency
 FROM Custinfo WITH (NOLOCK)
 WHERE roleid = 1  AND Enabled = 1 AND custid IN (SELECT custid FROM #MissCust)
 	
-	
-INSERT INTO #SMATemp (CustID, roleid)
-SELECT custid, roleid
+INSERT INTO #SMATemp (CustID, roleid, currency)
+SELECT custid, roleid, currency
 FROM Custinfo WITH (NOLOCK)
 WHERE roleid IN (2,3,4) AND Enabled = 1 AND custid IN (SELECT custid FROM #MissCust)
 
-DECLARE @MaxPT TINYINT, @Currency INT--, @MaxComm DECIMAL(9,8)
+DECLARE @MaxPT TINYINT
 SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 --SELECT TOP 1 @MaxComm = MaxDiscount FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 3
 	
@@ -161,25 +162,24 @@ FROM dbo.CustGameType cs WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE cs.GameTypeID = @fBetType
 	AND dest.SettingType = 2
+	AND cs.CustID <> 29472088
 	
 --------------------------------------Win Loss Limit-------------------------------------------------		
 --Agent Level
 INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
 SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
 FROM #SMATemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.custInfo c WITH (NOLOCK) ON c.custid = ci.CustID
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 	CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
-WHERE dest.SettingType = 6 AND cs.ExchangeId = c.currency AND cs.ProductId = @ProductID
+WHERE dest.SettingType = 6 AND cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
 
 --Member Level
 INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
 SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
 FROM #MemberTemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.custInfo c WITH (NOLOCK) ON c.custid = ci.CustID
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 	CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
-WHERE dest.SettingType = 6 AND cs.ExchangeId = c.currency AND cs.ProductId = @ProductID
+WHERE dest.SettingType = 6 AND cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
