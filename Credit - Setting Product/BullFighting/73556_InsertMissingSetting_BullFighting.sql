@@ -103,6 +103,7 @@ FROM dbo.custSetting cs WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 1
+	AND NOT EXISTS (SELECT 1 FROM CustPTSetting3rd_Agent WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 	
 --MEMBER LEVEL
 INSERT INTO dbo.CustPTSetting3rd_Member
@@ -131,6 +132,7 @@ FROM dbo.custSetting cs WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 1
+	AND NOT EXISTS (SELECT 1 FROM CustPTSetting3rd_Member WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 
 --------------------------------------Bet Setting-------------------------------------------------		
 --Agent Level
@@ -143,6 +145,7 @@ FROM #SMATemp ci
 	CROSS APPLY #DestinationSportBetType dest
 	INNER JOIN dbo.ProductBetSetting ps WITH (NOLOCK) ON dest.tSportType = ps.Sporttype AND dest.tBetType = ps.Bettype AND ps.Currency = ci.currency
 WHERE dest.SettingType = 16
+	AND NOT EXISTS (SELECT 1 FROM CustBetSetting3rd_Agent WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 
 --Member Level
 INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
@@ -150,6 +153,7 @@ SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0.1, 0.1
 FROM #MemberTemp ci
 	CROSS APPLY #DestinationSportBetType dest
 WHERE dest.SettingType = 16
+	AND NOT EXISTS (SELECT 1 FROM CustBetSetting3rd_Member WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 	
 --------------------------------------Commission Setting-------------------------------------------------		
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -167,6 +171,7 @@ FROM dbo.custSetting cs WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 3
+	AND NOT EXISTS (SELECT 1 FROM CustDiscount3rd_Agent WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 		 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
@@ -176,6 +181,7 @@ FROM dbo.custSetting cs WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 3
+	AND NOT EXISTS (SELECT 1 FROM CustDiscount3rd_Member WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 
 --------------------------------------Win Loss Limit-------------------------------------------------		
 --Agent Level
@@ -185,6 +191,7 @@ FROM #SMATemp ci
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 	CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
 WHERE dest.SettingType = 6 AND cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
+	AND NOT EXISTS (SELECT 1 FROM CustWinLossLimit_Agent WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 
 --Member Level
 INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
@@ -193,6 +200,7 @@ FROM #MemberTemp ci WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 	CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
 WHERE dest.SettingType = 6 AND cs.ExchangeId = ci.currency AND cs.ProductId = @ProductID
+	AND NOT EXISTS (SELECT 1 FROM CustWinLossLimit_Member WITH (NOLOCK) WHERE sporttype = 207 AND CustID = ci.CustID)
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
