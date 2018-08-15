@@ -100,7 +100,7 @@ WHERE d.CustID > @MaxCustID
 	 	
 ---------- For members ---------
 INSERT INTO #MemberTemp (CustID, currency, Type)
-SELECT  ci.custid, ci.currency, 1 -- member of direct master
+SELECT  ci.custid, ci.currency, 2 -- member of direct master
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
 WHERE ci.roleid = 1	AND ci.custid > @maxcustid AND ci.Enabled = 1 			
@@ -131,16 +131,20 @@ WHERE t.SettingType = 6 AND t.ProductID = @ProductID
 --Agent Level
 INSERT INTO dbo.CustDiscount3rd_Agent (CustID, SportType, BetType, Discount)	        
 SELECT ci.custid, sb.SportType, sb.BetType, 
-	CASE	WHEN ci.roleid = 4 THEN 0.85
+	CASE	WHEN ci.Type = 0 THEN 0.85
 			ELSE 0 END 
 FROM #SMATemp ci WITH(NOLOCK)
 	CROSS APPLY #SportBettypeFilter3 sb 
 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-SELECT ci.custid, sb.SportType, sb.BetType, 0, 0, 0, 0.85
+SELECT ci.custid, sb.SportType, sb.BetType, 
+		CASE WHEN ci.Type = 0 THEN 0.85 ELSE 0 END,
+		CASE WHEN ci.Type = 1 THEN 0.85 ELSE 0 END, 
+		0.85, 0.85
 FROM #MemberTemp ci WITH(NOLOCK)
 	CROSS APPLY #SportBettypeFilter3 sb
+
 ----------------------------------------WinLoss Limit Setting-------------------------------------------------		
 --Agent Level
 INSERT INTO dbo.CustWinLossLimit_Agent (CustID, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)

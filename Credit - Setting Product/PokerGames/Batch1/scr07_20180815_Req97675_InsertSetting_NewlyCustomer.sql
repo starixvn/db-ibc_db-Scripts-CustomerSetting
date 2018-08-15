@@ -98,12 +98,25 @@ FROM #MemberTemp ci WITH(NOLOCK)
 WHERE cs.ProductId = @ProductID	
 
 /*******************************CUST PRODUCTSTATUS TABLE*******************************/	
-DECLARE @xmlStrValue_0 XML, @Sporttype SMALLINT = 163
+DECLARE @xmlStrValue_0 XML, @xmlStrValue_1 XML, @Sporttype SMALLINT = 163
 
 SET @xmlStrValue_0 =(
 		SELECT (
 				SELECT psp.bitmapOrder	AS '@b'
 					, 0	AS '@s'
+				FROM ProductStatusProfile psp WITH (NOLOCK)
+				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1404
+				FOR XML PATH('r')
+					, TYPE
+				)
+		FOR XML PATH('root')
+			, TYPE
+		)
+
+SET @xmlStrValue_1 =(
+		SELECT (
+				SELECT psp.bitmapOrder	AS '@b'
+					, 1	AS '@s'
 				FROM ProductStatusProfile psp WITH (NOLOCK)
 				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1404
 				FOR XML PATH('r')
@@ -128,9 +141,10 @@ SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 
+--Should update disabled = 1 for newly member
 UPDATE cs
 SET bitmapIsDisabled = CASE WHEN ci.roleid BETWEEN 2 AND 4 THEN (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
-							ELSE cs.bitmapIsDisabled END
+							ELSE (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_1))) END
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 WHERE NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.srecommend)	
