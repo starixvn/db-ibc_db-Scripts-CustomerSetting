@@ -1,3 +1,10 @@
+/*
+	Created: Elodie
+	Date: 20180815
+	Task: Update status of Poker Games
+	DB: DBCust/CustDB
+*/
+
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@srecommend INT	
 	,@maxcustid INT
@@ -6,11 +13,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'SITDBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'SITDBCUST') RETURN -- run at dbcust only
-
-	--IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DB233') RETURN	-- run at all replicated servers
-	--IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DB233') RETURN -- run at dbcust only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
 	   AND dbo.f_CheckRepTable('CustProductStatus') = 1
@@ -37,7 +41,8 @@ BEGIN
 	/*******************************CUST PRODUCTSTATUS TABLE*******************************/	
 	UPDATE cs
 	SET 	
-		cs.bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))	,
+		cs.bitmapIsDisabled = CASE WHEN roleid <> 1 THEN (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
+								ELSE cs.bitmapIsDisabled END,
 		cs.bitmapIsHidden =  (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0))) 
 	FROM CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN custInfo ci WITH (NOLOCK) ON cs.CustID = ci.CustID
@@ -68,6 +73,7 @@ WHERE c.roleid = 4
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0
  AND c.site = '789y'
+ AND c.currency <> 20
  AND c.custid <= @max_custid
 
 -- For deployer info
@@ -121,6 +127,7 @@ WHERE c.roleid = 4
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0
  AND c.site = '789y'
+ AND c.currency <> 20
  AND c.custid <= @max_custid
 
 -- For deployer info
