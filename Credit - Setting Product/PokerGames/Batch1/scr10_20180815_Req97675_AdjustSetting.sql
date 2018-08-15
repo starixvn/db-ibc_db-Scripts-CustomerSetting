@@ -71,7 +71,7 @@ BEGIN
 	
 	SELECT custid INTO #ListCust
 	FROM DBLOG.bodb_CustomerLog.dbo.UserLog_Credit WITH (NOLOCK)
-	WHERE ActionID = 1200 AND logdate = GETDATE()
+	WHERE ActionID IN (1200,1201,1202,1203,1204,1205,1206,1211) AND logdate = GETDATE()
 	
 	IF @@ROWCOUNT = 0
 		RETURN
