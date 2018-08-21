@@ -24,15 +24,13 @@ WHERE ci.custid IN (2,3,16,17,35,21278849,21278858) -- dummy account
 CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
-	currency INT,
-	Type BIT --0: Dummy account or Direct account, 1: Indirect account
+	Type TINYINT --0: Direct member, 1: Member of Direct Agent, 2: Member of Direct Master
 )
 
 CREATE TABLE #SMATemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
 	roleid TINYINT,
-	currency INT,
 	Type BIT --0: Dummy account or Direct account, 1: Indirect account
 )
 	
@@ -140,7 +138,7 @@ FROM #SMATemp ci WITH(NOLOCK)
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
 SELECT ci.custid, sb.SportType, sb.BetType, 
 		CASE WHEN ci.Type = 0 THEN 0.85 ELSE 0 END,
-		CASE WHEN ci.Type = 1 THEN 0.85 ELSE 0 END, 
+		CASE WHEN ci.Type = 2 THEN 0 ELSE 0.85 END, 
 		0.85, 0.85
 FROM #MemberTemp ci WITH(NOLOCK)
 	CROSS APPLY #SportBettypeFilter3 sb
