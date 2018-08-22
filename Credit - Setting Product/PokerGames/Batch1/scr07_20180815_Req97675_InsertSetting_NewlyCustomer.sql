@@ -137,15 +137,15 @@ FROM dbo.custInfo ci WITH (NOLOCK)
 WHERE ci.srecommend IN (SELECT custid FROM #supers) AND custid > @MaxCustID
 
 UPDATE cs
-SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 
 --Should update disabled = 1 for newly member
 UPDATE cs
 SET bitmapIsDisabled = CASE WHEN ci.roleid BETWEEN 2 AND 4 THEN (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
 							ELSE (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_1))) END
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 WHERE NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.srecommend)	
 
