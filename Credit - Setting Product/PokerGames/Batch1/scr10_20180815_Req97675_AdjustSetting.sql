@@ -5,6 +5,7 @@
 	Date: 20180815
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09] 
+	@ReleaseDate DATETIME
 AS
 
 BEGIN
@@ -44,9 +45,7 @@ BEGIN
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
-	DECLARE @ProductID INT = 33, @currency INT, @ReleaseDate DATETIME
-
-	SELECT @ReleaseDate = CAST (GETDATE() AS DATE)
+	DECLARE @ProductID INT = 33, @currency INT
 
 	SELECT t.* 
 	INTO #SportBettypeFilter6
@@ -70,7 +69,7 @@ BEGIN
 	
 	SELECT custid INTO #ListCust
 	FROM DBLOG.bodb_CustomerLog.dbo.UserLog_Credit WITH (NOLOCK)
-	WHERE ActionID IN (1200,1201,1202,1203,1204,1205,1206,1211) AND logdate >= @ReleaseDate
+	WHERE ActionID IN (1200,1201,1202,1203,1204,1205,1206,1211) AND logdate > @ReleaseDate
 	
 	IF @@ROWCOUNT = 0
 		RETURN
