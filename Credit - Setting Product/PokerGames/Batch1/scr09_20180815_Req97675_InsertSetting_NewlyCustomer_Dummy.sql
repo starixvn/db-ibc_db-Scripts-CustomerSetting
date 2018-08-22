@@ -24,6 +24,7 @@ WHERE ci.custid IN (2,3,16,17,35,21278849,21278858) -- dummy account
 CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
+	currency INT,
 	Type TINYINT --0: Direct member, 1: Member of Direct Agent, 2: Member of Direct Master
 )
 
@@ -31,6 +32,7 @@ CREATE TABLE #SMATemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
 	roleid TINYINT,
+	currency INT,
 	Type BIT --0: Dummy account or Direct account, 1: Indirect account
 )
 	
@@ -151,7 +153,7 @@ SELECT ci.custid, sb.SportType, sb.BetType, 0,
 			WHEN FLOOR(ci.Credit * 0.1) > cs.DefaultLossLimit THEN cs.DefaultLossLimit ELSE FLOOR(ci.Credit * 0.1) END, 1
 FROM #SMATemp c WITH(NOLOCK)
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.CustID
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
+	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON c.currency = cs.ExchangeId
 	CROSS APPLY #SportBettypeFilter6 sb
 WHERE cs.ProductId = @ProductID	
 		 
@@ -162,7 +164,7 @@ SELECT ci.custid, sb.SportType, sb.BetType, 0,
 			WHEN FLOOR(ci.Credit * 0.1) > cs.DefaultLossLimit THEN cs.DefaultLossLimit ELSE FLOOR(ci.Credit * 0.1) END, 1
 FROM #MemberTemp c WITH(NOLOCK)
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.CustID
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
+	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON c.currency = cs.ExchangeId
 	CROSS APPLY #SportBettypeFilter6 sb
 WHERE cs.ProductId = @ProductID	
 
@@ -196,13 +198,13 @@ SET @xmlStrValue_1 =(
 		)
 
 UPDATE cs
-SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),
+SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),
 	bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 
 UPDATE cs
-SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),	
+SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),	
 	--Should update disabled = 1 for newly member
 	cs.bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_1)))
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
