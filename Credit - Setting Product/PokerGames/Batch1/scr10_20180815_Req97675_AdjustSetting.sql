@@ -44,11 +44,10 @@ BEGIN
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
-	CREATE TABLE #SMAList_CommSetting (custid INT, Discount DECIMAL(9,8))
-	CREATE TABLE #MemberList_CommSetting (custid INT, SuperDiscount DECIMAL(9,8), MasterDiscount DECIMAL(9,8), AgentDiscount DECIMAL(9,8), PlayerDiscount DECIMAL(9,8))
+	DECLARE @ProductID INT = 33, @currency INT, @ReleaseDate DATETIME
 
-	DECLARE @ProductID INT = 33, @currency INT
-	
+	SELECT @ReleaseDate = CAST (GETDATE() AS DATE)
+
 	SELECT t.* 
 	INTO #SportBettypeFilter6
 	FROM ProductSettingDetail t WITH (NOLOCK)
@@ -71,7 +70,7 @@ BEGIN
 	
 	SELECT custid INTO #ListCust
 	FROM DBLOG.bodb_CustomerLog.dbo.UserLog_Credit WITH (NOLOCK)
-	WHERE ActionID IN (1200,1201,1202,1203,1204,1205,1206,1211) AND logdate = GETDATE()
+	WHERE ActionID IN (1200,1201,1202,1203,1204,1205,1206,1211) AND logdate >= @ReleaseDate
 	
 	IF @@ROWCOUNT = 0
 		RETURN
