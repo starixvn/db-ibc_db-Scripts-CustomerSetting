@@ -117,6 +117,6 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @ReleaseDate = 'xxx'
 
 PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
