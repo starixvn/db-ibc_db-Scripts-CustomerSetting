@@ -24,6 +24,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site IN ('789y')
 	AND ci.currency <> 20
+	AND c.custid NOT IN (2,3,16,17,35,21278849,21278858) -- dummy account
 
 DECLARE @ProductID INT = 33, @currency INT
 
