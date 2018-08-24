@@ -41,8 +41,7 @@ BEGIN
 	/*******************************CUST PRODUCTSTATUS TABLE*******************************/	
 	UPDATE cs
 	SET 	
-		cs.bitmapIsDisabled = CASE WHEN roleid <> 1 THEN (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
-								ELSE cs.bitmapIsDisabled END,
+		cs.bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),
 		cs.bitmapIsHidden =  (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0))) 
 	FROM CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN custInfo ci WITH (NOLOCK) ON cs.CustID = ci.CustID
