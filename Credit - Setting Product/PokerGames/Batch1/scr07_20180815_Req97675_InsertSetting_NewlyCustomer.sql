@@ -129,7 +129,7 @@ SET @xmlStrValue_1 =(
 		)
 
 SELECT custid, roleid
-INTO #DisableLine
+INTO #EnableList
 FROM custInfo WITH (NOLOCK) 
 WHERE username IN (	'AZ1','AZ12','AZ13','AZ15','AZ3','AZ4','AZ5','AZ6','AZ7','BC5','BC7','BC8','BC9','BCA','BK','BL','BM','BP','BX14','BX15','BX16','BX19',
 					'BX21','BX3','BX32','BX37','BX38','BX41','BX43','BX45','BX48','BX54','BX55','BX60','BX63','BX64','BX75','BX76','BX79','BX81','BX84',
@@ -213,7 +213,7 @@ SET bitmapIsDisabled = CASE WHEN ci.roleid BETWEEN 2 AND 4 THEN (SELECT bitmap F
 							ELSE (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_1))) END
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-WHERE NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.srecommend)	
+WHERE EXISTS (SELECT 1 FROM #EnableList WHERE custid = ci.srecommend)	
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
