@@ -38,9 +38,8 @@ WHERE GroupName IN ('ACCYEN888','ACCUSD','ACCUT2','ACCUT','ACCUSDOTH','ACCYEN668
 
 --input Permission To
 INSERT INTO #PermissionMapping (PermissionFrom, PermissionTo)
-SELECT 82, 115 --Keno ==> Edit BullFighting Setting
-UNION ALL SELECT 85, 116 --Keno Bet Setting ==> Edit BullFighting Betting Limit
-UNION ALL SELECT 81, 114 --Enable Keno ==> Enable BullFighting Status
+SELECT 82, 119 --Keno ==> Edit Poker Games Setting
+UNION ALL SELECT 81, 117 --Enable Keno ==> Enable Poker Games
 
 --SIT
 --SELECT 82, 102 --Keno ==> Edit NG2 Setting

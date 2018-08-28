@@ -134,10 +134,8 @@ BEGIN
 	
 	--SMA Level
 	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0))),
-		bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
+	SET cs.bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrValue_0)))
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN CustInfo c WITH (NOLOCK) ON c.custid = cs.CustID
 		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 
 	--Member level
