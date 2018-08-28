@@ -21,11 +21,12 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site IN ('789y')
 	AND ci.currency <> 20
+	AND ci.currency IN (16,64)
 
 INSERT INTO #supers(custid)
 SELECT custid
 FROM CustInfo ci WITH (NOLOCK)
-WHERE custid IN (2,3,16,17,35,21278849,21278858)
+WHERE custid IN (16)
 
 DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 

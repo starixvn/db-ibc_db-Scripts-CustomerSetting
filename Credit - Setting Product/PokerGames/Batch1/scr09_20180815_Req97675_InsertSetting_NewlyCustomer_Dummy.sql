@@ -19,7 +19,7 @@ CREATE TABLE #DummySupers (custid int)
 INSERT INTO #DummySupers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (2,3,16,17,35,21278849,21278858) -- dummy account				
+WHERE ci.custid IN (16) -- dummy account				
 				          
 CREATE TABLE #MemberTemp
 (

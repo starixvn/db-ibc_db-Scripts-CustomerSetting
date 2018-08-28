@@ -211,7 +211,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (2,3,16,17,35,21278849,21278858) -- dummy account	
+WHERE ci.custid IN (16) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -255,7 +255,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (2,3,16,17,35,21278849,21278858) -- dummy account
+WHERE ci.custid IN (16) -- dummy account	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

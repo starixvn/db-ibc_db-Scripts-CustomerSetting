@@ -43,16 +43,11 @@ BEGIN
 		AND s.islicensee = 0
 		AND ci.site IN ('789y')
 		AND ci.currency <> 20
+		AND ci.currency IN (16,64)
 
 	--dummy account	
 	INSERT INTO #supers(custid)
-	SELECT 2
-	UNION ALL SELECT 3
-	UNION ALL SELECT 16
-	UNION ALL SELECT 17
-	UNION ALL SELECT 35
-	UNION ALL SELECT 21278849
-	UNION ALL SELECT 21278858 
+	SELECT 16
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustDiscount3rd_Agent

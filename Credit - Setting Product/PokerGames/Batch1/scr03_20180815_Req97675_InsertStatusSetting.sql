@@ -75,7 +75,8 @@ WHERE c.roleid = 4
  AND c.site = '789y'
  AND c.currency <> 20
  AND c.custid <= @max_custid
- AND c.custid NOT IN (2,3,16,17,35,21278849,21278858) -- dummy account
+ AND c.custid NOT IN (16) -- dummy account
+ AND c.currency IN (16,64)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -130,7 +131,8 @@ WHERE c.roleid = 4
  AND c.site = '789y'
  AND c.currency <> 20
  AND c.custid <= @max_custid
- AND c.custid NOT IN (2,3,16,17,35,21278849,21278858) -- dummy account
+ AND c.custid NOT IN (16) -- dummy account
+ AND c.currency IN (16,64)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
