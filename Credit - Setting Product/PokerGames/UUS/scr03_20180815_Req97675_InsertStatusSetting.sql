@@ -31,7 +31,7 @@ BEGIN
 					SELECT psp.bitmapOrder	AS '@b'
 						, 0	AS '@s'
 					FROM ProductStatusProfile psp WITH (NOLOCK)
-					WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1404
+					WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1405
 					FOR XML PATH('r')
 						, TYPE
 					)
