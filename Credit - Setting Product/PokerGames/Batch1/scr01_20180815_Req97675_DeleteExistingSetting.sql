@@ -50,6 +50,27 @@ BEGIN
 	SELECT 16
 
 	SELECT DISTINCT cg.custid 
+	INTO #CustPT_Agent
+	FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+						
+	SELECT DISTINCT cg.custid 
+	INTO #CustPT_Member
+	FROM CustPTSetting3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+		
+	SELECT DISTINCT cg.AgentID AS CustID
+	INTO #CustPTGroup_Member
+	FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
 	INTO #CustDiscount3rd_Agent
 	FROM dbo.CustDiscount3rd_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
@@ -75,6 +96,21 @@ BEGIN
 	FROM dbo.CustWinLossLimit_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN #CustPT_Agent ci ON ci.custid = cg.CustID
+	WHERE SportType = @Sporttype
+						
+	DELETE cg
+	FROM CustPTSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN #CustPT_Member ci ON ci.custid = cg.CustID
+	WHERE SportType = @Sporttype
+		
+	DELETE cg
+	FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
+		INNER JOIN #CustPTGroup_Member ci ON ci.CustID = cg.AgentID	
 	WHERE SportType = @Sporttype
 
 	DELETE cg
