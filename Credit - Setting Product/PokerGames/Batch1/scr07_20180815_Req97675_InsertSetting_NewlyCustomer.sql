@@ -287,6 +287,7 @@ WHERE EXISTS (SELECT 1 FROM #EnableList WHERE custid = ci.srecommend)
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
+DROP TABLE #SportBettypeFilter1
 DROP TABLE #SportBettypeFilter3
 DROP TABLE #SportBettypeFilter6	
 
