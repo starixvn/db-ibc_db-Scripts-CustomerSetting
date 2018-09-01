@@ -2,7 +2,7 @@
 	Created: Elodie
 	Task: Insert setting of Poker Games for dummy line
 	DB: DBCUST/CustDB
-	Date: 20171101
+	Date: 20180815
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
@@ -26,9 +26,15 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN			
 
-	DECLARE @ProductID INT = 33, @currency INT
+	DECLARE @ProductID INT = 33, @currency INT, @MaxPT TINYINT
 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
+	SELECT TOP 1 @MaxPT= MaxPT from ProductSettingDetail WITH(NOLOCK) where ProductID = @ProductID and SettingType = 1
+
+	SELECT t.* 
+	INTO #SportBettypeFilter1
+	FROM ProductSettingDetail t WITH (NOLOCK)
+	WHERE t.SettingType = 1 AND t.ProductID = @ProductID
 
 	SELECT t.* 
 	INTO #SportBettypeFilter3
@@ -135,6 +141,90 @@ BEGIN
 	SELECT ci.custid, 0
 	FROM #DirectMember ci
 
+	--------------------------------------PT Setting-------------------------------------------------	
+	--SUPER LEVEL
+	INSERT INTO dbo.CustPTSetting3rd_Agent
+		(	[CustID]
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			,[IsAutoMasterPT]
+			,[AutoMasterPT]
+			,[IsAutoSuperPT]
+			,[AutoSuperPT]
+			,[MinPT]
+			,[MaxPT])
+	SELECT 
+		ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MaxPT, @MaxPT, @MaxPT, 0, 0, 0, 0, 0, @MaxPT	
+	FROM #SMATemp ci 
+		CROSS APPLY #SportBettypeFilter1 dest
+	WHERE ci.roleid = 4
+	
+	--MASTER LEVEL
+	INSERT INTO dbo.CustPTSetting3rd_Agent
+		(	[CustID]
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			,[IsAutoMasterPT]
+			,[AutoMasterPT]
+			,[IsAutoSuperPT]
+			,[AutoSuperPT]
+			,[MinPT]
+			,[MaxPT])
+	SELECT 
+		ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, @MaxPT, 0, 0, 0, 0, 0, 0, @MaxPT	
+	FROM #SMATemp ci 
+		CROSS APPLY #SportBettypeFilter1 dest
+	WHERE ci.roleid = 3
+
+	--AGENT LEVEL
+	INSERT INTO dbo.CustPTSetting3rd_Agent
+		(	[CustID]
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			,[IsAutoMasterPT]
+			,[AutoMasterPT]
+			,[IsAutoSuperPT]
+			,[AutoSuperPT]
+			,[MinPT]
+			,[MaxPT])
+	SELECT 
+		ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, 0, 
+		CASE WHEN ci.Type = 0 THEN @MaxPT ELSE 0 END, 
+		0, 0, 0, 0, 0, @MaxPT	
+	FROM #SMATemp ci 
+		CROSS APPLY #SportBettypeFilter1 dest
+	WHERE ci.roleid = 2
+
+	--MEMBER LEVEL
+	INSERT INTO dbo.CustPTSetting3rd_Member
+		(	[custid]
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+			,	[IsAutoMasterPT]
+			,	[AutoMasterPT]
+			,	[IsAutoSuperPT]
+			,	[AutoSuperPT])
+	SELECT 
+		ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, 0, 0, 0, 0, 0, 0
+	FROM #MemberTemp ci 
+		CROSS APPLY #SportBettypeFilter1 dest
+
 	--------------------------------------Commission Setting-------------------------------------------------
 	--Agent Level
 	INSERT INTO dbo.CustDiscount3rd_Agent (CustID, SportType, BetType, Discount)	        
@@ -178,6 +268,7 @@ BEGIN
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+	DROP TABLE #SportBettypeFilter1
 	DROP TABLE #SportBettypeFilter3
 	DROP TABLE #SportBettypeFilter6		
 END

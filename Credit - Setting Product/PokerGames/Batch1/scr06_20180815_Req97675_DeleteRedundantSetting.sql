@@ -32,28 +32,49 @@ WHERE ci.roleid = 4
 	AND ci.currency IN (16,64)
 
 DELETE cg
-FROM CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
+FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
 WHERE SportType = @SportType
 	AND cg.custid > @maxcustID
 
 DELETE cg
-FROM CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)
+FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
 WHERE SportType = @SportType
 	AND cg.custid > @maxcustID
 
 DELETE cg
-FROM CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)	
+FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND c.custid > @maxcustID
+				
+DELETE cg
+FROM CustDiscount3rd_Agent cg WITH(ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
 WHERE SportType = @SportType
 	AND cg.custid > @maxcustID
 
 DELETE cg
-FROM CustWinLossLimit_Member cg WITH(UPDLOCK,ROWLOCK)
+FROM CustDiscount3rd_Member cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM CustWinLossLimit_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM CustWinLossLimit_Member cg WITH(ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
 WHERE SportType = @SportType

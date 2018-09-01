@@ -115,7 +115,14 @@ SELECT ci.custid, currency, 0
 FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID
 
-DECLARE @ProductID INT = 33, @currency INT
+DECLARE @ProductID INT = 33, @MaxPT TINYINT
+
+SELECT TOP 1 @MaxPT= MaxPT from ProductSettingDetail WITH(NOLOCK) where ProductID = @ProductID and SettingType = 1
+
+SELECT t.* 
+INTO #SportBettypeFilter1
+FROM ProductSettingDetail t WITH (NOLOCK)
+WHERE t.SettingType = 1 AND t.ProductID = @ProductID
 
 SELECT t.* 
 INTO #SportBettypeFilter3
@@ -126,6 +133,69 @@ SELECT t.*
 INTO #SportBettypeFilter6
 FROM ProductSettingDetail t WITH (NOLOCK)
 WHERE t.SettingType = 6 AND t.ProductID = @ProductID
+
+--------------------------------------PT Setting-------------------------------------------------	
+--MASTER LEVEL
+INSERT INTO dbo.CustPTSetting3rd_Agent
+	(	[CustID]
+		,[SportType]
+		,[BetType]
+		,[IsLive]
+		,[SuperPT]
+		,[MasterPT]
+		,[AgentPT]
+		,[IsAutoMasterPT]
+		,[AutoMasterPT]
+		,[IsAutoSuperPT]
+		,[AutoSuperPT]
+		,[MinPT]
+		,[MaxPT])
+SELECT 
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, @MaxPT, 0, 0, 0, 0, 0, 0, @MaxPT	
+FROM #SMATemp ci 
+	CROSS APPLY #SportBettypeFilter1 dest
+WHERE ci.roleid = 3
+
+--AGENT LEVEL
+INSERT INTO dbo.CustPTSetting3rd_Agent
+	(	[CustID]
+		,[SportType]
+		,[BetType]
+		,[IsLive]
+		,[SuperPT]
+		,[MasterPT]
+		,[AgentPT]
+		,[IsAutoMasterPT]
+		,[AutoMasterPT]
+		,[IsAutoSuperPT]
+		,[AutoSuperPT]
+		,[MinPT]
+		,[MaxPT])
+SELECT 
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, 0, 
+	CASE WHEN ci.Type = 0 THEN @MaxPT ELSE 0 END, 
+	0, 0, 0, 0, 0, @MaxPT	
+FROM #SMATemp ci 
+	CROSS APPLY #SportBettypeFilter1 dest
+WHERE ci.roleid = 2
+
+--MEMBER LEVEL
+INSERT INTO dbo.CustPTSetting3rd_Member
+	(	[custid]
+		,	[sporttype]
+		,	[bettype]
+		,	[islive]
+		,	[superPT]
+		,	[masterPT]
+		,	[agentPT]
+		,	[IsAutoMasterPT]
+		,	[AutoMasterPT]
+		,	[IsAutoSuperPT]
+		,	[AutoSuperPT])
+SELECT 
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, 0, 0, 0, 0, 0, 0
+FROM #MemberTemp ci 
+	CROSS APPLY #SportBettypeFilter1 dest
 
 ----------------------------------------Comm Setting-------------------------------------------------		
 --Agent Level
@@ -176,7 +246,7 @@ SET @xmlStrValue_0 =(
 				SELECT psp.bitmapOrder	AS '@b'
 					, 0	AS '@s'
 				FROM ProductStatusProfile psp WITH (NOLOCK)
-				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1404
+				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1405
 				FOR XML PATH('r')
 					, TYPE
 				)
@@ -189,7 +259,7 @@ SET @xmlStrValue_1 =(
 				SELECT psp.bitmapOrder	AS '@b'
 					, 1	AS '@s'
 				FROM ProductStatusProfile psp WITH (NOLOCK)
-				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1404
+				WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1405
 				FOR XML PATH('r')
 					, TYPE
 				)
@@ -212,6 +282,7 @@ FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
+DROP TABLE #SportBettypeFilter1
 DROP TABLE #SportBettypeFilter3
 DROP TABLE #SportBettypeFilter6	
 

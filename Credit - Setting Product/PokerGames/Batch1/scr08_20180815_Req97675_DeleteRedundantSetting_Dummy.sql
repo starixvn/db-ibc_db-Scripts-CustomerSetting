@@ -88,7 +88,7 @@ UNION
 SELECT ci.CustID,2 -- Agent of direct master
 FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster D ON ci.mrecommend = d.CustID 
-WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid > @maxcustid 
+WHERE ci.roleid = 2 AND ci.Enabled=1 AND ci.custid > @MaxCustID 
 UNION
 SELECT DISTINCT d.recommend, 2 -- agent of direct member
 FROM #DirectMember D 	
@@ -103,17 +103,32 @@ INSERT INTO #MemberTemp (CustID)
 SELECT  ci.custid -- member of direct master
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectMaster m ON ci.mrecommend = m.CustID
-WHERE ci.roleid = 1	AND ci.custid > @maxcustid AND ci.Enabled = 1 			
+WHERE ci.roleid = 1	AND ci.custid > @MaxCustID AND ci.Enabled = 1 			
 UNION ALL -- member of direct agent
 SELECT  ci.custid
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN #DirectAgent a ON ci.recommend = a.CustID
-WHERE ci.roleid = 1 AND ci.custid > @maxcustid AND ci.Enabled = 1 			
+WHERE ci.roleid = 1 AND ci.custid > @MaxCustID AND ci.Enabled = 1 			
 -- Direct member		
 UNION ALL
 SELECT ci.custid
 FROM #DirectMember ci
 WHERE ci.CustID > @MaxCustID	
+
+DELETE cg
+FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)	
+	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.CustID = c.custid
+WHERE SportType = @SportType
+
+DELETE cg
+FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)
+	INNER JOIN #MemberTemp c WITH (NOLOCK) ON cg.CustID = c.custid		
+WHERE SportType = @SportType
+
+DELETE cg
+FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
+	INNER JOIN #SMATemp c WITH (NOLOCK) ON cg.AgentID = c.custid	
+WHERE SportType = @SportType
 
 DELETE cg
 FROM CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
