@@ -27,9 +27,11 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (16) -- dummy account
 	AND ci.currency IN (16,64)
 
-DECLARE @ProductID INT = 33, @MaxPT TINYINT
+DECLARE @ProductID INT = 33, @MaxPT TINYINT, @MinPT TINYINT
 
 SELECT TOP 1 @MaxPT= MaxPT from ProductSettingDetail WITH(NOLOCK) where ProductID = @ProductID and SettingType = 1
+
+SELECT @MinPT = @MaxPT
 
 SELECT t.* 
 INTO #SportBettypeFilter1
