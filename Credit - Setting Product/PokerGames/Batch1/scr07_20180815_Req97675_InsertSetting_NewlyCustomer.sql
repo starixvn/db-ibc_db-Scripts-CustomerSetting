@@ -88,7 +88,7 @@ INSERT INTO dbo.CustPTSetting3rd_Agent
 		,[MinPT]
 		,[MaxPT])
 SELECT 
-	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MaxPT, @MaxPT, @MaxPT, 0, 0, 0, 0, 0, @MaxPT	
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MaxPT, @MaxPT, @MaxPT, 0, 0, 0, 0, @MinPT, @MaxPT	
 FROM #SMATemp ci 
 	CROSS APPLY #SportBettypeFilter1 dest
 WHERE ci.roleid = 4
@@ -128,7 +128,7 @@ INSERT INTO dbo.CustPTSetting3rd_Member
 		,	[IsAutoSuperPT]
 		,	[AutoSuperPT])
 SELECT 
-	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, 0, 0, 0, 0, 0, 0, 0
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MinPT, 0, 0, 0, 0, 0, 0
 FROM #MemberTemp ci 
 	CROSS APPLY #SportBettypeFilter1 dest
 
