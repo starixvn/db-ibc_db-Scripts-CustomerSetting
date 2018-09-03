@@ -10,7 +10,7 @@ DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
 	
-CREATE TABLE #supers (custid int)
+CREATE TABLE #supers (custid INT)
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -27,11 +27,9 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (16) -- dummy account
 	AND ci.currency IN (16,64)
 
-DECLARE @ProductID INT = 33, @MaxPT TINYINT, @MinPT TINYINT
+DECLARE @ProductID INT = 33, @MaxPT TINYINT
 
 SELECT TOP 1 @MaxPT= MaxPT from ProductSettingDetail WITH(NOLOCK) where ProductID = @ProductID and SettingType = 1
-
-SELECT @MinPT = @MaxPT
 
 SELECT t.* 
 INTO #SportBettypeFilter1
@@ -52,7 +50,8 @@ CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
 	currency INT,
-	Credit MONEY
+	Credit MONEY,
+	MinPT TINYINT
 )
 
 CREATE TABLE #SMATemp
@@ -60,18 +59,29 @@ CREATE TABLE #SMATemp
 	CustID INT PRIMARY KEY CLUSTERED,
 	roleid TINYINT,
 	currency INT,
-	Credit MONEY
+	Credit MONEY,
+	MinPT TINYINT
 )
 	
-INSERT INTO #MemberTemp (CustID, currency, Credit)
-SELECT custid, currency, Credit
+INSERT INTO #MemberTemp (CustID, currency, Credit, MinPT)
+SELECT custid, currency, Credit, @MaxPT
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
 	
-INSERT INTO #SMATemp (CustID, roleid, currency, Credit)
-SELECT custid, roleid, currency, Credit
+INSERT INTO #SMATemp (CustID, roleid, currency, Credit, MinPT)
+SELECT custid, roleid, currency, Credit, 85
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
+
+UPDATE mem
+SET mem.MinPT = 0
+FROM #MemberTemp mem
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = mem.custid
+	INNER JOIN dbo.custInfo s ON ci.srecommend = s.custid
+WHERE s.username IN (	'ABS','ABB','ABW','BBA','BBD','BBE','BBF','SQ','SM','EE','ET','XE','XF','XL','XXC','XXF','EAL','SCV','EH5','EH6',
+						'ZW1','ZW2','ZW3','ZW4','ZW5','ZW6','ZW7','ZW8','ZW9','ZW10','ZW11','ZW12','ZW13','ZW14','ZW15','ZW16','ZW17',
+						'ZW18','ZW19','ZW20','ZW21','ZW22','ZW23','ZW24','ZW25','ZW26','ZW27','ZW28','ZW29','ZW30','KY48','S05','KP100',
+						'KP200','KP300','PV100','TWW','TV','SJK.','XTV','COPA','TK','TKH','SJK','ED24','SC')
 
 --------------------------------------PT Setting-------------------------------------------------	
 --SUPER LEVEL
@@ -90,7 +100,7 @@ INSERT INTO dbo.CustPTSetting3rd_Agent
 		,[MinPT]
 		,[MaxPT])
 SELECT 
-	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MaxPT, @MaxPT, @MaxPT, 0, 0, 0, 0, @MinPT, @MaxPT	
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MaxPT, @MaxPT, @MaxPT, 0, 0, 0, 0, MinPT, @MaxPT	
 FROM #SMATemp ci 
 	CROSS APPLY #SportBettypeFilter1 dest
 WHERE ci.roleid = 4
@@ -130,7 +140,7 @@ INSERT INTO dbo.CustPTSetting3rd_Member
 		,	[IsAutoSuperPT]
 		,	[AutoSuperPT])
 SELECT 
-	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MinPT, 0, 0, 0, 0, 0, 0
+	ci.CustID, dest.SportType, dest.BetType, dest.IsLive, MinPT, 0, 0, 0, 0, 0, 0
 FROM #MemberTemp ci 
 	CROSS APPLY #SportBettypeFilter1 dest
 
