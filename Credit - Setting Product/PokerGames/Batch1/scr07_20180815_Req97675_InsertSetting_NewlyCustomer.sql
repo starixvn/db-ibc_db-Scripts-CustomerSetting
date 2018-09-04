@@ -69,7 +69,7 @@ FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
 	
 INSERT INTO #SMATemp (CustID, roleid, currency, Credit, MinPT)
-SELECT custid, roleid, currency, Credit, 85
+SELECT custid, roleid, currency, Credit, @MaxPT
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
 
