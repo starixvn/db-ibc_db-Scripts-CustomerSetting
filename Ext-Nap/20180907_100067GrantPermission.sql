@@ -10,3 +10,4 @@ GO
 
 GRANT SELECT ON Age_CustDateLimit TO bodbExtAccNet
 GRANT UPDATE ON Age_CustDateLimit TO bodbExtAccNet
+GRANT INSERT ON Age_CustDateLimit TO bodbExtAccNet
