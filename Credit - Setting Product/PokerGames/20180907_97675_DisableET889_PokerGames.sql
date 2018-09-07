@@ -28,7 +28,7 @@ BEGIN
 	SET @xmlStrValue_1 =(
 			SELECT (
 					SELECT psp.bitmapOrder	AS '@b'
-						, 0	AS '@s'
+						, 1	AS '@s'
 					FROM ProductStatusProfile psp WITH (NOLOCK)
 					WHERE psp.Sporttype = @Sporttype AND Bettype BETWEEN 1401 AND 1405
 					FOR XML PATH('r')
