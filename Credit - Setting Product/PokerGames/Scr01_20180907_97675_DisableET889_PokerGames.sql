@@ -7,6 +7,7 @@
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@srecommend INT	
+	,@MaxCustID INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -44,7 +45,7 @@ BEGIN
 		cs.bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrValue_1)))
 	FROM CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON cs.CustID = ci.CustID
-	WHERE ci.srecommend = @srecommend
+	WHERE ci.srecommend = @srecommend AND ci.custid <=@MaxCustID
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -56,7 +57,9 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @srecommend INT
+DECLARE @srecommend INT, @MaxCustID INT
+
+SELECT @MaxCustID = xxx
 
 CREATE TABLE #DisableList (CustId INT)
 INSERT INTO #DisableList (CustId)
@@ -167,6 +170,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09
 			@srecommend = @srecommend
+			,@MaxCustID = @MaxCustID
 			,@target = 'REPLICATED'
 						
 	waitfor delay '00:00:0.100'
@@ -180,7 +184,9 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @srecommend INT
+DECLARE @srecommend INT, @MaxCustID INT
+
+SELECT @MaxCustID = xxx
 
 CREATE TABLE #DisableList (CustId INT)
 INSERT INTO #DisableList (CustId)
@@ -291,6 +297,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09
 			@srecommend = @srecommend
+			,@MaxCustID = @MaxCustID
 			,@target = 'DBCUST'
 						
 	waitfor delay '00:00:0.100'
