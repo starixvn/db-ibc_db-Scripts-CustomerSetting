@@ -565,7 +565,7 @@ FROM #Betlimit t
 	LEFT JOIN exchange e WITH(NOLOCK) 
 		ON RTRIM(LTRIM(t.Currency))=e.Code
 	INNER JOIN Dep_StakeLevel s WITH(NOLOCK) 
-		ON s.GameTypeID=4001 AND s.GameGroupID=4 
+		ON s.GameTypeID=4001 AND s.GameGroupID=3
 			AND CASE WHEN RTRIM(LTRIM(t.Currency))='UUS' THEN 20 ELSE e.exchangeid END=s.ExchangeID
 WHERE Level=1 
 
