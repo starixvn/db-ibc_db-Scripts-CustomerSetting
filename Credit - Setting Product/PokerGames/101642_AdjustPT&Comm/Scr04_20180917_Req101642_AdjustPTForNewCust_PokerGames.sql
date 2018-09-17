@@ -66,7 +66,7 @@ FROM #MemberTemp mem
 WHERE s.username IN (	'ABS','ABB','ABW','BBA','BBD','BBE','BBF','SQ','SM','EE','ET','XE','XF','XL','XXC','XXF','EAL','SCV','EH5','EH6',
 						'ZW1','ZW2','ZW3','ZW4','ZW5','ZW6','ZW7','ZW8','ZW9','ZW10','ZW11','ZW12','ZW13','ZW14','ZW15','ZW16','ZW17',
 						'ZW18','ZW19','ZW20','ZW21','ZW22','ZW23','ZW24','ZW25','ZW26','ZW27','ZW28','ZW29','ZW30','KY48','S05','KP100',
-						'KP200','KP300','PV100','TWW','TV','SJK.','XTV','COPA','TK','TKH','SJK','ED24','SC')
+						'KP200','KP300','PV100','TWW','TV','SJK.','XTV','COPA','TK','TKH','SJK','ED24','SC','MPK')
 
 --------------------------------------PT Setting-------------------------------------------------	
 --SUPER LEVEL
