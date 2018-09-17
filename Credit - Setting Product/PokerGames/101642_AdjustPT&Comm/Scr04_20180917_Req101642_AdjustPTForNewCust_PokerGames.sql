@@ -26,6 +26,7 @@ WHERE ci.roleid = 4
 	AND ci.currency <> 20
 	AND ci.custid NOT IN (16) -- dummy account
 	AND ci.currency IN (16,64)
+	AND ci.username <> 'MPK'
 
 DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT
 
@@ -50,7 +51,7 @@ SELECT ci.custid, @MaxPT
 FROM Custinfo ci WITH (NOLOCK)
 	INNER JOIN CustPTSetting3rd_Member cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND ci.custid > @maxcustid	
-	AND cs.SuperPT = 85
+	AND cs.SuperPT = 85 AND cs.SportType = @Sporttype
 
 INSERT INTO #SMATemp (CustID, roleid, MinPT)
 SELECT custid, roleid, @MaxPT

@@ -56,8 +56,8 @@ BEGIN
 	SELECT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN CustPTSetting3rd_Member cs WITH (NOLOCK) ON ci.custid = cs.custid
-	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND ci.custid <= @maxcustid
-		AND cs.SuperPT = 85
+	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND ci.custid <= @maxcustid		
+		AND cs.SuperPT = 85 AND cs.SportType = @Sporttype
 	
 	INSERT INTO #SMATemp (CustID, roleid)
 	SELECT custid, roleid
@@ -122,6 +122,7 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.custid NOT IN (16) -- dummy account
  AND c.currency IN (16,64)
+ AND c.username <> 'MPK'
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -177,6 +178,7 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.custid NOT IN (16) -- dummy account
  AND c.currency IN (16,64)
+ AND c.username <> 'MPK'
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
