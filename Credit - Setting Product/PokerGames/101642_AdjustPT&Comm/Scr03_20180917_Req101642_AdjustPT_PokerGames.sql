@@ -29,7 +29,7 @@ BEGIN
 	
 	DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT
 
-	SELECT @MaxPT = 85, @Sporttype = 163
+	SELECT @MaxPT = 80, @Sporttype = 163
 	
 	IF EXISTS (	SELECT 1 
 				FROM CustInfo WITH (NOLOCK) 
