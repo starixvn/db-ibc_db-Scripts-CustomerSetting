@@ -53,14 +53,14 @@ BEGIN
 	)
 	
 	INSERT INTO #MemberTemp (CustID)
-	SELECT ci.custid, credit
+	SELECT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN CustPTSetting3rd_Member cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND ci.custid <= @maxcustid
 		AND cs.SuperPT = 85
 	
 	INSERT INTO #SMATemp (CustID, roleid)
-	SELECT custid, roleid, credit
+	SELECT custid, roleid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
