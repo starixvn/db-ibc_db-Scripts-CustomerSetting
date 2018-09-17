@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Date: 20180917
-	Task: Adjust PT and comm setting of Poker Games
+	Task: Adjust PT setting of Poker Games
 	DB: DBCust/CustDB
 */
 
@@ -43,23 +43,23 @@ BEGIN
 
 	CREATE TABLE #MemberTemp
 	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		Credit MONEY
+		CustID INT PRIMARY KEY CLUSTERED
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT,
-		Credit MONEY
+		roleid TINYINT
 	)
 	
-	INSERT INTO #MemberTemp (CustID, credit)
-	SELECT custid, credit
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
+	INSERT INTO #MemberTemp (CustID)
+	SELECT ci.custid, credit
+	FROM Custinfo ci WITH (NOLOCK)
+		INNER JOIN CustPTSetting3rd_Member cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND ci.custid <= @maxcustid
+		AND cs.SuperPT = 85
 	
-	INSERT INTO #SMATemp (CustID, roleid, credit)
+	INSERT INTO #SMATemp (CustID, roleid)
 	SELECT custid, roleid, credit
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
@@ -87,7 +87,7 @@ BEGIN
 
 	--MEMBER LEVEL
 	UPDATE cs
-	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
+	SET cs.SuperPT = @MaxPT
 	FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
 		INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustID
 	WHERE cs.SportType = @Sporttype
