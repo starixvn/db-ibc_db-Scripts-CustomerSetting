@@ -27,9 +27,11 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 	
-	DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT
+	DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT, @batchUpdate INT
+	DECLARE @tmpCust TABLE(CustID INT PRIMARY KEY, roleid TINYINT)
 
 	SELECT @MaxPT = 80, @Sporttype = 163
+	SET @batchUpdate = 5000
 	
 	IF EXISTS (	SELECT 1 
 				FROM CustInfo WITH (NOLOCK) 
@@ -73,24 +75,48 @@ BEGIN
 	WHERE cs.SportType = @Sporttype AND ci.roleid = 4
 	
 	--MASTER, AGENT LEVEL
-	UPDATE cs
-	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
-	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
-	WHERE cs.SportType = @Sporttype AND ci.roleid IN (2,3)
+	WHILE(1=1)
+	BEGIN
+		DELETE @tmpCust
+				
+		DELETE TOP (@batchUpdate) t
+		OUTPUT DELETED.custid, DELETED.roleid INTO @tmpCust
+		FROM #SMATemp t
+				
+		IF @@rowcount = 0 
+			BREAK;
+					
+		UPDATE cs
+		SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
+		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+			INNER JOIN @tmpCust ci ON ci.CustID = cs.CustID
+		WHERE cs.SportType = @Sporttype AND ci.roleid IN (2,3)
 
-	UPDATE cs
-	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
-	FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
-		INNER JOIN #SMATemp ci ON ci.CustID = cs.AgentID
-	WHERE cs.SportType = @Sporttype AND ci.roleid IN (2)
+		UPDATE cs
+		SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
+		FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
+			INNER JOIN @tmpCust ci ON ci.CustID = cs.AgentID
+		WHERE cs.SportType = @Sporttype AND ci.roleid IN (2)
+	END		
 
 	--MEMBER LEVEL
-	UPDATE cs
-	SET cs.SuperPT = @MaxPT
-	FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
-		INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustID
-	WHERE cs.SportType = @Sporttype
+	WHILE(1=1)
+	BEGIN
+		DELETE @tmpCust
+				
+		DELETE TOP (@batchUpdate) t
+		OUTPUT DELETED.custid, 1 INTO @tmpCust
+		FROM #MemberTemp t
+				
+		IF @@rowcount = 0 
+			BREAK;
+					
+		UPDATE cs
+		SET cs.SuperPT = @MaxPT
+		FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
+			INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustID
+		WHERE cs.SportType = @Sporttype
+	END	
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp	
