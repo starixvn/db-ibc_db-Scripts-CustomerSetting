@@ -27,9 +27,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 	
-	DECLARE @MaxPT TINYINT, @MinPT TINYINT, @MaxComm DECIMAL(19,8), @Sporttype SMALLINT
+	DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT
 
-	SELECT @MaxPT = 85, @MaxComm = 0.85, @Sporttype = 163
+	SELECT @MaxPT = 85, @Sporttype = 163
 	
 	IF EXISTS (	SELECT 1 
 				FROM CustInfo WITH (NOLOCK) 
@@ -67,50 +67,30 @@ BEGIN
 	--------------------------------------PT Setting-------------------------------------------------	
 	--SUPER LEVEL
 	UPDATE cs
-	SET cs.SuperPT = @MaxPT, cs.MasterPT = @MaxPT, cs.AgentPT = @MaxPT, cs.MaxPT = @MaxPT, cs.MinPT = @MinPT
+	SET cs.SuperPT = @MaxPT, cs.MasterPT = @MaxPT, cs.AgentPT = @MaxPT, cs.MinPT = @MinPT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
 	WHERE cs.SportType = @Sporttype AND ci.roleid = 4
 	
 	--MASTER, AGENT LEVEL
 	UPDATE cs
-	SET cs.MaxPT = @MaxPT
+	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
 	WHERE cs.SportType = @Sporttype AND ci.roleid IN (2,3)
 
-	--MEMBER LEVEL
-	INSERT INTO dbo.CustPTSetting3rd_Member
-		(	[custid]
-			,	[sporttype]
-			,	[bettype]
-			,	[islive]
-			,	[superPT]
-			,	[masterPT]
-			,	[agentPT]
-			,	[IsAutoMasterPT]
-			,	[AutoMasterPT]
-			,	[IsAutoSuperPT]
-			,	[AutoSuperPT])
-	SELECT 
-		ci.CustID, dest.SportType, dest.BetType, dest.IsLive, @MinPT, 0, 0, 0, 0, 0, 0
-	FROM #MemberTemp ci 
-		CROSS APPLY #SportBettypeFilter1 dest
-	
-	----------------------------------------Comm Setting-------------------------------------------------		
-	--Agent Level
-	INSERT INTO dbo.CustDiscount3rd_Agent (CustID, SportType, BetType, Discount)	        
-	SELECT ci.custid, sb.SportType, sb.BetType, 
-		CASE	WHEN ci.roleid = 4 THEN 0.85
-				ELSE 0 END 
-	FROM #SMATemp ci WITH(NOLOCK)
-		CROSS APPLY #SportBettypeFilter3 sb 
+	UPDATE cs
+	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
+	FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
+		INNER JOIN #SMATemp ci ON ci.CustID = cs.AgentID
+	WHERE cs.SportType = @Sporttype AND ci.roleid IN (2)
 
-	--Member Level
-	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-	SELECT ci.custid, sb.SportType, sb.BetType, 0, 0, 0, 0.85
-	FROM #MemberTemp ci WITH(NOLOCK)
-		CROSS APPLY #SportBettypeFilter3 sb
+	--MEMBER LEVEL
+	UPDATE cs
+	SET cs.SuperPT = CASE WHEN cs.SuperPT = 85 THEN @MaxPT ELSE cs.SuperPT END
+	FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
+		INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustID
+	WHERE cs.SportType = @Sporttype
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp	
