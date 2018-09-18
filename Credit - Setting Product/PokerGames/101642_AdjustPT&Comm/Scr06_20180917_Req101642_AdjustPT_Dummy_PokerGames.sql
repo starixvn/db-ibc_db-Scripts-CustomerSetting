@@ -114,15 +114,15 @@ BEGIN
 	--MASTER LEVEL
 	UPDATE cs
 	SET cs.MasterPT = CASE WHEN cs.MasterPT = 85 THEN @MaxPT ELSE cs.MasterPT END
-	FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
-		INNER JOIN #SMATemp ci ON ci.CustID = cs.AgentID
+	FROM dbo.CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
 	WHERE cs.SportType = @Sporttype AND ci.roleid = 3
 
 	--AGENT LEVEL
 	UPDATE cs
 	SET cs.AgentPT = CASE WHEN cs.AgentPT = 85 THEN @MaxPT ELSE cs.AgentPT END
-	FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
-		INNER JOIN #SMATemp ci ON ci.CustID = cs.AgentID
+	FROM dbo.CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
 	WHERE cs.SportType = @Sporttype AND ci.roleid = 2	
 
 	DROP TABLE #SMATemp
