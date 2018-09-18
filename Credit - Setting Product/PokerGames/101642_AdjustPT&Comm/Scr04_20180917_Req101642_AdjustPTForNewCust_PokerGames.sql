@@ -28,7 +28,7 @@ WHERE ci.roleid = 4
 	AND ci.currency IN (16,64)
 	AND ci.username <> 'MPK'
 
-DECLARE @MaxPT TINYINT, @MinPT TINYINT, @Sporttype SMALLINT
+DECLARE @MaxPT TINYINT, @Sporttype SMALLINT
 
 SELECT @MaxPT = 80, @Sporttype = 163
 	
@@ -71,7 +71,7 @@ WHERE s.username IN (	'ABS','ABB','ABW','BBA','BBD','BBE','BBF','SQ','SM','EE','
 --------------------------------------PT Setting-------------------------------------------------	
 --SUPER LEVEL
 UPDATE cs
-SET cs.SuperPT = @MaxPT, cs.MasterPT = @MaxPT, cs.AgentPT = @MaxPT, cs.MinPT = @MinPT
+SET cs.SuperPT = @MaxPT, cs.MasterPT = @MaxPT, cs.AgentPT = @MaxPT, cs.MinPT = ci.MinPT
 FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	INNER JOIN #SMATemp ci ON ci.CustID = cs.CustID
 WHERE cs.SportType = @Sporttype AND ci.roleid = 4
