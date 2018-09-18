@@ -14,7 +14,7 @@ SELECT @Discount = '<ROOT>
 							/>
 						</ROOT>'
 
-PRINT N'Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
@@ -64,4 +64,4 @@ BEGIN
 	waitfor delay '00:00:0.200'
 END
 
-PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'

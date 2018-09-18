@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20180917
 */ 
-PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
 DECLARE @MaxCustID INT
 	
@@ -99,4 +99,4 @@ WHERE cs.SportType = @Sporttype
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
 
-PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
