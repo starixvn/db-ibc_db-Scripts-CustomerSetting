@@ -114,7 +114,7 @@ BEGIN
 		UPDATE cs
 		SET cs.SuperPT = @MaxPT
 		FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
-			INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustID
+			INNER JOIN @tmpCust ci ON ci.CustID = cs.CustID
 		WHERE cs.SportType = @Sporttype
 	END	
 

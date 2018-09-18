@@ -33,6 +33,7 @@ WHERE c.roleid = 4
  AND c.site = '789y'
  AND c.currency <> 20
  AND c.currency IN (16,64)
+ AND c.username <> 'MPK'
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -60,7 +61,7 @@ BEGIN
 			, @SettingType  = 3
 			, @Discount_XML = @Discount
 
-	waitfor delay '00:00:0.100'
+	waitfor delay '00:00:0.200'
 END
 
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
