@@ -7,10 +7,10 @@
 USE [CustDB]
 GO
 
-TRUNCATE TABLE CustSuperProfile
+DELETE FROM CustSuperProfile
 GO
 
---105 affected rows
+--6464 affected rows
 INSERT INTO CustSuperProfile (custid, firstname, lastname, phone, mobilephone, fax, email, remark)
 SELECT DISTINCT c.custid, firstname, lastname, phone, mobilephone, fax, email, remark
 FROM DBAGE.bodb_Age.dbo.Acc_CustGroup ac WITH (NOLOCK)
