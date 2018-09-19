@@ -6,8 +6,9 @@
 
 USE [CustDB]
 GO
---TRUNCATE TABLE CustSuperProfile
 
+TRUNCATE TABLE CustSuperProfile
+GO
 
 --105 affected rows
 INSERT INTO CustSuperProfile (custid, firstname, lastname, phone, mobilephone, fax, email, remark)
