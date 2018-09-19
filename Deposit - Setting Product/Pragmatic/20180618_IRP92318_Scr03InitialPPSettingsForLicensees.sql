@@ -181,7 +181,7 @@ INSERT INTO #supers(custid, currency)
 SELECT custid, currency
 FROM  Dep_CustSuper with(nolock) 
 WHERE custid <= @max_custid
-	AND Site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','Goobet','UNObet')
+	AND Site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','UNObet')
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -231,7 +231,7 @@ INSERT INTO #supers(custid, currency)
 SELECT custid, currency
 FROM  Dep_CustSuper WITH(NOLOCK) 
 WHERE custid <= @max_custid
-	AND Site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','Goobet','UNObet')
+	AND Site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','UNObet')
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

@@ -11,7 +11,7 @@ DECLARE @max_custid INT = xxx,--old max_custid
 SELECT custid 
 INTO #supers
 FROM dbo.Dep_CustSuper WITH(NOLOCK) 
-WHERE site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','Goobet','UNObet')
+WHERE site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','UNObet')
 					
 CREATE TABLE #tblCust (custid INT PRIMARY KEY,roleid TINYINT, currency INT, mrecommend INT)
 DECLARE @bitmapOrder INT = 8,--PP

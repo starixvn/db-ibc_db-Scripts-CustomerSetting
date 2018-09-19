@@ -9,7 +9,7 @@ DECLARE @max_custid INT = xxx
 SELECT custid 
 INTO #supers
 FROM dbo.Dep_CustSuper WITH(NOLOCK) 
-WHERE site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','Goobet','UNObet')
+WHERE site IN ('Aoncash','Macaubet','ITCbet','9bet','M8bola','Q8bola','NBCbet','BE7','Bolanation','Sbcbet','UNObet')
 
 --profile setting Dep_LicenseeProductSetting					
 DELETE Dep_LicenseeProductSetting WITH(UPDLOCK,ROWLOCK)
