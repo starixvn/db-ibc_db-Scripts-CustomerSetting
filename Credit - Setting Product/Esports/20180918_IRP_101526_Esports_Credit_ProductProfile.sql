@@ -1,6 +1,6 @@
 /*
-	Created: 20180703@Elodie
-	Task: Insert product profile for Card Club
+	Created: 20180918@Winnie
+	Task: Insert product profile for Esports
 	DB: DBCUST/CustDB
 */
 
@@ -9,74 +9,38 @@
 USE CustDB
 GO
 
-DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxDiscount DECIMAL(9,8), @IsSync BIT, @IsHidden BIT, @IsDisabled BIT, @IntervalValue DECIMAL(19,8)
+DECLARE @SettingStatus TINYINT, 
+		@ProductID INT,	
+		@IsSync BIT, 
+		@IsHidden BIT, 
+		@IsDisabled BIT 
+	
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
-SELECT @ProductID = 33
+SELECT @ProductID = 16
 SELECT @IsSync = 1
-SELECT @IsHidden = 1
-SELECT @IsDisabled = 1
-SELECT @MaxDiscount = 0.9
-SELECT @IntervalValue = 0.05
+SELECT @IsHidden = 0
+SELECT @IsDisabled = 0
 
 --PT Setting
 INSERT INTO	dbo.ProductSettingDetail
 		(	SettingType, SportType	, BetType	, IsLive, ProductID		, MaxPT	, MaxDiscount	, IsSync	, IsHidden	, IsDisabled	, SettingLevel, DisplayOrder, SettingStatus, IntervalValue)
 VALUES	
 --Status Setting																																				
-		(	13         , 163		, 1401		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 3           , 1           , @SettingStatus, NULL)
-	,	(	13         , 163		, 1402		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 3           , 1           , @SettingStatus, NULL)
-	,	(	13         , 163		, 1403		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 3           , 1           , @SettingStatus, NULL)
-	,	(	13         , 163		, 1404		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 3           , 1           , @SettingStatus, NULL)
---WinLossLimit Setting																																				
-	,	(	6		   , 163		, 1401		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 1           , 3           , @SettingStatus, NULL)
---Comm	
-	,	(	3          , 163		, 1401		, 0     , @ProductID	, NULL	, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue)
+		(	13         , 43		, 1		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 2           , 1           , @SettingStatus, NULL)
+-- PT Setting
+	,	(	1         , 43		, 1		, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+	,	(	1         , 43		, 2		, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+	,	(	1         , 43		, 3		, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+	,	(	1         , 43		, 10	, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+	,	(	1         , 43		, 20	, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+	,	(	1         , 43		, 9999	, 0     , @ProductID	, 90	, NULL			, NULL		, NULL		, NULL			, 4           , 3           , @SettingStatus, NULL)
+--Bet limit																																				
+	,	(	2		  , 43		, 1		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2            , 2           , @SettingStatus, NULL)
 	
 
 -- BEGIN STEP 2: DEPLOY THIS SCRIPT ON DBCUST/CustDB	 --
 -----------------------------------------------------------
 
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
-VALUES	(163, 1401, 13), (163, 1402, 14), (163, 1403, 15), (163, 1404, 16)
-
-INSERT INTO dbo.ProductSettingSystemDisplay
-        ( SystemID ,
-          ProductID ,
-          SettingType ,
-          DisplayMode
-        )
-SELECT 5,@ProductID,13,3
-UNION ALL 
-SELECT 5,@ProductID,6,3
-UNION ALL 
-SELECT 5,@ProductID,3,3
-
-INSERT INTO [dbo].[ProductStatusSiteCurrency]
-           ([SportType]
-           ,[BetType]
-           ,[Currency]
-           ,[SiteID]
-           ,[IsHidden]
-           ,[IsDisabled]
-		   ,[HasSynced])
-SELECT sb.Sporttype,sb.Bettype, 0 AS exchangeid, siteid, 0 AS IsHidden, 0 AS IsDisabled, 1 AS HasSynced
-FROM site s WITH (NOLOCK)
-	CROSS JOIN (SELECT 163 AS Sporttype, 1401 AS Bettype
-				UNION SELECT 163, 1402
-				UNION SELECT 163, 1403
-				UNION SELECT 163, 1404) sb
-WHERE s.site = '789y'
-
---SELECT * FROM ProductSettingDetail WHERE ProductID = 33
---SELECT * FROM ProductStatusProfile 
---SELECT * FROM dbo.SettingSystem
---SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 33
---SELECT * FROM ProductStatusSiteCurrency WHERE Sporttype = 163
-
---DELETE FROM ProductSettingDetail WHERE ProductID = 33
---DELETE FROM ProductStatusProfile WHERE Sporttype = 163
---DELETE FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 33
---DELETE FROM ProductStatusSiteCurrency WHERE Sporttype = 163
-
-
+SELECT 43,1,18
 
