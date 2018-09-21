@@ -58,7 +58,8 @@ INSERT INTO #tmpFB
 	[Email] ,[LanguageID],[CountryID] ,[FeedbackDate],[CommunicationID] ,[StationID],[MainCategoryID],[SubCategoryID],[SiteID],[RoleID],[ProductID],[BetTypeID] ,[ResponseID],[StatusID] ,[Description],
 	[Solution],[Review] ,[ReviewerID],[Subject],[Skype],[MSN],[ResolutionDate],[Pic1] ,[Pic2],[Pic3] ,[PhoneCountryCode],[PhoneAreaCode],[Phone2] ,[Phone2CountryCode] ,[Phone2AreaCode],
 	[Phone3],[Phone3CountryCode],[Phone3AreaCode],[MobilePhoneCountryCode],[MobilePhoneAreaCode],[FaxCountryCode],[FaxAreaCode] ,[Pic4],[Passport],[Birthday],[RefCode2],[IsVip],[WhatsApp],[Line],
-	[WeChat],[Yahoo],[BBM],[LicenseeType] ,[QQ] ,[SubProductID])
+	[WeChat],[Yahoo],[BBM],[LicenseeType] ,[QQ] ,[SubProductID],
+	AutoField ,Remark )
 SELECT t.FeedbackID,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FirstName)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LastName)[1]','NVARCHAR(50)')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Phone)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MobilePhone)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Fax)[1]','NVARCHAR(50)')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Email)[1]','NVARCHAR(254)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LanguageID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/CountryID)[1]','INT')
@@ -85,7 +86,7 @@ WHERE ActionID = 201
 	AND l.LogID IN(1928609,1928610,1928611,1928612,1928613,1928614,1928615,1928616,1928617,1928618,1928619,1928620,1928621,1928622,1928623,1928624,1928625)
 
 UPDATE  t
-	SET t.Description= (SELECT AutoField AS AutoField, Description AS Remark  FOR XML RAW,ROOT('ROOT'))
+	SET t.Description= (SELECT AutoField AS AutoField, Remark AS Remark  FOR XML RAW,ROOT('ROOT'))
 FROM #tmpFB t
 
 UPDATE fb
