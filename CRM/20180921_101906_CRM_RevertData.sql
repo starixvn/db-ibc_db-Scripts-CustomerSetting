@@ -102,16 +102,16 @@ DELETE fs
 FROM crmFeedbackSetting fs
 	INNER JOIN #tmpMultiUpdate t ON fs.FeedbackID=t.FeedbackID
 
-INSERT INTO crmFeedbackSetting(FeedbackID,SettingID,SubSettingID)
-SELECT t.FeedbackID,t.MainCategoryID,t.SubCategoryID
+INSERT INTO crmFeedbackSetting(FeedbackID,SettingID,SubSettingID,SubSettingIDLevel3)
+SELECT t.FeedbackID,t.MainCategoryID,t.SubCategoryID,0
 FROM #tmpFB t
 
-INSERT INTO crmFeedbackSetting(FeedbackID,SettingID)
-SELECT t.FeedbackID,t.CommunicationID
+INSERT INTO crmFeedbackSetting(FeedbackID,SettingID,SubSettingID,SubSettingIDLevel3)
+SELECT t.FeedbackID,t.CommunicationID,0,0
 FROM #tmpFB t
 
-INSERT INTO crmFeedbackSetting(FeedbackID,SettingID)
-SELECT t.FeedbackID,t.StationID
+INSERT INTO crmFeedbackSetting(FeedbackID,SettingID,SubSettingID,SubSettingIDLevel3)
+SELECT t.FeedbackID,t.StationID,0,0
 FROM #tmpFB t
 
 INSERT INTO crmFeedbackSetting(FeedbackID,SettingID,SubSettingID,SubSettingIDLevel3)
