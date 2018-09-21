@@ -30,7 +30,7 @@ BEGIN
 	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
 	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)		
 	DECLARE @Sporttype INT
-	SELECT @Sporttype=219	
+	SELECT @Sporttype=43
 	--- get direct master
 	INSERT INTO #DirectMaster (CustID,roleid)
 	SELECT ci.custid, ci.roleid

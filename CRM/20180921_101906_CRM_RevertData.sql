@@ -14,7 +14,8 @@ CREATE TABLE #tmpFB(FeedbackID INT PRIMARY KEY,[TitleID] [int] NULL,[FirstName] 
 	[PhoneAreaCode] [nvarchar](20) NULL,[Phone2] [nvarchar](100) NULL,[Phone2CountryCode] [nvarchar](20) NULL,[Phone2AreaCode] [nvarchar](20) NULL,[Phone3] [nvarchar](100) NULL,[Phone3CountryCode] [nvarchar](20) NULL,
 	[Phone3AreaCode] [nvarchar](20) NULL,[MobilePhoneCountryCode] [nvarchar](20) NULL,[MobilePhoneAreaCode] [nvarchar](20) NULL,[FaxCountryCode] [nvarchar](20) NULL,[FaxAreaCode] [nvarchar](20) NULL,
 	[Pic4] [nvarchar](100) NULL,[Passport] [nvarchar](100) NULL,[Birthday] [datetime] NULL,[RefCode2] [nvarchar](50) NULL,[IsVip] [bit] NULL,[WhatsApp] [nvarchar](100) NULL,[Line] [nvarchar](100) NULL,
-	[WeChat] [nvarchar](100) NULL,[Yahoo] [nvarchar](100) NULL,[BBM] [nvarchar](100) NULL,[LicenseeType] [int] NULL,[QQ] [nvarchar](100) NULL,[SubProductID] [int] NULL )
+	[WeChat] [nvarchar](100) NULL,[Yahoo] [nvarchar](100) NULL,[BBM] [nvarchar](100) NULL,[LicenseeType] [int] NULL,[QQ] [nvarchar](100) NULL,[SubProductID] [int] NULL,
+	AutoField VARCHAR(MAX),Remark VARCHAR(MAX) )
 
 INSERT INTO #tmpMultiUpdate(FeedbackID)
 SELECT 552151
@@ -64,7 +65,7 @@ SELECT t.FeedbackID,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/FeedbackDate)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/CommunicationID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/StationID)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MainCategoryID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubCategoryID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SiteID)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/RoleID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ProductID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/BettypeID)[1]','INT')
-,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ResponseID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/StatusID)[1]','INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Remark)[1]','NVARCHAR(MAX)')
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ResponseID)[1]', 'INT'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/StatusID)[1]','INT'),NULL
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Solution)[1]', 'NVARCHAR(MAX)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Review)[1]','NVARCHAR(MAX)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Reviewer)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Subject)[1]', 'NVARCHAR(200)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Skype)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/MSN)[1]','NVARCHAR(100)')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/ResolutionDate)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic1)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Pic2)[1]','NVARCHAR(100)')
@@ -76,11 +77,16 @@ SELECT t.FeedbackID,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/TitleID)[1]','INT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Birthday)[1]', 'DATETIME'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/RefCode2)[1]','NVARCHAR(50)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/IsVip)[1]','BIT')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/WhatsApp)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Line)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/WeChat)[1]','NVARCHAR(100)')
 ,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Yahoo)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/BBM)[1]','NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/LicenseeType)[1]','INT')
-,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/QQ)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubProductID)[1]','INT')	
+,l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/QQ)[1]', 'NVARCHAR(100)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/SubProductID)[1]','INT'),
+l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/AutoField)[1]','NVARCHAR(MAX)'),l.Oldvalues.value('(/Acc_CRM_FeedbackUpd/Remark)[1]','NVARCHAR(MAX)')
 from crmLogFeedback l (nolock)				
 	INNER JOIN #tmpMultiUpdate t ON l.FeedbackID=t.FeedbackID
 WHERE ActionID = 201	
 	AND l.LogID IN(1928609,1928610,1928611,1928612,1928613,1928614,1928615,1928616,1928617,1928618,1928619,1928620,1928621,1928622,1928623,1928624,1928625)
+
+UPDATE  t
+	SET t.Description= (SELECT AutoField AS AutoField, Description AS Remark  FOR XML RAW,ROOT('ROOT'))
+FROM #tmpFB t
 
 UPDATE fb
 SET 
