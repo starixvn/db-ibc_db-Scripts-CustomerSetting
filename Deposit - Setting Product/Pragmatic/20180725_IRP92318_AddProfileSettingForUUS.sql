@@ -169,12 +169,14 @@ UNION SELECT 	4161	,	20	,	'0.1'	,	'30'	,	0.1	,	30	--	UUS	as currency
 UNION SELECT 	4162	,	20	,	'0.2'	,	'20'	,	0.2	,	20	--	UUS	as currency
 UNION SELECT 	4163	,	20	,	'0.05'	,	'15'	,	0.05	,	15	--	UUS	as currency
 UNION SELECT 	4164	,	20	,	'0.07'	,	'420'	,	0.07	,	420	--	UUS	as currency
+/*
+--not offered this time
 UNION SELECT 	4165	,	20	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	UUS	as currency
 UNION SELECT 	4166	,	20	,	'0.5'	,	'5'	,	0.5	,	5	--	UUS	as currency
 UNION SELECT 	4167	,	20	,	'0.25'	,	'50'	,	0.25	,	50	--	UUS	as currency
 UNION SELECT 	4168	,	20	,	'0.1'	,	'30'	,	0.1	,	30	--	UUS	as currency
 UNION SELECT 	4169	,	20	,	'0.2'	,	'20'	,	0.2	,	20	--	UUS	as currency
-
+*/
 
 DELETE g
 FROM dbo.Dep_StakeLevelGroupDetail g WITH(UPDLOCK,ROWLOCK)
