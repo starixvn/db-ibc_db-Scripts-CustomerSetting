@@ -8,6 +8,23 @@
 USE [bodb_CustomerLog]
 GO
 
+--create temporary table on FileGroup [Data] for UAT testing then drop when launch PRO
+CREATE TABLE [dbo].[UserLog_Dep_CustSetting](
+  [LogID] [bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+  [UserID] [int] NULL,
+  [CustID] [int] NULL,
+  [logDate] [datetime] NULL,  
+  [ActionID] [int] NULL,
+  [TrackingValue] [nvarchar](max) NULL,  
+  [TrackingValue2] [nvarchar](max) NULL,
+  [Duration] [int] NULL,
+  [Language] [VARCHAR](3),
+  [IP] [VARCHAR](15)
+) ON DATA
+
+
+--Deploy this script when launch PRO
+
 -- Adds four new filegroups to the bodb_CustomerLog database  
 ALTER DATABASE bodb_CustomerLog ADD FILEGROUP Dep_CustSetting_18M09;  
 GO  
