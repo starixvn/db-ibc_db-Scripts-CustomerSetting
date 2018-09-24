@@ -43,7 +43,8 @@ UNION ALL
 SELECT 552721
 
 UPDATE fb
-	SET fb.ReviewerID=NULL
+	SET fb.ReviewerID=NULL,fb.Review=NULL
 FROM [dbo].[crmFeedback] fb
 	INNER JOIN #tmpMultiUpdate t ON fb.FeedbackID=t.FeedbackID
 	
+DROP TABLE #tmpMultiUpdate
