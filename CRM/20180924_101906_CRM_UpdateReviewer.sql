@@ -46,5 +46,6 @@ UPDATE fb
 	SET fb.ReviewerID=NULL,fb.Review=NULL
 FROM [dbo].[crmFeedback] fb
 	INNER JOIN #tmpMultiUpdate t ON fb.FeedbackID=t.FeedbackID
+WHERE fb.IsReviewed=0
 	
 DROP TABLE #tmpMultiUpdate
