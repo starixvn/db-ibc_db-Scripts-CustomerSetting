@@ -167,7 +167,7 @@ WHERE GameTypeID = 4101
 
 
 
-UNION SELECT 	4101	GameTypeID,	9	ExchangeID,	'0.1'	MinLabel,	'40'	MaxLabel,	0.1	MinStake,	40	MaxStake--	AUD	as code	AUD	as currency
+SELECT 	4101	GameTypeID,	9	ExchangeID,	'0.1'	MinLabel,	'40'	MaxLabel,	0.1	MinStake,	40	MaxStake--	AUD	as code	AUD	as currency
 INTO #tmpStake
 UNION SELECT 	4102	,	9	,	'0.1'	,	'40'	,	0.1	,	40	--	AUD	as code	AUD	as currency
 UNION SELECT 	4103	,	9	,	'0.03'	,	'9'	,	0.03	,	9	--	AUD	as code	AUD	as currency
