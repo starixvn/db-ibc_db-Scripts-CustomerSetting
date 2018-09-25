@@ -18,7 +18,7 @@ CREATE TABLE [dbo].[SettlementSpecialBettypeProfile](
 	[SportType] [tinyint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
 	[BetID] [bigint] NOT NULL,
-	[ResourceID] [varchar](10) NOT NULL,
+	[ResourceID] [varchar](20) NOT NULL,
 	[SettleType] [char](3) NOT NULL,
 	[GroupType] [char](2) NOT NULL,
 	[OrdNo] [smallint] NULL,
