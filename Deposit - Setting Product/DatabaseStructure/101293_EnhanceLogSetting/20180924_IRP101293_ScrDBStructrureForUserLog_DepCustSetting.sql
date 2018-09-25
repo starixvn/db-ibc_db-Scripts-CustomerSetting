@@ -15,8 +15,8 @@ CREATE TABLE [dbo].[UserLog_Dep_CustSetting](
   [CustID] [int] NULL,
   [logDate] [datetime] NULL,  
   [ActionID] [int] NULL,
-  [TrackingValue] [nvarchar](max) NULL,  
-  [TrackingValue2] [nvarchar](max) NULL,
+  [TrackingValue] [varchar](max) NULL,  
+  [TrackingValue2] [varchar](max) NULL,
   [Duration] [int] NULL,
   [Language] [VARCHAR](3),
   [IP] [VARCHAR](15)
@@ -157,8 +157,8 @@ CREATE TABLE [dbo].[UserLog_Dep_CustSetting](
 		[CustID] [int] NULL,
 		[logDate] [datetime] NULL,		
 		[ActionID] [int] NULL,
-		[TrackingValue] [nvarchar](max) NULL,		
-		[TrackingValue2] [nvarchar](max) NULL,
+		[TrackingValue] [varchar](max) NULL,		
+		[TrackingValue2] [varchar](max) NULL,
 		[Duration] [int] NULL,
 		[Language] [VARCHAR](3),
 		[IP] [VARCHAR](15)
