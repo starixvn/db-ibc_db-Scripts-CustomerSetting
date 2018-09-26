@@ -34,7 +34,7 @@ BEGIN
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON cs.CustID = ci.CustID
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1
-		AND ci.roleid IN(2,3,4)
+		
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -53,7 +53,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid	AND c.Enabled=1		
-
+		AND ci.Username='supertestlive'
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -84,7 +84,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE (ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid AND c.Enabled=1)
-
+		AND ci.Username='supertestlive'
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
