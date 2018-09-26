@@ -8,6 +8,9 @@
 USE CUSTDB
 GO
 
+--dont initial profile setting coz it's been already on UAT
+--just need re-initial global settings 
+/*
 --insert product setting
 INSERT INTO [dbo].[Dep_ProductSetting]
            ([ProductSettingID]
@@ -51,6 +54,7 @@ INSERT INTO [dbo].[GameGroup]
            ,[IsDeposit])
 SELECT 8,248,4101,'Level 1',1
 GO
+*/
 
 --Insert Dep_StakeLevel
 /*
@@ -80,6 +84,7 @@ SELECT [StakeLevelID]
 	   ,[ExchangeID] 
 FROM #Dep_StakeLevel
 */
+/*
 INSERT INTO [dbo].[Dep_StakeLevel]
            ([StakeLevelID]
            ,[GameTypeID]
@@ -87,8 +92,8 @@ INSERT INTO [dbo].[Dep_StakeLevel]
            ,[ExchangeID]
            )
 SELECT 	507	,	4101	,	8	,	20
-
 GO
+*/
 
 --Insert Dep_StakeLevelGroupDetail
 /*INSERT INTO [dbo].[Dep_StakeLevelGroupDetail]
