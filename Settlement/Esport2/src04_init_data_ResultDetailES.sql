@@ -13,7 +13,7 @@ SELECT m.Matchid, '00', m.finalhomescore, m.finalawayscore
 	, CASE WHEN m.eventstatus = 'completed' THEN 5 ELSE 0 END AS ResultStatusID
 		
 	, CASE  WHEN m.eventstatus = 'completed' AND m.betstatus LIKE 'Refund%' THEN 1
-			WHEN m.eventstatus = 'completed' THEN 4
+			WHEN m.eventstatus = 'completed' THEN 4.
 			ELSE 0 END
 		AS SettlementStatusID
 	,m.creator, m.kickofftime, m.creator, m.changetime
@@ -34,9 +34,9 @@ SELECT m.Matchid, '00', m.finalhomescore, m.finalawayscore
 			ELSE 0 END
 		AS SettlementStatusID
 	,m.creator, m.kickofftime, m.creator, m.changetime
-FROM Match m
+FROM Match14 m
 	LEFT JOIN ResultDetailES14 rs ON rs.matchid = m.matchid 
-WHERE rs.Matchid IS NULL AND m.Sporttype = 43 AND m.eventstatus <> 'running'
+WHERE rs.Matchid IS NULL AND m.Sporttype = 43
 
 	
 	
