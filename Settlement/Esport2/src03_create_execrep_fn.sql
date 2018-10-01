@@ -1,7 +1,7 @@
 /*
 	Created: Vicky
 	Task: create execrep fn
-	DB: DBPRO/bodb02,DBTXN/bodb02, 
+	DB: DBTXN/bodb02, DBACC/bodb02, DBAGE/bodb02, DBEXT/bodb02, DB042/bodb02
 	Date: 20180912
 */
 USE [bodb02]
@@ -14,22 +14,22 @@ AS
 BEGIN
 	SELECT 1
 END 
-	
+GO
 -------------------------------------------------------------SP NAP_Admin_Calculate_Refund_9001	
-ALTER PROCEDURE [dbo].[NAP_Admin_Calculate_Refund_9001]
+CREATE PROCEDURE [dbo].[NAP_Admin_Calculate_Refund_9001]
 	@transIds					VARCHAR(MAX)	 = NULL
 
 AS
 BEGIN
 	SELECT 1
 END 
-
+GO
 
 -------------------------------------------------------------SP NAP_Admin_Calculate_Undo_9001
-ALTER PROCEDURE [dbo].[NAP_Admin_Calculate_Undo_9001]
+CREATE PROCEDURE [dbo].[NAP_Admin_Calculate_Undo_9001]
 	@transIds      		VARCHAR(MAX)
 AS
 BEGIN
 	SELECT 1
 END 
-	
+GO
