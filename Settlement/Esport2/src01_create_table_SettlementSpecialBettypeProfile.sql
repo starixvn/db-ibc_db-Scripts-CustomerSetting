@@ -22,28 +22,15 @@ CREATE TABLE [dbo].[SettlementSpecialBettypeProfile](
 	[SettleType] [char](3) NOT NULL,
 	[GroupType] [char](2) NOT NULL,
 	[OrdNo] [smallint] NULL,
-	[RoundID] [varchar](10) NULL,
- CONSTRAINT [PK_SettlementSpecialBettypeProfile] PRIMARY KEY CLUSTERED 
-(
-	[BetType] ASC,
-	[SportType] ASC,
-	[BetID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
+	[RoundID] [varchar](10) NULL
 ) ON [DATA]
 GO
 
 
 
-CREATE NONCLUSTERED INDEX [idx_sporttype_resourceid] ON [dbo].[SettlementSpecialBettypeProfile] 
+CREATE CLUSTERED INDEX [IX_SettlementSpecialBettypeProfile_resourceid_sporttype] ON [dbo].[SettlementSpecialBettypeProfile] 
 (
 	[ResourceID] ASC,
-	[SportType] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
-GO
-
-CREATE NONCLUSTERED INDEX [idx_settletype_sporttype] ON [dbo].[SettlementSpecialBettypeProfile] 
-(
-	[SettleType] ASC,
 	[SportType] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 GO
