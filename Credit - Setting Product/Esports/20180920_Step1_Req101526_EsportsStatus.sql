@@ -6,8 +6,7 @@
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
-	@srecommend INT	
-	,@ExchangeID INT	
+	@srecommend INT			
 	,@maxcustid INT
 	,@target VARCHAR(20)
 AS
@@ -21,110 +20,24 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 
-	CREATE TABLE #CustTemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED
-	)
-	
-	CREATE TABLE #DirectMaster (CustID INT PRIMARY KEY,roleid INT)
-	CREATE TABLE #DirectAgent (CustID INT PRIMARY KEY,mrecommend INT,roleid INT)
-	CREATE TABLE #DirectMember (CustID INT PRIMARY KEY,recommend INT,mrecommend INT,roleid INT)		
 	DECLARE @Sporttype INT
-	SELECT @Sporttype=43
-	--- get direct master
-	INSERT INTO #DirectMaster (CustID,roleid)
-	SELECT ci.custid, ci.roleid
-	FROM Customer ci with(nolock)
-	INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
-	WHERE  site in ('733333','222223', '222225', '222227', '222229')
-		and ci.custid NOT IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		and ci.srecommend IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		and ci.roleid=3 AND ci.srecommend = @srecommend AND ci.custid <= @maxcustid AND c.Enabled=1
-		
-	--- get direct agent
-	INSERT INTO #DirectAgent (CustID,mrecommend,roleid)
-	SELECT ci.custid, ci.mrecommend,ci.roleid
-	FROM Customer ci WITH(NOLOCK)
-	INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
-	WHERE site in ('733333','222223', '222225', '222227', '222229')
-		and ci.custid NOT IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		and ci.mrecommend IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		and ci.roleid=2 AND ci.srecommend = @srecommend AND ci.custid <= @maxcustid AND c.Enabled=1
-
-	INSERT INTO #DirectMember(CustID,recommend,mrecommend,roleid)
-	SELECT c.custid, c.recommend,c.mrecommend,c.roleid
-	FROM Customer c WITH(NOLOCK)
-	INNER JOIN Customer ca (nolock) on c.recommend=ca.custid 
-	INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
-	WHERE c.custid NOT IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		AND c.recommend IN (SELECT custid from Acc_CustDirect WITH(NOLOCK))
-		AND c.roleid=1 AND c.srecommend = @srecommend AND C.custid <= @maxcustid 
-		AND  ca.site in ('733333','222223', '222225', '222227', '222229')
-		AND ci.Enabled=1
-	----------- For SMA  -----------
-	INSERT INTO #CustTemp (CustID)
-	SELECT @srecommend -- Super
-	UNION ALL
-	SELECT CI.CustID -- Direct Master 
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMaster D ON CI.custid = D.CustID 
-	UNION 
-	SELECT DISTINCT CI.CustID -- Master of direct agent
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectAgent D ON CI.custid = D.mrecommend 
-	WHERE CI.custid <= @maxcustid 	
-	
-	UNION 
-
-	SELECT CI.CustID -- Agent of direct master
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMaster D ON CI.mrecommend = D.CustID 
-	WHERE CI.roleid = 2 AND CI.custid <= @maxcustid 
-				
-	UNION 
-	SELECT CI.CustID -- Direct Agent
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectAgent D ON CI.custid = D.CustID 
-	
-	UNION 
-
-	SELECT DISTINCT CI.CustID -- Master of direct member
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMember D ON CI.custid = D.mrecommend 
-	WHERE  ci.Enabled = 1
-
-	UNION 
-	SELECT DISTINCT CI.CustID -- agent of direct member
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMember D ON CI.custid = D.recommend 
-	WHERE  ci.Enabled = 1 	
-	---------- For members ---------
-	INSERT INTO #CustTemp (CustID)
-	SELECT CI.custid
-	FROM Custinfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMaster M ON CI.mrecommend = M.CustID
-	WHERE CI.roleid = 1	AND CI.custid <= @maxcustid AND ci.Enabled=1			
-
-	UNION 
-	SELECT CI.custid
-	FROM Custinfo CI WITH (NOLOCK)
-		INNER JOIN #DirectAgent M ON CI.recommend = M.CustID
-	WHERE CI.roleid = 1 AND CI.custid <= @maxcustid AND ci.Enabled=1			
-	-- Direct member		
-	UNION 
-	SELECT CI.custid
-	FROM Custinfo CI WITH (NOLOCK)
-		INNER JOIN #DirectMember M ON CI.custid = M.CustID AND CI.custid <= @maxcustid 	
-	
+	SELECT @Sporttype=43	
 	DECLARE @BitOrder INT
 	SELECT @BitOrder= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
+
+	CREATE TABLE #temp (CustID INT PRIMARY KEY,DisableEsports BIT DEFAULT(1))
+
+	INSERT INTO #temp(CustID,DisableEsports)
+	SELECT ci.custid,[DisableEsports]
+	FROM custInfo CI WITH (NOLOCK) 
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1	
 	
 	UPDATE cs
 	SET								
-		 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden, @BitOrder,0)
+		 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+		 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,[DisableEsports])
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #CustTemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID	
-
+		INNER JOIN #temp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
 	---------------------------------------------------------------------------------------
 
 END
@@ -134,14 +47,14 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid int,exchangeid INT,isfinished bit default(0))
+CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT, @exchangeid INT
+DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid,exchangeid)
-SELECT ci.custid,ci.currency
+INSERT INTO #supers(custid)
+SELECT ci.custid
 FROM dbo.custInfo ci WITH(NOLOCK)
 WHERE ci.custid NOT IN (SELECT CustID FROM Dep_CustSuper)
 	AND ci.roleid=4 
@@ -151,13 +64,12 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
-		,@srecommend = custid	
-		,@exchangeid = exchangeid 
+		,@srecommend = custid			
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 			
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend , @Exchangeid = @exchangeid
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 			
@@ -167,14 +79,14 @@ END
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid int,exchangeid INT,isfinished bit default(0))
+CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT, @exchangeid INT
+DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid,exchangeid)
-SELECT ci.custid,ci.currency
+INSERT INTO #supers(custid)
+SELECT ci.custid
 FROM dbo.custInfo ci WITH(NOLOCK)
 WHERE ci.custid NOT IN (SELECT CustID FROM Dep_CustSuper)
 	AND ci.roleid=4 
@@ -184,13 +96,12 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
-		,@srecommend = custid	
-		,@exchangeid = exchangeid 
+		,@srecommend = custid			
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend, @Exchangeid = @exchangeid
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
