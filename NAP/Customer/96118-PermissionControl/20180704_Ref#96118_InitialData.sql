@@ -3,6 +3,7 @@
     Date: 20180704
     Task: initial setting for Manage Account Info permission
     DB: DBCUST/NAP_UserControl
+    publication: DBTrans_ExecRep
 */ 
 
 DECLARE @FuncIdCreadit INT
