@@ -58,4 +58,5 @@ SELECT
            ,0
            ,0        
 FROM exchange WITH(NOLOCK)
+WHERE exchangeid=20
    
