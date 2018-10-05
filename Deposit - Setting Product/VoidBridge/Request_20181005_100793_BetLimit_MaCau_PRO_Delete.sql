@@ -14,7 +14,7 @@ where g.GameTypeID BETWEEN  4031 AND 4037
 
 DELETE g
 FROM Dep_StakeLevelGroupDetail g
-	INNER JOIN StakeLevel s WITH(NOLOCK) ON g.StakelevelID=s.StakelevelID
+	INNER JOIN Dep_StakeLevel s WITH(NOLOCK) ON g.StakelevelID=s.StakelevelID
 WHERE g.GameTypeID BETWEEN  4031 AND 4037
 	AND GameGroupID IN(3)
 	AND s.ExchangeID<>20
