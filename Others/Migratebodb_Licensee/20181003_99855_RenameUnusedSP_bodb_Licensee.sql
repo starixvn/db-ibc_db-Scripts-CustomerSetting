@@ -92,3 +92,8 @@ EXEC sp_rename 'view_kpi_labels_NG', 'DEL_view_kpi_labels_NG'
 EXEC sp_rename 'view_kpi_labels_VS', 'DEL_view_kpi_labels_VS'
 EXEC sp_rename 'Lbs_UserLogin', 'DEL_Lbs_UserLogin'
 
+USE bodb02
+GO
+
+EXEC sp_rename 'Lrf_CustomerSelBalance', 'DEL_Lrf_CustomerSelBalance'
+
