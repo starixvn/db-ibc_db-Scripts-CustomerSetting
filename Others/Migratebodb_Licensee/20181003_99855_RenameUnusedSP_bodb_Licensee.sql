@@ -91,6 +91,7 @@ EXEC sp_rename 'view_kpi_labels_LC', 'DEL_view_kpi_labels_LC'
 EXEC sp_rename 'view_kpi_labels_NG', 'DEL_view_kpi_labels_NG'
 EXEC sp_rename 'view_kpi_labels_VS', 'DEL_view_kpi_labels_VS'
 EXEC sp_rename 'Lbs_UserLogin', 'DEL_Lbs_UserLogin'
+EXEC sp_rename 'Acc_Dep_SyncLicenseeSetting', 'DEL_Acc_Dep_SyncLicenseeSetting'
 
 USE bodb02
 GO
