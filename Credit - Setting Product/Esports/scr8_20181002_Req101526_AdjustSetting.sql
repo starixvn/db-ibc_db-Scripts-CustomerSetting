@@ -57,9 +57,9 @@ BEGIN
 		--Agent Level
 		INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking)
 		SELECT ci.custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking
-		FROM dbo.CustSetting3rd cs WITH(NOLOCK) 
+		FROM dbo.CustSetting cs WITH(NOLOCK) 
 			INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
-			INNER JOIN dbo.custOverride3rd co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype	
+			INNER JOIN dbo.custOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype	
 			INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 				AND ci.roleid IN (2,3,4) AND Enabled = 1			
@@ -79,7 +79,7 @@ BEGIN
 		--Member Level
 		INSERT INTO #MemberList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking)
 		SELECT ci.custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking
-		FROM dbo.CustSetting3rd cs WITH(NOLOCK)
+		FROM dbo.CustSetting cs WITH(NOLOCK)
 			INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
 			INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
@@ -143,7 +143,7 @@ BEGIN
 		--Agent Level
 		INSERT INTO #SMAList_BetSetting (custid, minBet, MaxBet, MaxPerMatch)
 		SELECT c.custid, cs.minBet, cs.MaxBet, c.maxpermatch99
-		FROM dbo.CustSetting3rd cs WITH(NOLOCK)
+		FROM dbo.CustSetting cs WITH(NOLOCK)
 			INNER JOIN custInfo c WITH(NOLOCK) ON cs.CustID = c.custid
 			INNER JOIN dbo.CustBetSetting3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
@@ -159,7 +159,7 @@ BEGIN
 		--Member Level
 		INSERT INTO #MemberList_BetSetting (custid, minBet, MaxBet, MaxPerMatch)
 		SELECT c.custid, cs.minBet, cs.MaxBet, c.maxpermatch99
-		FROM dbo.CustSetting3rd cs WITH(NOLOCK)
+		FROM dbo.CustSetting cs WITH(NOLOCK)
 			INNER JOIN custInfo c WITH(NOLOCK) ON cs.CustID = c.custid		
 			INNER JOIN dbo.CustBetSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
