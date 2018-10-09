@@ -128,7 +128,7 @@ BEGIN
 	SET IsGrouped = 0
 	WHERE CustID IN (SELECT CustID FROM #UnGroupedCustomer WITH(NOLOCK)) 
 
-	--Insert setting of PT Group for AllBet
+	--Insert setting of PT Group for Esports
 	INSERT INTO [dbo].[CustPTGroupSetting3rd_Member]
 		   ([AgentID]
 		   ,[SportType]
