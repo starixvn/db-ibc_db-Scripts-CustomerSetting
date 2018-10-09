@@ -1,7 +1,7 @@
 /*
 	Created By: Winnie
 	Created Date: 20180912
-	Description: Stakelevel for MaCau PRO
+	Description: Stakelevel for MaCau PRO for Credit
 	DB: DBCust/CustDB	
 */
 USE CustDB
@@ -519,12 +519,12 @@ GO
 INSERT #Betlimit ([GameType], [Game], [Level], [Currency], [BetLimit]) VALUES (N'4037', N'Gods of Fortune', N'2', N' JPY ', N'9 - 1800')
 GO
 
-CREATE TABLE #BetlimitDeposit(	
-	GameType		INT			NOT NULL,		
-	CurrencyID		INT			NOT NULL,
-	BetLimit		VARCHAR(50)	NOT NULL,
-	StakeLevelID	INT			NOT NULL
-) 
+--CREATE TABLE #BetlimitDeposit(	
+--	GameType		INT			NOT NULL,		
+--	CurrencyID		INT			NOT NULL,
+--	BetLimit		VARCHAR(50)	NOT NULL,
+--	StakeLevelID	INT			NOT NULL
+--) 
 CREATE TABLE #BetlimitCredit(
 	GameType		INT				NOT NULL,		
 	Level			INT				NOT NULL,
@@ -532,18 +532,18 @@ CREATE TABLE #BetlimitCredit(
 	BetLimit		VARCHAR(50)		NOT NULL,
 	StakeLevelID	INT				NOT NULL
 ) 
-INSERT INTO #BetlimitDeposit(GameType,CurrencyID,BetLimit,StakeLevelID)
-SELECT	GameType,
-		CASE WHEN RTRIM(LTRIM(t.Currency))='UUS' THEN 20 ELSE e.exchangeid END,		
-		BetLimit,
-		StakeLevelID
-FROM #Betlimit t
-	LEFT JOIN exchange e WITH(NOLOCK) 
-		ON RTRIM(LTRIM(t.Currency))=e.Code
-	INNER JOIN Dep_StakeLevel s WITH(NOLOCK) 
-		ON s.GameTypeID=4001 AND s.GameGroupID=3
-			AND CASE WHEN RTRIM(LTRIM(t.Currency))='UUS' THEN 20 ELSE e.exchangeid END=s.ExchangeID
-WHERE Level=1 
+--INSERT INTO #BetlimitDeposit(GameType,CurrencyID,BetLimit,StakeLevelID)
+--SELECT	GameType,
+--		CASE WHEN RTRIM(LTRIM(t.Currency))='UUS' THEN 20 ELSE e.exchangeid END,		
+--		BetLimit,
+--		StakeLevelID
+--FROM #Betlimit t
+--	LEFT JOIN exchange e WITH(NOLOCK) 
+--		ON RTRIM(LTRIM(t.Currency))=e.Code
+--	INNER JOIN Dep_StakeLevel s WITH(NOLOCK) 
+--		ON s.GameTypeID=4001 AND s.GameGroupID=3
+--			AND CASE WHEN RTRIM(LTRIM(t.Currency))='UUS' THEN 20 ELSE e.exchangeid END=s.ExchangeID
+--WHERE Level=1 
 
 INSERT INTO #BetlimitCredit(GameType,Level,CurrencyID,BetLimit,StakeLevelID)
 SELECT	GameType,
@@ -580,15 +580,15 @@ SELECT	StakeLevelID,
 		CONVERT(DECIMAL(19,2), REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,CHARINDEX('-',BetLimit) + 1,LEN(BetLimit)))),',','')) AS Max
 FROM #BetlimitCredit
 
-INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
-SELECT	StakeLevelID,
-		GameType,
-		REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,1,CHARINDEX('-',BetLimit) - 1))),',','') AS MinLabel,
-		CAST(CONVERT(FLOAT, REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,CHARINDEX('-',BetLimit) + 1,LEN(BetLimit)))),',','')) AS VARCHAR(100)) AS MaxLabel,
-		CONVERT(DECIMAL(19,2),REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,1,CHARINDEX('-',BetLimit) - 1))),',','')) AS Min,
-		CONVERT(DECIMAL(19,2), REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,CHARINDEX('-',BetLimit) + 1,LEN(BetLimit)))),',','')) AS Max
-FROM #BetlimitDeposit
+--INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
+--SELECT	StakeLevelID,
+--		GameType,
+--		REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,1,CHARINDEX('-',BetLimit) - 1))),',','') AS MinLabel,
+--		CAST(CONVERT(FLOAT, REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,CHARINDEX('-',BetLimit) + 1,LEN(BetLimit)))),',','')) AS VARCHAR(100)) AS MaxLabel,
+--		CONVERT(DECIMAL(19,2),REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,1,CHARINDEX('-',BetLimit) - 1))),',','')) AS Min,
+--		CONVERT(DECIMAL(19,2), REPLACE(LTRIM(RTRIM(SUBSTRING (BetLimit,CHARINDEX('-',BetLimit) + 1,LEN(BetLimit)))),',','')) AS Max
+--FROM #BetlimitDeposit
 
-DROP TABLE #BetlimitDeposit
+--DROP TABLE #BetlimitDeposit
 DROP TABLE #BetlimitCredit
 DROP TABLE #Betlimit
