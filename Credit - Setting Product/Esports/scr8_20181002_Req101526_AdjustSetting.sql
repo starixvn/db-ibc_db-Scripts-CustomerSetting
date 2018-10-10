@@ -135,7 +135,7 @@ BEGIN
 	END
 
 	--------------------------------------Bet Setting-------------------------------------------------		
-
+		SELECT @Sporttype =43,@fSportType  = 99,@fBetType =1,@tBetType=1	
 	
 		CREATE TABLE #SMAList_BetSetting (custid INT, minBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
 		CREATE TABLE #MemberList_BetSetting (custid INT, minBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
