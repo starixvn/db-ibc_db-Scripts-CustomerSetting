@@ -179,3 +179,10 @@ EXEC sp_rename 'Task_rptCustomerMatch_Bettrans14_20141121','DEL_Task_rptCustomer
 EXEC sp_rename 'Task_rptWinlostbyleague_Bettrans14_20141121','DEL_Task_rptWinlostbyleague_Bettrans14_20141121'
 EXEC sp_rename 'Task_rptWinlostbyleague_bk','DEL_Task_rptWinlostbyleague_bk'
 
+USE bodb_LicenseeReport
+GO
+EXEC sp_rename 'GEN_rptBetting_ColossusBets_support', 'DEL_GEN_rptBetting_ColossusBets_support'
+
+USE bodb_PlaytechCS
+GO
+EXEC sp_rename 'Task_DOT_GoldDeluxe_DailySummary_DanielTest', 'DEL_Task_DOT_GoldDeluxe_DailySummary_DanielTest'
