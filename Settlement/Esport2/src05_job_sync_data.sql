@@ -16,7 +16,7 @@ AS
 	*/ 
 BEGIN
 	SET NOCOUNT ON
-	DECLARE @varSecondCheck SMALLINT = 20
+	DECLARE @varTimeCheck SMALLINT = 20
 	DECLARE @tblData TABLE (matchid INT, finalhomescore VARCHAR(50), finalawayscore VARCHAR(50), creator INT)
 	-----------------------------------------------------------------------------------
 	
@@ -25,7 +25,7 @@ BEGIN
 	SELECT TOP 10 matchid, finalhomescore, finalawayscore, creator
 	FROM dbo.[match] WITH (NOLOCK, INDEX(IX_match_eventstatus))
 	WHERE eventstatus = N'completed' AND sporttype = 43 
-		AND DATEDIFF(second, changetime, GETDATE()) <= @varSecondCheck
+		AND DATEDIFF(second, changetime, GETDATE()) <= @varTimeCheck
 
 	
 	DELETE d
