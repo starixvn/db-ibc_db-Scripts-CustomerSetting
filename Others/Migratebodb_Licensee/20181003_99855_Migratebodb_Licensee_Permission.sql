@@ -17,6 +17,18 @@ GRANT SELECT ON LicenseeBAConfig TO bodbLicenseeNet
 
 GRANT SELECT ON dbo.Product3rd TO bodbAdminNet
 GRANT SELECT ON Licensees TO bodbAdminNet
+GRANT SELECT ON LicenseeProduct3rd TO bodbAdminNet
+GRANT SELECT ON LicenseeCust TO bodbAdminNet
+
+GRANT SELECT ON Licensees TO Dot_Admin_Portal
+GRANT SELECT ON Users TO Dot_Admin_Portal
+GRANT SELECT ON LicenseeUser TO Dot_Admin_Portal
+GRANT SELECT ON Functions TO Dot_Admin_Portal
+GRANT SELECT ON LicenseeUserFunctions TO Dot_Admin_Portal
+GRANT SELECT ON CurrencyUser TO Dot_Admin_Portal
+
+GRANT SELECT ON LicenseeSourcedSetting TO Dot_Member
+GRANT SELECT ON LicenseeBAHistory TO Dot_Member
 
 USE CustDB
 GO

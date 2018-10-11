@@ -14,7 +14,7 @@ EXEC sp_rename 'Acc_KenoCurrencySelByLicensee','DEL_Acc_KenoCurrencySelByLicense
 EXEC sp_rename 'Acc_KenoLicenseeSel','DEL_Acc_KenoLicenseeSel'
 EXEC sp_rename 'Acc_Licensee_Product3rdSel','DEL_Acc_Licensee_Product3rdSel'
 EXEC sp_rename 'Acc_LicenseeByResellerSel','DEL_Acc_LicenseeByResellerSel'
---EXEC sp_rename 'Acc_LicenseeProduct3rdSel','DEL_Acc_LicenseeProduct3rdSel'
+EXEC sp_rename 'Acc_LicenseeProduct3rdSel','DEL_Acc_LicenseeProduct3rdSel'
 EXEC sp_rename 'Acc_MoveBet_LicenseeBAConfigSel','DEL_Acc_MoveBet_LicenseeBAConfigSel'
 EXEC sp_rename 'Acc_MoveBet_LicenseeCurrencyBAGroupSel','DEL_Acc_MoveBet_LicenseeCurrencyBAGroupSel'
 EXEC sp_rename 'Acc_MoveBet_LicenseeCustSel','DEL_Acc_MoveBet_LicenseeCustSel'
