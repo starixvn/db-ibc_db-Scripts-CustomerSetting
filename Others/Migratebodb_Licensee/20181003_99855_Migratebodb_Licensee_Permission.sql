@@ -16,6 +16,7 @@ GRANT SELECT ON Users TO bodbLicenseeNet
 GRANT SELECT ON LicenseeBAConfig TO bodbLicenseeNet
 
 GRANT SELECT ON dbo.Product3rd TO bodbAdminNet
+GRANT SELECT ON Licensees TO bodbAdminNet
 
 USE CustDB
 GO
