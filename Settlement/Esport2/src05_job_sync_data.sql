@@ -22,9 +22,10 @@ BEGIN
 	
 	--get data from table match	
 	INSERT INTO @tblData (matchid, finalhomescore, finalawayscore, creator)
-	SELECT TOP 10 matchid, finalhomescore, finalawayscore, creator
+	SELECT matchid, finalhomescore, finalawayscore, creator
 	FROM dbo.[match] WITH (NOLOCK, INDEX(IX_match_eventstatus))
-	WHERE eventstatus = N'completed' AND sporttype = 43 
+	WHERE eventstatus = N'completed' 
+		AND sporttype = 43 
 		AND DATEDIFF(second, changetime, GETDATE()) <= @varTimeCheck
 
 	
