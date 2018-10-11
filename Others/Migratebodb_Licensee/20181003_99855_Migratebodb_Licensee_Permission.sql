@@ -13,5 +13,12 @@ GRANT SELECT ON Licensees TO bodbLicenseeNet
 GRANT SELECT ON LicenseeBAHistory TO bodbLicenseeNet
 GRANT SELECT ON LicenseeCust TO bodbLicenseeNet
 GRANT SELECT ON Users TO bodbLicenseeNet
+GRANT SELECT ON LicenseeBAConfig TO bodbLicenseeNet
 
 GRANT SELECT ON dbo.Product3rd TO bodbAdminNet
+
+USE CustDB
+GO
+
+GRANT SELECT ON Customer TO bodbLicenseeNet
+GRANT SELECT ON custInfo TO bodbLicenseeNet
