@@ -156,7 +156,7 @@
 		   ,[MinPT]
 		   ,[MaxPT]
 	FROM #PTTemp t
-		WHERE t.roleid IN(2,3,4) AND MinPT IS NOT NULL
+		WHERE t.roleid IN(2,3,4) 
 	--MEMBER LEVEL
 	INSERT INTO dbo.CustPTSetting3rd_Member
 		(	[custid]

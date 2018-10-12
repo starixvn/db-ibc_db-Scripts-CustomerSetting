@@ -63,7 +63,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-
+			AND ci.custid<=@max_custid
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -99,7 +99,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-
+			AND ci.custid<=@max_custid
 
 WHILE (1 = 1)
 BEGIN
