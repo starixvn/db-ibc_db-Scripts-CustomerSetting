@@ -68,7 +68,7 @@ INSERT INTO [dbo].[custSetting]
            ,[isautompositiontaking]
            ,[isautolivempositiontaking]
 	FROM Custsetting WITH(NOLOCK)
-	WHERE custid=613100
+	WHERE custid=613100 AND sporttype=99
 
 	INSERT INTO [dbo].[custSetting]
            ([custid]
@@ -131,7 +131,7 @@ INSERT INTO [dbo].[custSetting]
            ,[isautompositiontaking]
            ,[isautolivempositiontaking]
 	FROM Custsetting WITH(NOLOCK)
-	WHERE custid=1003645
+	WHERE custid=1003645 AND sporttype=99
 
 	INSERT INTO [dbo].[custSetting]
            ([custid]
@@ -194,7 +194,7 @@ INSERT INTO [dbo].[custSetting]
            ,[isautompositiontaking]
            ,[isautolivempositiontaking]
 	FROM Custsetting WITH(NOLOCK)
-	WHERE custid=139534
+	WHERE custid=139534 AND sporttype=99
 
 
 
