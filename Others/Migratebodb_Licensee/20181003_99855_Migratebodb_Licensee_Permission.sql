@@ -35,3 +35,8 @@ GO
 
 GRANT SELECT ON Customer TO bodbLicenseeNet
 GRANT SELECT ON custInfo TO bodbLicenseeNet
+
+USE NAP_UserControl
+GO
+
+GRANT EXECUTE ON Acc_Con_CheckPermission TO bodbLicenseeNet
