@@ -1,6 +1,6 @@
 /*
-	Created: 20180918@Winnie
-	Task: Insert product profile for Esports
+	Created: 20181011@Winnie
+	Task: Insert product profile for Esports Deposit
 	DB: DBCUST/CustDB
 */
 
@@ -22,7 +22,7 @@ SELECT @IsHidden = 0
 SELECT @IsDisabled = 0
 
 --PT Setting
-INSERT INTO	dbo.ProductSettingDetail
+INSERT INTO	dbo.Dep_ProductSettingDetail
 		(	SettingType, SportType	, BetType	, IsLive, ProductID		, MaxPT	, MaxDiscount	, IsSync	, IsHidden	, IsDisabled	, SettingLevel, DisplayOrder, SettingStatus, IntervalValue)
 VALUES	
 --Status Setting																																				
