@@ -59,7 +59,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-
+			AND ci.custid IN(356945,951650,613094)
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -109,7 +109,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-
+			AND ci.custid IN(356945,951650,613094)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
