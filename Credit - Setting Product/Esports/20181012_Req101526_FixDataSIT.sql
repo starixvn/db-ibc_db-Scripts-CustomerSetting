@@ -25,11 +25,11 @@ BEGIN
 		cs.custid,cs.sporttype, cs.bettype,0,
 		(SELECT spositiontaking
 		FROM custSetting cc WITH(NOLOCK)
-		WHERE cs.custid=@srecommend AND cc.sporttype=cs.sporttype AND cc.bettype=cs.bettype )
+		WHERE cc.custid=@srecommend AND cc.sporttype=cs.sporttype AND cc.bettype=cs.bettype )
 		,0
 		,(SELECT slivepositiontaking
 		FROM custSetting cc WITH(NOLOCK)
-		WHERE cs.custid=@srecommend AND cc.sporttype=cs.sporttype AND cc.bettype=cs.bettype)
+		WHERE cc.custid=@srecommend AND cc.sporttype=cs.sporttype AND cc.bettype=cs.bettype)
 	FROM custInfo ci WITH(NOLOCK)
 		INNER JOIN dbo.custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
 		LEFT JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype	
