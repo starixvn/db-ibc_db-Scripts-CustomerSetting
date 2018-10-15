@@ -6,7 +6,11 @@
 */
 USE [bodb02]
 GO
-/****** Object:  Table [dbo].[SettlementSpecialBettypeProfile]    Script Date: 10/09/2018 13:15:34 ******/
+-------------------DELETE DATA
+DELETE SettlementSpecialBettypeProfile
+WHERE Sporttype = 43
+
+/****** Object:  Table [dbo].[SettlementSpecialBettypeProfile]    Script Date: 10/15/2018 11:13:12 ******/
 INSERT [dbo].[SettlementSpecialBettypeProfile] ([pfID], [BetType], [SportType], [BetID], [ResourceID], [SettleType], [GroupType], [OrdNo], [RoundID]) VALUES (1, 1, 43, 0, N'00', N'MNL', N'FT', 99, N'00')
 INSERT [dbo].[SettlementSpecialBettypeProfile] ([pfID], [BetType], [SportType], [BetID], [ResourceID], [SettleType], [GroupType], [OrdNo], [RoundID]) VALUES (2, 2, 43, 0, N'00', N'MNL', N'FT', 99, N'00')
 INSERT [dbo].[SettlementSpecialBettypeProfile] ([pfID], [BetType], [SportType], [BetID], [ResourceID], [SettleType], [GroupType], [OrdNo], [RoundID]) VALUES (3, 3, 43, 0, N'00', N'MNL', N'FT', 99, N'00')
