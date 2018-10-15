@@ -1,13 +1,13 @@
 /*
 	Created: 20181015@Vicky
-	Task: Insert data into custgametype table
+	Task: Insert data for custgametype table
 	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
 
-DECLARE @tblCustID TABLE (CustID INT, GameTypeID INT)
-DECLARE @tblGameTypeID TABLE (GameTypeID INT)
+DECLARE @tblCustID 		TABLE (CustID INT, GameTypeID INT)
+DECLARE @tblGameTypeID  TABLE (GameTypeID INT)
 DECLARE @srecommend INT
 ---------------------------------------------------------------------------------------------------------------
 
@@ -38,8 +38,8 @@ FROM @tblCustID c
 	INNER JOIN CustGameType cg ON cg.CustID = c.CustID AND c.GameTypeID = cg.GameTypeID
 */
 
-INSERT INTO CustGameType (CustID,GameTypeID,StakeLevelList,MaxPerGameType,MinBet,MaxBet,IsDisabled)
-SELECT c.CustID,c.GameTypeID,cg.StakeLevelList,cg.MaxPerGameType,cg.MinBet,cg.MaxBet,cg.IsDisabled
+INSERT INTO CustGameType (CustID,	  GameTypeID,	 StakeLevelList,	MaxPerGameType,	   MinBet,	  MaxBet,	 IsDisabled)
+SELECT 					  c.CustID, c.GameTypeID, cg.StakeLevelList, cg.MaxPerGameType, cg.MinBet, cg.MaxBet, cg.IsDisabled
 FROM @tblCustID c
 	INNER JOIN CustGameType cg ON cg.CustID = c.CustID
 WHERE cg.GameTypeID = 1
