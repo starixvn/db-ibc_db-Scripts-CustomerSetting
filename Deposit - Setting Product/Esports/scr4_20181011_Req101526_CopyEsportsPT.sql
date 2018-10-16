@@ -25,7 +25,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
-	DECLARE @Sporttype INT = 43	
+	DECLARE @Sporttype	INT = 43	
 
 	CREATE TABLE #PTTemp
 	(
@@ -37,7 +37,7 @@ BEGIN
 		[SuperPT]			TINYINT,
 		[MasterPT]			TINYINT,
 		[AgentPT]			TINYINT
-		PRIMARY KEY (CustID,SportType,BetType,IsLive)
+		PRIMARY KEY (CustID,SportType,BetType,IsLive,RoleID)
 	)
 
 	CREATE TABLE #BetSettingTemp
@@ -49,7 +49,7 @@ BEGIN
 		MinBet				MONEY,
 		MaxBet				MONEY,
 		MaxPerMatch			MONEY
-		PRIMARY KEY (CustID,SportType,BetType)
+		PRIMARY KEY (CustID,SportType,BetType,RoleID)
 	)
 
 	INSERT INTO #PTTemp(
@@ -91,9 +91,8 @@ BEGIN
 		maxpermatch99			
 	FROM custInfo ci WITH(NOLOCK)
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1 AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1 AND cs.sporttype=@fSportType AND cs.bettype=@fBetType	
 
-	
 	--------------------------------------PT Setting-------------------------------------------------	
 	--AGENT LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -116,26 +115,36 @@ BEGIN
 	FROM #PTTemp t
 		WHERE t.roleid IN(2,3,4)
 	--MEMBER LEVEL
+					
 	INSERT INTO dbo.Dep_CustPTSetting_Member
-		(	[custid]
-		  ,	[sporttype]
-		  ,	[bettype]
-		  ,	[islive]
-		  ,	[superPT]
-		  ,	[masterPT]
-		  ,	[agentPT]
-		)
+	(	CustID
+		,	[sporttype]
+		,	[bettype]
+		,	[islive]
+		,	[superPT]
+		,	[masterPT]
+		,	[agentPT]
+	)
 	SELECT 
-			[CustID]
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]	
+			CustID
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]	
 	FROM #PTTemp t
-		WHERE t.roleid =1
-		
+	WHERE roleid=1
+
+	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+		SELECT t.CustID,1
+	FROM #PTTemp t
+	WHERE roleid=1 AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
+
+	
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT @srecommend,24
+
 	--------------------------------------Bet Setting-------------------------------------------------		
 
 	--Agent Level
@@ -149,6 +158,10 @@ BEGIN
 	SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch				
 	FROM #BetSettingTemp 
 	WHERE roleid = 1 
+
+		
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT @srecommend,25
 
 	DROP TABLE #PTTemp
 	DROP TABLE #BetSettingTemp			
@@ -167,15 +180,11 @@ SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-			AND ci.username NOT LIKE '3rdSuper%'
-			AND cs.isinternal = 0
-			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-			AND s.islicensee = 0
-
+FROM Custinfo ci WITH (NOLOCK) 	
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.username NOT LIKE '3rdSuper%'
+	AND ci.Enabled=1
+	AND ci.CustID <= @max_custid
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -217,15 +226,11 @@ SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-			AND ci.username NOT LIKE '3rdSuper%'
-			AND cs.isinternal = 0
-			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-			AND s.islicensee = 0
-
+FROM Custinfo ci WITH (NOLOCK) 	
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.username NOT LIKE '3rdSuper%'
+	AND ci.Enabled=1
+	AND ci.CustID <= @max_custid
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -255,36 +260,3 @@ BEGIN
 END
 
 PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
-
-
-
-CREATE TABLE #Supers_Offered (custid INT)
-INSERT INTO #Supers_Offered (custid)
-SELECT lds.CustID
-FROM Dep_LicenseeProductSetting lds WITH (NOLOCK)
-	INNER JOIN Dep_CustSuper c WITH (NOLOCK) on c.custid = lds.CustID 
-	INNER JOIN Dep_ProductSetting ps WITH (NOLOCK) ON lds.ProductSettingID = PS.ProductSettingID AND ps.ProductID= 16
-	INNER JOIN Dep_ProductSettingDetail psd WITH (NOLOCK) ON psd.ProductSettingID = ps.ProductSettingID
-WHERE PSD.SportType IN (43)
-
-
-
-	SELECT TOP 1 *
-	FROM Dep_CustPTSetting_Agent cg WITH (NOLOCK) 		
-	WHERE SportType =43
-						
-	SELECT TOP 1 *
-	FROM Dep_CustPTSetting_Member cg WITH (NOLOCK) 
-	WHERE SportType  =43  
-		
-	SELECT TOP 1 *
-	FROM Dep_CustPTGroupSetting_Member cg WITH (NOLOCK) 
-	WHERE SportType  =43  		
-				
-	SELECT TOP 1 *
-	FROM Dep_CustBetSetting_Agent cg WITH (NOLOCK) 
-	WHERE SportType  =43  		
-
-	SELECT TOP 1 *
-	FROM Dep_CustBetSetting_Member cg	WITH (NOLOCK) 
-	WHERE SportType  =43  		

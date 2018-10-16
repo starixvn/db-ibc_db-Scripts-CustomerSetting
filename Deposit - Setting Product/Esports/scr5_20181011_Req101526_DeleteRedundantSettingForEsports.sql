@@ -1,8 +1,8 @@
 /*
 	Created: Winnie
-	Task: Delete redundant setting
+	Task: Delete redundant setting Deposit RedmineID: #101526
 	DB: DBCUST/CustDB
-	Date: 20181002
+	Date: 20181015
 */ 
 USE CustDB
 GO
@@ -15,41 +15,37 @@ CREATE TABLE #supers (custid int)
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-			AND ci.username NOT LIKE '3rdSuper%'
-			AND cs.isinternal = 0
-			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-			AND s.islicensee = 0
+FROM Custinfo ci WITH (NOLOCK) 	
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.username NOT LIKE '3rdSuper%'
+	AND ci.Enabled=1
 
 DELETE cg
-FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
+FROM Dep_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid	
 WHERE SportType =43 AND cg.custid > @maxcustID
 						
 DELETE cg
-FROM CustPTSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)		
+FROM Dep_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)		
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid	
 WHERE SportType =43 AND cg.custid > @maxcustID
 		
 DELETE cg
-FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
+FROM Dep_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
 WHERE SportType =43 AND c.custid > @maxcustID
 				
 DELETE cg
-FROM CustBetSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
+FROM Dep_CustBetSetting_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
 WHERE SportType =43 AND c.custid > @maxcustID
 
 DELETE cg
-FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)
+FROM Dep_CustBetSetting_Member cg WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
 WHERE SportType =43 AND c.custid > @maxcustID

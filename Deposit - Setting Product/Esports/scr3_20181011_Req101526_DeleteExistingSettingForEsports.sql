@@ -21,6 +21,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN		
 
 	DELETE cg
 	FROM Dep_CustPTSetting_Agent cg 		
@@ -42,6 +43,10 @@ BEGIN
 	FROM Dep_CustBetSetting_Member cg	
 	WHERE SportType  =43  		
 
+	DELETE cg
+	FROM Dep_LicenseeProductSetting cg 		
+	WHERE ProductSettingID IN(24,25)
+
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -53,4 +58,4 @@ EXEC Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+EXEC Acc_DynamicCustSetting3rd_09 @target = 'DB233'
