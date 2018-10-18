@@ -6,6 +6,7 @@
 USE bodb_Licensee
 GO
 
+GRANT SELECT ON Functions TO bodbLicenseeNet
 GRANT SELECT ON LicenseeUserFunctions TO bodbLicenseeNet
 GRANT SELECT ON LicenseeSpecialCust TO bodbLicenseeNet
 GRANT SELECT ON LicenseeCurrencyBAGroup TO bodbLicenseeNet
