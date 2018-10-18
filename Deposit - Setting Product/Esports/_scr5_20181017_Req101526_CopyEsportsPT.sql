@@ -28,6 +28,12 @@ BEGIN
 	DECLARE @Sporttype	INT = 43	
 	
 	--------------------------------------PT Setting-------------------------------------------------	
+
+	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)	
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
+		AND custid<=@maxcustid 
 	--AGENT LEVEL	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -68,6 +74,7 @@ BEGIN
 		   ,0	
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=3 AND custid<=@maxcustid 
+		AND custid NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -88,6 +95,7 @@ BEGIN
 		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -108,6 +116,7 @@ BEGIN
 		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT t.CustID,1
@@ -115,6 +124,7 @@ BEGIN
 	WHERE srecommend=@srecommend 
 		AND custid<=@maxcustid 
 		AND roleid=1 AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT @srecommend,24
@@ -134,6 +144,7 @@ BEGIN
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND cs.sporttype=@fSportType AND cs.bettype=@fBetType	
 		AND roleid IN(2,3,4)
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
 	--Member Level
 	INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)			
@@ -148,6 +159,7 @@ BEGIN
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND cs.sporttype=@fSportType AND cs.bettype=@fBetType	
 		AND roleid = 1 
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 		
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT @srecommend,25

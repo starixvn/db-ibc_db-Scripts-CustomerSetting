@@ -29,6 +29,13 @@
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
 	DECLARE @Sporttype INT = 43
+
+	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)	
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN (SELECT custid FROM #supers)
+		AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
+		AND custid<=@maxcustid
 	
 	--------------------------------------PT Setting-------------------------------------------------	
 	--AGENT LEVEL	
@@ -74,6 +81,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid
 		AND roleid=3
+		AND custid NOT IN(SELECT CustID FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -96,6 +104,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid
 		AND roleid=2 
+		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -118,6 +127,7 @@
 	WHERE srecommend IN(SELECT custid FROM #supers)
 		AND custid>@maxcustid
 		AND roleid=2 
+		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT t.CustID,1
@@ -125,7 +135,7 @@
 	WHERE t.srecommend IN(SELECT custid FROM #supers)
 		AND t.custid>@maxcustid
 		AND roleid=1 AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-
+		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 		
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT CustID,24
@@ -148,6 +158,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid  AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
 		AND roleid IN(2,3,4)
+		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
 	--Member Level
 	INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
@@ -163,6 +174,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid  AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
 		AND roleid = 1 
+		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT CustID,25
