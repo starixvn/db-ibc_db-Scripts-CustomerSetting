@@ -11,11 +11,11 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@target VARCHAR(20)
 AS
 BEGIN
-	SET NOCOUNT ON
+	SET NOCOUNT ON	
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbcust only
-	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
@@ -58,4 +58,4 @@ EXEC Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC Acc_DynamicCustSetting3rd_09 @target = 'DB233'
+EXEC Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'

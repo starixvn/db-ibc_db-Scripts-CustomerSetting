@@ -4,10 +4,8 @@
 	DB: DBCUST/CustDB
 */
 ALTER TABLE Dep_ProductSettingDetail
-ADD IsApplyBA BIT
+ADD IsApplyBA BIT NOT NULL CONSTRAINT [DF_Dep_ProductSettingDetail_IsApplyBA]  DEFAULT ((0))
 
 UPDATE Dep_ProductSettingDetail WITH(ROWLOCK,UPDLOCK)
 	SET IsApplyBA=0
 
-ALTER TABLE Dep_ProductSettingDetail
-ALTER COLUMN IsApplyBA BIT NOT NULL

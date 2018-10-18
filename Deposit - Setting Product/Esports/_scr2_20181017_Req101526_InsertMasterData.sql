@@ -14,8 +14,8 @@ VALUES
 GO
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus,IsApplyBA)
 VALUES 
-	 (24,43,1,0,0,0,1)
-	,(25,43,1,0,0,0,0)	
+	 (24,43,1,0,0,1,1)
+	,(25,43,1,0,0,1,0)	
 GO
 
 
