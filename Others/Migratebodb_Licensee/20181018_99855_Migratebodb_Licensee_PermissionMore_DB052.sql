@@ -7,4 +7,4 @@ USE bodb02
 GO
 
 GRANT SELECT ON Customer TO bodbLicenseeNet
-GRANT SELECT ON Customer TO bodbLicenseeNet
+
