@@ -25,7 +25,7 @@
 					,'GPIGAME','Jinyazhou','Swin','Brown888','396Club','e8casino','HongChow','Lucky88','spondemo','MAX88','OPEBET','BBIN2','Bobo88','GMASTER','Opal88','Sunriseb2b'
 					,'YongBao','ALPHA88','11bet','Aplus','Fugui','zt828','ENTAPLAY','MICL','Tripleone','Yibo','TangChao','WBS','CGame','Xinbo','24TECH'
 					,'FB88','9wickets','YBTech','jinmangguo','Monaco','GWORLD','BETSUN','Mybet88','JIBET','Gameroom','Fabet','WINCLUB88','Callmeboss'
-					,'Uwin18','GOAB88','108bet','Citybk','HOT88','SSSGaming','ANGbet')
+					,'Uwin18','GOAB88','108bet','Citybk','HOT88','SSSGaming','ANGbet','athena000')
 
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1

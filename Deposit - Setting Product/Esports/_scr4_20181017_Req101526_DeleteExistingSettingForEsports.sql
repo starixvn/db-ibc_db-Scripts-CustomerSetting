@@ -29,8 +29,7 @@ BEGIN
 						
 	DELETE cg
 	FROM Dep_CustPTSetting_Member cg
-	WHERE SportType  =43  
-		
+	
 	DELETE cg
 	FROM Dep_CustPTGroupSetting_Member cg 
 	WHERE SportType  =43  		
