@@ -47,3 +47,9 @@ GRANT SELECT ON Exchange TO bodbLicenseeNet
 GRANT EXECUTE ON Lrf_f_Get_MsgNamebyMsgID_UAT4 TO bodbAdminNet
 GRANT EXECUTE ON Lrf_f_Get_MsgNamebyMsgID_UAT4 TO Dot_Member
 GRANT SELECT ON strSplit TO bodbLicenseeNet
+
+GRANT EXECUTE ON Lrf_f_Get_MsgNamebyMsgID_UAT4 TO bodbDownlineNet
+GRANT EXECUTE ON Lrf_f_Get_MsgNamebyMsgID_UAT4 TO bodbExtAccNet
+GRANT EXECUTE ON Lrf_LicenseeBACust_Playerdiscount_Upd TO bodbDownlineNet
+GRANT EXECUTE ON Lrf_LicenseeBACust_Playerdiscount_Upd TO bodbExtAccNet
+GRANT EXECUTE ON Lrf_LicenseeBACust_Playerdiscount_Upd TO Dot_Member
