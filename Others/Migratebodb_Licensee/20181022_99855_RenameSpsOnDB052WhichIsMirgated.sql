@@ -1,0 +1,70 @@
+/*
+ CREATE 20181022@Sophia: Rename SPs which are migrated from DB052 to DBCUST [redmine: #99855]
+ DB: DB052
+*/
+
+Use bodb_licensee
+GO 
+
+EXEC sp_rename 'Acc_BA_GroupCurrency_ViewLog','DEL_Acc_BA_GroupCurrency_ViewLog'
+EXEC sp_rename 'Acc_BA_GroupCurrencySel','DEL_Acc_BA_GroupCurrencySel'
+EXEC sp_rename 'Acc_BA_GroupCurrencyUpd','DEL_Acc_BA_GroupCurrencyUpd'
+EXEC sp_rename 'Acc_BA_LicConfig_ViewLog','DEL_Acc_BA_LicConfig_ViewLog'
+EXEC sp_rename 'Acc_BA_LicConfigSel','DEL_Acc_BA_LicConfigSel'
+EXEC sp_rename 'Acc_BA_LicConfigUpd','DEL_Acc_BA_LicConfigUpd'
+EXEC sp_rename 'Acc_BA_SpecialCust_ViewLog','DEL_Acc_BA_SpecialCust_ViewLog'
+EXEC sp_rename 'Acc_BA_SpecialCustAdd','DEL_Acc_BA_SpecialCustAdd'
+EXEC sp_rename 'Acc_BA_SpecialCustDel','DEL_Acc_BA_SpecialCustDel'
+EXEC sp_rename 'Acc_BA_SpecialCustSel','DEL_Acc_BA_SpecialCustSel'
+EXEC sp_rename 'Acc_BA_SpecialCustUpd','DEL_Acc_BA_SpecialCustUpd'
+EXEC sp_rename 'DBA_AddLicenseeToBA','DEL_DBA_AddLicenseeToBA'
+EXEC sp_rename 'DBA_CreateLicenseeAgent','DEL_DBA_CreateLicenseeAgent'
+EXEC sp_rename 'DBA_CreateLicenseeUser','DEL_DBA_CreateLicenseeUser'
+EXEC sp_rename 'DBA_LicenseeBAConfig_Ins','DEL_DBA_LicenseeBAConfig_Ins'
+EXEC sp_rename 'DBA_LicenseeCustomerDel','DEL_DBA_LicenseeCustomerDel'
+EXEC sp_rename 'DBA_Lrf_ActiveLicenseeSystem','DEL_DBA_Lrf_ActiveLicenseeSystem'
+EXEC sp_rename 'DBA_Lrf_AddUserIntoLicensee','DEL_DBA_Lrf_AddUserIntoLicensee'
+EXEC sp_rename 'DBA_Lrf_CreateNewLicensee','DEL_DBA_Lrf_CreateNewLicensee'
+EXEC sp_rename 'DBA_Lrf_EnablePlayerComm','DEL_DBA_Lrf_EnablePlayerComm'
+EXEC sp_rename 'DBA_Lrf_FunctionProduct','DEL_DBA_Lrf_FunctionProduct'
+EXEC sp_rename 'DBA_Lrf_FunctionUserRole','DEL_DBA_Lrf_FunctionUserRole'
+EXEC sp_rename 'DBA_Lrf_LaunchLicensee','DEL_DBA_Lrf_LaunchLicensee'
+EXEC sp_rename 'DBA_Lrf_LaunchProduct','DEL_DBA_Lrf_LaunchProduct'
+EXEC sp_rename 'DBA_Lrf_OfferProduct','DEL_DBA_Lrf_OfferProduct'
+EXEC sp_rename 'Licensee_UserPasswordUpd','DEL_Licensee_UserPasswordUpd'
+EXEC sp_rename 'Lrf_ActiveDomainUpd','DEL_Lrf_ActiveDomainUpd'
+EXEC sp_rename 'Lrf_CheckIn','DEL_Lrf_CheckIn'
+EXEC sp_rename 'Lrf_CurrencyCustIns','DEL_Lrf_CurrencyCustIns'
+EXEC sp_rename 'Lrf_CustomerMoveGroupComm','DEL_Lrf_CustomerMoveGroupComm'
+EXEC sp_rename 'Lrf_CustomerRemoveGroupComm','DEL_Lrf_CustomerRemoveGroupComm'
+EXEC sp_rename 'Lrf_CustomerSetDefaultComm','DEL_Lrf_CustomerSetDefaultComm'
+EXEC sp_rename 'Lrf_CustomerUpdMemberComm','DEL_Lrf_CustomerUpdMemberComm'
+EXEC sp_rename 'Lrf_LicenseeBACustUpdComm','DEL_Lrf_LicenseeBACustUpdComm'
+EXEC sp_rename 'Lrf_LicenseeBAHistoryIns','DEL_Lrf_LicenseeBAHistoryIns'
+EXEC sp_rename 'Lrf_LicenseeBAHistoryUpdDone','DEL_Lrf_LicenseeBAHistoryUpdDone'
+EXEC sp_rename 'Lrf_LicenseeCustCommUpd','DEL_Lrf_LicenseeCustCommUpd'
+EXEC sp_rename 'Lrf_LicenseeGroupCommDel','DEL_Lrf_LicenseeGroupCommDel'
+EXEC sp_rename 'Lrf_LicenseeGroupCommIns','DEL_Lrf_LicenseeGroupCommIns'
+EXEC sp_rename 'Lrf_LicenseeGroupCommUpd','DEL_Lrf_LicenseeGroupCommUpd'
+EXEC sp_rename 'LRF_LicenseeSourcedSel','DEL_LRF_LicenseeSourcedSel'
+EXEC sp_rename 'Lrf_LicenseeUserFunctionsDel','DEL_Lrf_LicenseeUserFunctionsDel'
+EXEC sp_rename 'Lrf_LicenseeUserFunctionsIns','DEL_Lrf_LicenseeUserFunctionsIns'
+EXEC sp_rename 'Lrf_ReCheckIn','DEL_Lrf_ReCheckIn'
+EXEC sp_rename 'Lrf_UpdateUser','DEL_Lrf_UpdateUser'
+EXEC sp_rename 'Lrf_UserLogout','DEL_Lrf_UserLogout'
+EXEC sp_rename 'Lrf_UserPasswordUpd','DEL_Lrf_UserPasswordUpd'
+EXEC sp_rename 'Lrf_UserPwdReset','DEL_Lrf_UserPwdReset'
+EXEC sp_rename 'Lrf_UserUpdAccount','DEL_Lrf_UserUpdAccount'
+EXEC sp_rename 'Task_Licensee_ClearLogin','DEL_Task_Licensee_ClearLogin'
+
+EXEC sp_rename 'Lrf_BATimeCheck','DEL_Lrf_BATimeCheck'
+EXEC sp_rename 'LRF_InternalLogin','DEL_LRF_InternalLogin'
+EXEC sp_rename 'Lrf_SyncInternalUser','DEL_Lrf_SyncInternalUser'
+EXEC sp_rename 'Lrf_UserLogin','DEL_Lrf_UserLogin'
+
+Use bodb02
+GO
+
+EXEC sp_rename 'DBA_LicenseeCustInfo_InsertMissingData','DEL_DBA_LicenseeCustInfo_InsertMissingData'
+EXEC sp_rename 'Lrf_LicenseeGroupCommSel','DEL_Lrf_LicenseeGroupCommSel'
+EXEC sp_rename 'Lrf_LicenseeCustRngCommSel','DEL_Lrf_LicenseeCustRngCommSel'
