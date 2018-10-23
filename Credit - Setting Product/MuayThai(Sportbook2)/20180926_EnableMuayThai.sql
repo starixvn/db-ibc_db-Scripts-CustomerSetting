@@ -53,7 +53,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid	AND c.Enabled=1		
-		AND ci.Username='supertestlive'
+		
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -84,7 +84,7 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE (ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid AND c.Enabled=1)
-		AND ci.Username='supertestlive'
+		
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
