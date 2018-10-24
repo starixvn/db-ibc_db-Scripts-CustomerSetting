@@ -53,6 +53,14 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid	AND c.Enabled=1		
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 		
 WHILE (1 = 1)
 BEGIN
@@ -84,6 +92,14 @@ INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE (ci.roleid = 4 	
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid <= @max_custid AND c.Enabled=1)
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 		
 WHILE (1 = 1)
 BEGIN
