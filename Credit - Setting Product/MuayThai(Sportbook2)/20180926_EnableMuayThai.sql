@@ -70,6 +70,8 @@ BEGIN
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 			
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
@@ -109,6 +111,9 @@ BEGIN
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
+		
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
