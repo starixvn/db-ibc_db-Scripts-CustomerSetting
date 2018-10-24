@@ -4,8 +4,7 @@
 	Task: Update IsActive for Ref Setting
 	DB: DBTXN/bodb02
 */
- 
- -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+
 ------------------------------------------------------
 DELETE FROM Sport_Bettype_Reference 
 WHERE Sporttype=43 AND isLicensee=0
