@@ -7,8 +7,7 @@
  
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-UPDATE Sport_Bettype_Reference WITH(ROWLOCK,UPDLOCK)
-	SET IsActive=0
+DELETE FROM Sport_Bettype_Reference 
 WHERE Sporttype=43 AND isLicensee=1
 
 
