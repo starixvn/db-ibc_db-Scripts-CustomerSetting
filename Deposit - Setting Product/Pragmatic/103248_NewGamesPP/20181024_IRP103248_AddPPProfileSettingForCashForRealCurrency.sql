@@ -5,8 +5,10 @@
 	DB: DBCUST/CUSTDB
 */
 
-SELECT 	4165	GameTypeID,	9	ExchangeID,	'0.25'	MinLabel,	'12.5'	MaxLabel,	0.25	MinStake,	12.5	MaxStake--	AUD	as code	AUD	as currency
+SELECT 	4132	GameTypeID,	9	ExchangeID,	'0.5'	MinLabel,	'5'	MaxLabel,	0.5	MinStake,	5	MaxStake--	AUD	as code	AUD	as currency
 INTO #tmpStake
+UNION SELECT 	4135	,	9	,	'0.5'	,	'5'	,	0.5	,	5	--	AUD	as code	AUD	as currency
+UNION SELECT 	4165	,	9	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	AUD	as code	AUD	as currency
 UNION SELECT 	4166	,	9	,	'0.5'	,	'5'	,	0.5	,	5	--	AUD	as code	AUD	as currency
 UNION SELECT 	4167	,	9	,	'0.25'	,	'50'	,	0.25	,	50	--	AUD	as code	AUD	as currency
 UNION SELECT 	4168	,	9	,	'0.1'	,	'30'	,	0.1	,	30	--	AUD	as code	AUD	as currency
@@ -16,6 +18,8 @@ UNION SELECT 	4171	,	9	,	'0.2'	,	'20'	,	0.2	,	20	--	AUD	as code	AUD	as currency
 UNION SELECT 	4172	,	9	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	AUD	as code	AUD	as currency
 UNION SELECT 	4173	,	9	,	'0.09'	,	'9'	,	0.09	,	9	--	AUD	as code	AUD	as currency
 UNION SELECT 	4174	,	9	,	'0.2'	,	'10'	,	0.2	,	10	--	AUD	as code	AUD	as currency
+UNION SELECT 	4132	,	13	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	RMB	as currency
+UNION SELECT 	4135	,	13	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	RMB	as currency
 UNION SELECT 	4165	,	13	,	'1.5'	,	'75'	,	1.5	,	75	--	CNY	as code	RMB	as currency
 UNION SELECT 	4166	,	13	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	RMB	as currency
 UNION SELECT 	4167	,	13	,	'1.5'	,	'300'	,	1.5	,	300	--	CNY	as code	RMB	as currency
@@ -26,6 +30,8 @@ UNION SELECT 	4171	,	13	,	'1.2'	,	'120'	,	1.2	,	120	--	CNY	as code	RMB	as curren
 UNION SELECT 	4172	,	13	,	'1.5'	,	'15'	,	1.5	,	15	--	CNY	as code	RMB	as currency
 UNION SELECT 	4173	,	13	,	'0.54'	,	'54'	,	0.54	,	54	--	CNY	as code	RMB	as currency
 UNION SELECT 	4174	,	13	,	'1.2'	,	'60'	,	1.2	,	60	--	CNY	as code	RMB	as currency
+UNION SELECT 	4132	,	66	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	YUN	as currency
+UNION SELECT 	4135	,	66	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	YUN	as currency
 UNION SELECT 	4165	,	66	,	'1.5'	,	'75'	,	1.5	,	75	--	CNY	as code	YUN	as currency
 UNION SELECT 	4166	,	66	,	'3'	,	'30'	,	3	,	30	--	CNY	as code	YUN	as currency
 UNION SELECT 	4167	,	66	,	'1.5'	,	'300'	,	1.5	,	300	--	CNY	as code	YUN	as currency
@@ -36,6 +42,8 @@ UNION SELECT 	4171	,	66	,	'1.2'	,	'120'	,	1.2	,	120	--	CNY	as code	YUN	as curren
 UNION SELECT 	4172	,	66	,	'1.5'	,	'15'	,	1.5	,	15	--	CNY	as code	YUN	as currency
 UNION SELECT 	4173	,	66	,	'0.54'	,	'54'	,	0.54	,	54	--	CNY	as code	YUN	as currency
 UNION SELECT 	4174	,	66	,	'1.2'	,	'60'	,	1.2	,	60	--	CNY	as code	YUN	as currency
+UNION SELECT 	4132	,	6	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EURO	as currency
+UNION SELECT 	4135	,	6	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EURO	as currency
 UNION SELECT 	4165	,	6	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	EUR	as code	EURO	as currency
 UNION SELECT 	4166	,	6	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EURO	as currency
 UNION SELECT 	4167	,	6	,	'0.25'	,	'50'	,	0.25	,	50	--	EUR	as code	EURO	as currency
@@ -46,6 +54,8 @@ UNION SELECT 	4171	,	6	,	'0.2'	,	'20'	,	0.2	,	20	--	EUR	as code	EURO	as currency
 UNION SELECT 	4172	,	6	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	EUR	as code	EURO	as currency
 UNION SELECT 	4173	,	6	,	'0.09'	,	'9'	,	0.09	,	9	--	EUR	as code	EURO	as currency
 UNION SELECT 	4174	,	6	,	'0.2'	,	'10'	,	0.2	,	10	--	EUR	as code	EURO	as currency
+UNION SELECT 	4132	,	78	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EUR	as currency
+UNION SELECT 	4135	,	78	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EUR	as currency
 UNION SELECT 	4165	,	78	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	EUR	as code	EUR	as currency
 UNION SELECT 	4166	,	78	,	'0.5'	,	'5'	,	0.5	,	5	--	EUR	as code	EUR	as currency
 UNION SELECT 	4167	,	78	,	'0.25'	,	'50'	,	0.25	,	50	--	EUR	as code	EUR	as currency
@@ -56,6 +66,8 @@ UNION SELECT 	4171	,	78	,	'0.2'	,	'20'	,	0.2	,	20	--	EUR	as code	EUR	as currency
 UNION SELECT 	4172	,	78	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	EUR	as code	EUR	as currency
 UNION SELECT 	4173	,	78	,	'0.09'	,	'9'	,	0.09	,	9	--	EUR	as code	EUR	as currency
 UNION SELECT 	4174	,	78	,	'0.2'	,	'10'	,	0.2	,	10	--	EUR	as code	EUR	as currency
+UNION SELECT 	4132	,	12	,	'0.5'	,	'5'	,	0.5	,	5	--	GBP	as code	GBP	as currency
+UNION SELECT 	4135	,	12	,	'0.5'	,	'5'	,	0.5	,	5	--	GBP	as code	GBP	as currency
 UNION SELECT 	4165	,	12	,	'0.25'	,	'10'	,	0.25	,	10	--	GBP	as code	GBP	as currency
 UNION SELECT 	4166	,	12	,	'0.5'	,	'5'	,	0.5	,	5	--	GBP	as code	GBP	as currency
 UNION SELECT 	4167	,	12	,	'0.25'	,	'25'	,	0.25	,	25	--	GBP	as code	GBP	as currency
@@ -66,6 +78,8 @@ UNION SELECT 	4171	,	12	,	'0.2'	,	'10'	,	0.2	,	10	--	GBP	as code	GBP	as currency
 UNION SELECT 	4172	,	12	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	GBP	as code	GBP	as currency
 UNION SELECT 	4173	,	12	,	'0.09'	,	'4.5'	,	0.09	,	4.5	--	GBP	as code	GBP	as currency
 UNION SELECT 	4174	,	12	,	'0.2'	,	'5'	,	0.2	,	5	--	GBP	as code	GBP	as currency
+UNION SELECT 	4132	,	15	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IN	as currency
+UNION SELECT 	4135	,	15	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IN	as currency
 UNION SELECT 	4165	,	15	,	'2.25'	,	'112.5'	,	2.25	,	112.5	--	IDR	as code	IN	as currency
 UNION SELECT 	4166	,	15	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IN	as currency
 UNION SELECT 	4167	,	15	,	'2.25'	,	'450'	,	2.25	,	450	--	IDR	as code	IN	as currency
@@ -76,6 +90,8 @@ UNION SELECT 	4171	,	15	,	'1.8'	,	'180'	,	1.8	,	180	--	IDR	as code	IN	as currenc
 UNION SELECT 	4172	,	15	,	'2.25'	,	'22.5'	,	2.25	,	22.5	--	IDR	as code	IN	as currency
 UNION SELECT 	4173	,	15	,	'0.81'	,	'81'	,	0.81	,	81	--	IDR	as code	IN	as currency
 UNION SELECT 	4174	,	15	,	'1.8'	,	'90'	,	1.8	,	90	--	IDR	as code	IN	as currency
+UNION SELECT 	4132	,	22	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IND	as currency
+UNION SELECT 	4135	,	22	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IND	as currency
 UNION SELECT 	4165	,	22	,	'2.25'	,	'112.5'	,	2.25	,	112.5	--	IDR	as code	IND	as currency
 UNION SELECT 	4166	,	22	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IND	as currency
 UNION SELECT 	4167	,	22	,	'2.25'	,	'450'	,	2.25	,	450	--	IDR	as code	IND	as currency
@@ -86,6 +102,8 @@ UNION SELECT 	4171	,	22	,	'1.8'	,	'180'	,	1.8	,	180	--	IDR	as code	IND	as curren
 UNION SELECT 	4172	,	22	,	'2.25'	,	'22.5'	,	2.25	,	22.5	--	IDR	as code	IND	as currency
 UNION SELECT 	4173	,	22	,	'0.81'	,	'81'	,	0.81	,	81	--	IDR	as code	IND	as currency
 UNION SELECT 	4174	,	22	,	'1.8'	,	'90'	,	1.8	,	90	--	IDR	as code	IND	as currency
+UNION SELECT 	4132	,	33	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDD	as currency
+UNION SELECT 	4135	,	33	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDD	as currency
 UNION SELECT 	4165	,	33	,	'2.25'	,	'112.5'	,	2.25	,	112.5	--	IDR	as code	IDD	as currency
 UNION SELECT 	4166	,	33	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDD	as currency
 UNION SELECT 	4167	,	33	,	'2.25'	,	'450'	,	2.25	,	450	--	IDR	as code	IDD	as currency
@@ -96,6 +114,8 @@ UNION SELECT 	4171	,	33	,	'1.8'	,	'180'	,	1.8	,	180	--	IDR	as code	IDD	as curren
 UNION SELECT 	4172	,	33	,	'2.25'	,	'22.5'	,	2.25	,	22.5	--	IDR	as code	IDD	as currency
 UNION SELECT 	4173	,	33	,	'0.81'	,	'81'	,	0.81	,	81	--	IDR	as code	IDD	as currency
 UNION SELECT 	4174	,	33	,	'1.8'	,	'90'	,	1.8	,	90	--	IDR	as code	IDD	as currency
+UNION SELECT 	4132	,	34	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDR	as currency
+UNION SELECT 	4135	,	34	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDR	as currency
 UNION SELECT 	4165	,	34	,	'2.25'	,	'112.5'	,	2.25	,	112.5	--	IDR	as code	IDR	as currency
 UNION SELECT 	4166	,	34	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	IDR	as currency
 UNION SELECT 	4167	,	34	,	'2.25'	,	'450'	,	2.25	,	450	--	IDR	as code	IDR	as currency
@@ -106,6 +126,8 @@ UNION SELECT 	4171	,	34	,	'1.8'	,	'180'	,	1.8	,	180	--	IDR	as code	IDR	as curren
 UNION SELECT 	4172	,	34	,	'2.25'	,	'22.5'	,	2.25	,	22.5	--	IDR	as code	IDR	as currency
 UNION SELECT 	4173	,	34	,	'0.81'	,	'81'	,	0.81	,	81	--	IDR	as code	IDR	as currency
 UNION SELECT 	4174	,	34	,	'1.8'	,	'90'	,	1.8	,	90	--	IDR	as code	IDR	as currency
+UNION SELECT 	4132	,	47	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	DDD	as currency
+UNION SELECT 	4135	,	47	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	DDD	as currency
 UNION SELECT 	4165	,	47	,	'2.25'	,	'112.5'	,	2.25	,	112.5	--	IDR	as code	DDD	as currency
 UNION SELECT 	4166	,	47	,	'4.5'	,	'45'	,	4.5	,	45	--	IDR	as code	DDD	as currency
 UNION SELECT 	4167	,	47	,	'2.25'	,	'450'	,	2.25	,	450	--	IDR	as code	DDD	as currency
@@ -116,6 +138,8 @@ UNION SELECT 	4171	,	47	,	'1.8'	,	'180'	,	1.8	,	180	--	IDR	as code	DDD	as curren
 UNION SELECT 	4172	,	47	,	'2.25'	,	'22.5'	,	2.25	,	22.5	--	IDR	as code	DDD	as currency
 UNION SELECT 	4173	,	47	,	'0.81'	,	'81'	,	0.81	,	81	--	IDR	as code	DDD	as currency
 UNION SELECT 	4174	,	47	,	'1.8'	,	'90'	,	1.8	,	90	--	IDR	as code	DDD	as currency
+UNION SELECT 	4132	,	61	,	'25'	,	'250'	,	25	,	250	--	INR	as code	INR	as currency
+UNION SELECT 	4135	,	61	,	'25'	,	'250'	,	25	,	250	--	INR	as code	INR	as currency
 UNION SELECT 	4165	,	61	,	'12.5'	,	'625'	,	12.5	,	625	--	INR	as code	INR	as currency
 UNION SELECT 	4166	,	61	,	'25'	,	'250'	,	25	,	250	--	INR	as code	INR	as currency
 UNION SELECT 	4167	,	61	,	'12.5'	,	'2500'	,	12.5	,	2500	--	INR	as code	INR	as currency
@@ -126,6 +150,8 @@ UNION SELECT 	4171	,	61	,	'10'	,	'1000'	,	10	,	1000	--	INR	as code	INR	as curren
 UNION SELECT 	4172	,	61	,	'12.5'	,	'125'	,	12.5	,	125	--	INR	as code	INR	as currency
 UNION SELECT 	4173	,	61	,	'4.5'	,	'450'	,	4.5	,	450	--	INR	as code	INR	as currency
 UNION SELECT 	4174	,	61	,	'10'	,	'500'	,	10	,	500	--	INR	as code	INR	as currency
+UNION SELECT 	4132	,	75	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PTU	as currency
+UNION SELECT 	4135	,	75	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PTU	as currency
 UNION SELECT 	4165	,	75	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	INR	as code	PTU	as currency
 UNION SELECT 	4166	,	75	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PTU	as currency
 UNION SELECT 	4167	,	75	,	'0.25'	,	'50'	,	0.25	,	50	--	INR	as code	PTU	as currency
@@ -136,6 +162,8 @@ UNION SELECT 	4171	,	75	,	'0.2'	,	'20'	,	0.2	,	20	--	INR	as code	PTU	as currency
 UNION SELECT 	4172	,	75	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	INR	as code	PTU	as currency
 UNION SELECT 	4173	,	75	,	'0.09'	,	'9'	,	0.09	,	9	--	INR	as code	PTU	as currency
 UNION SELECT 	4174	,	75	,	'0.2'	,	'10'	,	0.2	,	10	--	INR	as code	PTU	as currency
+UNION SELECT 	4132	,	76	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PS	as currency
+UNION SELECT 	4135	,	76	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PS	as currency
 UNION SELECT 	4165	,	76	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	INR	as code	PS	as currency
 UNION SELECT 	4166	,	76	,	'0.5'	,	'5'	,	0.5	,	5	--	INR	as code	PS	as currency
 UNION SELECT 	4167	,	76	,	'0.25'	,	'50'	,	0.25	,	50	--	INR	as code	PS	as currency
@@ -146,6 +174,8 @@ UNION SELECT 	4171	,	76	,	'0.2'	,	'20'	,	0.2	,	20	--	INR	as code	PS	as currency
 UNION SELECT 	4172	,	76	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	INR	as code	PS	as currency
 UNION SELECT 	4173	,	76	,	'0.09'	,	'9'	,	0.09	,	9	--	INR	as code	PS	as currency
 UNION SELECT 	4174	,	76	,	'0.2'	,	'10'	,	0.2	,	10	--	INR	as code	PS	as currency
+UNION SELECT 	4132	,	77	,	'3'	,	'30'	,	3	,	30	--	INR	as code	PTH	as currency
+UNION SELECT 	4135	,	77	,	'3'	,	'30'	,	3	,	30	--	INR	as code	PTH	as currency
 UNION SELECT 	4165	,	77	,	'1.5'	,	'75'	,	1.5	,	75	--	INR	as code	PTH	as currency
 UNION SELECT 	4166	,	77	,	'3'	,	'30'	,	3	,	30	--	INR	as code	PTH	as currency
 UNION SELECT 	4167	,	77	,	'1.5'	,	'300'	,	1.5	,	300	--	INR	as code	PTH	as currency
@@ -156,6 +186,8 @@ UNION SELECT 	4171	,	77	,	'1.2'	,	'120'	,	1.2	,	120	--	INR	as code	PTH	as curren
 UNION SELECT 	4172	,	77	,	'1.5'	,	'15'	,	1.5	,	15	--	INR	as code	PTH	as currency
 UNION SELECT 	4173	,	77	,	'0.54'	,	'54'	,	0.54	,	54	--	INR	as code	PTH	as currency
 UNION SELECT 	4174	,	77	,	'1.2'	,	'60'	,	1.2	,	60	--	INR	as code	PTH	as currency
+UNION SELECT 	4132	,	31	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	Pts	as currency
+UNION SELECT 	4135	,	31	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	Pts	as currency
 UNION SELECT 	4165	,	31	,	'25'	,	'1250'	,	25	,	1250	--	JPY	as code	Pts	as currency
 UNION SELECT 	4166	,	31	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	Pts	as currency
 UNION SELECT 	4167	,	31	,	'25'	,	'5000'	,	25	,	5000	--	JPY	as code	Pts	as currency
@@ -166,6 +198,8 @@ UNION SELECT 	4171	,	31	,	'20'	,	'2000'	,	20	,	2000	--	JPY	as code	Pts	as curren
 UNION SELECT 	4172	,	31	,	'25'	,	'250'	,	25	,	250	--	JPY	as code	Pts	as currency
 UNION SELECT 	4173	,	31	,	'9'	,	'900'	,	9	,	900	--	JPY	as code	Pts	as currency
 UNION SELECT 	4174	,	31	,	'20'	,	'1000'	,	20	,	1000	--	JPY	as code	Pts	as currency
+UNION SELECT 	4132	,	32	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	JPY	as currency
+UNION SELECT 	4135	,	32	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	JPY	as currency
 UNION SELECT 	4165	,	32	,	'25'	,	'1250'	,	25	,	1250	--	JPY	as code	JPY	as currency
 UNION SELECT 	4166	,	32	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	JPY	as currency
 UNION SELECT 	4167	,	32	,	'25'	,	'5000'	,	25	,	5000	--	JPY	as code	JPY	as currency
@@ -176,6 +210,8 @@ UNION SELECT 	4171	,	32	,	'20'	,	'2000'	,	20	,	2000	--	JPY	as code	JPY	as curren
 UNION SELECT 	4172	,	32	,	'25'	,	'250'	,	25	,	250	--	JPY	as code	JPY	as currency
 UNION SELECT 	4173	,	32	,	'9'	,	'900'	,	9	,	900	--	JPY	as code	JPY	as currency
 UNION SELECT 	4174	,	32	,	'20'	,	'1000'	,	20	,	1000	--	JPY	as code	JPY	as currency
+UNION SELECT 	4132	,	37	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	P	as currency
+UNION SELECT 	4135	,	37	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	P	as currency
 UNION SELECT 	4165	,	37	,	'25'	,	'1250'	,	25	,	1250	--	JPY	as code	P	as currency
 UNION SELECT 	4166	,	37	,	'10'	,	'250'	,	10	,	250	--	JPY	as code	P	as currency
 UNION SELECT 	4167	,	37	,	'25'	,	'5000'	,	25	,	5000	--	JPY	as code	P	as currency
@@ -186,6 +222,8 @@ UNION SELECT 	4171	,	37	,	'20'	,	'2000'	,	20	,	2000	--	JPY	as code	P	as currency
 UNION SELECT 	4172	,	37	,	'25'	,	'250'	,	25	,	250	--	JPY	as code	P	as currency
 UNION SELECT 	4173	,	37	,	'9'	,	'900'	,	9	,	900	--	JPY	as code	P	as currency
 UNION SELECT 	4174	,	37	,	'20'	,	'1000'	,	20	,	1000	--	JPY	as code	P	as currency
+UNION SELECT 	4132	,	71	,	'1.5'	,	'15'	,	1.5	,	15	--	KHR	as code	KHR	as currency
+UNION SELECT 	4135	,	71	,	'1.5'	,	'15'	,	1.5	,	15	--	KHR	as code	KHR	as currency
 UNION SELECT 	4165	,	71	,	'0.75'	,	'37.5'	,	0.75	,	37.5	--	KHR	as code	KHR	as currency
 UNION SELECT 	4166	,	71	,	'1.5'	,	'15'	,	1.5	,	15	--	KHR	as code	KHR	as currency
 UNION SELECT 	4167	,	71	,	'0.75'	,	'150'	,	0.75	,	150	--	KHR	as code	KHR	as currency
@@ -196,6 +234,8 @@ UNION SELECT 	4171	,	71	,	'0.6'	,	'60'	,	0.6	,	60	--	KHR	as code	KHR	as currency
 UNION SELECT 	4172	,	71	,	'0.75'	,	'7.5'	,	0.75	,	7.5	--	KHR	as code	KHR	as currency
 UNION SELECT 	4173	,	71	,	'0.27'	,	'27'	,	0.27	,	27	--	KHR	as code	KHR	as currency
 UNION SELECT 	4174	,	71	,	'0.6'	,	'30'	,	0.6	,	30	--	KHR	as code	KHR	as currency
+UNION SELECT 	4132	,	44	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	PT	as currency
+UNION SELECT 	4135	,	44	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	PT	as currency
 UNION SELECT 	4165	,	44	,	'250'	,	'12500'	,	250	,	12500	--	KRW	as code	PT	as currency
 UNION SELECT 	4166	,	44	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	PT	as currency
 UNION SELECT 	4167	,	44	,	'250'	,	'50000'	,	250	,	50000	--	KRW	as code	PT	as currency
@@ -206,6 +246,8 @@ UNION SELECT 	4171	,	44	,	'200'	,	'20000'	,	200	,	20000	--	KRW	as code	PT	as cur
 UNION SELECT 	4172	,	44	,	'250'	,	'2500'	,	250	,	2500	--	KRW	as code	PT	as currency
 UNION SELECT 	4173	,	44	,	'90'	,	'9000'	,	90	,	9000	--	KRW	as code	PT	as currency
 UNION SELECT 	4174	,	44	,	'200'	,	'10000'	,	200	,	10000	--	KRW	as code	PT	as currency
+UNION SELECT 	4132	,	45	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	Won	as currency
+UNION SELECT 	4135	,	45	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	Won	as currency
 UNION SELECT 	4165	,	45	,	'250'	,	'12500'	,	250	,	12500	--	KRW	as code	Won	as currency
 UNION SELECT 	4166	,	45	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	Won	as currency
 UNION SELECT 	4167	,	45	,	'250'	,	'50000'	,	250	,	50000	--	KRW	as code	Won	as currency
@@ -216,6 +258,8 @@ UNION SELECT 	4171	,	45	,	'200'	,	'20000'	,	200	,	20000	--	KRW	as code	Won	as cu
 UNION SELECT 	4172	,	45	,	'250'	,	'2500'	,	250	,	2500	--	KRW	as code	Won	as currency
 UNION SELECT 	4173	,	45	,	'90'	,	'9000'	,	90	,	9000	--	KRW	as code	Won	as currency
 UNION SELECT 	4174	,	45	,	'200'	,	'10000'	,	200	,	10000	--	KRW	as code	Won	as currency
+UNION SELECT 	4132	,	62	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	KW	as currency
+UNION SELECT 	4135	,	62	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	KW	as currency
 UNION SELECT 	4165	,	62	,	'250'	,	'12500'	,	250	,	12500	--	KRW	as code	KW	as currency
 UNION SELECT 	4166	,	62	,	'100'	,	'2500'	,	100	,	2500	--	KRW	as code	KW	as currency
 UNION SELECT 	4167	,	62	,	'250'	,	'50000'	,	250	,	50000	--	KRW	as code	KW	as currency
@@ -226,6 +270,8 @@ UNION SELECT 	4171	,	62	,	'200'	,	'20000'	,	200	,	20000	--	KRW	as code	KW	as cur
 UNION SELECT 	4172	,	62	,	'250'	,	'2500'	,	250	,	2500	--	KRW	as code	KW	as currency
 UNION SELECT 	4173	,	62	,	'90'	,	'9000'	,	90	,	9000	--	KRW	as code	KW	as currency
 UNION SELECT 	4174	,	62	,	'200'	,	'10000'	,	200	,	10000	--	KRW	as code	KW	as currency
+UNION SELECT 	4132	,	2	,	'1.5'	,	'15'	,	1.5	,	15	--	MYR	as code	RM	as currency
+UNION SELECT 	4135	,	2	,	'1.5'	,	'15'	,	1.5	,	15	--	MYR	as code	RM	as currency
 UNION SELECT 	4165	,	2	,	'0.75'	,	'37.5'	,	0.75	,	37.5	--	MYR	as code	RM	as currency
 UNION SELECT 	4166	,	2	,	'1.5'	,	'15'	,	1.5	,	15	--	MYR	as code	RM	as currency
 UNION SELECT 	4167	,	2	,	'0.75'	,	'150'	,	0.75	,	150	--	MYR	as code	RM	as currency
@@ -236,6 +282,8 @@ UNION SELECT 	4171	,	2	,	'0.6'	,	'60'	,	0.6	,	60	--	MYR	as code	RM	as currency
 UNION SELECT 	4172	,	2	,	'0.75'	,	'7.5'	,	0.75	,	7.5	--	MYR	as code	RM	as currency
 UNION SELECT 	4173	,	2	,	'0.27'	,	'27'	,	0.27	,	27	--	MYR	as code	RM	as currency
 UNION SELECT 	4174	,	2	,	'0.6'	,	'30'	,	0.6	,	30	--	MYR	as code	RM	as currency
+UNION SELECT 	4132	,	56	,	'1.5'	,	'15'	,	1.5	,	15	--	PLN	as code	PLN	as currency
+UNION SELECT 	4135	,	56	,	'1.5'	,	'15'	,	1.5	,	15	--	PLN	as code	PLN	as currency
 UNION SELECT 	4165	,	56	,	'0.75'	,	'37.5'	,	0.75	,	37.5	--	PLN	as code	PLN	as currency
 UNION SELECT 	4166	,	56	,	'1.5'	,	'15'	,	1.5	,	15	--	PLN	as code	PLN	as currency
 UNION SELECT 	4167	,	56	,	'0.75'	,	'150'	,	0.75	,	150	--	PLN	as code	PLN	as currency
@@ -246,6 +294,8 @@ UNION SELECT 	4171	,	56	,	'0.6'	,	'60'	,	0.6	,	60	--	PLN	as code	PLN	as currency
 UNION SELECT 	4172	,	56	,	'0.75'	,	'7.5'	,	0.75	,	7.5	--	PLN	as code	PLN	as currency
 UNION SELECT 	4173	,	56	,	'0.27'	,	'27'	,	0.27	,	27	--	PLN	as code	PLN	as currency
 UNION SELECT 	4174	,	56	,	'0.6'	,	'30'	,	0.6	,	30	--	PLN	as code	PLN	as currency
+UNION SELECT 	4132	,	55	,	'25'	,	'250'	,	25	,	250	--	RUB	as code	RUB	as currency
+UNION SELECT 	4135	,	55	,	'25'	,	'250'	,	25	,	250	--	RUB	as code	RUB	as currency
 UNION SELECT 	4165	,	55	,	'12.5'	,	'625'	,	12.5	,	625	--	RUB	as code	RUB	as currency
 UNION SELECT 	4166	,	55	,	'25'	,	'250'	,	25	,	250	--	RUB	as code	RUB	as currency
 UNION SELECT 	4167	,	55	,	'12.5'	,	'2500'	,	12.5	,	2500	--	RUB	as code	RUB	as currency
@@ -256,6 +306,8 @@ UNION SELECT 	4171	,	55	,	'10'	,	'1000'	,	10	,	1000	--	RUB	as code	RUB	as curren
 UNION SELECT 	4172	,	55	,	'12.5'	,	'125'	,	12.5	,	125	--	RUB	as code	RUB	as currency
 UNION SELECT 	4173	,	55	,	'4.5'	,	'450'	,	4.5	,	450	--	RUB	as code	RUB	as currency
 UNION SELECT 	4174	,	55	,	'10'	,	'500'	,	10	,	500	--	RUB	as code	RUB	as currency
+UNION SELECT 	4132	,	1	,	'0.5'	,	'5'	,	0.5	,	5	--	SGD	as code	SD$	as currency
+UNION SELECT 	4135	,	1	,	'0.5'	,	'5'	,	0.5	,	5	--	SGD	as code	SD$	as currency
 UNION SELECT 	4165	,	1	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	SGD	as code	SD$	as currency
 UNION SELECT 	4166	,	1	,	'0.5'	,	'5'	,	0.5	,	5	--	SGD	as code	SD$	as currency
 UNION SELECT 	4167	,	1	,	'0.25'	,	'50'	,	0.25	,	50	--	SGD	as code	SD$	as currency
@@ -266,6 +318,8 @@ UNION SELECT 	4171	,	1	,	'0.2'	,	'20'	,	0.2	,	20	--	SGD	as code	SD$	as currency
 UNION SELECT 	4172	,	1	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	SGD	as code	SD$	as currency
 UNION SELECT 	4173	,	1	,	'0.09'	,	'9'	,	0.09	,	9	--	SGD	as code	SD$	as currency
 UNION SELECT 	4174	,	1	,	'0.2'	,	'10'	,	0.2	,	10	--	SGD	as code	SD$	as currency
+UNION SELECT 	4132	,	4	,	'15'	,	'150'	,	15	,	150	--	THB	as code	TB	as currency
+UNION SELECT 	4135	,	4	,	'15'	,	'150'	,	15	,	150	--	THB	as code	TB	as currency
 UNION SELECT 	4165	,	4	,	'7.5'	,	'375'	,	7.5	,	375	--	THB	as code	TB	as currency
 UNION SELECT 	4166	,	4	,	'15'	,	'150'	,	15	,	150	--	THB	as code	TB	as currency
 UNION SELECT 	4167	,	4	,	'7.5'	,	'1500'	,	7.5	,	1500	--	THB	as code	TB	as currency
@@ -276,6 +330,8 @@ UNION SELECT 	4171	,	4	,	'6'	,	'600'	,	6	,	600	--	THB	as code	TB	as currency
 UNION SELECT 	4172	,	4	,	'7.5'	,	'75'	,	7.5	,	75	--	THB	as code	TB	as currency
 UNION SELECT 	4173	,	4	,	'2.7'	,	'270'	,	2.7	,	270	--	THB	as code	TB	as currency
 UNION SELECT 	4174	,	4	,	'6'	,	'300'	,	6	,	300	--	THB	as code	TB	as currency
+UNION SELECT 	4132	,	43	,	'15'	,	'150'	,	15	,	150	--	THB	as code	THB	as currency
+UNION SELECT 	4135	,	43	,	'15'	,	'150'	,	15	,	150	--	THB	as code	THB	as currency
 UNION SELECT 	4165	,	43	,	'7.5'	,	'375'	,	7.5	,	375	--	THB	as code	THB	as currency
 UNION SELECT 	4166	,	43	,	'15'	,	'150'	,	15	,	150	--	THB	as code	THB	as currency
 UNION SELECT 	4167	,	43	,	'7.5'	,	'1500'	,	7.5	,	1500	--	THB	as code	THB	as currency
@@ -286,6 +342,8 @@ UNION SELECT 	4171	,	43	,	'6'	,	'600'	,	6	,	600	--	THB	as code	THB	as currency
 UNION SELECT 	4172	,	43	,	'7.5'	,	'75'	,	7.5	,	75	--	THB	as code	THB	as currency
 UNION SELECT 	4173	,	43	,	'2.7'	,	'270'	,	2.7	,	270	--	THB	as code	THB	as currency
 UNION SELECT 	4174	,	43	,	'6'	,	'300'	,	6	,	300	--	THB	as code	THB	as currency
+UNION SELECT 	4132	,	3	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	US$	as currency
+UNION SELECT 	4135	,	3	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	US$	as currency
 UNION SELECT 	4165	,	3	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	US$	as currency
 UNION SELECT 	4166	,	3	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	US$	as currency
 UNION SELECT 	4167	,	3	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	US$	as currency
@@ -296,6 +354,8 @@ UNION SELECT 	4171	,	3	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	US$	as currency
 UNION SELECT 	4172	,	3	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	US$	as currency
 UNION SELECT 	4173	,	3	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	US$	as currency
 UNION SELECT 	4174	,	3	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	US$	as currency
+UNION SELECT 	4132	,	16	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Yen	as currency
+UNION SELECT 	4135	,	16	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Yen	as currency
 UNION SELECT 	4165	,	16	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	Yen	as currency
 UNION SELECT 	4166	,	16	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Yen	as currency
 UNION SELECT 	4167	,	16	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	Yen	as currency
@@ -306,6 +366,8 @@ UNION SELECT 	4171	,	16	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	Yen	as currency
 UNION SELECT 	4172	,	16	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	Yen	as currency
 UNION SELECT 	4173	,	16	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	Yen	as currency
 UNION SELECT 	4174	,	16	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	Yen	as currency
+UNION SELECT 	4132	,	17	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	NTD	as currency
+UNION SELECT 	4135	,	17	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	NTD	as currency
 UNION SELECT 	4165	,	17	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	NTD	as currency
 UNION SELECT 	4166	,	17	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	NTD	as currency
 UNION SELECT 	4167	,	17	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	NTD	as currency
@@ -316,6 +378,8 @@ UNION SELECT 	4171	,	17	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	NTD	as currency
 UNION SELECT 	4172	,	17	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	NTD	as currency
 UNION SELECT 	4173	,	17	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	NTD	as currency
 UNION SELECT 	4174	,	17	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	NTD	as currency
+UNION SELECT 	4132	,	35	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	$US	as currency
+UNION SELECT 	4135	,	35	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	$US	as currency
 UNION SELECT 	4165	,	35	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	$US	as currency
 UNION SELECT 	4166	,	35	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	$US	as currency
 UNION SELECT 	4167	,	35	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	$US	as currency
@@ -326,6 +390,8 @@ UNION SELECT 	4171	,	35	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	$US	as currency
 UNION SELECT 	4172	,	35	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	$US	as currency
 UNION SELECT 	4173	,	35	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	$US	as currency
 UNION SELECT 	4174	,	35	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	$US	as currency
+UNION SELECT 	4132	,	36	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Y$US	as currency
+UNION SELECT 	4135	,	36	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Y$US	as currency
 UNION SELECT 	4165	,	36	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	Y$US	as currency
 UNION SELECT 	4166	,	36	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	Y$US	as currency
 UNION SELECT 	4167	,	36	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	Y$US	as currency
@@ -336,6 +402,8 @@ UNION SELECT 	4171	,	36	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	Y$US	as currenc
 UNION SELECT 	4172	,	36	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	Y$US	as currency
 UNION SELECT 	4173	,	36	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	Y$US	as currency
 UNION SELECT 	4174	,	36	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	Y$US	as currency
+UNION SELECT 	4132	,	40	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	IRR	as currency
+UNION SELECT 	4135	,	40	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	IRR	as currency
 UNION SELECT 	4165	,	40	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	IRR	as currency
 UNION SELECT 	4166	,	40	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	IRR	as currency
 UNION SELECT 	4167	,	40	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	IRR	as currency
@@ -346,6 +414,8 @@ UNION SELECT 	4171	,	40	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	IRR	as currency
 UNION SELECT 	4172	,	40	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	IRR	as currency
 UNION SELECT 	4173	,	40	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	IRR	as currency
 UNION SELECT 	4174	,	40	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	IRR	as currency
+UNION SELECT 	4132	,	64	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UT	as currency
+UNION SELECT 	4135	,	64	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UT	as currency
 UNION SELECT 	4165	,	64	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	UT	as currency
 UNION SELECT 	4166	,	64	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UT	as currency
 UNION SELECT 	4167	,	64	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	UT	as currency
@@ -356,6 +426,8 @@ UNION SELECT 	4171	,	64	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	UT	as currency
 UNION SELECT 	4172	,	64	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	UT	as currency
 UNION SELECT 	4173	,	64	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	UT	as currency
 UNION SELECT 	4174	,	64	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	UT	as currency
+UNION SELECT 	4132	,	65	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UDI	as currency
+UNION SELECT 	4135	,	65	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UDI	as currency
 UNION SELECT 	4165	,	65	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	UDI	as currency
 UNION SELECT 	4166	,	65	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	UDI	as currency
 UNION SELECT 	4167	,	65	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	UDI	as currency
@@ -366,6 +438,8 @@ UNION SELECT 	4171	,	65	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	UDI	as currency
 UNION SELECT 	4172	,	65	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	UDI	as currency
 UNION SELECT 	4173	,	65	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	UDI	as currency
 UNION SELECT 	4174	,	65	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	UDI	as currency
+UNION SELECT 	4132	,	68	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	POS	as currency
+UNION SELECT 	4135	,	68	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	POS	as currency
 UNION SELECT 	4165	,	68	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	POS	as currency
 UNION SELECT 	4166	,	68	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	POS	as currency
 UNION SELECT 	4167	,	68	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	POS	as currency
@@ -376,6 +450,8 @@ UNION SELECT 	4171	,	68	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	POS	as currency
 UNION SELECT 	4172	,	68	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	POS	as currency
 UNION SELECT 	4173	,	68	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	POS	as currency
 UNION SELECT 	4174	,	68	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	POS	as currency
+UNION SELECT 	4132	,	74	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	TH	as currency
+UNION SELECT 	4135	,	74	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	TH	as currency
 UNION SELECT 	4165	,	74	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	USD	as code	TH	as currency
 UNION SELECT 	4166	,	74	,	'0.5'	,	'5'	,	0.5	,	5	--	USD	as code	TH	as currency
 UNION SELECT 	4167	,	74	,	'0.25'	,	'50'	,	0.25	,	50	--	USD	as code	TH	as currency
@@ -386,6 +462,8 @@ UNION SELECT 	4171	,	74	,	'0.2'	,	'20'	,	0.2	,	20	--	USD	as code	TH	as currency
 UNION SELECT 	4172	,	74	,	'0.25'	,	'2.5'	,	0.25	,	2.5	--	USD	as code	TH	as currency
 UNION SELECT 	4173	,	74	,	'0.09'	,	'9'	,	0.09	,	9	--	USD	as code	TH	as currency
 UNION SELECT 	4174	,	74	,	'0.2'	,	'10'	,	0.2	,	10	--	USD	as code	TH	as currency
+UNION SELECT 	4132	,	51	,	'9'	,	'90'	,	9	,	90	--	VND	as code	INH	as currency
+UNION SELECT 	4135	,	51	,	'9'	,	'90'	,	9	,	90	--	VND	as code	INH	as currency
 UNION SELECT 	4165	,	51	,	'4.5'	,	'225'	,	4.5	,	225	--	VND	as code	INH	as currency
 UNION SELECT 	4166	,	51	,	'9'	,	'90'	,	9	,	90	--	VND	as code	INH	as currency
 UNION SELECT 	4167	,	51	,	'4.5'	,	'900'	,	4.5	,	900	--	VND	as code	INH	as currency
@@ -396,6 +474,8 @@ UNION SELECT 	4171	,	51	,	'3.6'	,	'360'	,	3.6	,	360	--	VND	as code	INH	as curren
 UNION SELECT 	4172	,	51	,	'4.5'	,	'45'	,	4.5	,	45	--	VND	as code	INH	as currency
 UNION SELECT 	4173	,	51	,	'1.62'	,	'162'	,	1.62	,	162	--	VND	as code	INH	as currency
 UNION SELECT 	4174	,	51	,	'3.6'	,	'180'	,	3.6	,	180	--	VND	as code	INH	as currency
+UNION SELECT 	4132	,	72	,	'0.5'	,	'5'	,	0.5	,	5	--	YNG	as code	YNG	as currency
+UNION SELECT 	4135	,	72	,	'0.5'	,	'5'	,	0.5	,	5	--	YNG	as code	YNG	as currency
 UNION SELECT 	4165	,	72	,	'0.25'	,	'12.5'	,	0.25	,	12.5	--	YNG	as code	YNG	as currency
 UNION SELECT 	4166	,	72	,	'0.5'	,	'5'	,	0.5	,	5	--	YNG	as code	YNG	as currency
 UNION SELECT 	4167	,	72	,	'0.25'	,	'50'	,	0.25	,	50	--	YNG	as code	YNG	as currency
@@ -408,23 +488,27 @@ UNION SELECT 	4173	,	72	,	'0.09'	,	'9'	,	0.09	,	9	--	YNG	as code	YNG	as currency
 UNION SELECT 	4174	,	72	,	'0.2'	,	'10'	,	0.2	,	10	--	YNG	as code	YNG	as currency
 
 
-DELETE g
-FROM dbo.Dep_StakeLevelGroupDetail g WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN dbo.Dep_StakeLevel s WITH(NOLOCK) ON g.StakeLevelID = s.StakeLevelID
-	INNER JOIN #tmpStake t ON g.GameTypeID = t.GameTypeID
-							AND s.exchangeid = t.exchangeid
-WHERE s.GameTypeID = 4101							
 
-INSERT INTO [dbo].[Dep_StakeLevelGroupDetail]
-           ([StakeLevelID]
-           ,[GameTypeID]
-           ,[MinLabel]
-           ,[MaxLabel]
-           ,[MinStake]
-           ,[MaxStake])
-SELECT s.StakeLevelID, t.GameTypeID,t.MinLabel, t.MaxLabel, t.MinStake, t.MaxStake
-FROM dbo.Dep_StakeLevel s WITH(NOLOCK)
-	CROSS APPLY (SELECT * FROM #tmpStake t WHERE t.exchangeid = s.exchangeid) t
+;WITH T AS(
+SELECT s.StakeLevelID,t.* 
+FROM StakeLevel s (NOLOCK)
+CROSS APPLY (SELECT * FROM #tmpStake t WHERE s.ExchangeId = t.ExchangeID ) t
 WHERE s.GameTypeID = 4101
+)
+MERGE StakeLevelGroupDetail as g 
+USING t ON g.GameTypeID = t.GameTypeID AND g.StakeLevelID = t.StakeLevelID 
+WHEN MATCHED THEN UPDATE SET g.MinLabel = t.MinLabel,
+							g.MaxLabel = t.MaxLabel,
+							g.MinStake = t.MinStake,
+							g.MaxStake = t.MaxStake
+WHEN NOT MATCHED THEN INSERT ([StakeLevelID]
+							   ,[GameTypeID]
+							   ,[MinLabel]
+							   ,[MaxLabel]
+							   ,[MinStake]
+							   ,[MaxStake]
+							   )
+				VALUES(t.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake);	   							
+
 
 
