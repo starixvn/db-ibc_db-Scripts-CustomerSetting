@@ -113,7 +113,9 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
+		   ,CASE WHEN site='Haifa' THEN 90.5 
+				 WHEN site='Asiabet88' AND currency IN(3,6) THEN 0
+			ELSE 85 END
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)

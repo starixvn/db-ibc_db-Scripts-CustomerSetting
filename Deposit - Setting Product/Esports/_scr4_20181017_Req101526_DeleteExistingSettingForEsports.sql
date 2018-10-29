@@ -41,7 +41,7 @@ BEGIN
 	DELETE cg
 	FROM Dep_CustPTSetting_Member cg
 		INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
-	WHERE SportType =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)
+	WHERE c.srecommend NOT IN (SELECT custid FROM #supers)
 
 	DELETE cg
 	FROM Dep_CustPTGroupSetting_Member cg 
