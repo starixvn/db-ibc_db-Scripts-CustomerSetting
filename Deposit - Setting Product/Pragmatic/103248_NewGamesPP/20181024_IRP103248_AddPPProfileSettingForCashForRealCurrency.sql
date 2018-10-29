@@ -491,11 +491,11 @@ UNION SELECT 	4174	,	72	,	'0.2'	,	'10'	,	0.2	,	10	--	YNG	as code	YNG	as currency
 
 ;WITH T AS(
 SELECT s.StakeLevelID,t.* 
-FROM StakeLevel s (NOLOCK)
+FROM Dep_StakeLevel s (NOLOCK)
 CROSS APPLY (SELECT * FROM #tmpStake t WHERE s.ExchangeId = t.ExchangeID ) t
 WHERE s.GameTypeID = 4101
 )
-MERGE StakeLevelGroupDetail as g 
+MERGE Dep_StakeLevelGroupDetail as g 
 USING t ON g.GameTypeID = t.GameTypeID AND g.StakeLevelID = t.StakeLevelID 
 WHEN MATCHED THEN UPDATE SET g.MinLabel = t.MinLabel,
 							g.MaxLabel = t.MaxLabel,
