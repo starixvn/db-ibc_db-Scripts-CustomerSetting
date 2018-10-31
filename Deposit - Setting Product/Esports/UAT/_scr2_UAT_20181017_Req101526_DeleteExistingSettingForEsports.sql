@@ -23,29 +23,45 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN		
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN		
 
-	DELETE cg
-	FROM Dep_CustPTSetting_Agent cg 		
-	WHERE SportType =43
-						
-	DELETE cg
-	FROM Dep_CustPTSetting_Member cg	
-		
-	DELETE cg
-	FROM Dep_CustPTGroupSetting_Member cg 
-	WHERE SportType  =43  		
-				
-	DELETE cg
-	FROM Dep_CustBetSetting_Agent cg
-	WHERE SportType  =43  		
-
-	DELETE cg
-	FROM Dep_CustBetSetting_Member cg	
-	WHERE SportType  =43  		
+	IF EXISTS(SELECT 1 FROM Dep_CustPTSetting_Agent WITH(NOLOCK) WHERE SportType=43)
+	BEGIN
+		DELETE cg
+		FROM Dep_CustPTSetting_Agent cg 		
+		WHERE SportType =43
+	END
+	
+	IF EXISTS(SELECT 1 FROM Dep_CustPTSetting_Member WITH(NOLOCK))	
+	BEGIN				
+		DELETE cg
+		FROM Dep_CustPTSetting_Member cg	
+	END
+	
+	IF EXISTS(SELECT 1 FROM Dep_CustPTGroupSetting_Member WITH(NOLOCK) WHERE SportType=43)	
+	BEGIN
+		DELETE cg
+		FROM Dep_CustPTGroupSetting_Member cg 
+		WHERE SportType  =43  		
+	END
+	
+	IF EXISTS(SELECT 1 FROM Dep_CustBetSetting_Agent WITH(NOLOCK) WHERE SportType=43)	
+	BEGIN			
+		DELETE cg
+		FROM Dep_CustBetSetting_Agent cg
+		WHERE SportType  =43 
+	END 	
+	
+	IF EXISTS(SELECT 1 FROM Dep_CustBetSetting_Member WITH(NOLOCK) WHERE SportType=43)	
+	BEGIN			
+		DELETE cg
+		FROM Dep_CustBetSetting_Member cg	
+		WHERE SportType  =43  
+		OPTION(MAXDOP 1)		
+	END
 
 	DELETE cg
 	FROM Dep_LicenseeProductSetting cg 		
 	WHERE ProductSettingID IN(24,25)
-
+	
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

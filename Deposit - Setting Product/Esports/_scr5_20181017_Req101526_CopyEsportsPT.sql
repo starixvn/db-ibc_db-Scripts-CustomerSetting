@@ -25,15 +25,43 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
-	DECLARE @Sporttype	INT = 43	
-	
+	DECLARE @Sporttype	INT = 43, @PT SMALLMONEY,@PTGroup SMALLMONEY
+	DECLARE @Site VARCHAR(10),@Currency INT
+
+	SELECT @Site=Site FROM Customer WITH(NOLOCK) WHERE custid=@srecommend	
+	IF @Site='Haifa'
+	BEGIN
+		SELECT @PT=90.5
+		SELECT @PTGroup=90.5
+	END
+	ELSE IF @Site='Asiabet88' AND @currency IN(3,6) 
+	BEGIN
+		SELECT @PTGroup=0
+		SELECT @PT=85
+	END
+	ELSE 
+	BEGIN
+		SELECT @PT=85
+		SELECT @PTGroup=85
+	END
 	--------------------------------------PT Setting-------------------------------------------------	
 
-	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)	
+	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,MaxPerMatch MONEY)
+	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY,MaxPerMatch MONEY)	
+
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
 	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
 		AND custid<=@maxcustid 
+
+	INSERT INTO #tmpCust(CustID,MaxPerMatch)
+	SELECT CustID,maxpermatch99
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
+		AND roleid = 1 
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
 	--AGENT LEVEL	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -49,9 +77,9 @@ BEGIN
 		   ,@Sporttype
 		   ,@fBetType
 		   ,0
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END	
+		   ,@PT
+		   ,@PT
+		   ,@PT
 	FROM Customer WITH(NOLOCK)
 	WHERE custid=@srecommend
 	
@@ -70,7 +98,7 @@ BEGIN
 		   ,@fBetType
 		   ,0
 		   ,0
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
+		   ,@PT
 		   ,0	
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=3 AND custid<=@maxcustid 
@@ -92,7 +120,7 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,CASE WHEN site='Haifa' THEN 90.5 ELSE 85 END
+		   ,@PT
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
@@ -113,9 +141,7 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,CASE WHEN site='Haifa' THEN 90.5 
-				 WHEN site='Asiabet88' AND currency IN(3,6) THEN 0
-			ELSE 85 END
+		   ,@PTGroup
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
@@ -148,20 +174,24 @@ BEGIN
 		AND roleid IN(2,3,4)
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
+	WHILE EXISTS(SELECT 1 FROM #tmpCust)
+	BEGIN
+		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tmpCustInsert
 	--Member Level
-	INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)			
-	SELECT 
-		ci.CustID			,	
-		@Sporttype			,
-		@fBetType			,		
-		MinBet				,
-		MaxBet				,
-		maxpermatch99			
-	FROM custInfo ci WITH(NOLOCK)
-		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND cs.sporttype=@fSportType AND cs.bettype=@fBetType	
-		AND roleid = 1 
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+		INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)			
+		SELECT 
+			ci.CustID			,	
+			@Sporttype			,
+			@fBetType			,		
+			MinBet				,
+			MaxBet				,
+			maxpermatch			
+		FROM #tmpCustInsert ci WITH(NOLOCK)
+			 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
+		WHERE cs.sporttype=@fSportType AND cs.bettype=@fBetType	
+		
+		TRUNCATE TABLE #tmpCustInsert
+	END
 		
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT @srecommend,25

@@ -27,6 +27,8 @@ BEGIN
 	DECLARE @Sporttype INT = 43, @BetType INT = 1
 
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,recommend INT)
+	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY,recommend INT)	
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -37,63 +39,66 @@ BEGIN
 		AND ci.Enabled=1
 		AND cs.site IN ('spondemo','Athena000')
 
-	INSERT INTO [dbo].[Dep_CustPTSetting_Member]
-           (CustID
-           ,[SportType]
-           ,[BetType]
-           ,[IsLive]
-           ,[SuperPT]
-           ,[MasterPT]
-           ,[AgentPT])
-	SELECT 
-			BA.CustId
-           ,@Sporttype
-           ,@BetType
-           ,0
-           ,0
-           ,0
-           ,0
-	FROM Dep_CustBAActive BA WITH(NOLOCK)
-		INNER JOIN Custinfo c WITH(NOLOCK) ON BA.CustId=c.custid
-	WHERE BA.CustId<=@maxcustid AND c.srecommend IN(SELECT CustID FROM #supers)
-
-	INSERT INTO [dbo].[Dep_CustPTSetting_Member]
-           (CustID
-           ,[SportType]
-           ,[BetType]
-           ,[IsLive]
-           ,[SuperPT]
-           ,[MasterPT]
-           ,[AgentPT])
-	SELECT 
-			BA.CustId
-           ,SportType
-           ,BetType
-           ,0
-           ,[SuperPT]
-           ,[MasterPT]
-           ,[AgentPT]
+	INSERT INTO #tmpCust(CustID,recommend)
+	SELECT BA.custID,c.recommend
 	FROM Dep_CustBAActive BA WITH(NOLOCK)
 		INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
-		INNER JOIN [Dep_CustPTGroupSetting_Member] s WITH(NOLOCK) ON c.recommend=s.AgentID
-	WHERE s.SportType<>@Sporttype AND s.BetType<>@BetType AND BA.CustId<=@maxcustid
-		AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE BA.CustId<=@maxcustid AND c.srecommend IN(SELECT CustId FROM #supers)
 
-	UPDATE m
-		SET m.IsGroupedPT=0
-	FROM Dep_CustSettingMode m WITH(NOLOCK)
-		INNER JOIN Dep_CustBAActive ba WITH(NOLOCK) ON m.CustID=ba.CustId
-		INNER  JOIN custInfo c WITH(NOLOCK) ON ba.CustId=c.custid
-	WHERE BA.CustId<=@maxcustid
-		AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHILE EXISTS(SELECT 1 FROM #tmpCust)
+	BEGIN
+		DELETE TOP (1000) #tmpCust OUTPUT DELETED.* INTO #tmpCustInsert
 
-	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-	SELECT ba.CustId,0
-	FROM Dep_CustBAActive ba WITH(NOLOCK)
-		INNER  JOIN custInfo c WITH(NOLOCK) ON ba.CustId=c.custid
-	WHERE NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
-		AND ba.CustId<=@maxcustid
-		AND c.srecommend IN(SELECT CustID FROM #supers)
+		INSERT INTO [dbo].[Dep_CustPTSetting_Member]
+			   (CustID
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT])
+		SELECT 
+				BA.CustId
+			   ,@Sporttype
+			   ,@BetType
+			   ,0
+			   ,0
+			   ,0
+			   ,0
+		FROM #tmpCustInsert BA WITH(NOLOCK)		
+
+		INSERT INTO [dbo].[Dep_CustPTSetting_Member]
+			   (CustID
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT])
+		SELECT 
+				BA.CustId
+			   ,SportType
+			   ,BetType
+			   ,0
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+		FROM #tmpCustInsert BA WITH(NOLOCK)		
+			INNER JOIN [Dep_CustPTGroupSetting_Member] s WITH(NOLOCK) ON BA.recommend=s.AgentID
+		WHERE s.SportType<>@Sporttype AND s.BetType<>@BetType
+
+		UPDATE m
+			SET m.IsGroupedPT=0
+		FROM Dep_CustSettingMode m WITH(NOLOCK)
+			INNER JOIN #tmpCustInsert ba WITH(NOLOCK) ON m.CustID=ba.CustId		
+
+		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+		SELECT ba.CustId,0
+		FROM #tmpCustInsert ba WITH(NOLOCK)		
+		WHERE NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
+
+		TRUNCATE TABLE #tmpCustInsert
+	END
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

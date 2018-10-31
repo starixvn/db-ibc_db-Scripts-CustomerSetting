@@ -33,31 +33,58 @@ BEGIN
 		AND ci.Enabled=1
 		AND cs.site IN ('spondemo','Athena000')
 
-	DELETE cg
-	FROM Dep_CustPTSetting_Agent cg 		
-	 INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
-	WHERE SportType =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)
-						
-	DELETE cg
-	FROM Dep_CustPTSetting_Member cg
-		INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
-	WHERE c.srecommend NOT IN (SELECT custid FROM #supers)
+	IF EXISTS(SELECT 1 FROM Dep_CustPTSetting_Agent cg 		
+		 INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE SportType =43 AND c.srecommend NOT IN (SELECT custid FROM #supers))
+	BEGIN
+		DELETE cg
+		FROM Dep_CustPTSetting_Agent cg 		
+		 INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE SportType =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)
+	END
+	
+	IF EXISTS(SELECT 1 FROM Dep_CustPTSetting_Member cg
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE c.srecommend NOT IN (SELECT custid FROM #supers))		
+	BEGIN				
+		DELETE cg
+		FROM Dep_CustPTSetting_Member cg
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE c.srecommend NOT IN (SELECT custid FROM #supers)
+	END
 
-	DELETE cg
-	FROM Dep_CustPTGroupSetting_Member cg 
+	IF EXISTS(SELECT 1 	FROM Dep_CustPTGroupSetting_Member cg 
 		INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.AgentID
 	WHERE SportType  =43 
-		AND c.srecommend NOT IN (SELECT custid FROM #supers) 		
-				
-	DELETE cg
-	FROM Dep_CustBetSetting_Agent cg
+		AND c.srecommend NOT IN (SELECT custid FROM #supers))
+	BEGIN		
+		DELETE cg
+		FROM Dep_CustPTGroupSetting_Member cg 
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.AgentID
+		WHERE SportType  =43 
+			AND c.srecommend NOT IN (SELECT custid FROM #supers) 	
+	END
+		
+	IF EXISTS(SELECT 1 	FROM Dep_CustBetSetting_Agent cg
 		INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
-	WHERE SportType  =43  AND c.srecommend NOT IN (SELECT custid FROM #supers)		
+	WHERE SportType  =43  AND c.srecommend NOT IN (SELECT custid FROM #supers))
+	BEGIN				
+		DELETE cg
+		FROM Dep_CustBetSetting_Agent cg
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE SportType  =43  AND c.srecommend NOT IN (SELECT custid FROM #supers)		
+	END
 
-	DELETE cg
-	FROM Dep_CustBetSetting_Member cg	
-		INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
-	WHERE SportType  =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)		 		
+	IF EXISTS(SELECT 1 FROM Dep_CustBetSetting_Member cg	
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE SportType  =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)	 )
+	BEGIN
+		DELETE cg
+		FROM Dep_CustBetSetting_Member cg	
+			INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID
+		WHERE SportType  =43 AND c.srecommend NOT IN (SELECT custid FROM #supers)	
+		OPTION(MAXDOP 1)	 		
+	END
 
 	DELETE cg
 	FROM Dep_LicenseeProductSetting cg 		
