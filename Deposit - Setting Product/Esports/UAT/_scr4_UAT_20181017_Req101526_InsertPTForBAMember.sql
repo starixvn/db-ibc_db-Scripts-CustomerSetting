@@ -92,11 +92,6 @@ BEGIN
 		FROM Dep_CustSettingMode m WITH(NOLOCK)
 			INNER JOIN #tmpCustInsert ba WITH(NOLOCK) ON m.CustID=ba.CustId		
 
-		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT ba.CustId,0
-		FROM #tmpCustInsert ba WITH(NOLOCK)		
-		WHERE NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
-
 		TRUNCATE TABLE #tmpCustInsert
 	END
 END	

@@ -48,6 +48,7 @@ BEGIN
 
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,MaxPerMatch MONEY)
+	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT,MaxPerMatch MONEY)
 	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY,MaxPerMatch MONEY)	
 
 	INSERT INTO #Dummy(CustID)
@@ -57,10 +58,19 @@ BEGIN
 
 	INSERT INTO #tmpCust(CustID,MaxPerMatch)
 	SELECT CustID,maxpermatch99
-	FROM custInfo ci WITH(NOLOCK)
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	OPTION ( MAXDOP 2)
+
+	INSERT INTO #tmpSMA(CustID,RoleID,MaxPerMatch)
+	SELECT CustID,RoleID,maxpermatch99
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
+		AND roleid IN(2,3,4)
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	OPTION ( MAXDOP 2)
 
 	--AGENT LEVEL	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -80,8 +90,8 @@ BEGIN
 		   ,@PT
 		   ,@PT
 		   ,@PT
-	FROM Customer WITH(NOLOCK)
-	WHERE custid=@srecommend
+	FROM #tmpSMA WITH(NOLOCK)
+	WHERE RoleID=4
 	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -100,9 +110,8 @@ BEGIN
 		   ,0
 		   ,@PT
 		   ,0	
-	FROM Customer WITH(NOLOCK)
-	WHERE srecommend=@srecommend AND roleid=3 AND custid<=@maxcustid 
-		AND custid NOT IN (SELECT custid FROM #Dummy)
+	FROM #tmpSMA WITH(NOLOCK)
+	WHERE RoleID=3
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -121,9 +130,8 @@ BEGIN
 		   ,0
 		   ,0
 		   ,@PT
-	FROM Customer WITH(NOLOCK)
-	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #tmpSMA WITH(NOLOCK)
+	WHERE RoleID=2
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -142,17 +150,13 @@ BEGIN
 		   ,0
 		   ,0
 		   ,@PTGroup
-	FROM Customer WITH(NOLOCK)
-	WHERE srecommend=@srecommend AND roleid=2 AND custid<=@maxcustid 
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #tmpSMA
+	WHERE RoleID=2
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT t.CustID,1
-	FROM Customer t WITH(NOLOCK)
-	WHERE srecommend=@srecommend 
-		AND custid<=@maxcustid 
-		AND roleid=1 AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #tmpCust t WITH(NOLOCK)
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
 	
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT @srecommend,24
@@ -167,16 +171,17 @@ BEGIN
 		@fBetType			,		
 		MinBet				,
 		MaxBet				,
-		maxpermatch99			
-	FROM custInfo ci WITH(NOLOCK)
+		maxpermatch		
+	FROM #tmpSMA ci WITH(NOLOCK)
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND cs.sporttype=@fSportType AND cs.bettype=@fBetType	
-		AND roleid IN(2,3,4)
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
+	WHERE cs.sporttype=@fSportType AND cs.bettype=@fBetType				
 
 	WHILE EXISTS(SELECT 1 FROM #tmpCust)
 	BEGIN
 		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tmpCustInsert
+
+		IF @@ROWCOUNT=0
+			BREAK
 	--Member Level
 		INSERT INTO dbo.Dep_CustBetSetting_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)			
 		SELECT 
