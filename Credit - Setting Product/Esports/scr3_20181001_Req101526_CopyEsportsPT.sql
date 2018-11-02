@@ -56,7 +56,38 @@ BEGIN
 		PRIMARY KEY (CustID,SportType,BetType,IsLive)
 	)
 
+	CREATE TABLE #PTTempMemBatch
+	(
+		CustID				INT ,
+		roleid				TINYINT,
+		[SportType]			SMALLINT,
+		[BetType]			SMALLINT,
+		[IsLive]			BIT,
+		[SuperPT]			TINYINT,
+		[MasterPT]			TINYINT,
+		[AgentPT]			TINYINT,
+		[IsAutoMasterPT]	BIT,
+		[AutoMasterPT]		TINYINT,
+		[IsAutoSuperPT]		BIT,
+		[AutoSuperPT]		TINYINT,
+		[MinPT]				TINYINT,
+		[MaxPT]				TINYINT,
+		PRIMARY KEY (CustID,SportType,BetType,IsLive)
+	)
+
 	CREATE TABLE #BetSettingTemp
+	(
+		CustID				INT ,
+		roleid				TINYINT,
+		[SportType]			SMALLINT,
+		[BetType]			SMALLINT,		
+		MinBet				MONEY,
+		MaxBet				MONEY,
+		MaxPerMatch			MONEY
+		PRIMARY KEY (CustID,SportType,BetType)
+	)
+
+	CREATE TABLE #BetSettingTempMemBatch
 	(
 		CustID				INT ,
 		roleid				TINYINT,
@@ -157,32 +188,43 @@ BEGIN
 	FROM #PTTemp t
 		WHERE t.roleid IN(2,3,4) 
 	--MEMBER LEVEL
-	INSERT INTO dbo.CustPTSetting3rd_Member
-		(	[custid]
-		  ,	[sporttype]
-		  ,	[bettype]
-		  ,	[islive]
-		  ,	[superPT]
-		  ,	[masterPT]
-		  ,	[agentPT]
-		  ,	[IsAutoMasterPT]
-		  ,	[AutoMasterPT]
-		  ,	[IsAutoSuperPT]
-		  ,	[AutoSuperPT])
-	SELECT 
-			[CustID]
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		   ,[IsAutoMasterPT]
-		   ,[AutoMasterPT]
-		   ,[IsAutoSuperPT]
-		   ,[AutoSuperPT]		
-	FROM #PTTemp t
-		WHERE t.roleid =1
+
+	WHILE EXISTS(SELECT 1 FROM #PTTemp WHERE roleid=1)
+	BEGIN
+		DELETE TOP (3000) #PTTemp OUTPUT DELETED.* INTO #PTTempMemBatch WHERE roleid=1  
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		INSERT INTO dbo.CustPTSetting3rd_Member
+			(	[custid]
+			  ,	[sporttype]
+			  ,	[bettype]
+			  ,	[islive]
+			  ,	[superPT]
+			  ,	[masterPT]
+			  ,	[agentPT]
+			  ,	[IsAutoMasterPT]
+			  ,	[AutoMasterPT]
+			  ,	[IsAutoSuperPT]
+			  ,	[AutoSuperPT])
+		SELECT 
+				[CustID]
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			   ,[IsAutoMasterPT]
+			   ,[AutoMasterPT]
+			   ,[IsAutoSuperPT]
+			   ,[AutoSuperPT]		
+		FROM #PTTempMemBatch t
+			WHERE t.roleid =1
+
+		TRUNCATE TABLE #PTTempMemBatch
+	END
 		
 	--------------------------------------Bet Setting-------------------------------------------------		
 
@@ -192,11 +234,20 @@ BEGIN
 	FROM #BetSettingTemp 
 	WHERE roleid IN(2,3,4)
 
-	--Member Level
-	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-	SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch				
-	FROM #BetSettingTemp 
-	WHERE roleid = 1 
+	WHILE EXISTS(SELECT 1 FROM #BetSettingTemp WHERE roleid=1)
+	BEGIN
+		DELETE TOP (3000) #BetSettingTemp OUTPUT DELETED.* INTO #BetSettingTempMemBatch WHERE roleid=1  
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		--Member Level
+		INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
+		SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch				
+		FROM #BetSettingTempMemBatch 
+		WHERE roleid = 1 
+		TRUNCATE TABLE #BetSettingTempMemBatch
+	END
 
 	DROP TABLE #PTTemp
 	DROP TABLE #BetSettingTemp

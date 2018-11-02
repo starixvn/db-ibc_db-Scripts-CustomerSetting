@@ -26,22 +26,33 @@ BEGIN
 	SELECT @BitOrder= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
 
 	CREATE TABLE #temp (CustID INT PRIMARY KEY,DisableEsports BIT DEFAULT(1))
+	CREATE TABLE #tempUpdate (CustID INT PRIMARY KEY,DisableEsports BIT DEFAULT(1))
 
 	INSERT INTO #temp(CustID,DisableEsports)
 	SELECT ci.custid,[DisableEsports]
 	FROM custInfo CI WITH (NOLOCK) 
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1	
 	
-	UPDATE cs
-	SET								
-		 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
-		 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,[DisableEsports])
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #temp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+	WHILE EXISTS(SELECT 1 FROM #temp)
+	BEGIN
+		DELETE TOP (3000) #temp OUTPUT DELETED.* INTO #tempUpdate
+
+		IF @@ROWCOUNT=0
+			BREAK		
+		UPDATE cs
+		SET								
+			 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+			 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,[DisableEsports])
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #tempUpdate CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+
+		TRUNCATE TABLE #tempUpdate
+	END
 	---------------------------------------------------------------------------------------
 
 END
 GO
+
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 

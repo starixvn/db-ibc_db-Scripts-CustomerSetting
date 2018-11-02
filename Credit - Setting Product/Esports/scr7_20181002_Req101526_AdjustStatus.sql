@@ -39,7 +39,8 @@ BEGIN
 	SELECT ci.custid
 	FROM [dbo].[CustProductStatus] cs WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH(NOLOCK) ON cs.CustID = ci.CustID	
-	WHERE ci.srecommend IN (SELECT custid FROM #supers)		 				
+	WHERE ci.srecommend IN (SELECT custid FROM #supers)		 	
+		AND ci.Enabled=1				
 		AND bitmapIsDisabled <>  (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(bitmapIsDisabled, @BitmapOrder, ISNULL(ci.DisableEsports,1)))
 		
 	RAISERROR('Done: Get the affected downlines list for status', 0, 1)  WITH NOWAIT
