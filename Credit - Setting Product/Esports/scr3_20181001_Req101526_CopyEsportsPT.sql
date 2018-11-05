@@ -301,7 +301,7 @@ BEGIN
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 GO
 
@@ -351,7 +351,7 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 
 PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

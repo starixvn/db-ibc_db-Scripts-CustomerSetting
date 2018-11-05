@@ -6,6 +6,8 @@
 ALTER TABLE Dep_ProductSettingDetail
 ADD IsApplyBA BIT NOT NULL CONSTRAINT [DF_Dep_ProductSettingDetail_IsApplyBA]  DEFAULT ((0))
 
+GO
+
 UPDATE Dep_ProductSettingDetail WITH(ROWLOCK,UPDLOCK)
 	SET IsApplyBA=0
 
