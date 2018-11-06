@@ -8,6 +8,16 @@
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
 
+/*
+	Created: Winnie
+	Date: 20181011
+	Task: Delete existing data of Deposit Esports
+	DB: DBCust/CustDB
+*/
+ 
+ -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+------------------------------------------------------
+
 
 DECLARE @Sporttype INT = 43, @BetType INT = 1
 DECLARE @maxcustid INT=xxx
@@ -56,6 +66,7 @@ DELETE t
 FROM #tmpCustBAActiveOn t
 	INNER JOIN Customer c WITH(NOLOCK) ON t.CustID=c.custid
 WHERE c.srecommend NOT IN (SELECT CustID FROM #supers)
+	OR t.CustID IN(SELECT custid FROM Dep_CustPTSetting_Member)
 
 DELETE t
 FROM #tmpCustBAActiveOFF t
@@ -96,7 +107,7 @@ SELECT
 		BA.CustId
         ,SportType
         ,BetType
-        ,0
+        ,[IsLive]
         ,[SuperPT]
         ,[MasterPT]
         ,[AgentPT]
@@ -105,7 +116,7 @@ FROM Dep_CustBAActive BA WITH(NOLOCK)
 	INNER JOIN [Dep_CustPTGroupSetting_Member] s WITH(NOLOCK) ON c.recommend=s.AgentID
 WHERE s.SportType<>@Sporttype AND s.BetType<>@BetType AND BA.CustId>@maxcustid
 	AND c.srecommend IN (SELECT CustID FROM #supers)
-
+	
 UPDATE m
 	SET m.IsGroupedPT=0
 FROM Dep_CustSettingMode m WITH(NOLOCK)
@@ -120,6 +131,7 @@ FROM Dep_CustBAActive ba WITH(NOLOCK)
 WHERE c.srecommend IN (SELECT CustID FROM #supers)
 	AND NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
 	AND ba.CustId>@maxcustid 
+
 -- new on BA
 INSERT INTO [dbo].[Dep_CustPTSetting_Member]
         (CustID
@@ -151,7 +163,7 @@ SELECT
 		BA.CustId
         ,SportType
         ,BetType
-        ,0
+        ,[IsLive]
         ,[SuperPT]
         ,[MasterPT]
         ,[AgentPT]
@@ -183,3 +195,79 @@ WHERE CustID IN(SELECT CustID FROM #tmpCustBAActiveOFF)
 
 DROP TABLE #tmpCustBAActiveOFF
 DROP TABLE #tmpCustBAActiveOn
+
+-----------------Asiabet88
+CREATE TABLE #supersAsiabet88	(custid INT)
+CREATE TABLE  #tmpCustBAActiveOn_AsiaBet88(CustID INT PRIMARY KEY)
+CREATE TABLE  #tmpCustBAActiveOFF_AsiaBet88(CustID INT PRIMARY KEY)
+
+INSERT INTO #supersAsiabet88(custid)
+	SELECT ci.custid
+	FROM custInfo ci WITH (NOLOCK) 	
+		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.username NOT LIKE '3rdSuper%'	
+		AND ci.Enabled=1
+		AND cs.site IN('asiabet88')
+		AND ci.currency IN(3,6)
+
+INSERT INTO #tmpCustBAActiveOn_AsiaBet88(h.CustID)
+SELECT DISTINCT Custid FROM DBLIC.bodb_Licensee.dbo.[LicenseeBAHistory] h WITH(NOLOCK) 
+WHERE h.OnDate>@BALogdate AND h.Custid<=@maxcustid AND h.Status='Running'
+	AND NOT EXISTS(SELECT CustID FROM Dep_CustPTSetting_Member m WITH(NOLOCK) WHERE h.CustID=m.CustID )
+
+INSERT INTO #tmpCustBAActiveOFF_AsiaBet88(CustID)
+SELECT DISTINCT Custid FROM DBLIC.bodb_Licensee.dbo.[LicenseeBAHistory] WITH(NOLOCK) WHERE OffDate>@BALogdate AND Custid<=@maxcustid AND Status='Done'
+
+DELETE t
+FROM #tmpCustBAActiveOn_AsiaBet88 t
+	INNER JOIN Customer c WITH(NOLOCK) ON t.CustID=c.custid
+WHERE c.srecommend NOT IN (SELECT CustID FROM #supersAsiabet88)
+
+DELETE t
+FROM #tmpCustBAActiveOFF_AsiaBet88 t
+	INNER JOIN Customer c WITH(NOLOCK) ON t.CustID=c.custid
+WHERE c.srecommend NOT IN (SELECT CustID FROM #supersAsiabet88)
+	OR t.CustID IN(SELECT custid FROM Dep_CustPTSetting_Member)
+
+-- new on BA of Asiabet88(3,6)
+UPDATE m
+	SET m.IsGroupedPT=1
+FROM Dep_CustSettingMode m WITH(NOLOCK)
+	INNER JOIN #tmpCustBAActiveOn_AsiaBet88 ba WITH(NOLOCK) ON m.CustID=ba.CustId
+
+DELETE FROM [Dep_CustPTSetting_Member]
+WHERE CustID IN(SELECT CustID FROM #tmpCustBAActiveOn_AsiaBet88)
+
+
+-- new off BA of Asiabet88(3,6)
+
+INSERT INTO [dbo].[Dep_CustPTSetting_Member]
+        (CustID
+        ,[SportType]
+        ,[BetType]
+        ,[IsLive]
+        ,[SuperPT]
+        ,[MasterPT]
+        ,[AgentPT])
+SELECT 
+		BA.CustId
+        ,SportType
+        ,BetType
+        ,[IsLive]
+        ,[SuperPT]
+        ,[MasterPT]
+        ,[AgentPT]
+FROM #tmpCustBAActiveOFF_AsiaBet88 BA WITH(NOLOCK)
+	INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
+	INNER JOIN [Dep_CustPTSetting_Agent] s WITH(NOLOCK) ON c.recommend=s.CustID
+WHERE NOT EXISTS(SELECT CustID FROM [Dep_CustPTSetting_Member] a WHERE a.CustID=BA.CustID)
+
+UPDATE m
+	SET m.IsGroupedPT=0
+FROM Dep_CustSettingMode m WITH(NOLOCK)
+	INNER JOIN #tmpCustBAActiveOFF_AsiaBet88 ba WITH(NOLOCK) ON m.CustID=ba.CustId
+
+INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+SELECT ba.CustId,0
+FROM #tmpCustBAActiveOFF_AsiaBet88 ba WITH(NOLOCK)
+WHERE NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
