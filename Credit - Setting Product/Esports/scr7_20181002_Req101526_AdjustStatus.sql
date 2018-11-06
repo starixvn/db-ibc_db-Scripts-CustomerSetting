@@ -45,7 +45,7 @@ BEGIN
 		
 	RAISERROR('Done: Get the affected downlines list for status', 0, 1)  WITH NOWAIT
 
-	SELECT Custid FROM #CustList_Status
+	--SELECT Custid FROM #CustList_Status
 
 	UPDATE cs
 		SET bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(bitmapIsDisabled, @BitmapOrder, ISNULL(ci.DisableEsports,1)))

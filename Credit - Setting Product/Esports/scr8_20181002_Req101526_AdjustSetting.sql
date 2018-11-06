@@ -75,7 +75,7 @@ BEGIN
 					)
 
 		RAISERROR('Done: Get the affected SMA list for PT', 0, 1)  WITH NOWAIT
-		SELECT * FROM #SMAList_PT
+		--SELECT * FROM #SMAList_PT
 		--Member Level
 		INSERT INTO #MemberList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking)
 		SELECT ci.custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking
@@ -95,7 +95,7 @@ BEGIN
 					)
 
 		RAISERROR('Done: Get the affected member list for PT', 0, 1)  WITH NOWAIT
-		SELECT * FROM #MemberList_PT
+		--SELECT * FROM #MemberList_PT
 		-------------------------------------------------Adjust data----------------------------------------------------
 		--Agent Level
 		UPDATE csa
@@ -155,7 +155,7 @@ BEGIN
 					)
 
 		RAISERROR('Done: Get the affected SMA list for bet setting', 0, 1)  WITH NOWAIT
-		SELECT * FROM #SMAList_BetSetting
+		--SELECT * FROM #SMAList_BetSetting
 		--Member Level
 		INSERT INTO #MemberList_BetSetting (custid, minBet, MaxBet, MaxPerMatch)
 		SELECT c.custid, cs.minBet, cs.MaxBet, c.maxpermatch99
@@ -172,7 +172,7 @@ BEGIN
 	
 		RAISERROR('Done: Get the affected member list for bet setting', 0, 1)  WITH NOWAIT
 
-		SELECT * FROM #MemberList_BetSetting
+		--SELECT * FROM #MemberList_BetSetting
 		--------------------------------------Bet Setting-------------------------------------------------		
 		--Agent Level
 		UPDATE csa
