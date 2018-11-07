@@ -59,4 +59,26 @@ SELECT
            ,0        
 FROM exchange WITH(NOLOCK)
 WHERE exchangeid=20
+
+INSERT INTO [CustDB].[dbo].[ProductSettingSystemDisplay]
+           ([SystemID]
+           ,[ProductID]
+           ,[SettingType]
+           ,[DisplayMode])
+     VALUES
+           (5
+           ,16
+           ,1
+           ,3)
+INSERT INTO [CustDB].[dbo].[ProductSettingSystemDisplay]
+       ([SystemID]
+       ,[ProductID]
+       ,[SettingType]
+       ,[DisplayMode])
+ VALUES
+       (5
+       ,16
+       ,13
+       ,3)
+GO
    
