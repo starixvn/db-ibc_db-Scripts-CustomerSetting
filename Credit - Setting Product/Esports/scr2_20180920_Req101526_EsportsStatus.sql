@@ -75,6 +75,7 @@ WHERE ci.roleid = 4
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid<=@max_custid
+			AND ci.currency<>20
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -111,7 +112,7 @@ WHERE ci.roleid = 4
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid<=@max_custid
-
+			AND ci.currency<>20
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers

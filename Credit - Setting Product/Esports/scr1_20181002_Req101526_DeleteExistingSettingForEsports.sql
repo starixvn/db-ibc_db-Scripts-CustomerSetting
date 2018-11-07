@@ -30,19 +30,34 @@ BEGIN
 	CREATE TABLE #CustBetSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
 
 	INSERT INTO #CustPTSetting3rd_Agent(CustID,SporttypeID,Bettype,IsLive)
-	SELECT Custid,SportType,BetType,IsLive FROM CustPTSetting3rd_Agent WITH(NOLOCK) WHERE SportType =43
+	SELECT s.Custid,SportType,BetType,IsLive 
+	FROM CustPTSetting3rd_Agent s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =43 AND c.currency<>20
 
 	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT CustID,Sporttype,Bettype,IsLive FROM CustPTSetting3rd_Member WITH(NOLOCK) WHERE SportType =43
+	SELECT s.CustID,Sporttype,Bettype,IsLive 
+	FROM CustPTSetting3rd_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =43 AND c.currency<>20
 	
 	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT AgentID,SportType,BetType,IsLive FROM CustPTGroupSetting3rd_Member WITH(NOLOCK) WHERE SportType =43
+	SELECT AgentID,SportType,BetType,IsLive 
+	FROM CustPTGroupSetting3rd_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
+	WHERE SportType =43 AND c.currency<>20
 
 	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
-	SELECT CustID,SportType,BetType FROM CustBetSetting3rd_Agent WITH(NOLOCK) WHERE SportType =43
+	SELECT S.CustID,SportType,BetType 
+	FROM CustBetSetting3rd_Agent S WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =43 AND c.currency<>20
 
 	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
-	SELECT CustID,SportType,BetType FROM CustBetSetting3rd_Member WITH(NOLOCK) WHERE SportType =43
+	SELECT S.CustID,SportType,BetType 
+	FROM CustBetSetting3rd_Member S WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =43 AND c.currency<>20
 
 	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN

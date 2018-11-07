@@ -34,6 +34,7 @@ BEGIN
 				AND cs.isinternal = 0
 				AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 				AND s.islicensee = 0
+				AND ci.currency<>20
 
 	INSERT INTO #CustList_Status (custid)
 	SELECT ci.custid
