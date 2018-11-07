@@ -28,7 +28,7 @@ BEGIN
 	DECLARE @Sporttype	INT = 43, @PT SMALLMONEY,@PTGroup SMALLMONEY
 	DECLARE @Site VARCHAR(10),@Currency INT	
 	
-	SELECT @Site=Site FROM Customer WITH(NOLOCK) WHERE custid=@srecommend	
+	SELECT @Site=Site,@Currency=Currency FROM Customer WITH(NOLOCK) WHERE custid=@srecommend	
 	IF @Site='Haifa'
 	BEGIN
 		SELECT @PT=90.5
