@@ -1,3 +1,6 @@
+USE CustDB
+GO
+
 ALTER PROC NAP_CWL_Initialize_Settings 
 	@ProductID                              INT
    , @BetTypeID_Begin                        INT
@@ -38,6 +41,7 @@ AS
 	
 	Revisions	 : 
 				- 20180319@Robert: Initialize CWL Settings
+				- 20181108@Elodie: Migrate bodb_Licensee to DBCUST [Redmine:#99855]
      Ex		 :
 
      EXEC NAP_CWL_Initialize_Settings 
@@ -132,13 +136,13 @@ BEGIN
 		 SELECT DISTINCT 
 			   LicenseeID
 			 , Currency
-		 FROM DBLIC.bodb_licensee.dbo.LicenseeCust AS lc;
+		 FROM bodb_licensee.dbo.LicenseeCust AS lc;
 
     INSERT INTO @Licensees(LicenseeID
 					, LicenseeName)
 		 SELECT LicenseeID
 			 , LicenseeName
-		 FROM DBLIC.bodb_licensee.dbo.Licensees;
+		 FROM bodb_licensee.dbo.Licensees;
 
 
     INSERT INTO #Currency_Deposit(siteid

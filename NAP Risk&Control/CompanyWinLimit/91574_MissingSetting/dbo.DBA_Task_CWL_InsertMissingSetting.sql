@@ -1,3 +1,6 @@
+USE CustDB
+GO
+
 ALTER PROCEDURE [dbo].[DBA_Task_CWL_InsertMissingSetting] 
 	@Mode TINYINT,
 	@currencies VARCHAR(500) = ''
@@ -5,11 +8,13 @@ AS
 /*
 	Created: 20180326@Johnson
 	Task : task insert missing  cwl setting 
-	DB: DBCUST/CustDB, DBACC/bodb02
+	DB: DBCUST/CustDB
 	Original:
 
 	Revisions:
 		- 20180326@Johnson: create sp [Redmine: #92012]
+		- 20181108@Elodie: Migrate bodb_Licensee to DBCUST [Redmine:#99855]
+
 	Param's Explanation:
 	• @Mode: 1: deposit, 2: credit
 	• @currencies: list currency need to add for credit
@@ -24,8 +29,8 @@ BEGIN
 
 		INSERT INTO #Currency_Deposit
 		SELECT DISTINCT  s.siteid,ex.exchangeid AS Id
-		FROM DBLIC.bodb_licensee.dbo.LicenseeCust lc WITH (NOLOCK)
-		  INNER JOIN DBLIC.bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeID = lc.LicenseeID
+		FROM bodb_licensee.dbo.LicenseeCust lc WITH (NOLOCK)
+		  INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeID = lc.LicenseeID
 		  INNER JOIN dbo.exchange ex WITH (NOLOCK) ON lc.Currency = ex.exchangeid
 		  INNER JOIN dbo.site s WITH (NOLOCK) ON s.site = l.LicenseeName  AND S.isActive = 1
 		WHERE ex.currency NOT IN('H', 'C')
