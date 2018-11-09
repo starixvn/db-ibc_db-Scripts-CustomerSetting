@@ -1,0 +1,220 @@
+/*
+	Created: Johnson
+	Date: 2018-11-08
+	Task: copy bet setting for Happy 5 from NG
+	DB: DBCUST/CUSTDB
+*/
+ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
+	@srecommend INT	
+	,@max_custid INT
+	,@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN -- run at dbcust only
+	
+	IF dbo.f_CheckRepTable('CustSetting3rd') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+
+	CREATE TABLE #tblCust (CustID INT PRIMARY KEY, ID INT IDENTITY(1,1))
+	DECLARE @tmpCust TABLE(CustID INT PRIMARY KEY)
+	
+	INSERT INTO #tblCust(custid)
+	SELECT c.custid
+	FROM dbo.custinfo c WITH(NOLOCK)		
+	WHERE srecommend = @srecommend
+		AND custid <= @max_custid		
+		AND Enabled = 1	
+	ORDER BY roleid DESC	
+	
+	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
+	
+	SELECT @maxID = max(ID) FROM #tblCust
+	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
+		
+	WHILE(1=1)
+	BEGIN		
+		DELETE @tmpCust
+
+		DELETE #tblCust
+		OUTPUT DELETED.custID
+		INTO @tmpCust
+		WHERE ID BETWEEN @fromID AND @toID
+		
+		INSERT INTO [dbo].[CustSetting3rd]
+           ([custid]
+           ,[bettype]
+           ,[sporttype]
+           ,[apositiontaking]
+           ,[mpositiontaking]
+           ,[spositiontaking]
+           ,[playerdiscount]
+           ,[discount]
+           ,[adiscount]
+           ,[sdiscount]
+           ,[minbet]
+           ,[maxbet]
+           ,[autopositiontaking]
+           ,[isautopositiontaking]
+           ,[autompositiontaking]
+           ,[isautompositiontaking]
+           ,[alivepositiontaking]
+           ,[mlivepositiontaking]
+           ,[slivepositiontaking]
+           ,[autolivepositiontaking]
+           ,[isautolivepositiontaking]
+           ,[autolivempositiontaking]
+           ,[isautolivempositiontaking])
+		SELECT [custid]
+           ,8101 as [bettype]
+           ,164 as [sporttype]
+           ,0 [apositiontaking]
+           ,0 [mpositiontaking]
+           ,0 [spositiontaking]
+           ,0 [playerdiscount]
+           ,0 [discount]
+           ,0[adiscount]
+           ,0 [sdiscount]
+           ,[minbet]
+           ,[maxbet]
+           ,0 [autopositiontaking]
+           ,0 [isautopositiontaking]
+           ,0 [autompositiontaking]
+           ,0 [isautompositiontaking]
+           ,0 [alivepositiontaking]
+           ,0 [mlivepositiontaking]
+           ,0 [slivepositiontaking]
+           ,0 [autolivepositiontaking]
+           ,0 [isautolivepositiontaking]
+           ,0 [autolivempositiontaking]
+           ,0 [isautolivempositiontaking]	
+		FROM dbo.CustSetting3rd WITH(NOLOCK)
+		WHERE custid IN (SELECT custid FROM @tmpCust)
+			AND sporttype = 161 
+			AND bettype = 81
+			
+		SELECT @fromID = @toID + 1,
+			@toID = @toID + @Threshold + 1
+
+		IF @fromID > @maxID
+			BREAK;			
+			
+		WAITFOR DELAY '00:00:00.200'
+	END	
+	
+END
+GO
+-- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
+
+------------------------------------------------------	
+-- BEGIN STEP 2: Run this SP at replicated DB -----
+--------------------------------------------------------------------------------------
+
+CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
+
+DECLARE @max_custid INT, @srecommend INT
+SELECT  @max_custid= xxx ---input maxcustid
+
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND cs.isinternal = 0
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
+	
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #supers
+	SET isfinished = 1
+		,@srecommend = custid		
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	
+	EXEC dbo.[Acc_CustSetting3rd_19] 
+			@srecommend = @srecommend, 			
+			@max_custid=@max_custid,
+			@target = 'REPLICATED' 	
+				
+	--WAITFOR DELAY '00:00:00.280'			
+END			
+GO		
+
+---
+-- BEGIN STEP 3: Run this SP at DBCust -----
+-------------------------------------------------
+
+CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
+
+DECLARE @max_custid INT, @srecommend INT
+SELECT  @max_custid= xxx ---input maxcustid
+
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND cs.isinternal = 0
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
+	
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #supers
+	SET isfinished = 1
+		,@srecommend = custid		
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	
+	EXEC dbo.[Acc_CustSetting3rd_19] 
+			@srecommend = @srecommend, 			
+			@max_custid=@max_custid,
+			@target = 'DBCUST' 	
+				
+	--WAITFOR DELAY '00:00:00.280'			
+END			
+GO	
+-- END STEP 3: Run this SP at DBCust -----
+-------------------------------------------------
