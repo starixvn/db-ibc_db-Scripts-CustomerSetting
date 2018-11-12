@@ -40,6 +40,7 @@ SELECT custid
 INTO #tblCust
 FROM CustInfo ci WITH(NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers)
+	AND enabled = 1
 	AND maxpermatch164 <> maxpermatch161
 	
 UPDATE ci
