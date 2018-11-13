@@ -34,8 +34,8 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		)
 		
 UPDATE cs
-SET	cs1.minbet = t.minbet,
-	cs1.maxbet = t.maxbet
+SET	cs.minbet = t.minbet,
+	cs.maxbet = t.maxbet
 FROM dbo.custsetting3rd cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN #tmpSetting t ON cs.custid = t.custid 
 								AND cs.sporttype = t.sporttype

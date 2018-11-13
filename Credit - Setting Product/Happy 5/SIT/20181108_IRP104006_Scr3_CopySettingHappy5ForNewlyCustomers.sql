@@ -87,7 +87,7 @@ WHERE custid IN (SELECT custid FROM #tblCust)
 
 UPDATE ci
 SET maxpermatch164 = maxpermatch161
-FROM dbo.CustInfo ci WITH(NOLOCK)
+FROM dbo.CustInfo ci WITH(UPDLOCK,ROWLOCK)
 WHERE custid IN (SELECT custid FROM #tblCust)
 
 	
