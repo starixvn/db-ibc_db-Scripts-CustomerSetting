@@ -15,12 +15,12 @@ SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
+WHERE ci.roleid = 4 
+	AND ci.currency <> 20
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-	AND s.islicensee = 0
-	AND ci.custid <= @max_custid
+	AND s.islicensee = 0	
 	
 INSERT INTO #tblCust(custid)
 SELECT custid
