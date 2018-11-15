@@ -5,7 +5,7 @@
 	DB: DBCUST/CUSTDB
 */
 DECLARE @max_custid INT, @max_custid2 INT 
-SET @max_custid = xx,--old maxcustid
+SELECT @max_custid = xx,--old maxcustid
 	@max_custid2 =yy --new maxcustid
 CREATE TABLE #supers (custid INT)
 CREATE TABLE #tblCust (custid INT PRIMARY KEY)
