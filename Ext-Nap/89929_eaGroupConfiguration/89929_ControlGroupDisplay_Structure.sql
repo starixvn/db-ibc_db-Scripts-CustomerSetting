@@ -1,7 +1,7 @@
 /*
 	CreatedDate: 20181120@Elodie
 	Task: Add new column into eaGroup, add new table eaGroupConfiguration
-	DB: DBCUST/bodb_EAS
+	DB: DBEAS/bodb_EAS
 */
 
 

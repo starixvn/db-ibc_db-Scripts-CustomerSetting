@@ -1,13 +1,12 @@
 /*
-	CreatedDate: 20180730@Elodie
-	Task: Initial data to support super profile on Ext-NAP
-	DB: DBCUST/CustDB
+	CreatedDate: 20181120@Elodie
+	Task: Initial data for eaGroupConfiguration table
+	DB: DBEAS/bodb_EAS
 */
-
-USE [CustDB]
+USE bodb_EAS
 GO
 
-DELETE FROM CustSuperProfile
+DELETE FROM eaGroupConfiguration
 GO
 
 --6464 affected rows
