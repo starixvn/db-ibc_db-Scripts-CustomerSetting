@@ -1,6 +1,7 @@
 /*
 	CreatedDate: 20181120@Elodie
-	Task: Add new column into eaGroup, add new table eaGroupConfiguration
+	Task:	Add new column into eaGroup, add new table eaGroupConfiguration
+			Grant select permission on Products to bodbExtAccNet
 	DB: DBEAS/bodb_EAS
 */
 
@@ -26,3 +27,9 @@ CREATE TABLE [dbo].[eaGroupConfiguration](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [eaUserControl]
 ) ON [eaUserControl]
 GO
+
+
+USE [bodb02]
+GO
+
+GRANT SELECT ON Products TO bodbExtAccNet
