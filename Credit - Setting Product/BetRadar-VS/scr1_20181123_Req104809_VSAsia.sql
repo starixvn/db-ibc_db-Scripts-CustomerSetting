@@ -52,6 +52,10 @@ GO
 INSERT #tmpProductLaunchedSiteCurrency ([SiteID], [Currency], [SportType], [IsLaunched], [IsTest]) VALUES (188, 0, 194, 0, 0)
 GO
 
+
+UPDATE #tmpProductLaunchedSiteCurrency
+SET IsLaunched=1
+
 INSERT INTO ProductLaunchedSiteCurrency ([SiteID], [Currency], [SportType], [IsLaunched], [IsTest])
 SELECT [SiteID], [Currency], [SportType], [IsLaunched], [IsTest]
 FROM #tmpProductLaunchedSiteCurrency
