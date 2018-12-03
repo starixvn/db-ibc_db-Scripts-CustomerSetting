@@ -34,13 +34,7 @@ BEGIN
 		AND cs.site IN ('spondemo','Athena000')
 
 	INSERT INTO #supers(custid)
-	SELECT ci.custid
-	FROM custInfo ci WITH (NOLOCK) 	
-		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.username NOT LIKE '3rdSuper%'			
-		AND ci.Enabled=1
-		AND cs.site IN ('12bet')
-		AND ci.currency=20
+	SELECT 916498
 
 	IF EXISTS(SELECT 1 FROM Dep_CustPTSetting_Agent cg 		
 		 INNER JOIN Customer c WITH(NOLOCK) ON c.custid=cg.CustID

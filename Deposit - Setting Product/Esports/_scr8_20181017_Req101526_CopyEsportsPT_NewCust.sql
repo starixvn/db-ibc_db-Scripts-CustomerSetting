@@ -17,7 +17,7 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-		AND cs.site IN('Avia','GamingSoft','DBP','HL8','TLC','368Cash','Senibet','HonorW','Vwin','W88','alog','asiabet88','mansion88','MayFair','OLE777','Salon365','SunGame'
+		AND cs.site IN('Avia','GamingSoft','DBP','HL8','TLC','368Cash','Senibet','HonorW','Vwin','W88','alog','12Bet','asiabet88','mansion88','MayFair','OLE777','Salon365','SunGame'
 					,'HAIFA','Bodog','Boma365','Happy1668','Hengcai88','KeenOcean','Unobet','ISC888','3star88','Newhonbet','Zzun88','Abcasino','Hecbet','iBET','Royal'
 					,'XTD3','IBO','Liga','88Macao','9Club','Ae88','AG','HONBET','NBCbet','Aoncash','BE7','ITCBet','M8bola','Macaubet','Q8bola','9bet','TGO'
 					,'WeBet168','KhmerG','365online','IONclub','Mayayule','Sun988','DEWA','Gampag','sbcbet','Bolanation','HuangMa','Webet138','Boying','webet88','MrCat','PKbet','BigGaming'
@@ -26,15 +26,8 @@
 					,'YongBao','ALPHA88','11bet','Aplus','Fugui','zt828','ENTAPLAY','MICL','Tripleone','Yibo','TangChao','WBS','CGame','Xinbo','24TECH'
 					,'FB88','9wickets','YBTech','jinmangguo','Monaco','GWORLD','BETSUN','Mybet88','JIBET','Gameroom','Fabet','WINCLUB88','Callmeboss'
 					,'Uwin18','GOAB88','108bet','Citybk','HOT88','SSSGaming','ANGbet')
+		AND ci.custid<>916498
 
-	INSERT INTO #supers(custid)
-	SELECT ci.custid
-	FROM Custinfo ci WITH (NOLOCK) 	
-		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.username NOT LIKE '3rdSuper%'
-		AND ci.Enabled=1
-		AND cs.site IN('12Bet')
-		AND ci.currency<>20
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
 	DECLARE @Sporttype INT = 43
