@@ -11,6 +11,12 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 AS
 BEGIN
 	
+	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('site') = 0 RETURN	
+	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
+	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
+	
 	CREATE TABLE #supers (custid int)
 
 	INSERT INTO #supers(custid)

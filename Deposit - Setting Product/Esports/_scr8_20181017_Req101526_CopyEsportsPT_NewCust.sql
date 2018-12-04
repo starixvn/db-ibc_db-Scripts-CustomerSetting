@@ -10,6 +10,17 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 (@MaxCustID INT)
 AS
 BEGIN
+	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
+
+
 
 	DECLARE @AgentID	INT,@CustID	INT
 

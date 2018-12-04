@@ -1,7 +1,7 @@
 /*
 	Created: Winnie
 	Date: 20181011
-	Task: Delete existing data of Deposit Esports
+	Task: Insert setting Esport for BA member
 	DB: DBCust/CustDB
 */
  
@@ -23,6 +23,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN		
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 
 	DECLARE @Sporttype INT = 43, @BetType INT = 1
 

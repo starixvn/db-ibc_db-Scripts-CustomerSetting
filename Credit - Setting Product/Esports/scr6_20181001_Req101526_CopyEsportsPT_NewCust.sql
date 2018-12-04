@@ -8,6 +8,19 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 (@MaxCustID INT)
 AS
 BEGIN
+			
+	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN		
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('custSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustOverride') = 0 RETURN
+	IF dbo.f_CheckRepTable('customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('site') = 0 RETURN
+	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
+
 	CREATE TABLE #supers (custid int)
 
 	INSERT INTO #supers(custid)

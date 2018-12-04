@@ -22,6 +22,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN		
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('custSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustOverride') = 0 RETURN
+	
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
 	DECLARE @Sporttype INT = 43
