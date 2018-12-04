@@ -4,10 +4,10 @@
 	DB: DBCUST/CustDB
 	Date: 20181001
 */ 
-
-	DECLARE @maxcustid INT
-	
-	SELECT @maxcustid = xxx
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+(@MaxCustID INT)
+AS
+BEGIN
 	CREATE TABLE #supers (custid int)
 
 	INSERT INTO #supers(custid)
@@ -203,3 +203,14 @@
 	DROP TABLE #PTTemp
 	DROP TABLE #BetSettingTemp
 	DROP TABLE #DestinationSportBetType			
+END
+
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
+--------------------------------------------------------------------------------------
+DECLARE @MaxCustID INT
+	
+SELECT @MaxCustID = xxx
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @MaxCustID=@MaxCustID

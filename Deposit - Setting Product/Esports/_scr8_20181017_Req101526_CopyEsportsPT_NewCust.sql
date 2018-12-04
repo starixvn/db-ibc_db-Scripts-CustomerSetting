@@ -4,11 +4,15 @@
 	DB: DBCUST/CustDB
 	Date: 20181015
 */ 
+USE CustDB
+GO
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+(@MaxCustID INT)
+AS
+BEGIN
 
-	DECLARE @maxcustid INT
 	DECLARE @AgentID	INT,@CustID	INT
-	
-	SELECT @maxcustid = xxx
+
 	CREATE TABLE #supers (custid int)
 
 	INSERT INTO #supers(custid)
@@ -186,3 +190,14 @@
 	WHERE ci.custid>@maxcustid
 
 	DROP TABLE #supers
+END		
+GO
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
+--------------------------------------------------------------------------------------
+DECLARE @MaxCustID INT
+	
+SELECT @MaxCustID = xxx
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @MaxCustID=@MaxCustID

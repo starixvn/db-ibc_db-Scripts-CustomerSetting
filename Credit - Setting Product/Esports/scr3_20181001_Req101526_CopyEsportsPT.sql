@@ -13,8 +13,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
@@ -25,13 +25,6 @@ BEGIN
 
 	DECLARE @fSportType INT = 99, @fBetType INT=1
 	DECLARE @Sporttype INT = 43
-
-	DECLARE @StartRow	INT, 
-			@MaxRow		INT,
-			@Threshold	INT, 
-			@StopRow INT			
-	SET @StartRow=1
-	SET @Threshold=3000
 
 	CREATE TABLE #DestinationSportBetType(fSportType INT, fBetType INT,tSportType INT, tBetType INT, IsLive BIT)
 	INSERT INTO #DestinationSportBetType(fSportType , fBetType ,tSportType , tBetType , IsLive)
@@ -46,7 +39,6 @@ BEGIN
 
 	CREATE TABLE #PTTemp
 	(
-		ID					INT IDENTITY(1,1),
 		CustID				INT ,
 		roleid				TINYINT,
 		[SportType]			SMALLINT,
@@ -58,14 +50,33 @@ BEGIN
 		[IsAutoMasterPT]	BIT,
 		[AutoMasterPT]		TINYINT,
 		[IsAutoSuperPT]		BIT,
-		[AutoSuperPT]		TINYINT
-	
-		PRIMARY KEY (RoleID,ID)
+		[AutoSuperPT]		TINYINT,
+		[MinPT]				TINYINT,
+		[MaxPT]				TINYINT,
+		PRIMARY KEY (CustID,SportType,BetType,IsLive)
+	)
+
+	CREATE TABLE #PTTempMemBatch
+	(
+		CustID				INT ,
+		roleid				TINYINT,
+		[SportType]			SMALLINT,
+		[BetType]			SMALLINT,
+		[IsLive]			BIT,
+		[SuperPT]			TINYINT,
+		[MasterPT]			TINYINT,
+		[AgentPT]			TINYINT,
+		[IsAutoMasterPT]	BIT,
+		[AutoMasterPT]		TINYINT,
+		[IsAutoSuperPT]		BIT,
+		[AutoSuperPT]		TINYINT,
+		[MinPT]				TINYINT,
+		[MaxPT]				TINYINT,
+		PRIMARY KEY (CustID,SportType,BetType,IsLive)
 	)
 
 	CREATE TABLE #BetSettingTemp
 	(
-		ID					INT IDENTITY(1,1),
 		CustID				INT ,
 		roleid				TINYINT,
 		[SportType]			SMALLINT,
@@ -73,7 +84,19 @@ BEGIN
 		MinBet				MONEY,
 		MaxBet				MONEY,
 		MaxPerMatch			MONEY
-		PRIMARY KEY (roleid,ID)
+		PRIMARY KEY (CustID,SportType,BetType)
+	)
+
+	CREATE TABLE #BetSettingTempMemBatch
+	(
+		CustID				INT ,
+		roleid				TINYINT,
+		[SportType]			SMALLINT,
+		[BetType]			SMALLINT,		
+		MinBet				MONEY,
+		MaxBet				MONEY,
+		MaxPerMatch			MONEY
+		PRIMARY KEY (CustID,SportType,BetType)
 	)
 
 	INSERT INTO #PTTemp(
@@ -88,7 +111,9 @@ BEGIN
 		[IsAutoMasterPT]	,
 		[AutoMasterPT]		,
 		[IsAutoSuperPT]		,
-		[AutoSuperPT]		
+		[AutoSuperPT]		,
+		[MinPT]				,
+		[MaxPT]				
 		)
 
 	SELECT 
@@ -99,9 +124,12 @@ BEGIN
 		,cs.isautompositiontaking
 		,cs.autompositiontaking *100
 		,cs.isautopositiontaking 
-		,cs.autopositiontaking  *100	
+		,cs.autopositiontaking  *100
+		,co.minpositiontaking  *100
+		,co.maxpositiontaking*100
 	FROM custInfo ci WITH(NOLOCK)
-		INNER JOIN dbo.custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid		
+		INNER JOIN dbo.custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
+		LEFT JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
 		INNER JOIN  #DestinationSportBetType dest ON dest.fSportType=cs.sporttype AND dest.fBetType=cs.bettype
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1 
 
@@ -144,10 +172,10 @@ BEGIN
 		   ,[MinPT]
 		   ,[MaxPT])
 	SELECT 
-			cs.CustID
-		   ,cs.SportType
-		   ,cs.BetType
-		   ,cs.IsLive
+			[CustID]
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
 		   ,[SuperPT]
 		   ,[MasterPT]
 		   ,[AgentPT]
@@ -155,104 +183,71 @@ BEGIN
 		   ,[AutoMasterPT]
 		   ,[IsAutoSuperPT]
 		   ,[AutoSuperPT]
-		   ,co.minpositiontaking  *100
-		   ,co.maxpositiontaking  *100
-	FROM #PTTemp cs			
-		INNER JOIN  #DestinationSportBetType dest ON dest.tSportType=cs.sporttype AND dest.tBetType=cs.bettype
-		INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and dest.fsporttype = co.sporttype and dest.fBetType = co.bettype
-	WHERE cs.roleid IN(2,3,4) 
-
+		   ,[MinPT]
+		   ,[MaxPT]
+	FROM #PTTemp t
+		WHERE t.roleid IN(2,3,4) 
 	--MEMBER LEVEL
 
-	IF EXISTS(SELECT 1 FROM #PTTemp)
-		BEGIN
-			
-			SET @MaxRow = (SELECT MAX(ID) FROM #PTTemp)
-			
-			IF	@Threshold >= @MaxRow
-				SET	@Threshold = @MaxRow
-			
-			SET @StopRow = @Threshold
+	WHILE EXISTS(SELECT 1 FROM #PTTemp WHERE roleid=1)
+	BEGIN
+		DELETE TOP (3000) #PTTemp OUTPUT DELETED.* INTO #PTTempMemBatch WHERE roleid=1  
 
-			WHILE (0 = 0)
-			BEGIN					
-					INSERT INTO dbo.CustPTSetting3rd_Member
-				(	[custid]
-				  ,	[sporttype]
-				  ,	[bettype]
-				  ,	[islive]
-				  ,	[superPT]
-				  ,	[masterPT]
-				  ,	[agentPT]
-				  ,	[IsAutoMasterPT]
-				  ,	[AutoMasterPT]
-				  ,	[IsAutoSuperPT]
-				  ,	[AutoSuperPT])
-				SELECT 
-					[CustID]
-				   ,[SportType]
-				   ,[BetType]
-				   ,[IsLive]
-				   ,[SuperPT]
-				   ,[MasterPT]
-				   ,[AgentPT]
-				   ,[IsAutoMasterPT]
-				   ,[AutoMasterPT]
-				   ,[IsAutoSuperPT]
-				   ,[AutoSuperPT]		
-			FROM #PTTemp t
-				WHERE t.roleid =1 AND  ID >= @StartRow AND ID <= @StopRow
+		IF @@ROWCOUNT=0
+			BREAK		
 
-				IF	@StopRow = @MaxRow 
-					BREAK
-						
-				SET	@StartRow = @StopRow + 1
-						
-				SET	@StopRow = 1 + @StopRow + @Threshold
-						
-				IF	@StopRow >= @MaxRow
-					SET	@StopRow = @MaxRow
-										
-			END;
-		END;			
+		INSERT INTO dbo.CustPTSetting3rd_Member
+			(	[custid]
+			  ,	[sporttype]
+			  ,	[bettype]
+			  ,	[islive]
+			  ,	[superPT]
+			  ,	[masterPT]
+			  ,	[agentPT]
+			  ,	[IsAutoMasterPT]
+			  ,	[AutoMasterPT]
+			  ,	[IsAutoSuperPT]
+			  ,	[AutoSuperPT])
+		SELECT 
+				[CustID]
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			   ,[IsAutoMasterPT]
+			   ,[AutoMasterPT]
+			   ,[IsAutoSuperPT]
+			   ,[AutoSuperPT]		
+		FROM #PTTempMemBatch t
+			WHERE t.roleid =1
+
+		TRUNCATE TABLE #PTTempMemBatch
+	END
+		
 	--------------------------------------Bet Setting-------------------------------------------------		
-	SET @StartRow=1
-	SET @Threshold=3000
+
 	--Agent Level
 	INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
 	SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch		
 	FROM #BetSettingTemp 
 	WHERE roleid IN(2,3,4)
 
-	IF EXISTS(SELECT 1 FROM #BetSettingTemp)
-		BEGIN
-			
-			SET @MaxRow = (SELECT MAX(ID) FROM #BetSettingTemp)
-			
-			IF	@Threshold >= @MaxRow
-			SET	@Threshold = @MaxRow
-			
-			SET @StopRow = @Threshold
+	WHILE EXISTS(SELECT 1 FROM #BetSettingTemp WHERE roleid=1)
+	BEGIN
+		DELETE TOP (3000) #BetSettingTemp OUTPUT DELETED.* INTO #BetSettingTempMemBatch WHERE roleid=1  
 
-			WHILE (0 = 0)
-			BEGIN	
-				INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-				SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch				
-				FROM #BetSettingTemp 
-				WHERE roleid = 1 AND  ID >= @StartRow AND ID <= @StopRow	
-		
-				IF	@StopRow = @MaxRow 
-					BREAK
-						
-				SET	@StartRow = @StopRow + 1
-						
-				SET	@StopRow = 1 + @StopRow + @Threshold
-						
-				IF	@StopRow >= @MaxRow
-					SET	@StopRow = @MaxRow
-										
-			END;
-		END;	
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		--Member Level
+		INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
+		SELECT CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch				
+		FROM #BetSettingTempMemBatch 
+		WHERE roleid = 1 
+		TRUNCATE TABLE #BetSettingTempMemBatch
+	END
 
 	DROP TABLE #PTTemp
 	DROP TABLE #BetSettingTemp
