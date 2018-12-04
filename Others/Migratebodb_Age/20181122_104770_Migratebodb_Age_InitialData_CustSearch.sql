@@ -1,7 +1,7 @@
 /*
 	Created: 20181122@Elodie
 	Task: Initial data for bodb_Age Migration
-	DB: DBCUST/CustDB and all replicated servers (DB052/bodb02, DB053/bodb02, DB06/bodb02, DBTP/bodb02, .....)
+	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
@@ -11,6 +11,16 @@ CREATE TABLE #custSearch (userId INT, UserName VARCHAR(30), SearchCount INT, Fir
 INSERT INTO #custSearch (userid, username, searchcount, firstname, lastname, Currency, GroupName)
 SELECT userid, username, searchcount, firstname, lastname, Currency, GroupName
 FROM DBAGE.bodb02.dbo.custSearch WITH (NOLOCK)
+
+WHILE(1=1)
+BEGIN
+	DELETE TOP (@Threshold) FROM custSearch WITH (ROWLOCK)
+
+	IF @@ROWCOUNT < @Threshold
+		BREAK;			
+			
+	WAITFOR DELAY '00:00:00.200'
+END
 
 SELECT @maxID = max(ID) FROM #custSearch
 SELECT @fromID = 1, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	

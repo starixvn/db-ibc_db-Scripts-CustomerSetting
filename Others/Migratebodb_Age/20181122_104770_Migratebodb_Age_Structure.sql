@@ -3,8 +3,6 @@
 	Task: Prepare structure for bodb_Age Migration
 	DB: DBCUST/CustDB and all replicated servers (DB052/bodb02, DB053/bodb02, DB06/bodb02, DBTP/bodb02, .....)
 */
-USE bodb02
-GO
 
 CREATE TABLE [dbo].[Acc_CustGroup](
 	[CustID] [int] NOT NULL,
