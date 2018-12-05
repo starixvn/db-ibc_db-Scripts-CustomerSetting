@@ -14,8 +14,6 @@ GO
 	
 	DECLARE @Sporttype INT = 43, @BetType INT = 1
 
-	CREATE TABLE  #tmpCustBAActiveOn(CustID INT PRIMARY KEY)
-	CREATE TABLE  #tmpCustBAActiveOFF(CustID INT PRIMARY KEY)
 
 	CREATE TABLE #supers (custid int)
 
