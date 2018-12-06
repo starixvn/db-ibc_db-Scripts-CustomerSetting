@@ -1,8 +1,12 @@
 /*
 	Created: 20181122@Elodie
 	Task: Prepare structure for bodb_Age Migration
-	DB: DBCUST/CustDB and all replicated servers (DB052/bodb02, DB053/bodb02, DB06/bodb02, DBTP/bodb02, .....)
+	DB: - Create Acc_CustGroup, Age_CustDateLimit, Age_CustProfilePicture table on DBCUST/CustDB 
+			and all replicated servers (DB052/bodb02, DB053/bodb02, DB06/bodb02, DBTP/bodb02, .....)
+		- Only create Age_CustSeq table on DBCUST/CustDB
 */
+
+
 
 CREATE TABLE [dbo].[Acc_CustGroup](
 	[CustID] [int] NOT NULL,
@@ -46,6 +50,8 @@ PRIMARY KEY CLUSTERED
 ) ON [DATA] TEXTIMAGE_ON [DATA]
 GO
 
+
+--only create on DBCUST/CustDB
 CREATE TABLE [dbo].[Age_CustSeq](
 	[SeqName] [varchar](3) NOT NULL,
 	[Type] [tinyint] NOT NULL,
