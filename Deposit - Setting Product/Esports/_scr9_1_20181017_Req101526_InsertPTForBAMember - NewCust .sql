@@ -148,7 +148,7 @@ GO
 	INSERT INTO #tmpCustBAActiveOn_AsiaBet88(h.CustID)
 	SELECT DISTINCT Custid FROM DBLIC.bodb_Licensee.dbo.[LicenseeBAHistory] h WITH(NOLOCK) 
 	WHERE h.OnDate>@BALogdate AND h.Custid<=@maxcustid AND h.Status='Running'
-		AND NOT EXISTS(SELECT CustID FROM Dep_CustPTSetting_Member m WITH(NOLOCK) WHERE h.CustID=m.CustID )
+		--AND NOT EXISTS(SELECT CustID FROM Dep_CustPTSetting_Member m WITH(NOLOCK) WHERE h.CustID=m.CustID )
 
 	INSERT INTO #tmpCustBAActiveOFF_AsiaBet88(CustID)
 	SELECT DISTINCT Custid FROM DBLIC.bodb_Licensee.dbo.[LicenseeBAHistory] WITH(NOLOCK) WHERE OffDate>@BALogdate AND Custid<=@maxcustid AND Status='Done'
@@ -162,7 +162,7 @@ GO
 	FROM #tmpCustBAActiveOFF_AsiaBet88 t
 		INNER JOIN Customer c WITH(NOLOCK) ON t.CustID=c.custid
 	WHERE c.srecommend NOT IN (SELECT CustID FROM #supersAsiabet88)
-		OR t.CustID IN(SELECT custid FROM Dep_CustPTSetting_Member)
+		--OR t.CustID IN(SELECT custid FROM Dep_CustPTSetting_Member)
 
 	-- new on BA of Asiabet88(3,6)
 	UPDATE m
