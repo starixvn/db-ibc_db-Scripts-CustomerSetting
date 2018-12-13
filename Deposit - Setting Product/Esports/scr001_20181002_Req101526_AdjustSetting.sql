@@ -10,10 +10,8 @@
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
 	
-	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
-	DECLARE @Sporttype INT = 43
+	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT
 
-	SELECT @fSportType  = 99, @fBetType =1		
 	DECLARE @MaxCustIDUM INT =xxx
 	
 	--------------------------------------Bet Setting-------------------------------------------------		
