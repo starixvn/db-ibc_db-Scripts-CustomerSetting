@@ -22,6 +22,7 @@ BEGIN
 	
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	DECLARE @Sporttype INT = 43
+	DECLARE @maxCustIDUM	INT= xxx
 
 	SELECT @fSportType  = 99, @fBetType =1	
 
@@ -62,7 +63,8 @@ BEGIN
 			INNER JOIN dbo.custOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype	
 			INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
-				AND ci.roleid IN (2,3,4) AND Enabled = 1			
+				AND ci.roleid IN (2,3,4) AND Enabled = 1	
+				AND cs.CustID <=@maxCustIDUM		
 				AND (
 					cs.SPositionTaking * 100 <> csa.SuperPT
 					OR cs.MPositionTaking * 100 <> csa.MasterPT
@@ -84,6 +86,7 @@ BEGIN
 			INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 				AND ci.roleid = 1 AND Enabled = 1
+				AND cs.CustID <=@maxCustIDUM		
 				AND (
 					cs.SPositionTaking  * 100 <> csm.SuperPT
 					OR cs.MPositionTaking  * 100 <> csm.MasterPT
@@ -148,6 +151,7 @@ BEGIN
 			INNER JOIN dbo.CustBetSetting3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 				AND c.roleid IN (2,3,4) AND Enabled = 1
+				AND cs.CustID <=@maxCustIDUM		
 				AND (
 					cs.minBet <> csa.minBet
 					OR cs.MaxBet <> csa.MaxBet
@@ -164,6 +168,7 @@ BEGIN
 			INNER JOIN dbo.CustBetSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 				AND c.roleid = 1 AND Enabled = 1
+				AND cs.CustID <=@maxCustIDUM		
 				AND (
 					cs.minBet <> csm.minBet
 					OR cs.MaxBet <> csm.MaxBet
