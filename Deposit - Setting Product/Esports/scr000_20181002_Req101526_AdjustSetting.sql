@@ -25,6 +25,7 @@ BEGIN
 	DECLARE @Sporttype INT = 43
 
 	SELECT @fSportType  = 99, @fBetType =1		
+	DECLARE @MaxCustIDUM INT =xxx
 	
 	--------------------------------------Bet Setting-------------------------------------------------		
 		SELECT @Sporttype =43,@fSportType  = 99,@fBetType =1,@tBetType=1	
@@ -40,6 +41,7 @@ BEGIN
 			INNER JOIN dbo.Dep_CustBetSetting_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 				AND c.roleid IN (2,3,4) AND Enabled = 1
+				AND cs.custid<=@MaxCustIDUM
 				AND (
 					cs.minBet <> csa.minBet
 					OR cs.MaxBet <> csa.MaxBet
@@ -56,6 +58,7 @@ BEGIN
 			INNER JOIN dbo.Dep_CustBetSetting_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
 		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 				AND c.roleid = 1 AND Enabled = 1
+				AND cs.custid<=@MaxCustIDUM
 				AND (
 					cs.minBet <> csm.minBet
 					OR cs.MaxBet <> csm.MaxBet
