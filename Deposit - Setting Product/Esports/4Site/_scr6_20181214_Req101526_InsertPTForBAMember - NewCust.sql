@@ -11,6 +11,7 @@ USE CustDB
 GO
 
 	DECLARE @maxcustid INT=xxx
+	DECLARE @maxcustid2 INT=xxx
 	
 	DECLARE @Sporttype INT = 43, @BetType INT = 1
 
@@ -45,6 +46,7 @@ GO
 	FROM Dep_CustBAActive BA WITH(NOLOCK)
 		INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
 	WHERE BA.CustId>@maxcustid
+		AND BA.CustId<=@maxcustid2
 		AND c.srecommend IN (SELECT CustID FROM #supers)
 
 	INSERT INTO [dbo].[Dep_CustPTSetting_Member]
@@ -66,7 +68,9 @@ GO
 	FROM Dep_CustBAActive BA WITH(NOLOCK)
 		INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
 		INNER JOIN [Dep_CustPTGroupSetting_Member] s WITH(NOLOCK) ON c.recommend=s.AgentID
-	WHERE s.SportType<>@Sporttype AND s.BetType<>@BetType AND BA.CustId>@maxcustid
+	WHERE s.SportType<>@Sporttype AND s.BetType<>@BetType 
+		AND BA.CustId>@maxcustid
+		AND BA.CustId<=@maxcustid2
 		AND c.srecommend IN (SELECT CustID FROM #supers)
 	
 	UPDATE m
@@ -74,7 +78,9 @@ GO
 	FROM Dep_CustSettingMode m WITH(NOLOCK)
 		INNER JOIN Dep_CustBAActive ba WITH(NOLOCK) ON m.CustID=ba.CustId
 		INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
-	WHERE BA.CustId>@maxcustid AND c.srecommend IN (SELECT CustID FROM #supers)
+	WHERE BA.CustId>@maxcustid 
+		AND BA.CustId<=@maxcustid2
+		AND c.srecommend IN (SELECT CustID FROM #supers)
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 	SELECT ba.CustId,0
@@ -82,6 +88,7 @@ GO
 		INNER JOIN Customer c WITH(NOLOCK) ON BA.CustId=c.custid
 	WHERE c.srecommend IN (SELECT CustID FROM #supers)
 		AND NOT EXISTS(SELECT 1 FROM Dep_CustSettingMode m WITH(NOLOCK) WHERE m.CustID=ba.CustId)
-		AND ba.CustId>@maxcustid 
+		AND ba.CustId>@maxcustid
+		AND BA.CustId<=@maxcustid2 
 
 	
