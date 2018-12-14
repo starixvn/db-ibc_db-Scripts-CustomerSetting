@@ -8,7 +8,7 @@ USE [CustDB]
 GO
 
 INSERT INTO ProductLaunchedSiteCurrency ([SiteID], [Currency], [SportType], [IsLaunched], [IsTest])
-SELECT [SiteID], 20, 194, 1, 0
+SELECT [SiteID], 20, 194, 1, 1
 FROM Site WITH(NOLOCK)
 where isLicensee = 0 and isDeposit = 0
 and isActive = 1
