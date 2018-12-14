@@ -89,7 +89,7 @@ BEGIN
 	DELETE cg
 	FROM Dep_LicenseeProductSetting cg 		
 	WHERE ProductSettingID IN(24,25)
-	 AND cg.CustID NOT IN (SELECT custid FROM #supers)	
+	 AND cg.CustID IN (SELECT custid FROM #supers)	
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
