@@ -7,7 +7,7 @@
 USE CustDB
 GO
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-(@MaxCustID INT)
+(@MaxCustID INT,@MaxCustID2 INT)
 AS
 BEGIN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
@@ -42,9 +42,9 @@ BEGIN
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
 	WHERE srecommend IN (SELECT custid FROM #supers)
-		AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
+		AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 		AND custid<=@maxcustid
-	
+	   
 	--------------------------------------PT Setting-------------------------------------------------	
 	--AGENT LEVEL	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -67,6 +67,7 @@ BEGIN
 	FROM Customer ci WITH(NOLOCK)
 	WHERE ci.custid IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid
+		AND ci.custid<=@MaxCustID2
 	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -88,6 +89,7 @@ BEGIN
 	FROM Customer ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid
+		AND ci.custid<=@MaxCustID2
 		AND roleid=3
 		AND custid NOT IN(SELECT CustID FROM #Dummy)
 
@@ -111,6 +113,7 @@ BEGIN
 	FROM Customer ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid
+		AND ci.custid<=@MaxCustID2
 		AND roleid=2 
 		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
@@ -136,6 +139,7 @@ BEGIN
 	FROM Customer WITH(NOLOCK)
 	WHERE srecommend IN(SELECT custid FROM #supers)
 		AND custid>@maxcustid
+		AND custid<=@MaxCustID2
 		AND roleid=2 
 		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
@@ -144,6 +148,7 @@ BEGIN
 	FROM Customer t WITH(NOLOCK)
 	WHERE t.srecommend IN(SELECT custid FROM #supers)
 		AND t.custid>@maxcustid
+		AND t.custid<=@MaxCustID2
 		AND roleid=1 AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
 		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 		
@@ -151,6 +156,7 @@ BEGIN
 	SELECT CustID,24
 	FROM #supers ci
 	WHERE ci.custid>@maxcustid
+		 AND ci.custid<=@MaxCustID2
 
 	--------------------------------------Bet Setting-------------------------------------------------		
 
@@ -166,7 +172,9 @@ BEGIN
 	FROM custInfo ci WITH(NOLOCK)
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid  AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
+		AND ci.custid>@maxcustid  
+		AND ci.custid<=@MaxCustID2
+		AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
 		AND roleid IN(2,3,4)
 		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
@@ -182,7 +190,9 @@ BEGIN
 	FROM custInfo ci WITH(NOLOCK)
 		 INNER JOIN dbo.Dep_custSetting cs WITH(NOLOCK) ON ci.custid=cs.custid
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid  AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
+		AND ci.custid>@maxcustid  
+		AND ci.custid<=@MaxCustID2
+		AND cs.sporttype=@fSportType AND cs.bettype=@fBetType
 		AND roleid = 1 
 		AND mrecommend NOT IN(SELECT CustID FROM #Dummy)
 
@@ -190,6 +200,7 @@ BEGIN
 	SELECT CustID,25
 	FROM #supers ci
 	WHERE ci.custid>@maxcustid
+		AND ci.custid<=@MaxCustID2
 
 	DROP TABLE #supers
 END		
@@ -199,7 +210,8 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @MaxCustID INT
+DECLARE @MaxCustID INT, @MaxCustID2 INT
 	
 SELECT @MaxCustID = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @MaxCustID=@MaxCustID
+SELECT @MaxCustID2 = xxx
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @MaxCustID=@MaxCustID,@MaxCustID2=@MaxCustID2
