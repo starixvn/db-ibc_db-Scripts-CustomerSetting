@@ -1,0 +1,216 @@
+/*
+	Created: 20181212@Elodie
+	Task: Prepare structure for new credit site
+	DB: DB06/bodb02, DBTP/bodb02
+*/
+USE bodb02
+GO
+
+CREATE TABLE CS_ByteSeq
+(
+	[Type]		VARCHAR(50) NOT NULL,
+	SportType	SMALLINT NOT NULL,
+	BetType		SMALLINT NOT NULL,
+	IsLive		BIT NOT NULL,
+	GroupId		SMALLINT NOT NULL,
+	ByteOrder	SMALLINT NOT NULL,
+CONSTRAINT [PK_CS_ByteSeq] PRIMARY KEY CLUSTERED 
+(
+	[Type] ASC,
+	SportType ASC,
+	BetType ASC,
+	IsLive ASC,
+	GroupId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO
+
+CREATE TABLE CS_CustPTSetting_Agent
+(
+	CustId		INT NOT NULL,
+	SuperPT		BINARY(10),
+	MasterPT	BINARY(10),
+	AgentPT		BINARY(10),
+	MinPT		BINARY(10),
+	MaxPT		BINARY(10),
+CONSTRAINT [PK_CS_CustPTSetting_Agent] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Agent_table]
+) ON [CS_CustPTSetting_Agent_table]
+GO
+
+CREATE TABLE CS_CustPTGroupSetting_Member 
+(
+	AgentId		INT NOT NULL,
+	SuperPT		BINARY(10) NOT NULL,
+	MasterPT	BINARY(10) NOT NULL,
+	AgentPT		BINARY(10) NOT NULL,
+CONSTRAINT [PK_CS_CustPTGroupSetting_Member] PRIMARY KEY CLUSTERED 
+(
+	AgentId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Member_table]
+) ON [CS_CustPTSetting_Member_table]
+GO
+
+CREATE TABLE CS_CustPTSetting_Member  
+(
+	CustId		INT NOT NULL,
+	SuperPT		BINARY(10) NOT NULL,
+	MasterPT	BINARY(10) NOT NULL,
+	AgentPT		BINARY(10) NOT NULL,
+CONSTRAINT [PK_CS_CustPTSetting_Member] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Member_table]
+) ON [CS_CustPTSetting_Member_table]
+GO
+
+CREATE TABLE CS_CustBetSetting_Agent  
+(
+	CustId			INT NOT NULL,
+	SportType		SMALLINT NOT NULL,
+	BetType			SMALLINT NOT NULL,
+	IsLive			BIT NOT NULL,
+	MaxBet			MONEY,
+	MaxPerMatch		MONEY,
+CONSTRAINT [PK_CS_CustBetSetting_Agent] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC,
+	SportType ASC,
+	BetType ASC,
+	IsLive ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustBetSetting_Agent_table]
+) ON [CS_CustBetSetting_Agent_table]
+GO
+
+CREATE TABLE CS_CustBetSetting_Member  
+(
+	CustId			INT NOT NULL,
+	SportType		SMALLINT NOT NULL,
+	BetType			SMALLINT NOT NULL,
+	IsLive			BIT NOT NULL,
+	MaxBet			MONEY,
+	MaxPerMatch		MONEY,
+CONSTRAINT [PK_CS_CustBetSetting_Member] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC,
+	SportType ASC,
+	BetType ASC,
+	IsLive ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustBetSetting_Member_table]
+) ON [CS_CustBetSetting_Member_table]
+GO
+
+CREATE TABLE CS_ProductBetSetting
+(
+	SportType		SMALLINT NOT NULL,
+	BetType			SMALLINT NOT NULL,
+	IsLive			BIT NOT NULL,
+	Currency		TINYINT,
+	MinBet			MONEY,
+	MaxBet			MONEY,
+	MaxPerMatch		MONEY,
+CONSTRAINT [PK_CS_ProductBetSetting] PRIMARY KEY CLUSTERED 
+(
+	SportType ASC,
+	BetType ASC,
+	IsLive ASC,
+	Currency ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO
+
+CREATE TABLE CS_GroupConfig
+(
+	GroupId			SMALLINT NOT NULL,
+	SportType		SMALLINT NOT NULL,
+	BetType			SMALLINT NOT NULL,
+	IsLive			BIT NOT NULL,
+	GroupName		NVARCHAR(100),
+	uGroup			VARCHAR(3),
+	MaxValue		DECIMAL(9,8),
+CONSTRAINT [PK_CS_GroupConfig] PRIMARY KEY CLUSTERED 
+(
+	GroupId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO
+
+
+CREATE TABLE CS_CustDiscount_Agent  
+(
+	CustId		INT NOT NULL,
+	Discount	BINARY(50) NOT NULL,
+CONSTRAINT [PK_CS_CustDiscount_Agent] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustDiscount_Agent_table]
+) ON [CS_CustDiscount_Agent_table]
+GO
+
+CREATE TABLE CS_CustDiscount_Member  
+(
+	CustId				INT NOT NULL,
+	PlayerDiscount		BINARY(30) NOT NULL,
+	AgentDiscount		BINARY(30) NOT NULL,
+	MasterDiscount		BINARY(30) NOT NULL,
+	SuperDiscount		BINARY(30) NOT NULL,
+CONSTRAINT [PK_CS_CustDiscount_Member] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustDiscount_Member_table]
+) ON [CS_CustDiscount_Member_table]
+GO
+
+CREATE TABLE CS_CustGroupDiscount_Member  
+(
+	AgentId				INT NOT NULL,
+	PlayerDiscount		BINARY(30) NOT NULL,
+	AgentDiscount		BINARY(30) NOT NULL,
+	MasterDiscount		BINARY(30) NOT NULL,
+	SuperDiscount		BINARY(30) NOT NULL,
+CONSTRAINT [PK_CS_CustGroupDiscount_Member] PRIMARY KEY CLUSTERED 
+(
+	AgentId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustGroupDiscount_Member_table]
+) ON [CS_CustGroupDiscount_Member_table]
+GO
+
+CREATE TABLE CS_CustSettingMode  
+(
+	CustId				INT NOT NULL,
+	IsGroupPT			BIT NOT NULL,
+	IsGroupComm			BIT NOT NULL,
+CONSTRAINT [PK_CS_CustSettingMode] PRIMARY KEY CLUSTERED 
+(
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustSettingMode_table]
+) ON [CS_CustSettingMode_table]
+GO
+
+CREATE TABLE CS_ProductSettingDetail
+(
+	ProductSettingId	SMALLINT NOT NULL,
+	SettingType			SMALLINT NOT NULL,
+	SportType			SMALLINT NOT NULL,
+	BetType				SMALLINT NOT NULL,
+	IsLive				BIT NOT NULL,
+	ProductId			TINYINT NOT NULL,
+	MaxPT				TINYINT,
+	MaxDiscount			DECIMAL(9,8),
+	IntervalValue		DECIMAL	(19,8),
+	SettingLevel		TINYINT NOT NULL,
+	DisplayOrder		TINYINT NOT NULL,
+	ChildOrder			TINYINT NOT NULL,
+	SettingStatus		TINYINT NOT NULL,
+	LayoutType			TINYINT
+CONSTRAINT [PK_CS_ProductSettingDetail] PRIMARY KEY CLUSTERED 
+(
+	SettingType ASC,
+	SportType ASC,
+	BetType ASC,
+	IsLive ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO

@@ -1,0 +1,12 @@
+/*
+	Created: 20181217@Elodie
+	Task: Drop unused SP
+	DB: DB053/bodb02, DB052/bodb02
+*/
+
+IF @@SERVERNAME NOT IN ('DB053','DB215\SQLSERVER2008R2','DB231\SQLSERVER2008R2','DB052','DB215','DB231') RETURN
+
+USE bodb02
+GO
+
+DROP PROCEDURE dbo.Acc_CustomerUpdUserSearch_delete
