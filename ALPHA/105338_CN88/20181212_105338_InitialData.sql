@@ -143,3 +143,4 @@ FROM CS_ProductSettingDetail ps WITH (NOLOCK)
 WHERE settingType = 2 AND e.exchangeid NOT IN (51)
 
 
+--SELECT * FROM dbo.CS_GroupConfig

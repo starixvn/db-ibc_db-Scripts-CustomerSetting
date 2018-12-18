@@ -10,3 +10,8 @@ USE bodb02
 GO
 
 DROP PROCEDURE dbo.Acc_CustomerUpdUserSearch_delete
+
+DROP PROCEDURE Acc_Rpt_WinLossDetail_ComEx_delete
+DROP PROCEDURE Acc_CustomerSelGroupHeadlineByRefno_delete
+
+DROP PROCEDURE Acc_Rpt_WinLossDaily_ComEx14_delete
