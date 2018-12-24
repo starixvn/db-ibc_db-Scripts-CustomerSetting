@@ -28,9 +28,9 @@ BEGIN
 	WHERE exchangeid = @currency
 		AND GameTypeID = 2401
 		AND MinStake = CASE WHEN @currency IN (1,3,6,12,16,17,35,40,64,74) THEN 250 --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH
-							WHEN @currency = 67 THEN 500 END
+							WHEN @currency IN (2,67) THEN 500 END
 		AND MaxStake = CASE WHEN @currency IN (1,3,6,12,16,17,35,40,64,74) THEN 10000 --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH
-							WHEN @currency = 67 THEN 25000 END				
+							WHEN @currency IN (2,67) THEN 25000 END				
 	
 	IF @@ROWCOUNT =0 RETURN						
 	
@@ -177,12 +177,12 @@ CREATE TABLE #Supers(CustID INT, currency INT, isfinished BIT DEFAULT(0))
 SELECT * 
 INTO #StakeLevel
 FROM dbo.StakeLevel st WITH(NOLOCK)
-WHERE exchangeid IN (1,3,6,12,16,17,35,40,64,74, 67) --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH, HKK
+WHERE exchangeid IN (1,3,6,12,16,17,35,40,64,74, 2, 67) --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH, RM, HKK
 	AND GameTypeID = 2401
 	AND MinStake = CASE WHEN exchangeid IN (1,3,6,12,16,17,35,40,64,74) THEN 250
-						WHEN exchangeid = 67 THEN 500 END
+						WHEN exchangeid IN (2,67) THEN 500 END
 	AND MaxStake = CASE WHEN exchangeid IN (1,3,6,12,16,17,35,40,64,74) THEN 10000
-						WHEN exchangeid = 67 THEN 25000 END
+						WHEN exchangeid IN (2,67) THEN 25000 END
 
 SELECT ci.custid, ci.currency 
 INTO #tmpCust
@@ -195,7 +195,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency IN (1,3,6,12,16,17,35,40,64,74,67)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD,HKK
+	AND ci.currency IN (1,3,6,12,16,17,35,40,64,74,2,67)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD,RM,HKK
 	
 INSERT INTO #supers(custid,currency)
 SELECT DISTINCT cs.custid, t.currency
@@ -252,12 +252,12 @@ CREATE TABLE #Supers(CustID INT, currency INT, isfinished BIT DEFAULT(0))
 SELECT * 
 INTO #StakeLevel
 FROM dbo.StakeLevel st WITH(NOLOCK)
-WHERE exchangeid IN (1,3,6,12,16,17,35,40,64,74, 67) --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH, HKK
+WHERE exchangeid IN (1,3,6,12,16,17,35,40,64,74, 2, 67) --$US, NTD, US$, UT, Yen, IRR, EURO, SD$, GBP, TH, RM, HKK
 	AND GameTypeID = 2401
 	AND MinStake = CASE WHEN exchangeid IN (1,3,6,12,16,17,35,40,64,74) THEN 250
-						WHEN exchangeid = 67 THEN 500 END
+						WHEN exchangeid IN (2,67) THEN 500 END
 	AND MaxStake = CASE WHEN exchangeid IN (1,3,6,12,16,17,35,40,64,74) THEN 10000
-						WHEN exchangeid = 67 THEN 25000 END
+						WHEN exchangeid IN (2,67) THEN 25000 END
 
 SELECT ci.custid, ci.currency 
 INTO #tmpCust
@@ -270,7 +270,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency IN (1,3,6,12,16,17,35,40,64,74,67)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD,HKK
+	AND ci.currency IN (1,3,6,12,16,17,35,40,64,74,2,67)--UT, Yen, US$, $US, TH, NTD, EURO, IRR, AUD, GBP, SD,RM,HKK
 	
 INSERT INTO #supers(custid,currency)
 SELECT DISTINCT cs.custid, t.currency
