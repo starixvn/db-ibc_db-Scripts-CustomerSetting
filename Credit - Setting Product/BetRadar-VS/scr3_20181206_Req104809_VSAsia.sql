@@ -20,3 +20,7 @@ UPDATE p
 	SET p.Currency=t.Currency
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #temp t ON p.SiteID=t.SiteID AND p.sporttype=t.SportType AND p.Currency=20
+
+UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
+	SET IsLaunched=1
+WHERE sporttype = 194 and Siteid = 11 
