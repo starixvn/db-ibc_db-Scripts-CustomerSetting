@@ -75,13 +75,13 @@ SELECT  @max_custid= xxx, ---input maxcustid
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
-	INNER JOIN DBCUST.CUSTDB.site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN DBCUST.CUSTDB.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN DBCUST.CUSTDB.dbo.site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN DBCUST.CUSTDB.dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4 
 	AND ci.currency <> 20
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
-	AND ci.custid NOT IN (SELECT custid FROM DBCUST.CUSTDB.Dep_CustSuper WITH(NOLOCK))
+	AND ci.custid NOT IN (SELECT custid FROM DBCUST.CUSTDB.dbo.Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND s.site = @site
 	AND ci.currency = @currency
