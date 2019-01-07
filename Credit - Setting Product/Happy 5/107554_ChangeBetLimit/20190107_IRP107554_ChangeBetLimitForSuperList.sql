@@ -43,7 +43,6 @@ UNION ALL SELECT	'NT'	,	75 	,	89419 	,	894188
 UNION ALL SELECT	'Pts'	,	265 	,	317460 	,	3174603 
 UNION ALL SELECT	'JPY'	,	265 	,	317460 	,	3174603 
 UNION ALL SELECT	'PE'	,	128 	,	153257 	,	1532567 
-UNION ALL SELECT	'CAN'	,	3 	,	3901 	,	39014 
 UNION ALL SELECT	'NZD'	,	4 	,	4254 	,	42537 	
 
 DELETE #Supers
@@ -69,6 +68,14 @@ SET s.MinBet = t.MinBet,
 	s.MaxPerMatch = t.MaxPerMatch
 FROM #supers s
 	INNER JOIN #tmpBetSetting t ON s.code = t.code
+WHERE s.currency <> 50 --exclude CAN currency
+	
+UPDATE s
+SET s.MinBet = 3,
+	s.MaxBet = 3901,
+	s.MaxPerMatch = 39014
+FROM #supers s
+WHERE currency = 50--CurrenyName = CAN	
 
 --check setting before update	
 SELECT * 
