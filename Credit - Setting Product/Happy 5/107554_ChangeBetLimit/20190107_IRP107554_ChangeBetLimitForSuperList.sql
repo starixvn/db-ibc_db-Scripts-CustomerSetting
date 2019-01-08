@@ -52,7 +52,7 @@ WHERE code NOT IN (SELECT code FROM #tmpBetSetting)
 DELETE s
 FROM #supers s
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON ci.custid = s.custid 												
-WHERE ci.maxpermatch164 = 0
+WHERE ci.maxpermatch164 IN (0, 0.1)
 	
 --remove supers have maxbet = 0
 DELETE s
@@ -60,7 +60,7 @@ FROM #supers s
 	INNER JOIN dbo.custSetting3rd cs WITH(NOLOCK) ON cs.custid = s.custid 
 													AND cs.sporttype = 164
 													AND cs.bettype = 8101
-WHERE cs.maxbet = 0
+WHERE cs.maxbet IN (0, 0.1)
 
 UPDATE s
 SET s.MinBet = t.MinBet,
