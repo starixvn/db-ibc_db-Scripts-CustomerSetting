@@ -21,6 +21,7 @@ WHERE ci.roleid = 4
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND ci.custid NOT IN (SELECT custid FROM custaccount WITH (NOLOCK) WHERE groupid=515)--ZU01 headline
 	AND s.islicensee = 0
 	--dont get site KORIBC, INDO
 	AND s.site NOT IN ('KORIBC','INDO')	
