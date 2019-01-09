@@ -1,66 +1,36 @@
 /*
 	Created by: Elodie
 	Date: 20181212
-	Task: Insert LogAction for new credit site
+	Task: Insert ErrMsg for new credit site
 	DB: DBLOG/bodb_CustomerLog
 */
-USE [bodb_CustomerLog]
+USE CustDB
 GO
 
-DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT)
+DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
-INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId)
-SELECT	1213, 'Set Credit when Super''s created', 'CS_CustomerIns_Com', 0, NULL UNION ALL
-SELECT	1214, 'Set Credit when Master''s created', 'CS_CustomerIns_SAg', 0, NULL UNION ALL
-SELECT	1215, 'Set Credit when Agent''s created', 'CS_CustomerIns_MAg', 0, NULL UNION ALL
-SELECT	1216, 'Set Credit when Member''s created', 'CS_CustomerIns_Ag', 0, NULL UNION ALL
+INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
+SELECT	11, 'Commission is out of range.', 1, 1 UNION ALL
 
-SELECT	119997, 'Add Position Taking for super', 'CS_CustomerIns_Com', 0, 1 UNION ALL
-SELECT	119998, 'Add Position Taking for master', 'CS_CustomerIns_SAg', 0, 1 UNION ALL
-SELECT	119999, 'Add Position Taking for agent', 'CS_CustomerIns_MAg', 0, 1 UNION ALL
-SELECT	100000, 'Update Position Taking for super', 'CS_CustSetting_PTSetting_Upd', 0, 1 UNION ALL
-SELECT	105000, 'Update Position Taking for master', 'CS_CustSetting_PTSetting_Upd', 0, 1 UNION ALL
-SELECT	110000, 'Update Position Taking for agent', 'CS_CustSetting_PTSetting_Upd', 0, 1 UNION ALL
+SELECT	10040, 'Wrong Max bet/ Max per match.', 2, 1 UNION ALL
+SELECT	10041, 'Max bet must be less than max bet per match.', 2, 1 UNION ALL
+SELECT	10042, 'Max bet is out of range.', 2, 1 UNION ALL
 
-SELECT	139996, 'Add Commission for super', 'CS_CustomerIns_Com', 0, 2 UNION ALL
-SELECT	139997, 'Add Commission for master', 'CS_CustomerIns_SAg', 0, 2 UNION ALL
-SELECT	139998, 'Add Commission for agent', 'CS_CustomerIns_MAg', 0, 2 UNION ALL
-SELECT	139999, 'Add Commission for member', 'CS_CustomerIns_Ag', 0, 2 UNION ALL
-SELECT	120000, 'Update Commission for super', 'CS_CustSetting_CommBetSetting_Upd', 0, 2 UNION ALL
-SELECT	125000, 'Update Commission for master', 'CS_CustSetting_CommBetSetting_Upd', 0, 2 UNION ALL
-SELECT	130000, 'Update Commission for agent', 'CS_CustSetting_CommBetSetting_Upd', 0, 2 UNION ALL
-SELECT	135000, 'Update Commission for member', 'CS_CustSetting_CommBetSetting_Upd', 0, 2 UNION ALL
+SELECT	20035, 'New Super PT is too low. It makes some lines'' Total PT Taken become less than Super Min PT', 3, 1 UNION ALL
+SELECT	20036, 'New Super PT is too high. It makes some lines'' Total PT Taken become greater than Super Max PT', 3, 1 UNION ALL
+SELECT	20037, 'Master & Agent''s Total PT is too low. It makes the line''s Total PT less than Super Min PT', 3, 1 UNION ALL
+SELECT	20038, 'Master & Agent''s Total PT is too high. It makes the line''s Total PT greater than Super Max PT', 3, 1 UNION ALL
+SELECT	30007, 'New Super Min PT is greater than the Total PT Taken by some lines.', 3, 1 UNION ALL
+SELECT	30008, 'New Super Max PT is less than the Total PT Taken by some lines.', 3, 1 UNION ALL
+SELECT	30009, 'Super Min PT must be less than or equal to Super Max PT.', 3, 1 UNION ALL
 
-SELECT	149996, 'Add Bet Limit for super', 'CS_CustomerIns_Com', 0, 3 UNION ALL
-SELECT	149997, 'Add Bet Limit for master', 'CS_CustomerIns_SAg', 0, 3 UNION ALL
-SELECT	149998, 'Add Bet Limit for agent', 'CS_CustomerIns_MAg', 0, 3 UNION ALL
-SELECT	149999, 'Add Bet Limit for member', 'CS_CustomerIns_Ag', 0, 3 UNION ALL
-SELECT	140000, 'Update Bet Limit for super', 'CS_CustSetting_CommBetSetting_Upd', 0, 3 UNION ALL
-SELECT	145000, 'Update Bet Limit for master', 'CS_CustSetting_CommBetSetting_Upd', 0, 3 UNION ALL
-SELECT	150000, 'Update Bet Limit for agent', 'CS_CustSetting_CommBetSetting_Upd', 0, 3 UNION ALL
-SELECT	155000, 'Update Bet Limit for member', 'CS_CustSetting_CommBetSetting_Upd', 0, 3 UNION ALL
+SELECT	70024, 'Insufficient credit.', 8, 1 
 
-SELECT	160000, 'Add general information for super', 'CS_CustomerIns_Com', 0, 4 UNION ALL
-SELECT	160001, 'Add general information for master', 'CS_CustomerIns_SAg', 0, 4 UNION ALL
-SELECT	160002, 'Add general information for agent', 'CS_CustomerIns_MAg', 0, 4 UNION ALL
-SELECT	160003, 'Add general information for member', 'CS_CustomerIns_Ag', 0, 4 UNION ALL
-SELECT	160004, 'Update general information for super', 'CS_CustSetting_GeneralInfo_Upd', 0, 4 UNION ALL
-SELECT	160005, 'Update general information for master', 'CS_CustSetting_GeneralInfo_Upd', 0, 4 UNION ALL
-SELECT	160006, 'Update general information for agent', 'CS_CustSetting_GeneralInfo_Upd', 0, 4 UNION ALL
-SELECT	160007, 'Update general information for member', 'CS_CustSetting_GeneralInfo_Upd', 0, 4 UNION ALL
+INSERT INTO dbo.MsgError (MsgID, MsgGroupID, MsgNameEN, MsgNameCT, MsgNameCS, MsgNameJP, MsgNameTH, MsgNameKO, MsgNameES, MsgNameVI, IsActive, MsgNameCN)
+SELECT t.MsgID, t.MsgGroupId, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.IsActive, t.MsgName
+FROM @tmpMsg t
+--WHERE NOT EXISTS (SELECT 1 FROM MsgError WHERE MsgID = t.MsgID)
 
-SELECT	165000, 'Create Account Status for super', 'CS_CustomerIns_Com', 0, 5 UNION ALL
-SELECT	165001, 'Create Account Status for master', 'CS_CustomerIns_SAg', 0, 5 UNION ALL
-SELECT	165002, 'Create Account Status for agent', 'CS_CustomerIns_MAg', 0, 5 UNION ALL
-SELECT	165003, 'Create Account Status for member', 'CS_CustomerIns_Ag', 0, 5 UNION ALL
-SELECT	165004, 'Edit Account Status', 'CS_CustSetting_GeneralInfo_Upd', 0, 5 
+--DELETE dbo.MsgError WHERE ActionID > 100000
 
-
-INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
-SELECT ActionID,SPName,ActionTypeID,ActionName,ActionName,ActionName,ActionName,ActionName,ActionName,IsInternal,ActionName
-FROM @tmpAction t
-WHERE NOT EXISTS (SELECT 1 FROM LogAction WHERE ActionID = t.ActionID)
-
---DELETE dbo.LogAction WHERE ActionID > 100000
-
---SELECT * FROM dbo.LogAction WHERE ActionID > 100000
+--SELECT * FROM dbo.MsgError WHERE MsgID > 100000
