@@ -72,7 +72,7 @@ BEGIN
 	SET cs.StakeLevelList_new = ISNULL(REVERSE(STUFF(REVERSE(REPLACE(cs.StakeLevelList+',',CAST(@StakeLevelID_Excluded as VARCHAR(10))+',','')),1,1,'')),'')
 	FROM #CustStakeLevelDownlines cs 
 
-	--Apply lowest stakelevel if new stakelevel doesnt have any	
+	--Apply highest stakelevel if new stakelevel doesnt have any	
 	UPDATE T
 		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
 	FROM #CustStakeLevelDownlines T		
@@ -83,7 +83,7 @@ BEGIN
 						AND StakeLevelID <> @StakeLevelid_Excluded
 						AND MinStake <> 0 
 						AND MaxStake <> 0
-					ORDER BY minstake , maxstake
+					ORDER BY maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 4
 		AND T.StakeLevelList_new = ''
@@ -99,7 +99,7 @@ BEGIN
 						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY minstake , maxstake
+						ORDER BY maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 3
 		AND T.StakeLevelList_new = ''
@@ -116,7 +116,7 @@ BEGIN
 						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY minstake , maxstake
+						ORDER BY maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 2
 		AND T.StakeLevelList_new = ''
@@ -133,7 +133,7 @@ BEGIN
 						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY minstake , maxstake
+						ORDER BY maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 1
 		AND T.StakeLevelList_new = ''
