@@ -49,11 +49,10 @@ SELECT	160005, 'Update general information for master', 'CS_CustSetting_GeneralI
 SELECT	160006, 'Update general information for agent', 'CS_CustSetting_GeneralInfo_Upd', 0, 4, 2 UNION ALL
 SELECT	160007, 'Update general information for member', 'CS_CustSetting_GeneralInfo_Upd', 0, 4, 1 UNION ALL
 
-SELECT	165000, 'Create Account Status for super', 'CS_CustomerIns_Com', 0, 5, NULL UNION ALL
-SELECT	165001, 'Create Account Status for master', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
-SELECT	165002, 'Create Account Status for agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
-SELECT	165003, 'Create Account Status for member', 'CS_CustomerIns_Ag', 0, 5, NULL UNION ALL
-SELECT	165004, 'Edit Account Status', 'CS_CustSetting_GeneralInfo_Upd', 0, 5, NULL 
+SELECT	165000, 'Create Account Status for master', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
+SELECT	165001, 'Create Account Status for agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
+SELECT	165002, 'Create Account Status for member', 'CS_CustomerIns_Ag', 0, 5, NULL UNION ALL
+SELECT	165003, 'Edit Account Status', 'CS_CustSetting_GeneralInfo_Upd', 0, 5, NULL 
 
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
 SELECT ActionID,SPName,ActionTypeID,ActionName,ActionName,ActionName,ActionName,ActionName,ActionName,IsInternal,ActionName
@@ -65,6 +64,7 @@ SELECT ActionID, @ProductID, Level
 FROM @tmpAction
 WHERE SPName IN ('CS_CustSetting_CommBetSetting_Upd', 'CS_CustSetting_PTSetting_Upd')
 
---DELETE dbo.LogAction WHERE ActionID > 100000
+--DELETE dbo.LogAction WHERE ActionID >= 100000
+--DELETE dbo.LogActionDetail WHERE ActionID >= 100000
 
 --SELECT * FROM dbo.LogAction WHERE ActionID > 100000
