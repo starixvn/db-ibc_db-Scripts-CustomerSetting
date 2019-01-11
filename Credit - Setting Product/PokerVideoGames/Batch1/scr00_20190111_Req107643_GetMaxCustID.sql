@@ -1,7 +1,10 @@
 USE bodb02
 GO
 /*
-	https://redmine.nexcel.vn/issues/97675
+	Created: Winnie 
+	Task: Poker games
+	Date: 20190110
+	https://redmine.nexcel.vn/issues/107643
 	Get MaxCustID AND Release Date.
 	Run on DB06
 */
