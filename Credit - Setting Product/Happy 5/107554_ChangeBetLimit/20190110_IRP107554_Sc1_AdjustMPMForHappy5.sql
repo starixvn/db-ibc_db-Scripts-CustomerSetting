@@ -38,7 +38,7 @@ BEGIN
 	SET maxpermatch164 = @maxpermatch
 	FROM custinfo ci WITH(UPDLOCK,ROWLOCK)
 	WHERE custid = @srecommend
-		AND matchpermatch164 NOT IN (0, 0.1)
+		AND maxpermatch164 NOT IN (0, 0.1)
 	
 	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
 	
