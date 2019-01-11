@@ -151,13 +151,12 @@ INSERT INTO #tempMember(CustID,DisableVideoGame)
 SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #MemberTemp CI WITH (NOLOCK) 
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
-WHERE ci.custid<=@maxcustid 
 
 INSERT INTO #tempSMA(CustID,DisableVideoGame)
 SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #SMATemp CI WITH (NOLOCK) 
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
-WHERE ci.custid<=@maxcustid 
+
 
 UPDATE cs
 	SET								

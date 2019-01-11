@@ -6,7 +6,10 @@
 */ 
 PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
-DECLARE @MaxCustID INT,@Sporttype INT = 165,@Bettype INT =1901
+DECLARE @MaxCustID INT,@Sporttype INT = 165,@Bettype INT =1901	
+DECLARE @BitOrder INT,@BitOrder1402 INT
+SELECT @BitOrder= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
+SELECT @BitOrder1402= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=163 AND Bettype=1402
 	
 SELECT @MaxCustID = xxx
 	
@@ -70,6 +73,35 @@ SELECT t.custid,@Sporttype, @Bettype, CAST(StakeLevelID AS varchar(50)),GETDATE(
 FROM StakeLevel WITH(NOLOCK) 
 CROSS JOIN  #MemberTemp t
 WHERE GameGroupID=9 AND GameTypeID=1901 AND ExchangeId=t.Currency
+
+CREATE TABLE #tempMember (CustID INT PRIMARY KEY,DisableVideoGame BIT DEFAULT(1))
+CREATE TABLE #tempSMA (CustID INT PRIMARY KEY,DisableVideoGame BIT DEFAULT(1))
+
+INSERT INTO #tempMember(CustID,DisableVideoGame)
+SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+FROM #MemberTemp CI WITH (NOLOCK) 
+	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
+
+
+INSERT INTO #tempSMA(CustID,DisableVideoGame)
+SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+FROM #SMATemp CI WITH (NOLOCK) 
+	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
+
+UPDATE cs
+	SET								
+			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,DisableVideoGame)
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #tempMember CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+
+UPDATE cs
+	SET								
+			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,DisableVideoGame)
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #tempSMA CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
