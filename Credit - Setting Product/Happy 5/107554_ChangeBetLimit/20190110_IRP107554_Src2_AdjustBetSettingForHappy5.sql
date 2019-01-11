@@ -106,7 +106,7 @@ WHERE ci.roleid = 4
 							FROM custinfo (NOLOCK)
 							WHERE custid IN (SELECT custid 
 											FROM custaccount WITH (NOLOCK) 
-											WHERE groupid NOT IN (60,515))--ETUS,ZU01 headline								
+											WHERE groupid IN (60,515))--ETUS,ZU01 headline								
 						)
 	AND s.islicensee = 0
 	--dont get site KORIBC, INDO
