@@ -33,10 +33,21 @@ BEGIN
 	WHERE srecommend = @srecommend
 		AND c.custid <= @max_custid		
 		AND Enabled = 1	
+		AND roleid < 4
 		AND maxpermatch164 NOT IN (0, 0.1)
 		AND (cs.MinBet < @Minbet OR cs.MaxBet > @MaxBet)
 	ORDER BY roleid DESC	
 	
+	UPDATE cs
+	SET MinBet = @minbet,
+		MaxBet = @MaxBet
+	FROM custSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custID
+	WHERE ci.custid = @srecommend 
+		AND ci.maxpermatch164 NOT IN (0, 0.1)
+		AND cs.sporttype = 164
+		AND cs.bettype = 8101
+			
 	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
 	
 	SELECT @maxID = max(ID) FROM #tblCust
