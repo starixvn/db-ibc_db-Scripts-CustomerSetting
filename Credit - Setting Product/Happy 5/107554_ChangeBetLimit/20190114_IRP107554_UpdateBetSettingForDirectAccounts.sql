@@ -80,6 +80,7 @@ FROM CustDirectAccount ca WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.roleid IN (2,3)	
 	AND ci.Enabled = 1
+	AND ci.maxpermatch164 NOT IN (0, 0.1)
 	AND c.site NOT IN ('KORIBC','INDO')
 	--Direct accounts under group headlines ETUS, ZU01
 	AND ci.custid NOT IN (1283	,--	etus
@@ -103,6 +104,7 @@ FROM CustDirectAccount ca WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.roleid = 1
 	AND ci.Enabled = 1
+	AND ci.maxpermatch164 NOT IN (0, 0.1)
 	AND c.site NOT IN ('KORIBC','INDO')
 	--Direct accounts under group headlines ETUS, ZU01
 	AND ci.custid NOT IN (1283	,--	etus
