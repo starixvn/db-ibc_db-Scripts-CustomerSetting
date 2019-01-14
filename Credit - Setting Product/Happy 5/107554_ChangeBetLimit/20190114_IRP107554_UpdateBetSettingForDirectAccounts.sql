@@ -133,6 +133,7 @@ WHERE ci.custid IN (
 		--dummy agents				
 		UNION SELECT recommend FROM #DirectAccounts WHERE roleid = 1
 	)
+	AND ci.maxpermatch164 NOT IN (0, 0.1)
 					
 UPDATE cs
 SET cs.minbet = s.minbet,
@@ -150,6 +151,6 @@ WHERE ci.custid IN (
 		--dummy agents				
 		UNION SELECT recommend FROM #DirectAccounts WHERE roleid = 1
 	)
-					
+	AND ci.maxpermatch164 NOT IN (0, 0.1)				
 			
 	
