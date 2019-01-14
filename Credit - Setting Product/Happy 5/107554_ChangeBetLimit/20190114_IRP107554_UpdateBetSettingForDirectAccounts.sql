@@ -75,10 +75,12 @@ CREATE TABLE #DirectAccounts (custID INT, roleid TINYINT, srecommend INT, mrecom
 INSERT INTO #DirectAccounts
 SELECT ci.custid, roleid, srecommend, mrecommend, recommend
 FROM CustDirectAccount ca WITH(NOLOCK)
-	INNER JOIN custinfo ci (NOLOCK) ON ca.custid = ci.custid
+	INNER JOIN custinfo ci WITH(NOLOCK) ON ca.custid = ci.custid
+	INNER JOIN customer c WITH (NOLOCK) ON ca.custid = c.custid
 WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND roleid < 4	
 	AND ci.Enabled = 1
+	AND c.site NOT IN ('KORIBC','INDO')
 	--Direct accounts under group headlines ETUS, ZU01
 	AND ci.custid NOT IN (1283	,--	etus
 						3472	,--	ETCASINO
