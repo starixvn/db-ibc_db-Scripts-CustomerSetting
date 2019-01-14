@@ -73,12 +73,12 @@ CREATE TABLE #DirectAccounts (custID INT, roleid TINYINT, srecommend INT, mrecom
 
 --3k customers affected
 INSERT INTO #DirectAccounts
-SELECT ci.custid, roleid, srecommend, mrecommend, recommend
+SELECT ci.custid, ci.roleid, ci.srecommend, ci.mrecommend, ci.recommend
 FROM CustDirectAccount ca WITH(NOLOCK)
 	INNER JOIN custinfo ci WITH(NOLOCK) ON ca.custid = ci.custid
 	INNER JOIN customer c WITH (NOLOCK) ON ca.custid = c.custid
 WHERE ci.srecommend IN (SELECT custid FROM #supers)
-	AND roleid < 4	
+	AND ci.roleid IN (2,3)	
 	AND ci.Enabled = 1
 	AND c.site NOT IN ('KORIBC','INDO')
 	--Direct accounts under group headlines ETUS, ZU01
@@ -95,6 +95,29 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 						24336740	--	MEK
 						)
 
+INSERT INTO #DirectAccounts
+SELECT ci.custid, ci.roleid, ci.srecommend, ci.mrecommend, ci.recommend
+FROM CustDirectAccount ca WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON ca.custid = ci.custid
+	INNER JOIN customer c WITH (NOLOCK) ON ci.recommend = c.custid
+WHERE ci.srecommend IN (SELECT custid FROM #supers)
+	AND ci.roleid = 1
+	AND ci.Enabled = 1
+	AND c.site NOT IN ('KORIBC','INDO')
+	--Direct accounts under group headlines ETUS, ZU01
+	AND ci.custid NOT IN (1283	,--	etus
+						3472	,--	ETCASINO
+						5106	,--	VT1US
+						7714	,--	etrmb
+						525344	,--	ET1RMB
+						2440619	,--	SELLUSD
+						11771775	,--	THA1US
+						12055986	,--	D-THAUS
+						15546129	,--	ETprovision
+						22392814	,--	AEK
+						24336740	--	MEK
+						)
+						
 --Adjust bet settings by global settings 
 UPDATE ci
 SET ci.maxpermatch164 = s.maxpermatch
