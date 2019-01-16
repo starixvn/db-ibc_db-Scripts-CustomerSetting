@@ -7,13 +7,13 @@
 
 USE CustDB
 GO
-
+/*
 UPDATE ProductSettingDetail WITH(UPDLOCK,ROWLOCK)
 SET SettingStatus = 2--hide vip baccarat
 WHERE SportType = 211 
 	AND bettype = 2402
 	AND SettingType IN (7,13)--stakelevel & status
-GO
+GO*/
 
 --remove stakelevel has resourceid = 244 for currencies: 
 --'$US', 'NTD', 'US$', 'UT', 'Yen', 'IRR', 'EURO', 'SD$', 'GBP', 'TH'
