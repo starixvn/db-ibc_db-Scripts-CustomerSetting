@@ -51,8 +51,7 @@ SELECT	160007, 'Update general information for member', 'CS_CustSetting_GeneralI
 
 SELECT	165000, 'Create Account Status for master', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
 SELECT	165001, 'Create Account Status for agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
-SELECT	165002, 'Create Account Status for member', 'CS_CustomerIns_Ag', 0, 5, NULL UNION ALL
-SELECT	165003, 'Edit Account Status', 'CS_CustSetting_GeneralInfo_Upd', 0, 5, NULL 
+SELECT	165002, 'Create Account Status for member', 'CS_CustomerIns_Ag', 0, 5, NULL
 
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
 SELECT ActionID,SPName,ActionTypeID,ActionName,ActionName,ActionName,ActionName,ActionName,ActionName,IsInternal,ActionName
