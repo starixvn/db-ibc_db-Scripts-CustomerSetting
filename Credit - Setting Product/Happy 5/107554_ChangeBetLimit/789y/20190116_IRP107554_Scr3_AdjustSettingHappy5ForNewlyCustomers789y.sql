@@ -29,8 +29,7 @@ WHERE ci.roleid = 4
 	AND ci.custid  IN (SELECT custid 
 						FROM dbo.custaccount WITH (NOLOCK)
 						WHERE groupid IN (60,515)--ETUS,ZU01 headline								
-						)
-	AND ci.custid <= @max_custid					
+						)					
 	AND s.islicensee = 0	
 	AND s.site = '789y'
 	AND (ac.groupname in ('ACCYEN889') or hl.username = 'zu01')

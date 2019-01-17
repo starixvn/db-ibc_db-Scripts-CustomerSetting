@@ -32,8 +32,7 @@ BEGIN
 													AND cs.bettype = 8101
 	WHERE srecommend = @srecommend
 		AND c.custid <= @max_custid		
-		AND Enabled = 1	
-		AND roleid < 4
+		AND Enabled = 1			
 		AND maxpermatch164 NOT IN (0, 0.1)
 		AND (cs.MinBet < @Minbet OR cs.MaxBet > @MaxBet)
 	ORDER BY roleid DESC	
