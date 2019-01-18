@@ -21,7 +21,7 @@ FROM customer ci WITH (NOLOCK)
 			INNER JOIN custinfo ci1(nolock) on ca1.custid = ci1.custid									
 			WHERE ca1.IsGroupHeadLine =1									
 		) hl ON ca.groupID = hl.GroupID	
-	LEFT JOIN DBAGE.bodb_age.dbo.Acc_custgroup ac WITH(NOLOCK ) on ac.custid = ci.custid
+	LEFT JOIN dbo.Acc_custgroup ac WITH(NOLOCK ) on ac.custid = ci.custid
 WHERE ci.roleid = 4  
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
