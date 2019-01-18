@@ -103,8 +103,7 @@ WHERE ci.roleid = 4
 						WHERE groupid IN (60,515)--ETUS,ZU01 headline								
 						)
 	AND ci.custid <= @max_custid						
-	AND s.islicensee = 0	
-	AND s.site = '789y'	
+	AND s.islicensee = 0		
 	AND (ac.groupname in ('ACCYEN889') or hl.username = 'zu01')
 	
 SELECT	'IDR'	 code,	18	MinBet,	36000	MaxBet,	360000 MaxPerMatch
@@ -212,8 +211,7 @@ WHERE ci.roleid = 4
 						WHERE groupid IN (60,515)--ETUS,ZU01 headline								
 						)
 	AND ci.custid <= @max_custid					
-	AND s.islicensee = 0	
-	AND s.site = '789y'
+	AND s.islicensee = 0		
 	AND (ac.groupname in ('ACCYEN889') or hl.username = 'zu01')
 	
 SELECT	'IDR'	 code,	18	MinBet,	36000	MaxBet,	360000 MaxPerMatch
