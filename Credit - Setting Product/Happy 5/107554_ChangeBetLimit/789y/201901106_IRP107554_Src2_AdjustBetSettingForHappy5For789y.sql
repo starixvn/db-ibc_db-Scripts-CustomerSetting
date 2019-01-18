@@ -76,13 +76,14 @@ GO
 -- BEGIN STEP 2: Run this SP at replicated DB -----
 --------------------------------------------------------------------------------------
 
-CREATE TABLE #supers (custid INT, currency INT, code VARCHAR(20),groupname varchar(20), MinBet MONEY, MaxBet Money, MaxPerMatch MONEY, isfinished BIT DEFAULT(0))
+CREATE TABLE #supers (custid INT, currency INT, code VARCHAR(20), MinBet MONEY, MaxBet Money, MaxPerMatch MONEY, isfinished BIT DEFAULT(0))
 
 DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 
-INSERT INTO #supers(custid,currency, code,groupname)
-SELECT ci.custid, ci.currency,e.code, isnull(groupname,hl.username) 
+
+INSERT INTO #supers(custid,currency, code)
+SELECT DISTINCT ci.custid, ci.currency,e.code 
 FROM customer ci WITH (NOLOCK) 
 	INNER JOIN dbo.exchange e WITH(NOLOCK) ON ci.currency = e.exchangeid
 	INNER JOIN dbo.site s WITH (NOLOCK) ON ci.site = s.site	
@@ -184,13 +185,14 @@ GO
 -- BEGIN STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
 
-CREATE TABLE #supers (custid INT, currency INT, code VARCHAR(20),groupname varchar(20), MinBet MONEY, MaxBet Money, MaxPerMatch MONEY, isfinished BIT DEFAULT(0))
+CREATE TABLE #supers (custid INT, currency INT, code VARCHAR(20), MinBet MONEY, MaxBet Money, MaxPerMatch MONEY, isfinished BIT DEFAULT(0))
 
 DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 
-INSERT INTO #supers(custid,currency, code,groupname)
-SELECT ci.custid, ci.currency,e.code, isnull(groupname,hl.username) 
+
+INSERT INTO #supers(custid,currency, code)
+SELECT DISTINCT ci.custid, ci.currency,e.code
 FROM customer ci WITH (NOLOCK) 
 	INNER JOIN dbo.exchange e WITH(NOLOCK) ON ci.currency = e.exchangeid
 	INNER JOIN dbo.site s WITH (NOLOCK) ON ci.site = s.site	
