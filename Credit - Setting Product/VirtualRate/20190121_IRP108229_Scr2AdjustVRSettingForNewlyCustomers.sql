@@ -47,7 +47,7 @@ FROM custinfo ci WITH(NOLOCK)
 				) AS virtualXML
 	) p	
 
-WHERE ci.srecommend IN (SELECT * FROM #supers)
+WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid > @max_custid
 	AND virtualXML IS NOT NULL
 	
