@@ -19,10 +19,11 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProfileVirtualSetting') = 0 RETURN	
 	
+	CREATE TABLE #tblCust (CustID INT, seqNo TINYINT, newBitmap BINARY(64), ID INT PRIMARY KEY IDENTITY(1,1))	
 	DECLARE @tmpCust TABLE(CustID INT, seqNo TINYINT, newBitmap binary(64))
-		
-	SELECT ci.custid, cs.seqNo, (SELECT bitmap FROM dbo.f_GenerateVirtualSetting_inline(cs.bitmapVirtual, P.virtualXML)) newBitmap
-	INTO #tblCust
+	
+	INSERT INTO #tblCust(custid, seqNo, newBitmap)	
+	SELECT ci.custid, cs.seqNo, (SELECT bitmap FROM dbo.f_GenerateVirtualSetting_inline(cs.bitmapVirtual, P.virtualXML)) newBitmap	
 	FROM custinfo ci WITH(NOLOCK)
 		INNER JOIN CustVirtualSetting cs WITH (NOLOCK) ON cs.custid = ci.custid 							
 		CROSS APPLY (
@@ -42,14 +43,20 @@ BEGIN
 		AND ci.custid <= @max_custid
 		AND virtualXML IS NOT NULL
 	
+	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
+	
+	SELECT @maxID = max(ID) FROM #tblCust
+	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
+		
 	WHILE(1=1)
 	BEGIN		
 		DELETE @tmpCust
 
-		DELETE TOP (5000) #tblCust
+		DELETE #tblCust
 		OUTPUT DELETED.custID, DELETED.seqNo, DELETED.newBitmap
-		INTO @tmpCust		
-		
+		INTO @tmpCust
+		WHERE ID BETWEEN @fromID AND @toID
+
 		IF @@rowcount = 0 
 			BREAK;
 		
@@ -58,7 +65,13 @@ BEGIN
 		FROM	@tmpCust t
 			INNER JOIN CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK) ON t.custID = cs.custID
 																	AND t.seqNo = cs.seqNo			
-								
+		
+		SELECT @fromID = @toID + 1,
+			@toID = @toID + @Threshold + 1
+
+		IF @fromID > @maxID
+			BREAK;	
+			
 		WAITFOR DELAY '00:00:00.1'
 	END
 	

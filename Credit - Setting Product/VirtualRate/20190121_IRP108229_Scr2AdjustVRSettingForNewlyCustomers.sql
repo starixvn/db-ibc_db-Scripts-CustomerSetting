@@ -7,7 +7,6 @@
 
 
 CREATE TABLE #supers (custid INT,  isfinished BIT DEFAULT(0))
-DECLARE @tmpCust TABLE(CustID INT, seqNo TINYINT, newBitmap binary(64))
 
 DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
@@ -29,9 +28,11 @@ UNION
 SELECT ci.custid
 FROM Dep_CustSuper ci WITH(NOLOCK)	
 
+CREATE TABLE #tblCust (CustID INT, seqNo TINYINT, newBitmap BINARY(64), ID INT PRIMARY KEY IDENTITY(1,1))	
+DECLARE @tmpCust TABLE(CustID INT, seqNo TINYINT, newBitmap binary(64))
 	
+INSERT INTO #tblCust(custid, seqNo, newBitmap)		
 SELECT ci.custid, cs.seqNo, (SELECT bitmap FROM dbo.f_GenerateVirtualSetting_inline(cs.bitmapVirtual, P.virtualXML)) newBitmap
-INTO #tblCust
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN CustVirtualSetting cs WITH (NOLOCK) ON cs.custid = ci.custid 							
 	CROSS APPLY (
@@ -51,23 +52,36 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.custid > @max_custid
 	AND virtualXML IS NOT NULL
 	
+	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
 	
-WHILE(1=1)
-BEGIN		
-	DELETE @tmpCust
+	SELECT @maxID = max(ID) FROM #tblCust
+	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
+		
+	WHILE(1=1)
+	BEGIN		
+		DELETE @tmpCust
 
-	DELETE TOP (5000) #tblCust
-	OUTPUT DELETED.custID, DELETED.seqNo, DELETED.newBitmap
-	INTO @tmpCust		
+		DELETE #tblCust
+		OUTPUT DELETED.custID, DELETED.seqNo, DELETED.newBitmap
+		INTO @tmpCust
+		WHERE ID BETWEEN @fromID AND @toID
+
+		IF @@rowcount = 0 
+			BREAK;
+		
+		UPDATE cs
+		SET cs.bitmapVirtual = t.newbitmap
+		FROM	@tmpCust t
+			INNER JOIN CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK) ON t.custID = cs.custID
+																	AND t.seqNo = cs.seqNo			
+		
+		SELECT @fromID = @toID + 1,
+			@toID = @toID + @Threshold + 1
+
+		IF @fromID > @maxID
+			BREAK;	
+			
+		WAITFOR DELAY '00:00:00.1'
+	END
 	
-	IF @@rowcount = 0 
-		BREAK;
-	
-	UPDATE cs
-	SET cs.bitmapVirtual = t.newbitmap
-	FROM	@tmpCust t
-		INNER JOIN CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK) ON t.custID = cs.custID
-																AND t.seqNo = cs.seqNo			
-							
-	WAITFOR DELAY '00:00:00.1'
-END	
+	DROP TABLE #tblCust
