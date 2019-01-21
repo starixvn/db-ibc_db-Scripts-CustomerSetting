@@ -24,8 +24,8 @@ BEGIN
 	
 	--------------------------------------PT Setting-------------------------------------------------	
 	
-	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
-	CREATE TABLE #tmpCustUpdate		(CustID INT PRIMARY KEY)	
+	
+	CREATE TABLE #tmpCust	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT)	
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	
 	INSERT INTO #tmpCust(CustID)
@@ -60,20 +60,46 @@ BEGIN
 	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
 	WHERE RoleID=2 AND a.SportType =161
+	----------------------------------------
+	DECLARE @StartRow	INT, 
+			@MaxRow		INT,		
+			@Threshold	INT, 
+			@StopRow	INT			
+	SET @StartRow=1
+	SET @Threshold=500
 
-	
-	WHILE EXISTS(SELECT 1 FROM #tmpCust)
-	BEGIN
-		DELETE TOP (1000) #tmpCust OUTPUT DELETED.* INTO #tmpCustUpdate
+	IF EXISTS(SELECT 1 FROM #tmpCust)
+		BEGIN
+			
+			SET @MaxRow = (SELECT MAX(ID) FROM #tmpCust)
+			
+			IF	@Threshold >= @MaxRow
+			SET	@Threshold = @MaxRow
+			
+			SET @StopRow = @Threshold
 
-		UPDATE a
-			SET a.apositiontaking=@PT
-		FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #tmpCustUpdate t ON a.CustID=t.CustID
-		WHERE a.SportType =161
+			WHILE (0 = 0)
+			BEGIN	
+
+				UPDATE a
+					SET a.apositiontaking=@PT
+				FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
+					INNER JOIN #tmpCust t ON a.CustID=t.CustID
+				WHERE ID >= @StartRow AND ID <= @StopRow AND a.SportType =161
+		
+				IF	@StopRow = @MaxRow 
+					BREAK
+						
+				SET	@StartRow = @StopRow + 1
+						
+				SET	@StopRow = 1 + @StopRow + @Threshold
+						
+				IF	@StopRow >= @MaxRow
+					SET	@StopRow = @MaxRow
+										
+			END;
+		END;	
 	
-		TRUNCATE TABLE #tmpCustUpdate
-	END
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

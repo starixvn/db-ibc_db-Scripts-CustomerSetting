@@ -28,14 +28,13 @@ BEGIN
 	
 	--------------------------------------PT Setting-------------------------------------------------	
 	
-	CREATE TABLE #tmpCustBA			(CustID INT PRIMARY KEY)
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpCustUpdate		(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	
-	INSERT INTO #tmpCustBA(CustID)
+	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
-		INNER JOIN Dep_CustBAActive BA WITH(NOLOCK) ON ci.custid=BA.custid
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 		
 	OPTION ( MAXDOP 2)
@@ -74,7 +73,7 @@ BEGIN
 	
 	WHILE EXISTS(SELECT 1 FROM #tmpCustBA)
 	BEGIN
-		DELETE TOP (1000) #tmpCustBA OUTPUT DELETED.* INTO #tmpCustUpdate
+		DELETE TOP (500) #tmpCust OUTPUT DELETED.* INTO #tmpCustUpdate
 
 		UPDATE a
 			SET a.[AgentPT]=@PT

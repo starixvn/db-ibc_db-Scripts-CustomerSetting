@@ -77,7 +77,7 @@ BEGIN
 	
 	WHILE EXISTS(SELECT 1 FROM #tmpCust)
 	BEGIN
-		DELETE TOP (1000) #tmpCust OUTPUT DELETED.* INTO #tmpCustUpdate
+		DELETE TOP (500) #tmpCust OUTPUT DELETED.* INTO #tmpCustUpdate
 
 		UPDATE a
 			SET a.apositiontaking=@PT
