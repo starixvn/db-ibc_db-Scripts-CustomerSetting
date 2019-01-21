@@ -32,14 +32,14 @@ BEGIN
 	SELECT ci.CustID
 	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
-		AND roleid = 1 		
+		AND roleid = 1 	AND ci.Enabled=1
 	OPTION ( MAXDOP 2)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
-		AND roleid IN(2,3,4)		
+		AND roleid IN(2,3,4) AND ci.Enabled=1		
 	OPTION ( MAXDOP 2)
 
 	--AGENT LEVEL	
