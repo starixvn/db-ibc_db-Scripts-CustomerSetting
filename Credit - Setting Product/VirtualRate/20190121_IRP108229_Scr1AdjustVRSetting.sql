@@ -18,63 +18,51 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustVirtualSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProfileVirtualSetting') = 0 RETURN	
-
-	CREATE TABLE #tblCust (CustID INT, seqNo TINYINT, virtualXML VARCHAR(MAX), ID INT IDENTITY(1,1))	
-	DECLARE @tmpCust TABLE(CustID INT, seqNo TINYINT, virtualXML VARCHAR(MAX))
+	
+	DECLARE @tmpCust TABLE(CustID INT, seqNo TINYINT, newBitmap binary(64))
 		
-	INSERT INTO #tblCust(custid, seqNo, virtualXML)	
-	SELECT ci.custid, pvs.seqNo, p.virtualXML
+	SELECT ci.custid, cs.seqNo, (SELECT bitmap FROM dbo.f_GenerateVirtualSetting_inline(cs.bitmapVirtual, P.virtualXML)) newBitmap
+	INTO #tblCust
 	FROM custinfo ci WITH(NOLOCK)
-	CROSS APPLY
-	 (
-				SELECT	DISTINCT seqNo
-				FROM	ProfileVirtualSetting WITH (NOLOCK)
-			) pvs
-	CROSS APPLY (
-			SELECT		
-				(SELECT pvs1.profileID as '@p', 0.15 as '@v'--new value -85%
-					FROM CustVirtualSetting cs WITH(NOLOCK) 
-						INNER JOIN ProfileVirtualSetting pvs1 WITH(NOLOCK) ON cs.seqNo = pvs1.seqNo	
-					WHERE cs.custid = ci.custid						
-						AND dbo.f_GetVirtualSetting(cs.bitmapVirtual, pvs1.profileID) = 0.2 --VR = -80%
-						AND pvs1.seqNo = pvs.seqNo
-						FOR XML PATH ('r')
-						,ROOT('root')	
-				) AS virtualXML
-	) p
-	WHERE srecommend = @srecommend
+		INNER JOIN CustVirtualSetting cs WITH (NOLOCK) ON cs.custid = ci.custid 							
+		CROSS APPLY (
+				SELECT		
+					(SELECT pvs1.profileID as '@p', 0.15 as '@v'--new value -85%
+						FROM ProfileVirtualSetting pvs1 WITH(NOLOCK) 
+						WHERE cs.seqNo = pvs1.seqNo													
+							AND (CASE WHEN CAST(substring(cs.bitmapVirtual, 1+((profileID-1)%64), 1) as int) > 200 THEN ((CAST(substring(cs.bitmapVirtual, 1+((profileID-1)%64), 1) as int) - 200)*5 + 200)
+									 ELSE CAST(substring(cs.bitmapVirtual, 1+((profileID-1)%64), 1) as int) 
+									 END) / 100.0 = 0.2-- VR = -80%						
+							FOR XML PATH ('r')
+							,ROOT('root')	
+					) AS virtualXML
+		) p	
+
+	WHERE ci.srecommend = @srecommend	
 		AND ci.custid <= @max_custid
-		AND ci.roleid = 1
-		AND ci.Enabled = 1
 		AND virtualXML IS NOT NULL
-	ORDER BY ci.custid	
 	
-	DECLARE @Threshold INT = 5000,@fromID INT , @toID INT, @maxID INT
-	
-	SELECT @maxID = max(ID) FROM #tblCust
-	SELECT @fromID = 0, @toID = @Threshold, @maxID = ISNULL(@maxID,0)	
-		
 	WHILE(1=1)
 	BEGIN		
 		DELETE @tmpCust
 
-		DELETE #tblCust
-		OUTPUT DELETED.custID, DELETED.seqNo, DELETED.virtualXML
-		INTO @tmpCust
-		WHERE ID BETWEEN @fromID AND @toID
+		DELETE TOP (5000) #tblCust
+		OUTPUT DELETED.custID, DELETED.seqNo, DELETED.newBitmap
+		INTO @tmpCust		
 		
 		IF @@rowcount = 0 
 			BREAK;
 		
 		UPDATE cs
-		SET cs.bitmapVirtual = bm.bitmap
+		SET cs.bitmapVirtual = t.newbitmap
 		FROM	@tmpCust t
 			INNER JOIN CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK) ON t.custID = cs.custID
-																	AND t.seqNo = cs.seqNo
-			CROSS APPLY dbo.f_GenerateVirtualSetting_inline(cs.bitmapVirtual, t.virtualXML) AS bm
-		
+																	AND t.seqNo = cs.seqNo			
+								
 		WAITFOR DELAY '00:00:00.1'
 	END
+	
+	DROP TABLE #tblCust
 END	
 GO
 
