@@ -34,7 +34,8 @@ BEGIN
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)	
+		INNER JOIN Dep_CustPTSetting_Member BA WITH(NOLOCK) ON ci.custid=BA.custid	
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 		
 	OPTION ( MAXDOP 2)
