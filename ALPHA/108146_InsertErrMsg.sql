@@ -7,7 +7,6 @@ GO
 	Date: 20190121
 */ 
 
-
 INSERT INTO [dbo].[MsgError]
            ([MsgID]
            ,[MsgGroupID]
@@ -24,16 +23,16 @@ INSERT INTO [dbo].[MsgError]
      VALUES
            (40039
            ,5
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	
            ,1
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296 accounts). Please contact your upline for further assistance.'	)
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (1296). Please contact your upline for further assistance.'	)
 GO
 
 INSERT INTO [dbo].[MsgError]
@@ -52,16 +51,16 @@ INSERT INTO [dbo].[MsgError]
      VALUES
            (40040
            ,5
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	
            ,1
-           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656 accounts). Please contact your upline for further assistance.'	)
+           ,'Sorry, you cannot create more accounts because the total downlines have reached the limit (46656). Please contact your upline for further assistance.'	)
 GO
 
 
