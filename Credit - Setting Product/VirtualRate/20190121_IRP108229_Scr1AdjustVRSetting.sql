@@ -103,10 +103,6 @@ WHERE ci.roleid = 4
 	AND ci.currency = 64 --UT currency
 	AND ci.custid <= @max_custid
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-UNION 
---get list supers for licensees
-SELECT ci.custid
-FROM Dep_CustSuper ci WITH(NOLOCK)	
 
 
 -- For deployer info
@@ -167,10 +163,6 @@ WHERE ci.roleid = 4
 	AND ci.currency = 64 --UT currency
 	AND ci.custid <= @max_custid
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-UNION 
---get list supers for licensees
-SELECT ci.custid
-FROM Dep_CustSuper ci WITH(NOLOCK)	
 
 
 -- For deployer info
