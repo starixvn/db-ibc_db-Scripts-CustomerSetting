@@ -72,19 +72,6 @@ DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 
 INSERT INTO #supers(custid)
---get list supers for credit
-SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-	AND ci.username NOT LIKE '3rdSuper%'
-	AND cs.isinternal = 0
-	AND s.islicensee = 0
-	AND ci.currency = 64 --UT currency
-	AND ci.custid <= @max_custid
-	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-UNION 
 --get list supers for licensees
 SELECT ci.custid
 FROM Dep_CustSuper ci WITH(NOLOCK)	
@@ -136,19 +123,6 @@ DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 
 INSERT INTO #supers(custid)
---get list supers for credit
-SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-	AND ci.username NOT LIKE '3rdSuper%'
-	AND cs.isinternal = 0
-	AND s.islicensee = 0
-	AND ci.currency = 64 --UT currency
-	AND ci.custid <= @max_custid
-	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-UNION 
 --get list supers for licensees
 SELECT ci.custid
 FROM Dep_CustSuper ci WITH(NOLOCK)	
