@@ -51,7 +51,7 @@ DECLARE @tmpCust TABLE (custid INT PRIMARY KEY)
 			cvs.bitmapVirtual LIKE '%[' + CAST(CAST(20 AS BINARY(1)) AS VARCHAR) + ']%'	-- Update rows that containt Virtual Rate -80% only
 			AND cvs.custid IN (SELECT custid FROM @tmpCust)
 		
-		WAITFOR DELAY '00:00:00.1'
+		WAITFOR DELAY '00:00:00.01'
 	END
 	
 	DROP TABLE #tblCust
