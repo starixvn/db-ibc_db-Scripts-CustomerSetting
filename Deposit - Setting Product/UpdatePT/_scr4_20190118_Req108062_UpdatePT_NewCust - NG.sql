@@ -43,17 +43,15 @@ BEGIN
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
+	FROM custInfo ci WITH(NOLOCK)		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
-	OPTION ( MAXDOP 2)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
+	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)  AND ci.custid>@maxcustid 
-		AND roleid IN(2,3,4)		
-	OPTION ( MAXDOP 2)
+		AND roleid IN(2,3,4)	
 
 	--AGENT LEVEL	
 	UPDATE a

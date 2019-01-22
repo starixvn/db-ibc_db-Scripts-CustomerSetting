@@ -72,7 +72,7 @@ BEGIN
 		INNER JOIN #tmpSMA t ON a.AgentID=t.CustID
 	WHERE RoleID=2 AND a.SportType BETWEEN 180 AND 194
 	
-	WHILE EXISTS(SELECT 1 FROM #tmpCustBA)
+	WHILE EXISTS(SELECT 1 FROM #tmpCust)
 	BEGIN
 		DELETE TOP (500) #tmpCust OUTPUT DELETED.* INTO #tmpCustUpdate
 
@@ -138,7 +138,7 @@ BEGIN
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 GO
 
@@ -192,7 +192,7 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 
 PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

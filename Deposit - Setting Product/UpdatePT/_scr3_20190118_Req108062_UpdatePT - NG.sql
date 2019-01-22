@@ -21,84 +21,111 @@ BEGIN
 	
 	DECLARE @PT SMALLMONEY	
 	SELECT @PT=0.88
-	
+	DECLARE @StartRow	INT, 
+		@MaxRow		INT,		
+		@Threshold	INT, 
+		@StopRow	INT		
+	SET @StartRow=1
+	SET @Threshold=3000	
 	--------------------------------------PT Setting-------------------------------------------------	
 	
+	CREATE TABLE #tempSporttype (Sporttype SMALLINT,BetType SMALLINT,IsLive BIT,PRIMARY KEY(Sporttype,BetType,IsLive))
+	INSERT INTO #tempSporttype(Sporttype ,BetType ,IsLive )
+	SELECT 	161,	81,	0
+	UNION ALL
+	SELECT 161,	83,	0
+	UNION ALL
+	SELECT 161,	85,	1
+	UNION ALL
+	SELECT 161,	86,	0
+	UNION ALL
+	SELECT 161,	86,	1
+	UNION ALL
+	SELECT 161,	87,	1
+	UNION ALL
+	SELECT 161,	88,	0
+	UNION ALL
+	SELECT 161,	89,	1
+	UNION ALL
+	SELECT 161,	90,	1
 	
-	CREATE TABLE #tmpCust	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT)	
-	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+	CREATE TABLE #tmpCust	(CustID INT,Sporttype SMALLINT,BetType SMALLINT,IsLive BIT)	
+	CREATE TABLE #tmpSMA	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT,Sporttype SMALLINT,BetType SMALLINT,IsLive SMALLINT)	
+	CREATE TABLE #tmpCust161_81_0	(CustID INT,BetType SMALLINT,Sporttype SMALLINT,IsLive BIT, PRIMARY KEY(CustID,BetType ,Sporttype  ,IsLive))	
+
+	INSERT INTO #tmpCust(CustID,Sporttype,BetType,IsLive)
+	SELECT ci.CustID,Sporttype,BetType,IsLive
+	FROM custInfo ci WITH(NOLOCK)	
+		CROSS JOIN #tempSporttype
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
+		AND roleid = 1 	
+
+	INSERT INTO #tmpSMA(CustID,RoleID,Sporttype,BetType,IsLive)
+	SELECT CustID,RoleID,Sporttype,BetType,IsLive
+	FROM custInfo ci WITH(NOLOCK)		
+			CROSS JOIN #tempSporttype
+	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
+		AND roleid IN(2,3,4) 
 	
-	INSERT INTO #tmpCust(CustID)
-	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
-		AND roleid = 1 	AND ci.Enabled=1
-	OPTION ( MAXDOP 2)
-
-	INSERT INTO #tmpSMA(CustID,RoleID)
-	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
-		AND roleid IN(2,3,4) AND ci.Enabled=1		
-	OPTION ( MAXDOP 2)
-
 	--AGENT LEVEL	
-	UPDATE a
-		SET a.spositiontaking=@PT,a.mpositiontaking=@PT,a.apositiontaking=@PT
-	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=4 AND a.SportType =161
+
+	IF EXISTS(SELECT 1 FROM #tmpSMA)
+	BEGIN
+			
+		SET @MaxRow = (SELECT MAX(ID) FROM #tmpSMA)
+			
+		IF	@Threshold >= @MaxRow
+		SET	@Threshold = @MaxRow
+			
+		SET @StopRow = @Threshold
+
+		WHILE (0 = 0)
+		BEGIN			
+			UPDATE a
+				SET a.spositiontaking=@PT,a.mpositiontaking=@PT,a.apositiontaking=@PT
+			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #tmpSMA t ON a.CustID=t.CustID		
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=4 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
 	
-	UPDATE a
-		SET a.mpositiontaking=@PT
-	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=3 AND a.SportType =161
+			UPDATE a
+				SET a.mpositiontaking=@PT
+			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=3 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
 		
-	UPDATE a
-		SET a.apositiontaking=@PT
-	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=2 AND a.SportType =161
-	----------------------------------------
-	DECLARE @StartRow	INT, 
-			@MaxRow		INT,		
-			@Threshold	INT, 
-			@StopRow	INT			
-	SET @StartRow=1
-	SET @Threshold=500
-
-	IF EXISTS(SELECT 1 FROM #tmpCust)
-		BEGIN
-			
-			SET @MaxRow = (SELECT MAX(ID) FROM #tmpCust)
-			
-			IF	@Threshold >= @MaxRow
-			SET	@Threshold = @MaxRow
-			
-			SET @StopRow = @Threshold
-
-			WHILE (0 = 0)
-			BEGIN	
-
-				UPDATE a
-					SET a.apositiontaking=@PT
-				FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-					INNER JOIN #tmpCust t ON a.CustID=t.CustID
-				WHERE ID >= @StartRow AND ID <= @StopRow AND a.SportType =161
+			UPDATE a
+				SET a.apositiontaking=@PT
+			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=2 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
 		
-				IF	@StopRow = @MaxRow 
-					BREAK
+			IF	@StopRow = @MaxRow 
+				BREAK
 						
-				SET	@StartRow = @StopRow + 1
+			SET	@StartRow = @StopRow + 1
 						
-				SET	@StopRow = 1 + @StopRow + @Threshold
+			SET	@StopRow = 1 + @StopRow + @Threshold
 						
-				IF	@StopRow >= @MaxRow
-					SET	@StopRow = @MaxRow
+			IF	@StopRow >= @MaxRow
+				SET	@StopRow = @MaxRow
 										
-			END;
-		END;	
+		END;
+	END;	
+	----------------------------------------
+	WHILE EXISTS(SELECT 1 FROM #tmpCust)
+	BEGIN
+		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tmpCust161_81_0
+
+		UPDATE a
+			SET a.apositiontaking=@PT
+		FROM Dep_CustSetting3rd a WITH(ROWLOCK)
+			INNER JOIN #tmpCust161_81_0 t ON a.CustID=t.CustID AND a.bettype=t.BetType AND a.SportType =t.Sporttype AND a.islive=t.IsLive
+							
+		TRUNCATE TABLE #tmpCust161_81_0
+
+	END
+
+
 	
 END
 GO
@@ -154,7 +181,7 @@ BEGIN
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 GO
 
@@ -208,7 +235,7 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 
 PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
