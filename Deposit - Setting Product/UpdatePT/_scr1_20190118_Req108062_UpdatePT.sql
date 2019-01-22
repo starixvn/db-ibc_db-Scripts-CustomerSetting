@@ -33,7 +33,7 @@ BEGIN
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	
 	INSERT INTO #tmpCust(CustID)
-	SELECT ci.CustID
+	SELECT DISTINCT ci.CustID
 	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)	
 		INNER JOIN Dep_CustPTSetting_Member BA WITH(NOLOCK) ON ci.custid=BA.custid	
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
