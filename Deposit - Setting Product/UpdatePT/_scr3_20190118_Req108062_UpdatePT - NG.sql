@@ -118,7 +118,7 @@ BEGIN
 
 		UPDATE a
 			SET a.apositiontaking=@PT
-		FROM Dep_CustSetting3rd a WITH(ROWLOCK)
+		FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #tmpCust161_81_0 t ON a.CustID=t.CustID AND a.bettype=t.BetType AND a.SportType =t.Sporttype AND a.islive=t.IsLive
 							
 		TRUNCATE TABLE #tmpCust161_81_0
