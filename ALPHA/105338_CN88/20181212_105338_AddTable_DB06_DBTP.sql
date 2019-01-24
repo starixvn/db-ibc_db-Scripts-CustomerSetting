@@ -166,13 +166,14 @@ GO
 CREATE TABLE CS_CustGroupDiscount_Member  
 (
 	AgentId				INT NOT NULL,
+	uGroup				VARCHAR(3) NOT NULL,
 	PlayerDiscount		BINARY(30) NOT NULL,
 	AgentDiscount		BINARY(30) NOT NULL,
 	MasterDiscount		BINARY(30) NOT NULL,
 	SuperDiscount		BINARY(30) NOT NULL,
 CONSTRAINT [PK_CS_CustGroupDiscount_Member] PRIMARY KEY CLUSTERED 
 (
-	AgentId ASC
+	AgentId ASC, uGroup ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustGroupDiscount_Member_table]
 ) ON [CS_CustGroupDiscount_Member_table]
 GO
