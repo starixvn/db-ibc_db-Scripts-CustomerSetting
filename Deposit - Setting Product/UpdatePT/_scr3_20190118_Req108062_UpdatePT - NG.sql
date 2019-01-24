@@ -49,12 +49,12 @@ BEGIN
 	UNION ALL
 	SELECT 161,	90,	1
 	
-	CREATE TABLE #tmpCust	(CustID INT,Sporttype SMALLINT,BetType SMALLINT,IsLive BIT)	
+	CREATE TABLE #tmpCust	(CustID INT,BetType SMALLINT,Sporttype SMALLINT,IsLive BIT)	
 	CREATE TABLE #tmpSMA	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT,Sporttype SMALLINT,BetType SMALLINT,IsLive SMALLINT)	
 	CREATE TABLE #tmpCust161_81_0	(CustID INT,BetType SMALLINT,Sporttype SMALLINT,IsLive BIT, PRIMARY KEY(CustID,BetType ,Sporttype  ,IsLive))	
 
-	INSERT INTO #tmpCust(CustID,Sporttype,BetType,IsLive)
-	SELECT ci.CustID,Sporttype,BetType,IsLive
+	INSERT INTO #tmpCust(CustID,BetType,Sporttype,IsLive)
+	SELECT ci.CustID,BetType,Sporttype,IsLive
 	FROM custInfo ci WITH(NOLOCK)	
 		CROSS JOIN #tempSporttype
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
