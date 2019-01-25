@@ -40,37 +40,44 @@ BEGIN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpCustUpdate		(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT c.CustID 
+	FROM Customer c WITH(NOLOCK) 		
+	WHERE c.srecommend IN(SELECT custid FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
 	FROM custInfo ci WITH(NOLOCK)		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)  AND ci.custid>@maxcustid 
 		AND roleid IN(2,3,4)	
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
 	--AGENT LEVEL	
 	UPDATE a
 		SET a.spositiontaking=@PT,a.mpositiontaking=@PT,a.apositiontaking=@PT
 	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=4 AND a.SportType =161
+	WHERE RoleID=4 AND a.bettype BETWEEN 81 AND 90
 	
 	UPDATE a
 		SET a.mpositiontaking=@PT
 	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=3 AND a.SportType =161
+	WHERE RoleID=3 AND a.bettype BETWEEN 81 AND 90
 		
 	UPDATE a
 		SET a.apositiontaking=@PT
 	FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-	WHERE RoleID=2 AND a.SportType =161
+	WHERE RoleID=2 AND a.bettype BETWEEN 81 AND 90
 
 	
 	WHILE EXISTS(SELECT 1 FROM #tmpCust)
@@ -81,7 +88,7 @@ BEGIN
 			SET a.apositiontaking=@PT
 		FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #tmpCustUpdate t ON a.CustID=t.CustID
-		WHERE a.SportType =161
+		WHERE  a.bettype BETWEEN 81 AND 90
 	
 		TRUNCATE TABLE #tmpCustUpdate
 	END

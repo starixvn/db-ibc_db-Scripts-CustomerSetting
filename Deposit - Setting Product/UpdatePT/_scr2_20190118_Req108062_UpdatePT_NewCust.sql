@@ -43,6 +43,12 @@ BEGIN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpCustUpdate		(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+
+	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT c.CustID 
+	FROM Customer c WITH(NOLOCK) 		
+	WHERE c.srecommend IN(SELECT custid FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT DISTINCT ci.CustID
@@ -50,14 +56,14 @@ BEGIN
 		INNER JOIN Dep_CustPTSetting_Member BA WITH(NOLOCK) ON ci.custid=BA.custid		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
-	
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid IN(2,3,4)		
-
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
 	--AGENT LEVEL	
 	UPDATE a

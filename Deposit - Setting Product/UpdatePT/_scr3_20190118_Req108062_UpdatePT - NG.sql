@@ -20,6 +20,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustSetting3rd') = 0 RETURN		
 	
 	DECLARE @PT SMALLMONEY	
+	
 	SELECT @PT=0.88
 	DECLARE @StartRow	INT, 
 		@MaxRow		INT,		
@@ -27,45 +28,32 @@ BEGIN
 		@StopRow	INT		
 	SET @StartRow=1
 	SET @Threshold=3000	
-	--------------------------------------PT Setting-------------------------------------------------	
+	--------------------------------------PT Setting-------------------------------------------------		
 	
-	CREATE TABLE #tempSporttype (Sporttype SMALLINT,BetType SMALLINT,IsLive BIT,PRIMARY KEY(Sporttype,BetType,IsLive))
-	INSERT INTO #tempSporttype(Sporttype ,BetType ,IsLive )
-	SELECT 	161,	81,	0
-	UNION ALL
-	SELECT 161,	83,	0
-	UNION ALL
-	SELECT 161,	85,	1
-	UNION ALL
-	SELECT 161,	86,	0
-	UNION ALL
-	SELECT 161,	86,	1
-	UNION ALL
-	SELECT 161,	87,	1
-	UNION ALL
-	SELECT 161,	88,	0
-	UNION ALL
-	SELECT 161,	89,	1
-	UNION ALL
-	SELECT 161,	90,	1
-	
-	CREATE TABLE #tmpCust	(CustID INT,BetType SMALLINT,Sporttype SMALLINT,IsLive BIT)	
-	CREATE TABLE #tmpSMA	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT,Sporttype SMALLINT,BetType SMALLINT,IsLive SMALLINT)	
-	CREATE TABLE #tmpCust161_81_0	(CustID INT,BetType SMALLINT,Sporttype SMALLINT,IsLive BIT, PRIMARY KEY(CustID,BetType ,Sporttype  ,IsLive))	
+	CREATE TABLE #tmpCust	(CustID INT)	
+	CREATE TABLE #tmpSMA	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT)	
+	CREATE TABLE #tmpCust161_81_0	(CustID INT PRIMARY KEY)	
 
-	INSERT INTO #tmpCust(CustID,BetType,Sporttype,IsLive)
-	SELECT ci.CustID,BetType,Sporttype,IsLive
-	FROM custInfo ci WITH(NOLOCK)	
-		CROSS JOIN #tempSporttype
+	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT c.CustID 
+	FROM Customer c WITH(NOLOCK) 		
+	WHERE c.srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+
+
+	INSERT INTO #tmpCust(CustID)
+	SELECT ci.CustID
+	FROM custInfo ci WITH(NOLOCK)			
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 	
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
-	INSERT INTO #tmpSMA(CustID,RoleID,Sporttype,BetType,IsLive)
-	SELECT CustID,RoleID,Sporttype,BetType,IsLive
-	FROM custInfo ci WITH(NOLOCK)		
-			CROSS JOIN #tempSporttype
+	INSERT INTO #tmpSMA(CustID,RoleID)
+	SELECT CustID,RoleID
+	FROM custInfo ci WITH(NOLOCK)				
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid IN(2,3,4) 
+		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 	
 	--AGENT LEVEL	
 
@@ -85,19 +73,19 @@ BEGIN
 				SET a.spositiontaking=@PT,a.mpositiontaking=@PT,a.apositiontaking=@PT
 			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 				INNER JOIN #tmpSMA t ON a.CustID=t.CustID		
-			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=4 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=4 AND a.bettype BETWEEN 81 AND 90
 	
 			UPDATE a
 				SET a.mpositiontaking=@PT
 			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=3 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=3 AND a.bettype BETWEEN 81 AND 90
 		
 			UPDATE a
 				SET a.apositiontaking=@PT
 			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
 				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
-			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=2 AND a.SportType =t.Sporttype AND a.bettype=t.BetType AND a.islive=t.IsLive
+			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=2 AND a.bettype BETWEEN 81 AND 90
 		
 			IF	@StopRow = @MaxRow 
 				BREAK
@@ -114,12 +102,13 @@ BEGIN
 	----------------------------------------
 	WHILE EXISTS(SELECT 1 FROM #tmpCust)
 	BEGIN
-		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tmpCust161_81_0
+		DELETE TOP (500) #tmpCust OUTPUT DELETED.* INTO #tmpCust161_81_0
 
 		UPDATE a
 			SET a.apositiontaking=@PT
 		FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #tmpCust161_81_0 t ON a.CustID=t.CustID AND a.bettype=t.BetType AND a.SportType =t.Sporttype AND a.islive=t.IsLive
+			INNER JOIN #tmpCust161_81_0 t ON a.CustID=t.CustID 
+		WHERE a.bettype BETWEEN 81 AND 90
 							
 		TRUNCATE TABLE #tmpCust161_81_0
 
