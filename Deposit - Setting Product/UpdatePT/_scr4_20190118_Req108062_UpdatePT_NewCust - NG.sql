@@ -48,14 +48,14 @@ BEGIN
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK)		
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
 		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK)
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)  AND ci.custid>@maxcustid 
 		AND roleid IN(2,3,4)	
 		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)

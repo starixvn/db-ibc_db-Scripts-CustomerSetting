@@ -52,7 +52,7 @@ BEGIN
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT DISTINCT ci.CustID
-	FROM custInfo ci WITH(NOLOCK)	
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)	
 		INNER JOIN Dep_CustPTSetting_Member BA WITH(NOLOCK) ON ci.custid=BA.custid		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
@@ -60,7 +60,7 @@ BEGIN
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK)
+	FROM custInfo ci WITH(NOLOCK,INDEX=IX_RoleID)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid IN(2,3,4)		
 		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
