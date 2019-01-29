@@ -8,7 +8,7 @@
 UPDATE c
 SET c.IsVIP=0,c.Ignored=1
 FROM crmCustomer c WITH(ROWLOCK,UPDLOCK)
-WHERE UserName IN('et888','THAUS','Supertest16') OR CustID=-5634
+WHERE UserName IN('et888','THAUS','Supertest16','ML') OR CustID=-5634
 
 
 UPDATE c
