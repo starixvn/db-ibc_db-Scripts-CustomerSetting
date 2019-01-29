@@ -12,7 +12,7 @@ BEGIN
 	SET NOCOUNT ON	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSetting3rd') = 0 RETURN		
-
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 
 	DECLARE @PT SMALLMONEY	
 	SELECT @PT=0.88
@@ -40,25 +40,50 @@ BEGIN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpCustUpdate		(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
-	CREATE TABLE #Dummy (CustID INT PRIMARY KEY)
-	INSERT INTO #Dummy(CustID)
-	SELECT c.CustID 
-	FROM Customer c WITH(NOLOCK) 		
-	WHERE c.srecommend IN(SELECT custid FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	
+	CREATE TABLE #DummySMA (CustID INT PRIMARY KEY)
+	CREATE TABLE #DummyMember (CustID INT PRIMARY KEY)
+
+	DECLARE @tmpDumMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
+
+	INSERT INTO @tmpDumMaster(custid, username)
+	SELECT c.CustID, fc.username
+	FROM Customer c WITH(NOLOCK) 
+	 CROSS APPLY (
+	  SELECT TOP 1 custid, username
+	  FROM dbo.Customer cc WITH(NOLOCK)
+	  WHERE c.custid = cc.custid 
+	 ) fc
+	WHERE c.srecommend IN(SELECT custid FROM #supers)
+	 AND c.roleid =3
+
+	INSERT INTO #DummyMember(CustID)
+	SELECT c.custid
+	FROM @tmpDumMaster d
+	 INNER JOIN dbo.Customer c 
+	  ON d.custid = c.mrecommend AND c.roleid = 1
+	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
+
+	INSERT INTO #DummySMA(CustID)
+	SELECT c.custid
+	FROM @tmpDumMaster d
+	 INNER JOIN dbo.Customer c 
+	  ON d.custid = c.mrecommend AND c.roleid IN(2,3)
+	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 	
 	INSERT INTO #tmpCust(CustID)
 	SELECT ci.CustID
 	FROM custInfo ci WITH(NOLOCK)		
 	WHERE ci.srecommend IN(SELECT custid FROM #supers) AND ci.custid>@maxcustid 
 		AND roleid = 1 		
-		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
+		AND ci.CustID NOT IN(SELECT Custid FROM #DummyMember)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)  AND ci.custid>@maxcustid 
 		AND roleid IN(2,3,4)	
-		AND ci.mrecommend NOT IN(SELECT Custid FROM #Dummy)
+		AND ci.CustID NOT IN(SELECT Custid FROM #DummySMA)
 
 	--AGENT LEVEL	
 	UPDATE a
