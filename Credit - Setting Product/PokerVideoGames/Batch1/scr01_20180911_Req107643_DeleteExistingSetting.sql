@@ -18,7 +18,11 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN			
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN	
+	IF dbo.f_CheckRepTable('site') = 0 RETURN
+	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
+	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
+	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN				
 
 	DECLARE @Sporttype SMALLINT 
 	CREATE TABLE #supers (custid INT)

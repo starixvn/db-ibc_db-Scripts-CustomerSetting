@@ -17,8 +17,11 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDirectAccount') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN		
+	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN		
 
 	DECLARE @ProductID INT = 33, @currency INT,@Sporttype INT = 165,@Bettype INT =1901
 
