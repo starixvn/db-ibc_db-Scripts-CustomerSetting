@@ -61,19 +61,6 @@ CONSTRAINT [PK_CS_CustPTGroupSetting_Member] PRIMARY KEY CLUSTERED
 ) ON [CS_CustPTSetting_Member_table]
 GO
 
-CREATE TABLE CS_CustPTSetting_Member  
-(
-	CustId		INT NOT NULL,
-	SuperPT		BINARY(10) NOT NULL,
-	MasterPT	BINARY(10) NOT NULL,
-	AgentPT		BINARY(10) NOT NULL,
-CONSTRAINT [PK_CS_CustPTSetting_Member] PRIMARY KEY CLUSTERED 
-(
-	CustId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Member_table]
-) ON [CS_CustPTSetting_Member_table]
-GO
-
 CREATE TABLE CS_CustBetSetting_Agent  
 (
 	CustId			INT NOT NULL,
