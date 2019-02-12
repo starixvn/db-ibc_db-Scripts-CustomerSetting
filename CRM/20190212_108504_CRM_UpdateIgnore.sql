@@ -10,3 +10,7 @@ SET c.IsVIP=0
 FROM crmCustomer c WITH(ROWLOCK,UPDLOCK)
 WHERE UserName IN('D-KKT') 
 
+UPDATE c
+SET c.Ignored=1
+FROM crmCustomer c WITH(ROWLOCK,UPDLOCK)
+WHERE UserName IN('MBET','TMARTIN') 
