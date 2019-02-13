@@ -68,7 +68,7 @@ CREATE TABLE CS_CustBetSetting_Agent
 	BetType			SMALLINT NOT NULL,
 	IsLive			BIT NOT NULL,
 	MaxBet			MONEY,
-	MaxPerMatch		MONEY,
+	MaxPerEvent		MONEY,
 CONSTRAINT [PK_CS_CustBetSetting_Agent] PRIMARY KEY CLUSTERED 
 (
 	CustId ASC,
@@ -86,7 +86,7 @@ CREATE TABLE CS_CustBetSetting_Member
 	BetType			SMALLINT NOT NULL,
 	IsLive			BIT NOT NULL,
 	MaxBet			MONEY,
-	MaxPerMatch		MONEY,
+	MaxPerEvent		MONEY,
 CONSTRAINT [PK_CS_CustBetSetting_Member] PRIMARY KEY CLUSTERED 
 (
 	CustId ASC,
@@ -105,7 +105,7 @@ CREATE TABLE CS_ProductBetSetting
 	Currency		TINYINT,
 	MinBet			MONEY,
 	MaxBet			MONEY,
-	MaxPerMatch		MONEY,
+	MaxPerEvent		MONEY,
 CONSTRAINT [PK_CS_ProductBetSetting] PRIMARY KEY CLUSTERED 
 (
 	SportType ASC,
