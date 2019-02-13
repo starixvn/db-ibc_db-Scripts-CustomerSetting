@@ -18,8 +18,8 @@ DECLARE @SettingStatus TINYINT,
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 33
 SELECT @IsSync = 1
-SELECT @IsHidden = 0
-SELECT @IsDisabled = 0
+SELECT @IsHidden = 1
+SELECT @IsDisabled = 1
 
 
 INSERT INTO	dbo.ProductSettingDetail
