@@ -44,47 +44,18 @@ CREATE TABLE #SMATemp
 	Currency INT
 )
 
-CREATE TABLE #DummySMA (CustID INT PRIMARY KEY)
-CREATE TABLE #DummyMember (CustID INT PRIMARY KEY)
-
-DECLARE @tmpDumMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
-
-INSERT INTO @tmpDumMaster(custid, username)
-SELECT c.CustID, fc.username
-FROM Customer c WITH(NOLOCK) 
-	CROSS APPLY (
-	SELECT TOP 1 custid, username
-	FROM dbo.Customer cc WITH(NOLOCK)
-	WHERE c.custid = cc.custid 
-	) fc
-WHERE c.srecommend IN(SELECT custid FROM #supers)
-	AND c.roleid =3
-
-INSERT INTO #DummyMember(CustID)
-SELECT c.custid
-FROM @tmpDumMaster d
-	INNER JOIN dbo.Customer c 
-	ON d.custid = c.mrecommend AND c.roleid = 1
-WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
-
-INSERT INTO #DummySMA(CustID)
-SELECT c.custid
-FROM @tmpDumMaster d
-	INNER JOIN dbo.Customer c 
-	ON d.custid = c.mrecommend AND c.roleid IN(2,3)
-WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 		
 INSERT INTO #MemberTemp (CustID,Currency)
 SELECT custid,currency
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
-	AND custid NOT IN(SELECT custid FROM #DummyMember)
+
 	
 INSERT INTO #SMATemp (CustID,Currency)
 SELECT custid,currency
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
-	AND custid NOT IN(SELECT custid FROM #DummySMA)
+
 
 	----------------------------------------Betlimit Setting-------------------------------------------------		
 --Agent Level
