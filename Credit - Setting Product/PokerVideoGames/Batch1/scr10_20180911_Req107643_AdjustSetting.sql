@@ -47,64 +47,17 @@ CREATE TABLE #SMATemp
 )
 CREATE NONCLUSTERED INDEX IX_#MemberTemp_ID ON #MemberTemp(ID)
 CREATE NONCLUSTERED INDEX IX_SMATemp_ID ON #SMATemp(ID)
-
-SELECT DISTINCT custid INTO #ListCust
-FROM DBLOG.bodb_CustomerLog.dbo.UserLog_RunSP  WITH (NOLOCK)
-WHERE ActionID IN (391) AND logdate > @ReleaseDate
-	
-IF @@ROWCOUNT = 0
-	RETURN
-
-INSERT INTO #MemberTemp (CustID, currency)
-SELECT c.custid, currency
-FROM Custinfo c WITH (NOLOCK)
-	INNER JOIN #ListCust l ON l.custid = c.custid
-WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1
-	
-INSERT INTO #SMATemp (CustID, currency)
-SELECT c.custid, currency
-FROM Custinfo c WITH (NOLOCK)
-	INNER JOIN #ListCust l ON l.custid = c.custid
-WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1
-
 --------------------------------------Win Loss Limit-------------------------------------------------		
-SELECT @MinID = 1, @MaxID = @Batch
-WHILE (1=1)
-BEGIN
-	--Agent Level
-	UPDATE cs
-	SET cs.StakeLevelList=CAST (ls.StakeLevelID AS VARCHAR(50))
-	FROM CustStakeLevel_Agent cs
-		INNER JOIN #SMATemp ci ON ci.CustID = cs.CustId
-		INNER JOIN dbo.StakeLevel ls WITH(NOLOCK) ON ci.currency = ls.ExchangeId AND  GameGroupID=9 AND GameTypeID=1901	
-	WHERE ci.ID BETWEEN @MinID AND @MaxID AND CAST (ls.StakeLevelID AS VARCHAR(50))<>cs.StakeLevelList
 
-	IF @@ROWCOUNT = 0 BREAK
-
-	SELECT @MinID = @MaxID + 1
-	SELECT @MaxID = @MaxID + @Batch
-END
-
-SELECT @MinID = 1, @MaxID = @Batch
-WHILE (1=1)
-BEGIN
-	--Member Level
-	UPDATE cs
-	SET  cs.StakeLevelList=CAST (ls.StakeLevelID AS VARCHAR(50))
-	FROM dbo.CustStakeLevel_Member cs
-		INNER JOIN #MemberTemp ci ON ci.CustID = cs.CustId
-		INNER JOIN dbo.StakeLevel ls WITH(NOLOCK) ON ci.currency = ls.ExchangeId AND  GameGroupID=9 AND GameTypeID=1901	
-	WHERE ci.ID BETWEEN @MinID AND @MaxID AND CAST (ls.StakeLevelID AS VARCHAR(50))<>cs.StakeLevelList		
-
-	IF @@ROWCOUNT = 0 BREAK
-
-	SELECT @MinID = @MaxID + 1
-	SELECT @MaxID = @MaxID + @Batch
-END
 
 SELECT DISTINCT custid INTO #ListCustStatus
 FROM DBLOG.bodb_CustomerLog.dbo.UserLog_RunSP  WITH (NOLOCK)
-WHERE ActionID BETWEEN 60500 AND 75579  AND logdate > @ReleaseDate
+WHERE (ActionID BETWEEN 60500 AND 60519 
+	OR ActionID BETWEEN 65500 AND 65539 
+	OR ActionID BETWEEN 70500 AND 70559 
+	OR ActionID BETWEEN 75500 AND 75579 
+	)
+AND logdate > @ReleaseDate
 
 DECLARE @Sporttype INT
 SELECT @Sporttype=165	
