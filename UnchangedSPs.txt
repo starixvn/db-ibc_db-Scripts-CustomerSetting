@@ -1,0 +1,1 @@
+CheckSettingWeekly\CheckStatus\DBA_CheckStatus_Deposit_NonDCS.sql
