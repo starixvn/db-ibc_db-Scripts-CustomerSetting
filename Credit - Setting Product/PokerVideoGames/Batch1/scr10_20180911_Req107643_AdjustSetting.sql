@@ -50,32 +50,34 @@ CREATE TABLE #tempUpdate (CustID INT PRIMARY KEY,DisableVideoGame BIT DEFAULT(1)
 INSERT INTO #temp(CustID,DisableVideoGame)
 SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
+	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.custid
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
+	AND c.Enabled=1
 
 UNION
-SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.recommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
-	AND c.roleid=1	
+	AND c.roleid=1	AND c.Enabled=1
 
 UNION
-SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.mrecommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
-	AND c.roleid IN(1,2)
+	AND c.roleid IN(1,2) AND c.Enabled=1
 
 UNION
-SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.srecommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
-	AND c.roleid IN(1,2,3)
+	AND c.roleid IN(1,2,3) AND c.Enabled=1
 
 WHILE EXISTS(SELECT 1 FROM #temp)
 BEGIN
