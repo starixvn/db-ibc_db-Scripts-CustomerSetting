@@ -28,36 +28,15 @@ SELECT custid
 FROM CustInfo ci WITH (NOLOCK)
 WHERE custid IN (16)
 
-DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
-
-DECLARE  @currency INT
-
-CREATE TABLE #MemberTemp
-(
-	ID INT IDENTITY(1,1),
-	CustID INT PRIMARY KEY CLUSTERED,
-	currency INT
-)
-
-CREATE TABLE #SMATemp
-(
-	ID INT IDENTITY(1,1),
-	CustID INT PRIMARY KEY CLUSTERED,	
-	currency INT
-)
-CREATE NONCLUSTERED INDEX IX_#MemberTemp_ID ON #MemberTemp(ID)
-CREATE NONCLUSTERED INDEX IX_SMATemp_ID ON #SMATemp(ID)
 --------------------------------------Win Loss Limit-------------------------------------------------		
 
 
 SELECT DISTINCT custid INTO #ListCustStatus
 FROM DBLOG.bodb_CustomerLog.dbo.UserLog_RunSP  WITH (NOLOCK)
-WHERE (ActionID BETWEEN 60500 AND 60519 
-	OR ActionID BETWEEN 65500 AND 65539 
-	OR ActionID BETWEEN 70500 AND 70559 
-	OR ActionID BETWEEN 75500 AND 75579 
-	)
+WHERE ActionID IN(60516,60517,65532,65533,65534,65535,70548,70549,70550,70551,70552,70553,75564,75565,75566,75567,75568,75569,75570,75571)
 AND logdate > @ReleaseDate
+IF @@ROWCOUNT=0
+	RETURN
 
 DECLARE @Sporttype INT
 SELECT @Sporttype=165	
@@ -73,7 +52,31 @@ SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
-	
+
+UNION
+SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+FROM #ListCustStatus CI WITH (NOLOCK) 
+	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.recommend
+	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
+	AND c.roleid=1	
+
+UNION
+SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+FROM #ListCustStatus CI WITH (NOLOCK) 
+	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.mrecommend
+	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
+	AND c.roleid IN(1,2)
+
+UNION
+SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
+FROM #ListCustStatus CI WITH (NOLOCK) 
+	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.srecommend
+	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
+	AND c.roleid IN(1,2,3)
+
 WHILE EXISTS(SELECT 1 FROM #temp)
 BEGIN
 	DELETE TOP (3000) #temp OUTPUT DELETED.* INTO #tempUpdate
@@ -89,3 +92,8 @@ BEGIN
 
 	TRUNCATE TABLE #tempUpdate
 END
+
+DROP TABLE #supers
+DROP TABLE #temp
+DROP TABLE #tempUpdate
+DROP TABLE #ListCustStatus
