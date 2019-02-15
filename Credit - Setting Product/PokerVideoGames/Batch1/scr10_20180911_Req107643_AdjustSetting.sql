@@ -87,7 +87,7 @@ BEGIN
 		BREAK		
 	UPDATE cs
 	SET								
-			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+			
 			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,DisableVideoGame)
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tempUpdate CI WITH (NOLOCK) ON cs.CustID = ci.CustID
