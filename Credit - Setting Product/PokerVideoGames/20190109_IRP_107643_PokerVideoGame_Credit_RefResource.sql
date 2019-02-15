@@ -1,7 +1,7 @@
 /*
 	Created: Winnie
 	Task: Copy Setting for newly created customer
-	DB: DBTXN/bodb02
+	DB: DBPRO/bodb02
 	Date: 20190110
 */ 
 USE [bodb02]
