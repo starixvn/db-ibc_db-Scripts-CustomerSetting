@@ -52,6 +52,7 @@ SELECT ci.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.custid
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON ci.custid=s.CustID
+	INNER JOIN #supers Su ON c.srecommend=su.Custid
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
 	AND c.Enabled=1
 
@@ -60,6 +61,7 @@ SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.recommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+	INNER JOIN #supers Su ON c.srecommend=su.Custid
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
 	AND c.roleid=1	AND c.Enabled=1
 
@@ -68,6 +70,7 @@ SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.mrecommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+	INNER JOIN #supers Su ON c.srecommend=su.Custid
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
 	AND c.roleid IN(1,2) AND c.Enabled=1
 
@@ -76,6 +79,7 @@ SELECT c.custid,dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)
 FROM #ListCustStatus CI WITH (NOLOCK) 
 	INNER JOIN custInfo c WITH(NOLOCK)  ON ci.Custid=c.srecommend
 	INNER JOIN CustProductStatus s WITH(NOLOCK) ON c.custid=s.CustID
+	INNER JOIN #supers Su ON c.srecommend=su.Custid
 WHERE  dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder1402)<>dbo.f_GetProductStatus(s.bitmapIsDisabled,@BitOrder)
 	AND c.roleid IN(1,2,3) AND c.Enabled=1
 
