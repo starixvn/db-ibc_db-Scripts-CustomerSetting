@@ -40,7 +40,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.site IN ('BEST-ODDS')
-		AND ci.currency = 20
+		
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Agent

@@ -80,7 +80,7 @@ WHERE c.roleid = 4
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0
  AND c.site IN ('BEST-ODDS')
- AND c.currency = 20
+
  AND c.custid <= @max_custid
 
 -- For deployer info
@@ -134,7 +134,7 @@ WHERE c.roleid = 4
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0
  AND c.site IN ('BEST-ODDS')
- AND c.currency = 20
+
  AND c.custid <= @max_custid
 
 -- For deployer info
