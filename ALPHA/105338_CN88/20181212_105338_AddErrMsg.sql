@@ -10,7 +10,7 @@ GO
 DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
 INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
-SELECT	11, 'Commission is out of range.', 1, 1 UNION ALL
+SELECT	11, 'Please refresh the page and try again. Commission is out of range.', 1, 1 UNION ALL
 
 SELECT	10040, 'Wrong Max per Bet/ Max per Event.', 2, 1 UNION ALL
 SELECT	10041, 'Max per Bet must be less than Max per Event.', 2, 1 UNION ALL
