@@ -8,7 +8,7 @@ USE [bodb_CRM]
 GO
 
 CREATE TABLE #temp(
-	[custid] [varchar](50) NULL,
+	[custid] INT,
 	[username] [varchar](50) NULL
 ) 
 INSERT #temp ([custid], [username]) VALUES (N'3352151', N'HPK')
