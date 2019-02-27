@@ -208,7 +208,7 @@ GO
 UPDATE c
 	SET c.Ignored=1
 FROM #temp t
-INNER JOIN crmCustomer c WITH(NOLOCK) ON t.CustID=c.CustID
+INNER JOIN crmCustomer c WITH(ROWLOCK,UPDLOCK) ON t.CustID=c.CustID
 
 DELETE t
 FROM #temp t
@@ -243,7 +243,7 @@ DECLARE @Site					INT  = NULL,
 		@Pic2Name				NVARCHAR(200)='',
 		@Pic3Name				NVARCHAR(200)='',
 		@Pic4Name				NVARCHAR(200)='',
-		@UserID					INT = 15954668,
+		@UserID					INT = 24103343,
 		@IP						VARCHAR(15) = '125.227.140.97'
 
 SELECT ci.custid, ci.username, ci.roleid, 0 AS IsFinished
@@ -342,7 +342,7 @@ END
 UPDATE c
 	SET c.Ignored=1
 FROM #temp t
-INNER JOIN crmCustomer c WITH(NOLOCK) ON t.CustID=c.CustID
+INNER JOIN crmCustomer c WITH(ROWLOCK,UPDLOCK) ON t.CustID=c.CustID
 
 DROP TABLE #temp
 DROP TABLE #CustListImport
