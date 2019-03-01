@@ -7,9 +7,12 @@
 USE [CustDB]
 GO
 
-ALTER TABLE ProductLaunchedSiteCurrency ADD BetType SMALLINT NOT NULL DEFAULT(0)
-ALTER TABLE ProductLaunchedSiteCurrency ADD LaunchedLevel TINYINT NOT NULL DEFAULT(0)
+ALTER TABLE ProductLaunchedSiteCurrency ADD BetType SMALLINT NOT NULL 
+ALTER TABLE ProductLaunchedSiteCurrency ADD LaunchedLevel TINYINT NOT NULL
 
+
+ALTER TABLE ProductLaunchedSiteCurrency ADD  CONSTRAINT [DF_ProductLaunchedSiteCurrency_BetType]  DEFAULT ((0)) FOR [BetType]
+ALTER TABLE ProductLaunchedSiteCurrency ADD  CONSTRAINT [DF_ProductLaunchedSiteCurrency_LaunchedLevel]  DEFAULT ((0)) FOR [LaunchedLevel]
 
 /****** Object:  Index [PK_ProductLaunchedSiteCurrency]    Script Date: 2/21/2019 2:17:21 PM ******/
 ALTER TABLE [dbo].[ProductLaunchedSiteCurrency] DROP CONSTRAINT [PK_ProductLaunchedSiteCurrency]
