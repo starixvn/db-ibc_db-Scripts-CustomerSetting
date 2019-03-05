@@ -7,9 +7,17 @@
 USE [CustDB]
 GO
 
-ALTER TABLE ProductLaunchedSiteCurrency ADD BetType SMALLINT NOT NULL 
-ALTER TABLE ProductLaunchedSiteCurrency ADD LaunchedLevel TINYINT NOT NULL
+ALTER TABLE ProductLaunchedSiteCurrency ADD BetType SMALLINT  NULL 
+ALTER TABLE ProductLaunchedSiteCurrency ADD LaunchedLevel TINYINT  NULL
 
+UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
+	SET BetType=0
+
+UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
+	SET LaunchedLevel=0
+
+ALTER TABLE ProductLaunchedSiteCurrency ALTER COLUMN BetType SMALLINT NOT NULL 
+ALTER TABLE ProductLaunchedSiteCurrency ALTER COLUMN LaunchedLevel SMALLINT NOT NULL 
 
 ALTER TABLE ProductLaunchedSiteCurrency ADD  CONSTRAINT [DF_ProductLaunchedSiteCurrency_BetType]  DEFAULT ((0)) FOR [BetType]
 ALTER TABLE ProductLaunchedSiteCurrency ADD  CONSTRAINT [DF_ProductLaunchedSiteCurrency_LaunchedLevel]  DEFAULT ((0)) FOR [LaunchedLevel]
