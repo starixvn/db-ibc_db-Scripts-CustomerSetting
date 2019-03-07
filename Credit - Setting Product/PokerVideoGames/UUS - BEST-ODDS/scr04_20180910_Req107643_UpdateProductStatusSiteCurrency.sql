@@ -9,6 +9,6 @@ DECLARE @Sporttype INT
 SELECT @Sporttype = 165
 
 INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
-SELECT @Sporttype, 1901, siteid, 0, 0, 0, 1
+SELECT @Sporttype, 1901, siteid, 20, 0, 0, 1
 FROM Site WITH (NOLOCK)	
 WHERE site IN ('BEST-ODDS')	
