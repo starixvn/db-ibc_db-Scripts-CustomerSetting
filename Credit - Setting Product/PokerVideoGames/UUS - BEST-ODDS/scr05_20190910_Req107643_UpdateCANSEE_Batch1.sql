@@ -23,5 +23,7 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.siteid IN (SELECT siteid FROM #OfferedSites)
 
-
+UPDATE ProductLaunchedSiteCurrency
+	SET bettype=1901,LaunchedLevel=0
+WHERE SportType=165
 
