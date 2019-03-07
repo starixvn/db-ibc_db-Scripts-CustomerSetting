@@ -17,8 +17,8 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('789y')
 
-INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, c.Currency AS Currency, s.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest
+INSERT INTO ProductLaunchedSiteCurrency (SportType,BetType, Currency, SiteID, IsLaunched, IsTest,LaunchedLevel)
+SELECT @Sporttype AS SportType,1901, c.Currency AS Currency, s.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest,0
 FROM dbo.Site s WITH(NOLOCK)
 	CROSS APPLY (SELECT 16 AS Currency UNION ALL SELECT 64) c
 WHERE s.isActive = 1 AND s.isLicensee = 0
