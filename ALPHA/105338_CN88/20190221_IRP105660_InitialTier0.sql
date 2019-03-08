@@ -28,7 +28,7 @@ DECLARE @firstname NVARCHAR(50),
 	@recommend INT = 0,
 	@ugroup VARCHAR(10) ='',
 	@custid INT,
-	@isForcedChangeSecurityCode BIT = 0,
+	@isForcedChangeSecurityCode BIT = 1,
 	@suspended BIT = 0,
 	
 	@Danger TINYINT = 0,
