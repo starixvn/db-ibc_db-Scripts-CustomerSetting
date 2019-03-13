@@ -9,7 +9,7 @@ USE [CustDB]
 GO
 
 DELETE FROM ProductLaunchedSiteCurrency
-WHERE SiteID NOT IN(SELECT siteid FROM Site WHERE site IN('INDO', 'KORIBC','755555' ,'789y'))
+WHERE SiteID NOT IN(SELECT siteid FROM Site WITH(NOLOCK) WHERE site IN('INDO', 'KORIBC','755555' ,'789y'))
 	AND SportType=1 AND BetType=38
 
 INSERT INTO ProductLaunchedSiteCurrency ([SiteID], [Currency], [SportType],BetType, [IsLaunched], [IsTest],LaunchedLevel)
