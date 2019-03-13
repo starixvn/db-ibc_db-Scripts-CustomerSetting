@@ -10,7 +10,7 @@ USE CustDB
 GO
 
 DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxDiscount DECIMAL(9,8), @MaxPT TINYINT, @IntervalValuePT DECIMAL(19,8), @IntervalValueComm DECIMAL(19,8)
-SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
+SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 1
 SELECT @MaxDiscount = 0.01
 SELECT @MaxPT = 90
@@ -21,25 +21,30 @@ INSERT INTO	dbo.CS_ProductSettingDetail
 (ProductSettingId, SettingType, SportType, BetType, IsLive, ProductId, MaxPT, MaxDiscount, IntervalValue, SettingLevel, DisplayOrder, ChildOrder, SettingStatus, LayoutType)
 VALUES	
 --PT Setting																																				
-(1				 , 1			  ,	1    , 1      , 0     , @ProductID, @MaxPT, NULL     , 1                   , 1           , 1           , 1         , @SettingStatus, NULL),
+(1				 , 1			  ,	1    , 1      , 0     , @ProductID, @MaxPT, NULL     , 1                   , 2           , 1           , 1         , @SettingStatus, NULL),
+(2				 , 1			  ,	9998 , 81     , 0     , @ProductID, @MaxPT, NULL     , 1                   , 2           , 1           , 2         , 1, NULL),
 --Comm	
-(2				 , 2			  ,	1    , 1      , 0     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 1         , @SettingStatus, 1),
-(3				 , 2			  ,	1    , 1      , 1     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 2         , @SettingStatus, 1),
-(4				 , 2			  ,	1    , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 3         , @SettingStatus, 2),
-(5				 , 2			  ,	1    , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 4         , @SettingStatus, 2),
-(6				 , 2			  ,	1    , 9999   , 1     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 5         , @SettingStatus, 2),
-(7				 , 2			  ,	2    , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 6         , @SettingStatus, 1),
-(8				 , 2			  ,	2    , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 7         , @SettingStatus, 1),
-(9				 , 2			  ,	2    , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 8         , @SettingStatus, 2),
-(10				 , 2			  ,	2    , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 9         , @SettingStatus, 2),
-(11				 , 2			  ,	99   , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 10        , @SettingStatus, 1),
-(12				 , 2			  ,	99   , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 11        , @SettingStatus, 1),
-(13				 , 2			  ,	99   , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 12        , @SettingStatus, 2),
-(14				 , 2			  ,	99   , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 13        , @SettingStatus, 2),	
-(15				 , 2			  ,	9999 , 10     , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 14        , @SettingStatus, 2)	
+(3				 , 2			  ,	1    , 1      , 0     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 1         , @SettingStatus, 1),
+(4				 , 2			  ,	1    , 1      , 1     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 2         , @SettingStatus, 1),
+(5				 , 2			  ,	1    , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 3         , @SettingStatus, 2),
+(6				 , 2			  ,	1    , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 4         , @SettingStatus, 2),
+(7				 , 2			  ,	1    , 9999   , 1     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 5         , @SettingStatus, 2),
+(8				 , 2			  ,	2    , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 6         , @SettingStatus, 1),
+(9				 , 2			  ,	2    , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 7         , @SettingStatus, 1),
+(10				 , 2			  ,	2    , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 8         , @SettingStatus, 2),
+(11				 , 2			  ,	2    , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 9         , @SettingStatus, 2),
+(12				 , 2			  ,	99   , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 10        , @SettingStatus, 1),
+(13				 , 2			  ,	99   , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 11        , @SettingStatus, 1),
+(14				 , 2			  ,	99   , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 12        , @SettingStatus, 2),
+(15				 , 2			  ,	99   , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 13        , @SettingStatus, 2),	
+(16				 , 2			  ,	9999 , 10     , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 14        , @SettingStatus, 2),	
+(17				 , 2			  ,	9998 , 81     , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 15        , 1, 2),
+(18				 , 2			  ,	9998 , 1501   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 16        , 1, 2),
+(19				 , 2			  ,	9998 , 1201   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 17        , 1, 2)
 
 INSERT INTO CS_ByteSeq (Type, SportType, BetType, IsLive, GroupId, ByteOrder)
 SELECT 'PTSetting', 1, 1, 0, 0, 1 UNION ALL 
+SELECT 'PTSetting', 9998, 81, 0, 0, 2 UNION ALL 
 SELECT 'DiscountAgent', 1, 1, 0, 1, 1 UNION ALL 
 SELECT 'DiscountAgent', 1, 1, 0, 2, 2 UNION ALL 
 SELECT 'DiscountAgent', 1, 1, 0, 3, 3 UNION ALL 
@@ -174,3 +179,5 @@ WHERE settingType = 2 AND e.exchangeid = 81
 --FROM dbo.CS_ProductBetSetting ps 
 --	INNER JOIN CS_ProductSettingDetail pd ON pd.BetType = ps.BetType AND pd.IsLive = ps.IsLive AND pd.SportType = ps.SportType
 --WHERE SettingType = 2
+
+--DELETE FROM CS_ProductSettingDetail

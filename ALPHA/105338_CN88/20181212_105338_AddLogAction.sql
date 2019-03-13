@@ -48,6 +48,7 @@ SELECT	160004, 'Update general information for SMA', 'CS_CustSetting_GeneralInfo
 SELECT	160005, 'Update general information for Master Agent', 'CS_CustSetting_GeneralInfo_Upd', 0, 4, 3 UNION ALL
 SELECT	160006, 'Update general information for Agent', 'CS_CustSetting_GeneralInfo_Upd', 0, 4, 2 UNION ALL
 SELECT	160007, 'Update general information for Member', 'CS_CustSetting_GeneralInfo_Upd', 0, 4, 1 UNION ALL
+SELECT	160008, 'Add Primary Extra PT Group', 'CS_CustomerIns_Com', 1, 4, NULL UNION ALL
 
 SELECT	165000, 'Create Account Status for Master Agent', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
 SELECT	165001, 'Create Account Status for Agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL

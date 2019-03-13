@@ -32,7 +32,8 @@ SELECT	30009, 'SMA Min Possess must be less than or equal to SMA Max Possess.', 
 
 SELECT	40041, 'Invalid Headline.', 5, 1 UNION ALL
 
-SELECT	70024, 'Insufficient credit.', 8, 1 
+SELECT	70024, 'Insufficient credit.', 8, 1 UNION ALL
+SELECT	70025, 'Credit must be positive.', 8, 1 
 
 DELETE m
 FROM dbo.MsgError m
