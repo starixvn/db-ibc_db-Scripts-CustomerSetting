@@ -22,7 +22,7 @@ INSERT INTO	dbo.CS_ProductSettingDetail
 VALUES	
 --PT Setting																																				
 (1				 , 1			  ,	1    , 1      , 0     , @ProductID, @MaxPT, NULL     , 1                   , 2           , 1           , 1         , @SettingStatus, NULL),
-(2				 , 1			  ,	9998 , 81     , 0     , @ProductID, @MaxPT, NULL     , 1                   , 2           , 1           , 2         , 1, NULL),
+(2				 , 1			  ,	9998 , 81     , 0     , @ProductID, @MaxPT, NULL     , 1                   , 2           , 1           , 2         , @SettingStatus, NULL),
 --Comm	
 (3				 , 2			  ,	1    , 1      , 0     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 1         , @SettingStatus, 1),
 (4				 , 2			  ,	1    , 1      , 1     , @ProductID, NULL, NULL       ,@IntervalValueComm   , 4           , 2           , 2         , @SettingStatus, 1),
@@ -38,9 +38,9 @@ VALUES
 (14				 , 2			  ,	99   , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 12        , @SettingStatus, 2),
 (15				 , 2			  ,	99   , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 13        , @SettingStatus, 2),	
 (16				 , 2			  ,	9999 , 10     , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 14        , @SettingStatus, 2),	
-(17				 , 2			  ,	9998 , 81     , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 15        , 1, 2),
-(18				 , 2			  ,	9998 , 1501   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 16        , 1, 2),
-(19				 , 2			  ,	9998 , 1201   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 17        , 1, 2)
+(17				 , 2			  ,	9998 , 81     , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 15        , @SettingStatus, 2),
+(18				 , 2			  ,	9998 , 1501   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 16        , @SettingStatus, 2),
+(19				 , 2			  ,	9998 , 1201   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 17        , @SettingStatus, 2)
 
 INSERT INTO CS_ByteSeq (Type, SportType, BetType, IsLive, GroupId, ByteOrder)
 SELECT 'PTSetting', 1, 1, 0, 0, 1 UNION ALL 
