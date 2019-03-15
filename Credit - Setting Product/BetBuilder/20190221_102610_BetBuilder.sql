@@ -5,7 +5,7 @@
 	DB: DBCust/CustDB
 */
 
-
+DELETE FROM [VendorGlobalSetting] WHERE [VendorId]=34 AND [VName]='3rdPartyFee' AND [bettype]=38
 
 INSERT INTO [CustDB].[dbo].[VendorGlobalSetting]
            ([VendorId]
@@ -16,7 +16,7 @@ INSERT INTO [CustDB].[dbo].[VendorGlobalSetting]
      VALUES
            (34
            ,'3rdPartyFee'
-           ,0.2
+           ,0.04
            ,1
            ,38)
 GO
