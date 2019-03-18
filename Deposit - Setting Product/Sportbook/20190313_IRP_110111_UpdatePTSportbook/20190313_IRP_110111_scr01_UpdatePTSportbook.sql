@@ -18,25 +18,25 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at DBCUST only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSetting') = 0 RETURN		
 	
-	DECLARE @StartRow INT, @StopRow	INT, @MaxRow INT, @ThresholdSMA INT, @ThresholdMem INT
+	DECLARE @StartRow INT, @StopRow	INT, @MaxRow INT, @ThresholdSMA INT
 				
 	SET @StartRow = 1
-	SET @ThresholdSMA = 3000	
+	SET @ThresholdSMA = 3000
+		
 	--------------------------------------PT Setting-------------------------------------------------		
+	CREATE TABLE #tmpMem		(CustID INT)	
+	CREATE TABLE #tmpSMA		(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT)	
+	CREATE TABLE #tmpCust		(CustID INT PRIMARY KEY)	
 	
-	CREATE TABLE #tmpMem	(CustID INT)	
-	CREATE TABLE #tmpSMA	(ID INT IDENTITY (1,1) PRIMARY KEY,CustID INT ,RoleID INT)	
-	CREATE TABLE #tmpCust	(CustID INT PRIMARY KEY)	
+	CREATE TABLE #DummySMA		(CustID INT PRIMARY KEY)
+	CREATE TABLE #DummyMember	(CustID INT PRIMARY KEY)
+	
+	DECLARE @tmpDummyMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
 
-	
-	CREATE TABLE #DummySMA (CustID INT PRIMARY KEY)
-	CREATE TABLE #DummyMember (CustID INT PRIMARY KEY)
-	
-	DECLARE @tmpDumMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
-
-	INSERT INTO @tmpDumMaster(custid, username)
+	INSERT INTO @tmpDummyMaster(custid, username)
 	SELECT c.CustID, fc.username
 	FROM Customer c WITH(NOLOCK) 
 		CROSS APPLY (
@@ -48,13 +48,13 @@ BEGIN
 
 	INSERT INTO #DummyMember(CustID)
 	SELECT c.custid
-	FROM @tmpDumMaster d
+	FROM @tmpDummyMaster d
 		INNER JOIN dbo.Customer c ON d.custid = c.mrecommend AND c.roleid = 1
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 
 	INSERT INTO #DummySMA(CustID)
 	SELECT c.custid
-	FROM @tmpDumMaster d
+	FROM @tmpDummyMaster d
 	 INNER JOIN dbo.Customer c 
 	  ON d.custid = c.mrecommend AND c.roleid IN(2,3)
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
@@ -65,6 +65,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 	
 		AND ci.custid NOT IN(SELECT Custid FROM #DummyMember)
+		AND ci.custid NOT IN(SELECT Custid FROM dbo.Dep_CustBAActive)
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
@@ -86,22 +87,22 @@ BEGIN
 
 		WHILE (0 = 0)
 		BEGIN			
-			UPDATE a
-			SET a.spositiontaking=@PT,a.mpositiontaking=@PT,a.apositiontaking=@PT
-			FROM Dep_CustSetting a WITH(ROWLOCK)
-				INNER JOIN #tmpSMA t ON a.CustID=t.CustID		
+			UPDATE cs
+			SET cs.spositiontaking=@PT,cs.mpositiontaking=@PT,cs.apositiontaking=@PT
+			FROM Dep_CustSetting cs WITH(ROWLOCK)
+				INNER JOIN #tmpSMA t ON cs.CustID=t.CustID		
 			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=4
 	
-			UPDATE a
-			SET a.mpositiontaking=@PT
-			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
+			UPDATE cs
+			SET cs.mpositiontaking=@PT
+			FROM Dep_CustSetting cs WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #tmpSMA t ON cs.CustID=t.CustID
 			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=3
 		
-			UPDATE a
-			SET a.apositiontaking=@PT
-			FROM Dep_CustSetting3rd a WITH(ROWLOCK,UPDLOCK)
-				INNER JOIN #tmpSMA t ON a.CustID=t.CustID
+			UPDATE cs
+			SET cs.apositiontaking=@PT
+			FROM Dep_CustSetting cs WITH(ROWLOCK,UPDLOCK)
+				INNER JOIN #tmpSMA t ON cs.CustID=t.CustID
 			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=2
 		
 			IF	@StopRow = @MaxRow 
@@ -121,11 +122,10 @@ BEGIN
 	BEGIN
 		DELETE TOP (500) #tmpMem OUTPUT DELETED.* INTO #tmpCust
 
-		UPDATE a
-		SET a.apositiontaking=@PT
-		FROM Dep_CustSetting a WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #tmpCust t ON a.CustID=t.CustID 
-							
+		UPDATE cs
+		SET cs.apositiontaking=@PT
+		FROM Dep_CustSetting cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #tmpCust t ON cs.CustID=t.CustID 			
 		TRUNCATE TABLE #tmpCust
 	END
 END
@@ -142,23 +142,31 @@ CREATE TABLE #supersFinal (ID INT IDENTITY(1,1), custid INT, PT SMALLMONEY, NoDo
 
 DECLARE @max_custid INT, @srecommend INT, @PT SMALLMONEY
 
-SELECT @max_custid = 30000000
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
-SELECT ci.custid, 0.85
+SELECT ci.custid, 
+	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 92.5
+			WHEN cs.site IN ('asiabet88', 'TLC', 'IBO', 'ZT828') THEN 0.91
+			ELSE 0.88 END
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('12Bet','asiabet88','mansion88','alog','spondemo','TLC','SunGame','MayFair','Zzun88','Bodog','Vwin','Macaubet','Aoncash','ITCBet','Athena000','Avia','W88','9bet','3star88','OLE777',
-	'88Macao','Boma365','Salon365','Ae88','Hengcai88','368Cash','Senibet','Happy1668','AG','M8bola','9Club','XTD3','HONBET','Q8bola','BE7','iBET','ISC888','Liga','NBCbet','HonorW','Royal',
-	'DEWA','IBO','Unobet','GamingSoft','Newhonbet','Hecbet','DBP','HL8','Abcasino','TGO','Starnet','365online','Bolanation','KhmerG','Gampag','IONclub','Sun988','Mayayule','HuangMa','Webet138','webet88',
-	'BigGaming','Boying','Brown888','MrCat','CGame','PKbet','VCBA','Taipanbet','FLC','IGPTech','BetStar','TGame','Dawoo','Ty777','Uwoniwin','Sunrise','Swin','UN168','PanguGame','K8VN','ECLBET','GPIGAME','818Bet','SSSSEA',
-	'Heaven','GOAB88','Bobo88','OPEBET','Jinyazhou','Sunriseb2b','Okada','396Club','Mybet88','e8casino','HongChow','TangChao','MAX88','YongBao','Fugui','GMASTER','ALPHA88','Citybk','Tripleone','GWORLD',
-	'ENTAPLAY','MICL','zt828','Aplus','Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET','WINCLUB88','EU88','MARS','Dade','Nbbet',
-	'Gameroom','ANGbet','Hongtu','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66','A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
-	'HCVIP','ig128','AMG','MRCATSB','VN88')
+	AND cs.site IN(	'12Bet','asiabet88','mansion88','alog','spondemo','TLC','SunGame','MayFair','Zzun88','HAIFA','Bodog','Vwin','Macaubet',
+					'Aoncash','ITCBet','Athena000','Avia','W88','9bet','3star88','OLE777','88Macao','Boma365','Salon365','Ae88','Hengcai88',
+					'368Cash','Royal','Senibet','Happy1668','AG','M8bola','KeenOcean','9Club','XTD3','HONBET','Q8bola','BE7','iBET','ISC888',
+					'Liga','NBCbet','HonorW','WeBet168','DEWA','IBO','Unobet','GamingSoft','Newhonbet','Hecbet','DBP','HL8','Abcasino','TGO',
+					'Starnet','365online','NextBet','Bolanation','KhmerG','Gampag','IONclub','Sun988','Mayayule','HuangMa','Webet138','webet88',
+					'BigGaming','Boying','Brown888','MrCat','CGame','PKbet','VCBA','Taipanbet','FLC','IGPTech','BetStar','TGame','Dawoo','Ty777',
+					'IvoryBet','Uwoniwin','Opal88','Sunrise','Swin','UN168','PanguGame','K8VN','ECLBET','GPIGAME','818Bet','SSSSEA',
+					'Heaven','Bobo88','OPEBET','Jinyazhou','Sunriseb2b','Okada','396Club','Mybet88','e8casino','HongChow','TangChao','MAX88',
+					'BBIN2','YongBao','Fugui','GMASTER','ALPHA88','Tripleone','GWORLD','ENTAPLAY','MICL','zt828','9wickets','Aplus',
+					'Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET',
+					'WINCLUB88','MARS','Dade','Nbbet','Gameroom','ANGbet','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66',
+					'A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
+					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton')
 
 INSERT INTO #supersFinal (custid, PT, NoDownline)
 SELECT ci.srecommend, s.PT, COUNT(1)
@@ -205,23 +213,31 @@ CREATE TABLE #supersFinal (ID INT IDENTITY(1,1), custid INT, PT SMALLMONEY, NoDo
 
 DECLARE @max_custid INT, @srecommend INT, @PT SMALLMONEY
 
-SELECT @max_custid = 30000000
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
-SELECT ci.custid, 0.85
+SELECT ci.custid, 
+	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 92.5
+			WHEN cs.site IN ('asiabet88', 'TLC', 'IBO', 'ZT828') THEN 0.91
+			ELSE 0.88 END
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('12Bet','asiabet88','mansion88','alog','spondemo','TLC','SunGame','MayFair','Zzun88','Bodog','Vwin','Macaubet','Aoncash','ITCBet','Athena000','Avia','W88','9bet','3star88','OLE777',
-	'88Macao','Boma365','Salon365','Ae88','Hengcai88','368Cash','Senibet','Happy1668','AG','M8bola','9Club','XTD3','HONBET','Q8bola','BE7','iBET','ISC888','Liga','NBCbet','HonorW','Royal',
-	'DEWA','IBO','Unobet','GamingSoft','Newhonbet','Hecbet','DBP','HL8','Abcasino','TGO','Starnet','365online','Bolanation','KhmerG','Gampag','IONclub','Sun988','Mayayule','HuangMa','Webet138','webet88',
-	'BigGaming','Boying','Brown888','MrCat','CGame','PKbet','VCBA','Taipanbet','FLC','IGPTech','BetStar','TGame','Dawoo','Ty777','Uwoniwin','Sunrise','Swin','UN168','PanguGame','K8VN','ECLBET','GPIGAME','818Bet','SSSSEA',
-	'Heaven','GOAB88','Bobo88','OPEBET','Jinyazhou','Sunriseb2b','Okada','396Club','Mybet88','e8casino','HongChow','TangChao','MAX88','YongBao','Fugui','GMASTER','ALPHA88','Citybk','Tripleone','GWORLD',
-	'ENTAPLAY','MICL','zt828','Aplus','Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET','WINCLUB88','EU88','MARS','Dade','Nbbet',
-	'Gameroom','ANGbet','Hongtu','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66','A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
-	'HCVIP','ig128','AMG','MRCATSB','VN88')
+	AND cs.site IN(	'12Bet','asiabet88','mansion88','alog','spondemo','TLC','SunGame','MayFair','Zzun88','HAIFA','Bodog','Vwin','Macaubet',
+					'Aoncash','ITCBet','Athena000','Avia','W88','9bet','3star88','OLE777','88Macao','Boma365','Salon365','Ae88','Hengcai88',
+					'368Cash','Royal','Senibet','Happy1668','AG','M8bola','KeenOcean','9Club','XTD3','HONBET','Q8bola','BE7','iBET','ISC888',
+					'Liga','NBCbet','HonorW','WeBet168','DEWA','IBO','Unobet','GamingSoft','Newhonbet','Hecbet','DBP','HL8','Abcasino','TGO',
+					'Starnet','365online','NextBet','Bolanation','KhmerG','Gampag','IONclub','Sun988','Mayayule','HuangMa','Webet138','webet88',
+					'BigGaming','Boying','Brown888','MrCat','CGame','PKbet','VCBA','Taipanbet','FLC','IGPTech','BetStar','TGame','Dawoo','Ty777',
+					'IvoryBet','Uwoniwin','Opal88','Sunrise','Swin','UN168','PanguGame','K8VN','ECLBET','GPIGAME','818Bet','SSSSEA',
+					'Heaven','Bobo88','OPEBET','Jinyazhou','Sunriseb2b','Okada','396Club','Mybet88','e8casino','HongChow','TangChao','MAX88',
+					'BBIN2','YongBao','Fugui','GMASTER','ALPHA88','Tripleone','GWORLD','ENTAPLAY','MICL','zt828','9wickets','Aplus',
+					'Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET',
+					'WINCLUB88','MARS','Dade','Nbbet','Gameroom','ANGbet','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66',
+					'A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
+					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton')
 
 INSERT INTO #supersFinal (custid, PT, NoDownline)
 SELECT ci.srecommend, s.PT, COUNT(1)
