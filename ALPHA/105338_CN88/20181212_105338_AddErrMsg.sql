@@ -25,6 +25,7 @@ SELECT	20039, 'Master Agent''s Possess is too high. It makes the line''s Total P
 SELECT	20040, 'Agent''s Possess is too high. It makes the line''s Total Possess greater than SMA Max Possess.', 3, 1 UNION ALL
 SELECT	20041, 'Wrong possess.', 3, 1 UNION ALL
 SELECT	20042, 'You cannot update new possess value at this moment.', 3, 1 UNION ALL
+SELECT	20043, 'Conflict between current possess and new possess values. Please try again after the new possess value takes effect.', 3, 1 UNION ALL
 
 SELECT	30007, 'New SMA Min Possess is greater than the Total Possess Taken by some lines.', 3, 1 UNION ALL
 SELECT	30008, 'New SMA Max Possess is less than the Total Possess Taken by some lines.', 3, 1 UNION ALL
