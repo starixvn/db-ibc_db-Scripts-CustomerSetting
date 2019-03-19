@@ -148,7 +148,7 @@ SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
 SELECT ci.custid, 
-	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 92.5
+	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 0.925
 			WHEN cs.site IN ('asiabet88', 'TLC', 'IBO', 'ZT828') THEN 0.91
 			ELSE 0.88 END
 FROM custInfo ci WITH (NOLOCK) 	
@@ -219,7 +219,7 @@ SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
 SELECT ci.custid, 
-	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 92.5
+	CASE	WHEN cs.site IN ('BBIN2', 'HAIFA') THEN 0.925
 			WHEN cs.site IN ('asiabet88', 'TLC', 'IBO', 'ZT828') THEN 0.91
 			ELSE 0.88 END
 FROM custInfo ci WITH (NOLOCK) 	
