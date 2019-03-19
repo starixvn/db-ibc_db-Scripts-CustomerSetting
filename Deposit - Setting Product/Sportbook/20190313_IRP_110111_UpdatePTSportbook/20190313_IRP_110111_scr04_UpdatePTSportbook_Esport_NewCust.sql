@@ -49,8 +49,8 @@ BEGIN
 	CREATE TABLE #DummySMA (CustID INT PRIMARY KEY)
 	CREATE TABLE #DummyMember (CustID INT PRIMARY KEY)
 
-	DECLARE @tmpDumMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
-	DECLARE @SportType SMALLINT = 44
+	DECLARE @tmpDummyMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
+	DECLARE @SportType SMALLINT = 43
 
 	INSERT INTO @tmpDummyMaster(custid, username)
 	SELECT c.CustID, fc.username
@@ -64,14 +64,14 @@ BEGIN
 
 	INSERT INTO #DummyMember(CustID)
 	SELECT c.custid
-	FROM @tmpDumMaster d
+	FROM @tmpDummyMaster d
 	 INNER JOIN dbo.Customer c 
 	  ON d.custid = c.mrecommend AND c.roleid = 1
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 
 	INSERT INTO #DummySMA(CustID)
 	SELECT c.custid
-	FROM @tmpDumMaster d
+	FROM @tmpDummyMaster d
 	 INNER JOIN dbo.Customer c 
 	  ON d.custid = c.mrecommend AND c.roleid IN(2,3)
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
@@ -119,7 +119,7 @@ BEGIN
 	SET cs.[AgentPT] = t.PT
 	FROM Dep_CustPTGroupSetting_Member cs WITH(ROWLOCK)
 		INNER JOIN #tmpSMA t ON cs.AgentID=t.CustID
-	WHERE RoleID=2 AND cs.SportType = @SportType
+	WHERE RoleID=2 AND cs.SportType = @SportType AND cs.AgentPT <> 0 
 	
 	WHILE EXISTS(SELECT 1 FROM #tmpMem)
 	BEGIN

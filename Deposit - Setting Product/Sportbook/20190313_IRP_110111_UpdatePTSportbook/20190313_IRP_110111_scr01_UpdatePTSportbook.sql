@@ -88,7 +88,9 @@ BEGIN
 		WHILE (0 = 0)
 		BEGIN			
 			UPDATE cs
-			SET cs.spositiontaking=@PT,cs.mpositiontaking=@PT,cs.apositiontaking=@PT
+			SET cs.spositiontaking=@PT,
+				cs.mpositiontaking=@PT,
+				cs.apositiontaking=@PT
 			FROM Dep_CustSetting cs WITH(ROWLOCK)
 				INNER JOIN #tmpSMA t ON cs.CustID=t.CustID		
 			WHERE ID >= @StartRow AND ID <= @StopRow AND RoleID=4

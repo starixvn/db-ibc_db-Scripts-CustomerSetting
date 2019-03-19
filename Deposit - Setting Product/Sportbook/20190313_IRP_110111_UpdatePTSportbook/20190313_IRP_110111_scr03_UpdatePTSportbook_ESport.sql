@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at DBCUST only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
@@ -32,7 +32,7 @@ BEGIN
 	CREATE TABLE #DummyMember	(CustID INT PRIMARY KEY)
 
 	DECLARE @tmpDummyMaster TABLE (custid INT PRIMARY KEY, username VARCHAR(30))
-	DECLARE @SportType SMALLINT = 44
+	DECLARE @SportType SMALLINT = 43
 
 	INSERT INTO @tmpDummyMaster(custid, username)
 	SELECT c.CustID, fc.username
@@ -99,7 +99,7 @@ BEGIN
 	SET cs.[AgentPT]=@PT
 	FROM Dep_CustPTGroupSetting_Member cs WITH(ROWLOCK)
 		INNER JOIN #tmpSMA t ON cs.AgentID=t.CustID
-	WHERE RoleID=2 AND cs.SportType = @SportType
+	WHERE RoleID=2 AND cs.SportType = @SportType AND cs.AgentPT <> 0
 	
 	WHILE EXISTS(SELECT 1 FROM #tmpMem)
 	BEGIN
