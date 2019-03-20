@@ -31,7 +31,7 @@ VALUES
 (7				 , 2			  ,	1    , 9999   , 1     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 5         , @SettingStatus, 2),
 (8				 , 2			  ,	2    , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 6         , @SettingStatus, 1),
 (9				 , 2			  ,	2    , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 7         , @SettingStatus, 1),
-(10				 , 2			  ,	2    , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 8         , @SettingStatus, 2),
+(10				 , 2			  ,	2    , 20     , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 8         , @SettingStatus, 2),
 (11				 , 2			  ,	2    , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 9         , @SettingStatus, 2),
 (12				 , 2			  ,	99   , 1      , 0     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 10        , @SettingStatus, 1),
 (13				 , 2			  ,	99   , 1      , 1     , @ProductID, NULL, NULL        ,@IntervalValueComm  , 4           , 2           , 11        , @SettingStatus, 1),
@@ -64,7 +64,7 @@ SELECT 'DiscountAgent', 2, 1, 1, 13, 16 UNION ALL
 SELECT 'DiscountAgent', 2, 1, 1, 14, 17 UNION ALL 
 SELECT 'DiscountAgent', 2, 1, 1, 15, 18 UNION ALL 
 SELECT 'DiscountAgent', 2, 1, 1, 16, 19 UNION ALL 
-SELECT 'DiscountAgent', 2, 5, 0, 0, 20 UNION ALL 
+SELECT 'DiscountAgent', 2, 20, 0, 0, 20 UNION ALL 
 SELECT 'DiscountAgent', 2, 9999, 0, 0, 21 UNION ALL 
 SELECT 'DiscountAgent', 99, 1, 0, 17, 22 UNION ALL 
 SELECT 'DiscountAgent', 99, 1, 0, 18, 23 UNION ALL 
@@ -84,7 +84,7 @@ SELECT 'DiscountMember', 1, 9999, 0, 0, 4 UNION ALL
 SELECT 'DiscountMember', 1, 9999, 1, 0, 5 UNION ALL 
 SELECT 'DiscountMember', 2, 1, 0, 0, 6 UNION ALL 
 SELECT 'DiscountMember', 2, 1, 1, 0, 7 UNION ALL 
-SELECT 'DiscountMember', 2, 5, 0, 0, 8 UNION ALL 
+SELECT 'DiscountMember', 2, 20, 0, 0, 8 UNION ALL 
 SELECT 'DiscountMember', 2, 9999, 0, 0, 9 UNION ALL 
 SELECT 'DiscountMember', 99, 1, 0, 0, 10 UNION ALL 
 SELECT 'DiscountMember', 99, 1, 1, 0, 11 UNION ALL 
@@ -181,3 +181,4 @@ WHERE settingType = 2 AND e.exchangeid = 81
 --WHERE SettingType = 2
 
 --DELETE FROM CS_ProductSettingDetail
+--DELETE FROM CS_ByteSeq
