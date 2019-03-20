@@ -12,6 +12,7 @@ GO
 DELETE FROM CS_ProductSettingDetail
 DELETE FROM CS_ByteSeq
 DELETE FROM CS_ProductBetSetting
+DELETE FROM dbo.CS_GroupConfig
 
 DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxDiscount DECIMAL(9,8), @MaxPT TINYINT, @IntervalValuePT DECIMAL(19,8), @IntervalValueComm DECIMAL(19,8)
 SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
@@ -96,6 +97,32 @@ SELECT 'DiscountMember', 99, 5, 0, 0, 12 UNION ALL
 SELECT 'DiscountMember', 99, 9999, 0, 0, 13 UNION ALL 
 SELECT 'DiscountMember', 9999, 10, 0, 0, 14 
   
+INSERT INTO dbo.CS_GroupConfig (GroupId, SportType, BetType, IsLive, GroupName, uGroup, MaxValue)
+SELECT 1, 1, 1, 0,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 2, 1, 1, 0,'B', 'CNB', 0.015 UNION ALL 
+SELECT 3, 1, 1, 0,'C', 'CNC', 0.01 UNION ALL 
+SELECT 4, 1, 1, 0,'D', 'CND', 0.0075 UNION ALL 
+SELECT 5, 1, 1, 1,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 6, 1, 1, 1,'B', 'CNB', 0.015 UNION ALL 
+SELECT 7, 1, 1, 1,'C', 'CNC', 0.01 UNION ALL 
+SELECT 8, 1, 1, 1,'D', 'CND', 0.0075 UNION ALL 
+SELECT 9, 2, 1, 0,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 10, 2, 1, 0,'B', 'CNB', 0.015 UNION ALL 
+SELECT 11, 2, 1, 0,'C', 'CNC', 0.01 UNION ALL 
+SELECT 12, 2, 1, 0,'D', 'CND', 0.0075 UNION ALL 
+SELECT 13, 2, 1, 1,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 14, 2, 1, 1,'B', 'CNB', 0.015 UNION ALL 
+SELECT 15, 2, 1, 1,'C', 'CNC', 0.01 UNION ALL 
+SELECT 16, 2, 1, 1,'D', 'CND', 0.0075 UNION ALL 
+SELECT 17, 99, 1, 0,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 18, 99, 1, 0,'B', 'CNB', 0.015 UNION ALL 
+SELECT 19, 99, 1, 0,'C', 'CNC', 0.01 UNION ALL 
+SELECT 20, 99, 1, 0,'D', 'CND', 0.0075 UNION ALL 
+SELECT 21, 99, 1, 1,'A', 'CNA', 0.0225 UNION ALL 
+SELECT 22, 99, 1, 1,'B', 'CNB', 0.015 UNION ALL 
+SELECT 23, 99, 1, 1,'C', 'CNC', 0.01 UNION ALL 
+SELECT 24, 99, 1, 1,'D', 'CND', 0.0075
+
 INSERT INTO dbo.CS_ProductBetSetting (SportType, BetType, IsLive, Currency, MinBet, MaxBet, MaxPerEvent)
 SELECT SportType, BetType, IsLive, e.exchangeid, 1000, 10000, 100000
 FROM CS_ProductSettingDetail ps WITH (NOLOCK)
