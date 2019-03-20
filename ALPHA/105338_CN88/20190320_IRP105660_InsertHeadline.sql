@@ -41,7 +41,7 @@ BEGIN
 		@fax=N'',
 		@refcode1=N'',
 		@creator=8,
-		@username='HLTest01',
+		@username=@username,
 		@userpwd='56E8A2D78170E87C928E480797CC73',
 		@site=N'CN88',
 		@currency=20,
