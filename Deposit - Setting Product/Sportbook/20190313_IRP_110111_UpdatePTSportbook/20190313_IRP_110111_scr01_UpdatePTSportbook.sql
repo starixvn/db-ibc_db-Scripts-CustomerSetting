@@ -65,7 +65,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 	
 		AND ci.custid NOT IN(SELECT Custid FROM #DummyMember)
-		AND ci.custid NOT IN(SELECT Custid FROM dbo.Dep_CustBAActive)
+		AND ci.custid NOT IN(SELECT Custid FROM dbo.Dep_CustBAActive WITH (NOLOCK))
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID

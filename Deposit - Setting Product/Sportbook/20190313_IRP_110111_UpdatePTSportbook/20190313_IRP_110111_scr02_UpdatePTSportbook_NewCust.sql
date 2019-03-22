@@ -80,7 +80,7 @@ BEGIN
 	WHERE ci.custid > @maxcustid 
 		AND roleid = 1 		
 		AND ci.CustID NOT IN(SELECT Custid FROM #DummyMember)
-		AND ci.custid NOT IN(SELECT Custid FROM dbo.Dep_CustBAActive)
+		AND ci.custid NOT IN(SELECT Custid FROM dbo.Dep_CustBAActive WITH (NOLOCK))
 
 	INSERT INTO #tmpSMA(CustID, RoleID, PT)
 	SELECT ci.CustID, RoleID, s.PT
