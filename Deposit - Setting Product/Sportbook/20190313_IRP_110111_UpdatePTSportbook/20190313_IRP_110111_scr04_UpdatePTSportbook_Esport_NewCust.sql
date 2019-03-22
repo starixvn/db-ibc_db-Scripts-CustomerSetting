@@ -65,14 +65,14 @@ BEGIN
 	INSERT INTO #DummyMember(CustID)
 	SELECT c.custid
 	FROM @tmpDummyMaster d
-	 INNER JOIN dbo.Customer c 
+	 INNER JOIN dbo.Customer c WITH(NOLOCK) 
 	  ON d.custid = c.mrecommend AND c.roleid = 1
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 
 	INSERT INTO #DummySMA(CustID)
 	SELECT c.custid
 	FROM @tmpDummyMaster d
-	 INNER JOIN dbo.Customer c 
+	 INNER JOIN dbo.Customer c WITH(NOLOCK) 
 	  ON d.custid = c.mrecommend AND c.roleid IN(2,3)
 	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
 
