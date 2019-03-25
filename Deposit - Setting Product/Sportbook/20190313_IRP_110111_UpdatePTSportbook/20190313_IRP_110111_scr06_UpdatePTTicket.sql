@@ -50,7 +50,7 @@ SELECT a.CustID, TransId, PT
 FROM dbo.bettrans b WITH (NOLOCK)
 	INNER JOIN #tmpAgent a ON b.recommend = a.CustID
 	INNER JOIN #tmpSportBettypeMatrix mt ON b.bettype = mt.BetType
-WHERE b.winlostdate > '2019-03-25 00:00:00'
+WHERE b.winlostdate > '2019-04-01 00:00:00'
 	AND b.statusID IN (0,1)
 
 --Delete BA ticket
