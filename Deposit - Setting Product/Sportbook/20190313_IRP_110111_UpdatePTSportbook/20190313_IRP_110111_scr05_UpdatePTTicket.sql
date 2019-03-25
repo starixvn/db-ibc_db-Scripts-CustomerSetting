@@ -5,52 +5,27 @@
 	Date: 20190313
 */ 
 
-ALTER PROCEDURE [dbo].NAP_Admin_Calculate_10
+ALTER PROCEDURE [dbo].Acc_ExecRep_09
 	@TransIdList VARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON
+	DECLARE @IsExistBettrans BIT, @TransIdXML XML
 	
-	IF dbo.f_CheckRepTable('bettrans') = 0 RETURN
-	IF dbo.f_CheckRepTable('tranlog') = 0 RETURN
-	
-	CREATE TABLE #tmpList (ID INT IDENTITY (1,1) PRIMARY KEY, TransId INT)
-	DECLARE @StartRow INT, @StopRow	INT, @MaxRow INT, @Threshold INT
-				
-	SET @StartRow = 1
-	SET @Threshold = 4000
-		
-	IF EXISTS(SELECT 1 FROM #tmpList)
-	BEGIN
-			
-		SET @MaxRow = (SELECT MAX(ID) FROM #tmpList)
-			
-		IF	@Threshold >= @MaxRow
-		SET	@Threshold = @MaxRow
-			
-		SET @StopRow = @Threshold
+	SELECT @IsExistBettrans = COUNT(1) FROM dbo.sysobjects WHERE name = 'bettrans'
+	SELECT @TransIdXML = @TransIdList
 
-		WHILE (0 = 0)
-		BEGIN			
-			UPDATE b
-			SET b.spositiontaking=@PT,
-				b.mpositiontaking=@PT,
-				b.apositiontaking=@PT
-			FROM bettrans b WITH(ROWLOCK)
-				INNER JOIN #tmpList t ON b.CustID=t.TransId		
-			WHERE ID >= @StartRow AND ID <= @StopRow
-		
-			IF	@StopRow = @MaxRow 
-				BREAK
-						
-			SET	@StartRow = @StopRow + 1
-						
-			SET	@StopRow = 1 + @StopRow + @Threshold
-						
-			IF	@StopRow >= @MaxRow
-				SET	@StopRow = @MaxRow
-										
-		END;
-	END;	
-		
+	SELECT	r.value('./@T','BIGINT') AS TransId,
+			r.value('./@PT','SMALLMONEY') AS PT
+	INTO #tmpList
+	FROM @TransIdXML.nodes('//R/C') AS RECORDS(r)
+
+	IF @IsExistBettrans = 1
+	BEGIN
+		UPDATE b
+		SET b.apositiontaking = t.PT
+		FROM bettrans b WITH(ROWLOCK)
+			INNER JOIN #tmpList t ON b.transid=t.TransId	
+	END
 END	
+
