@@ -58,7 +58,7 @@ DELETE FROM #tmpTrans WHERE CustId IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_
 
 WHILE EXISTS(SELECT 1 FROM #tmpTrans)
 BEGIN
-	DELETE TOP (2000) #tmpTrans OUTPUT DELETED.* INTO #tmpTable
+	DELETE TOP (2500) #tmpTrans OUTPUT DELETED.* INTO #tmpTable
 
 	SELECT @TransIdList = (SELECT (
 									SELECT  bt.TransId	AS '@T',
@@ -76,8 +76,10 @@ BEGIN
 	TRUNCATE TABLE #tmpTable
 END
 
---DROP TABLE #supers
---DROP TABLE #tmpAgent
---DROP TABLE #tmpSportBettypeMatrix
---DROP TABLE #tmpTable
---DROP TABLE #tmpTrans
+/*
+DROP TABLE #supers
+DROP TABLE #tmpAgent
+DROP TABLE #tmpSportBettypeMatrix
+DROP TABLE #tmpTable
+DROP TABLE #tmpTrans
+*/
