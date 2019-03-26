@@ -60,7 +60,7 @@ DELETE FROM #tmpTrans WHERE CustId IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_
 
 WHILE EXISTS(SELECT 1 FROM #tmpTrans)
 BEGIN
-	DELETE TOP (2500) #tmpTrans OUTPUT DELETED.* INTO #tmpTable
+	DELETE TOP (2500) #tmpTrans OUTPUT DELETED.TransId, Deleted.PT INTO #tmpTable
 
 	SELECT @TransIdList = (SELECT (
 									SELECT  bt.TransId	AS '@T',
