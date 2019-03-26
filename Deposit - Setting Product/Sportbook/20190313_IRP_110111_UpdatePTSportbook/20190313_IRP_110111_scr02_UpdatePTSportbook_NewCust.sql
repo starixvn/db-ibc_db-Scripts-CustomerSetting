@@ -75,7 +75,7 @@ BEGIN
 	
 	INSERT INTO #tmpMem(CustID, PT)
 	SELECT ci.CustID, s.PT
-	FROM custInfo ci WITH(NOLOCK)
+	FROM Customer ci WITH(NOLOCK)
 		INNER JOIN #supers s ON ci.srecommend = s.custid		
 	WHERE ci.custid > @maxcustid 
 		AND roleid = 1 		
@@ -84,7 +84,7 @@ BEGIN
 
 	INSERT INTO #tmpSMA(CustID, RoleID, PT)
 	SELECT ci.CustID, RoleID, s.PT
-	FROM custInfo ci WITH(NOLOCK)
+	FROM Customer ci WITH(NOLOCK)
 		INNER JOIN #supers s ON ci.srecommend = s.custid		
 	WHERE ci.custid > @maxcustid 
 		AND roleid IN(2,3,4)	

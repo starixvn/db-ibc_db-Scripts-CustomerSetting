@@ -64,7 +64,10 @@ SELECT ActionID, @ProductID, Level
 FROM @tmpAction
 WHERE SPName IN ('CS_CustSetting_CommBetSetting_Upd', 'CS_CustSetting_PTSetting_Upd')
 
+/*
 --DELETE dbo.LogAction WHERE ActionID >= 100000 OR ActionID BETWEEN 1213 AND 1216
 --DELETE dbo.LogActionDetail WHERE ActionID >= 100000
 
---SELECT * FROM dbo.LogAction WHERE ActionID > 100000
+SELECT * FROM dbo.LogAction WHERE ActionID > 100000
+SELECT * FROM dbo.LogActionDetail INNER JOIN LogAction ON  WHERE ActionID > 100000
+*/

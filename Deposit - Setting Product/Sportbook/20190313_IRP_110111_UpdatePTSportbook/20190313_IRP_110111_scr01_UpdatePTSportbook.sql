@@ -61,7 +61,7 @@ BEGIN
 
 	INSERT INTO #tmpMem(CustID)
 	SELECT ci.CustID
-	FROM custInfo ci WITH(NOLOCK)			
+	FROM Customer ci WITH(NOLOCK)			
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid = 1 	
 		AND ci.custid NOT IN(SELECT Custid FROM #DummyMember)
@@ -69,7 +69,7 @@ BEGIN
 
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK)				
+	FROM Customer ci WITH(NOLOCK)				
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid 
 		AND roleid IN(2,3,4) 
 		AND ci.custid NOT IN(SELECT Custid FROM #DummySMA)
