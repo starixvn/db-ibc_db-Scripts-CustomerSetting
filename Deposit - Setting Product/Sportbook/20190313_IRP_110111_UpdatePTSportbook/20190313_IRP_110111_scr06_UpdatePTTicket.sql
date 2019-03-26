@@ -80,6 +80,7 @@ BEGIN
 	EXEC Acc_ExecRep_09 @TransIdList = @TransIdStr
 
 	TRUNCATE TABLE #tmpTable
+	WAITFOR DELAY '00:00:0.100'
 END
 
 /*

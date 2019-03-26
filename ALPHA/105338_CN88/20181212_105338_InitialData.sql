@@ -19,7 +19,7 @@ DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxDiscount DECIMAL(9,8), @MaxP
 SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 1
 SELECT @MaxDiscount = 0.01
-SELECT @MaxPT = 70
+SELECT @MaxPT = 90
 SELECT @IntervalValuePT = 1
 SELECT @IntervalValueComm = 0.0005
 
