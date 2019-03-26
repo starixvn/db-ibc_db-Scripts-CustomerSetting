@@ -1,9 +1,11 @@
 /*
 	Created: Elodie
 	Task: Update PT settings of SB for licensees [RedmineID: #110111]
-	DB: DBCUST/CustDB
+	DB: DBTXN/bodb02
 	Date: 20190313
 */ 
+USE bodb02
+GO
 
 ALTER PROCEDURE [dbo].Acc_ExecRep_09
 	@TransIdList VARCHAR(MAX)

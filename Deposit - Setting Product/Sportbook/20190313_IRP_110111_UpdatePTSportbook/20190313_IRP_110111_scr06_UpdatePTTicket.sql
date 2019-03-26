@@ -1,9 +1,11 @@
 /*
 	Created: Elodie
 	Task: Update PT settings of SB for licensees [RedmineID: #110111]
-	DB: DBCUST/CustDB
+	DB: DBTXN/bodb02
 	Date: 20190313
 */ 
+USE bodb02
+GO 
 
 CREATE TABLE #supers (custid INT, PT SMALLMONEY)
 CREATE TABLE #tmpAgent (CustID INT PRIMARY KEY, PT SMALLMONEY)	
@@ -43,10 +45,10 @@ FROM CustDB.dbo.custInfo ci WITH(NOLOCK)
 WHERE roleid = 2
 
 INSERT INTO #tmpSportBettypeMatrix (bettype)
-SELECT bettype FROM SportBettypeMatrix WITH (NOLOCK) WHERE productID = 1 
+SELECT DISTINCT bettype FROM SportBettypeMatrix WITH (NOLOCK) WHERE productID = 1 
 
 INSERT INTO #tmpTrans(CustId, TransId, PT)
-SELECT a.CustID, TransId, PT
+SELECT b.CustID, TransId, PT
 FROM dbo.bettrans b WITH (NOLOCK)
 	INNER JOIN #tmpAgent a ON b.recommend = a.CustID
 	INNER JOIN #tmpSportBettypeMatrix mt ON b.bettype = mt.BetType
