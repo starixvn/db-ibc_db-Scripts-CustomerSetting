@@ -55,8 +55,12 @@ FROM dbo.bettrans b WITH (NOLOCK)
 WHERE b.winlostdate > '2019-04-01 00:00:00'
 	AND b.statusID IN (0,1)
 
+SELECT custid 
+INTO #BAActive
+FROM OPENQUERY (DBCUST, 'SELECT custid FROM CustDB.dbo.Dep_CustBAActive WITH (NOLOCK)')
+
 --Delete BA ticket
-DELETE FROM #tmpTrans WHERE CustId IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_CustBAActive WITH (NOLOCK))
+DELETE FROM #tmpTrans WHERE CustId IN (SELECT CustId FROM #BAActive)
 
 WHILE EXISTS(SELECT 1 FROM #tmpTrans)
 BEGIN
