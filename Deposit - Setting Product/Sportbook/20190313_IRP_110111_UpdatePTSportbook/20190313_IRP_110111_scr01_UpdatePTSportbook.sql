@@ -50,7 +50,7 @@ BEGIN
 	SELECT c.custid
 	FROM @tmpDummyMaster d
 		INNER JOIN dbo.Customer c WITH(NOLOCK) ON d.custid = c.mrecommend AND c.roleid = 1
-	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%'
+	WHERE d.username LIKE '%Acc%' OR d.username LIKE '%LocalBank%' OR d.username LIKE '%ClearBal%'
 
 	INSERT INTO #DummySMA(CustID)
 	SELECT c.custid
