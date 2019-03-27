@@ -168,7 +168,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 					'Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET',
 					'WINCLUB88','MARS','Dade','Nbbet','Gameroom','ANGbet','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66',
 					'A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
-					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton')
+					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton','pinbo','Win68Club','Sunwin')
 
 INSERT INTO #supersFinal (custid, PT, NoDownline)
 SELECT ci.srecommend, s.PT, COUNT(1)
@@ -239,7 +239,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 					'Arlocash','WBS','YBTech','Yibo','24TECH','Xinbo','BETSUN','HOT88','Monaco','Opadmin','Bonanza88','SSSGaming','JIBET',
 					'WINCLUB88','MARS','Dade','Nbbet','Gameroom','ANGbet','Callmeboss','Hong88','BetDeal','SampleSite','VWIN66',
 					'A1game','HJTK','TitanOne','gbkj','skykey','Dachen','Bobbet','laba360','AEUG','XinYo','18Luck','Mbet','Kudatogel','WinWin',
-					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton')
+					'HCVIP','ig128','AMG','MRCATSB','VN88','TXG','Sin88','Zbet','Debet','Kraton','pinbo','Win68Club','Sunwin')
 
 INSERT INTO #supersFinal (custid, PT, NoDownline)
 SELECT ci.srecommend, s.PT, COUNT(1)
