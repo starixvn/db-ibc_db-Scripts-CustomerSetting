@@ -7,6 +7,9 @@
 USE bodb02
 GO 
 
+DECLARE @MaxTransId BIGINT
+
+SELECT @MaxTransId = xxx
 CREATE TABLE #supers (custid INT, PT SMALLMONEY)
 CREATE TABLE #tmpAgent (CustID INT PRIMARY KEY, PT SMALLMONEY)	
 CREATE TABLE #tmpTrans (CustId INT, TransId BIGINT, PT SMALLMONEY)	
@@ -54,6 +57,7 @@ FROM dbo.bettrans b WITH (NOLOCK)
 	INNER JOIN #tmpSportBettypeMatrix mt ON b.bettype = mt.BetType
 WHERE b.winlostdate > '2019-04-01 00:00:00'
 	AND b.statusID IN (0,1)
+	AND TransId <= @MaxTransId
 
 SELECT custid 
 INTO #BAActive
