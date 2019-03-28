@@ -25,7 +25,8 @@ BEGIN
 	IF @IsExistBettrans = 1
 	BEGIN
 		UPDATE b
-		SET b.apositiontaking = t.PT
+		SET b.apositiontaking = t.PT,
+			b.tpositiontaking = t.PT
 		FROM bettrans b WITH(ROWLOCK)
 			INNER JOIN #tmpList t ON b.transid=t.TransId	
 	END
