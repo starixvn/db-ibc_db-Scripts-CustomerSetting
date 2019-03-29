@@ -60,7 +60,7 @@ WHERE b.winlostdate > '2019-04-01 00:00:00'
 	AND TransId <= @MaxTransId
 	AND b.apositiontaking <> 0
 
-select transid into bettrans_UpdatePT_DanielTmp from #tmpTrans
+SELECT transid INTO bettrans_UpdatePT_DanielTmp FROM #tmpTrans
 
 WHILE EXISTS(SELECT 1 FROM #tmpTrans)
 BEGIN
