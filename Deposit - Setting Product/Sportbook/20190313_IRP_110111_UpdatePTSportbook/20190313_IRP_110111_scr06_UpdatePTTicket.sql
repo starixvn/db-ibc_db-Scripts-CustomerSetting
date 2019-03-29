@@ -60,6 +60,8 @@ WHERE b.winlostdate > '2019-04-01 00:00:00'
 	AND TransId <= @MaxTransId
 	AND b.apositiontaking <> 0
 
+select transid into bettrans_UpdatePT_DanielTmp from #tmpTrans
+
 WHILE EXISTS(SELECT 1 FROM #tmpTrans)
 BEGIN
 	DELETE TOP (2500) #tmpTrans OUTPUT DELETED.TransId, Deleted.PT INTO #tmpTable
