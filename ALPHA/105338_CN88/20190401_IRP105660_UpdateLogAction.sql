@@ -7,4 +7,4 @@
 
 UPDATE LogAction WITH(UPDLOCK,ROWLOCK)
 SET ActionTypeID = 4
-WHERE actionID IN (93,936)
+WHERE actionID IN (935,936)
