@@ -18,4 +18,4 @@ WHERE b.statusid NOT IN (0,1)
 SELECT *
 FROM bettrans b WITH (NOLOCK)
 	INNER JOIN bettrans_UpdatePT_DanielTmp t WITH (NOLOCK) ON b.transid = t.transid
-WHERE b.awinlost <> -(b.winlost-b.actual_stake) * b.apositiontaking
+WHERE b.awinlost <> -(b.winlost-b.actual_stake) * b.apositiontaking AND b.statusid NOT IN (0,1)
