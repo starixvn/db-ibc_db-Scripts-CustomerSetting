@@ -8,7 +8,7 @@ GO
 */
 
 INSERT INTO dbo.LogAction (ActionID, ActionTypeID, SPName, ActionNameEN, IsInternal)
-	VALUES (165004, 5, 'Age_CS_Customer_Status_Upd', 'Edit Account Status', 0)
+	VALUES (165004, 5, 'CS_Customer_Status_Upd', 'Edit Account Status', 0)
 GO
 
 UPDATE dbo.LogAction WITH (ROWLOCK, UPDLOCK)
