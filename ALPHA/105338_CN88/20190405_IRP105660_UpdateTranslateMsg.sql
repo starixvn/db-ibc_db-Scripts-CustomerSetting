@@ -1,7 +1,7 @@
 /*
 	Created by: Johnson	
 	Date: 20190405
-	Task: Insert LogAction for tier0
+	Task: update translate msg for LogAction
 	DB: DBLOG/bodb_CustomerLog
 */
 
@@ -17,7 +17,8 @@ SELECT	935, N'重設特有的保安碼', N'重设特有的保安码', N'Reset ow
 SELECT	936, N'重置下線的機密碼',N'重置下线的机密码',N'Reset Security Code of downline'
 
 
-INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
-SELECT ActionID,SPName,ActionTypeID,ActionName,ActionName,ActionName,ActionName,ActionName,ActionName,IsInternal,ActionName
-FROM @tmpAction t
-WHERE NOT EXISTS (SELECT 1 FROM LogAction WHERE ActionID = t.ActionID)
+UPDATE l
+SET l.ActionNameCH = t.ActionNameCH,
+	l.ActionNameCS = t.ActionNameCS
+FROM LogAction l WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
