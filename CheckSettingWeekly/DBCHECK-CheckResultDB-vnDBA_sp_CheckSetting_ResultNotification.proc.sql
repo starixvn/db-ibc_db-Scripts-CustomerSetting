@@ -23,6 +23,7 @@ AS
 		- 20180807@Billy:	Fix bug of rendering result - [Redmine: #99249]
 		- 20180816@Billy:	Integrate Bet Limit & Stake Level checking - [Redmine: #99249]
 		- 20190405@Billy:	Update mail format - [Redmine: #111478]
+		- 20190405@Billy:	Integrate check PT Deposit - [Redmine: #111499]
 */
 BEGIN;
 	SET NOCOUNT ON;
@@ -234,6 +235,21 @@ FROM	bodb02.dbo.Sports WITH (NOLOCK);
 			AND	ic.sporttype = CASE WHEN ic.sporttype = 0 THEN ic.sporttype ELSE r.sporttype END;
 
 	DELETE	r WITH (TABLOCK)
+	FROM		dbo.CheckPTResult_Deposit AS r
+	INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
+			ON	r.CustIdA = cus.CustId
+	INNER JOIN	dbo.IgnoredCust ic WITH (NOLOCK)
+			ON	ic.custid = CASE	WHEN ic.Allline = 0 THEN cus.CustId 
+									ELSE CASE	WHEN ic.RoleID = 4 THEN cus.srecommend 
+												WHEN ic.RoleID = 3 THEN cus.mrecommend
+												WHEN ic.RoleID = 2 THEN cus.recommend
+												ELSE cus.CustId
+											END
+							END
+			AND ic.RuleId = CASE WHEN ic.RuleId = 0 THEN ic.RuleId ELSE r.ruleid END
+			AND	ic.sporttype = CASE WHEN ic.sporttype = 0 THEN ic.sporttype ELSE r.sporttype END;
+
+	DELETE	r WITH (TABLOCK)
 	FROM		dbo.CheckStatusResult AS r
 	INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
 			ON	r.CustIdA = cus.CustId
@@ -365,13 +381,18 @@ FROM	bodb02.dbo.Sports WITH (NOLOCK);
 	FROM		dbo.CheckPTResult_Credit AS c WITH (NOLOCK)
 	LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
 			ON	c.RuleId = r.RuleId
-	INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
-			ON	c.CustIdA = cus.CustId
-	INNER JOIN	CheckCustDB.dbo.custInfo AS cus1 WITH (NOLOCK)
-			ON	c.CustIdB = cus1.CustId
 	LEFT JOIN	@Sports AS s
 			ON	c.SportType = s.SportType
 	GROUP BY r.RuleName, c.RuleId, s.SportName, c.SportType, c.BetType, c.IsLive;
+
+	INSERT INTO	#CheckResultPTAgg (RuleName, RuleId, SportName, SportType, BetType, IsLive, IsDeposit, Total)
+	SELECT	ISNULL(r.RuleName, 'N/A'), d.RuleId, ISNULL(s.SportName, 'N/A'), d.SportType, d.BetType, d.IsLive, 1, COUNT(1)
+	FROM		dbo.CheckPTResult_Deposit AS d WITH (NOLOCK)
+	LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
+			ON	d.RuleId = r.RuleId
+	LEFT JOIN	@Sports AS s
+			ON	d.SportType = s.SportType
+	GROUP BY r.RuleName, d.RuleId, s.SportName, d.SportType, d.BetType, d.IsLive;
 
 	SELECT	@countPTCredit = ISNULL(SUM(Total), 0)
 	FROM	#CheckResultPTAgg WITH (NOLOCK)
@@ -392,12 +413,20 @@ FROM	bodb02.dbo.Sports WITH (NOLOCK);
 		FROM		dbo.CheckPTResult_Credit AS c WITH (NOLOCK)
 		LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
 				ON	c.RuleId = r.RuleId
-		INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
+		LEFT JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
 				ON	c.CustIdA = cus.CustId
-		INNER JOIN	CheckCustDB.dbo.custInfo AS cus1 WITH (NOLOCK)
-				ON	c.CustIdB = cus1.CustId
 		LEFT JOIN	@Sports AS s
 				ON	c.SportType = s.SportType;
+
+		INSERT INTO	#CheckResultPT (RuleName, RuleId, SportName, SportType, BetType, CustId_A, Username_A, CustId_B, Value_A, Value_B, CreatedDate, IsLive, IsDeposit)
+		SELECT	ISNULL(r.RuleName, 'N/A'), d.RuleId, ISNULL(s.SportName, 'N/A'), d.SportType, d.BetType, d.CustIdA, cus.username, d.CustIdB, d.ValueA, d.ValueB, d.CreatedDate, d.IsLive, 1
+		FROM		dbo.CheckPTResult_Deposit AS d WITH (NOLOCK)
+		LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
+				ON	d.RuleId = r.RuleId
+		INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
+				ON	d.CustIdA = cus.CustId
+		LEFT JOIN	@Sports AS s
+				ON	d.SportType = s.SportType;
 	END;
 
 
@@ -466,10 +495,8 @@ FROM	bodb02.dbo.Sports WITH (NOLOCK);
 	FROM		dbo.CheckCommResult_Credit AS c WITH (NOLOCK)
 	LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
 			ON	c.RuleId = r.RuleId
-	INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
+	LEFT JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
 			ON	c.CustIdA = cus.CustId
-	INNER JOIN	CheckCustDB.dbo.custInfo AS cus1 WITH (NOLOCK)
-			ON	c.CustIdB = cus1.CustId
 	LEFT JOIN	@Sports AS s
 			ON	c.SportType = s.SportType
 	GROUP BY r.RuleName, c.RuleId, s.SportName, c.SportType, c.BetType;
@@ -493,10 +520,8 @@ FROM	bodb02.dbo.Sports WITH (NOLOCK);
 		FROM		dbo.CheckCommResult_Credit AS c WITH (NOLOCK)
 		LEFT JOIN	dbo.Rule_Credit AS r WITH (NOLOCK)
 				ON	c.RuleId = r.RuleId
-		INNER JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
+		LEFT JOIN	CheckCustDB.dbo.custInfo AS cus WITH (NOLOCK)
 				ON	c.CustIdA = cus.CustId
-		INNER JOIN	CheckCustDB.dbo.custInfo AS cus1 WITH (NOLOCK)
-				ON	c.CustIdB = cus1.CustId
 		LEFT JOIN	@Sports s
 				ON	c.SportType = s.SportType;
 	END;
