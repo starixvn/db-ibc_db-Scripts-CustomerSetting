@@ -19,3 +19,9 @@ UPDATE l WITH (ROWLOCK, UPDLOCK)
 SET l.ActionNameCN = c.ActionNameCN
 FROM dbo.LogAction l
 	INNER JOIN CTE_Action c ON l.ActionID = c.ActionID
+GO
+
+UPDATE dbo.LogAction WITH (ROWLOCK, UPDLOCK)
+SET ActionNameCH = N'更改帳戶狀態'
+WHERE ActionID = 165004
+GO
