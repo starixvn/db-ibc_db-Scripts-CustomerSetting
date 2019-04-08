@@ -14,10 +14,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	DECLARE @isExistTable BIT = 0
-	SELECT  @isExistTable = COUNT(1) FROM sys.objects WHERE name = @tableName
-
-	IF @isExistTable = 0
+	IF dbo.f_CheckRepTable(@tableName) = 0
 		RETURN
 
 	DECLARE @CustIdXML XML
