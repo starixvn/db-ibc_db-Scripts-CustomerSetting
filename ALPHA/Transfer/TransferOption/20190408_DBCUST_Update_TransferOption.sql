@@ -4,8 +4,14 @@ GO
 /*
 	Created: 20190408Percy
 	DB: DBCUST.CustDB
-	Task: Update transfer option of CustSuper/CustMaster/CustAgent
+	Task: Update transfer option to Daily of CustSuper/CustMaster/CustAgent
 */
+
+-- Remark
+	/*
+		CustSuper/CustMaster/CustAgent: TransferOption = 0: Daily
+		Acc_ClearBalanceList:			TransferType = 2: Transfer All Downlines
+	*/
 
 CREATE TABLE #tmpCust (CustId INT)
 DECLARE @CustIdXML XML, @CustIdList VARCHAR(MAX)
@@ -16,6 +22,7 @@ INTO #tmpCustSuper
 FROM dbo.CustSuper s WITH (NOLOCK)
 	INNER JOIN dbo.Acc_ClearBalanceList ac WITH (NOLOCK) ON s.custid = ac.custid
 WHERE s.TransferOption <> 0
+	AND ac.TransferType = 2
 
 WHILE EXISTS (SELECT 1 FROM #tmpCustSuper)
 BEGIN
@@ -40,6 +47,7 @@ FROM dbo.CustMaster m WITH (NOLOCK)
 	INNER JOIN dbo.custInfo c WITH (NOLOCK) ON m.custid = c.custid
 	INNER JOIN dbo.Acc_ClearBalanceList ac WITH (NOLOCK) ON c.srecommend = ac.custid
 WHERE m.TransferOption <> 0
+	AND ac.TransferType = 2
 	AND c.roleid = 3
 
 WHILE EXISTS (SELECT 1 FROM #tmpCustMaster)
@@ -64,6 +72,7 @@ FROM dbo.CustAgent a WITH (NOLOCK)
 	INNER JOIN dbo.custInfo c WITH (NOLOCK) ON a.custid = c.custid
 	INNER JOIN dbo.Acc_ClearBalanceList ac WITH (NOLOCK) ON c.srecommend = ac.custid
 WHERE a.TransferOption <> 0
+	AND ac.TransferType = 2
 	AND c.roleid = 2
 
 WHILE EXISTS (SELECT 1 FROM #tmpCustAgent)
