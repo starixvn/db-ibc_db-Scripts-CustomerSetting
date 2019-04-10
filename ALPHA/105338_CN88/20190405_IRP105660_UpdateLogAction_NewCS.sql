@@ -25,7 +25,7 @@ SELECT	110000, N'更新代理商的佔成數', N'更新代理商的占成数', '
 SELECT	139996, N'增加超級代理的退水值', N'添加超级代理的退水值', 'CS_CustomerIns_Com', 0, 2, NULL UNION ALL
 SELECT	139997, N'增加總代理的退水值', N'添加总代理的退水值', 'CS_CustomerIns_SAg', 0, 2, NULL UNION ALL
 SELECT	139998, N'增加代理商的退水值', N'添加代理商的退水值', 'CS_CustomerIns_MAg', 0, 2, NULL UNION ALL
-SELECT	139999, N'Add Commission for Member', N'Add Commission for Member', 'CS_CustomerIns_Ag', 0, 2, NULL UNION ALL
+SELECT	139999, N'增添會員退水額', N'增添会员退水额', 'CS_CustomerIns_Ag', 0, 2, NULL UNION ALL
 SELECT	120000, N'更新超級代理的退水設定', N'更新超级代理的退水设定', 'CS_CustSetting_CommBetSetting_Upd', 0, 2, 4 UNION ALL
 SELECT	125000, N'更新總代理的退水設定', N'更新总代理的退水设定', 'CS_CustSetting_CommBetSetting_Upd', 0, 2, 3 UNION ALL
 SELECT	130000, N'更新代理商的退水設定', N'更新代理商的退水设定', 'CS_CustSetting_CommBetSetting_Upd', 0, 2, 2 UNION ALL

@@ -34,11 +34,13 @@ SELECT	30009, 'SMA Min Possess must be less than or equal to SMA Max Possess.', 
 SELECT	40041, 'Invalid Headline.', 5, 1 UNION ALL
 
 SELECT	70024, 'Insufficient credit.', 8, 1 UNION ALL
-SELECT	70025, 'Credit must be positive.', 8, 1 
+SELECT	70025, 'Credit must be positive.', 8, 1 UNION ALL
+SELECT	70027, 'Sorry, credit update is not successful, You have exceeded your SMA credit.', 8, 1 UNION ALL
+SELECT	70028, 'Sorry, credit update is not successful, You have exceeded your master credit.', 8, 1
 
-DELETE m
-FROM dbo.MsgError m
-	INNER JOIN @tmpMsg t ON t.MsgID = m.MsgID
+--DELETE m
+--FROM dbo.MsgError m
+--	INNER JOIN @tmpMsg t ON t.MsgID = m.MsgID
 
 INSERT INTO dbo.MsgError (MsgID, MsgGroupID, MsgNameEN, MsgNameCT, MsgNameCS, MsgNameJP, MsgNameTH, MsgNameKO, MsgNameES, MsgNameVI, IsActive, MsgNameCN)
 SELECT t.MsgID, t.MsgGroupId, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.MsgName, t.IsActive, t.MsgName
