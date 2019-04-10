@@ -18,8 +18,8 @@ DELETE FROM CS_ProductBetSetting
 DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxDiscount DECIMAL(9,8), @MaxPT TINYINT, @IntervalValuePT DECIMAL(19,8), @IntervalValueComm DECIMAL(19,8)
 SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 1
-SELECT @MaxDiscount = 0.01
-SELECT @MaxPT = 90
+SELECT @MaxDiscount = 0
+SELECT @MaxPT = 85
 SELECT @IntervalValuePT = 1
 SELECT @IntervalValueComm = 0.0005
 
@@ -44,6 +44,7 @@ VALUES
 (14				 , 2			  ,	99   , 5      , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 12        , @SettingStatus, 2),
 (15				 , 2			  ,	99   , 9999   , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 13        , @SettingStatus, 2),	
 (16				 , 2			  ,	9999 , 10     , 0     , @ProductID, NULL, @MaxDiscount,@IntervalValueComm  , 4           , 2           , 14        , @SettingStatus, 2),	
+
 (17				 , 2			  ,	9998 , 81     , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 15        , @SettingStatus, 2),
 (18				 , 2			  ,	9998 , 1501   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 16        , @SettingStatus, 2),
 (19				 , 2			  ,	9998 , 1201   , 0     , @ProductID, NULL, NULL		  ,NULL				   , 4           , 2           , 17        , @SettingStatus, 2)
@@ -148,35 +149,40 @@ SELECT 46, 0.0225
 
 INSERT INTO dbo.CS_GroupConfig (GroupId, SportType, BetType, IsLive, GroupName, uGroup, MaxValue)
 SELECT 1, 1, 1, 0,'a', 'a', 0.0225 UNION ALL 
-SELECT 2, 1, 1, 0,'b', 'b', 0.015 UNION ALL 
-SELECT 3, 1, 1, 0,'c', 'd', 0.01 UNION ALL 
-SELECT 4, 1, 1, 0,'d', 'd', 0.0075 UNION ALL 
+SELECT 2, 1, 1, 0,'b', 'b', 0.0125 UNION ALL 
+SELECT 3, 1, 1, 0,'c', 'd', 0.0075 UNION ALL 
+SELECT 4, 1, 1, 0,'d', 'd', 0 UNION ALL 
 SELECT 5, 1, 1, 1,'a', 'a', 0.0225 UNION ALL 
-SELECT 6, 1, 1, 1,'b', 'b', 0.015 UNION ALL 
-SELECT 7, 1, 1, 1,'c', 'c', 0.01 UNION ALL 
-SELECT 8, 1, 1, 1,'d', 'd', 0.0075 UNION ALL 
+SELECT 6, 1, 1, 1,'b', 'b', 0.0125 UNION ALL 
+SELECT 7, 1, 1, 1,'c', 'c', 0.0075 UNION ALL 
+SELECT 8, 1, 1, 1,'d', 'd', 0 UNION ALL 
 SELECT 9, 2, 1, 0,'a', 'a', 0.0225 UNION ALL 
-SELECT 10, 2, 1, 0,'b', 'b', 0.015 UNION ALL 
-SELECT 11, 2, 1, 0,'c', 'd', 0.01 UNION ALL 
-SELECT 12, 2, 1, 0,'d', 'd', 0.0075 UNION ALL 
+SELECT 10, 2, 1, 0,'b', 'b', 0.0125 UNION ALL 
+SELECT 11, 2, 1, 0,'c', 'd', 0.0075 UNION ALL 
+SELECT 12, 2, 1, 0,'d', 'd', 0 UNION ALL 
 SELECT 13, 2, 1, 1,'a', 'a', 0.0225 UNION ALL 
-SELECT 14, 2, 1, 1,'b', 'b', 0.015 UNION ALL 
-SELECT 15, 2, 1, 1,'c', 'c', 0.01 UNION ALL 
-SELECT 16, 2, 1, 1,'d', 'd', 0.0075 UNION ALL 
+SELECT 14, 2, 1, 1,'b', 'b', 0.0125 UNION ALL 
+SELECT 15, 2, 1, 1,'c', 'c', 0.0075 UNION ALL 
+SELECT 16, 2, 1, 1,'d', 'd', 0 UNION ALL 
 SELECT 17, 99, 1, 0,'a', 'a', 0.0225 UNION ALL 
-SELECT 18, 99, 1, 0,'b', 'b', 0.015 UNION ALL 
-SELECT 19, 99, 1, 0,'c', 'c', 0.01 UNION ALL 
-SELECT 20, 99, 1, 0,'d', 'd', 0.0075 UNION ALL 
+SELECT 18, 99, 1, 0,'b', 'b', 0.0125 UNION ALL 
+SELECT 19, 99, 1, 0,'c', 'c', 0.0075 UNION ALL 
+SELECT 20, 99, 1, 0,'d', 'd', 0 UNION ALL 
 SELECT 21, 99, 1, 1,'a', 'a', 0.0225 UNION ALL 
-SELECT 22, 99, 1, 1,'b', 'b', 0.015 UNION ALL 
-SELECT 23, 99, 1, 1,'c', 'c', 0.01 UNION ALL 
-SELECT 24, 99, 1, 1,'d', 'd', 0.0075
+SELECT 22, 99, 1, 1,'b', 'b', 0.0125 UNION ALL 
+SELECT 23, 99, 1, 1,'c', 'c', 0.0075 UNION ALL 
+SELECT 24, 99, 1, 1,'d', 'd', 0
      
 INSERT INTO dbo.CS_ProductBetSetting (SportType, BetType, IsLive, Currency, MinBet, MaxBet, MaxPerEvent)
-SELECT SportType, BetType, IsLive, e.exchangeid, 1000, 10000, 100000
+SELECT SportType, BetType, IsLive, e.exchangeid, 16, NULL, NULL
 FROM CS_ProductSettingDetail ps WITH (NOLOCK)
 	CROSS JOIN dbo.exchange e WITH (NOLOCK)
-WHERE settingType = 2 AND e.exchangeid = 81
+WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (81) AND e.exchangeid = 81
+UNION ALL
+SELECT SportType, BetType, IsLive, e.exchangeid, 8, NULL, NULL
+FROM CS_ProductSettingDetail ps WITH (NOLOCK)
+	CROSS JOIN dbo.exchange e WITH (NOLOCK)
+WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (1501,1201) AND e.exchangeid = 81
 
 --SELECT * FROM dbo.CS_GroupConfig
 --DELETE FROM dbo.CS_GroupConfig
@@ -188,3 +194,5 @@ WHERE settingType = 2 AND e.exchangeid = 81
 
 --DELETE FROM CS_ProductSettingDetail
 --DELETE FROM CS_ByteSeq
+
+--SELECT * FROM dbo.exchange WHERE exchangeid = 81
