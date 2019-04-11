@@ -177,12 +177,12 @@ INSERT INTO dbo.CS_ProductBetSetting (SportType, BetType, IsLive, Currency, MinB
 SELECT SportType, BetType, IsLive, e.exchangeid, 16, NULL, NULL
 FROM CS_ProductSettingDetail ps WITH (NOLOCK)
 	CROSS JOIN dbo.exchange e WITH (NOLOCK)
-WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (81) AND e.exchangeid = 81
+WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (81) AND e.exchangeid IN (20, 81)
 UNION ALL
 SELECT SportType, BetType, IsLive, e.exchangeid, 8, NULL, NULL
 FROM CS_ProductSettingDetail ps WITH (NOLOCK)
 	CROSS JOIN dbo.exchange e WITH (NOLOCK)
-WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (1501,1201) AND e.exchangeid = 81
+WHERE settingType = 2 AND ps.SportType = 9998 AND ps.BetType IN (1501,1201) AND e.exchangeid IN (20, 81)
 
 --SELECT * FROM dbo.CS_GroupConfig
 --DELETE FROM dbo.CS_GroupConfig

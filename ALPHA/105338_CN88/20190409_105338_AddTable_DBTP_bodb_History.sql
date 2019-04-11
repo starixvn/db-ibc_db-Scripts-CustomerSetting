@@ -4,27 +4,12 @@
 	DB: DBTP/bodb_CustHistory
 */
 
-/*
-	DROP TABLE dbo.CS_ByteSeqNumber
-	DROP TABLE dbo.CS_CommTemplate
-	DROP TABLE dbo.CS_CustBetSetting_Agent
-	DROP TABLE dbo.CS_CustBetSetting_Member
-	DROP TABLE dbo.CS_CustDiscount_Agent
-	DROP TABLE dbo.CS_CustDiscount_Member
-	DROP TABLE dbo.CS_CustGroupDiscount_Member
-	DROP TABLE dbo.CS_CustPTGroupSetting_Member
-	DROP TABLE dbo.CS_CustPTSetting_Agent
-	DROP TABLE dbo.CS_CustPTSetting_Member
-	DROP TABLE dbo.CS_CustSettingMode
-	DROP TABLE dbo.CS_GroupConfig
-	DROP TABLE dbo.CS_ProductBetSetting
-	DROP TABLE dbo.CS_ProductSettingDetail
-*/
 USE bodb_CustHistory
 GO
 
-CREATE TABLE CS_CustPTSetting_Agent
+CREATE TABLE CS_CustPTSetting_Agent_History
 (
+	UpdateTime	DATETIME NOT NULL CONSTRAINT [DF_CS_CustPTSetting_Agent_History_UpdateTime]  DEFAULT (GETDATE()),
 	CustId		INT NOT NULL,
 	SuperPT		BINARY(10),
 	MasterPT	BINARY(10),
@@ -36,15 +21,19 @@ CREATE TABLE CS_CustPTSetting_Agent
 	AgentPT2	BINARY(10),
 	MinPT2		BINARY(10),
 	MaxPT2		BINARY(10),
-CONSTRAINT [PK_CS_CustPTSetting_Agent] PRIMARY KEY CLUSTERED 
-(
-	CustId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Agent_table]
-) ON [CS_CustPTSetting_Agent_table]
+) ON [CS_CustPTSetting_table]
 GO
 
-CREATE TABLE CS_CustPTGroupSetting_Member 
+CREATE CLUSTERED INDEX CS_CustPTSetting_Agent_His_Index ON CS_CustPTSetting_Agent_History
 (
+	UpdateTime DESC,
+	CustId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_table]
+GO
+
+CREATE TABLE CS_CustPTGroupSetting_Member_History
+(
+	UpdateTime	DATETIME NOT NULL CONSTRAINT [DF_CS_CustPTGroupSetting_Member_History_UpdateTime]  DEFAULT (GETDATE()),
 	AgentId		INT NOT NULL,
 	SuperPT		BINARY(10) NOT NULL,
 	MasterPT	BINARY(10) NOT NULL,
@@ -52,15 +41,28 @@ CREATE TABLE CS_CustPTGroupSetting_Member
 	SuperPT2	BINARY(10) NOT NULL,
 	MasterPT2	BINARY(10) NOT NULL,
 	AgentPT2	BINARY(10) NOT NULL,
-CONSTRAINT [PK_CS_CustPTGroupSetting_Member] PRIMARY KEY CLUSTERED 
-(
-	AgentId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Member_table]
-) ON [CS_CustPTSetting_Member_table]
+) ON [CS_CustPTSetting_table]
 GO
 
-CREATE TABLE CS_CustBetSetting_Agent  
+CREATE CLUSTERED INDEX CS_CustPTGroupSetting_Member_His_Index ON CS_CustPTGroupSetting_Member_History
 (
+	UpdateTime DESC,
+	AgentId ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_table]
+GO
+
+CREATE TABLE CS_CustSettingMode_History  
+(
+	UpdateTime		DATETIME NOT NULL CONSTRAINT [DF_CS_CustSettingMode_History_UpdateTime]  DEFAULT (GETDATE()),
+	CustId			INT NOT NULL,
+	IsGroupPT		BIT NOT NULL,
+	IsGroupComm		BIT NOT NULL,
+) ON [CS_CustSettingMode_table]
+GO
+
+CREATE TABLE CS_CustBetSetting_Agent_History  
+(
+	UpdateTime		DATETIME NOT NULL CONSTRAINT [DF_CS_CustBetSetting_Agent_History_UpdateTime]  DEFAULT (GETDATE()),
 	CustId			INT NOT NULL,
 	SportType		SMALLINT NOT NULL,
 	BetType			SMALLINT NOT NULL,
@@ -77,8 +79,9 @@ CONSTRAINT [PK_CS_CustBetSetting_Agent] PRIMARY KEY CLUSTERED
 ) ON [CS_CustBetSetting_Agent_table]
 GO
 
-CREATE TABLE CS_CustBetSetting_Member  
+CREATE TABLE CS_CustBetSetting_Member_History  
 (
+	UpdateTime		DATETIME NOT NULL CONSTRAINT [DF_CS_CustBetSetting_Member_History_UpdateTime]  DEFAULT (GETDATE()),
 	CustId			INT NOT NULL,
 	SportType		SMALLINT NOT NULL,
 	BetType			SMALLINT NOT NULL,
@@ -95,56 +98,9 @@ CONSTRAINT [PK_CS_CustBetSetting_Member] PRIMARY KEY CLUSTERED
 ) ON [CS_CustBetSetting_Member_table]
 GO
 
-CREATE TABLE CS_ProductBetSetting
+CREATE TABLE CS_CustDiscount_Agent_History  
 (
-	SportType		SMALLINT NOT NULL,
-	BetType			SMALLINT NOT NULL,
-	IsLive			BIT NOT NULL,
-	Currency		TINYINT,
-	MinBet			MONEY,
-	MaxBet			MONEY,
-	MaxPerEvent		MONEY,
-CONSTRAINT [PK_CS_ProductBetSetting] PRIMARY KEY CLUSTERED 
-(
-	SportType ASC,
-	BetType ASC,
-	IsLive ASC,
-	Currency ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
-) ON [DATA]
-GO
-
-CREATE TABLE CS_GroupConfig
-(
-	GroupId			SMALLINT NOT NULL,
-	SportType		SMALLINT NOT NULL,
-	BetType			SMALLINT NOT NULL,
-	IsLive			BIT NOT NULL,
-	GroupName		NVARCHAR(100),
-	uGroup			VARCHAR(3),
-	MaxValue		DECIMAL(9,8),
-CONSTRAINT [PK_CS_GroupConfig] PRIMARY KEY CLUSTERED 
-(
-	GroupId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
-) ON [DATA]
-GO
-
-CREATE TABLE CS_CommTemplate
-(
-	ValueId		TINYINT NOT NULL,
-	Value		DECIMAL(9,8) NOT NULL,
-CONSTRAINT [PK_CS_CommTemplate] PRIMARY KEY CLUSTERED 
-(
-	ValueId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
-) ON [DATA]
-GO
-
-CREATE NONCLUSTERED INDEX IX_CS_CommTemplate_Value ON CS_CommTemplate(Value)
-
-CREATE TABLE CS_CustDiscount_Agent  
-(
+	UpdateTime	DATETIME NOT NULL CONSTRAINT [DF_CS_CustDiscount_Agent_History_UpdateTime]  DEFAULT (GETDATE()),
 	CustId		INT NOT NULL,
 	Discount	BINARY(50) NOT NULL,
 CONSTRAINT [PK_CS_CustDiscount_Agent] PRIMARY KEY CLUSTERED 
@@ -154,8 +110,9 @@ CONSTRAINT [PK_CS_CustDiscount_Agent] PRIMARY KEY CLUSTERED
 ) ON [CS_CustDiscount_Agent_table]
 GO
 
-CREATE TABLE CS_CustDiscount_Member  
+CREATE TABLE CS_CustDiscount_Member_History  
 (
+	UpdateTime	DATETIME NOT NULL CONSTRAINT [DF_CS_CustDiscount_Member_History_UpdateTime]  DEFAULT (GETDATE()),
 	CustId				INT NOT NULL,
 	PlayerDiscount		BINARY(30) NOT NULL,
 	AgentDiscount		BINARY(30) NOT NULL,
@@ -168,14 +125,15 @@ CONSTRAINT [PK_CS_CustDiscount_Member] PRIMARY KEY CLUSTERED
 ) ON [CS_CustDiscount_Member_table]
 GO
 
-CREATE TABLE CS_CustGroupDiscount_Member  
+CREATE TABLE CS_CustGroupDiscount_Member_History  
 (
-	AgentId				INT NOT NULL,
-	uGroup				VARCHAR(3) NOT NULL,
-	PlayerDiscount		BINARY(30) NOT NULL,
-	AgentDiscount		BINARY(30) NOT NULL,
-	MasterDiscount		BINARY(30) NOT NULL,
-	SuperDiscount		BINARY(30) NOT NULL,
+	UpdateTime		DATETIME NOT NULL CONSTRAINT [DF_CS_CustGroupDiscount_Member_History_UpdateTime]  DEFAULT (GETDATE()),
+	AgentId			INT NOT NULL,
+	uGroup			VARCHAR(3) NOT NULL,
+	PlayerDiscount	BINARY(30) NOT NULL,
+	AgentDiscount	BINARY(30) NOT NULL,
+	MasterDiscount	BINARY(30) NOT NULL,
+	SuperDiscount	BINARY(30) NOT NULL,
 CONSTRAINT [PK_CS_CustGroupDiscount_Member] PRIMARY KEY CLUSTERED 
 (
 	AgentId ASC, uGroup ASC
@@ -183,40 +141,3 @@ CONSTRAINT [PK_CS_CustGroupDiscount_Member] PRIMARY KEY CLUSTERED
 ) ON [CS_CustGroupDiscount_Member_table]
 GO
 
-CREATE TABLE CS_CustSettingMode  
-(
-	CustId				INT NOT NULL,
-	IsGroupPT			BIT NOT NULL,
-	IsGroupComm			BIT NOT NULL,
-CONSTRAINT [PK_CS_CustSettingMode] PRIMARY KEY CLUSTERED 
-(
-	CustId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustSettingMode_table]
-) ON [CS_CustSettingMode_table]
-GO
-
-CREATE TABLE CS_ProductSettingDetail
-(
-	ProductSettingId	SMALLINT NOT NULL,
-	SettingType			SMALLINT NOT NULL,
-	SportType			SMALLINT NOT NULL,
-	BetType				SMALLINT NOT NULL,
-	IsLive				BIT NOT NULL,
-	ProductId			TINYINT NOT NULL,
-	MaxPT				TINYINT,
-	MaxDiscount			DECIMAL(9,8),
-	IntervalValue		DECIMAL	(19,8),
-	SettingLevel		TINYINT NOT NULL,
-	DisplayOrder		TINYINT NOT NULL,
-	ChildOrder			TINYINT NOT NULL,
-	SettingStatus		TINYINT NOT NULL,
-	LayoutType			TINYINT
-CONSTRAINT [PK_CS_ProductSettingDetail] PRIMARY KEY CLUSTERED 
-(
-	SettingType ASC,
-	SportType ASC,
-	BetType ASC,
-	IsLive ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
-) ON [DATA]
-GO
