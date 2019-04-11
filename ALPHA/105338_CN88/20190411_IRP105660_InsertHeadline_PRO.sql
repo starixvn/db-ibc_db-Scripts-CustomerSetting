@@ -8,8 +8,8 @@ SELECT 'TestCN1' as username, 20 as currency, 'CN88' as firstname, 'Partner''s a
 INTO #tmp
 UNION SELECT 'TestCN2' as username, 20 as currency, 'CN88' as firstname, 'Partner''s account' as lastname, 'CN88_11' groupName
 UNION SELECT 'TestCN3' as username, 20 as currency, 'CN88' as firstname, 'Partner''s account' as lastname, 'CN88_22' groupName
-UNION SELECT 'TestCN4' as username, 20 as currency, 'CN88' as firstname, 'Partner''s account' as lastname, 'CN88' groupName
-UNION SELECT 'HLTestCY01' as username, 81 as currency, 'CN88' as firstname, 'OPS''s account' as lastname, 'CN88' groupName
+UNION SELECT 'TestCN4' as username, 20 as currency, 'CN88' as firstname, 'Partner''s account' as lastname, 'CN88_33' groupName
+UNION SELECT 'HLTestCY01' as username, 81 as currency, 'CN88' as firstname, 'OPS''s account' as lastname, 'CN88_33' groupName
 
 DECLARE @username  VARCHAR(30),
 		@currency INT,
