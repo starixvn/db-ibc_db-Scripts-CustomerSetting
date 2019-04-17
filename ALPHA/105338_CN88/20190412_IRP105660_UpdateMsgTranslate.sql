@@ -26,9 +26,10 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionNameCN NVARCHAR(256),ActionNameEN NVARCHAR(256))
 
 INSERT INTO @tmpAction (ActionID, ActionNameCN,ActionNameEN)
-SELECT	902,N'Reset own password',N'Reset own password'
+SELECT	902,N'重置专属密码',N'Reset own password'
 UNION SELECT 622, N'设定只能使用「昵称」登入', N'Set login option by nickname only'
 UNION SELECT 621, N'创建昵称', N'Create nickname'
+UNION SELECT 917, N'无法提供会员的安全代码',N'Failed providing Security Code of customer'
 
 UPDATE l
 SET l.actionNameCN = ISNULL(t.ActionNameCN,l.ActionNameCN)
