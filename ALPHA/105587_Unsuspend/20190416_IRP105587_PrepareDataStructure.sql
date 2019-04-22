@@ -9,18 +9,16 @@ GO
 
 --deploy 2 functions in all replicated servers of pub [CUSTDB_Customer_Info]
 -- to initial function.
-ALTER FUNCTION dbo.f_GenerateSuspendInfo()
-RETURNS TINYINT
+CREATE FUNCTION dbo.f_GenerateSuspendInfo()
+RETURNS TABLE
 AS 
-BEGIN
-	RETURN 0
-END
+	RETURN 
+	SELECT 0 as suspendInfo
 GO
 
-ALTER FUNCTION dbo.f_GetSuspendInfoStatus()
-RETURNS BIT
+CREATE FUNCTION dbo.f_GetSuspendInfoStatus()
+RETURNS TABLE
 AS 
-BEGIN
-	RETURN 0
-END
+	RETURN 
+	SELECT 0 as suspendInfo
 GO
