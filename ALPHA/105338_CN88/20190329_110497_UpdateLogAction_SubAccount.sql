@@ -13,8 +13,10 @@ INSERT INTO @tmpAction (ActionID, ActionNameCH, ActionNameCN)
 SELECT	685, N'增加新的子帳戶', N'增添新的子账户' UNION ALL
 SELECT	686, N'更新子帳戶', N'更新子账户' UNION ALL
 SELECT	904, N'子帳戶已變更其密碼。', N'子帐户已变更其密码。' UNION ALL
-SELECT	919, N'子账户已重置其安全代码。', N'子帳戶已重設其安全密碼。'
-
+SELECT	919, N'子帳戶已重設其安全密碼。', N'子账户已重置其安全代码。' UNION ALL
+SELECT	921, N'無法提供子帳戶的安全代碼', N'无法提供子账户的安全代码' UNION ALL
+SELECT	920, N'重設子帳戶安全代碼', N'重置子账户安全代码' UNION ALL
+SELECT	903, N'重設子帳戶密碼', N'重置子帐户密码'
 
 UPDATE l
 SET l.ActionNameCN = t.ActionNameCN,
