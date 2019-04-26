@@ -23,7 +23,7 @@ SELECT	149996, N'增加股東的限額', N'添加股东的限额' UNION ALL
 SELECT	140000, N'更新股東的限額', N'更新股东的限额' UNION ALL
 
 SELECT	160000, N'為股東增加一般資訊', N'为股东添加一般信息' UNION ALL
-SELECT	160004, N'更新股東的一般資訊', N'更新股东的一般信息' UNION ALL
+SELECT	160004, N'更新股東的一般資訊', N'更新股东的一般信息' 
 
 UPDATE l
 SET l.ActionNameCN = t.ActionNameCN,
