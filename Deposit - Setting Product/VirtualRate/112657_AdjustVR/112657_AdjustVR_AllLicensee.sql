@@ -68,6 +68,12 @@ CROSS APPLY (
 	) AS virtualXML
 ) p	
 
+-- 1137 affected rows
+UPDATE ci 
+SET	ci.VirtualMultiplier = 1
+FROM dbo.custInfo ci WITH(ROWLOCK,UPDLOCK)	
+	INNER JOIN #AffectedList a ON a.custid = ci.custid		
+
 WHILE (1 = 1)
 BEGIN
 	DELETE @tmpCust
@@ -88,12 +94,6 @@ BEGIN
 		
 	WAITFOR DELAY '00:00:00.01'
 END
-
--- 1137 affected rows
-UPDATE ci 
-SET	ci.VirtualMultiplier = 1
-FROM dbo.custInfo ci WITH(ROWLOCK,UPDLOCK)	
-	INNER JOIN #AffectedList a ON a.custid = ci.custid		
 	
 DROP TABLE #masters
 DROP TABLE #AffectedList
