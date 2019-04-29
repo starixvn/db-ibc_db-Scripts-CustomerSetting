@@ -83,7 +83,7 @@ BEGIN
 	UPDATE	cvs 
 	SET		cvs.bitmapVirtual =	nv.NewBitmap
 	FROM dbo.CustVirtualSetting AS cvs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #AffectedList a ON a.custid = cvs.custid		
+		INNER JOIN @tmpCust a ON a.custid = cvs.custid		
 		INNER JOIN @NewValue nv ON nv.seqNo = cvs.seqNo				
 		
 	WAITFOR DELAY '00:00:00.01'
