@@ -12,6 +12,6 @@ FROM WinLimit_ProductSettingDetail p WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN site S (NOLOCK) ON p.SiteID = s.siteid
 WHERE isActive = 1 
 	AND isLicensee = 1
-	AND productid = 6 
+	AND productid = 6 --RnG
 	AND levelID IN (1,2,101,102)
 	AND IsBlockedTransfer = 1
