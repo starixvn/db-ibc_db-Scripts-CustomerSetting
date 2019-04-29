@@ -13,7 +13,7 @@ DECLARE @tmpCust TABLE (custid INT PRIMARY KEY)
 DECLARE @NewValue TABLE (seqNo TINYINT, NewBitmap BINARY(64))
 
 DECLARE @max_custid INT, @srecommend INT
-SELECT  @max_custid= 300000000 ---input maxcustid
+SELECT  @max_custid= xxx ---input maxcustid
 
 --get master list EnableVR = 1 and VR = -85
 INSERT INTO #masters(custid)
