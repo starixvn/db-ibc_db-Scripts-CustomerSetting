@@ -53,6 +53,11 @@ DELETE a
 FROM #AgentList a 
 	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = a.custid
 
+DELETE a 
+FROM #AgentList a 
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
+	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = ci.mrecommend
+
 --exclude exception list used by OPS/Finance (bodb_report.dbo.Task_Cust_ArchiveAcc_Exception)
 DELETE m 
 FROM #MasterList m 
@@ -77,6 +82,15 @@ FROM #AgentList a
 	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
 WHERE c.creator <> c.mrecommend
 	OR (c.creatdate <= DATEADD(dd,-7, '20190503') AND li.isFirstLogin = 1)
+
+--Get member list
+SELECT *
+FROM dbo.Customer c WITH (NOLOCK)	
+WHERE c.roleid = 1
+	AND c.recommend = c.creator
+	AND c.lastlogged IS NULL
+	AND c.creatdate <= DATEADD(dd,-7, '20190503')
+	AND NOT EXISTS (SELECT 1 FROM DBACC.bodb02.dbo.phonebettingCustomerList)
 
 SELECT COUNT(1) FROM #MasterList
 SELECT COUNT(1) FROM #AgentList
