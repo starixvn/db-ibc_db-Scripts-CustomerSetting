@@ -1,11 +1,3 @@
-/*
-    Created: Elodie
-    Date: 20190502
-    Task: Clear given credit for new created SMA
-    DB: DBCUST/CustDB
-*/ 
-USE CustDB
-GO
 
 --Get masters don't have downlines
 SELECT c.mrecommend AS custid INTO #MasterList
@@ -23,14 +15,11 @@ WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSuper s WITH (NOLOCK) WHERE s.custid
 GROUP BY c.recommend 
 HAVING COUNT(1) = 1
 
---exclude masters/agent already login (CustLoginInfo.isFirstLogin=0)
 --exclude internal accounts
 DELETE m 
 FROM #MasterList m 
-	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON li.CustID = m.custid
 	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = m.custid
-WHERE li.isFirstLogin = 0
-	OR cm.IsInternal = 1
+WHERE cm.IsInternal = 1
 
 DELETE m 
 FROM #MasterList m 
@@ -38,20 +27,18 @@ FROM #MasterList m
 	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = ci.srecommend
 WHERE cs.IsInternal = 1
 
-DELETE m 
+DELETE a 
 FROM #AgentList a
-	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON li.CustID = a.custid
-	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = a.custid
-WHERE li.isFirstLogin = 0
-	OR cm.IsInternal = 1
+	INNER JOIN dbo.CustAgent ca WITH (NOLOCK) ON ca.custid = a.custid
+WHERE ca.IsInternal = 1
 
-DELETE m 
+DELETE a 
 FROM #AgentList a 
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
 	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = ci.srecommend
 WHERE cs.IsInternal = 1
 
-DELETE m 
+DELETE a 
 FROM #AgentList a 
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
 	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = ci.mrecommend
@@ -62,7 +49,7 @@ DELETE m
 FROM #MasterList m 
 	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = m.custid
 
-DELETE m 
+DELETE a 
 FROM #AgentList a 
 	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = a.custid
 
@@ -71,25 +58,28 @@ DELETE m
 FROM #MasterList m 
 	INNER JOIN DBACC.bodb_report.dbo.Task_Cust_ArchiveAcc_Exception e WITH (NOLOCK) ON e.CustID = m.custid
 
-DELETE m 
+DELETE a 
 FROM #AgentList a 
 	INNER JOIN DBACC.bodb_report.dbo.Task_Cust_ArchiveAcc_Exception e WITH (NOLOCK) ON e.CustID = a.custid
 
 --exclude masters/agents whose creator is upline
---exclude masters/agents who created before xx days
+--exclude masters/agents who created before xx days and don't login yet
 DELETE m 
 FROM #MasterList m 
-	INNER JOIN Customer c WITH (NOLOCK) ON c.CustID = m.custid
-WHERE c.creator = c.srecommend
-	OR c.creatdate <= DATEADD(dd,-7, GETDATE())
+	INNER JOIN vw_Customer c WITH (NOLOCK) ON c.CustID = m.custid
+	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
+WHERE c.creator <> c.srecommend
+	OR (c.creatdate <= DATEADD(dd,-7, '20190503') AND li.isFirstLogin = 1)
 
-DELETE m 
+DELETE a 
 FROM #AgentList a 
-	INNER JOIN Customer c WITH (NOLOCK) ON c.CustID = a.custid
-WHERE c.creator = c.mrecommend
-	OR c.creatdate <= DATEADD(dd,-7, GETDATE())
+	INNER JOIN vw_Customer c WITH (NOLOCK) ON c.CustID = a.custid
+	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
+WHERE c.creator <> c.mrecommend
+	OR (c.creatdate <= DATEADD(dd,-7, '20190503') AND li.isFirstLogin = 1)
 
---Get member list
-SELECT *
-FROM Customer c WITH (NOLOCK)
-	
+SELECT COUNT(1) FROM #MasterList
+SELECT COUNT(1) FROM #AgentList
+
+--DROP TABLE #MasterList
+--DROP TABLE #AgentList
