@@ -12,3 +12,11 @@ CREATE USER [Dot_Member] FOR LOGIN [Dot_Member] WITH DEFAULT_SCHEMA=[dbo]
 GO
 
 
+USE bodb_Licensee
+GO
+GRANT SELECT ON Product3rd TO [Dot_Member]
+
+
+USE CustDB
+GO
+GRANT SELECT  ON strSplit TO [Dot_Member]
