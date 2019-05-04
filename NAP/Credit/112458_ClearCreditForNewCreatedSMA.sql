@@ -8,61 +8,59 @@ USE CustDB
 GO
 
 DECLARE @tmpCust TABLE (custid INT PRIMARY KEY)
-CREATE TABLE #MasterList (custid INT PRIMARY KEY)
-CREATE TABLE #AgentList (custid INT PRIMARY KEY)
-CREATE TABLE #MemberList (custid INT PRIMARY KEY, username NVARCHAR(50), credit MONEY, srecommend INT, mrecommend INT, recommend INT)
+CREATE TABLE #CustomerList (custid INT PRIMARY KEY, roleid TINYINT, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
+CREATE TABLE #MasterList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
+CREATE TABLE #AgentList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 DECLARE @Log XML = '', @SB_Error BIT = 0, @LogData VARCHAR(1000), @UserId INT = 10278938, @ITName VARCHAR(50) = 'starixIT', @ActionId INT = 1221
+
+--Get customer list
+INSERT INTO #CustomerList (custid, roleid, username, credit, srecommend, mrecommend)
+SELECT c.custid, ci.roleid, c.username, ci.credit, c.srecommend, c.mrecommend
+FROM vw_Customer c WITH (NOLOCK) 
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = c.custid
+	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
+WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSuper s WITH (NOLOCK) WHERE s.custid = c.srecommend)
+	AND c.currency <> 20
+	AND c.site <> 'CN88'
+	AND c.creator = CASE WHEN c.roleid = 3 THEN c.srecommend ELSE c.mrecommend END
+	AND c.roleid IN (2, 3)
+	AND ci.credit <> 0
+	AND (c.creatdate > DATEADD(dd,-7, '20190503') OR li.isFirstLogin = 0)
 
 --Get masters don't have downlines
 INSERT INTO #MasterList (custid)
-SELECT c.mrecommend
+SELECT c.mrecommend 
 FROM dbo.Custinfo c WITH (NOLOCK) 
-WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSuper s WITH (NOLOCK) WHERE s.custid = c.srecommend)
-	AND c.roleid IN (2,3)
+	INNER JOIn #CustomerList m WITH (NOLOCK) ON c.mrecommend = m.custid
+WHERE c.roleid IN (2,3) AND m.roleid = 3
 GROUP BY c.mrecommend 
 HAVING COUNT(1) = 1
 
 --Get agents don't have downlines
 INSERT INTO #AgentList (custid)
-SELECT c.recommend
+SELECT c.recommend 
 FROM dbo.Custinfo c WITH (NOLOCK) 
-WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSuper s WITH (NOLOCK) WHERE s.custid = c.srecommend)
-	AND c.roleid IN (1,2)
+	INNER JOIn #CustomerList m WITH (NOLOCK) ON c.recommend = m.custid
+WHERE c.roleid IN (1,2) AND m.roleid = 2
 GROUP BY c.recommend 
 HAVING COUNT(1) = 1
 
---Get member list
-INSERT INTO #MemberList (custid, username, credit, srecommend, mrecommend, recommend)
-SELECT c.custid, c.username, credit, c.srecommend, c.mrecommend, c.recommend
-FROM dbo.vw_Customer c WITH (NOLOCK)	
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON c.custid = ci.custid
-WHERE ci.roleid = 1
-	AND ci.credit > 0
-	AND c.recommend = c.creator	
-	AND c.lastlogged IS NULL
-	AND c.creatdate <= DATEADD(dd,-7, '20190503')
-
---exclude masters/agents whose creator is upline
---exclude masters/agents who created before xx days and don't login yet
-DELETE m 
+----------------
+UPDATE m 
+SET m.username = c.username,
+	m.credit = c.credit,
+	m.srecommend = c.srecommend,
+	m.mrecommend = c.mrecommend
 FROM #MasterList m 
-	INNER JOIN vw_Customer c WITH (NOLOCK) ON c.CustID = m.custid
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = m.custid
-	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
-WHERE c.creator <> c.srecommend
-	OR c.creatdate > DATEADD(dd,-7, '20190503') 
-	OR li.isFirstLogin = 0
-	OR ci.credit = 0
+	INNER JOIN #CustomerList c ON c.custid = m.custid
 
-DELETE a 
+UPDATE a 
+SET a.username = c.username,
+	a.credit = c.credit,
+	a.srecommend = c.srecommend,
+	a.mrecommend = c.mrecommend
 FROM #AgentList a 
-	INNER JOIN vw_Customer c WITH (NOLOCK) ON c.CustID = a.custid
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
-	INNER JOIN dbo.CustLoginInfo li WITH (NOLOCK) ON c.CustID = li.custid
-WHERE c.creator <> c.mrecommend
-	OR c.creatdate > DATEADD(dd,-7, '20190503') 
-	OR li.isFirstLogin = 0
-	OR ci.credit = 0
+	INNER JOIN #CustomerList c ON c.custid = a.custid
 
 --exclude direct accounts
 DELETE m 
@@ -75,20 +73,7 @@ FROM #AgentList a
 
 DELETE a 
 FROM #AgentList a 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
-	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = ci.mrecommend
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = m.custid
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = m.recommend
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = m.mrecommend
+	INNER JOIN dbo.CustDirectAccount da WITH (NOLOCK) ON da.CustID = a.mrecommend
 
 --exclude exception list used by OPS/Finance (bodb_report.dbo.Task_Cust_ArchiveAcc_Exception)
 DELETE m 
@@ -99,11 +84,6 @@ DELETE a
 FROM #AgentList a 
 	INNER JOIN DBACC.bodb_report.dbo.Task_Cust_ArchiveAcc_Exception e WITH (NOLOCK) ON e.CustID = a.custid
 
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN DBACC.bodb_report.dbo.Task_Cust_ArchiveAcc_Exception e WITH (NOLOCK) ON e.CustID = m.custid
-
-
 --exclude internal accounts
 DELETE m 
 FROM #MasterList m 
@@ -112,8 +92,7 @@ WHERE cm.IsInternal = 1
 
 DELETE m 
 FROM #MasterList m 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = m.custid
-	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = ci.srecommend
+	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = m.srecommend
 WHERE cs.IsInternal = 1
 
 DELETE a 
@@ -123,38 +102,20 @@ WHERE ca.IsInternal = 1
 
 DELETE a 
 FROM #AgentList a 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
-	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = ci.srecommend
+	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = a.srecommend
 WHERE cs.IsInternal = 1
 
 DELETE a 
 FROM #AgentList a 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = a.custid
-	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = ci.mrecommend
+	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = a.mrecommend
 WHERE cm.IsInternal = 1
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustSuper cs WITH (NOLOCK) ON cs.custid = m.srecommend
-WHERE cs.IsInternal = 1
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustMaster cm WITH (NOLOCK) ON cm.custid = m.mrecommend
-WHERE cm.IsInternal = 1
-
-DELETE m 
-FROM #MemberList m 
-	INNER JOIN dbo.CustAgent ca WITH (NOLOCK) ON ca.custid = m.mrecommend
-WHERE ca.IsInternal = 1
 
 SELECT COUNT(1) FROM #MasterList
 SELECT COUNT(1) FROM #AgentList
-SELECT COUNT(1) FROM #MemberList
 
 --DROP TABLE #MasterList
 --DROP TABLE #AgentList
---DROP TABLE #MemberList
+--DROP TABLE #CustomerList
 
 SELECT @LogData = 'System automate Clear Credit'
 
@@ -163,7 +124,7 @@ BEGIN
 	DELETE @tmpCust
 		
 	DELETE TOP (5000) t
-	OUTPUT DELETED.custid
+	OUTPUT DELETED.custid, Deleted.credit
 	INTO @tmpCust 
 	FROM #MasterList t
 		
@@ -176,9 +137,8 @@ BEGIN
 		INNER JOIN @tmpCust c ON c.custid = ci.custid		
 		
 	SELECT @log = (
-						SELECT @UserID as UserID, ci.CustID, ci.credit as OldValue, 0 as NewValue, '' as IP, @LogData as Doing, @ActionId as ActionID, getdate() as LogDate
+						SELECT @UserID as UserID, t.CustID, t.credit as OldValue, 0 as NewValue, '' as IP, @LogData as Doing, @ActionId as ActionID, getdate() as LogDate
 						FROM @tmpCust t
-							INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = t.custid
 						FOR XML RAW('Row')
 					)
 
@@ -193,14 +153,14 @@ BEGIN
 		-- Write log
 		BEGIN TRY
 			INSERT INTO DBLOG.bodb_CustomerLog.dbo.Userlog_Credit (userid, custid, OldValue, NewValue, ip, doing, ActionID)
-			SELECT	@UserID, custid, oldCredit, 0, '', @LogData, @ActionId 
+			SELECT	@UserID, custid, credit, 0, '', @LogData, @ActionId 
 			FROM	@tmpCust 
 		END TRY
 		BEGIN CATCH
 			SELECT @LogData = @LogData + ' ErrMsg=' + ERROR_MESSAGE()
 		
 			INSERT INTO bodb_CustomerLog.dbo.userlog_Credit(userid, custid, OldValue, NewValue, ip, doing, ActionID)
-			SELECT	@UserID, custid, oldCredit, 0, '', @LogData, @ActionId 
+			SELECT	@UserID, custid, credit, 0, '', @LogData, @ActionId 
 			FROM	@tmpCust 
 		END CATCH						
 	END	
@@ -212,4 +172,3 @@ BEGIN
 END
 --DROP TABLE #MasterList
 --DROP TABLE #AgentList
---DROP TABLE #MemberList
