@@ -7,7 +7,8 @@
 USE CustDB
 GO
 
-DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, Credit MONEY)
+CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT)
+DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, Credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #CustomerList (custid INT PRIMARY KEY, roleid TINYINT, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #MasterList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #AgentList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
@@ -127,7 +128,7 @@ SELECT @LogData = 'System automate Clear Credit'
 WHILE(1=1)
 BEGIN
 	DELETE TOP (5000) t
-	OUTPUT DELETED.custid, Deleted.credit
+	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #MasterList t
 		
@@ -168,6 +169,10 @@ BEGIN
 		END CATCH						
 	END	
 
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend)
+	SELECT custid, 3, credit, srecommend, mrecommend
+	FROM @tmpCust
+
 	DELETE @tmpCust
 
 	WAITFOR DELAY '00:00:00.01'
@@ -178,7 +183,7 @@ END
 WHILE(1=1)
 BEGIN
 	DELETE TOP (5000) t
-	OUTPUT DELETED.custid, Deleted.credit
+	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #AgentList t
 		
@@ -219,6 +224,10 @@ BEGIN
 		END CATCH						
 	END	
 
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend)
+	SELECT custid, 3, credit, srecommend, mrecommend
+	FROM @tmpCust
+
 	DELETE @tmpCust
 
 	WAITFOR DELAY '00:00:00.01'
@@ -233,34 +242,19 @@ DECLARE @PostTime DATETIME = GETDATE()
 CREATE TABLE #UplineList (ID INT IDENTITY(1,1), CustId INT, username VARCHAR(30))
 
 -- English
-SET @Content_en = 'Dear valued agents, '
-					+ '<br />' + 'Some of your agents were closed because their members have had No Activity in the last 3 months. You can re-open them if you wish to keep their businesses. '
-					+ '<br />' + 'Please be informed that the account will be disabled after being closed for 1 month, and you cannot recover a disabled account. '
-					+ '<br />' + 'Thank you. '	
+SET @Content_en = 'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
 
 -- VietNamese
-SET @Content_vn = N'Kính gửi quý khách hàng, '
-					+ N'<br />' + N'Một số đại lý của bạn đã bị đóng vì các thành viên của họ đã Không Có Hoạt Động Nào trong 3 tháng qua. Bạn có thể mở lại nếu bạn muốn giữ những đại lý này. '
-					+ N'<br />' + N'Xin lưu ý rằng tài khoản sẽ bị vô hiệu sau khi đóng trong 1 tháng và bạn không thể khôi phục tài khoản bị vô hiệu. '
-					+ N'<br />' + N'Trân Trọng. '
+SET @Content_vn = N'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'
 
 -- Chinese Traditional
-SET @Content_ch = N'尊敬的代理們，'
-					+ N'<br />' + N'由於您代理及其會員賬號已長達近 3 個月無活躍操作因此已關閉。倘若關閉賬號持有者有意繼續進行生意仍可重啟賬號。 '
-					+ N'<br />' + N'請知悉，賬號將在關閉後的一個月被禁用。禁用後的賬號將無法重啟。 '
-					+ N'<br />' + N'謝謝。'
+SET @Content_ch = N'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'
 	
 -- Chinese Simplified
-SET @Content_cs = N'尊敬的代理们，'
-					+ N'<br />' + N'由于您代理及其会员账号已长达近 3 个月无活跃操作因此已关闭。倘若关闭账号持有者有意继续进行生意仍可重启账号。 '
-					+ N'<br />' + N'请知悉，账号将在关闭后的一个月被禁用。禁用后的账号将无法重启。 '
-					+ N'<br />' + N'谢谢。 '
+SET @Content_cs = N'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'
 	
 -- Thai
-SET @Content_th = N'เรียนเอเจนต์ทุกท่าน '
-					+ N'<br />' + N'เอเจนต์ของคุณบางบัญชีถูกปิดเนื่องจากบัญชีสมาชิกไม่มีการใช้งานใดๆ ในช่วง 3เดือนที่ผ่านมา คุณสามารถเปิดกลับอีกครั้งหากต้องการทำธุรกิจต่อและรักษาบัญชีดังกล่าวไว้ '
-					+ N'<br />' + N'โปรดทราบว่าบัญชีจะถูกปิดใช้งานหลังจากปิดให้บริการเป็นเวลา 1 เดือนและคุณจะไม่สามารถกู้คืนบัญชีที่ถูกปิดใช้งานได้ '
-					+ N'<br />' + N'ขอบคุณค่ะ '	
+SET @Content_th = N'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
 
 -- Insert message
 EXEC dbo.Dot_Msg_SetMessage2 
@@ -277,16 +271,16 @@ EXEC dbo.Dot_Msg_SetMessage2
 	@IsTest		= 0,			 -- Is test or not 
 	@IsBatch	= 0			 -- normal message (no need to replace the symbol @@ by transid when display)
 	
-
 -- Insert Message Target	
-INSERT INTO #UplineList( CustId, username )
+INSERT INTO #UplineList( CustId, username)
 SELECT DISTINCT m.srecommend, c.username
-FROM #MasterList m
+FROM CustomerClearCredit m
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
+WHERE m.roleid = 3
 
-INSERT INTO #UplineList( CustId, username )
+INSERT INTO #UplineList (CustId, username)
 SELECT DISTINCT a.mrecommend, c.username
-FROM #AgentList a
+FROM CustomerClearCredit a
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
 
 SET @i = 1
