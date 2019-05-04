@@ -1,7 +1,7 @@
 /*	
 	Created: Elodie
 	Date: 2019-05-03
-	Task: Clear given credit for new created SMAs
+	Task: Rollback credit for customer who cleared credit by system
 	DB: DBCUST/CUSTDB
 */
 USE CustDB
@@ -27,7 +27,7 @@ FROM CustomerClearCredit cr WITH (NOLOCK)
 WHERE roleid = 2
 
 ------------------------------STEP 2: Clear credit and write log--------------------------------------------------------------
-SELECT @LogData = 'System automate Clear Credit'
+SELECT @LogData = 'Rollback the unused account''s credit by IT Admin'
 
 --Clear credit for master
 WHILE(1=1)

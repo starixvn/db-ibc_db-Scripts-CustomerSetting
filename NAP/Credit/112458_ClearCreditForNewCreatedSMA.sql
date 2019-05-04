@@ -8,12 +8,9 @@ USE CustDB
 GO
 
 CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT, LogDate DATETIME, Batch TINYINT)
-DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, Credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #CustomerList (custid INT PRIMARY KEY, roleid TINYINT, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #MasterList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #AgentList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
-DECLARE @Log XML = '', @SB_Error BIT = 0, @LogData VARCHAR(1000), @ActionId INT = 1221
-DECLARE @UserId INT = 10278938, @ITName VARCHAR(50) = 'starixIT'
 
 ------------------------------STEP 0: Clear data in CustomerClearCredit table--------------------------------------------------------------
 DELETE FROM CustomerClearCredit
@@ -125,6 +122,10 @@ SELECT COUNT(1) FROM #AgentList
 --DROP TABLE #CustomerList
 
 ------------------------------STEP 2: Clear credit and write log--------------------------------------------------------------
+DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, Credit MONEY, srecommend INT, mrecommend INT)
+DECLARE @Log XML = '', @SB_Error BIT = 0, @LogData VARCHAR(1000), @ActionId INT = 1221
+DECLARE @UserId INT = 10278938, @ITName VARCHAR(50) = 'starixIT'
+
 SELECT @LogData = 'Remove the unused account''s credit by IT Admin'
 
 --Clear credit for master
@@ -144,7 +145,7 @@ BEGIN
 		INNER JOIN @tmpCust c ON c.custid = ci.custid		
 		
 	SELECT @log = (
-						SELECT @UserID as UserID, t.CustID, t.credit as OldValue, 0 as NewValue, '' as IP, @LogData as Doing, @ActionId as ActionID, getdate() as LogDate
+						SELECT @UserID as UserID, t.CustID, t.credit as OldValue, 0 as NewValue, '' as IP, @LogData as Doing, @ActionId as ActionID, GETDATE() as LogDate
 						FROM @tmpCust t
 						FOR XML RAW('Row')
 					)
@@ -238,12 +239,12 @@ BEGIN
 END
 
 ------------------------------STEP 3: Send personal message--------------------------------------------------------------
---Send personal message
 DECLARE @Content_en NVARCHAR(4000), @Content_vn NVARCHAR(4000), @Content_ch NVARCHAR(4000), @Content_cs NVARCHAR(4000), @Content_th NVARCHAR(4000)
 DECLARE @MessageID INT, @Creator INT = 10278938, @CreatorName VARCHAR(50) = 'starixIT', @Max INT, @i INT, @CustID INT, @UserName VARCHAR(30)
 DECLARE @PostTime DATETIME = GETDATE()
-CREATE TABLE #UplineList (ID INT IDENTITY(1,1), CustId INT, username VARCHAR(30))
+CREATE TABLE #UplineList (ID INT IDENTITY(1,1), CustId INT, username VARCHAR(30), MsgId INT)
 
+--Send personal message for super
 -- English
 SET @Content_en = 'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
 
@@ -275,24 +276,57 @@ EXEC dbo.Dot_Msg_SetMessage2
 	@IsBatch	= 0			 -- normal message (no need to replace the symbol @@ by transid when display)
 	
 -- Insert Message Target	
-INSERT INTO #UplineList( CustId, username)
-SELECT DISTINCT m.srecommend, c.username
+INSERT INTO #UplineList( CustId, username, MsgId)
+SELECT DISTINCT m.srecommend, c.username, @MessageId
 FROM CustomerClearCredit m
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
 WHERE m.roleid = 3 AND m.Batch = 1
 
-INSERT INTO #UplineList (CustId, username)
-SELECT DISTINCT a.mrecommend, c.username
+--Send personal message for master
+-- English
+SET @Content_en = 'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+
+-- VietNamese
+SET @Content_vn = N'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+
+-- Chinese Traditional
+SET @Content_ch = N'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+	
+-- Chinese Simplified
+SET @Content_cs = N'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+	
+-- Thai
+SET @Content_th = N'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+
+-- Insert message
+EXEC dbo.Dot_Msg_SetMessage2 
+	@MessageId	= @MessageId OUTPUT,
+	@Content_en = @Content_en,
+	@Content_ch = @Content_ch,
+	@Content_cs = @Content_cs,
+	@Content_th = @Content_th,
+	@Content_vn = @Content_vn,
+	@MsgType	= 1,			 -- message to customer (personal)
+	@IsSticky	= 0,			 -- Is special Message or not 
+	@Creator	= @Creator,
+	@CreatorName = @CreatorName,
+	@IsTest		= 0,			 -- Is test or not 
+	@IsBatch	= 0			 -- normal message (no need to replace the symbol @@ by transid when display)
+	
+-- Insert Message Target	
+INSERT INTO #UplineList (CustId, username, MsgId)
+SELECT DISTINCT a.mrecommend, c.username, @MessageId
 FROM CustomerClearCredit a
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
 WHERE a.roleid = 2 AND a.Batch = 1
 
+--Send message for user
 SET @i = 1
 SELECT @Max = COUNT(ID) FROM #UplineList
 
 WHILE @i <= @Max
 BEGIN
-	SELECT @CustID = custid, @UserName = username FROM #UplineList WHERE ID = @i
+	SELECT @CustID = custid, @UserName = username, @MessageId = MsgId FROM #UplineList WHERE ID = @i
 
 	EXEC dbo.Dot_Msg_SetUsrMessage
 	@MessageId	= @MessageId,
