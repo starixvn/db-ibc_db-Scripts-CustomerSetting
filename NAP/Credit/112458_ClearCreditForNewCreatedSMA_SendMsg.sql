@@ -46,7 +46,7 @@ EXEC dbo.Dot_Msg_SetMessage2
 INSERT INTO #UplineList( CustId, username, MsgId)
 SELECT DISTINCT m.srecommend, c.username, @MessageId
 FROM DBCUST.CustDB.dbo.CustomerClearCredit m
-	INNER JOIN dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
+	INNER JOIN bodb02.dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
 WHERE m.roleid = 3 AND m.Batch = 1
 
 --Send personal message for master
@@ -84,7 +84,7 @@ EXEC dbo.Dot_Msg_SetMessage2
 INSERT INTO #UplineList (CustId, username, MsgId)
 SELECT DISTINCT a.mrecommend, c.username, @MessageId
 FROM DBCUST.CustDB.dbo.CustomerClearCredit a
-	INNER JOIN dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
+	INNER JOIN bodb02.dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
 WHERE a.roleid = 2 AND a.Batch = 1
 
 --Send message for user
