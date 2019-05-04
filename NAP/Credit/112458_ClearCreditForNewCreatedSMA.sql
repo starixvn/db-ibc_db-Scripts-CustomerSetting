@@ -1,4 +1,4 @@
-﻿/*	
+/*	
 	Created: Elodie
 	Date: 2019-05-03
 	Task: Clear given credit for new created SMAs
@@ -225,7 +225,7 @@ BEGIN
 	END	
 
 	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend)
-	SELECT custid, 3, credit, srecommend, mrecommend
+	SELECT custid, 2, credit, srecommend, mrecommend
 	FROM @tmpCust
 
 	DELETE @tmpCust
@@ -282,6 +282,7 @@ INSERT INTO #UplineList (CustId, username)
 SELECT DISTINCT a.mrecommend, c.username
 FROM CustomerClearCredit a
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
+WHERE a.roleid = 2
 
 SET @i = 1
 SELECT @Max = COUNT(ID) FROM #UplineList
