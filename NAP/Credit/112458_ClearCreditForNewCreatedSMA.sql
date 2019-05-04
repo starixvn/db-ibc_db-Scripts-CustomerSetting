@@ -15,6 +15,9 @@ CREATE TABLE #AgentList (custid INT PRIMARY KEY, username VARCHAR(30), credit MO
 DECLARE @Log XML = '', @SB_Error BIT = 0, @LogData VARCHAR(1000), @ActionId INT = 1221
 DECLARE @UserId INT = 10278938, @ITName VARCHAR(50) = 'starixIT'
 
+------------------------------STEP 0: Clear data in CustomerClearCredit table--------------------------------------------------------------
+DELETE FROM CustomerClearCredit
+
 ------------------------------STEP 1: Get Customer list--------------------------------------------------------------
 --Get customer list
 INSERT INTO #CustomerList (custid, roleid, username, credit, srecommend, mrecommend)
