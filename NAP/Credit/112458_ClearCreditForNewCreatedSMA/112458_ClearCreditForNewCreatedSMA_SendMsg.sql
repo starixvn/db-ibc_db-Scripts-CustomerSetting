@@ -7,7 +7,7 @@
 
 ------------------------------STEP 3: Send personal message--------------------------------------------------------------
 DECLARE @Content_en NVARCHAR(4000), @Content_vn NVARCHAR(4000), @Content_ch NVARCHAR(4000), @Content_cs NVARCHAR(4000), @Content_th NVARCHAR(4000)
-DECLARE @MessageID INT, @Creator INT = 10278938, @CreatorName VARCHAR(50) = 'starixIT', @Max INT, @i INT, @CustID INT, @UserName VARCHAR(30)
+DECLARE @MessageID INT, @MessageID1 INT, @MessageID2 INT, @Creator INT = 10278938, @CreatorName VARCHAR(50) = 'starixIT', @Max INT, @i INT, @CustID INT, @UserName VARCHAR(30)
 DECLARE @PostTime DATETIME = GETDATE()
 CREATE TABLE #UplineList (ID INT IDENTITY(1,1), CustId INT, username VARCHAR(30), MsgId INT)
 
@@ -29,7 +29,7 @@ SET @Content_th = N'Dear valued agents, some of your Masters did not login to ag
 
 -- Insert message
 EXEC dbo.Dot_Msg_SetMessage2 
-	@MessageId	= @MessageId OUTPUT,
+	@MessageId	= @MessageID1 OUTPUT,
 	@Content_en = @Content_en,
 	@Content_ch = @Content_ch,
 	@Content_cs = @Content_cs,
@@ -44,7 +44,7 @@ EXEC dbo.Dot_Msg_SetMessage2
 	
 -- Insert Message Target	
 INSERT INTO #UplineList( CustId, username, MsgId)
-SELECT DISTINCT m.srecommend, c.username, @MessageId
+SELECT DISTINCT m.srecommend, c.username, @MessageID1
 FROM DBCUST.CustDB.dbo.CustomerClearCredit m
 	INNER JOIN bodb02.dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
 WHERE m.roleid = 3 AND m.Batch = 1
@@ -67,7 +67,7 @@ SET @Content_th = N'Dear valued agents, some of your Agents did not login to age
 
 -- Insert message
 EXEC dbo.Dot_Msg_SetMessage2 
-	@MessageId	= @MessageId OUTPUT,
+	@MessageId	= @MessageID2 OUTPUT,
 	@Content_en = @Content_en,
 	@Content_ch = @Content_ch,
 	@Content_cs = @Content_cs,
@@ -82,7 +82,7 @@ EXEC dbo.Dot_Msg_SetMessage2
 	
 -- Insert Message Target	
 INSERT INTO #UplineList (CustId, username, MsgId)
-SELECT DISTINCT a.mrecommend, c.username, @MessageId
+SELECT DISTINCT a.mrecommend, c.username, @MessageID2
 FROM DBCUST.CustDB.dbo.CustomerClearCredit a
 	INNER JOIN bodb02.dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
 WHERE a.roleid = 2 AND a.Batch = 1
