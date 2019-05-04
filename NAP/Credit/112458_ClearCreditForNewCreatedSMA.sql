@@ -7,7 +7,7 @@
 USE CustDB
 GO
 
-CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT, LogDate DATETIME)
+CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT, LogDate DATETIME, Batch TINYINT)
 DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, Credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #CustomerList (custid INT PRIMARY KEY, roleid TINYINT, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #MasterList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
@@ -125,7 +125,7 @@ SELECT COUNT(1) FROM #AgentList
 --DROP TABLE #CustomerList
 
 ------------------------------STEP 2: Clear credit and write log--------------------------------------------------------------
-SELECT @LogData = 'System automate Clear Credit'
+SELECT @LogData = 'Remove the unused account''s credit by IT Admin'
 
 --Clear credit for master
 WHILE(1=1)
@@ -172,8 +172,8 @@ BEGIN
 		END CATCH						
 	END	
 
-	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate)
-	SELECT custid, 3, credit, srecommend, mrecommend, GETDATE()
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate, Batch)
+	SELECT custid, 3, credit, srecommend, mrecommend, GETDATE(), 1
 	FROM @tmpCust
 
 	DELETE @tmpCust
@@ -227,8 +227,8 @@ BEGIN
 		END CATCH						
 	END	
 
-	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate)
-	SELECT custid, 2, credit, srecommend, mrecommend, GETDATE()
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate, Batch)
+	SELECT custid, 2, credit, srecommend, mrecommend, GETDATE(), 1
 	FROM @tmpCust
 
 	DELETE @tmpCust
@@ -279,13 +279,13 @@ INSERT INTO #UplineList( CustId, username)
 SELECT DISTINCT m.srecommend, c.username
 FROM CustomerClearCredit m
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON m.srecommend = c.custid
-WHERE m.roleid = 3
+WHERE m.roleid = 3 AND m.Batch = 1
 
 INSERT INTO #UplineList (CustId, username)
 SELECT DISTINCT a.mrecommend, c.username
 FROM CustomerClearCredit a
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON a.mrecommend = c.custid
-WHERE a.roleid = 2
+WHERE a.roleid = 2 AND a.Batch = 1
 
 SET @i = 1
 SELECT @Max = COUNT(ID) FROM #UplineList
