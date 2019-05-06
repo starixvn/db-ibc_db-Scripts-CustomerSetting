@@ -164,7 +164,7 @@ SELECT @LogData = 'Remove the unused account''s credit by IT Admin'
 --Clear credit for master
 WHILE(1=1)
 BEGIN
-	DELETE TOP (5000) t
+	DELETE TOP (3000) t
 	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #MasterList t
@@ -219,7 +219,7 @@ END
 --Clear credit for agent
 WHILE(1=1)
 BEGIN
-	DELETE TOP (5000) t
+	DELETE TOP (3000) t
 	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #AgentList t

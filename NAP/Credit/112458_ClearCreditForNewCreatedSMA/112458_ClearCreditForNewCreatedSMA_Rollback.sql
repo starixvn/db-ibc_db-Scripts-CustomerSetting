@@ -32,7 +32,7 @@ SELECT @LogData = 'Rollback the unused account''s credit by IT Admin'
 --Clear credit for master
 WHILE(1=1)
 BEGIN
-	DELETE TOP (5000) t
+	DELETE TOP (3000) t
 	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #MasterList t
@@ -76,14 +76,14 @@ BEGIN
 
 	DELETE @tmpCust
 
-	WAITFOR DELAY '00:00:00.01'
+	WAITFOR DELAY '00:00:02'
 
 END
 
 --Clear credit for agent
 WHILE(1=1)
 BEGIN
-	DELETE TOP (5000) t
+	DELETE TOP (3000) t
 	OUTPUT DELETED.custid, DELETED.credit, DELETED.srecommend, DELETED.mrecommend
 	INTO @tmpCust 
 	FROM #AgentList t
@@ -127,6 +127,6 @@ BEGIN
 
 	DELETE @tmpCust
 
-	WAITFOR DELAY '00:00:00.01'
+	WAITFOR DELAY '00:00:02'
 
 END
