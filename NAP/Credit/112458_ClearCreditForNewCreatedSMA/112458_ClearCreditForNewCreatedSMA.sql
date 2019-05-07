@@ -7,7 +7,7 @@
 USE CustDB
 GO
 
-CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT, LogDate DATETIME, Batch TINYINT)
+CREATE TABLE CustomerClearCredit (custid INT PRIMARY KEY, roleid TINYINT, Oldcredit MONEY, srecommend INT, mrecommend INT, recommend INT, LogDate DATETIME, Batch TINYINT)
 CREATE TABLE #CustomerList (custid INT PRIMARY KEY, roleid TINYINT, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #MasterList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
 CREATE TABLE #AgentList (custid INT PRIMARY KEY, username VARCHAR(30), credit MONEY, srecommend INT, mrecommend INT)
@@ -206,8 +206,8 @@ BEGIN
 		END CATCH						
 	END	
 
-	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate, Batch)
-	SELECT custid, 3, credit, srecommend, mrecommend, GETDATE(), 1
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, recommend, LogDate, Batch)
+	SELECT custid, 3, credit, srecommend, mrecommend, 0, GETDATE(), 1
 	FROM @tmpCust
 
 	DELETE @tmpCust
@@ -261,8 +261,8 @@ BEGIN
 		END CATCH						
 	END	
 
-	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, LogDate, Batch)
-	SELECT custid, 2, credit, srecommend, mrecommend, GETDATE(), 1
+	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, recommend, LogDate, Batch)
+	SELECT custid, 2, credit, srecommend, mrecommend, 0, GETDATE(), 1
 	FROM @tmpCust
 
 	DELETE @tmpCust
