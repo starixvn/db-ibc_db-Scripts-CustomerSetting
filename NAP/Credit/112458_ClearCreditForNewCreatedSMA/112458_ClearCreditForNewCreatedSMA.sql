@@ -262,7 +262,7 @@ BEGIN
 	END	
 
 	INSERT INTO dbo.CustomerClearCredit (custid, roleid, Oldcredit, srecommend, mrecommend, recommend, LogDate, Batch)
-	SELECT custid, 2, credit, srecommend, mrecommend, 0, GETDATE(), 1
+	SELECT custid, 2, credit, srecommend, mrecommend, custid, GETDATE(), 1
 	FROM @tmpCust
 
 	DELETE @tmpCust
