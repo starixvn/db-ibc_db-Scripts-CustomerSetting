@@ -15,16 +15,16 @@ DECLARE @Batch TINYINT = 2
 
 --Send personal message for super
 -- English
-SET @Content_en = 'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+SET @Content_en = 'Dear valued agents, some of your Masters did not login to agency site within 7 days after creation. The system has already removed these unused accounts'' credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
 
 -- VietNamese
-SET @Content_vn = N'"Kính gửi quý khách hàng, Một số Master của bạn không đăng nhập vào trang Agency trong vòng 7 ngày sau khi tạo. Hệ thống sẽ xóa tín dụng của những tài khoản không sử dụng này. Điều này nhằm ngăn chặn bên thứ ba lợi dụng tuyến dưới không sử dụng của bạn. Trân trọng."'
+SET @Content_vn = N'"Kính gửi quý khách hàng, Một số Master của bạn không đăng nhập vào trang Agency trong vòng 7 ngày sau khi tạo. Hệ thống đã thu hồi tín dụng của những tài khoản không sử dụng này. Điều này nhằm ngăn chặn bên thứ ba lợi dụng tuyến dưới không sử dụng của bạn. Trân trọng."'
 
 -- Chinese Traditional
-SET @Content_ch = N'敬愛的客戶， 由於某些總代理在賬號創建後的 7天內无登入代理網故系統將清除無使用賬號的余額。這是為了防範您下線無使用的空白賬號讓第三方有機可乘。'
+SET @Content_ch = N'敬愛的客戶，由於某些總代理在帳號建立後的7天內都不曾登入，系統已清除這些未曾使用帳號的餘額。這是為了防範您下線無使用的空白賬號讓第三方有機可乘。'
 	
 -- Chinese Simplified
-SET @Content_cs = N'敬爱的客户， 由于某些总代理在账号创建后的 7天内无登入代理网故系统将清除无使用账号的余额。这是为了防范您下线无使用的空白账号让第三方有机可乘。'
+SET @Content_cs = N'敬爱的客户，由于某些总代理在账号创建后的7天内都不曾登入，系统已清除这些未曾使用账号的余额。这是为了防范您下线无使用的空白账号让第三方有机可乘。'
 	
 -- Thai
 SET @Content_th = N'"เรียน ลูกค้าที่เคารพ เนื่องจากบางบัญชีของมาสเตอร์ ที่สร้างขึ้นใหม่และไม่ได้ลงชื่อเข้าใช้เว็ปไซต์ตัวแทนภายใน7วันนับจากวันสร้างบัญชี ระบบจะล้างวงเงินเครดิตทั้งหมดออกจากบัญชี เพื่อความปลอดภัยและป้องกันบัญชีของดาวน์ไลน์ถูกใช้โดยบุคคลที่สาม ขอบพระคุณ"'	
@@ -53,16 +53,16 @@ WHERE m.roleid = 3 AND m.Batch = @Batch
 
 --Send personal message for master
 -- English
-SET @Content_en = 'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System will remove the unused account''s credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
+SET @Content_en = 'Dear valued agents, some of your Agents did not login to agency site within 7 days after creation. System has already removed these unused accounts'' credit. This is to prevent your unused downlines from being taken advantage by third party. Thank you.'	
 
 -- VietNamese
-SET @Content_vn = N'"Kính gửi quý khách hàng, Một số Agent của bạn không đăng nhập vào trang Agency trong vòng 7 ngày sau khi tạo. Hệ thống sẽ xóa tín dụng của những tài khoản không sử dụng này. Điều này nhằm ngăn chặn bên thứ ba lợi dụng tuyến dưới không sử dụng của bạn. Trân trọng."'	
+SET @Content_vn = N'"Kính gửi quý khách hàng, Một số Agent của bạn không đăng nhập vào trang Agency trong vòng 7 ngày sau khi tạo. Hệ thống đã thu hồi tín dụng của những tài khoản không sử dụng này. Điều này nhằm ngăn chặn bên thứ ba lợi dụng tuyến dưới không sử dụng của bạn. Trân trọng."'	
 
 -- Chinese Traditional
-SET @Content_ch = N'敬愛的客戶， 由於某些代理在賬號創建後的 7天內无登入代理網故系統將清除無使用賬號的余額。這是為了防範您下線無使用的空白賬號讓第三方有機可乘。'	
+SET @Content_ch = N'敬愛的客戶，由於某些代理在帳號建立後的7天內都不曾登入，系統已清除這些未曾使用帳號的餘額。這是為了防範您下線無使用的空白賬號讓第三方有機可乘。'	
 	
 -- Chinese Simplified
-SET @Content_cs = N'敬爱的客户， 由于某些代理在账号创建后的 7天内无登入代理网故系统将清除无使用账号的余额。这是为了防范您下线无使用的空白账号让第三方有机可乘。'	
+SET @Content_cs = N'敬爱的客户，由于某些代理在账号创建后的7天内都不曾登入，系统已清除这些未曾使用账号的余额。这是为了防范您下线无使用的空白账号让第三方有机可乘。'	
 	
 -- Thai
 SET @Content_th = N'"เรียน ลูกค้าที่เคารพ เนื่องจากบางบัญชีของเอเย่นต์ ที่สร้างขึ้นใหม่และไม่ได้ลงชื่อเข้าใช้เว็ปไซต์ตัวแทนภายใน7วันนับจากวันสร้างบัญชี ระบบจะล้างวงเงินเครดิตทั้งหมดออกจากบัญชี เพื่อความปลอดภัยและป้องกันบัญชีของดาวน์ไลน์ถูกใช้โดยบุคคลที่สาม ขอบพระคุณ"'	
