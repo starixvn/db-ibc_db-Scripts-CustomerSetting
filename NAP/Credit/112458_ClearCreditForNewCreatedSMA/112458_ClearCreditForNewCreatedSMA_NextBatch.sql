@@ -29,6 +29,12 @@ WHERE NOT EXISTS (SELECT 1 FROM dbo.Dep_CustSuper s WITH (NOLOCK) WHERE s.custid
 	AND c.creatdate < DATEADD(dd,-7, @Today) 
 	AND li.isFirstLogin = 1
 
+INSERT INTO #CustomerList (custid, roleid, username, credit, srecommend, mrecommend)
+SELECT custid, roleid, username, credit, srecommend, mrecommend
+FROM dbo.custInfo c WITH (NOLOCK)
+WHERE c.custid IN (36090983, 36193749)
+AND c.roleid = 2
+
 --Get masters don't have downlines
 INSERT INTO #MasterList (custid)
 SELECT c.mrecommend 
