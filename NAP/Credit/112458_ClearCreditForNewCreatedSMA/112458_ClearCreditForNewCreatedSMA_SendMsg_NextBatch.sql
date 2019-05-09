@@ -11,7 +11,7 @@ DECLARE @MessageID INT, @MessageID1 INT, @MessageID2 INT, @Creator INT = 1027893
 DECLARE @PostTime DATETIME = GETDATE()
 CREATE TABLE #UplineList (ID INT IDENTITY(1,1), CustId INT, username VARCHAR(30), MsgId INT)
 
-DECLARE @Batch TINYINT = 2
+DECLARE @Batch TINYINT = 3
 
 --Send personal message for super
 -- English
