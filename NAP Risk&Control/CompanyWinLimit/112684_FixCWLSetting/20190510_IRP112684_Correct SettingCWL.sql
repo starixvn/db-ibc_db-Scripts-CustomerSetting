@@ -9,7 +9,7 @@ GO
 
 UPDATE wl
 SET wl.IsBlockedTransfer = 1
-FROM WinLimit_ProductSettingDetail wl WITH (NOLOCK) 
+FROM WinLimit_ProductSettingDetail wl WITH (ROWLOCK) 
 	INNER JOIN Site s WITH (NOLOCK) ON wl.SiteID = s.siteid
 	INNER join Winlimit_ProductGlobalSetting g WITH (NOLOCK) ON g.ProductID = wl.ProductID and g.GroupID = wl.GroupID
 WHERE wl.LevelID = 3 AND wl.IsBlockedTransfer = 0
