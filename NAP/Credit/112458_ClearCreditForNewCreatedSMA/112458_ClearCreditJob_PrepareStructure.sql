@@ -9,7 +9,7 @@ GO
 
 DROP TABLE CustomerClearCredit
 
-CREATE TABLE CustomerClearCredit (LogDate DATETIME NOT NULL, custid INT NOT NULL, OldCredit MONEY)
+CREATE TABLE CustomerClearCredit (LogDate DATETIME NOT NULL, custid INT NOT NULL, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, OldCredit MONEY, IsSend BIT CONSTRAINT DF_CustomerClearCredit_IsSend DEFAULT 0)
 
 GO
 ALTER TABLE dbo.CustomerClearCredit 
