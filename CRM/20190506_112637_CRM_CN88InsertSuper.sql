@@ -17,7 +17,8 @@ GO
 SET ANSI_PADDING OFF
 GO
 INSERT #temp ([CustID])
-SELECT custid from bodb02.dbo.CS_CustSuper
+SELECT CustID FROM bodb02.dbo.Customer WITH(NOLOCK) WHERE srecommend IN
+(SELECT custid from bodb02.dbo.CS_CustSuper)
 
 UPDATE c
 	SET c.Ignored=1
@@ -91,7 +92,7 @@ BEGIN
 	DECLARE @SiteID INT,
 			@CountryName varchar(100),
 			@IsGroupHeadLine BIT
-		
+	
 	IF @RoleID = 1
 	BEGIN
 		SELECT @SiteID = SettingID 
@@ -101,7 +102,7 @@ BEGIN
 								FROM bodb02.dbo.customer c WITH(NOLOCK) 
 									INNER JOIN bodb02.dbo.customer ag WITH(NOLOCK) ON c.recommend = ag.custid
 								WHERE c.custid = @CustID)
-			AND SettingName = 'Site'
+			AND (SettingName = 'Site' OR SettingName='SiteCategory')
 
 	END
 	ELSE
@@ -112,9 +113,9 @@ BEGIN
 							(SELECT site 
 								FROM bodb02.dbo.customer c WITH(NOLOCK)
 								WHERE c.custid = @CustID)
-			AND SettingName = 'Site'
+			AND (SettingName = 'Site' OR SettingName='SiteCategory')
 	END
-
+	
 	-----return customer
 	SELECT @CountryName = Country,
 			@CountryID = c.CountryID
@@ -143,12 +144,11 @@ BEGIN
 	FROM crmCustomerLanguage cl WITH (NOLOCK) 
 	WHERE CustID = @custID
 
-	exec Acc_CRM_CustomerUpdateBasicInfo @IP=@IP,@MobilePhone=@MobilePhone,@LastName=@LastName,@Phone3=@Phone3,@Language=@Language,@Phone2AreaCode=@Phone2AreaCode,
+	exec Acc_CRM_CustomerUpdateBasicInfo_xpre @IP=@IP,@MobilePhone=@MobilePhone,@LastName=@LastName,@Phone3=@Phone3,@Language=@Language,@Phone2AreaCode=@Phone2AreaCode,
 										@Email=@Email,@FirstName=@FirstName,@Phone2=@Phone2,@MobilePhoneCountryCode=@MobilePhoneCountryCode,@PhoneAreaCode=@PhoneAreaCode,
-										@Site=@Site,@MSN=@MSN,@UserID=@UserID,@Phone3AreaCode=@Phone3AreaCode,@CustID=@custID,@MobilePhoneAreaCode=@MobilePhoneAreaCode,
+										@Site=@SiteID,@MSN=@MSN,@UserID=@UserID,@Phone3AreaCode=@Phone3AreaCode,@CustID=@custID,@MobilePhoneAreaCode=@MobilePhoneAreaCode,
 										@Skype=@Skype,@CountryID=@CountryID,@Phone2CountryCode=@Phone2CountryCode,@Phone3CountryCode=@Phone3CountryCode,
-										@PhoneCountryCode=@PhoneCountryCode,@Phone=@Phone
-	
+										@PhoneCountryCode=@PhoneCountryCode,@Phone=@Phone,@UserRole=1
 	waitfor delay '00:00:0.100'
 END
 

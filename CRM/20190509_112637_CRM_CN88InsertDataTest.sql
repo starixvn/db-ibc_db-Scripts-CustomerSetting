@@ -97,3 +97,28 @@ INSERT INTO [dbo].[crmSetting]
            ,1
            ,1)
 GO
+
+INSERT INTO crmSettingRelation(SettingID,ParentID,DisplayOrder)
+ VALUES
+           (4230
+           ,3044      
+           ,1)
+GO
+INSERT INTO crmSettingRelation(SettingID,ParentID,DisplayOrder)
+ VALUES
+           (4231
+           ,3044      
+           ,2)
+GO
+INSERT INTO crmSettingRelation(SettingID,ParentID,DisplayOrder)
+ VALUES
+           (4232
+           ,3043   
+           ,3)
+GO
+INSERT INTO crmSettingRelation(SettingID,ParentID,DisplayOrder)
+ VALUES
+           (4233
+           ,3043   
+           ,4)
+GO

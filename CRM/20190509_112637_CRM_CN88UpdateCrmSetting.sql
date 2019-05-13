@@ -987,3 +987,4 @@ FROM crmSetting c WITH(ROWLOCK,UPDLOCK)
 INNER JOIN #tmpSetting t ON c.SettingID=t.SettingID
 
 DROP TABLE #tmpSetting
+
