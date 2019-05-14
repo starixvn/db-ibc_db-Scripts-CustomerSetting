@@ -6,6 +6,38 @@
 */
 USE [bodb_CRM]
 GO
+INSERT INTO [dbo].[crmSetting]
+           ([SettingName]
+           ,[SettingID]
+           ,[SettingValue]
+           ,[DisplayOrder]
+           ,[IsActive]
+		   ,[SiteOffer])
+     VALUES
+           ('SiteCategory'
+           ,33002
+           ,'CN88'
+           ,3
+           ,1
+		   ,1)
+GO
+
+INSERT INTO [dbo].[crmSetting]
+           ([SettingName]
+           ,[SettingID]
+           ,[SettingValue]
+           ,[DisplayOrder]
+           ,[IsActive]
+		   ,[SiteOffer])
+     VALUES
+           ('Role'
+           ,7006
+           ,'Headline'
+           ,6
+           ,1
+		   ,1)
+GO
+
 
 INSERT INTO [dbo].[crmSetting]
            ([SettingName]
@@ -122,3 +154,4 @@ INSERT INTO crmSettingRelation(SettingID,ParentID,DisplayOrder)
            ,3043   
            ,4)
 GO
+

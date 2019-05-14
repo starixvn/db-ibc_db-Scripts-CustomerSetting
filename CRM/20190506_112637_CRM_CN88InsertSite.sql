@@ -63,32 +63,4 @@ inner join crmSettingRelation(NOLOCK) sr on sr.SettingID = s.SettingID
 where SettingName='Bettype'
 GO
 
-INSERT INTO [dbo].[crmSetting]
-           ([SettingName]
-           ,[SettingID]
-           ,[SettingValue]
-           ,[DisplayOrder]
-           ,[IsActive])
-     VALUES
-           ('SiteCategory'
-           ,33002
-           ,'CN88'
-           ,3
-           ,1)
-GO
-
-INSERT INTO [dbo].[crmSetting]
-           ([SettingName]
-           ,[SettingID]
-           ,[SettingValue]
-           ,[DisplayOrder]
-           ,[IsActive])
-     VALUES
-           ('Role'
-           ,7006
-           ,'Headline'
-           ,6
-           ,1)
-GO
-
 
