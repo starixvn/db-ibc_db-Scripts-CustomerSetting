@@ -18,7 +18,7 @@ SET ANSI_PADDING OFF
 GO
 INSERT #temp ([CustID])
 SELECT CustID FROM bodb02.dbo.Customer WITH(NOLOCK) WHERE 
---srecommend IN(SELECT custid from bodb02.dbo.CS_CustSuper) OR 
+srecommend IN(SELECT custid from bodb02.dbo.CS_CustSuper) OR 
 RoleID=0
 
 UPDATE c
@@ -160,5 +160,3 @@ INNER JOIN crmCustomer c WITH(ROWLOCK,UPDLOCK) ON t.CustID=c.CustID
 
 DROP TABLE #temp
 DROP TABLE #CustListImport
-
---select * from crmCustomer where custid=35555230
