@@ -2,7 +2,7 @@
 	Created: Winnie
 	Date: 20190515
 	Task: Pragmatic Update triple-tigers RedmineID:#112836
-	DB: DBCRM/bodb_crm
+	DB: DBCUST/CUSTDB
 */
 --INH
 UPDATE a
