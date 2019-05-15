@@ -58,6 +58,8 @@ BEGIN
 		IF @rowcount < 5000 
 			BREAK;
 		
+		DELETE @tmpCust
+		
 		WAITFOR DELAY '0:0:0.01'
 	END
 	
@@ -70,7 +72,7 @@ GO
 ------------------------------------------------------	
 -- BEGIN STEP 2: Run this SP at replicated DB -----
 --------------------------------------------------------------------------------------
-DECLARE @max_custid INT, @srecommend INT, @currency INT
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #LicenseeSetting (site VARCHAR(20), currency int, minbet MONEY, maxbet MONEY, maxPerDraw MONEY, isFinished BIT DEFAULT (0))  
@@ -772,7 +774,7 @@ GO
 ---
 -- BEGIN STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
-DECLARE @max_custid INT, @srecommend INT, @currency INT
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #LicenseeSetting (site VARCHAR(20), currency int, minbet MONEY, maxbet MONEY, maxPerDraw MONEY, isFinished BIT DEFAULT (0))  

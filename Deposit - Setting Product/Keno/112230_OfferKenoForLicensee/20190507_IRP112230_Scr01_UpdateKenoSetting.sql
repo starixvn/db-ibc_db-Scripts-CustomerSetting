@@ -49,7 +49,7 @@ BEGIN
 			@GameTypeID_max INT = 14--max gameTypeID
 			
 	WHILE(1=1)
-	BEGIN			
+	BEGIN		
 		DELETE TOP (5000) t
 		OUTPUT DELETED.custid, DELETED.roleid INTO @tmpCust
 		FROM #tblCust t
@@ -109,6 +109,8 @@ BEGIN
 		
 		IF @rowcount < 5000 
 			BREAK;
+		
+		DELETE @tmpCust
 		
 		WAITFOR DELAY '0:0:0.01'
 	END
@@ -804,8 +806,8 @@ BEGIN
 	SET isfinished = 1
 		,@srecommend = custid
 		,@minbet = MinBet
-		,@maxbet = @maxbet
-		,@maxperDraw = @maxPerDraw		
+		,@maxbet = maxbet
+		,@maxperDraw = maxPerDraw		
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -1514,8 +1516,8 @@ BEGIN
 	SET isfinished = 1
 		,@srecommend = custid
 		,@minbet = MinBet
-		,@maxbet = @maxbet
-		,@maxperDraw = @maxPerDraw		
+		,@maxbet = maxbet
+		,@maxperDraw = maxPerDraw		
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK

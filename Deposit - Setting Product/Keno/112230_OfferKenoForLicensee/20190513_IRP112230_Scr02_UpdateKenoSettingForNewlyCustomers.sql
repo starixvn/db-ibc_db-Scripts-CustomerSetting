@@ -751,8 +751,12 @@ BEGIN
 	IF @rowcount < 5000 
 		BREAK;
 	
+	DELETE @tmpCust
+	
 	WAITFOR DELAY '0:0:0.01'
 END
 
-
+DROP TABLE #Supers
+DROP TABLE #tblCust	
+DROP TABLE #LicenseeSetting
 

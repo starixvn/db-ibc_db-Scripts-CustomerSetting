@@ -28,7 +28,7 @@ DELETE #tblCust
 WHERE mrecommend IN (SELECT custid 
 					FROM dbo.custinfo WITH(NOLOCK)
 					WHERE srecommend IN (SELECT custid FROM #Supers)
-					AND(username like '%Acc%'  OR username like '%AFF%' OR username like '%LocalBank%'
+					AND(username like '%Acc%'  OR username like '%AFF%' OR username like '%LocalBank%')
 					AND roleid=3)
 
 
@@ -36,7 +36,7 @@ WHILE(1=1)
 BEGIN			
 	DELETE TOP (5000) t
 	OUTPUT DELETED.custid, DELETED.roleid INTO @tmpCust
-	FROM #tblCust
+	FROM #tblCust t
 	
 	SELECT @rowcount = @@rowcount	
 	
@@ -51,6 +51,8 @@ BEGIN
 	
 	IF @rowcount < 5000
 		BREAK;
+	
+	DELETE @tmpCust
 END	
 
 DROP TABLE #tblCust

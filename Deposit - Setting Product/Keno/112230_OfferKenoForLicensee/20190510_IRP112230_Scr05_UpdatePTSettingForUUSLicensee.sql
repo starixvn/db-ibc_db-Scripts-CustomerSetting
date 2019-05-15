@@ -59,6 +59,8 @@ BEGIN
 		
 		IF @rowcount < 5000
 			BREAK;
+		
+		DELETE @tmpCust
 	END	
 	
 	DROP TABLE #tblCust
@@ -71,7 +73,7 @@ GO
 -- BEGIN STEP 2: Run this SP at replicated DB -----
 --------------------------------------------------------------------------------------
 
-DECLARE @max_custid INT, @srecommend INT, @currency INT
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #Supers (custid INT,isFinished BIT DEFAULT(0))
@@ -121,7 +123,7 @@ GO
 -- BEGIN STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
 
-DECLARE @max_custid INT, @srecommend INT, @currency INT
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #Supers (custid INT,isFinished BIT DEFAULT(0))
