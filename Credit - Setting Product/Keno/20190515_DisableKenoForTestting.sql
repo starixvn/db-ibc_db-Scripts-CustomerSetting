@@ -8,5 +8,5 @@ GO
 
 UPDATE cg 
 SET cg.IsDisabled = 1
-FROM CustGameType cg (ROWLOCK) 
+FROM CustGameType cg WITH (ROWLOCK, UPDLOCK) 
 WHERE custid = 19280167 AND GameTypeID IN (7,9)
