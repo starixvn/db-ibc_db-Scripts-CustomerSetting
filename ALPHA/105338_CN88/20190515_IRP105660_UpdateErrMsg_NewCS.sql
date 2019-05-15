@@ -7,13 +7,14 @@
 USE CustDB
 GO
 
-DECLARE @tmpErrMsg TABLE (MsgID INT, MsgNameCS NVARCHAR(500), MsgNameCN NVARCHAR(500))
+DECLARE @tmpErrMsg TABLE (MsgID INT, MsgNameCS NVARCHAR(500), MsgNameCN NVARCHAR(500), MsgNameCT NVARCHAR(500))
 
-INSERT INTO @tmpErrMsg (MsgID, MsgNameCN, MsgNameCS)
-SELECT	80001, N'帐户/昵称或是密码错误。', N'帳戶/暱稱/密碼錯誤。'
+INSERT INTO @tmpErrMsg (MsgID, MsgNameCN, MsgNameCS, MsgNameCT)
+SELECT	80001, N'帐户/昵称或是密码错误。', N'帐户/昵称或是密码错误。', N'帳戶/暱稱/密碼錯誤。'
 
 UPDATE l
 SET l.MsgNameCS = t.MsgNameCS,
-	l.MsgNameCN = t.MsgNameCN
+	l.MsgNameCN = t.MsgNameCN,
+	l.MsgNameCT = t.MsgNameCT
 FROM dbo.MsgError l WITH (ROWLOCK)
 	INNER JOIN @tmpErrMsg t ON t.MsgID = l.MsgID
