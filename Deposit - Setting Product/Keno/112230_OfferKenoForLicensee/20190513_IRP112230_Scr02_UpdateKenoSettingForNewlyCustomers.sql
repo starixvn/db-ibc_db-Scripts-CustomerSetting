@@ -711,9 +711,9 @@ BEGIN
 	USING (SELECT custid, roleid FROM @tmpCust) as source ON target.custid = source.custid
 													AND target.sporttype = 202
 													AND target.bettype = 1501
-	WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE spositiontaking END,
-						target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE mpositiontaking END,
-						target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE apositiontaking END		
+	WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE 0 END,
+						target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE 0 END,
+						target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE 0 END		
 	WHEN NOT MATCHED THEN INSERT([CustID]
 							   ,[Bettype]
 							   ,[Sporttype]

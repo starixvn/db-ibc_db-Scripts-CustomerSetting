@@ -41,9 +41,9 @@ BEGIN
 	SELECT @rowcount = @@rowcount	
 	
 	UPDATE cs
-	SET spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE spositiontaking END,
-		mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE mpositiontaking END,
-		apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE apositiontaking END		
+	SET spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE 0 END,
+		mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE 0 END,
+		apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE 0 END		
 	FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN @tmpCust t ON cs.custid = t.custid
 	WHERE sporttype = 202
