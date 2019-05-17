@@ -699,5 +699,8 @@ BEGIN
 		SET @GameTypeID = @GameTypeID + 1			
 	END
 	
+	IF @rowcount < 5000 
+			BREAK;
+			
 	DELETE @tmpCust
 END	
