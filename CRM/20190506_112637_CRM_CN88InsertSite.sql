@@ -7,11 +7,23 @@
 USE [bodb_CRM]
 GO
 
-ALTER TABLE crmSetting
-        ADD SiteOffer TINYINT NULL 
- CONSTRAINT DF_crmSetting_SiteOffer 
-    DEFAULT (2)
+ALTER TABLE crmSetting  ADD SiteOffer TINYINT NULL 
+ CONSTRAINT DF_crmSetting_SiteOffer   DEFAULT (2)
 GO
+
+ALTER TABLE crmSetting  ADD SettingValueCS NVARCHAR(100) 
+GO
+ALTER TABLE crmSetting  ADD SettingValueCT NVARCHAR(100) 
+GO
+
+ALTER TABLE [dbo].[crmSubjectTemplate] ADD SiteOffer TINYINT NULL
+ CONSTRAINT DF_crmSubjectTemplate_SiteOffer   DEFAULT (2)
+GO
+ALTER TABLE [crmSubjectTemplate]  ADD subjectCS NVARCHAR(200) 
+GO
+ALTER TABLE [crmSubjectTemplate]  ADD subjectCT NVARCHAR(200) 
+GO
+
 ALTER VIEW [dbo].[crmLanguage] 
 AS 
 SELECT SettingID LanguageID, SettingValue Name, s.DisplayOrder, s.IsActive,s.SiteOffer
