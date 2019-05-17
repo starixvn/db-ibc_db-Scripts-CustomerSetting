@@ -27,7 +27,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, mrecommend INT, roleid TINYINT)
-	DECLARE @tmpCust TABLE(Custid INT, roleid TINYINT)
+	DECLARE @tmpCust TABLE(Custid INT PRIMARY KEY, roleid TINYINT)
 	DECLARE @rowcount INT
 	
 	INSERT INTO #tblCust (custid,roleid,mrecommend)			
