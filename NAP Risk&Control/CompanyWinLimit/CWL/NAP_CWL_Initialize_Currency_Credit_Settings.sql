@@ -121,11 +121,7 @@ BEGIN
 									 WHEN p.LevelID = 102
 									 THEN g.Level102
 								  END
-				 , p.IsBlockedTransfer = CASE
-									    WHEN p.LevelID = 3
-									    THEN g.blockedTransferLvl3
-									    ELSE 0
-									END
+				 , p.IsBlockedTransfer = 0
 		  FROM @ProductSettingDetail AS p
 			 INNER JOIN Winlimit_ProductGlobalSetting AS g WITH (NOLOCK) ON p.ProductID = g.ProductID
 															    AND p.GroupID = g.GroupID;
@@ -190,7 +186,8 @@ BEGIN
 			 END;
 	   END;
 
-    SELECT *
+    SELECT SiteId
+	    , NumberOfCurrency
     FROM @Result
     ORDER BY SiteId;
 END;
