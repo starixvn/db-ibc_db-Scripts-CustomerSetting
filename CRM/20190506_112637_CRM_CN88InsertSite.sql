@@ -16,6 +16,31 @@ GO
 ALTER TABLE crmSetting  ADD SettingValueCT NVARCHAR(100) 
 GO
 
+ALTER TABLE [dbo].[crmCustomer] ADD ProvinceID INT
+GO
+ALTER TABLE [dbo].crmFeedback ADD ProvinceID INT
+GO
+
+ALTER TABLE crmCountry  ADD SiteOffer TINYINT NULL 
+ CONSTRAINT DF_crmCountry_SiteOffer   DEFAULT (2)
+GO
+
+CREATE TABLE [dbo].[crmProvince](
+	[ProvinceID] [int] NOT NULL IDENTITY(1,1),
+	[CountryID] [int] NULL,
+	[ProvinceName] [nvarchar](150) NULL,
+	[isActive] [bit] NULL,
+	[DisplayOrder] [tinyint] NULL,
+	[ProvinceNameCS] [nvarchar](150) NULL,
+	[ProvinceNameCT] [nvarchar](150) NULL,
+ CONSTRAINT [PK_crmProvince] PRIMARY KEY CLUSTERED 
+(
+	[ProvinceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+
+GO
+
 ALTER TABLE [dbo].[crmSubjectTemplate] ADD SiteOffer TINYINT NULL
  CONSTRAINT DF_crmSubjectTemplate_SiteOffer   DEFAULT (2)
 GO
@@ -76,3 +101,24 @@ where SettingName='Bettype'
 GO
 
 
+ALTER view [dbo].[crmSite]
+AS
+SELECT s.SettingID SiteID, 
+	s.SettingValue SiteName,
+	s.DisplayOrder,
+	CASE sr.ParentID WHEN 33000 THEN 1 WHEN 33001 THEN 0 ELSE -1 END IsLicensee,
+	s.IsActive,
+	s.SiteOffer
+	FROM dbo.crmSettingRelation sr
+	INNER JOIN dbo.crmSetting s ON sr.SettingID = s.SettingID AND s.SettingName = 'Site'
+	WHERE ParentID IN (33000,33001)
+UNION ALL
+SELECT s.SettingID SiteID, 
+	s.SettingValue SiteName,
+	s.DisplayOrder,
+	0 IsLicensee,
+	s.IsActive,
+	s.SiteOffer
+	FROM dbo.crmSetting s
+	WHERE s.SettingID=33002
+GO
