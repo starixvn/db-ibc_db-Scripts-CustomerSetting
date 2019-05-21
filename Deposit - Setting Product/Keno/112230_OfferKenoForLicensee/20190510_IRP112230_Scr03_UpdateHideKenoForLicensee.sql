@@ -21,12 +21,12 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 
-	CREATE TABLE #tblCust (custid INT, mrecommend INT, roleid TINYINT)
-	DECLARE @tmpCust TABLE(Custid INT, roleid TINYINT)
+	CREATE TABLE #tblCust (custid INT, mrecommend INT)
+	DECLARE @tmpCust TABLE(Custid INT)
 	DECLARE @rowcount INT
 	
-	INSERT INTO #tblCust (custid,roleid,mrecommend)			
-	SELECT custid,roleid,mrecommend
+	INSERT INTO #tblCust (custid,mrecommend)			
+	SELECT custid,mrecommend
 	FROM dbo.Customer WITH(NOLOCK)
 	WHERE srecommend =@srecommend
 		AND custid <= @max_custid
@@ -43,7 +43,7 @@ BEGIN
 	WHILE(1=1)
 	BEGIN			
 		DELETE TOP (5000) t
-		OUTPUT DELETED.custid, DELETED.roleid INTO @tmpCust
+		OUTPUT DELETED.custid INTO @tmpCust
 		FROM #tblCust t
 		
 		SELECT @rowcount = @@rowcount
