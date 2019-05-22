@@ -707,7 +707,7 @@ BEGIN
 	
 	DELETE @tmpCust
 	
-	WAITFOR DELAY '0:0:0.01'
+	WAITFOR DELAY '0:0:2' --wait 2s for replicate incase run without execrep
 END
 
 DROP TABLE #Supers

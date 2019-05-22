@@ -703,4 +703,6 @@ BEGIN
 		BREAK;
 		
 	DELETE @tmpCust
+	
+	WAITFOR DELAY '0:0:2'--wait 2s for replicate incase run without execrep
 END	
