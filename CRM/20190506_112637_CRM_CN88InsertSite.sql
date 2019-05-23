@@ -25,6 +25,9 @@ ALTER TABLE crmCountry  ADD SiteOffer TINYINT NULL
  CONSTRAINT DF_crmCountry_SiteOffer   DEFAULT (2)
 GO
 
+ALTER TABLE dbo.crmLogAction ADD ExcludedForCn88 BIT
+GO
+
 CREATE TABLE [dbo].[crmProvince](
 	[ProvinceID] [int] NOT NULL IDENTITY(1,1),
 	[CountryID] [int] NULL,
@@ -52,7 +55,7 @@ GO
 ALTER VIEW [dbo].[crmLanguage] 
 AS 
 SELECT SettingID LanguageID, SettingValue Name, s.DisplayOrder, s.IsActive,s.SiteOffer
-FROM crmSetting(NOLOCK) s
+FROM crmSetting s WITH(NOLOCK) 
 WHERE SettingName = 'Language'
 GO
 ALTER VIEW [dbo].[crmSubCategory]
@@ -88,7 +91,7 @@ select SettingID MainCategoryID,
 	DisplayOrder,
 	IsActive,
 	SiteOffer
-from crmsetting
+from crmsetting WITH(NOLOCK)
 where settingname = 'MainCategory'
 GO
 
@@ -109,8 +112,8 @@ SELECT s.SettingID SiteID,
 	CASE sr.ParentID WHEN 33000 THEN 1 WHEN 33001 THEN 0 ELSE -1 END IsLicensee,
 	s.IsActive,
 	s.SiteOffer
-	FROM dbo.crmSettingRelation sr
-	INNER JOIN dbo.crmSetting s ON sr.SettingID = s.SettingID AND s.SettingName = 'Site'
+	FROM dbo.crmSettingRelation sr WITH(NOLOCK)
+	INNER JOIN dbo.crmSetting s WITH(NOLOCK) ON sr.SettingID = s.SettingID AND s.SettingName = 'Site'
 	WHERE ParentID IN (33000,33001)
 UNION ALL
 SELECT s.SettingID SiteID, 
@@ -119,6 +122,6 @@ SELECT s.SettingID SiteID,
 	0 IsLicensee,
 	s.IsActive,
 	s.SiteOffer
-	FROM dbo.crmSetting s
+	FROM dbo.crmSetting s WITH(NOLOCK)
 	WHERE s.SettingID=33002
 GO
