@@ -6,3 +6,24 @@
 
 GRANT SELECT ON CustSuper TO bodbAdminNet;  
 GO  
+
+GRANT SELECT ON CustAgent TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON custAccount TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON Acc_CustDirect TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON exchange TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON Bettrans TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON Dep_CustSuper TO bodbAdminNet;  
+GO  
+
+GRANT SELECT ON Site TO bodbAdminNet;  
+GO  
