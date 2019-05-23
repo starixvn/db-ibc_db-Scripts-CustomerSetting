@@ -668,11 +668,17 @@ SELECT s.custid, l.MinBet, l.MaxBet, l.MaxPerDraw
 FROM #LicenseeSetting l
 	INNER JOIN Dep_CustSuper s WITH(NOLOCK) ON s.site = l.site AND s.currency = l.currency
 
-CREATE TABLE #tblCust (custid INT PRIMARY KEY, mrecommend INT, roleid TINYINT,minbet MONEY, maxbet MONEY, maxPerDraw MONEY)
-DECLARE @tmpCust TABLE (custid INT,roleid TINYINT,minbet MONEY, maxbet MONEY, maxPerDraw MONEY)
+CREATE TABLE #tblCust (custid INT PRIMARY KEY, mrecommend INT, roleid TINYINT,minbet MONEY, maxbet MONEY, maxPerDraw MONEY, PT SMALLMONEY)
+DECLARE @tmpCust TABLE (custid INT,roleid TINYINT,minbet MONEY, maxbet MONEY, maxPerDraw MONEY, PT SMALLMONEY)
 
-INSERT INTO #tblCust (custid,roleid,mrecommend,minbet,maxbet,maxPerDraw)			
-SELECT c.custid,roleid,mrecommend, minbet,maxbet,maxPerDraw
+INSERT INTO #tblCust (custid,roleid,mrecommend,minbet,maxbet,maxPerDraw,PT)			
+SELECT c.custid,roleid,mrecommend, minbet,maxbet,maxPerDraw, 
+		CASE WHEN srecommend IN (29336758	,--	FB88SuperUUS
+								29336794	,--	FB88SuperRMB
+								29336836	,--	FB88SuperINH
+								7596180	--	MacaubetSuperEURO
+								)
+			THEN 0.9 ELSE 0.94 END
 FROM dbo.Customer c WITH(NOLOCK)
 	INNER JOIN #supers s ON c.srecommend = s.custid
 WHERE c.custid > @max_custid
@@ -689,19 +695,19 @@ DECLARE @rowcount INT
 WHILE(1=1)
 BEGIN			
 	DELETE TOP (5000) t
-	OUTPUT DELETED.custid, DELETED.roleid, DELETED.minbet, DELETED.maxbet, DELETED.maxPerDraw 
-	INTO @tmpCust
+	OUTPUT DELETED.custid,DELETED.roleid, DELETED.minbet, DELETED.maxbet, DELETED.maxPerDraw,DELETED.PT 
+	INTO @tmpCust(custid,roleid,minbet,maxbet,maxPerDraw,PT)
 	FROM #tblCust t
 	
 	SELECT @rowcount = @@rowcount		
 				
 	MERGE CustSettingGame as target
-	USING (SELECT custid, roleid FROM @tmpCust) as source ON target.custid = source.custid
+	USING (SELECT custid,PT,roleid FROM @tmpCust) as source ON target.custid = source.custid
 													AND target.sporttype = 202
 													AND target.bettype = 1501
-	WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE 0 END,
-						target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE 0 END,
-						target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE 0 END		
+	WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN PT ELSE 0 END,
+						target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN PT ELSE 0 END,
+						target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN PT ELSE 0 END		
 	WHEN NOT MATCHED THEN INSERT([CustID]
 							   ,[Bettype]
 							   ,[Sporttype]
@@ -719,9 +725,9 @@ BEGIN
 	VALUES(source.CustID
 		   ,1501 --[Bettype]
 		   ,202  --[Sporttype]
-		   ,CASE WHEN source.roleid IN (4,2,1) THEN 0.9 ELSE 0 END -- apositiontaking
-		   ,CASE WHEN source.roleid IN (4,3) THEN 0.9 ELSE 0 END -- mpositiontaking
-		   ,CASE WHEN source.roleid IN (4) THEN 0.9 ELSE 0 END -- spositiontaking
+		   ,CASE WHEN source.roleid IN (4,2,1) THEN PT ELSE 0 END -- apositiontaking
+		   ,CASE WHEN source.roleid IN (4,3) THEN PT ELSE 0 END -- mpositiontaking
+		   ,CASE WHEN source.roleid IN (4) THEN PT ELSE 0 END -- spositiontaking
 		   ,0,0,0,0,0,0,0,0
 		   );						
 	
@@ -741,7 +747,7 @@ BEGIN
 	
 	DELETE @tmpCust
 	
-	WAITFOR DELAY '0:0:0.01'
+	WAITFOR DELAY '0:0:2'--wait 2s for replicate incase run without execrep
 END
 
 DROP TABLE #Supers

@@ -28,7 +28,17 @@ BEGIN
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, mrecommend INT, roleid TINYINT)
 	DECLARE @tmpCust TABLE(Custid INT PRIMARY KEY, roleid TINYINT)
-	DECLARE @rowcount INT
+	DECLARE @rowcount INT,
+			@PT SMALLMONEY
+	
+	IF @srecommend IN (29336758	,--	FB88SuperUUS
+						29336794	,--	FB88SuperRMB
+						29336836	,--	FB88SuperINH
+						7596180	--	MacaubetSuperEURO
+					)
+		SET @PT = 0.9
+	ELSE 
+		SET @PT = 0.94
 	
 	INSERT INTO #tblCust (custid,roleid,mrecommend)			
 	SELECT custid,roleid,mrecommend
@@ -60,9 +70,9 @@ BEGIN
 		USING (SELECT custid, roleid FROM @tmpCust) as source ON target.custid = source.custid
 														AND target.sporttype = 202
 														AND target.bettype = 1501
-		WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN 0.9 ELSE 0 END,
-							target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN 0.9 ELSE 0 END,
-							target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN 0.9 ELSE 0 END		
+		WHEN MATCHED THEN UPDATE SET target.spositiontaking = CASE WHEN roleid = 4 THEN @PT ELSE 0 END,
+							target.mpositiontaking = CASE WHEN roleid IN (4,3) THEN @PT ELSE 0 END,
+							target.apositiontaking = CASE WHEN roleid IN (4,2,1) THEN @PT ELSE 0 END		
 		WHEN NOT MATCHED THEN INSERT([CustID]
 								   ,[Bettype]
 								   ,[Sporttype]
@@ -80,9 +90,9 @@ BEGIN
 		VALUES(source.CustID
 			   ,1501 --[Bettype]
 			   ,202  --[Sporttype]
-			   ,CASE WHEN source.roleid IN (4,2,1) THEN 0.9 ELSE 0 END -- apositiontaking
-			   ,CASE WHEN source.roleid IN (4,3) THEN 0.9 ELSE 0 END -- mpositiontaking
-			   ,CASE WHEN source.roleid IN (4) THEN 0.9 ELSE 0 END -- spositiontaking
+			   ,CASE WHEN source.roleid IN (4,2,1) THEN @PT ELSE 0 END -- apositiontaking
+			   ,CASE WHEN source.roleid IN (4,3) THEN @PT ELSE 0 END -- mpositiontaking
+			   ,CASE WHEN source.roleid IN (4) THEN @PT ELSE 0 END -- spositiontaking
 			   ,0,0,0,0,0,0,0,0
 			   );						
 		
