@@ -11,7 +11,7 @@ INSERT INTO #CustList (CustId)
 SELECT c.custid
 FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.customer s ON c.srecommend = s.custid
-WHERE s.roleid = 4 AND s.site = 'CN88' AND c.roleid BETWEEN 2 AND 4 
+WHERE s.roleid = 4 AND s.site = 'CN88' AND c.roleid IN(2,3,4,0)
 	AND c.username2 IS NOT NULL 
 	AND c.username2 <> ''
 	AND c.username2 NOT LIKE 'CN88$%'
