@@ -16,7 +16,8 @@ SELECT	940, 'Account is locked due to failed logins 5 times', 'CS_LoginVerifyDow
 SELECT	1326, 'Login via Agent''s Site', 'CS_LoginVerifyDownline', 0, NULL, NULL UNION ALL
 SELECT	1327, 'Login via Agent''s Site', 'CS_LoginVerifyDownline', 1, NULL, NULL UNION ALL
 SELECT	1328, 'Login via Agent''s Site', 'CS_LoginVerifyDownline', 1, NULL, NULL UNION ALL
-SELECT	1329, 'Login via Agent''s Site', 'CS_LoginClaimDownline', 1, NULL, NULL 
+SELECT	1329, 'Login via Agent''s Site', 'CS_LoginClaimDownline', 1, NULL, NULL UNION ALL
+SELECT	1330, 'Log-out', 'CS_CheckOut', 1, NULL, NULL 
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
 
