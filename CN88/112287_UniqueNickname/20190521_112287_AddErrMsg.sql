@@ -10,7 +10,8 @@ GO
 DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
 INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
-SELECT	80007, 'Your account has been locked due to multiple failed security check attempts. Please contact your upline to unlock.', 9, 1
+SELECT	80007, 'Your account has been locked due to multiple failed security check attempts. Please contact your upline to unlock.', 9, 1 UNION ALL
+SELECT	80008, 'Your sub account has been locked due to multiple failed security check attempts. Please contact the main account user to unlock.', 9, 1
 
 DELETE m 
 FROM MsgError m 
