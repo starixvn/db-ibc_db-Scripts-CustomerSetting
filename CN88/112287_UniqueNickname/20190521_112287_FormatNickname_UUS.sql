@@ -30,8 +30,6 @@ UPDATE c
 SET c.username2 = NickName
 FROM dbo.customer c WITH (ROWLOCK)	
 	INNER JOIN #CustList m ON m.CustId = c.custid
-	CROSS APPLY dbo.f_CS_GetNickName(UserName2,1)
+	CROSS APPLY dbo.f_CS_GetNickName_xtest(UserName2,1)
 
 DROP TABLE #CustList
-
-SELECT * 
