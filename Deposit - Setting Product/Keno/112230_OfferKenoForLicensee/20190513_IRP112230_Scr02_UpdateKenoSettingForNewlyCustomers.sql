@@ -723,21 +723,18 @@ BEGIN
 	FROM #tblCust t
 	
 	SELECT @rowcount = @@rowcount	
-				
-	WHILE (1=1)
-	BEGIN
-		SET @GameTypeID = 1
 		
-		WHILE(@GameTypeID<=@GameTypeID_max)
-		BEGIN
-			DELETE custgametype WITH(UPDLOCK,ROWLOCK)
-			WHERE custid IN (SELECT custid FROM @tmpCust)	
-				AND gameTypeID = @GameTypeID
-			
-			SET @GameTypeID = @GameTypeID + 1			
-		END
-	END
+	SET @GameTypeID = 1
 	
+	WHILE(@GameTypeID<=@GameTypeID_max)
+	BEGIN
+		DELETE custgametype WITH(UPDLOCK,ROWLOCK)
+		WHERE custid IN (SELECT custid FROM @tmpCust)	
+			AND gameTypeID = @GameTypeID
+		
+		SET @GameTypeID = @GameTypeID + 1			
+	END
+		
 	MERGE CustSettingGame as target
 	USING (SELECT custid,PT,roleid FROM @tmpCust) as source ON target.custid = source.custid
 													AND target.sporttype = 202
