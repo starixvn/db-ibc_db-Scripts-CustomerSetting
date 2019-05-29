@@ -10,7 +10,9 @@ GO
 DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
 INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
-SELECT	40043, 'You cannot do this action because this account''s upline is not active.', 5, 1 
+SELECT	40043, 'You cannot do this action because this account''s upline is not active.', 5, 1 UNION ALL
+SELECT	80009, 'Your account has been inactive. Please contact your upline for assistance.', 5, 1 UNION ALL 
+SELECT	80010, 'Your account has been suspended. Please contact your upline to activate your account!', 9, 1 
 
 DELETE m 
 FROM MsgError m 

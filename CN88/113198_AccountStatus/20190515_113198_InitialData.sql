@@ -9,10 +9,11 @@ GO
 INSERT INTO CS_CustomerStatus  (CustId, InactiveInfo, SuspendedInfo, ViewOnlyInfo)
 SELECT CustId, 0, 0, 0
 FROM Customer c WITH (NOLOCK)
-WHERE c.site = 'CN88' AND c.roleid BETWEEN 2 AND 4
+WHERE c.site = 'CN88' AND (c.roleid BETWEEN 2 AND 4 OR c.roleid = 0)
 
 INSERT INTO CS_CustomerStatus  (CustId, InactiveInfo, SuspendedInfo, ViewOnlyInfo)
 SELECT c.CustId, 0, 0, 0
 FROM Customer c WITH (NOLOCK)
 	INNER JOIN Customer a WITH (NOLOCK) ON c.recommend = a.custid
 WHERE a.site = 'CN88' AND a.roleid = 2 AND c.roleid = 1
+
