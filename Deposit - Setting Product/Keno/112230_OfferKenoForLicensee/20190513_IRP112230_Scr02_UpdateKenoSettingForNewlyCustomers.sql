@@ -711,8 +711,10 @@ WHERE mrecommend IN (SELECT custid
 					AND(username like '%Acc%'  OR username like '%AFF%' OR username like '%LocalBank%')
 					AND roleid=3)
 
-DECLARE @rowcount INT
-			
+DECLARE @rowcount INT,
+	@GameTypeID INT = 1,
+	@GameTypeID_max INT = 14--max gameTypeID		
+	
 WHILE(1=1)
 BEGIN			
 	DELETE TOP (5000) t
@@ -720,8 +722,22 @@ BEGIN
 	INTO @tmpCust(custid,roleid,minbet,maxbet,maxPerDraw,PT)
 	FROM #tblCust t
 	
-	SELECT @rowcount = @@rowcount		
+	SELECT @rowcount = @@rowcount	
 				
+	WHILE (1=1)
+	BEGIN
+		SET @GameTypeID = 1
+		
+		WHILE(@GameTypeID<=@GameTypeID_max)
+		BEGIN
+			DELETE custgametype WITH(UPDLOCK,ROWLOCK)
+			WHERE custid IN (SELECT custid FROM @tmpCust)	
+				AND gameTypeID = @GameTypeID
+			
+			SET @GameTypeID = @GameTypeID + 1			
+		END
+	END
+	
 	MERGE CustSettingGame as target
 	USING (SELECT custid,PT,roleid FROM @tmpCust) as source ON target.custid = source.custid
 													AND target.sporttype = 202
