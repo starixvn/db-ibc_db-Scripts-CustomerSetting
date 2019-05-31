@@ -36,7 +36,7 @@ WHERE  EXISTS (SELECT custid
 				FROM dbo.CustDirectAccount WITH(NOLOCK) 
 				WHERE CustID = ci.custid)													
 	AND ci.roleid=3 
-	AND ci.srecommend in (select custid from #tmpSupers)												
+	AND ci.srecommend in (select custid from #Supers)												
 
 INSERT INTO #tblCust (custid,roleid,sporttype,bettype,spositiontaking,mpositiontaking,slivepositiontaking,mlivepositiontaking)			
 SELECT ci.custid,roleid,sporttype,bettype,spositiontaking,mpositiontaking,slivepositiontaking,mlivepositiontaking
@@ -60,10 +60,10 @@ BEGIN
 	SELECT @rowcount = @@rowcount	
 	
 	UPDATE cs
-	SET spositiontaking = 0,
-		slivepositiontaking = 0,
-		mpositiontaking = CASE WHEN roleid = 3 THEN t.mpositiontaking + t.spositiontaking ELSE mpositiontaking END,
-		mlivepositiontaking = CASE WHEN roleid = 3 THEN t.mlivepositiontaking + t.slivepositiontaking ELSE mlivepositiontaking END
+	SET cs.spositiontaking = 0,
+		cs.slivepositiontaking = 0,
+		cs.mpositiontaking = CASE WHEN roleid = 3 THEN t.mpositiontaking + t.spositiontaking ELSE cs.mpositiontaking END,
+		cs.mlivepositiontaking = CASE WHEN roleid = 3 THEN t.mlivepositiontaking + t.slivepositiontaking ELSE cs.mlivepositiontaking END
 	FROM custsetting cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN @tmpCust t ON cs.custid = t.custID
 								AND cs.sporttype = t.sporttype
