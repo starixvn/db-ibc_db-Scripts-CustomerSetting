@@ -1,7 +1,7 @@
 /*
 	Created: 20190530@Johnson
 	DB: DBCUST/CUSTDB
-	Task: correct PT setting for dummy master for DCS setting table
+	Task: correct PT setting for direct masters for DCS setting table
 */
 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running

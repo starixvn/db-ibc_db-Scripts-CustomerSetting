@@ -1,7 +1,7 @@
 /*
 	Created: 20190530@Johnson
 	DB: DBCUST/CUSTDB
-	Task: correct PT setting for dummy master for custsetting table
+	Task: correct PT setting for direct masters for custsetting table
 */
 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
@@ -127,7 +127,7 @@ WHERE 1=1
 	AND c.enabled=1			
 	AND c.roleid IN (1,3)								
 	AND mrecommend IN (SELECT custid FROM #DirectMaster)						
-	AND cs.sporttypeb <> 154--Horse Racing fixed odds
+	AND cs.sporttype <> 154--Horse Racing fixed odds
 	AND (spositiontaking<>0	OR slivepositiontaking <> 0)
 	
 
@@ -211,7 +211,7 @@ WHERE 1=1
 	AND c.enabled=1			
 	AND c.roleid IN (1,3)								
 	AND mrecommend IN (SELECT custid FROM #DirectMaster)						
-	AND cs.sporttypeb <> 154--Horse Racing fixed odds
+	AND cs.sporttype <> 154--Horse Racing fixed odds
 	AND (spositiontaking<>0	OR slivepositiontaking <> 0)
 	
 

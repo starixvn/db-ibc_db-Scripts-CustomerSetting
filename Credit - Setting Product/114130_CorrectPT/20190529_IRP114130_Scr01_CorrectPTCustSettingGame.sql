@@ -1,7 +1,7 @@
 /*
 	Created: 20190529@Johnson
 	DB: DBCUST/CUSTDB
-	Task: correct PT setting for dummy master for custsettinggame table
+	Task: correct PT setting for direct masters for custsettinggame table
 */
 
 

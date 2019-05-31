@@ -1,7 +1,7 @@
 /*
 	Created: 20190530@Johnson
 	DB: DBCUST/CUSTDB
-	Task: correct PT setting for newly customers under dummy masters for custsetting3rd table
+	Task: correct PT setting for newly customers under direct masters for custsetting3rd table
 */
 
 DECLARE @max_custid INT, @srecommend INT
