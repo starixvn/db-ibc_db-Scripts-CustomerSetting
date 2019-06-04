@@ -99,7 +99,7 @@ DDECLARE @srecommend INT,
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = 36264173
+SELECT @max_custid = xxx
 
 INSERT INTO #Supers(custid)
 SELECT ci.custid 
@@ -155,7 +155,7 @@ DECLARE @srecommend INT,
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = 36264173
+SELECT @max_custid = xxx
 
 INSERT INTO #Supers(custid)
 SELECT ci.custid 

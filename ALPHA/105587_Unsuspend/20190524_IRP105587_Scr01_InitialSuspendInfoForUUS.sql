@@ -99,7 +99,7 @@ DECLARE @srecommend INT,
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = 36264173
+SELECT @max_custid = xxx
 
 INSERT INTO #Supers(custid)
 SELECT ci.custid 
@@ -112,7 +112,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency <> 20
+	AND ci.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -156,7 +156,7 @@ DECLARE @srecommend INT,
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = 36264173
+SELECT @max_custid = xxx
 
 INSERT INTO #Supers(custid)
 SELECT ci.custid 
@@ -169,7 +169,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency <> 20
+	AND ci.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
