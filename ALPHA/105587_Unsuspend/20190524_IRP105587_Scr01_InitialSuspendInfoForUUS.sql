@@ -97,11 +97,11 @@ END
 DECLARE @srecommend INT,
 		@max_custid INT
 
-CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = xxx
+SELECT @max_custid = 36264173
 
-INSERT INTO #Super(custid)
+INSERT INTO #Supers(custid)
 SELECT ci.custid 
 FROM dbo.customer c WITH (Nolock) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
@@ -112,22 +112,39 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency = 20
+	AND ci.currency <> 20
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Super
+	UPDATE TOP (1) #supers
 	SET isfinished = 1
 		,@srecommend = custid			
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
-
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	
 	EXEC dbo.[Acc_DynamicCustomerInfo_09] @srecommend = @srecommend	
 			,@max_custid = @max_custid
-			,@target = 'REPLICATED'
+			,@target = 'REPLICATED'				
+	--WAITFOR DELAY '00:00:00.280'			
 END			
-GO	
+GO
+
 -- END STEP 2:  Run this SP at replicated DB ----------
 -----------------------------------------------------------------------------------	
 
@@ -137,11 +154,11 @@ GO
 DECLARE @srecommend INT,
 		@max_custid INT
 
-CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
-SELECT @max_custid = xxx
+SELECT @max_custid = 36264173
 
-INSERT INTO #Super(custid)
+INSERT INTO #Supers(custid)
 SELECT ci.custid 
 FROM dbo.customer c WITH (Nolock) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
@@ -152,22 +169,38 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency = 20
+	AND ci.currency <> 20
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Super
+	UPDATE TOP (1) #supers
 	SET isfinished = 1
 		,@srecommend = custid			
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
-
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	
 	EXEC dbo.[Acc_DynamicCustomerInfo_09] @srecommend = @srecommend	
 			,@max_custid = @max_custid
-			,@target = 'REPLICATED'
+			,@target = 'DBCUST'				
+	--WAITFOR DELAY '00:00:00.280'			
 END			
-GO			
+GO	
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST  -----
 -----------------------------------------------------------------------------------	
 
