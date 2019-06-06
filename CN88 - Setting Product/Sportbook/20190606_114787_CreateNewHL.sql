@@ -22,7 +22,7 @@ EXEC CS_DBA_Customer_HeadlineIns
 	@refcode1=N'',
 	@creator=8,
 	@username='MainSH05',
-	@userpwd='56E8A2D78170E87C928E480797CC73',
+	@userpwd='19D7E0DB8276A8706F78F797E4A18A',
 	@site=N'CN88',
 	@currency=35,
 	@GroupName = 'CN88_00',
