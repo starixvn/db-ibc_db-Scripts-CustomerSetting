@@ -22,7 +22,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND ci.currency <> 20
+	--AND ci.currency <> 20
 
 INSERT INTO #tblCust(CustID,roleid,suspend,suspendSuper,suspendMaster,suspendAgent, suspendInfo)
 SELECT ci.custid, ci.roleid, ISNULL(ci.reject,0), ISNULL(s.reject,0), ISNULL(m.reject,0), ISNULL(a.reject,0),0
