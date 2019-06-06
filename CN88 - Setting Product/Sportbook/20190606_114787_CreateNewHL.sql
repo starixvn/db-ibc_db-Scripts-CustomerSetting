@@ -9,7 +9,7 @@ DECLARE @ErrCode INT = 0 ,
 
 EXEC CS_DBA_Customer_HeadlineIns
 	@firstname=N'CN88',
-	@lastname=N'',
+	@lastname=N'Partner''s account',
 	@address='',
 	@postal='',
 	@city='',
