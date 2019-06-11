@@ -94,7 +94,7 @@ END
 ---
 -- BEGIN STEP 2: Run this SP at replicated DB ----- -----
 --------------------------------------------------------------------------------------
-DDECLARE @srecommend INT,
+DECLARE @srecommend INT,
 		@max_custid INT
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
