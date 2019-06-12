@@ -5,9 +5,12 @@
 */
 USE CustDB
 GO
+DECLARE @MaxCustID INT
 DECLARE @GroupHeadlineId INT, @CustId INT, @i INT = 1, @Max INT
 CREATE TABLE #HeadlineList (ID INT IDENTITY(1,1), CustId INT)
 SELECT @GroupHeadlineId = MAX(groupid) + 1 FROM custaccount WITH(NOLOCK)
+
+SELECT @MaxCustID = xxx
 
 INSERT INTO #HeadlineList (CustId)
 SELECT custid
@@ -46,6 +49,7 @@ BEGIN
 		CROSS JOIN dbo.custAccount ca WITH (NOLOCK)
 	WHERE s.UplineId = @CustId
 		AND ca.custid = @CustId AND ca.IsGroupHeadLine = 1
+		AND s.custid <= @MaxCustID
 
 	SELECT @i = @i + 1
 	SELECT @GroupHeadlineId = @GroupHeadlineId + 1

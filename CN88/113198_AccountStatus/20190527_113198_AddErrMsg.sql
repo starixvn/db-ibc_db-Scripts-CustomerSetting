@@ -10,14 +10,13 @@ GO
 DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
 INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
+SELECT	40047, 'Update status failed. Upline level is not active.', 5, 1 UNION ALL
 SELECT	40043, 'You cannot do this action because this account''s upline is not active.', 5, 1 UNION ALL
 SELECT	80009, 'Your account has been inactive. Please contact your upline for assistance.', 5, 1 UNION ALL 
 SELECT	80010, 'Your account has been suspended. Please contact your upline to activate your account!', 9, 1 UNION ALL
 SELECT	40044, 'Your sub account has been locked due to multiple failed security check attempts. Please contact the main account user to unlock. ', 5, 1 UNION ALL 
 SELECT	40045, 'Your account has been locked due to multiple failed security check attempts. Please contact your upline to unlock.', 5, 1 UNION ALL 
-SELECT	40046, 'Update account status failed, Please try again.', 5, 1 UNION ALL 
-SELECT	70029, 'You cannot do this action because this account''s upline is not active.', 9, 1
-
+SELECT	40046, 'Update status failed. Please try again.', 5, 1
 
 DELETE m 
 FROM MsgError m 
