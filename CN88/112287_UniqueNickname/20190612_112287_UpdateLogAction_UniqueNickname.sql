@@ -10,7 +10,7 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionNameEN NVARCHAR(256), ActionNameCS NVARCHAR(256), ActionNameCH NVARCHAR(256), ActionNameTH NVARCHAR(256))
 
 INSERT INTO @tmpAction (ActionID, ActionNameEN, ActionNameCS, ActionNameCH, ActionNameTH)
-SELECT	919, N'Sub account resets his own Security Code', N'子账户已重置其安全代码。', '子帳戶已重設其安全密碼。','ผู้ใช้งานย่อย ตั้งค่ารหัสความปลอดภัยใหม่' 
+SELECT	919, N'Sub account resets his own Security Code', N'子账户已重置其安全代码。', N'子帳戶已重設其安全密碼。', N'ผู้ใช้งานย่อย ตั้งค่ารหัสความปลอดภัยใหม่' 
 
 UPDATE l
 SET l.ActionNameEN = t.ActionNameEN,
