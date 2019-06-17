@@ -16,28 +16,28 @@ CREATE TABLE #WrongList(custid INT, roleid TINYINT, RuleID TINYINT)
 
 INSERT INTO #SuperList (CustId)
 SELECT c.custid
-FROM dbo.customer c WITH (NOLOCK)
+FROM dbo.vw_customer c WITH (NOLOCK)
 WHERE c.roleid = 4 AND c.site = 'CN88' 
 
 INSERT INTO #MasterList (CustId, srecommend)
 SELECT c.custid, srecommend
-FROM dbo.customer c WITH (NOLOCK)
+FROM dbo.vw_customer c WITH (NOLOCK)
 WHERE c.roleid = 3 AND c.site = 'CN88'
 
 INSERT INTO #AgentList (CustId, srecommend, mrecommend)
 SELECT c.custid, srecommend, mrecommend
-FROM dbo.customer c WITH (NOLOCK)
+FROM dbo.vw_customer c WITH (NOLOCK)
 WHERE c.roleid = 2 AND c.site = 'CN88'
 
 INSERT INTO #MemberList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.customer c WITH (NOLOCK)
+FROM dbo.vw_customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 0
 
 INSERT INTO #MemberGroupList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.customer c WITH (NOLOCK)
+FROM dbo.vw_customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 1
 
@@ -88,9 +88,9 @@ FROM #SuperComm sc
 	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid	
 	INNER JOIN dbo.CS_GroupConfig gc ON gc.GroupId = ac.groupid
 	INNER JOIN #MemberComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.recommend = ac.CustId AND memc.ugroup = gc.uGroup
-WHERE sc.Discount < memc.SuperDiscount
-	OR mc.Discount < memc.MasterDiscount
-	OR ac.Discount < memc.AgentDiscount
+WHERE sc.Discount <> memc.SuperDiscount
+	OR mc.Discount <> memc.MasterDiscount
+	OR ac.Discount <> memc.AgentDiscount
 
 INSERT INTO #WrongList (custid, roleid, RuleID)
 SELECT DISTINCT custid, 1, 2
@@ -113,14 +113,65 @@ WHERE gc.MasterDiscount > gc.SuperDiscount
 	OR gc.PlayerDiscount > gc.SuperDiscount
 
 INSERT INTO #WrongList (custid, roleid, RuleID)
-SELECT DISTINCT memc.custid, 1, 4
+SELECT DISTINCT memc.custid, 2, 4
+FROM #SuperComm sc
+	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
+	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid		
+	INNER JOIN #GroupComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.GroupId = ac.GroupId
+WHERE sc.Discount <> memc.SuperDiscount
+	OR mc.Discount <> memc.MasterDiscount
+	OR ac.Discount <> memc.AgentDiscount
+
+--no data
+INSERT INTO #WrongList (custid, roleid, RuleID)
+SELECT DISTINCT memc.custid, 1, 5
 FROM #MemberGroupList memc
 	INNER JOIN dbo.CS_CustDiscount_Member cs ON cs.CustId = memc.CustId
 
-
-SELECT ci.custid, ci.username, ci.currency,*
+SELECT wl.*
 FROM #WrongList wl
 	INNER JOIN custinfo ci WITH (NOLOCK) ON wl.custid = ci.custid
+
+SELECT ci.custid, ci.roleid, ci.username, ci.currency, RuleID, sc.Discount as SuperDiscount, memc.SuperDiscount AS sDiscount, 
+	mc.Discount AS MasterDiscount, memc.MasterDiscount AS mdiscount, ac.Discount AS AgentDiscount, memc.AgentDiscount AS adiscount
+FROM #SuperComm sc
+	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
+	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid	
+	INNER JOIN dbo.CS_GroupConfig gc ON gc.GroupId = ac.groupid
+	INNER JOIN #MemberComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.recommend = ac.CustId AND memc.ugroup = gc.uGroup
+	INNER JOIN #WrongList wl ON memc.custid = wl.custid
+	INNER JOIN custinfo ci WITH (NOLOCK) ON wl.custid = ci.custid
+WHERE (sc.Discount <> memc.SuperDiscount
+	OR mc.Discount <> memc.MasterDiscount
+	OR ac.Discount <> memc.AgentDiscount)
+	AND wl.RuleID = 1
+	--AND username NOT LIKE 'SuperTestTE%'
+
+SELECT ci.custid, ci.roleid, ci.username, ci.currency, RuleID, sc.Discount as SuperDiscount, memc.SuperDiscount AS sDiscount, 
+	mc.Discount AS MasterDiscount, memc.MasterDiscount AS mdiscount, ac.Discount AS AgentDiscount, memc.AgentDiscount AS adiscount
+FROM #SuperComm sc
+	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
+	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid		
+	INNER JOIN #GroupComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.GroupId = ac.GroupId
+	INNEr JOIN #WrongList wl ON memc.CustId = wl.custid
+	INNEr JOIN custInfo ci ON wl.CustId = ci.custid
+WHERE (sc.Discount <> memc.SuperDiscount
+	OR mc.Discount <> memc.MasterDiscount
+	OR ac.Discount <> memc.AgentDiscount)
+	AND wl.RuleID = 4
+
+SELECT ci.custid, ci.roleid, ci.username, ci.currency, RuleID, gc.SuperDiscount, MasterDiscount, AgentDiscount, PlayerDiscount
+FROM #GroupComm gc	
+	INNER JOIN #WrongList wl ON gc.custid = wl.custid
+	INNER JOIN custinfo ci WITH (NOLOCK) ON wl.custid = ci.custid
+WHERE (gc.MasterDiscount > gc.SuperDiscount
+	OR gc.AgentDiscount > gc.MasterDiscount
+	OR gc.AgentDiscount > gc.SuperDiscount
+	OR gc.PlayerDiscount > gc.AgentDiscount
+	OR gc.PlayerDiscount > gc.MasterDiscount
+	OR gc.PlayerDiscount > gc.SuperDiscount)
+	AND wl.RuleID = 3
+	--AND username NOT LIKE 'SuperTestTE%'
 
 --DROP TABLE #SportBettypeFilter2
 --DROP TABLE #SuperList
@@ -133,3 +184,4 @@ FROM #WrongList wl
 --DROP TABLE #AgentComm
 --DROP TABLE #GroupComm
 --DROP TABLE #MemberComm
+--DROP TABLE #WrongList
