@@ -10,7 +10,10 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT	165004, 'Update Account Status', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
+SELECT	165004, 'Update Account Status for SMA', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
+SELECT	165008, 'Update Account Status for Master Agent', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
+SELECT	165009, 'Update Account Status for Agent', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
+SELECT	165010, 'Update Account Status for Member', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
 SELECT	165003, 'Add account status for SMA', 'CS_CustomerIns_Com', 0, 5, NULL UNION ALL
 SELECT	165005, 'Add account status for MA', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
 SELECT	165006, 'Add account status for Agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
