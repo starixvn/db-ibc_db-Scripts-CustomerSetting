@@ -86,6 +86,7 @@ DECLARE @GroupASuperDiscount_XML XML, @GroupBSuperDiscount_XML XML, @GroupCSuper
 DECLARE @GroupAMasterDiscount_XML XML, @GroupBMasterDiscount_XML XML, @GroupCMasterDiscount_XML XML, @GroupDMasterDiscount_XML XML
 DECLARE @GroupAAgentDiscount_XML XML, @GroupBAgentDiscount_XML XML, @GroupCAgentDiscount_XML XML, @GroupDAgentDiscount_XML XML
 DECLARE @MaxID INT, @i INT, @custId INT
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
 
 SELECT @MaxID = MAX(ID) FROM #SuperList
 SET @i = 0
@@ -189,7 +190,7 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.SuperDiscount, @GroupDSuperDiscount_XML) scomm	
 	WHERE c.srecommend = @custId AND cm.uGroup = 'D'
 
-	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+	RAISERROR (@msg, 0, 1, @i, @custId) WITH NOWAIT
 
 	SELECT @i = @i + 1
 END
@@ -296,7 +297,7 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupDMasterDiscount_XML) mcomm	
 	WHERE c.mrecommend = @custId AND cm.uGroup = 'D'
 
-	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+	RAISERROR (@msg, 0, 1, @i, @custId) WITH NOWAIT
 
 	SELECT @i = @i + 1
 END
@@ -402,7 +403,7 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupDAgentDiscount_XML) acomm	
 	WHERE c.custid = @custId AND cm.uGroup = 'D' AND c.roleid = 2
 	
-	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+	RAISERROR (@msg, 0, 1, @i, @custId) WITH NOWAIT
 
 	SELECT @i = @i + 1
 END
