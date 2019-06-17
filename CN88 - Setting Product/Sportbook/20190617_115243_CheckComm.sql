@@ -12,31 +12,32 @@ CREATE TABLE #MasterList (CustId INT, srecommend INT)
 CREATE TABLE #AgentList (CustId INT, srecommend INT, mrecommend INT)
 CREATE TABLE #MemberList (CustId INT, srecommend INT, mrecommend INT, recommend INT, ugroup VARCHAR(3))
 CREATE TABLE #MemberGroupList (CustId INT, srecommend INT, mrecommend INT, recommend INT, ugroup VARCHAR(3))
+CREATE TABLE #WrongList(custid INT, roleid TINYINT, RuleID TINYINT)
 
 INSERT INTO #SuperList (CustId)
 SELECT c.custid
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 4 AND c.site = 'CN88' 
 
 INSERT INTO #MasterList (CustId, srecommend)
 SELECT c.custid, srecommend
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 3 AND c.site = 'CN88'
 
 INSERT INTO #AgentList (CustId, srecommend, mrecommend)
 SELECT c.custid, srecommend, mrecommend
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 2 AND c.site = 'CN88'
 
 INSERT INTO #MemberList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 0
 
 INSERT INTO #MemberGroupList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 1
 
@@ -71,6 +72,7 @@ FROM #MemberList ci
 	CROSS APPLY dbo.f_CS_GetDiscount_Member(ci.custid) mc
 	INNER JOIN #SportBettypeFilter2 ft ON mc.SportType = ft.SportType AND mc.BetType = ft.BetType AND mc.IsLive = ft.IsLive
 
+--no data
 SELECT *
 FROM #SuperComm sc
 	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
@@ -79,18 +81,19 @@ WHERE mc.Discount > sc.Discount
 	OR ac.Discount > mc.Discount
 	OR ac.Discount > sc.Discount
 	
-SELECT DISTINCT memc.custid INTO #WrongList
+INSERT INTO #WrongList (custid, roleid, RuleID)
+SELECT DISTINCT memc.custid, 1, 1
 FROM #SuperComm sc
 	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
 	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid	
 	INNER JOIN dbo.CS_GroupConfig gc ON gc.GroupId = ac.groupid
 	INNER JOIN #MemberComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.recommend = ac.CustId AND memc.ugroup = gc.uGroup
-WHERE sc.Discount <> memc.SuperDiscount
-	OR mc.Discount <> memc.MasterDiscount
-	OR ac.Discount <> memc.AgentDiscount
+WHERE sc.Discount < memc.SuperDiscount
+	OR mc.Discount < memc.MasterDiscount
+	OR ac.Discount < memc.AgentDiscount
 
-INSERT INTO #WrongList (custid)
-SELECT custid
+INSERT INTO #WrongList (custid, roleid, RuleID)
+SELECT DISTINCT custid, 1, 2
 FROM #MemberComm memc
 WHERE memc.MasterDiscount > memc.SuperDiscount
 	OR memc.AgentDiscount > memc.MasterDiscount
@@ -99,8 +102,8 @@ WHERE memc.MasterDiscount > memc.SuperDiscount
 	OR memc.PlayerDiscount > memc.MasterDiscount
 	OR memc.PlayerDiscount > memc.SuperDiscount
 
-INSERT INTO #WrongList (custid)
-SELECT custid
+INSERT INTO #WrongList (custid, roleid, RuleID)
+SELECT DISTINCT custid, 2, 3
 FROM #GroupComm gc
 WHERE gc.MasterDiscount > gc.SuperDiscount
 	OR gc.AgentDiscount > gc.MasterDiscount
@@ -109,19 +112,22 @@ WHERE gc.MasterDiscount > gc.SuperDiscount
 	OR gc.PlayerDiscount > gc.MasterDiscount
 	OR gc.PlayerDiscount > gc.SuperDiscount
 
+INSERT INTO #WrongList (custid, roleid, RuleID)
+SELECT DISTINCT memc.custid, 1, 4
+FROM #MemberGroupList memc
+	INNER JOIN dbo.CS_CustDiscount_Member cs ON cs.CustId = memc.CustId
+
+
 SELECT ci.custid, ci.username, ci.currency,*
 FROM #WrongList wl
 	INNER JOIN custinfo ci WITH (NOLOCK) ON wl.custid = ci.custid
-
-SELECT *
-FROM #WrongList wl
-	INNER JOIN #MemberComm memc ON memc.CustId = wl.CustId
 
 --DROP TABLE #SportBettypeFilter2
 --DROP TABLE #SuperList
 --DROP TABLE #MasterList
 --DROP TABLE #AgentList
 --DROP TABLE #MemberList
+--DROP TABLE #MemberGroupList
 --DROP TABLE #SuperComm
 --DROP TABLE #MasterComm
 --DROP TABLE #AgentComm
