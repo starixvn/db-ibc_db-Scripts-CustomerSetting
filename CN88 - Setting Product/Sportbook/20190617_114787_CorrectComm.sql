@@ -304,8 +304,8 @@ SET cm.SuperDiscount = scomm.binaryStr_new,
 FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 	INNER JOIN customer c WITH (NOLOCK) ON c.custid = cm.AgentId
 	CROSS APPLY dbo.f_SetBinaryValues(cm.SuperDiscount, @GroupCSuperDiscount_XML) scomm	
-	CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupBMasterDiscount_XML) mcomm	
-	CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupBAgentDiscount_XML) acomm	
+	CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupCMasterDiscount_XML) mcomm	
+	CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupCAgentDiscount_XML) acomm	
 WHERE c.custid IN (SELECT custid FROM #AgentList) AND cm.uGroup = 'C' AND c.roleid = 2
 
 UPDATE cm
@@ -315,8 +315,8 @@ SET cm.SuperDiscount = scomm.binaryStr_new,
 FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 	INNER JOIN customer c WITH (NOLOCK) ON c.custid = cm.AgentId
 	CROSS APPLY dbo.f_SetBinaryValues(cm.SuperDiscount, @GroupDSuperDiscount_XML) scomm	
-	CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupBMasterDiscount_XML) mcomm	
-	CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupBAgentDiscount_XML) acomm	
+	CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupDMasterDiscount_XML) mcomm	
+	CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupDAgentDiscount_XML) acomm	
 WHERE c.custid IN (SELECT custid FROM #AgentList) AND cm.uGroup = 'D' AND c.roleid = 2
 
 UPDATE cs 
