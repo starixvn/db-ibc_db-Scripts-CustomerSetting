@@ -189,6 +189,8 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.SuperDiscount, @GroupDSuperDiscount_XML) scomm	
 	WHERE c.srecommend = @custId AND cm.uGroup = 'D'
 
+	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+
 	SELECT @i = @i + 1
 END
 
@@ -208,6 +210,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'A' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -224,6 +227,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'B' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -240,6 +244,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'C' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -255,6 +260,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'D' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -290,6 +296,8 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.MasterDiscount, @GroupDMasterDiscount_XML) mcomm	
 	WHERE c.mrecommend = @custId AND cm.uGroup = 'D'
 
+	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+
 	SELECT @i = @i + 1
 END
 
@@ -309,6 +317,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'A' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -325,6 +334,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'B' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -341,6 +351,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'C' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -356,6 +367,7 @@ BEGIN
 										LEFT JOIN dbo.CS_GroupConfig gc WITH (NOLOCK) ON gc.SportType = comm.SportType AND gc.BetType = comm.BetType AND gc.IsLive = comm.IsLive AND gc.GroupId = comm.GroupId
 									WHERE bs.Type = 'DiscountMember'
 										AND (gc.GroupName = 'D' OR gc.GroupId IS NULL)
+										AND comm.CustId = @custId
 									FOR XML PATH('r')
 										, TYPE
 									)
@@ -390,6 +402,8 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupDAgentDiscount_XML) acomm	
 	WHERE c.custid = @custId AND cm.uGroup = 'D' AND c.roleid = 2
 	
+	RAISERROR ('Run at', 0, 1, @i, @custId) WITH NOWAIT
+
 	SELECT @i = @i + 1
 END
 

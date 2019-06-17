@@ -16,28 +16,28 @@ CREATE TABLE #WrongList(custid INT, roleid TINYINT, RuleID TINYINT)
 
 INSERT INTO #SuperList (CustId)
 SELECT c.custid
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 4 AND c.site = 'CN88' 
 
 INSERT INTO #MasterList (CustId, srecommend)
 SELECT c.custid, srecommend
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 3 AND c.site = 'CN88'
 
 INSERT INTO #AgentList (CustId, srecommend, mrecommend)
 SELECT c.custid, srecommend, mrecommend
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 WHERE c.roleid = 2 AND c.site = 'CN88'
 
 INSERT INTO #MemberList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 0
 
 INSERT INTO #MemberGroupList (CustId, srecommend, mrecommend, recommend, ugroup)
 SELECT c.custid, srecommend, mrecommend, recommend, c.ugroup
-FROM dbo.vw_customer c WITH (NOLOCK)
+FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.CS_CustSettingMode cm WITH (NOLOCK) ON c.custid = cm.CustId
 WHERE c.roleid = 1 AND c.site = 'CN88' AND cm.IsGroupComm = 1
 
