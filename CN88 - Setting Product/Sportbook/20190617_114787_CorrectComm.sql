@@ -359,34 +359,38 @@ BEGIN
 							)	
 	UPDATE cm
 	SET cm.AgentDiscount = acomm.binaryStr_new, 
-		cm.PlayerDiscount = acomm.binaryStr_new
+		cm.PlayerDiscount = pcomm.binaryStr_new
 	FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 		INNER JOIN custinfo c WITH (NOLOCK) ON c.custid = cm.AgentId
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupAAgentDiscount_XML) acomm		
+		CROSS APPLY dbo.f_SetBinaryValues(cm.PlayerDiscount, @GroupAAgentDiscount_XML) pcomm		
 	WHERE c.custid = @custId AND cm.uGroup = 'A' AND c.roleid = 2
 
 	UPDATE cm
 	SET cm.AgentDiscount = acomm.binaryStr_new, 
-		cm.PlayerDiscount = acomm.binaryStr_new
+		cm.PlayerDiscount = pcomm.binaryStr_new
 	FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 		INNER JOIN custinfo c WITH (NOLOCK) ON c.custid = cm.AgentId
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupBAgentDiscount_XML) acomm	
+		CROSS APPLY dbo.f_SetBinaryValues(cm.PlayerDiscount, @GroupBAgentDiscount_XML) pcomm
 	WHERE c.custid = @custId AND cm.uGroup = 'B' AND c.roleid = 2
 
 	UPDATE cm
 	SET cm.AgentDiscount = acomm.binaryStr_new, 
-		cm.PlayerDiscount = acomm.binaryStr_new
+		cm.PlayerDiscount = pcomm.binaryStr_new
 	FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 		INNER JOIN custinfo c WITH (NOLOCK) ON c.custid = cm.AgentId
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupCAgentDiscount_XML) acomm	
+		CROSS APPLY dbo.f_SetBinaryValues(cm.PlayerDiscount, @GroupCAgentDiscount_XML) pcomm
 	WHERE c.custid = @custId AND cm.uGroup = 'C' AND c.roleid = 2
 
 	UPDATE cm
 	SET cm.AgentDiscount = acomm.binaryStr_new, 
-		cm.PlayerDiscount = acomm.binaryStr_new
+		cm.PlayerDiscount = pcomm.binaryStr_new
 	FROM dbo.CS_CustGroupDiscount_Member cm WITH (ROWLOCK)
 		INNER JOIN custinfo c WITH (NOLOCK) ON c.custid = cm.AgentId
 		CROSS APPLY dbo.f_SetBinaryValues(cm.AgentDiscount, @GroupDAgentDiscount_XML) acomm	
+		CROSS APPLY dbo.f_SetBinaryValues(cm.PlayerDiscount, @GroupDAgentDiscount_XML) pcomm
 	WHERE c.custid = @custId AND cm.uGroup = 'D' AND c.roleid = 2
 	
 	RAISERROR (@msg, 0, 1, @i, @custId) WITH NOWAIT

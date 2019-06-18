@@ -119,7 +119,7 @@ SELECT DISTINCT memc.custid, 2, 4
 FROM #SuperComm sc
 	INNER JOIN #MasterComm mc ON mc.srecommend = sc.CustId AND sc.sporttype = mc.sporttype AND sc.Bettype = mc.bettype AND mc.IsLive = sc.IsLive AND sc.groupid = mc.groupid
 	INNER JOIN #AgentComm ac ON ac.srecommend = sc.CustId AND ac.mrecommend = mc.CustId AND ac.sporttype = mc.sporttype AND ac.Bettype = mc.bettype AND mc.IsLive = ac.IsLive AND ac.groupid = mc.groupid		
-	INNER JOIN #GroupComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.GroupId = ac.GroupId
+	INNER JOIN #GroupComm memc ON memc.srecommend = sc.CustId AND memc.mrecommend = mc.CustId AND memc.CustId = ac.CustId AND memc.GroupId = ac.GroupId
 WHERE sc.Discount <> memc.SuperDiscount
 	OR mc.Discount <> memc.MasterDiscount
 	OR ac.Discount <> memc.AgentDiscount
