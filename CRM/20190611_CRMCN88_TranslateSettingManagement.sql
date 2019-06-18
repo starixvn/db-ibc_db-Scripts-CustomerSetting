@@ -210,9 +210,10 @@ WHERE t.Removed<>'YES' AND c.SiteOffer=1
 DELETE c
 FROM crmSetting c 
 INNER JOIN #crmSettingManage t ON c.SettingValue=t.SettingName
-WHERE t.Removed='YES' AND c.SiteOffer=1
+WHERE t.Removed='YES' AND c.SiteOffer=1 AND c.SettingValue<>'N/A'  AND c.SettingValue<> 'N/A.'
 
 DROP TABLE #crmSettingManage
+
 ----------------------------
 CREATE TABLE #crmSettingBettype(
 	[SettingName] [nvarchar](150) ,	
@@ -611,7 +612,7 @@ WHERE t.Removed<>'YES' AND c.SiteOffer=1
 DELETE c
 FROM crmSetting c 
 INNER JOIN #crmSettingBettype t ON c.SettingValue=t.SettingName
-WHERE t.Removed='YES' AND c.SiteOffer=1
+WHERE t.Removed='YES' AND c.SiteOffer=1  AND c.SettingValue<>'N/A'  AND c.SettingValue<> 'N/A.'
 
 DROP TABLE #crmSettingBettype
 
