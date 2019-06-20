@@ -6,6 +6,8 @@
 USE CustDB
 GO
 
+DELETE FROM CS_CustomerStatus WITH (ROWLOCK)
+
 INSERT INTO CS_CustomerStatus  (CustId, InactiveInfo, SuspendedInfo, ViewOnlyInfo)
 SELECT CustId, 0, 0, 0
 FROM Customer c WITH (NOLOCK)
