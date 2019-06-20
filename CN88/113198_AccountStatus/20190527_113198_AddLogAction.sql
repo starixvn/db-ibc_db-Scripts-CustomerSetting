@@ -15,7 +15,7 @@ SELECT	165008, 'Update Account Status for Master Agent', 'CS_CustomerStatusUpd',
 SELECT	165009, 'Update Account Status for Agent', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
 SELECT	165010, 'Update Account Status for Member', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
 SELECT	165003, 'Add account status for SMA', 'CS_CustomerIns_Com', 0, 5, NULL UNION ALL
-SELECT	165005, 'Add account status for MA', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
+SELECT	165005, 'Add account status for Master Agent', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
 SELECT	165006, 'Add account status for Agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
 SELECT	165007, 'Add account status for Member', 'CS_CustomerIns_Ag', 0, 5, NULL UNION ALL
 SELECT	941, 'Failed providing Security Code of Sub-Account', 'CS_CustomerUpdSecurityCodeStatus_Sub', 0, 4, NULL UNION ALL
