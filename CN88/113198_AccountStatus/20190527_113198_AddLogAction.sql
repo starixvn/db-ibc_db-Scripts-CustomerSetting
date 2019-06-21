@@ -14,6 +14,7 @@ SELECT	165004, 'Update Account Status for SMA', 'CS_CustomerStatusUpd', 0, 5, NU
 SELECT	165008, 'Update Account Status for Master Agent', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
 SELECT	165009, 'Update Account Status for Agent', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
 SELECT	165010, 'Update Account Status for Member', 'CS_CustomerStatusUpd', 0, 5, NULL UNION ALL
+SELECT	165011, 'Unlock sub account', 'CS_CustSubUnlock', 0, 5, NULL UNION ALL
 SELECT	165003, 'Add account status for SMA', 'CS_CustomerIns_Com', 0, 5, NULL UNION ALL
 SELECT	165005, 'Add account status for Master Agent', 'CS_CustomerIns_SAg', 0, 5, NULL UNION ALL
 SELECT	165006, 'Add account status for Agent', 'CS_CustomerIns_MAg', 0, 5, NULL UNION ALL
@@ -22,6 +23,8 @@ SELECT	941, 'Failed providing Security Code of Sub-Account', 'CS_CustomerUpdSecu
 SELECT	942, 'Sub account is locked due to failed security code validations', 'CS_CustomerUpdSecurityCodeStatus_Sub', 0, 4, NULL UNION ALL
 SELECT	943, 'Failed providing Security Code of customer', 'CS_CustomerUpdSecurityCodeStatus', 0, 4, NULL UNION ALL
 SELECT	944, 'Account is locked due to failed security code validations', 'CS_CustomerUpdSecurityCodeStatus', 0, 4, NULL 
+
+DELETE l FROM dbo.LogAction l WHERE l.ActionID = 691 --delete unused log
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
 
