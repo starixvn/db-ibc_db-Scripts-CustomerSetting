@@ -30,3 +30,4 @@ SET l.MsgNameCS = t.MsgNameCS,
 	l.MsgNameCN = t.MsgNameCN
 FROM dbo.MsgError l WITH (ROWLOCK)
 	INNER JOIN @tmpErrMsg t ON t.MsgID = l.MsgID
+	

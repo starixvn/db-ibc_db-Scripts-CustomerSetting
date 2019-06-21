@@ -23,7 +23,8 @@ SELECT	940, 'Account is locked due to failed logins 5 times', N'登录失败次�
 SELECT	165004, 'Update Account Status for SMA', N'更新超级代理帐户状态', N'更新超級代理帳戶狀態' UNION ALL
 SELECT	165008, 'Update Account Status for Master Agent', N'更新总代理帐户状态', N'更新總代理帳戶狀態' UNION ALL
 SELECT	165009, 'Update Account Status for Agent', N'更新代理商账户状态', N'更新代理商帳戶狀態' UNION ALL
-SELECT	165010, 'Update Account Status for Member', N'更新会员账户状态', N'更新會員帳戶狀態'
+SELECT	165010, 'Update Account Status for Member', N'更新会员账户状态', N'更新會員帳戶狀態' UNION ALL
+SELECT	165011, 'Unlock Sub Account', N'解锁子账户', N'解鎖子帳戶'
 
 UPDATE l
 SET l.ActionNameCN = t.ActionNameCN,
