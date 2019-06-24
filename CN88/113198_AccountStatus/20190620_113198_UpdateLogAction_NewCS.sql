@@ -24,7 +24,6 @@ SELECT	165004, 'Update Account Status for SMA', N'更新超级代理帐户状态
 SELECT	165008, 'Update Account Status for Master Agent', N'更新总代理帐户状态', N'更新總代理帳戶狀態' UNION ALL
 SELECT	165009, 'Update Account Status for Agent', N'更新代理商账户状态', N'更新代理商帳戶狀態' UNION ALL
 SELECT	165010, 'Update Account Status for Member', N'更新会员账户状态', N'更新會員帳戶狀態' UNION ALL
-SELECT	165011, 'Unlock Sub Account', N'解锁子账户', N'解鎖子帳戶' UNION ALL
 SELECT	1324, 'Login via Agent''s Site', N'透过代理网站登入', N'登錄通過代理 網站' UNION ALL
 SELECT	1325, 'Login via Agent''s Site', N'透过代理网站登入', N'登錄通過代理 網站' UNION ALL
 SELECT	1326, 'Login via Agent''s Site', N'透过代理网站登入', N'登錄通過代理 網站' UNION ALL
@@ -45,4 +44,4 @@ UPDATE l
 SET l.ActionNameEN = t.ActionNameEN
 FROM dbo.LogAction l WITH (ROWLOCK)
 	INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
-WHERE t.ActionID = 165005
+WHERE t.ActionID IN ( 165005,165011)
