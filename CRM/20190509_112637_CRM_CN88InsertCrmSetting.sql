@@ -42,8 +42,7 @@ INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (
 GO
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (1023, 0, 0)
 GO
-INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (1024, 0, 0)
-GO
+
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (1025, 0, 0)
 GO
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (2055, 0, 0)
@@ -808,10 +807,7 @@ INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (
 GO
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (9242, 8010, 0)
 GO
-INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (9243, 0, 0)
-GO
-INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (9243, 8010, 0)
-GO
+
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (9244, 0, 0)
 GO
 INSERT #tmpcrmSettingRelation ([SettingID], [ParentID], [DisplayOrder]) VALUES (9244, 8010, 0)
@@ -1432,8 +1428,7 @@ INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayO
 GO
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'Communication', 1023, N'QQ', 10, 1, 1)
 GO
-INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'Communication', 1024, N'BBM', 11, 1, 1)
-GO
+
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'Communication', 1025, N'LetsTalk', 12, 1, 1)
 GO
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'Station', 2055, N'N/A', 0, 1, 1)
@@ -1640,8 +1635,7 @@ INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayO
 GO
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'BetType', 9242, N'End of day OE', 66, 1, 1)
 GO
-INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'BetType', 9243, N'Casino Games', 71, 0, 1)
-GO
+
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'BetType', 9244, N'P2P Games', 72, 1, 1)
 GO
 INSERT #tmpcrmSettingCN88 ([SettingName], [SettingID], [SettingValue], [DisplayOrder], [IsActive], [SiteOffer]) VALUES (N'BetType', 9245, N'1st ball OU', 81, 1, 1)

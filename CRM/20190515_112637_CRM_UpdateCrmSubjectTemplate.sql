@@ -7,11 +7,6 @@
 UPDATE crmSubjectTemplate SET SiteOffer=2
 GO
 
-INSERT INTO crmSubjectTemplate(subject,IsActive,SiteOffer)
-SELECT subject,IsActive,1
-FROM crmSubjectTemplate WHERE SiteOffer=2
-
-
 UPDATE crmSetting WITH(ROWLOCK,UPDLOCK)
 	SET DisplayOrder=1
 WHERE SettingID=7006
