@@ -37,9 +37,10 @@ VALUES(9,	165,	1901,	'Level 1',	0)
 INSERT INTO StakeLevel(GameTypeID	,GameGroupID,	MinLabel,	MaxLabel,	MinStake,	MaxStake,	ExchangeID,	ResourceID)
 SELECT 1901,	9,	NULL,	NULL,	NULL,	NULL,	exchangeid	,NULL
 FROM exchange WITH(NOLOCK)
+WHERE exchangeid=20
 
 INSERT INTO StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
-SELECT StakeLevelID,	GameTypeID,	'0.1',	'50',	0.1,50
+SELECT StakeLevelID,	GameTypeID,	'0.25',	' 125.00',	 0.25 , 125.00 
 FROM StakeLevel WITH(NOLOCK) WHERE GameTypeID=1901 AND GameGroupID=9
 
 
