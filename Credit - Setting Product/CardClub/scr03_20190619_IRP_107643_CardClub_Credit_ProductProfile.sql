@@ -41,6 +41,6 @@ WHERE exchangeid=20
 
 INSERT INTO StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
 SELECT StakeLevelID,	GameTypeID,	'0.25',	' 125.00',	 0.25 , 125.00 
-FROM StakeLevel WITH(NOLOCK) WHERE GameTypeID=1901 AND GameGroupID=9
+FROM StakeLevel WITH(NOLOCK) WHERE GameTypeID=1901 AND GameGroupID=9 AND ExchangeId=20
 
 
