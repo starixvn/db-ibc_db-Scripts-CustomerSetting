@@ -27,7 +27,7 @@ SELECT @CommSetting_SMA='<ROOT><Comm SportType="1" BetType="1" IsLive="0" GroupI
 								<Comm SportType="99" BetType="9999" IsLive="0" GroupId="0" ValueId="1"/>
 								<Comm SportType="9999" BetType="10" IsLive="0" GroupId="0" ValueId="1"/></ROOT>'
 
-SELECT @CommSettingD_Member='<ROOT><Comm SportType="1" BetType="5" IsLive="0" ValueId="1"/>
+SELECT @CommSetting_Member='<ROOT><Comm SportType="1" BetType="5" IsLive="0" ValueId="1"/>
 								<Comm SportType="1" BetType="9999" IsLive="0" ValueId="1"/>
 								<Comm SportType="1" BetType="9999" IsLive="1" ValueId="1"/>
 								<Comm SportType="2" BetType="20" IsLive="0" ValueId="1"/>
@@ -36,7 +36,7 @@ SELECT @CommSettingD_Member='<ROOT><Comm SportType="1" BetType="5" IsLive="0" Va
 								<Comm SportType="99" BetType="9999" IsLive="0" ValueId="1"/>
 								<Comm SportType="9999" BetType="10" IsLive="0" ValueId="1"/></ROOT>'
 
-SELECT @CommSetting_Member='<ROOT><Comm SportType="1" BetType="1" IsLive="0" ValueId="1"/>
+SELECT @CommSettingD_Member='<ROOT><Comm SportType="1" BetType="1" IsLive="0" ValueId="1"/>
 								<Comm SportType="1" BetType="1" IsLive="1" ValueId="1"/>
 								<Comm SportType="2" BetType="1" IsLive="0" ValueId="1"/>
 								<Comm SportType="2" BetType="1" IsLive="1" ValueId="1"/>
