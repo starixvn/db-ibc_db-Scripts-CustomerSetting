@@ -6,6 +6,7 @@
 
 UPDATE ci
 SET reject = 1
+FROM custinfo ci WITH(UPDLOCK,ROWLOCK)
 WHERE custid IN (
 			29762	,--	AC
 79409	,--	AC10
