@@ -126,6 +126,7 @@
 	SELECT t.custid,27
 	FROM #supers t
 	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=27)
 	--------------------------------------Bet Setting-------------------------------------------------	
 	
 		CREATE TABLE #MemberTemp
@@ -174,23 +175,35 @@
 	CROSS JOIN  #MemberTemp t
 	WHERE GameGroupID=10 AND GameTypeID=1901 AND ExchangeId=t.Currency
 
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT t.custid,28
+	FROM #supers t
+	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=28)
+
 	--Status	
 	DECLARE @BitOrder INT
-	SELECT @BitOrder= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
+	SELECT @BitOrder= bitmapOrder from Dep_ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
 
 	UPDATE cs
 	SET								
 			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
 			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #SMATemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
 
 	UPDATE cs
 	SET								
 			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
 			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #MemberTemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT t.custid,26
+	FROM #supers t
+	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=26)
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

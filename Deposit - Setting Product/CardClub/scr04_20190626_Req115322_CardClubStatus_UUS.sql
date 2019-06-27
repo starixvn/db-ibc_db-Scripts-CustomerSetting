@@ -17,13 +17,13 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 
 	DECLARE @Sporttype INT
 	SELECT @Sporttype=165	
 	DECLARE @BitOrder INT
-	SELECT @BitOrder= bitmapOrder from ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
+	SELECT @BitOrder= bitmapOrder from Dep_ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
 
 	CREATE TABLE #temp (CustID INT PRIMARY KEY)
 	CREATE TABLE #tempUpdate (CustID INT PRIMARY KEY)
@@ -43,14 +43,17 @@ BEGIN
 		SET								
 			 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
 			 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #tempUpdate CI WITH (NOLOCK) ON cs.CustID = ci.CustID
 
 		TRUNCATE TABLE #tempUpdate
 	END
 	---------------------------------------------------------------------------------------
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,26
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=26)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,26
+	END
 END
 GO
 

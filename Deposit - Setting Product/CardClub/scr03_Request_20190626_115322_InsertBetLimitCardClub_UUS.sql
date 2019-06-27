@@ -149,10 +149,12 @@ BEGIN
 		SELECT t.CustID,1
 	FROM #tmpCust t WITH(NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-	
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,27
 
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=27)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,27
+	END
 	--Betlimit Agent
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID]
@@ -184,10 +186,11 @@ BEGIN
 		
 		TRUNCATE TABLE #tmpCustInsert
 	END
-
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,28
-
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=28)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,28
+	END
 	DROP TABLE #Dummy
 	DROP TABLE #tmpCust
 	DROP TABLE #tmpSMA	

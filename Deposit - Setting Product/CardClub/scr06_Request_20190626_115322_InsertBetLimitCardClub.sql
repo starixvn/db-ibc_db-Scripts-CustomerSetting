@@ -35,9 +35,9 @@ BEGIN
 	   )
 		RETURN
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
-	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,MaxPerMatch MONEY)
-	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT,MaxPerMatch MONEY)
-	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY,MaxPerMatch MONEY)	
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
+	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY)	
 	DECLARE @SuperPT SMALLINT = 93	
 	DECLARE @currency INT
 	DECLARE @SportType SMALLINT = 165, @BetType SMALLINT = 1901,  @bitmapOrder INT 
@@ -48,19 +48,20 @@ BEGIN
 	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
 		AND custid<=@max_custid 
 
-	INSERT INTO #tmpCust(CustID,MaxPerMatch)
-	SELECT CustID,maxpermatch99
+	INSERT INTO #tmpCust(CustID)
+	SELECT CustID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid = 1 
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
-	INSERT INTO #tmpSMA(CustID,RoleID,MaxPerMatch)
-	SELECT CustID,RoleID,maxpermatch99
+	INSERT INTO #tmpSMA(CustID,RoleID)
+	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid IN(2,3,4)
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)							   
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
+								   
 	SELECT @currency = (SELECT Currency FROM custInfo WITH (NOLOCK) WHERE custid = @srecommend)
 
 	-- PT
@@ -149,10 +150,12 @@ BEGIN
 		SELECT t.CustID,1
 	FROM #tmpCust t WITH(NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-	
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,27
 
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=27)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,27
+	END
 	--Betlimit Agent
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID]
@@ -185,8 +188,11 @@ BEGIN
 		TRUNCATE TABLE #tmpCustInsert
 	END
 
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,28
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=28)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,28
+	END
 
 	DROP TABLE #Dummy
 	DROP TABLE #tmpCust
