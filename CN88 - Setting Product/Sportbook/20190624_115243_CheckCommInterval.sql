@@ -77,6 +77,38 @@ SELECT *
 FROM #MemberComm sc
 WHERE sc.ValueId NOT IN (1,6,11,16,21,26,31,36,41,46)
 
+
+SELECT *
+FROM #SuperComm sc
+WHERE sc.ValueId <> 1
+	AND ((sporttype IN (1,2,99) AND bettype = 1 AND GroupID IN (4,8,12,16, 20, 24)) OR (sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)))
+
+SELECT *
+FROM #MasterComm sc
+WHERE sc.ValueId <> 1
+	AND ((sporttype IN (1,2,99) AND bettype = 1 AND GroupID IN (4,8,12,16, 20, 24)) OR (sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)))
+
+SELECT *
+FROM #AgentComm sc
+WHERE sc.ValueId <> 1
+	AND ((sporttype IN (1,2,99) AND bettype = 1 AND GroupID IN (4,8,12,16, 20, 24)) OR (sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)))
+
+SELECT *
+FROM #GroupComm sc
+WHERE sc.ValueId <> 1
+	AND ((sporttype IN (1,2,99) AND bettype = 1 AND GroupID IN (4,8,12,16, 20, 24)) OR (sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)))
+
+SELECT *
+FROM #MemberComm sc
+WHERE sc.ValueId <> 1
+	AND ((sporttype IN (1,2,99) AND bettype = 1) OR (sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)))
+	AND sc.ugroup = 'd'
+
+SELECT *
+FROM #MemberComm sc
+WHERE sc.ValueId <> 1
+	AND sporttype IN (1,2,99,9999) AND bettype IN (5,9999, 20)
+	AND sc.ugroup <> 'd'
 --DROP TABLE #SportBettypeFilter2
 --DROP TABLE #SuperList
 --DROP TABLE #MasterList
