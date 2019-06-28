@@ -6,7 +6,7 @@
 */
 USE [CustDB]
 GO
-
+DELETE FROM VendorGlobalSetting WHERE [VendorId]=33
 INSERT INTO [dbo].[VendorGlobalSetting]
            ([VendorId]
            ,[VName]
