@@ -7,6 +7,8 @@
 USE CustDB
 GO
 
+DELETE dbo.CS_ProductBetSetting
+
 INSERT INTO dbo.CS_ProductBetSetting (SportType, BetType, IsLive, Currency, MinBet, MaxBet, MaxPerEvent)
 SELECT SportType, BetType, IsLive, e.exchangeid, 16, NULL, NULL
 FROM CS_ProductSettingDetail ps WITH (NOLOCK)
@@ -23,7 +25,8 @@ SELECT ps.SportType, ps.BetType, ps.IsLive, e.exchangeid,
 	CASE WHEN ps.IsLive = 0 THEN e.minbet ELSE e.minbetlive END, NULL, NULL
 FROM dbo.CS_ProductSettingDetail ps
 	CROSS JOIN dbo.exchange e
-WHERE ps.SportType BETWEEN 1 AND 99 AND ps.SettingType = 2
+WHERE (ps.SportType BETWEEN 1 AND 99 OR SportType = 9999)
+	AND ps.SettingType = 2
 	AND e.exchangeid IN (20,81)
 
 SELECT * 
