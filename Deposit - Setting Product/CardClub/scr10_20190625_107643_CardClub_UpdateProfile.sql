@@ -151,7 +151,7 @@ INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLab
 SELECT StakeLevelID,	GameTypeID,	CAST(t.Min AS NVARCHAR(50)),CAST(t.Max AS NVARCHAR(50)),	t.Min , t.Max
 FROM Dep_StakeLevel e WITH(NOLOCK) 
 INNER JOIN #temp t ON e.exchangeid=t.exchangeid
-WHERE GameTypeID=1901 AND GameGroupID=9 AND t.exchangeid<>20
+WHERE GameTypeID=1901 AND GameGroupID=10 AND t.exchangeid<>20
 
 
 
