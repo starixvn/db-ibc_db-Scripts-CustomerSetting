@@ -20,8 +20,19 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN	
+	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN	
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
+	
+	CREATE TABLE #supers (custid INT)
 
+	INSERT INTO #supers(custid)
+	SELECT ci.custid
+	FROM custInfo ci WITH (NOLOCK) 	
+		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.username NOT LIKE '3rdSuper%'			
+		AND ci.Enabled=1
+		AND cs.site IN ('spondemo')
 	
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
 	CREATE TABLE #CustPTSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
@@ -33,31 +44,31 @@ BEGIN
 	SELECT s.Custid,SportType,BetType,IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =165 AND c.currency=20
+	WHERE SportType =165 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.CustID,Sporttype,Bettype,IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =165 AND c.currency=20
+	WHERE SportType =165 AND c.srecommend IN(SELECT CustID FROM #supers)
 	
 	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT AgentID,SportType,BetType,IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =165 AND c.currency=20
+	WHERE SportType =165 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =165 AND c.currency=20
+	WHERE SportType =165 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =165 AND c.currency=20
+	WHERE SportType =165 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN

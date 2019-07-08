@@ -221,9 +221,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1
 			AND cs.site IN('11bet','12Bet','368Cash','3star88','88Macao','9bet','9Club','9wickets','Ae88','AG','Aoncash','Arlocash','asiabet88','Athena000','Avia','BE7','Bolanation','Boma365','Brown888','Debet','DEWA','Fabet',
 							'FB88','GamingSoft','Happy1668','Heaven','Hengcai88','HONBET','Hong88','HonorW','iBET','IONclub','ISC888','ITCbet','Kraton','Kudatogel','Liga','Lucky88','Luckywin88','M8bola','Macaubet','Mayfair',
-							'NBCbet','Newhonbet','OLE777','One88','Q8bola','Salon365','Senibet','Sin88','spondemo',
-							'Taipanbet','TLC','UN168','Unobet','Uwoniwin','Vwin','WeBet168','webet88','XTD3','Zbet','Zzun88')
-			AND ci.currency<>20
+							'NBCbet','Newhonbet','OLE777','One88','Q8bola','Salon365','Senibet','Sin88',
+							'Taipanbet','TLC','UN168','Unobet','Uwoniwin','Vwin','WeBet168','webet88','XTD3','Zbet','Zzun88')		
 
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -277,9 +276,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1
 	AND cs.site IN('11bet','12Bet','368Cash','3star88','88Macao','9bet','9Club','9wickets','Ae88','AG','Aoncash','Arlocash','asiabet88','Athena000','Avia','BE7','Bolanation','Boma365','Brown888','Debet','DEWA','Fabet',
 					'FB88','GamingSoft','Happy1668','Heaven','Hengcai88','HONBET','Hong88','HonorW','iBET','IONclub','ISC888','ITCbet','Kraton','Kudatogel','Liga','Lucky88','Luckywin88','M8bola','Macaubet','Mayfair',
-					'NBCbet','Newhonbet','OLE777','One88','Q8bola','Salon365','Senibet','Sin88','spondemo',
+					'NBCbet','Newhonbet','OLE777','One88','Q8bola','Salon365','Senibet','Sin88',
 					'Taipanbet','TLC','UN168','Unobet','Uwoniwin','Vwin','WeBet168','webet88','XTD3','Zbet','Zzun88')
-	AND ci.currency<>20
 
 
 DECLARE @super_cnt INT, @index INT = 0
