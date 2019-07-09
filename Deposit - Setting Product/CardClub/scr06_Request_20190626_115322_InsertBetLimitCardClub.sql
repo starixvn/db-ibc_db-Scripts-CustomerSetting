@@ -146,6 +146,27 @@ BEGIN
 	FROM #tmpSMA
 	WHERE RoleID=2
 
+	INSERT INTO dbo.Dep_CustPTSetting_Member
+		(	CustID
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			t.CustID
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,0
+		   ,@SuperPT
+	FROM #tmpCust t
+		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON t.CustID=m.CustID
+	WHERE m.IsGroupedPT=0
+
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT t.CustID,1
 	FROM #tmpCust t WITH(NOLOCK)

@@ -113,6 +113,30 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
 
+	INSERT INTO dbo.Dep_CustPTSetting_Member
+		(	CustID
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			ci.CustID
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,0
+		   ,@SuperPT
+	FROM custInfo ci WITH(NOLOCK)
+		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=1
+		AND m.IsGroupedPT=0
+
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT ci.CustID,1
 	FROM custInfo ci WITH(NOLOCK)
