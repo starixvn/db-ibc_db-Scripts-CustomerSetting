@@ -18,7 +18,7 @@ INSERT INTO [dbo].[LogAction]
            ,[IsInternal]
            ,[ActionNameVI]
            ,[ActionNameCN])
-SELECT 160010, 4, 'CS_Age_CustomerPwdUpd2'
+SELECT 160010, 4, 'CS_CustomerPwdUpd2'
 			,[ActionNameEN]
            ,[ActionNameCH]
            ,[ActionNameCS]
@@ -32,7 +32,7 @@ SELECT 160010, 4, 'CS_Age_CustomerPwdUpd2'
 FROM LogAction WITH(NOLOCK)
 WHERE ActionID = 902
 UNION 
-SELECT 160011, 4, 'CS_Age_CustSubPwdUpd2'
+SELECT 160011, 4, 'CS_CustSubPwdUpd2'
 			,[ActionNameEN]
            ,[ActionNameCH]
            ,[ActionNameCS]
