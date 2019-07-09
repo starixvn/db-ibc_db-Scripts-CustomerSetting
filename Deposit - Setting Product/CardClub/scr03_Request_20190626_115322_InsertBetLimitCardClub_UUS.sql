@@ -35,9 +35,9 @@ BEGIN
 	   )
 		RETURN
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
-	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,MaxPerMatch MONEY)
-	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT,MaxPerMatch MONEY)
-	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY,MaxPerMatch MONEY)	
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
+	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY)	
 	DECLARE @SuperPT SMALLINT = 93	
 	DECLARE @currency INT
 	DECLARE @SportType SMALLINT = 165, @BetType SMALLINT = 1901,  @bitmapOrder INT 
@@ -48,16 +48,16 @@ BEGIN
 	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%Cas%' OR username LIKE '%LocalBank%')
 		AND custid<=@max_custid 
 
-	INSERT INTO #tmpCust(CustID,MaxPerMatch)
-	SELECT CustID,maxpermatch99
+	INSERT INTO #tmpCust(CustID)
+	SELECT CustID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid = 1 
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
-	INSERT INTO #tmpSMA(CustID,RoleID,MaxPerMatch)
-	SELECT CustID,RoleID,maxpermatch99
+	INSERT INTO #tmpSMA(CustID,RoleID)
+	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid IN(2,3,4)
