@@ -53,6 +53,7 @@ BEGIN
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid = 1 
+		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
 	INSERT INTO #tmpSMA(CustID,RoleID,MaxPerMatch)
@@ -60,6 +61,7 @@ BEGIN
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid IN(2,3,4)
+		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)							   
 	SELECT @currency = (SELECT Currency FROM custInfo WITH (NOLOCK) WHERE custid = @srecommend)
 
