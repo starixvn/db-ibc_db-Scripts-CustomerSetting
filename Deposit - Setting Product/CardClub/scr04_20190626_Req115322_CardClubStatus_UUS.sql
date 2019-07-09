@@ -76,6 +76,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
 	AND cs.site IN('spondemo')
+	AND ci.currency=20
 			
 WHILE (1 = 1)
 BEGIN
@@ -110,7 +111,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
 	AND cs.site IN('spondemo')
-			
+	AND ci.currency=20		
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers

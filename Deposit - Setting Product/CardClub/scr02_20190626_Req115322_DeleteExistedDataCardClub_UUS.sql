@@ -33,6 +33,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
 		AND cs.site IN ('spondemo')
+		AND ci.currency=20
 	
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
 	CREATE TABLE #CustPTSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))

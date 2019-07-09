@@ -22,6 +22,15 @@
 					'NBCbet','Newhonbet','OLE777','One88','Q8bola','Salon365','Senibet','Sin88',
 					'Taipanbet','TLC','UN168','Unobet','Uwoniwin','Vwin','WeBet168','webet88','XTD3','Zbet','Zzun88')
 
+	INSERT INTO #supers(custid)
+	SELECT ci.custid
+	FROM Custinfo ci WITH (NOLOCK) 	
+		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.username NOT LIKE '3rdSuper%'
+		AND ci.Enabled=1		
+		AND cs.site IN('spondemo')
+		AND ci.currency<>20
+
 	DECLARE @SportType INT = 165, @BetType INT=1901
 	
 	--------------------------------------PT Setting-------------------------------------------------	
