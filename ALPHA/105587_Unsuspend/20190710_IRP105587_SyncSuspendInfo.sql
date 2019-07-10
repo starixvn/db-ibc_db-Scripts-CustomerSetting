@@ -17,12 +17,13 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
+	and c.custid = 1176092
 	
 SELECT ci.custid
 INTO #tblCust
 FROM dbo.custinfo ci WITH(NOLOCK)
 	INNER JOIN dbo.CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
-	INNER JOIN DBCUST.CustDB.dbo.CustProductStatus cs2 WITH(NOLOCK) ON ci.custid = c2.custid 
+	INNER JOIN DBCUST.CustDB.dbo.CustProductStatus cs2 WITH(NOLOCK) ON ci.custid = cs2.custid 
 WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND cs.suspendinfo <> cs2.suspendinfo
 	
@@ -43,7 +44,7 @@ BEGIN
 	UPDATE cs
 	SET cs.suspendinfo = cs2.suspendinfo
 	FROM dbo.CustProductStatus cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN DBCUST.CustDB.dbo.CustProductStatus cs2 WITH(NOLOCK) ON ci.custid = c2.custid 
+		INNER JOIN DBCUST.CustDB.dbo.CustProductStatus cs2 WITH(NOLOCK) ON cs.custid = cs2.custid 
 	WHERE cs.custid IN (SELECT custid FROM @tmpCust)
 		AND cs.suspendinfo <> cs2.suspendinfo
 	
