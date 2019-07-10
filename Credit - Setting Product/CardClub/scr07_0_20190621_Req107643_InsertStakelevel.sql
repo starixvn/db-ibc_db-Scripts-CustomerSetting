@@ -139,7 +139,7 @@ FROM exchange  e WITH(NOLOCK)
 	INNER JOIN #temp t ON e.exchangeid=t.exchangeid
 
 INSERT INTO StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
-SELECT StakeLevelID,	GameTypeID,	CAST(t.Min AS NVARCHAR(50)),CAST(t.Max AS NVARCHAR(50)),	t.Min , t.Max
+SELECT StakeLevelID,	GameTypeID,	CAST(CAST(t.Min AS Float) AS NVARCHAR(50)),CAST(CAST(t.Max AS Float) AS NVARCHAR(50)),	t.Min , t.Max
 FROM StakeLevel e WITH(NOLOCK) 
 INNER JOIN #temp t ON e.exchangeid=t.exchangeid
 WHERE GameTypeID=1901 AND GameGroupID=9
