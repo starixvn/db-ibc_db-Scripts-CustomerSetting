@@ -17,8 +17,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	and c.custid = 1176092
-	
+		
 SELECT ci.custid
 INTO #tblCust
 FROM dbo.custinfo ci WITH(NOLOCK)
