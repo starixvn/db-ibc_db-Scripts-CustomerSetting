@@ -16,7 +16,7 @@ DECLARE @ErrCode INT = 0 ,
 DECLARE @Headline TABLE (ID INT IDENTITY (1,1), Name VARCHAR(30), GroupName VARCHAR(50), Currency INT)
 
 INSERT INTO @Headline (Name)
-VALUES  ('AAA002'), ('AAA003'), ('AAA005'), ('AAA006'), ('AAA007'), ('AAA008'), ('AAA009'), ('AAA010'), ('AAA011')
+VALUES  ('PGA001'), ('PGA002'), ('PGA003'), ('PGA005'), ('PGA006'), ('PGA007'), ('PGA008'), ('PGA009'), ('PGA010'), ('PGA011')
 
 IF EXISTS (SELECT 1
 			FROM dbo.custInfo ci WITH (NOLOCK)
