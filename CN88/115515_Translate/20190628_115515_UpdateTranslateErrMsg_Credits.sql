@@ -1,4 +1,4 @@
-/*
+﻿/*
 	Created by: Elodie
 	Date: 20190709
 	Task: Update ErrMsg for New Simplified Chinese (CN88) 
