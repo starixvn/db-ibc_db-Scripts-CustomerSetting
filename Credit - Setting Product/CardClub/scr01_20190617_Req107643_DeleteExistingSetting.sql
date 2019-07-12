@@ -28,7 +28,7 @@ BEGIN
 	SELECT @Sporttype = 165
 
 	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM GameGroup WITH(ROWLOCK,UPDLOCK) WHERE RefSportType=@Sporttype
+	DELETE FROM GameGroup WITH(ROWLOCK,UPDLOCK) WHERE RefSportType=@Sporttype AND IsDeposit=0
 	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
 	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=1901
 	DELETE FROM StakeLevelGroupDetail  WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=1901
