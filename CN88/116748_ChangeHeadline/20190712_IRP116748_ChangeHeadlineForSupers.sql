@@ -71,4 +71,23 @@ BEGIN
 		
 	EXEC DBA_CS_SuperUpdHeadlineInfo @SuperID = @SuperID, @HeadlineID = @HeadlineID
 END
+GO
+
+--Step 3: delete super cn88 un-used
+Declare @ErrCode int	
+Declare @ErrMsg varchar(200)	
+
+---------------------------------
+--delete super TP004 has un-used
+	
+EXEC dbo.DBA_CustomerDel 	
+@username = 'TP004',	
+@ErrCode = @ErrCode OUTPUT,
+@ErrMsg = @ErrMsg OUTPUT	
+---------------------------------	
+select 
+@ErrCode as ErrCode,	
+@ErrMsg as ErrMsg	
+
+
 
