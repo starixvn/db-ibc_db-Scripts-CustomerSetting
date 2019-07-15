@@ -16,7 +16,7 @@ INSERT INTO [dbo].[VendorGlobalSetting]
      VALUES
            (33
            ,'3rdCashWLShareRate'
-           ,0.04
+           ,0.025
            ,NULL
            ,NULL)
 GO
@@ -31,7 +31,7 @@ INSERT INTO [dbo].[VendorGlobalSetting]
      VALUES
            (33
            ,'3rdCreditWLShareRate'
-           ,0.04
+           ,0.025
            ,NULL
            ,NULL)
 GO
