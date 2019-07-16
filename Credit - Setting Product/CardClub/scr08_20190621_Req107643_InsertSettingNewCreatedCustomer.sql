@@ -22,7 +22,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
 	AND ci.currency <> 20
-
+	 AND ci.Site<>'CN88'
 CREATE TABLE #MemberTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
