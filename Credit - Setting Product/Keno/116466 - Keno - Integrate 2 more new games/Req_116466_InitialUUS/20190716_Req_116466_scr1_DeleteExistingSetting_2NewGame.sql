@@ -9,8 +9,8 @@ ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
 AS
 BEGIN	
 	SET NOCOUNT ON
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME  IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2') ) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 		
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
 			AND dbo.f_CheckRepTable('CustGameType') = 1
