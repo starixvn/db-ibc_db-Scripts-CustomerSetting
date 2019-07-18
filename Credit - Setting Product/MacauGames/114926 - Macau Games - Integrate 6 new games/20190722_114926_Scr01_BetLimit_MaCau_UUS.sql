@@ -7,14 +7,6 @@
 USE CustDB
 GO
 
-/*
-	Created By: Eden
-	Created Date: 20190722
-	Description: Stakelevel for MaCau
-	DB: DBCust/CustDB	
-*/
-USE CustDB
-
 DECLARE @CRE_Stake TABLE (
 	[GameTypeID] [int] NOT NULL,
 	[Currency] [nvarchar](max) NULL,
