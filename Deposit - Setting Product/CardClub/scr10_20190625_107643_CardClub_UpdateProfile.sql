@@ -10,7 +10,3 @@ Go
 UPDATE [Dep_ProductSettingDetail] WITH(ROWLOCK,UPDLOCK)
 	SET SettingStatus=0
 WHERE SportType=165
-
-UPDATE [Dep_ProductSetting]  WITH(ROWLOCK,UPDLOCK)
-	SET SettingType=8
-WHERe ProductSettingID=28

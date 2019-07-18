@@ -1,0 +1,12 @@
+/*
+	Created: 20190625@Winnie
+	Task: DCS Deposit for CardClub - [Redmine:#115322]
+		Insert Master Data:
+	DB: Run at DBCust.CustDB
+*/  
+USE [CustDB]
+Go
+
+UPDATE [Dep_ProductSetting]  WITH(ROWLOCK,UPDLOCK)
+	SET SettingType=8
+WHERe ProductSettingID=28
