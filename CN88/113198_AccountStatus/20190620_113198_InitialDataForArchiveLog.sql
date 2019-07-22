@@ -7,7 +7,7 @@ USE bodb_CustomerLog
 GO
 
 INSERT INTO dbo.Task_ArchiveData_TableList (TableName)
-VALUES  ('CS_UserLog_Credit'), ('CS_UserLog_Login'), ('CS_UserLog_RunSP'), ('CS_UserLog_RunSP_MultiTarget')
+VALUES  ('CS_UserLog_Credit'), ('CS_UserLog_Login'), ('CS_UserLog_RunSP'), ('CS_UserLog_RunSP_MultiTarget'), ('CS_UserLog_RunSP_LogTarget')
 
 
 SELECT * FROM dbo.Task_ArchiveData_TableList
