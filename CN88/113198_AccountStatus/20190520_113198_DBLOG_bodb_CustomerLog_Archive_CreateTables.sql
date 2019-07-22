@@ -1,9 +1,16 @@
 USE [bodb_CustomerLog_Archive]
 GO
 
+DROP TABLE dbo.CS_UserLog_Credit
+DROP TABLE dbo.CS_UserLog_Login
+DROP TABLE dbo.CS_UserLog_RunSP
+DROP TABLE dbo.CS_UserLog_RunSP_LogTarget
+DROP TABLE dbo.CS_UserLog_RunSP_MultiTarget
+
+GO
 --[dbo].[CS_UserLog_Credit]
 CREATE TABLE [dbo].[CS_UserLog_Credit](
-	[LogID] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogID] [bigint] NOT NULL,
 	[UserID] [int] NOT NULL,
 	[CustID] [int] NOT NULL,
 	[SubAccID] [int] NOT NULL,
@@ -31,7 +38,7 @@ GO
 
 --[dbo].[CS_UserLog_Login]
 CREATE TABLE [dbo].[CS_UserLog_Login](
-	[LogID] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogID] [bigint] NOT NULL,
 	[UserID] [int] NOT NULL,
 	[RoleID] [tinyint] NOT NULL,
 	[SubAccID] [int] NOT NULL,
@@ -63,7 +70,7 @@ GO
 
 --[dbo].[CS_UserLog_RunSP]
 CREATE TABLE [dbo].[CS_UserLog_RunSP](
-	[LogID] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogID] [bigint] NOT NULL,
 	[UserID] [int] NULL,
 	[LogDate] [datetime] NULL,
 	[CustID] [int] NULL,
@@ -89,7 +96,7 @@ GO
 
 --[dbo].[CS_UserLog_RunSP_MultiTarget]
 CREATE TABLE [dbo].[CS_UserLog_RunSP_MultiTarget](
-	[LogID] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogID] [bigint] NOT NULL,
 	[UserID] [int] NULL,
 	[LogDate] [datetime] NULL,
 	[ActionID] [int] NULL,
