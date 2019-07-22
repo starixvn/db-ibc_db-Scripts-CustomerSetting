@@ -1,0 +1,24 @@
+USE [bodb_CustomerLog_Archive]
+GO
+
+--[dbo].[CS_UserLog_RunSP_LogTarget]
+CREATE TABLE [dbo].[CS_UserLog_RunSP_LogTarget](
+	[LogID] [bigint] NOT NULL,	
+	[CustID] [int] NOT NULL,
+	[LogDate] [datetime] NULL
+) ON [ps_CS_RUNSP_monthly]([LogDate])
+WITH
+(
+DATA_COMPRESSION = PAGE
+)
+
+CREATE CLUSTERED INDEX [CIX_CS_UserLog_RunSP_LogTarget] ON [dbo].[CS_UserLog_RunSP_LogTarget]
+(
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, DATA_COMPRESSION = PAGE) ON [ps_CS_RUNSP_monthly]([logdate])
+
+CREATE NONCLUSTERED INDEX [IX_LogID] ON [dbo].[CS_UserLog_RunSP_LogTarget]
+(
+	[LogID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, DATA_COMPRESSION = PAGE) ON [ps_CS_RUNSP_monthly]([logdate])
+GO
