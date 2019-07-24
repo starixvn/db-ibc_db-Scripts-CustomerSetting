@@ -14,13 +14,23 @@ BEGIN
 		IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 				
 		IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
+	
+	CREATE TABLE #TempCust (CustID INT PRIMARY KEY)
 
 	-->Hide ColossusBet
 	WHILE(1=1)
 	BEGIN
-		UPDATE TOP (5000) custinfo 
-		SET HideColossusBet = 1
+		TRUNCATE TABLE #TempCust
+
+		INSERT INTO  #TempCust(CustID)
+		SELECT TOP (5000) CustID
+		FROM   custinfo (NOLOCK)
 		WHERE HideColossusBet = 0
+
+		UPDATE c
+		SET HideColossusBet = 1
+		FROM Custinfo c WITH(ROWLOCK)
+			JOIN #TempCust tmp ON c.custid = tmp.CustID
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
