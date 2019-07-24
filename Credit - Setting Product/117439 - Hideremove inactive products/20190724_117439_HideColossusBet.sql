@@ -24,7 +24,7 @@ BEGIN
 
 		INSERT INTO  #TempCust(CustID)
 		SELECT TOP (5000) CustID
-		FROM   custinfo (NOLOCK)
+		FROM   custinfo WITH(NOLOCK)
 		WHERE HideColossusBet = 0
 
 		UPDATE c
