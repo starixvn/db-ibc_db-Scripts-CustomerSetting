@@ -10,7 +10,7 @@ GO
 DECLARE @tmpMsg TABLE (MsgID INT, MsgName NVARCHAR(500), MsgGroupId INT, IsActive BIT)
 
 INSERT INTO @tmpMsg (MsgID, MsgName, MsgGroupId, IsActive)
-SELECT	40048, 'Delete sub-account failed. Please try again.', 5, 1 UNION ALL
+SELECT	40048, 'Delete sub account failed. Please try again.', 5, 1 UNION ALL
 SELECT	40049, 'Action failed. Please try again.', 5, 1 UNION ALL
 SELECT 40050, 'You do not have any Managed Accounts selected.Please select a Managed Account or select"All"', 5, 1
 
