@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Update PT settings of SB for licensees [RedmineID: #110111]
+	Task: Update PT settings of SB for licensees [RedmineID: #117629]
 	DB: DBTXN/bodb02
-	Date: 20190313
+	Date: 20190801
 */ 
 USE bodb02
 GO 
