@@ -4,6 +4,9 @@
 	Task: adjust virtual rate for YEN currency
 	DB: DBCUST/CUSTDB
 */
+-- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
+------------------------------------------------------
+
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
 	@srecommend INT	
 	,@max_custid INT
