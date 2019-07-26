@@ -72,6 +72,15 @@ BEGIN
 	WHERE sporttype = 202
 		AND bettype = 1501
 	
+	--update PT member for Lottery
+	UPDATE cs
+	SET AgentPT = 94
+	FROM dbo.Dep_CustPTSetting_Member  cs WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN @tmpCust t ON cs.custid = t.custid
+	WHERE cs.sporttype = 220
+		AND cs.bettype = 1021	
+		AND roleid = 1
+
 	IF @rowcount < 5000 
 		BREAK;
 	
