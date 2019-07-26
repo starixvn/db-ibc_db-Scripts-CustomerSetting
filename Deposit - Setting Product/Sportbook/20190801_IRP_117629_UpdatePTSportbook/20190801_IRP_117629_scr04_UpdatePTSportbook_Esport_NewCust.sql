@@ -19,7 +19,7 @@ BEGIN
 
 	CREATE TABLE #supers (custid INT, PT SMALLMONEY)
 	INSERT INTO #supers(custid, PT)
-	SELECT ci.custid, 0.89		
+	SELECT ci.custid, 89		
 	FROM Custinfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'

@@ -130,7 +130,7 @@ DECLARE @max_custid INT, @srecommend INT, @PT SMALLMONEY
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
-SELECT ci.custid, 0.89	
+SELECT ci.custid, 89	
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
@@ -186,7 +186,7 @@ DECLARE @max_custid INT, @srecommend INT, @PT SMALLMONEY
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid, PT)
-SELECT ci.custid, 0.89	
+SELECT ci.custid, 89	
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
