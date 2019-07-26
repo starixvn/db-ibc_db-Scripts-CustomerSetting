@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Update PT settings of Esport for licensees [RedmineID: #110111]
+	Task: Update PT settings of Esport for licensees [RedmineID: #117629]
 	DB: DBCUST/CustDB
-	Date: 20190318
+	Date: 20190801
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]

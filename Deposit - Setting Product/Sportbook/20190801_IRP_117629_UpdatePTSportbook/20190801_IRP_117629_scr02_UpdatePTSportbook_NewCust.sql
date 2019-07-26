@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Update PT settings of SB for licensees new cust RedmineID: #110111
+	Task: Update PT settings of SB for licensees new cust [RedmineID: #117629]
 	DB: DBCUST/CustDB
-	Date: 20190313
+	Date: 20190801
 */ 
 
 ALTER PROCEDURE [dbo].Acc_CustSetting_18

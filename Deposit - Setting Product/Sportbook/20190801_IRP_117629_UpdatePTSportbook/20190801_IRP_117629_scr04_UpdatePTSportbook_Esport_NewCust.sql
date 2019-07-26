@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Update PT settings of Esport for licensees new cust [RedmineID: #110111]
+	Task: Update PT settings of Esport for licensees new cust [RedmineID: #117629]
 	DB: DBCUST/CustDB
-	Date: 20190318
+	Date: 20190801
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
@@ -19,11 +19,10 @@ BEGIN
 
 	CREATE TABLE #supers (custid INT, PT SMALLMONEY)
 	INSERT INTO #supers(custid, PT)
-	SELECT ci.custid, 0.89	
-	FROM custInfo ci WITH (NOLOCK) 	
+	SELECT ci.custid, 0.89		
+	FROM Custinfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-	WHERE ci.username NOT LIKE '3rdSuper%'	
-		AND ci.CustID <= @max_custid
+	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN(	'Ae88')
 	

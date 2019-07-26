@@ -22,7 +22,6 @@ SELECT ci.custid, 0.89
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
-	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
 	AND cs.site IN(	'Ae88')
 
