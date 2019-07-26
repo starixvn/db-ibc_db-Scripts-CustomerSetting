@@ -50,7 +50,7 @@ WHERE cs.sporttype = 220
 UPDATE cs
 SET AgentPT = 94
 FROM dbo.Dep_CustPTGroupSetting_Member cs WITH(UPDLOCK,ROWLOCK)		
-WHERE cs.custid IN (SELECT custid FROM #SMA WHERE roleid = 2)
+WHERE cs.AgentID IN (SELECT custid FROM #SMA WHERE roleid = 2)
 	AND cs.sporttype = 220
 	AND cs.bettype = 1021
 
