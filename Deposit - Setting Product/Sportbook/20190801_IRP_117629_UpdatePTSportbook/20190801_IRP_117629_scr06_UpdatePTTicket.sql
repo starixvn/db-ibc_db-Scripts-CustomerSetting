@@ -19,8 +19,8 @@ DECLARE @TransIdList XML, @TransIdStr VARCHAR(MAX)
 
 INSERT INTO #supers(custid, PT)
 SELECT ci.custid, 0.89	
-FROM custInfo ci WITH (NOLOCK) 	
-	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+FROM CustDB.dbo.custInfo ci WITH (NOLOCK) 	
+	INNER JOIN CustDB.dbo.Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.Enabled=1
 	AND cs.site IN(	'Ae88')
