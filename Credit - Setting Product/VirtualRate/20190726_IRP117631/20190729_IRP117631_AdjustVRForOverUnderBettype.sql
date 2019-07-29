@@ -35,7 +35,7 @@ BEGIN
 	BEGIN
 		DELETE @tmpCust
 		
-		DELETE TOP (5000) t
+		DELETE TOP (2500) t
 		OUTPUT DELETED.custid
 		INTO @tmpCust 
 		FROM #tblCust t
