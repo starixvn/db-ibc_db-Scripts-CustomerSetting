@@ -7,7 +7,7 @@
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ------------------------------------------------------
 
-ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
+ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_16]
 	@srecommend INT		
 	,@max_custid INT	
 	,@target VARCHAR(20)
@@ -146,7 +146,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_CustSetting3rd_19] 
+	EXEC dbo.Acc_CustSetting3rd_16 
 			@srecommend = @srecommend, 			
 			@max_custid=@max_custid,			
 			@target = 'REPLICATED' 	
@@ -195,7 +195,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_CustSetting3rd_19] 
+	EXEC dbo.Acc_CustSetting3rd_16 
 			@srecommend = @srecommend, 			
 			@max_custid=@max_custid,			
 			@target = 'DBCUST' 	
