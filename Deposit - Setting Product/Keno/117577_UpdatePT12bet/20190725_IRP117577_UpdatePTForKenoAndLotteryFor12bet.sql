@@ -22,6 +22,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN		
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, mrecommend INT, roleid TINYINT)
