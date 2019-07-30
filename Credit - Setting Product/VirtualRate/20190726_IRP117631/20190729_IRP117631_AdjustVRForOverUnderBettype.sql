@@ -23,7 +23,7 @@ BEGIN
 	
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY)
 	DECLARE @bitmapVirtual_tmp BINARY(64),
-			@bitmapVirtual_tmp2 BINARY(64),
+			@bitmapVirtual_tmp2 BINARY(64)
 	
 	SELECT custid
 	INTO #tblCust
@@ -44,7 +44,12 @@ BEGIN
 			BREAK;		
 
 		UPDATE cs
-		SET @bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 5, 1, CAST(CAST(12 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
+		SET --LIVE HDP/1H HDP Soccer
+			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,2,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 2, 1, CAST(CAST(20 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
+			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,8,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 8, 1, CAST(CAST(20 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
+			
+			--OU/1H OU
+			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 5, 1, CAST(CAST(12 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,			
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,6,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 6, 1, CAST(CAST(12 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,9,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 9, 1, CAST(CAST(12 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,10,1) = CAST(15 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 10, 1, CAST(CAST(12 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
@@ -87,7 +92,12 @@ BEGIN
 								ELSE bitmapVirtual END
 		FROM dbo.CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK)
 		WHERE ((cs.seqNo = 1
-				AND (SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1))
+				AND (
+					--LIVE HDP/1H HDP Soccer
+					SUBSTRING(cs.bitmapVirtual,2,1) = CAST(15 AS BINARY(1))
+					OR SUBSTRING(cs.bitmapVirtual,8,1) = CAST(15 AS BINARY(1))
+					--OU/1H OU
+					OR SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,6,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,9,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,10,1) = CAST(15 AS BINARY(1))
