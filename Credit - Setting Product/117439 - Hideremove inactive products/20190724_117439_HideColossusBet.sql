@@ -47,10 +47,8 @@ BEGIN
 	WHERE c.HideColossusBet = 0
 
 	DECLARE @TotalRow INT = 0
-	DECLARE @Threshold INT = 4000
 	DECLARE @FromID INT = 1
-	DECLARE @ToID INT = @Threshold
-	
+	DECLARE @ToID INT = 5000
 
 	SELECT @TotalRow = ISNULL(MAX(ID),0) FROM #TempUpdateCustList
 
@@ -66,8 +64,8 @@ BEGIN
 		EXEC dbo.Acc_CustomerInfo_Execrep_19 
 			@target = 'REPLICATED' 
 			
-		SELECT @FromID = @FromID + @Threshold
-		SELECT @ToID = @ToID + @Threshold
+		SELECT @FromID = @FromID + 5000
+		SELECT @ToID = @ToID + 5000
 
 		IF @FromID > @TotalRow
 			BREAK;
@@ -109,10 +107,8 @@ BEGIN
 	WHERE c.HideColossusBet = 0
 
 	DECLARE @TotalRow INT = 0
-	DECLARE @Threshold INT = 4000
 	DECLARE @FromID INT = 1
-	DECLARE @ToID INT = @Threshold
-	
+	DECLARE @ToID INT = 5000
 
 	SELECT @TotalRow = ISNULL(MAX(ID),0) FROM #TempUpdateCustList
 
@@ -128,8 +124,8 @@ BEGIN
 		EXEC dbo.Acc_CustomerInfo_Execrep_19 
 			@target = 'DBCUST' 
 			
-		SELECT @FromID = @FromID + @Threshold
-		SELECT @ToID = @ToID + @Threshold
+		SELECT @FromID = @FromID + 5000
+		SELECT @ToID = @ToID + 5000
 
 		IF @FromID > @TotalRow
 			BREAK;
@@ -141,6 +137,6 @@ BEGIN
 	DROP TABLE #TempCust
 	DROP TABLE #TempUpdateCustList
 END
-GO
+GO	
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST SERVER  -----
 -----------------------------------------------------------------------------------	
