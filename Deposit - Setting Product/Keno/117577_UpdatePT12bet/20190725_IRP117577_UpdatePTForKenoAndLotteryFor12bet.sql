@@ -71,7 +71,7 @@ BEGIN
 	--Update for Keno
 	WHILE(1=1)
 	BEGIN		
-		DELETE TOP (4000) t
+		DELETE TOP (3000) t
 		OUTPUT DELETED.custid, DELETED.roleid INTO @tmpCust
 		FROM #tblCust t
 		
@@ -95,7 +95,7 @@ BEGIN
 			AND cs.bettype = 1021	
 			AND roleid = 1
 
-		IF @rowcount < 4000 
+		IF @rowcount < 3000 
 			BREAK;
 		
 		DELETE @tmpCust
