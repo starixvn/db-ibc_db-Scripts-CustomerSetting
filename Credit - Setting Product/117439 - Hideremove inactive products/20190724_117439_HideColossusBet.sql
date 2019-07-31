@@ -47,7 +47,7 @@ BEGIN
 	WHERE c.HideColossusBet = 0
 
 	DECLARE @TotalRow INT = 0
-	DECLARE @Threshold INT = 4000
+	DECLARE @Threshold INT = 2000
 	DECLARE @FromID INT = 1
 	DECLARE @ToID INT = @Threshold
 	
@@ -109,7 +109,7 @@ BEGIN
 	WHERE c.HideColossusBet = 0
 
 	DECLARE @TotalRow INT = 0
-	DECLARE @Threshold INT = 4000
+	DECLARE @Threshold INT = 2000
 	DECLARE @FromID INT = 1
 	DECLARE @ToID INT = @Threshold
 	
