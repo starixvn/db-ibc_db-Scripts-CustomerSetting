@@ -1,7 +1,7 @@
 /*
-	Created: 20190515@Elodie	
-	Task: Add CS_CustomerStatus table 
-	DB: DBCUST/CustDB and all replicated server of CustDB_Customer_Info pub
+	Created: 20190731@Elodie	
+	Task: initial data to archive log of CN88
+	DB: DBLOG.bodb_CustomerLog
 */
 USE bodb_CustomerLog
 GO
