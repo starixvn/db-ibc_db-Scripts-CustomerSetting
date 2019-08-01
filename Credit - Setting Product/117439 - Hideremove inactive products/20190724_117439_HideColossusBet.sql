@@ -7,8 +7,7 @@
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].Acc_CustomerInfo_Execrep_19
-	 @target VARCHAR(20)	
-	,@srecommend INT
+	@target VARCHAR(20)	
 AS
 BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME  IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2') ) RETURN	-- run at all replicated servers
@@ -16,33 +15,22 @@ BEGIN
 				
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 	
-	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
-
-	INSERT INTO  #TempCust(CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend
-		  AND HideColossusBet = 0
-
 	-->Hide ColossusBet
 	UPDATE c
 	SET HideColossusBet = 1
 	FROM Custinfo c WITH(ROWLOCK)
 		JOIN #TempCust tmp ON c.custid = tmp.CustID
 
-	DROP TABLE #TempCust
 END
 GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
------------------------------------------------------------------------------------	
 BEGIN
-	DECLARE @srecommend INT
-	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
-	
+	CREATE TABLE #Supers(CustID INT PRIMARY KEY)
+	CREATE TABLE #TempUpdateCustList (CustID INT ,ID INT IDENTITY(1,1) PRIMARY KEY)		
+	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
+
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid 
 	FROM dbo.customer c WITH (NOLOCK) 
@@ -51,47 +39,60 @@ BEGIN
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
 		AND s.islicensee = 0
-		AND ci.custid IN ( SELECT srecommend FROM custinfo WITH(NOLOCK) WHERE HideColossusBet = 0 )
 
-	-- For deployer info
-	DECLARE @super_cnt INT, @index INT = 0
-	DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
-	DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+	INSERT INTO  #TempUpdateCustList(CustID)
+	SELECT c.CustID
+	FROM   custinfo c WITH(NOLOCK)
+		INNER JOIN #Supers s ON s.CustID = c.srecommend
+	WHERE c.HideColossusBet = 0
 
-	SET @super_cnt = (SELECT COUNT(*) FROM #supers )
-	RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
-
-	WHILE (1 = 1)
-	BEGIN
-		UPDATE TOP (1) #Supers
-		SET isfinished = 1
-			,@srecommend = custid	
-		WHERE isfinished = 0
+	DECLARE @TotalRow INT = 0
+	DECLARE @Threshold INT = 2000
+	DECLARE @FromID INT = 1
+	DECLARE @ToID INT = @Threshold
 	
-		IF @@ROWCOUNT = 0 BREAK
 
-		SET @index = @index + 1
-		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+	SELECT @TotalRow = ISNULL(MAX(ID),0) FROM #TempUpdateCustList
+
+	WHILE(1=1)
+	BEGIN
+		TRUNCATE TABLE #TempCust
+
+		INSERT INTO  #TempCust(CustID)
+		SELECT c.CustID
+		FROM  #TempUpdateCustList c
+		WHERE ID BETWEEN @FromID AND @ToID
 
 		EXEC dbo.Acc_CustomerInfo_Execrep_19 
-				 @srecommend = @srecommend
-				,@target = 'REPLICATED'
-						
-		WAITFOR DELAY '00:00:0.200'
+			@target = 'REPLICATED' 
+			
+		SELECT @FromID = @FromID + @Threshold
+		SELECT @ToID = @ToID + @Threshold
+
+		IF @FromID > @TotalRow
+			BREAK;
+
+		WAITFOR DELAY '00:00:00.200'	
 	END
 
-	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 	DROP TABLE #Supers
+	DROP TABLE #TempCust
+	DROP TABLE #TempUpdateCustList
 END
 GO
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
+-----------------------------------------------------------------------------------	
+
+
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------	
 BEGIN
-	DECLARE @srecommend INT
-	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
-	
+	CREATE TABLE #Supers(CustID INT PRIMARY KEY)
+	CREATE TABLE #TempUpdateCustList (CustID INT ,ID INT IDENTITY(1,1) PRIMARY KEY)		
+	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
+
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid 
 	FROM dbo.customer c WITH (NOLOCK) 
@@ -100,37 +101,45 @@ BEGIN
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
 		AND s.islicensee = 0
-		AND ci.custid IN ( SELECT srecommend FROM custinfo WITH(NOLOCK) WHERE HideColossusBet = 0 )
 
-	-- For deployer info
-	DECLARE @super_cnt INT, @index INT = 0
-	DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
-	DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+	INSERT INTO  #TempUpdateCustList(CustID)
+	SELECT c.CustID
+	FROM   custinfo c WITH(NOLOCK)
+		INNER JOIN #Supers s ON s.CustID = c.srecommend
+	WHERE c.HideColossusBet = 0
 
-	SET @super_cnt = (SELECT COUNT(*) FROM #supers )
-	RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
-
-	WHILE (1 = 1)
-	BEGIN
-		UPDATE TOP (1) #Supers
-		SET isfinished = 1
-			,@srecommend = custid	
-		WHERE isfinished = 0
+	DECLARE @TotalRow INT = 0
+	DECLARE @Threshold INT = 2000
+	DECLARE @FromID INT = 1
+	DECLARE @ToID INT = @Threshold
 	
-		IF @@ROWCOUNT = 0 BREAK
 
-		SET @index = @index + 1
-		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+	SELECT @TotalRow = ISNULL(MAX(ID),0) FROM #TempUpdateCustList
+
+	WHILE(1=1)
+	BEGIN
+		TRUNCATE TABLE #TempCust
+
+		INSERT INTO  #TempCust(CustID)
+		SELECT c.CustID
+		FROM  #TempUpdateCustList c
+		WHERE ID BETWEEN @FromID AND @ToID
 
 		EXEC dbo.Acc_CustomerInfo_Execrep_19 
-				 @srecommend = @srecommend
-				,@target = 'DBCUST'
-						
-		WAITFOR DELAY '00:00:0.200'
+			@target = 'DBCUST' 
+			
+		SELECT @FromID = @FromID + @Threshold
+		SELECT @ToID = @ToID + @Threshold
+
+		IF @FromID > @TotalRow
+			BREAK;
+
+		WAITFOR DELAY '00:00:00.200'	
 	END
 
-	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 	DROP TABLE #Supers
+	DROP TABLE #TempCust
+	DROP TABLE #TempUpdateCustList
 END
 GO
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST SERVER  -----
