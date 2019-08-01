@@ -18,18 +18,29 @@ BEGIN
 	
 	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
 
-	INSERT INTO  #TempCust(CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend
-		  AND HideColossusBet = 0
-
 	-->Hide ColossusBet
-	UPDATE c
-	SET HideColossusBet = 1
-	FROM Custinfo c WITH(ROWLOCK)
-		JOIN #TempCust tmp ON c.custid = tmp.CustID
+	WHILE(1=1)
+	BEGIN
+		TRUNCATE TABLE #TempCust
 
+		INSERT INTO  #TempCust(CustID)
+		SELECT TOP (5000) custid
+		FROM Custinfo WITH (NOLOCK)
+		WHERE srecommend = @srecommend
+			  AND HideColossusBet = 0
+
+		IF @@ROWCOUNT = 0
+			BREAK;
+
+		-->Hide ColossusBet
+		UPDATE c
+		SET HideColossusBet = 1
+		FROM Custinfo c WITH(ROWLOCK)
+			JOIN #TempCust tmp ON c.custid = tmp.CustID
+
+	END
+
+	
 	DROP TABLE #TempCust
 END
 GO
@@ -77,7 +88,7 @@ BEGIN
 				 @srecommend = @srecommend
 				,@target = 'REPLICATED'
 						
-		WAITFOR DELAY '00:00:0.200'
+		WAITFOR DELAY '00:00:0.100'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
