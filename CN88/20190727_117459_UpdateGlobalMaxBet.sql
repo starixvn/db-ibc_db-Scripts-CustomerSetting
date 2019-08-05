@@ -10,13 +10,19 @@ UPDATE pb
 SET pb.MaxPerEvent = 1100000, 
 	pb.MaxBet = 330000
 FROM CS_ProductBetSetting pb WITH (ROWLOCK)
-WHERE SportType IN (1,2,99) AND BetType IN (1,5)
+WHERE SportType IN (1) AND BetType IN (1,5)
 
 UPDATE pb 
 SET pb.MaxPerEvent = 220000, 
 	pb.MaxBet = 55000
 FROM CS_ProductBetSetting pb WITH (ROWLOCK)
 WHERE SportType = 1 AND BetType = 9999
+
+UPDATE pb 
+SET pb.MaxPerEvent = 1100000, 
+	pb.MaxBet = 330000
+FROM CS_ProductBetSetting pb WITH (ROWLOCK)
+WHERE SportType IN (2,99) AND BetType IN (1)
 
 UPDATE pb 
 SET pb.MaxPerEvent = 220000, 
