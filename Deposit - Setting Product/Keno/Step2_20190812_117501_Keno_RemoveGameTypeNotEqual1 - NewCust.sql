@@ -11,8 +11,8 @@ SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
 SELECT DISTINCT ds.custid
-FROM custgametype cs (nolock)
-INNER JOIN Dep_CustSuper ds (nolock) on cs.custid = ds.custid
+FROM custgametype cs (NOLOCK)
+	INNER JOIN Dep_CustSuper ds (NOLOCK) ON cs.custid = ds.custid
 	
 --------------------------------------------------------------
 	CREATE TABLE #MemberTemp
