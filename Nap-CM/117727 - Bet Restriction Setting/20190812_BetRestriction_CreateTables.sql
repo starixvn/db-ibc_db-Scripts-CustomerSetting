@@ -47,8 +47,8 @@ CREATE TABLE [dbo].[BetRestriction_Currency](
 PRIMARY KEY CLUSTERED 
 (
 	[ExchangeID] ASC,
-	[Type] ASC,
-	[SportType] ASC
+	[SportType] ASC,
+	[Type] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
 ) ON [BetRestriction]
 
