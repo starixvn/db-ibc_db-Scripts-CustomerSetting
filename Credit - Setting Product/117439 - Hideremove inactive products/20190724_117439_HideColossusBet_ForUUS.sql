@@ -1,7 +1,7 @@
 /*
 	Created by: Eden
 	Date: 2019-07-24
-	Task: Hide ColossusBet
+	Task: Hide ColossusBet For UUS
 */ 
 ---------------------------------------------------------------
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB
@@ -63,6 +63,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
 		AND s.islicensee = 0
 		AND ci.custid IN ( SELECT srecommend FROM custinfo WITH(NOLOCK) WHERE HideColossusBet = 0 )
+		AND ci.currency = 20 -- UUS
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -112,6 +113,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))	
 		AND s.islicensee = 0
 		AND ci.custid IN ( SELECT srecommend FROM custinfo WITH(NOLOCK) WHERE HideColossusBet = 0 )
+		AND ci.currency = 20 -- UUS
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
