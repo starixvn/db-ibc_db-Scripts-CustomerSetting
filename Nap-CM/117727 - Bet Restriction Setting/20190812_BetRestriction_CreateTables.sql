@@ -41,9 +41,9 @@ CREATE TABLE [dbo].[BetRestriction_Currency](
 	[ExchangeID] [int] NOT NULL,
 	[Type] [tinyint] NOT NULL,
 	[SportType] [smallint] NOT NULL,
-	[LiveBetAccept] [int] NOT NULL,
+	[LiveBetAccept] [smallint] NOT NULL,
 	[SeizeBetTicket] [tinyint] NULL,
-	[8RMAccount] [int] NULL,
+	[FollowAccount] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ExchangeID] ASC,
@@ -58,11 +58,11 @@ GO
 CREATE TABLE [dbo].[BetRestriction_Customer](
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
-	[LiveBetAccept] [int] NOT NULL,
+	[LiveBetAccept] [smallint] NOT NULL,
 	[SeizeBetTicket] [tinyint] NULL,
 	[MaxBet] [money] NULL,
 	[MaxPerMatch] [money] NULL,
-	[8RMAccount] [int] NULL,
+	[FollowAccount] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
@@ -89,9 +89,9 @@ GO
 CREATE TABLE [dbo].[BetRestriction_Site](
 	[SiteID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
-	[LiveBetAccept] [int] NOT NULL,
+	[LiveBetAccept] [smallint] NOT NULL,
 	[SeizeBetTicket] [tinyint] NULL,
-	[8RMAccount] [int] NULL,
+	[FollowAccount] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[SiteID] ASC,
