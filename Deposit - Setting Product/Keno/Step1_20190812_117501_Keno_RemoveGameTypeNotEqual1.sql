@@ -66,7 +66,7 @@ SELECT @max_custid = xxx
 INSERT INTO #Super(custid)
 SELECT DISTINCT ds.custid
 FROM custgametype cs (nolock)
-INNER JOIN Dep_CustSuper ds (nolock) on ds.custid = ds.custid
+INNER JOIN Dep_CustSuper ds (nolock) on cs.custid = ds.custid
 	WHERE ds.CustID<= @max_custid
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -118,7 +118,7 @@ SELECT @max_custid = xxx
 INSERT INTO #Super(custid)
 SELECT DISTINCT ds.custid
 FROM custgametype cs (nolock)
-INNER JOIN Dep_CustSuper ds (nolock) on ds.custid = ds.custid
+INNER JOIN Dep_CustSuper ds (nolock) on cs.custid = ds.custid
 	WHERE ds.CustID<= @max_custid	
 
 DECLARE @super_cnt INT, @index INT = 0
