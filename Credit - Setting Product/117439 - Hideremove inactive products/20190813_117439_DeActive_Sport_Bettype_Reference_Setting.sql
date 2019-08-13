@@ -6,6 +6,6 @@
 */ 
 -------------------------------------------------
 
-UPDATE Sport_Bettype_Reference_Setting (ROWLOCK)  
+UPDATE Sport_Bettype_Reference_Setting WITH(ROWLOCK)  
 SET	   IsActive = 0 
 WHERE  sporttype IN(160,163,207)
