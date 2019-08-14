@@ -1,10 +1,13 @@
 /*
-	Created: 20190715@Elodie	
+	Created: 20190805@Elodie	
 	Task: Prepare structure for problem account 
-	DB: DBCUST/CustDB and all replicated server of CustDB_Customer_Info pub
+	DB: DBCUST/CustDB and all replicated server of CustDB_CustSetting pub
 */
 USE CustDB
 GO
+
+DROP TABLE ProblemAccountReason
+DROP TABLE CS_ProblemAccount
 
 CREATE TABLE ProblemAccountReason
 (
@@ -21,7 +24,7 @@ CREATE TABLE CS_ProblemAccount
 (
 	CustId				INT NOT NULL,
 	ProblemStatus		BINARY(1) NOT NULL,
-	ReasonId			TINYINT NOT NULL,
+	ReasonId			TINYINT NULL,
 	Comment				NVARCHAR(300) NULL,
 	IsReducedBetLimit	BIT NOT NULL,
 	MaxBet				MONEY NULL,
