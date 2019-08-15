@@ -4,9 +4,6 @@
 	Task: Create new tables for BetRestriction [Redmine:#117727]	
 	DB: DBCUST
 */
-USE [CustDB]
-GO
-
 SET ANSI_NULLS ON
 GO
 
@@ -79,9 +76,9 @@ CREATE TABLE [dbo].[BetRestriction_Setting](
 	[RestrictionLevel] [varchar](30) NOT NULL,
 	[IsLicensee] [bit] NOT NULL,
 	[BackEndStatus] [tinyint] NOT NULL,
-	[LiveBetAcceptStatus] [tinyint] NOT NULL,
-	[SeizeBetTicketStatus] [tinyint] NOT NULL,
-	[BetLimitStatus] [tinyint] NOT NULL
+	[LiveBetAcceptStatus] [bit] NOT NULL,
+	[SeizeBetTicketStatus] [bit] NOT NULL,
+	[BetLimitStatus] [bit] NOT NULL
 ) ON [BetRestriction]
 
 GO
