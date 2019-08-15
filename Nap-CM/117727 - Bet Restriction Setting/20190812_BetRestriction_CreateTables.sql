@@ -74,15 +74,14 @@ GO
 
 /****** Object:  Table [dbo].[BetRestriction_Setting]    Script Date: 8/12/2019 8:24:31 AM ******/
 CREATE TABLE [dbo].[BetRestriction_Setting](
-	[SettingType] [tinyint] NOT NULL,
+	SettingID [smallint] NOT NULL,
 	[SportType] [smallint] NOT NULL,
-	[SettingName] [varchar](10) NOT NULL,
-	[SettingStatus] [tinyint] NOT NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[SettingType] ASC,
-	[SportType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
+	[RestrictionLevel] [varchar](30) NOT NULL,
+	[IsLicensee] [bit] NOT NULL,
+	[BackEndStatus] [tinyint] NOT NULL,
+	[LiveBetAcceptStatus] [tinyint] NOT NULL,
+	[SeizeBetTicketStatus] [tinyint] NOT NULL,
+	[BetLimitStatus] [tinyint] NOT NULL
 ) ON [BetRestriction]
 
 GO
