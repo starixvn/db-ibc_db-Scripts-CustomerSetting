@@ -2,7 +2,7 @@
 	Created by: Eden
 	Date: 20190812
 	Task: Create new tables for BetRestriction [Redmine:#117727]	
-	DB: DBCUST
+	DB: DBCUST/CustDB
 */
 SET ANSI_NULLS ON
 GO
