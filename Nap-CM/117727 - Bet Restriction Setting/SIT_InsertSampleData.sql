@@ -4,6 +4,12 @@
 	Task: Insert sample Data on SIT [Redmine:#117727]	
 	DB: DBCUST/CustDB
 */
+DELETE FROM BetRestriction_Customer WITH(rowlock)
+DELETE FROM BetRestriction_Site WITH(rowlock)
+DELETE FROM BetRestriction_Currency WITH(rowlock)
+DELETE FROM BetRestriction_Setting WITH(rowlock)
+GO
+
 -->BetRestriction_Setting
 SET IDENTITY_INSERT BetRestriction_Setting ON
 GO
@@ -33,9 +39,7 @@ SELECT	@8rmseizebet1 = CASE WHEN c.username  = '8rmseizebet1' THEN c.custid ELSE
 		@A8rmseizebet = CASE WHEN c.username  = 'A8rmseizebet' THEN c.custid ELSE @A8rmseizebet END,
 		@MA8rmseizebet = CASE WHEN c.username  = 'MA8rmseizebet' THEN c.custid ELSE @MA8rmseizebet END	
 FROM custinfo c WITH(NOLOCK) 
-	INNER JOIN custinfo rm WITH(NOLOCK) ON c.recommend = rm.custid
-WHERE rm.username = '8RM' AND c.roleid = 1
-	  AND c.username IN ('MA8rmseizebet','A8rmseizebet','8rmseizebet1','8rmseizebet2','8rmseizebet3','8rmseizebet4','8rmseizebet5')
+WHERE c.username IN ('MA8rmseizebet','A8rmseizebet','8rmseizebet1','8rmseizebet2','8rmseizebet3','8rmseizebet4','8rmseizebet5')
 
 -->BetRestriction_Currency
 DECLARE @THB INT, @USD INT, @HK INT, @UUS INT, @IDD INT, @GBP INT
