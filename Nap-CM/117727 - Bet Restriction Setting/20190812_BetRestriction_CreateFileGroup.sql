@@ -3,7 +3,7 @@
 	Date: 20190812
 	Task: Create BetRestriction File group [Redmine:#117727]	
 	DB: DBCUST/CustDB
-	Replication : add to CustDB_DR_sync publication
+	Replication : add to CustDB_Custsetting publication
 */
 USE [master]
 GO
