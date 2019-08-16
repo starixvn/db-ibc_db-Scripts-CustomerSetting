@@ -10,7 +10,6 @@ FROM CS_CustBetSetting_Member cs WITH (NOLOCK)
 	INNER JOIN CS_ProductBetSetting ps WITH (NOLOCK) ON cs.SportType = ps.SportType AND cs.BetType = ps.BetType AND cs.IsLive = ps.IsLive AND ci.currency = ps.Currency
 WHERE (cs.MaxBet > ps.MaxBet OR cs.MaxPerEvent > ps.MaxPerEvent)
 	AND ci.currency = 20 
-	AND ci.username NOT IN ('SupertestTE41', 'SupertestTE31')
 	
 INSERT INTO #tmpCust (CustId, roleid)
 SELECT DISTINCT ci.CustId, ci.roleid
