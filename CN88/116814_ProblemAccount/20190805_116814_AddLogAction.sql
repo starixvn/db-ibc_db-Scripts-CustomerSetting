@@ -14,7 +14,8 @@ INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, 
 SELECT	31601, 'Mark New Problem Account', 'CS_ProblemAccount_AddCustomer', @IsInternal, NULL, NULL UNION ALL
 SELECT	31602, 'Reduce Bet Limit', 'CS_ProblemAccount_ReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
 SELECT	31603, 'Remove Reduced Bet Limit - S/M/A', 'CS_ProblemAccount_ReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
-SELECT	31604, 'Remove Reduced Bet Limit - Member', 'CS_ProblemAccount_RemoveReduceBetLimit', @IsInternal, NULL, NULL 
+SELECT	31604, 'Remove Reduced Bet Limit - Member', 'CS_ProblemAccount_RemoveReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
+SELECT	31605, 'Inactivate Problem Account', 'CS_ProblemAccount_InactiveAccount', @IsInternal, NULL, NULL 
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
 
