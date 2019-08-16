@@ -7,7 +7,7 @@
 
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 DECLARE @max_custid INT,@srecommend INT
-SELECT @max_custid = xxx						
+SELECT @max_custid = xxx 						
 
 INSERT INTO #Super(custid)
 SELECT DISTINCT ds.custid
@@ -29,6 +29,10 @@ INSERT INTO #MemberTemp (CustID)
 SELECT custid
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN(SELECT CustID FROM #Super) AND roleid IN(1,2,3,4)  AND custid > @max_custid
+UNION ALL
+SELECT 33278834
+UNION ALL
+SELECT 33278835
 	
 WHILE EXISTS(SELECT 1 FROM #MemberTemp)
 BEGIN
