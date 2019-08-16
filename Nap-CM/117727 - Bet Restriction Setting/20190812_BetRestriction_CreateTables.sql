@@ -3,6 +3,7 @@
 	Date: 20190812
 	Task: Create new tables for BetRestriction [Redmine:#117727]	
 	DB: DBCUST/CustDB
+	Replication : add to CustDB_DR_sync publication
 */
 SET ANSI_NULLS ON
 GO

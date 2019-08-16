@@ -2,7 +2,8 @@
 	Created by: Eden
 	Date: 20190812
 	Task: Create BetRestriction File group [Redmine:#117727]	
-	DB: DBCUST
+	DB: DBCUST/CustDB
+	Replication : add to CustDB_DR_sync publication
 */
 USE [master]
 GO
