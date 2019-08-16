@@ -72,7 +72,7 @@ GO
 
 /****** Object:  Table [dbo].[BetRestriction_Setting]    Script Date: 8/12/2019 8:24:31 AM ******/
 CREATE TABLE [dbo].[BetRestriction_Setting](
-	[SettingID] [smallint] IDENTITY (1,1) NOT NULL,
+	[SettingID] [smallint] IDENTITY (1,1) NOT FOR REPLICATION NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[RestrictionLevel] [varchar](30) NOT NULL,
 	[IsLicensee] [bit] NOT NULL,
