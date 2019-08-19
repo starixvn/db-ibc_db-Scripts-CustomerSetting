@@ -1,0 +1,56 @@
+/*
+	Created: 20190819@Johnson
+	Task: data patch for headline
+	DB: DBCUST/CustDB
+*/
+
+CREATE TABLE #Headline (HeadlineID INT, isFinished BIT DEFAULT(0))
+
+INSERT INTO #Headline(HeadlineID)
+SELECT	37541013	--	hltest36
+UNION ALL SELECT	37543485	--	HLTest37
+UNION ALL SELECT	37556742	--	hltest38
+UNION ALL SELECT	37609284	--	TPG004
+UNION ALL SELECT	38157925	--	TPG023
+UNION ALL SELECT	38160592	--	TPG025
+UNION ALL SELECT	38173105	--	TPG026
+UNION ALL SELECT	38191108	--	TPG027
+UNION ALL SELECT	38191113	--	TPG028
+UNION ALL SELECT	38191119	--	TPG029
+UNION ALL SELECT	38191126	--	TPG030
+UNION ALL SELECT	38191134	--	TPG031
+UNION ALL SELECT	38191137	--	TPG032
+UNION ALL SELECT	38191140	--	TPG033
+UNION ALL SELECT	38191145	--	TPG035
+UNION ALL SELECT	38191148	--	TPG036
+UNION ALL SELECT	38191151	--	TPG037
+UNION ALL SELECT	38191152	--	TPG038
+UNION ALL SELECT	38191162	--	TPG039
+UNION ALL SELECT	38191167	--	TPG040
+UNION ALL SELECT	38191171	--	TPG041
+
+DECLARE @custID INT,
+		@GroupHeadlineId INT
+		
+		
+WHILE (1=1)
+BEGIN
+	UPDATE TOP(1) #Headline	
+	SET @custID = HeadlineID,
+		isFinished = 1
+	WHERE isFinished = 0
+	
+	IF @@rowcount = 0 
+		BREAK;
+	
+	SELECT @GroupHeadlineId = MAX(groupid) + 1 FROM custaccount WITH(NOLOCK)
+	
+	INSERT INTO dbo.CustGroupHeadline (CustID, GroupID, HeadlineType, OwnerName, OwnerID)
+	SELECT @custid, @GroupHeadlineId, 0, NULL, NULL	 
+	
+	INSERT INTO dbo.custAccount (custid, creditgrade, installmentdate, installmentamount, preagreeamount, accountremark, accountremarkdate,groupid,isgroupheadline,checker)
+	VALUES (@custid, N'A', N'1', 0, 0, '', CURRENT_TIMESTAMP, @GroupHeadlineId,1,0)
+END
+
+
+
