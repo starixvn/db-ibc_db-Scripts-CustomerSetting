@@ -40,3 +40,5 @@ GO
 
 ALTER TABLE [dbo].CS_ProblemAccount ADD  CONSTRAINT [DF_CS_ProblemAccount_CreatedDate]  DEFAULT (getdate()) FOR CreatedDate
 GO
+
+CREATE NONCLUSTERED INDEX IX_CS_ProblemAccount_CreatedDate ON CS_ProblemAccount (CreatedDate)
