@@ -25,7 +25,7 @@ CREATE TABLE CS_ProblemAccount
 	CustId				INT NOT NULL,
 	ProblemStatus		BINARY(1) NOT NULL,
 	ReasonId			TINYINT NULL,
-	IsAbnormalBetMember BIT NOT NULL,
+	IsAbnormalMember	BIT NOT NULL,
 	Comment				NVARCHAR(300) NULL,
 	MaxBet				MONEY NULL,
 	MaxPerEvent			MONEY NULL,
@@ -38,7 +38,7 @@ CONSTRAINT [PK_CS_ProblemAccount] PRIMARY KEY CLUSTERED
 ) ON [table_customer]
 GO
 
-ALTER TABLE [dbo].CS_ProblemAccount ADD  CONSTRAINT [DF_CS_ProblemAccount_CreatedDate]  DEFAULT (getdate()) FOR CreatedDate
+ALTER TABLE [dbo].CS_ProblemAccount ADD CONSTRAINT [DF_CS_ProblemAccount_CreatedDate]  DEFAULT (getdate()) FOR CreatedDate
 GO
 
 CREATE NONCLUSTERED INDEX IX_CS_ProblemAccount_CreatedDate ON CS_ProblemAccount (CreatedDate)
