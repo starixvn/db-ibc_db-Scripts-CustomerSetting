@@ -11,7 +11,15 @@ SELECT 4001,2
 UNION ALL
 SELECT 4101,7
 
-DELETE s
-FROM stakelevel s WITH(NOLOCK) 
+
+DELETE sd
+FROM stakelevel s WITH(NOLOCK) 	
 	INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID 
+	INNER JOIN  StakeLevelGroupDetail sd ON s.StakeLevelID=sd.StakeLevelID
+
+DELETE s
+FROM stakelevel s 
+	INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID 
+
+DROP TABLE #tmpLevel2
 
