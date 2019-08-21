@@ -136,15 +136,15 @@ BEGIN
 		TRUNCATE TABLE #MemberTempBatch
 	END
 
-	DROP TABLE #SMATemp
-	DROP TABLE #MemberTemp
-
 	--Agent Level
 	UPDATE a
 		SET a.StakeLevelList=t.StakeLevelList
 	FROM #SMATemp t
 		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
 
+	
+	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
 
 END
 GO
