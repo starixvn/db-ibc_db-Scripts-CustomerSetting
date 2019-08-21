@@ -58,6 +58,16 @@ BEGIN
 		PRIMARY KEY(CustID,Sporttype,Bettype)
 	)
 
+	CREATE TABLE #SMATempBatch
+	(
+		CustID			INT,
+		SportType		INT,
+		BetType			INT,
+		StakeLevelList	VARCHAR(50),
+		PRIMARY KEY(CustID,Sporttype,Bettype)
+	)
+
+
 		CREATE TABLE #MemberTempBatch
 	(
 		CustID			INT,
@@ -137,11 +147,21 @@ BEGIN
 	END
 
 	--Agent Level
-	UPDATE a
+
+	WHILE EXISTS(SELECT 1 FROM #SMATemp)
+	BEGIN
+		DELETE TOP (3000) #SMATemp OUTPUT DELETED.* INTO #SMATempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		UPDATE a
 		SET a.StakeLevelList=t.StakeLevelList
-	FROM #SMATemp t
+		FROM #SMATempBatch t
 		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
 
+		TRUNCATE TABLE #SMATempBatch
+	END
 	
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
