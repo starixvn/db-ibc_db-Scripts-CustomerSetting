@@ -100,17 +100,17 @@ INNER JOIN stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.Ga
 WHERE  StakeLevelList like '%'+ CAST(s.StakelevelID AS VARCHAR(50))+'%'
 GROUP BY c.custid,a.SportType,a.BetType
 	----------------------------------------Betlimit Setting-------------------------------------------------		
---Agent Level
-UPDATE a
-		SET a.StakeLevelList=t.StakeLevelList
-	FROM #SMATempSL t
-		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
-
 --Member Level
 UPDATE a
 		SET a.StakeLevelList=t.StakeLevelList
 		FROM #MemberTempSL t
 		INNER JOIN CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
+
+--Agent Level
+UPDATE a
+		SET a.StakeLevelList=t.StakeLevelList
+	FROM #SMATempSL t
+		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp

@@ -118,12 +118,7 @@ BEGIN
 	FROM #SMATempRaw
 	GROUP BY custid,SportType,BetType
 	----------------------------------------Betlimit Setting-------------------------------------------------		
-	--Agent Level
-	UPDATE a
-		SET a.StakeLevelList=t.StakeLevelList
-	FROM #SMATemp t
-		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
-
+	
 	--Member Level
 
 	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
@@ -143,6 +138,13 @@ BEGIN
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+
+	--Agent Level
+	UPDATE a
+		SET a.StakeLevelList=t.StakeLevelList
+	FROM #SMATemp t
+		INNER JOIN CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK) ON t.CustID=a.CustID AND t.SportType=a.SportType AND t.BetType=a.BetType		
+
 
 END
 GO
