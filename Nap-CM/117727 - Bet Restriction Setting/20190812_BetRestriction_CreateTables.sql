@@ -42,7 +42,7 @@ CREATE TABLE [dbo].[BetRestriction_Currency](
 	[LiveBetAccept] [smallint] NOT NULL,
 	[SeizeBetTicket] [tinyint] NULL,
 	[FollowAccount] [int] NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetRestriction_Currency] PRIMARY KEY CLUSTERED 
 (
 	[ExchangeID] ASC,
 	[SportType] ASC,
@@ -61,7 +61,7 @@ CREATE TABLE [dbo].[BetRestriction_Customer](
 	[MaxBet] [money] NULL,
 	[MaxPerMatch] [money] NULL,
 	[FollowAccount] [int] NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetRestriction_Customer] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
 	[SportType] ASC
@@ -80,7 +80,7 @@ CREATE TABLE [dbo].[BetRestriction_Setting](
 	[LiveBetAcceptStatus] [bit] NOT NULL,
 	[SeizeBetTicketStatus] [bit] NOT NULL,
 	[BetLimitStatus] [bit] NOT NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetRestriction_Setting] PRIMARY KEY CLUSTERED 
 (
 	[SettingID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
@@ -95,7 +95,7 @@ CREATE TABLE [dbo].[BetRestriction_Site](
 	[LiveBetAccept] [smallint] NOT NULL,
 	[SeizeBetTicket] [tinyint] NULL,
 	[FollowAccount] [int] NULL,
-PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_BetRestriction_Site] PRIMARY KEY CLUSTERED 
 (
 	[SiteID] ASC,
 	[SportType] ASC
