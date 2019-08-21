@@ -5,6 +5,7 @@
 	DB: DBCust/CustDB
 */
 
+
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@srecommend INT		
 	,@maxcustid INT
@@ -66,8 +67,26 @@ BEGIN
 		PRIMARY KEY(CustID,Sporttype,Bettype)
 	)	
 	
-	INSERT INTO #MemberTemp (CustID,SportType,BetType,StakeLevelList)
-	SELECT c.custid,a.SportType,a.BetType,CAST(MIN(s1.StakeLevelID) AS VARCHAR(50))	
+	CREATE TABLE #SMATempRaw
+	(
+		CustID			INT,
+		SportType		INT,
+		BetType			INT,
+		StakeLevelList	INT
+		
+	)
+
+	CREATE TABLE #MemberTempRaw
+	(
+		CustID			INT,
+		SportType		INT,
+		BetType			INT,
+		StakeLevelList	INT
+		
+	)	
+
+	INSERT INTO #MemberTempRaw (CustID,SportType,BetType,StakeLevelList)
+	SELECT c.custid,a.SportType,a.BetType,s1.StakeLevelID
 	FROM stakelevel s WITH(NOLOCK) 
 	INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID AND s.ExchangeId=@currency
 	INNER JOIN CustStakeLevel_Member a WITH(NOLOCK) ON t.GametypeID=a.Bettype
@@ -76,10 +95,10 @@ BEGIN
 	INNER JOIN stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=@currency 
 	WHERE srecommend = @srecommend AND roleid = 1  AND c.custid <= @maxcustid	
 		AND StakeLevelList = CAST(s.StakelevelID AS VARCHAR(50))
-	GROUP BY c.custid,a.SportType,a.BetType
+	
 
-	INSERT INTO #SMATemp (CustID,SportType,BetType,StakeLevelList)
-	SELECT c.custid,a.SportType,a.BetType,CAST(MIN(s1.StakeLevelID) AS VARCHAR(50))	
+	INSERT INTO #SMATempRaw (CustID,SportType,BetType,StakeLevelList)
+	SELECT c.custid,a.SportType,a.BetType,s1.StakeLevelID
 	FROM stakelevel s WITH(NOLOCK) 
 	INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID  AND s.ExchangeId=@currency		
 	INNER JOIN CustStakeLevel_Agent a WITH(NOLOCK) ON t.GametypeID=a.Bettype
@@ -87,9 +106,17 @@ BEGIN
 	INNER JOIN #tmpLevel1 t1 ON a.Bettype=t1.GameTypeID
 	INNER JOIN stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=@currency
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND c.custid <= @maxcustid			
-		AND StakeLevelList like '%'+ CAST(s.StakelevelID AS VARCHAR(50))+'%'
-	GROUP BY c.custid,a.SportType,a.BetType
+		AND StakeLevelList like '%'+ CAST(s.StakelevelID AS VARCHAR(50))+'%'	
 
+	INSERT INTO #MemberTemp (CustID,SportType,BetType,StakeLevelList)
+	SELECT custid,SportType,BetType,CAST(MIN(StakeLevelList) AS VARCHAR(50))	
+	FROM #MemberTempRaw
+	GROUP BY custid,SportType,BetType
+
+	INSERT INTO #SMATemp (CustID,SportType,BetType,StakeLevelList)
+	SELECT custid,SportType,BetType,CAST(MIN(StakeLevelList) AS VARCHAR(50))	
+	FROM #SMATempRaw
+	GROUP BY custid,SportType,BetType
 	----------------------------------------Betlimit Setting-------------------------------------------------		
 	--Agent Level
 	UPDATE a
