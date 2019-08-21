@@ -1,0 +1,17 @@
+/*
+	Created: Winnie
+	Task: Remove stake level 2. [RedmineID:#118564]
+	DB: DBCUST/CustDB
+	Date: 20190821
+*/ 
+
+CREATE TABLE #tmpLevel2(GameTypeID INT,GameGroupID INT)	
+INSERT INTO #tmpLevel2(GameTypeID ,GameGroupID )
+SELECT 4001,2
+UNION ALL
+SELECT 4101,7
+
+DELETE s
+FROM stakelevel s WITH(NOLOCK) 
+	INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID 
+
