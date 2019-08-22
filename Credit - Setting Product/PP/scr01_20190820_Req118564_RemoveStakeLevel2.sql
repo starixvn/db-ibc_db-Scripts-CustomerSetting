@@ -191,6 +191,8 @@ WHERE c.roleid = 4
  AND s.islicensee = 0  
  AND c.custid <= @max_custid
  AND c.Site<>'CN88'
+UNION
+SELECT 179457
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -243,6 +245,9 @@ WHERE c.roleid = 4
  AND s.islicensee = 0 
  AND c.custid <= @max_custid
  AND c.Site<>'CN88'
+UNION
+SELECT 179457
+
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'

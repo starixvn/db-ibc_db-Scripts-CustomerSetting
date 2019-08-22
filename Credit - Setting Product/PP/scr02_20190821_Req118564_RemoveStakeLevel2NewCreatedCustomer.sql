@@ -22,6 +22,8 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0		
 	AND ci.Site<>'CN88'
+UNION
+SELECT 179457
 
 CREATE TABLE #tmpLevel2(GameTypeID INT,GameGroupID INT)	
 INSERT INTO #tmpLevel2(GameTypeID ,GameGroupID )
