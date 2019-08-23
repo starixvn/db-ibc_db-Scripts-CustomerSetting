@@ -1,7 +1,7 @@
 /*
 	Created by: Eden
 	Date: 20190816
-	Task: Insert sample Data on SIT [Redmine:#117727]	
+	Task: Insert sample Data [Redmine:#117727]	
 	DB: DBCUST/CustDB
 */
 DELETE FROM BetRestriction_Customer WITH(rowlock)
@@ -14,17 +14,17 @@ GO
 SET IDENTITY_INSERT BetRestriction_Setting ON
 GO
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (1,1,'BetRestriction_Customer',0,0,1,1,1)
+VALUES (1,1,'BetRestriction_Customer',0,1,0,0,0)
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (2,1,'BetRestriction_Customer',1,0,1,1,1)
+VALUES (2,1,'BetRestriction_Customer',1,1,0,0,0)
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (3,1,'BetRestriction_Site',0,0,1,1,1)
+VALUES (3,1,'BetRestriction_Site',0,1,0,0,0)
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (4,1,'BetRestriction_Site',1,0,1,1,1)
+VALUES (4,1,'BetRestriction_Site',1,1,0,0,0)
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (5,1,'BetRestriction_Currency',0,0,1,1,1)
+VALUES (5,1,'BetRestriction_Currency',0,1,0,0,0)
 INSERT INTO BetRestriction_Setting (SettingID,SportType,RestrictionLevel,IsLicensee,BackEndStatus,LiveBetAcceptStatus,SeizeBetTicketStatus,BetLimitStatus)
-VALUES (6,1,'BetRestriction_Currency',1,0,1,1,1)
+VALUES (6,1,'BetRestriction_Currency',1,1,0,0,0)
 GO
 SET IDENTITY_INSERT BetRestriction_Setting OFF
 GO
