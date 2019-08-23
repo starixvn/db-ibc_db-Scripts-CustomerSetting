@@ -133,17 +133,17 @@ SELECT	@STAFFTW	  = CASE WHEN c.username  = 'STAFFTW'	   THEN c.custid ELSE @STA
 		@jackytestb = CASE WHEN c.username  = 'jackytestb' THEN c.custid ELSE @jackytestb END,
 		@jackytestc = CASE WHEN c.username  = 'jackytestc' THEN c.custid ELSE @jackytestc END,
 		----
-		@SupertestTE02 = CASE WHEN c.username  = '@SupertestTE02' THEN c.custid ELSE @SupertestTE02 END,
-		@SupertestTE0301 = CASE WHEN c.username  = '@SupertestTE0301' THEN c.custid ELSE @SupertestTE0301 END,
-		@SupertestTE030201 = CASE WHEN c.username  = '@SupertestTE030201' THEN c.custid ELSE @SupertestTE030201 END,
-		@SupertestTE030301001 = CASE WHEN c.username  = '@SupertestTE030301001' THEN c.custid ELSE @SupertestTE030301001 END,
-		@SupertestTE030301002 = CASE WHEN c.username  = '@SupertestTE030301002' THEN c.custid ELSE @SupertestTE030301002 END,
-		@SupertestTE030401001 = CASE WHEN c.username  = '@SupertestTE030401001' THEN c.custid ELSE @SupertestTE030401001 END,
-		@SupertestNC41 = CASE WHEN c.username  = '@SupertestNC41' THEN c.custid ELSE @SupertestNC41 END,
-		@SupertestTE3201 = CASE WHEN c.username  = '@SupertestTE3201' THEN c.custid ELSE @SupertestTE3201 END,
-		@SupertestTE320201 = CASE WHEN c.username  = '@SupertestTE320201' THEN c.custid ELSE @SupertestTE320201 END,
-		@SupertestTE320301001 = CASE WHEN c.username  = '@SupertestTE320301001' THEN c.custid ELSE @SupertestTE320301001 END,
-		@SupertestTE100101001 = CASE WHEN c.username  = '@SupertestTE100101001' THEN c.custid ELSE @SupertestTE100101001 END
+		@SupertestTE02 = CASE WHEN c.username  = 'SupertestTE02' THEN c.custid ELSE @SupertestTE02 END,
+		@SupertestTE0301 = CASE WHEN c.username  = 'SupertestTE0301' THEN c.custid ELSE @SupertestTE0301 END,
+		@SupertestTE030201 = CASE WHEN c.username  = 'SupertestTE030201' THEN c.custid ELSE @SupertestTE030201 END,
+		@SupertestTE030301001 = CASE WHEN c.username  = 'SupertestTE030301001' THEN c.custid ELSE @SupertestTE030301001 END,
+		@SupertestTE030301002 = CASE WHEN c.username  = 'SupertestTE030301002' THEN c.custid ELSE @SupertestTE030301002 END,
+		@SupertestTE030401001 = CASE WHEN c.username  = 'SupertestTE030401001' THEN c.custid ELSE @SupertestTE030401001 END,
+		@SupertestNC41 = CASE WHEN c.username  = 'SupertestNC41' THEN c.custid ELSE @SupertestNC41 END,
+		@SupertestTE3201 = CASE WHEN c.username  = 'SupertestTE3201' THEN c.custid ELSE @SupertestTE3201 END,
+		@SupertestTE320201 = CASE WHEN c.username  = 'SupertestTE320201' THEN c.custid ELSE @SupertestTE320201 END,
+		@SupertestTE320301001 = CASE WHEN c.username  = 'SupertestTE320301001' THEN c.custid ELSE @SupertestTE320301001 END,
+		@SupertestTE100101001 = CASE WHEN c.username  = 'SupertestTE100101001' THEN c.custid ELSE @SupertestTE100101001 END
 FROM custinfo c WITH(NOLOCK) 
 WHERE c.username IN (
 						 'STAFFTW'
