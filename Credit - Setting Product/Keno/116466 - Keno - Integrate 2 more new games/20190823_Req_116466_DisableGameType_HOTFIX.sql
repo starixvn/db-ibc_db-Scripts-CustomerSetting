@@ -12,4 +12,4 @@ GO
 
 UPDATE GameType WITH(rowlock)
 SET		IsDisabled = 1
-WHERE GameTypeID IN (25,2)
+WHERE GameTypeID IN (25,26)
