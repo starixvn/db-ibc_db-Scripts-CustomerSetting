@@ -14,22 +14,22 @@ SELECT @ReasonId = 1
 INSERT INTO #CustList (CustId, roleId)
 SELECT CustId, roleId
 FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.roleid = 4 AND ci.username IN ('SupertestCN06', 'SupertestCN05')
+WHERE ci.roleid = 4 AND ci.username IN ('supertestshcn8801', 'superbobcn88')
 
 INSERT INTO #CustList (CustId, roleId)
 SELECT CustId, roleId
 FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.roleid = 3 AND ci.username IN ('SuperKL0801', 'SuperKL0601', 'supertestnc3107')
+WHERE ci.roleid = 3 AND ci.username IN ('SupertestCN88KL0102', 'SuperRita0101', 'supertestshcn880100', 'supertestCN88Felix01')
 
 INSERT INTO #CustList (CustId, roleId)
 SELECT CustId, roleId
 FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.roleid = 2 AND ci.username IN ('CStest70000', 'TestCN520001', 'CStest90101','CStest10000')
+WHERE ci.roleid = 2 AND ci.username IN ('SuperTestCNL0102', 'bobsuper0101', 'Supertestte330000','SuperTestCNL8802')
 
 INSERT INTO #CustList (CustId, roleId)
-SELECT TOP 20 CustId, roleId
+SELECT CustId, roleId
 FROM dbo.Customer ci WITH (NOLOCK)
-WHERE ci.roleid = 1 AND site = 'CN88'
+WHERE ci.roleid = 1 AND custid IN (4710619,24971823,24972390)
 
 WHILE (1=1)
 BEGIN
@@ -72,8 +72,8 @@ BEGIN
 
 	IF @RoleId <> 1
 	BEGIN
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed)
-		SELECT @CustId, @SetBit1, @ReasonId, '', 1000, 5000, GETDATE(), 0
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
+		SELECT @CustId, @SetBit1, @ReasonId, '', 1000, 5000, GETDATE(), 0, 1
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = @CustId)
 
 		UPDATE pa 
@@ -83,8 +83,8 @@ BEGIN
 		FROM dbo.CS_ProblemAccount pa WITH (ROWLOCK)
 		WHERE CustId = @CustId	
 
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed)
-		SELECT CustId, @SetBit1, NULL, NULL, NULL, NULL, GETDATE(), 0
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
+		SELECT CustId, @SetBit1, NULL, NULL, NULL, NULL, GETDATE(), 0, 1
 		FROM #DownlineCust t
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = t.CustId)
 
@@ -97,8 +97,8 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed)
-		SELECT @CustId, @SetBit1, NULL, '', 1000, 5000, GETDATE(), 0
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
+		SELECT @CustId, @SetBit1, NULL, '', 1000, 5000, GETDATE(), 0, 1
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = @CustId)
 
 		UPDATE pa 
@@ -107,3 +107,6 @@ BEGIN
 		WHERE CustId = @CustId	
 	END
 END
+
+DROP TABLE #CustList
+DROP TABLE #DownlineCust
