@@ -7,4 +7,4 @@
 Update c
 SET IsLaunched=0
 from ProductLaunchedSiteCurrency c WITH(ROWLOCK,UPDLOCK) where SportType=1 and BetType=38
-AND SiteID=1 AND Currency=20
+AND SiteID=35 AND Currency=20
