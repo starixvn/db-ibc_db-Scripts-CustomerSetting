@@ -52,23 +52,23 @@ CREATE TABLE #SMATempSL
 
 INSERT INTO #MemberTempSL (CustID,SportType,BetType,StakeLevelList)
 SELECT c.custid,a.SportType,a.BetType,CAST(s1.StakeLevelID AS VARCHAR(50))	
-FROM stakelevel s WITH(NOLOCK) 
+FROM Temp_stakelevel s WITH(NOLOCK) 
 INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID 
 INNER JOIN CustStakeLevel_Member a WITH(NOLOCK) ON t.GametypeID=a.Bettype
 INNER JOIN custInfo c WITH(NOLOCK) ON a.custid=c.CustiD AND s.ExchangeId=c.currency
 INNER JOIN #tmpLevel1 t1 ON a.Bettype=t1.GameTypeID
-INNER JOIN stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=c.currency 
+INNER JOIN Temp_stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=c.currency 
 WHERE StakeLevelList = CAST(s.StakelevelID AS VARCHAR(50))
 AND srecommend IN(SELECT CustiD FROM #supers)
 
 INSERT INTO #SMATempSL (CustID,SportType,BetType,StakeLevelList)
 SELECT c.custid,a.SportType,a.BetType,CAST(s1.StakeLevelID AS VARCHAR(50))	
-FROM stakelevel s WITH(NOLOCK) 
+FROM Temp_stakelevel s WITH(NOLOCK) 
 INNER JOIN #tmpLevel2 t ON s.GameTypeID=t.GameTypeID AND s.GameGroupID=t.GameGroupID 	
 INNER JOIN CustStakeLevel_Agent a WITH(NOLOCK) ON t.GametypeID=a.Bettype
 INNER JOIN custInfo c WITH(NOLOCK) ON a.custid=c.CustiD  AND s.ExchangeId=c.currency	
 INNER JOIN #tmpLevel1 t1 ON a.Bettype=t1.GameTypeID
-INNER JOIN stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=c.currency
+INNER JOIN Temp_stakelevel s1 ON s1.GameTypeID=t1.GameTypeID AND s1.GameGroupID=t1.GameGroupID AND s1.ExchangeId=c.currency
 WHERE  StakeLevelList like '%'+ CAST(s.StakelevelID AS VARCHAR(50))+'%'
 AND srecommend IN(SELECT CustiD FROM #supers)
 
