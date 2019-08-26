@@ -5,6 +5,7 @@
 */
 USE CustDB
 GO
+
 DECLARE @CustId INT, @SetBit1 INT, @Pos TINYINT, @RoleId TINYINT, @ReasonId TINYINT
 CREATE TABLE #CustList (CustId INT, roleId TINYINT, IsFinished BIT DEFAULT(0))
 CREATE TABLE #DownlineCust (CustID INT PRIMARY KEY, RoleID TINYINT)
@@ -29,7 +30,7 @@ WHERE ci.roleid = 2 AND ci.username IN ('SuperTestCNL0102', 'bobsuper0101', 'Sup
 INSERT INTO #CustList (CustId, roleId)
 SELECT CustId, roleId
 FROM dbo.Customer ci WITH (NOLOCK)
-WHERE ci.roleid = 1 AND custid IN (4710619,24971823,24972390)
+WHERE ci.roleid = 1 AND custid IN (24971823)
 
 WHILE (1=1)
 BEGIN
