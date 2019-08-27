@@ -73,8 +73,8 @@ BEGIN
 
 	IF @RoleId <> 1
 	BEGIN
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
-		SELECT @CustId, @SetBit1, @ReasonId, '', 1000, 5000, GETDATE(), 0, 1
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsAbnormalMember)
+		SELECT @CustId, @SetBit1, @ReasonId, '', 1000, 5000, GETDATE(), 0, 0
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = @CustId)
 
 		UPDATE pa 
@@ -84,8 +84,8 @@ BEGIN
 		FROM dbo.CS_ProblemAccount pa WITH (ROWLOCK)
 		WHERE CustId = @CustId	
 
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
-		SELECT CustId, @SetBit1, NULL, NULL, NULL, NULL, GETDATE(), 0, 1
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsAbnormalMember)
+		SELECT CustId, @SetBit1, NULL, NULL, NULL, NULL, GETDATE(), 0, 0
 		FROM #DownlineCust t
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = t.CustId)
 
@@ -98,7 +98,7 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsReducedBetLimit)
+		INSERT INTO dbo.CS_ProblemAccount (CustId, ProblemStatus, ReasonId, Comment, MaxBet, MaxPerEvent, CreatedDate, IsReviewed, IsAbnormalMember)
 		SELECT @CustId, @SetBit1, NULL, '', 1000, 5000, GETDATE(), 0, 1
 		WHERE NOT EXISTS (SELECT 1 FROM CS_ProblemAccount WHERE CustId = @CustId)
 
