@@ -12,7 +12,7 @@ WHERE SiteID IN(SELECT siteid FROM Site WITH(NOLOCK) WHERE site IN('INDO', 'KORI
 	AND SportType=1 AND BetType=38
 
 INSERT INTO ProductLaunchedSiteCurrency ([SiteID], [Currency], [SportType],BetType, [IsLaunched], [IsTest],LaunchedLevel)
-SELECT [SiteID], 0, 1,38, 1, 0,1
+SELECT [SiteID], 0, 1,38, 1, 1,1
 FROM Site WITH(NOLOCK)
 where isLicensee = 0 and isDeposit = 0
 and isActive = 1 AND site IN('INDO', 'KORIBC')
