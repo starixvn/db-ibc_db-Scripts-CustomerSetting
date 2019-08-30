@@ -16,15 +16,23 @@ INSERT INTO @ListAccount (SMAAccount, [8RMAccount],SportType,LiveBetAccept,Seize
 UNION SELECT 'S69R', '8RM1-S6EU', 1, 0, 50, NULL, NULL
 UNION SELECT 'S69E', '8RM1-S69E', 1, 0, 50, NULL, NULL
 
-SELECT Invalid8RM_Message = CASE WHEN c1.custid IS NOT NULL THEN '''' + lc.[8RMAccount] + ''' is not a member of 8RM Agent'	
-								 ELSE '''' + lc.[8RMAccount] + ''' is invalid' 
-							END
+SELECT ErrorMessage = 'SMAAccount ''' + lc.SMAAccount + ''' is invalid' 
+FROM  @ListAccount lc
+	LEFT JOIN Custinfo c1 WITH(NOLOCK) ON lc.SMAAccount = c1.username
+WHERE c1.custid IS NULL
+UNION ALL
+SELECT ErrorMessage = '8RMAccount ''' + lc.[8RMAccount] + ''' is invalid' 
 FROM  @ListAccount lc
 	LEFT JOIN Custinfo c1 WITH(NOLOCK) ON lc.[8RMAccount] = c1.username
+WHERE c1.custid IS NULL
+UNION ALL
+SELECT ErrorMessage =  '8RMAccount ''' + lc.[8RMAccount] + ''' is not a member of 8RM Agent'	
+FROM  @ListAccount lc
+	INNER JOIN Custinfo c1 WITH(NOLOCK) ON lc.[8RMAccount] = c1.username
 	LEFT JOIN Custinfo rm WITH(NOLOCK)  
 			ON c1.recommend = rm.custid 
 			AND rm.username = '8RM'
-WHERE rm.custid IS NULL AND @IsCheck8RMLine = 1
+WHERE rm.custid IS NULL AND @IsCheck8RMLine = 1 
 
 IF @@ROWCOUNT <> 0
 	RETURN
