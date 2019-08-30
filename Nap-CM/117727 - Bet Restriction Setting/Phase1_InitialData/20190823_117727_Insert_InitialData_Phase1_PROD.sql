@@ -52,16 +52,10 @@ SELECT c.custid,
 	lc.SeizeBetTicket, 
 	lc.MaxBet, 
 	lc.MaxPerMatch, 
-	rm.[8RMAccID]
+	c1.custID
 FROM @ListAccount lc
 	 INNER JOIN custinfo c WITH(NOLOCK) 
 		ON lc.SMAAccount = c.username
-	 OUTER APPLY(	SELECT c1.custid AS [8RMAccID]
-					FROM Custinfo c1 WITH(NOLOCK) 
-						 INNER JOIN Custinfo rm WITH(NOLOCK)  
-							ON c1.recommend = rm.custid 
-							AND rm.username = '8RM'
-					WHERE c1.username = lc.[8RMAccount]
-				 ) rm
-
+	 INNER JOIN Custinfo c1 WITH(NOLOCK) 
+		ON c1.username = lc.[8RMAccount]
 GO
