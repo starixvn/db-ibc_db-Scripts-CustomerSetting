@@ -5,11 +5,11 @@
 	DB: DBCUST/CustDB
 */
 
-DECLARE @ListAccount TABLE (SMAAccount NVARCHAR(50), [8RMAccount]  NVARCHAR(50))
-INSERT INTO @ListAccount (SMAAccount, [8RMAccount])
-	  SELECT 'FNU' ,'8RM1-FNU'
-UNION SELECT 'S69R','8RM1-S6EU'
-UNION SELECT 'S69E','8RM1-S69E'
+DECLARE @ListAccount TABLE (SMAAccount NVARCHAR(50), [8RMAccount]  NVARCHAR(50), SportType SMALLINT,LiveBetAccept SMALLINT, SeizeBetTicket TINYINT, MaxBet MONEY, MaxPerMatch MONEY)
+INSERT INTO @ListAccount (SMAAccount, [8RMAccount],SportType,LiveBetAccept,SeizeBetTicket,MaxBet,MaxPerMatch)
+	  SELECT 'FNU', '8RM1-FNU'  , 1, 0, 50, NULL, NULL
+UNION SELECT 'S69R', '8RM1-S6EU', 1, 0, 50, NULL, NULL
+UNION SELECT 'S69E', '8RM1-S69E', 1, 0, 50, NULL, NULL
 
 INSERT INTO BetRestriction_Customer(
 	CustID, 
@@ -21,11 +21,11 @@ INSERT INTO BetRestriction_Customer(
 	FollowAccount
 	)
 SELECT c.custid,
-	SportType = 1, 
-	LiveBetAccept = 0, 
-	SeizeBetTicket = 50, 
-	MaxBet = NULL, 
-	MaxPerMatch = NULL, 
+	lc.SportType, 
+	lc.LiveBetAccept, 
+	lc.SeizeBetTicket, 
+	lc.MaxBet, 
+	lc.MaxPerMatch, 
 	rm.[8RMAccID]
 FROM @ListAccount lc
 	 JOIN custinfo c WITH(NOLOCK) 
