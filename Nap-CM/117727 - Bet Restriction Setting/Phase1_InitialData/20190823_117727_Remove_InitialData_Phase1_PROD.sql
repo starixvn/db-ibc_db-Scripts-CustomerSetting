@@ -5,20 +5,16 @@
 	DB: DBCUST/CustDB
 */
 
-DECLARE	 @SMAAccount1	INT
-		,@SMAAccount2	INT
-		,@SMAAccount3	INT
+DECLARE @ListAccount TABLE (SMAAccount NVARCHAR(50))
+INSERT INTO @ListAccount (SMAAccount)
+	  SELECT 'FNU' 
+UNION SELECT 'S69R'
+UNION SELECT 'S69E'
 
-SELECT	@SMAAccount1 = CASE WHEN c.username  = 'FNU'  THEN c.custid ELSE @SMAAccount1 END,
-		@SMAAccount2 = CASE WHEN c.username  = 'S69R' THEN c.custid ELSE @SMAAccount2 END,
-		@SMAAccount3 = CASE WHEN c.username  = 'S69E' THEN c.custid ELSE @SMAAccount3 END
-FROM custinfo c WITH(NOLOCK) 
-WHERE c.username IN ('FNU', 'S69R', 'S69E')
-
-DELETE 
-FROM BetRestriction_Customer WITH(ROWLOCK)
-WHERE custid IN (@SMAAccount1, @SMAAccount2, @SMAAccount3)
-
+DELETE bc
+FROM BetRestriction_Customer bc WITH(ROWLOCK)
+	 JOIN custinfo c WITH(NOLOCK)
+		ON bc.CustID = c.custid 
+	 JOIN @ListAccount lc 
+		ON lc.SMAAccount = c.username
 GO
-
-
