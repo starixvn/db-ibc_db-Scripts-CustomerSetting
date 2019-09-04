@@ -11,8 +11,8 @@ SELECT @Master='BOSSBRMB'
 SELECT @Pass='8058095B7DDB08A608811097E5DB8D'
 SELECT @MasterID=CustID,@SuperID=srecommend,@Currency=currency FROM Customer WITH(NOLOCK) WHERE username=@Master
 SELECT @CreatorID=10278938
-DECLARE @startnum INT=12
-DECLARE @endnum INT=511
+DECLARE @startnum INT=32
+DECLARE @endnum INT=531
 DECLARE @tmpSubCustID INT	
 DECLARE @tmpSubUserName VARCHAR(30), @ListCustIDRollBack VARCHAR(MAX)
 CREATE TABLE #tempSubCustID (CustID INT,isfinished BIT DEFAULT(0))
