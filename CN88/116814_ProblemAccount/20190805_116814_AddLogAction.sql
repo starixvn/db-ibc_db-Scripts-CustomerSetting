@@ -15,7 +15,7 @@ SELECT	31601, 'Mark New Problem Account', 'CS_ProblemAccount_AddCustomer', @IsIn
 SELECT	31602, 'Reduce Bet Limit', 'CS_ProblemAccount_ReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
 SELECT	31603, 'Remove Reduced Bet Limit - S/M/A', 'CS_ProblemAccount_RemoveReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
 SELECT	31604, 'Remove Reduced Bet Limit - Member', 'CS_ProblemAccount_RemoveReduceBetLimit', @IsInternal, NULL, NULL UNION ALL
-SELECT	31605, 'Inactivate Problem Account', 'CS_ProblemAccount_InactiveAccount', @IsInternal, NULL, NULL UNION ALL
+SELECT	31605, 'Inactivate Problem Account', 'CS_ProblemAccount_InactiveAccount', @IsInternal, 5, NULL UNION ALL
 SELECT	31607, 'Unmark Problem Account - S/M/A', 'CS_ProblemAccount_RemoveCustomer', @IsInternal, NULL, NULL UNION ALL
 SELECT	31611, 'Unmark Problem Account - Member', 'CS_ProblemAccount_RemoveCustomer', @IsInternal, NULL, NULL UNION ALL
 SELECT	31606, 'Remove Reduced Bet Limit - Following Upline', 'CS_ProblemAccount_RemoveReduceBetLimit', @IsInternal, NULL, NULL 
