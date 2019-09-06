@@ -7,4 +7,4 @@
 */
 UPDATE Sport_Bettype_Reference WITH(ROWLOCK,UPDLOCK)
 	SET BettypeRef=7
-WHERE Sporttype=1 AND bettype in (207,209) AND Site='All'
+WHERE Sporttype=1 AND bettype in (207,209) AND isLicensee = 0
