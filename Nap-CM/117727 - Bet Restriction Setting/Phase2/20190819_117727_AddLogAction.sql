@@ -1,6 +1,7 @@
 /*
 	Created: 20190819@Eden
-	Task: Insert LogAction for BetRestriction
+	Task: Insert LogAction for BetRestriction 
+	RM: #117727
 	DB: DBLOG/bodb_CustomerLog
 */
 
