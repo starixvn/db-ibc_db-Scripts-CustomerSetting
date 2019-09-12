@@ -22,13 +22,14 @@ INSERT INTO BetRestriction_Site(
 	SeizeBetTicket,
 	FollowAccount
 )
-SELECT SiteID, 
+SELECT s.SiteID, 
        @SportType, 
        @LiveBetAccept, 
        @SeizeBetTicket, 
        @FollowAccount
-FROM Site s WITH(NOLOCK)
-WHERE isLicensee = 1
-      AND isActive = 1
+FROM bodb_licensee.dbo.licensees lc WITH(NOLOCK)
+	INNER JOIN Site s WITH(NOLOCK) ON lc.LicenseeName = s.site
+WHERE lc.IsActive = 1
+	AND lc.IsDeposit = 1
 
 GO
