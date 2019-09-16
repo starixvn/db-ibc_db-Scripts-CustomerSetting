@@ -8,6 +8,7 @@
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@srecommend INT		
 	,@maxcustid INT
+	,@max_SubAccid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -77,6 +78,7 @@ BEGIN
 		c.closed = 1		
 	FROM dbo.custSub c WITH (ROWLOCK)
 		INNER JOIN #SMATemp a ON a.CustID = c.custid
+	WHERE c.subaccid <= @max_SubAccid
 
 	--Member Level
 	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
@@ -111,9 +113,10 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @srecommend INT, @max_SubAccid INT
 
 SELECT @max_custid = xxx
+SELECT @max_SubAccid = xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
@@ -200,6 +203,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
+			,@max_SubAccid = @max_SubAccid
 			,@target = 'REPLICATED'
 						
 	waitfor delay '00:00:0.100'
@@ -213,9 +217,10 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @srecommend INT, @max_SubAccid INT
 
 SELECT @max_custid = xxx
+SELECT @max_SubAccid = xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
@@ -302,6 +307,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
+			,@max_SubAccid = @max_SubAccid
 			,@target = 'DBCUST'
 						
 	waitfor delay '00:00:0.100'
