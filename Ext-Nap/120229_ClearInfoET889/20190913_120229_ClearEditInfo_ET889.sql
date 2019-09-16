@@ -200,7 +200,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
-			,@target = 'DBCUST'
+			,@target = 'REPLICATED'
 						
 	waitfor delay '00:00:0.100'
 END
