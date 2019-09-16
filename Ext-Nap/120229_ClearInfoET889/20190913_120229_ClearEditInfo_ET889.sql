@@ -1,0 +1,311 @@
+/*
+	Created: Elodie	
+	Task: Clear "Edit info" For Super And All Downlines
+	DB: DBCUST/CustDB
+	Date: 20190916
+*/ 
+
+ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+	@srecommend INT		
+	,@maxcustid INT
+	,@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+	
+	IF dbo.f_CheckRepTable('CustSuperProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('custSub') = 0 RETURN
+	
+	CREATE TABLE #MemberTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED		
+	)
+
+	CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED
+	)
+
+	CREATE TABLE #MemberTempBatch
+	(
+		CustID	INT PRIMARY KEY CLUSTERED	
+	)	
+	
+	INSERT INTO #MemberTemp (CustID)
+	SELECT custid
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @srecommend AND roleid = 1 AND custid <= @maxcustid	
+		
+	INSERT INTO #SMATemp (CustID)
+	SELECT custid
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
+	
+	--Super Level
+	UPDATE c 
+	SET c.lastname = '',
+		c.firstname = '',
+		c.phone = '',
+		c.mobilephone = '',
+		c.email = '',
+		c.fax = '',
+		c.remark = ''		
+	FROM dbo.CustSuperProfile c WITH (ROWLOCK)
+	WHERE c.custid = @srecommend
+
+	--Master, Agent Level
+	UPDATE c 
+	SET c.lastname = '',
+		c.firstname = '',
+		c.phone = '',
+		c.mobilephone = '',
+		c.email = '',
+		c.fax = '',
+		c.remark = ''		
+	FROM Customer c WITH (ROWLOCK)
+		INNER JOIN #SMATemp a ON a.CustID = c.custid
+	WHERE c.custid <> @srecommend
+
+	--Sub account
+	UPDATE c 
+	SET c.lastname = '',
+		c.firstname = '',
+		c.closed = 1		
+	FROM dbo.custSub c WITH (ROWLOCK)
+		INNER JOIN #SMATemp a ON a.CustID = c.custid
+
+	--Member Level
+	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
+	BEGIN
+		DELETE TOP (4000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		UPDATE c 
+		SET c.lastname = '',
+			c.firstname = '',
+			c.phone = '',
+			c.mobilephone = '',
+			c.email = '',
+			c.fax = '',
+			c.remark = ''		
+		FROM Customer c WITH (ROWLOCK)
+			INNER JOIN #MemberTempBatch m ON m.CustID = c.custid
+
+		TRUNCATE TABLE #MemberTempBatch
+	END
+	
+	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
+END
+GO
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
+--------------------------------------------------------------------------------------
+PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+
+CREATE TABLE #supers (custid int,isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT
+
+SELECT @max_custid = xxx
+
+INSERT INTO #supers(custid)
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+WHERE c.roleid = 4  
+ AND c.username IN ('AZ1','AZ10','AZ11','AZ12','AZ13','AZ14','AZ15','AZ2','AZ3','AZ8','AZ9','BC','BC1','BC2','BC3','BC5','BC6','BC8','BCA','BD',
+					'BD1','BD2','BD3','BD4','BD5','BE','BG','BH','BK','BL','BM','BN','BO','BR','BX','BX1','BX11','BX13','BX17','BX19','BX2',
+					'BX20','BX21','BX23','BX26','BX27','BX28','BX29','BX30','BX32','BX33','BX35','BX36','BX37','BX39','BX4','BX41','BX42',
+					'BX43','BX44','BX45','BX46','BX47','BX49','BX5','BX50','BX51','BX52','BX54','BX56','BX57','BX59','BX6','BX60','BX61',
+					'BX62','BX64','BX65','BX7','BX76','BX77','BX78','BX79','BX8','BX80','BX81','BX82','BX83','BX85','BX86','BX87','BX88',
+					'BX9','BX91','BX92','BX93','BX94','BX95','BX96','BX97','BX98','BY','BZ','CG1','CG15','CG16','CG17','CG18','CG19','CG2',
+					'CG20','CG21','CG23','CG24','CG25','CG26','CG27','CG28','CG29','CG3','CG31','CG32','CG33','CG35','CG36','CG37','CG38',
+					'CG39','CG4','CG40','CG41','CG42','CG43','CG45','CG46','CG47','CG48','CG49','CG5','CG50','CG51','CG53','CG54','CG55',
+					'CG57','CG58','CG59','CG6','CG60','CG7','CG8','CG9','DT1','DT10','DT12','DT13','DT14','DT16','DT17','DT18','DT19',
+					'DT2','DT21','DT22','DT23','DT24','DT27','DT28','DT29','DT3','DT30','DT32','DT34','DT35','DT36','DT37','DT4','DT40',
+					'DT42','DT44','DT45','DT46','DT47','DT48','DT49','DT5','DT51','DT6','DT61','DT62','DT63','DT64','DT65','DT68','DT69',
+					'DT70','DT71','DT72','DT73','DT75','DT77','DT79','DT80','DT81','DT82','DT84','DT85','DT86','DT88','DT89','DT9','DT90',
+					'DT91','DT92','DT94','DT96','DT98','DT99','DTA1','DTA10','DTA14','DTA16','DTA2','DTA20','DTA22','DTA24','DTA25','DTA26',
+					'DTA27','DTA28','DTA29','DTA3','DTA30','DTA31','DTA32','DTA33','DTA34','DTA35','DTA36','DTA37','DTA38','DTA39','DTA4',
+					'DTA40','DTA41','DTA43','DTA49','DTA5','DTA50','DTA51','DTA52','DTA53','DTA54','DTA55','DTA56','DTA58','DTA59','DTA6',
+					'DTA60','DTA61','DTA62','DTA63','DTA64','DTA65','DTA66','DTA67','DTA68','DTA69','DTA7','DTA70','DTA72','DTA73','DTA75',
+					'DTA76','DTA77','DTA78','DTA79','DTA8','DTA80','DTA81','DTA82','DTA83','DTA84','DTA85','DTA86','DTA89','DTA91','DTA92',
+					'DTA93','DTA94','DTA95','DTA96','DTA97','DTA98','DTA99','DTB01','DTB02','DTB03','DTB04','DTB06','DTB07','DTB09','DTB10',
+					'DTB11','DTB12','DTB13','DTB14','DTB15','DTB16','DTB17','DTB18','DTB20','DTB21','DTB22','DTB23','DTB24','DTB25','DTB26',
+					'DTB27','DTB28','DTB30','DTB35','DTB36','DTB37','DTB38','DTB39','DTB40','DTB43','DTB44','DTB47','DTB49','DTB50','DTB51',
+					'DTB52','DTB53','DTB54','DTB56','DTB57','DTB58','DTB59','DTB61','DTB62','DTB64','DTB65','DTB66','DTB68','DTB70','DTB71',
+					'DTB76','DTB77','DTB78','DTB79','DTB80','DTB81','DTB82','DTB83','DTB84','DTB86','DTB89','DTB91','DTB94','DTB95','DTB97',
+					'DTB98','DTB99','DTC1','DTC10','DTC109','DTC11','DTC110','DTC111','DTC112','DTC113','DTC115','DTC116','DTC119','DTC120',
+					'DTC121','DTC14','DTC16','DTC18','DTC19','DTC2','DTC20','DTC22','DTC23','DTC25','DTC26','DTC27','DTC28','DTC29','DTC30',
+					'DTC32','DTC33','DTC34','DTC35','DTC36','DTC37','DTC38','DTC39','DTC4','DTC40','DTC41','DTC43','DTC44','DTC46','DTC47',
+					'DTC48','DTC5','DTC50','DTC51','DTC52','DTC55','DTC57','DTC59','DTC6','DTC60','DTC61','DTC62','DTC63','DTC65','DTC66',
+					'DTC67','DTC69','DTC7','DTC70','DTC71','DTC72','DTC73','DTC75','DTC76','DTC78','DTC80','DTC81','DTC82','DTC86','DTC87',
+					'DTC88','DTC89','DTC9','DTC90','DTC91','DTC92','DTC93','DTC95','DTC97','DTC98','DTC99','DTD01','DTD05','DTD06','DTD07',
+					'DTD08','DTD09','DTD10','DTD100','DTD101','DTD103','DTD107','DTD109','DTD11','DTD110','DTD111','DTD112','DTD116','DTD12',
+					'DTD120','DTD17','DTD18','DTD20','DTD21','DTD22','DTD23','DTD26','DTD27','DTD28','DTD29','DTD30','DTD31','DTD32','DTD33',
+					'DTD35','DTD36','DTD37','DTD39','DTD50','DTD51','DTD52','DTD53','DTD55','DTD57','DTD58','DTD61','DTD62','DTD63','DTD65',
+					'DTD66','DTD68','DTD69','DTD70','DTD72','DTD73','DTD75','DTD77','DTD78','DTD79','DTD81','DTD82','DTD83','DTD85','DTD87',
+					'DTD88','DTD89','DTD91','DTD92','DTD95','DTD96','DTD97','DTE01','DTE02','DTE03','DTE07','DTE08','DTE09','DTE10','DTE11',
+					'DTE12','DTE13','DTE15','DTE16','DTE22','DTE24','DTE25','DTE27','DTE29','DTE30','DTE32','DTE33','DTE34','DTE35','DTE37',
+					'DTE38','DTE39','DTE42','DTE43','DTE44','DTE45','DTE46','DTE47','DTE49','DTE50','DTE51','DTE52','DTE53','DTE54','DTE55',
+					'DTE56','DTE57','DTE58','DTE59','DTE60','DTE62','DTE65','DTE66','DTE67','DTE68','DTE69','DTE71','DTE72','DTE73','DTE76',
+					'DTE77','DTE78','DTE79','DTE80','DTE81','DTE85','DTE86','DTE90','DTE91','DTE96','DTE97','DTE99','DTF01','DTF02','DTF05',
+					'DTF07','DTF08','DTF09','DTF10','DTF100','DTF101','DTF104','DTF106','DTF107','DTF108','DTF110','DTF114','DTF115','DTF116',
+					'DTF117','DTF12','DTF120','DTF121','DTF124','DTF125','DTF127','DTF129','DTF13','DTF131','DTF132','DTF133','DTF134','DTF135',
+					'DTF138','DTF139','DTF140','DTF142','DTF143','DTF144','DTF146','DTF147','DTF155','DTF156','DTF16','DTF162','DTF163','DTF166',
+					'DTF167','DTF169','DTF170','DTF173','DTF174','DTF176','DTF178','DTF179','DTF18','DTF182','DTF183','DTF185','DTF186','DTF187',
+					'DTF188','DTF19','DTF194','DTF196','DTF20','DTF201','DTF203','DTF204','DTF207','DTF213','DTF218','DTF219','DTF221','DTF225',
+					'DTF230','DTF235','DTF239','DTF25','DTF257','DTF266','DTF268','DTF270','DTF273','DTF279','DTF285','DTF30','DTF32','DTF34',
+					'DTF37','DTF40','DTF41','DTF42','DTF45','DTF48','DTF50','DTF51','DTF55','DTF57','DTF58','DTF59','DTF64','DTF66','DTF68',
+					'DTF69','DTF70','DTF71','DTF73','DTF75','DTF76','DTF78','DTF79','DTF80','DTF81','DTF82','DTF83','DTF84','DTF85','DTF86',
+					'DTF87','DTF88','DTF89','DTF91','DTF97','DTF98','DX1','DX10','DX11','DX12','DX13','DX14','DX15','DX16','DX17','DX2','DX20',
+					'DX21','DX23','DX24','DX25','DX26','DX27','DX28','DX30','DX31','DX34','DX35','DX36','DX37','DX38','DX39','DX4','DX40','DX41',
+					'DX42','DX43','DX44','DX45','DX46','DX47','DX48','DX49','DX5','DX50','DX52','DX53','DX55','DX57','DX58','DX59','DX60','DX7',
+					'DX8','DX9','EA','EB','EB1','EB2','EB5','EB6','EG1','EG2','EG3','EG5','EG6','EH2','EH3','EH7','EH8','EH9','EJ1','EJ2','EK',
+					'EM','EN','EO','EQ','ET2','ET3','ET4','ET5','EX','EZ03','EZ05','EZ06','EZ08','EZ09','EZ11','EZ12','EZ18','EZ21','EZ23','EZ25',
+					'EZ27','EZ28','EZ29','EZ30','EZ31','EZ32','EZ34','EZ35','EZ36','EZ37','EZ42','EZ43','EZ44','EZ45','EZ46','QA','QB','QC','QH',
+					'QI','QK','QL','QM','QN','QO','QP','QR','QT','QU','QV','S01','S02','S03','S04','S06','S07','S08','S10','S12','S15','S16','S17',
+					'S18','S19','S20','S21','S22','SD1','SD10','SD11','SD12','SD13','SD15','SD16','SD17','SD18','SD19','SD2','SD20','SD21','SD22',
+					'SD24','SD25','SD26','SD27','SD28','SD29','SD3','SD30','SD31','SD33','SD34','SD35','SD36','SD37','SD38','SD39','SD40','SD41',
+					'SD42','SD43','SD44','SD45','SD46','SD47','SD48','SD49','SD5','SD50','SD51','SD52','SD53','SD54','SD55','SD56','SD58','SD59',
+					'SD6','SD60','SD61','SD62','SD63','SD64','SD65','SD66','SD67','SD69','SD7','SD70','SD71','SD72','SD8','SD9','SK8','SS01',
+					'SS1','SS2','SS3','SS5','SS6','SS7','SS8','SS81','SS82','SS83','SS84','SS86','SS87','SS88','SS89','SS9','SU1','SU10','SU2',
+					'SU3','SU4','SU5','SU6','SU8','XH','XK','XK1','XK2','XK3','XK4','XK5','XS','XTA','XTB','XTF','XXA')
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
+			,@maxcustid = @max_custid
+			,@target = 'DBCUST'
+						
+	waitfor delay '00:00:0.100'
+END
+
+PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
+--------------------------------------------------------------------------------------
+PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+
+CREATE TABLE #supers (custid int,isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT
+
+SELECT @max_custid = xxx
+
+INSERT INTO #supers(custid)
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+WHERE c.roleid = 4  
+ AND c.username IN ('AZ1','AZ10','AZ11','AZ12','AZ13','AZ14','AZ15','AZ2','AZ3','AZ8','AZ9','BC','BC1','BC2','BC3','BC5','BC6','BC8','BCA','BD',
+					'BD1','BD2','BD3','BD4','BD5','BE','BG','BH','BK','BL','BM','BN','BO','BR','BX','BX1','BX11','BX13','BX17','BX19','BX2',
+					'BX20','BX21','BX23','BX26','BX27','BX28','BX29','BX30','BX32','BX33','BX35','BX36','BX37','BX39','BX4','BX41','BX42',
+					'BX43','BX44','BX45','BX46','BX47','BX49','BX5','BX50','BX51','BX52','BX54','BX56','BX57','BX59','BX6','BX60','BX61',
+					'BX62','BX64','BX65','BX7','BX76','BX77','BX78','BX79','BX8','BX80','BX81','BX82','BX83','BX85','BX86','BX87','BX88',
+					'BX9','BX91','BX92','BX93','BX94','BX95','BX96','BX97','BX98','BY','BZ','CG1','CG15','CG16','CG17','CG18','CG19','CG2',
+					'CG20','CG21','CG23','CG24','CG25','CG26','CG27','CG28','CG29','CG3','CG31','CG32','CG33','CG35','CG36','CG37','CG38',
+					'CG39','CG4','CG40','CG41','CG42','CG43','CG45','CG46','CG47','CG48','CG49','CG5','CG50','CG51','CG53','CG54','CG55',
+					'CG57','CG58','CG59','CG6','CG60','CG7','CG8','CG9','DT1','DT10','DT12','DT13','DT14','DT16','DT17','DT18','DT19',
+					'DT2','DT21','DT22','DT23','DT24','DT27','DT28','DT29','DT3','DT30','DT32','DT34','DT35','DT36','DT37','DT4','DT40',
+					'DT42','DT44','DT45','DT46','DT47','DT48','DT49','DT5','DT51','DT6','DT61','DT62','DT63','DT64','DT65','DT68','DT69',
+					'DT70','DT71','DT72','DT73','DT75','DT77','DT79','DT80','DT81','DT82','DT84','DT85','DT86','DT88','DT89','DT9','DT90',
+					'DT91','DT92','DT94','DT96','DT98','DT99','DTA1','DTA10','DTA14','DTA16','DTA2','DTA20','DTA22','DTA24','DTA25','DTA26',
+					'DTA27','DTA28','DTA29','DTA3','DTA30','DTA31','DTA32','DTA33','DTA34','DTA35','DTA36','DTA37','DTA38','DTA39','DTA4',
+					'DTA40','DTA41','DTA43','DTA49','DTA5','DTA50','DTA51','DTA52','DTA53','DTA54','DTA55','DTA56','DTA58','DTA59','DTA6',
+					'DTA60','DTA61','DTA62','DTA63','DTA64','DTA65','DTA66','DTA67','DTA68','DTA69','DTA7','DTA70','DTA72','DTA73','DTA75',
+					'DTA76','DTA77','DTA78','DTA79','DTA8','DTA80','DTA81','DTA82','DTA83','DTA84','DTA85','DTA86','DTA89','DTA91','DTA92',
+					'DTA93','DTA94','DTA95','DTA96','DTA97','DTA98','DTA99','DTB01','DTB02','DTB03','DTB04','DTB06','DTB07','DTB09','DTB10',
+					'DTB11','DTB12','DTB13','DTB14','DTB15','DTB16','DTB17','DTB18','DTB20','DTB21','DTB22','DTB23','DTB24','DTB25','DTB26',
+					'DTB27','DTB28','DTB30','DTB35','DTB36','DTB37','DTB38','DTB39','DTB40','DTB43','DTB44','DTB47','DTB49','DTB50','DTB51',
+					'DTB52','DTB53','DTB54','DTB56','DTB57','DTB58','DTB59','DTB61','DTB62','DTB64','DTB65','DTB66','DTB68','DTB70','DTB71',
+					'DTB76','DTB77','DTB78','DTB79','DTB80','DTB81','DTB82','DTB83','DTB84','DTB86','DTB89','DTB91','DTB94','DTB95','DTB97',
+					'DTB98','DTB99','DTC1','DTC10','DTC109','DTC11','DTC110','DTC111','DTC112','DTC113','DTC115','DTC116','DTC119','DTC120',
+					'DTC121','DTC14','DTC16','DTC18','DTC19','DTC2','DTC20','DTC22','DTC23','DTC25','DTC26','DTC27','DTC28','DTC29','DTC30',
+					'DTC32','DTC33','DTC34','DTC35','DTC36','DTC37','DTC38','DTC39','DTC4','DTC40','DTC41','DTC43','DTC44','DTC46','DTC47',
+					'DTC48','DTC5','DTC50','DTC51','DTC52','DTC55','DTC57','DTC59','DTC6','DTC60','DTC61','DTC62','DTC63','DTC65','DTC66',
+					'DTC67','DTC69','DTC7','DTC70','DTC71','DTC72','DTC73','DTC75','DTC76','DTC78','DTC80','DTC81','DTC82','DTC86','DTC87',
+					'DTC88','DTC89','DTC9','DTC90','DTC91','DTC92','DTC93','DTC95','DTC97','DTC98','DTC99','DTD01','DTD05','DTD06','DTD07',
+					'DTD08','DTD09','DTD10','DTD100','DTD101','DTD103','DTD107','DTD109','DTD11','DTD110','DTD111','DTD112','DTD116','DTD12',
+					'DTD120','DTD17','DTD18','DTD20','DTD21','DTD22','DTD23','DTD26','DTD27','DTD28','DTD29','DTD30','DTD31','DTD32','DTD33',
+					'DTD35','DTD36','DTD37','DTD39','DTD50','DTD51','DTD52','DTD53','DTD55','DTD57','DTD58','DTD61','DTD62','DTD63','DTD65',
+					'DTD66','DTD68','DTD69','DTD70','DTD72','DTD73','DTD75','DTD77','DTD78','DTD79','DTD81','DTD82','DTD83','DTD85','DTD87',
+					'DTD88','DTD89','DTD91','DTD92','DTD95','DTD96','DTD97','DTE01','DTE02','DTE03','DTE07','DTE08','DTE09','DTE10','DTE11',
+					'DTE12','DTE13','DTE15','DTE16','DTE22','DTE24','DTE25','DTE27','DTE29','DTE30','DTE32','DTE33','DTE34','DTE35','DTE37',
+					'DTE38','DTE39','DTE42','DTE43','DTE44','DTE45','DTE46','DTE47','DTE49','DTE50','DTE51','DTE52','DTE53','DTE54','DTE55',
+					'DTE56','DTE57','DTE58','DTE59','DTE60','DTE62','DTE65','DTE66','DTE67','DTE68','DTE69','DTE71','DTE72','DTE73','DTE76',
+					'DTE77','DTE78','DTE79','DTE80','DTE81','DTE85','DTE86','DTE90','DTE91','DTE96','DTE97','DTE99','DTF01','DTF02','DTF05',
+					'DTF07','DTF08','DTF09','DTF10','DTF100','DTF101','DTF104','DTF106','DTF107','DTF108','DTF110','DTF114','DTF115','DTF116',
+					'DTF117','DTF12','DTF120','DTF121','DTF124','DTF125','DTF127','DTF129','DTF13','DTF131','DTF132','DTF133','DTF134','DTF135',
+					'DTF138','DTF139','DTF140','DTF142','DTF143','DTF144','DTF146','DTF147','DTF155','DTF156','DTF16','DTF162','DTF163','DTF166',
+					'DTF167','DTF169','DTF170','DTF173','DTF174','DTF176','DTF178','DTF179','DTF18','DTF182','DTF183','DTF185','DTF186','DTF187',
+					'DTF188','DTF19','DTF194','DTF196','DTF20','DTF201','DTF203','DTF204','DTF207','DTF213','DTF218','DTF219','DTF221','DTF225',
+					'DTF230','DTF235','DTF239','DTF25','DTF257','DTF266','DTF268','DTF270','DTF273','DTF279','DTF285','DTF30','DTF32','DTF34',
+					'DTF37','DTF40','DTF41','DTF42','DTF45','DTF48','DTF50','DTF51','DTF55','DTF57','DTF58','DTF59','DTF64','DTF66','DTF68',
+					'DTF69','DTF70','DTF71','DTF73','DTF75','DTF76','DTF78','DTF79','DTF80','DTF81','DTF82','DTF83','DTF84','DTF85','DTF86',
+					'DTF87','DTF88','DTF89','DTF91','DTF97','DTF98','DX1','DX10','DX11','DX12','DX13','DX14','DX15','DX16','DX17','DX2','DX20',
+					'DX21','DX23','DX24','DX25','DX26','DX27','DX28','DX30','DX31','DX34','DX35','DX36','DX37','DX38','DX39','DX4','DX40','DX41',
+					'DX42','DX43','DX44','DX45','DX46','DX47','DX48','DX49','DX5','DX50','DX52','DX53','DX55','DX57','DX58','DX59','DX60','DX7',
+					'DX8','DX9','EA','EB','EB1','EB2','EB5','EB6','EG1','EG2','EG3','EG5','EG6','EH2','EH3','EH7','EH8','EH9','EJ1','EJ2','EK',
+					'EM','EN','EO','EQ','ET2','ET3','ET4','ET5','EX','EZ03','EZ05','EZ06','EZ08','EZ09','EZ11','EZ12','EZ18','EZ21','EZ23','EZ25',
+					'EZ27','EZ28','EZ29','EZ30','EZ31','EZ32','EZ34','EZ35','EZ36','EZ37','EZ42','EZ43','EZ44','EZ45','EZ46','QA','QB','QC','QH',
+					'QI','QK','QL','QM','QN','QO','QP','QR','QT','QU','QV','S01','S02','S03','S04','S06','S07','S08','S10','S12','S15','S16','S17',
+					'S18','S19','S20','S21','S22','SD1','SD10','SD11','SD12','SD13','SD15','SD16','SD17','SD18','SD19','SD2','SD20','SD21','SD22',
+					'SD24','SD25','SD26','SD27','SD28','SD29','SD3','SD30','SD31','SD33','SD34','SD35','SD36','SD37','SD38','SD39','SD40','SD41',
+					'SD42','SD43','SD44','SD45','SD46','SD47','SD48','SD49','SD5','SD50','SD51','SD52','SD53','SD54','SD55','SD56','SD58','SD59',
+					'SD6','SD60','SD61','SD62','SD63','SD64','SD65','SD66','SD67','SD69','SD7','SD70','SD71','SD72','SD8','SD9','SK8','SS01',
+					'SS1','SS2','SS3','SS5','SS6','SS7','SS8','SS81','SS82','SS83','SS84','SS86','SS87','SS88','SS89','SS9','SU1','SU10','SU2',
+					'SU3','SU4','SU5','SU6','SU8','XH','XK','XK1','XK2','XK3','XK4','XK5','XS','XTA','XTB','XTF','XXA')
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
+			,@maxcustid = @max_custid
+			,@target = 'DBCUST'
+						
+	waitfor delay '00:00:0.100'
+END
+
+PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
