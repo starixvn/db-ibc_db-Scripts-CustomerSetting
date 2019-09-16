@@ -21,6 +21,7 @@ WHERE ci.roleid = 4
 
 DELETE cs
 FROM [dbo].CustSetting cs WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
 	AND cs.Sporttype = 99
 	AND cs.Bettype = 9999
@@ -28,6 +29,7 @@ WHERE cs.CustID > @maxcustID
 	
 DELETE cs
 FROM [dbo].custoverride cs WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
 	AND cs.Sporttype = 99 
 	AND cs.Bettype = 9999
