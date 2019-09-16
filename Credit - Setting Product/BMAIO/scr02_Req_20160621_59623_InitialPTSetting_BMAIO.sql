@@ -115,7 +115,7 @@ BEGIN
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -163,7 +163,7 @@ BEGIN
 			,@target = 'DBCUST'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.100'
 END
 
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

@@ -19,6 +19,10 @@ BEGIN
 	
 	IF dbo.f_CheckRepTable('CustSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custoverride') = 0 RETURN
+	IF dbo.f_CheckRepTable('customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('site') = 0 RETURN
+	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	
 	CREATE TABLE #supers (custid int)
 
