@@ -79,9 +79,9 @@ UPDATE cso
 		
 FROM #tmpCustSetting c
 	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
-	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN custsetting cso WITH (ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
 
-UPDATE cs
+UPDATE cso
 	SET 
 		-- Update PT
 		minpositiontaking = cs.minpositiontaking
@@ -90,7 +90,7 @@ UPDATE cs
 		, maxlivepositiontaking = cs.maxlivepositiontaking
 FROM #tmpCustOverride c WITH (NOLOCK) 
 	INNER JOIN CustOverride cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
-	INNER JOIN CustOverride cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN CustOverride cso WITH(ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
 				  
 --------------- END OF updating PT ----------------
 
