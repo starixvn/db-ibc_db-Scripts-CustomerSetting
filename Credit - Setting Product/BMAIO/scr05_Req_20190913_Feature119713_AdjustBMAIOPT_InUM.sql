@@ -16,6 +16,7 @@ WHERE ci.roleid = 4
 	AND ci.username NOT LIKE '3rdSuper%'	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
+	AND ci.currency<>20
 
 --------------------- Update PT -------------------
 CREATE TABLE #tmpCustSetting(CustID INT PRIMARY KEY)

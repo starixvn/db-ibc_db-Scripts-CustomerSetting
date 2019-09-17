@@ -36,7 +36,7 @@ BEGIN
 	
 	WHILE EXISTS(SELECT TOP 1 1 FROM #DownlineListTemp)
 	BEGIN
-		DELETE TOP (3000) #DownlineListTemp OUTPUT DELETED.* INTO #TempBatch
+		DELETE TOP (2000) #DownlineListTemp OUTPUT DELETED.* INTO #TempBatch
 
 		IF @@ROWCOUNT=0
 			BREAK		
@@ -86,7 +86,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-
+	AND ci.currency<>20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -137,6 +137,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
+	AND ci.currency<>20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
