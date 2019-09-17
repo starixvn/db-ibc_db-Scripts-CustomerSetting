@@ -18,8 +18,7 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 		
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
-	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('custSub') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN	
 	
 	CREATE TABLE #MemberTemp
 	(
@@ -74,14 +73,17 @@ BEGIN
 		INNER JOIN #SMATemp a ON a.CustID = c.custid
 	WHERE c.custid <> @srecommend
 
-	--Sub account
-	UPDATE c 
-	SET c.lastname = '',
-		c.firstname = '',
-		c.closed = 1		
-	FROM dbo.custSub c WITH (ROWLOCK)
-		INNER JOIN #SMATemp a ON a.CustID = c.custid
-	WHERE c.subaccid <= @max_SubAccid
+	IF dbo.f_CheckRepTable('custSub') = 1
+	BEGIN
+		--Sub account
+		UPDATE c 
+		SET c.lastname = '',
+			c.firstname = '',
+			c.closed = 1		
+		FROM dbo.custSub c WITH (ROWLOCK)
+			INNER JOIN #SMATemp a ON a.CustID = c.custid
+		WHERE c.subaccid <= @max_SubAccid
+	END
 
 	--Member Level
 	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
