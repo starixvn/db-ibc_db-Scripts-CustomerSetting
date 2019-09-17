@@ -16,9 +16,9 @@ BEGIN
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
-	
-	IF dbo.f_CheckRepTable('CustSuperProfile') = 0 RETURN
+		
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('custSub') = 0 RETURN
 	
 	CREATE TABLE #MemberTemp
@@ -46,17 +46,20 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND custid <= @maxcustid 
 	
-	--Super Level
-	UPDATE c 
-	SET c.lastname = '',
-		c.firstname = '',
-		c.phone = '',
-		c.mobilephone = '',
-		c.email = '',
-		c.fax = '',
-		c.remark = ''		
-	FROM dbo.CustSuperProfile c WITH (ROWLOCK)
-	WHERE c.custid = @srecommend
+	IF dbo.f_CheckRepTable('CustSuperProfile') = 1
+	BEGIN
+		--Super Level
+		UPDATE c 
+		SET c.lastname = '',
+			c.firstname = '',
+			c.phone = '',
+			c.mobilephone = '',
+			c.email = '',
+			c.fax = '',
+			c.remark = ''		
+		FROM dbo.CustSuperProfile c WITH (ROWLOCK)
+		WHERE c.custid = @srecommend
+	END
 
 	--Master, Agent Level
 	UPDATE c 
