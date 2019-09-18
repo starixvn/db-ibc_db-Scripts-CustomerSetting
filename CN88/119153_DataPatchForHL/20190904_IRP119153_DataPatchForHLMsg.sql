@@ -1,7 +1,7 @@
 /*
 	Created: 20190904@Johnson
 	Task: data patch for headline message
-	DB: DBCUST/CustDB
+	DB: DBMSG/bodb02
 */
 
 CREATE TABLE #Headline (HeadlineID INT)
@@ -12,7 +12,7 @@ FROM dbo.customer ci WITH(NOLOCK)
 WHERE roleid = 0
 	AND site = 'CN88'
 	
-INSERT INTO DBMSG.bodb_Message.dbo.MsgCustReadStatus (
+INSERT INTO bodb_Message.dbo.MsgCustReadStatus (
 				CustId
 				,SubAccId
 				,LastSeenNormalMsg
@@ -27,6 +27,6 @@ SELECT h.HeadlineID
 	,GETDATE()
 	,GETDATE()
 FROM #Headline h 
-	LEFT JOIN DBMSG.bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK) ON h.HeadlineID = s.custid
+	LEFT JOIN bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK) ON h.HeadlineID = s.custid
 WHERE s.custid IS NULL				
 	
