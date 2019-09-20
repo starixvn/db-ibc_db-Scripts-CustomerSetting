@@ -1,0 +1,23 @@
+/*	
+	Created: 20190920@Elodie
+	Task: Drop all unused SP in DBCUST
+	Redmine: https://redmine.nexcel.vn/issues/118699
+	DB: DBCUST
+*/
+USE CustDB
+GO 
+
+DROP PROCEDURE DEL_Dot_Dep_CustomerInsMember_Legend
+DROP PROCEDURE DEL_Dot_Dep_GetMinMaxBet_Cust
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_xpre
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_xpre
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_xtest
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_xtest
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_UAT1
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_UAT1
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_UAT2
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_UAT2
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_UAT3
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_UAT3
+DROP PROCEDURE Dot_Dep_CustomerInsMember_Legend_UAT4
+DROP PROCEDURE Dot_Dep_GetMinMaxBet_Cust_UAT4
