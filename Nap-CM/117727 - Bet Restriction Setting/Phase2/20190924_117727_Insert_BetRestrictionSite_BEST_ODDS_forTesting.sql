@@ -6,7 +6,7 @@
 	DB: DBCUST/CustDB
 */
 DECLARE @LiveBetAccept smallint = 0, 
-		@SeizeBetTicket tinyint = 50,
+		@SeizeBetTicket tinyint = 90,
 		@FollowAccount nvarchar(50) = 'uusseizebet4',
 		@SiteID int = 1, --BEST-ODDS
 		@SportType smallint = 1
