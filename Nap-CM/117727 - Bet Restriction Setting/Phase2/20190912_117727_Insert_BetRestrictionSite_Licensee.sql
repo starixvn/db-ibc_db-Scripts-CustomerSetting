@@ -10,7 +10,7 @@ DELETE FROM BetRestriction_Site WITH(ROWLOCK,UPDLOCK)
 GO
 
 DECLARE @LiveBetAccept smallint = -2, 
-		@SeizeBetTicket tinyint = NULL,
+		@SeizeBetTicket tinyint = 0,
 		@FollowAccount int = NULL,
 		@SportType smallint = 1
 
