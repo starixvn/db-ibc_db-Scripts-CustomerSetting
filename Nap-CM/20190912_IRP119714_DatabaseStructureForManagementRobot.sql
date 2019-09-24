@@ -8,11 +8,11 @@ GO
 
 ALTER TABLE dbo.RobotUsers ADD remark NVARCHAR(500) NULL
 
-ALTER TABLE dbo.RobotUsers ADD AddedBy INT NULL
+ALTER TABLE dbo.RobotUsers ADD Creator INT NULL
 
 ALTER TABLE dbo.RobotUsers_DelLog ADD remark NVARCHAR(500) NULL
 
-ALTER TABLE dbo.RobotUsers_DelLog ADD AddedBy INT NULL
+ALTER TABLE dbo.RobotUsers_DelLog ADD Creator INT NULL
 
 GO
 
