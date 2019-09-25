@@ -2,8 +2,8 @@ USE [bodb_CRM]
 GO
 
 /*
-	Created: 20190509@Winnie
-	Task: CN88 Insert crmsetting RedmineID:#112637
+	Created: 20190925@Winnie
+	Task: Insert LogAction RedmineID:#120596
 	DB: DBCRM/bodb_CRM
 */
 INSERT INTO [dbo].[crmLogAction]
@@ -13,26 +13,9 @@ INSERT INTO [dbo].[crmLogAction]
            ,[IsInternal]
            ,[ExcludedForCn88])
      VALUES
-           (801
-           ,'Acc_CRM_CN88_SettingIns'
-           ,'Insert settings CN88'
+           (305
+           ,'Acc_CRM_CustomerFeedbackQuickUpd'
+           ,'Quick update feedback'
            ,0
-           ,0)
+           ,1)
 GO
-
-
-INSERT INTO [dbo].[crmLogAction]
-           ([ActionID]
-           ,[SPName]
-           ,[ActionNameEN]
-           ,[IsInternal]
-           ,[ExcludedForCn88])
-     VALUES
-           (800
-           ,'Acc_CRM_CN88_SettingUpd'
-           ,'Update settings CN88'
-           ,0
-           ,0)
-GO
-
-
