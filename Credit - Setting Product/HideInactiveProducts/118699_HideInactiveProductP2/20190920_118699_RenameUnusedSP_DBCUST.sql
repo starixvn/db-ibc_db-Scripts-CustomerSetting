@@ -247,6 +247,19 @@ EXEC sp_rename 'Las_Dep_DisableProductSetting','DEL_Las_Dep_DisableProductSettin
 EXEC sp_rename 'Las_Dep_UpdateMemberBetLimit','DEL_Las_Dep_UpdateMemberBetLimit'
 EXEC sp_rename 'Las_Dep_UpdateMemberBetLimit3rd','DEL_Las_Dep_UpdateMemberBetLimit3rd'
 
+--Add more
+EXEC sp_rename 'Acc_CheckHRAllowedCurrency','DEL_Acc_CheckHRAllowedCurrency'
+EXEC sp_rename 'f_DepSuperAllowedHR','DEL_f_DepSuperAllowedHR'
+EXEC sp_rename 'Acc_CustOverrideUpdFI','DEL_Acc_CustOverrideUpdFI'
+EXEC sp_rename 'Acc_MT_GetLiveCSPT','DEL_Acc_MT_GetLiveCSPT'
+EXEC sp_rename 'Acc_CustOverrideUpdVS','DEL_Acc_CustOverrideUpdVS'
+EXEC sp_rename 'Acc_CustomerUpdAgentVS_PositionTaking','DEL_Acc_CustomerUpdAgentVS_PositionTaking'
+EXEC sp_rename 'Acc_CustomerUpdMasterVS_Positiontaking','DEL_Acc_CustomerUpdMasterVS_Positiontaking'
+EXEC sp_rename 'Acc_CustomerUpdSuperVS_Positiontaking','DEL_Acc_CustomerUpdSuperVS_Positiontaking'
+EXEC sp_rename 'Acc_CustomerUpdMemberVS_Positiontaking','DEL_Acc_CustomerUpdMemberVS_Positiontaking'
+EXEC sp_rename 'Acc_CustomerUpdMemberVS_MAg','DEL_Acc_CustomerUpdMemberVS_MAg'
+EXEC sp_rename 'Acc_CustomerUpdMemberVS_SAg','DEL_Acc_CustomerUpdMemberVS_SAg'
+
 USE bodb_Licensee
 GO
 
