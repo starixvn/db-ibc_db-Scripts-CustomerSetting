@@ -20,6 +20,7 @@ WHERE ci.roleid = 4
 
 --------------------- Update PT -------------------
 CREATE TABLE #tmpCustSetting(CustID INT PRIMARY KEY)
+CREATE TABLE #tmpComm(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpCustOverride(CustID INT PRIMARY KEY)
 
 INSERT INTO #tmpCustSetting(CustID)
@@ -44,6 +45,25 @@ WHERE (cs.apositiontaking <> cso.apositiontaking
 	AND c.srecommend IN (SELECT custid FROM #supers)
 
 
+INSERT INTO #tmpComm(CustID)
+SELECT c.CustID
+FROM customer c WITH (NOLOCK) 
+	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=20
+	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+WHERE (cs.playerdiscount <> cso.playerdiscount 
+				 OR cs.discount <> cso.discount 
+				 OR cs.adiscount <> cso.adiscount 
+				 OR cs.sdiscount <> cso.sdiscount 
+				 OR cs.groupa <> cso.groupa 
+				 OR cs.groupb <> cso.groupb 
+				 OR cs.groupc <> cso.groupc 
+				 OR cs.groupd <> cso.groupd 
+				 OR cs.groupe <> cso.groupe 
+				 OR cs.groupf <> cso.groupf 
+				 OR cs.minbet <> cso.minbet 
+				 OR cs.maxbet <> cso.maxbet 				 
+			)
+	AND c.srecommend IN (SELECT custid FROM #supers)
 
 --2. custoverride
 
@@ -79,6 +99,25 @@ UPDATE cso
 		
 FROM #tmpCustSetting c
 	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
+	INNER JOIN custsetting cso WITH (ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+
+UPDATE cso
+	SET 
+		-- Update PT
+		playerdiscount = cs.playerdiscount
+		, discount = cs.discount
+		, adiscount = cs.adiscount
+		, sdiscount = cs.sdiscount
+		, groupa= cs.groupa
+		, groupb = cs.groupb
+		, groupc = cs.groupc
+		, groupd = cs.groupd
+		, groupe = cs.groupe
+		, groupf = cs.groupf
+		, minbet = cs.minbet
+		, maxbet = cs.maxbet		
+FROM #tmpComm c
+	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=20
 	INNER JOIN custsetting cso WITH (ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
 
 UPDATE cso

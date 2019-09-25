@@ -37,11 +37,12 @@ INSERT INTO custsetting (custid, sporttype,Bettype,apositiontaking, mpositiontak
 			, playerdiscount, discount, adiscount, sdiscount, groupa, groupb, groupc, groupd, groupe, groupf, minbet, maxbet
 			, autopositiontaking, autolivepositiontaking, isautopositiontaking, isautolivepositiontaking, autompositiontaking, autolivempositiontaking, isautompositiontaking, isautolivempositiontaking	)
 	
-SELECT t.custid, sporttype,9999,apositiontaking, mpositiontaking, spositiontaking, alivepositiontaking, mlivepositiontaking, slivepositiontaking
-			, playerdiscount, discount, adiscount, sdiscount, groupa, groupb, groupc, groupd, groupe, groupf, minbet,maxbet
-			, autopositiontaking, autolivepositiontaking, isautopositiontaking, isautolivepositiontaking, autompositiontaking, autolivempositiontaking, isautompositiontaking, isautolivempositiontaking
+SELECT t.custid, cs.sporttype,9999,cs.apositiontaking, cs.mpositiontaking, cs.spositiontaking, cs.alivepositiontaking, cs.mlivepositiontaking, cs.slivepositiontaking
+			, csb.playerdiscount, csb.discount, csb.adiscount, csb.sdiscount, csb.groupa, csb.groupb, csb.groupc, csb.groupd, csb.groupe, csb.groupf, csb.minbet,csb.maxbet
+			, cs.autopositiontaking, cs.autolivepositiontaking, cs.isautopositiontaking, cs.isautolivepositiontaking, cs.autompositiontaking, cs.autolivempositiontaking, cs.isautompositiontaking, cs.isautolivempositiontaking
 FROM #DownlineListTemp t
 	INNER JOIN custsetting cs (NOLOCK) ON t.CustID = cs.custid AND cs.sporttype = 99 AND cs.bettype = 1		
+	INNER JOIN custsetting csb (NOLOCK) ON t.CustID = csb.custid AND csb.sporttype = 99 AND csb.bettype = 20		
 	
 INSERT INTO custoverride (custid, bettype, sporttype, minpositiontaking, maxpositiontaking, minlivepositiontaking, maxlivepositiontaking)
 SELECT temp_pt.custid, 9999, sporttype, minpositiontaking, maxpositiontaking, minlivepositiontaking, maxlivepositiontaking
