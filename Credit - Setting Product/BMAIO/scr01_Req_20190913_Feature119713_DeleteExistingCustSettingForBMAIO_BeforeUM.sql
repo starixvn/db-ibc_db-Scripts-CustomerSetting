@@ -44,11 +44,11 @@ BEGIN
 	FROM CustSetting cg WITH (NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType =99 AND bettype = 9999
+	WHERE bettype = 9999 AND SportType =99  
 
 	DELETE cg
 	FROM CustSetting cg 
-		INNER JOIN #temp t ON cg.custid=t.CustID AND cg.sporttype=t.Sporttype AND cg.bettype=t.Bettype
+		INNER JOIN #temp t ON cg.custid=t.CustID AND cg.bettype=t.Bettype AND cg.sporttype=t.Sporttype 
 
 	TRUNCATE TABLE #temp
 
@@ -57,11 +57,11 @@ BEGIN
 	FROM custOverride cg WITH (NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType =99 AND bettype = 9999
+	WHERE bettype = 9999 AND SportType =99  
 
 	DELETE cg
 	FROM custOverride cg 
-		INNER JOIN #temp t ON cg.custid=t.CustID AND cg.sporttype=t.Sporttype AND cg.bettype=t.Bettype
+		INNER JOIN #temp t ON cg.custid=t.CustID AND cg.bettype=t.Bettype AND cg.sporttype=t.Sporttype 
 	
 END	
 GO

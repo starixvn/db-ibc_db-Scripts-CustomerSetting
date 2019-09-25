@@ -41,13 +41,13 @@ SELECT t.custid, cs.sporttype,9999,cs.apositiontaking, cs.mpositiontaking, cs.sp
 			, csb.playerdiscount, csb.discount, csb.adiscount, csb.sdiscount, csb.groupa, csb.groupb, csb.groupc, csb.groupd, csb.groupe, csb.groupf, csb.minbet,csb.maxbet
 			, cs.autopositiontaking, cs.autolivepositiontaking, cs.isautopositiontaking, cs.isautolivepositiontaking, cs.autompositiontaking, cs.autolivempositiontaking, cs.isautompositiontaking, cs.isautolivempositiontaking
 FROM #DownlineListTemp t
-	INNER JOIN custsetting cs (NOLOCK) ON t.CustID = cs.custid AND cs.sporttype = 99 AND cs.bettype = 1		
-	INNER JOIN custsetting csb (NOLOCK) ON t.CustID = csb.custid AND csb.sporttype = 99 AND csb.bettype = 20		
+	INNER JOIN custsetting cs (NOLOCK) ON t.CustID = cs.custid AND cs.bettype = 1 AND cs.sporttype = 99 
+	INNER JOIN custsetting csb (NOLOCK) ON t.CustID = csb.custid AND csb.bettype = 20 AND csb.sporttype = 99 		
 	
 INSERT INTO custoverride (custid, bettype, sporttype, minpositiontaking, maxpositiontaking, minlivepositiontaking, maxlivepositiontaking)
 SELECT temp_pt.custid, 9999, sporttype, minpositiontaking, maxpositiontaking, minlivepositiontaking, maxlivepositiontaking
 FROM #DownlineListTemp temp_pt
 	INNER JOIN custoverride cs (NOLOCK) ON temp_pt.CustID = cs.custid		
-WHERE cs.sporttype = 99 AND cs.bettype = 1		
+WHERE  cs.bettype = 1 AND cs.sporttype = 99 	
 
 DROP TABLE #DownlineListTemp

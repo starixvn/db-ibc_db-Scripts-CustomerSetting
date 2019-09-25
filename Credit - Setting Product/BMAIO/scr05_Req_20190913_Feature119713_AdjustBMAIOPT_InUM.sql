@@ -26,8 +26,8 @@ CREATE TABLE #tmpCustOverride(CustID INT PRIMARY KEY)
 INSERT INTO #tmpCustSetting(CustID)
 SELECT c.CustID
 FROM customer c WITH (NOLOCK) 
-	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
-	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.bettype=1 AND cs.sporttype=99 
+	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.bettype=9999 AND cso.sporttype=99 
 WHERE (cs.apositiontaking <> cso.apositiontaking 
 				 OR cs.mpositiontaking <> cso.mpositiontaking 
 				 OR cs.spositiontaking <> cso.spositiontaking 
@@ -48,8 +48,8 @@ WHERE (cs.apositiontaking <> cso.apositiontaking
 INSERT INTO #tmpComm(CustID)
 SELECT c.CustID
 FROM customer c WITH (NOLOCK) 
-	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=20
-	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid  AND cs.bettype=20 AND cs.sporttype=99 
+	INNER JOIN custsetting cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.bettype=9999 AND cso.sporttype=99 
 WHERE (cs.playerdiscount <> cso.playerdiscount 
 				 OR cs.discount <> cso.discount 
 				 OR cs.adiscount <> cso.adiscount 
@@ -70,8 +70,8 @@ WHERE (cs.playerdiscount <> cso.playerdiscount
 INSERT INTO #tmpCustOverride(CustID)
 SELECT c.CustID
 FROM customer c WITH (NOLOCK) 
-	INNER JOIN CustOverride cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
-	INNER JOIN CustOverride cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN CustOverride cs WITH (NOLOCK)  ON cs.custid = c.custid  AND cs.bettype=1 AND cs.sporttype=99
+	INNER JOIN CustOverride cso WITH (NOLOCK)  ON cso.custid = c.custid AND cso.bettype=9999 AND cso.sporttype=99 
 WHERE (cs.minpositiontaking <> cso.minpositiontaking
 		OR cs.maxpositiontaking <> cso.maxpositiontaking
 		OR cs.minlivepositiontaking <> cso.minlivepositiontaking
@@ -117,8 +117,8 @@ UPDATE cso
 		, minbet = cs.minbet
 		, maxbet = cs.maxbet		
 FROM #tmpComm c
-	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=20
-	INNER JOIN custsetting cso WITH (ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN custsetting cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.bettype=20 AND cs.sporttype=99 
+	INNER JOIN custsetting cso WITH (ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.bettype=9999 AND cso.sporttype=99 
 
 UPDATE cso
 	SET 
@@ -128,8 +128,8 @@ UPDATE cso
 		, minlivepositiontaking = cs.minlivepositiontaking
 		, maxlivepositiontaking = cs.maxlivepositiontaking
 FROM #tmpCustOverride c WITH (NOLOCK) 
-	INNER JOIN CustOverride cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.sporttype=99 AND cs.bettype=1
-	INNER JOIN CustOverride cso WITH(ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.sporttype=99 AND cso.bettype=9999
+	INNER JOIN CustOverride cs WITH (NOLOCK)  ON cs.custid = c.custid AND cs.bettype=1 AND cs.sporttype=99 
+	INNER JOIN CustOverride cso WITH(ROWLOCK,UPDLOCK)  ON cso.custid = c.custid AND cso.bettype=9999 AND cso.sporttype=99 
 				  
 --------------- END OF updating PT ----------------
 

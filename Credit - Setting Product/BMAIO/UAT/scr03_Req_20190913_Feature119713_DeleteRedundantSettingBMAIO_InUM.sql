@@ -24,14 +24,14 @@ DELETE cs
 FROM [dbo].CustSetting cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
-	AND cs.Sporttype = 99
 	AND cs.Bettype = 9999
+	AND cs.Sporttype = 99	
 	AND c.srecommend IN (SELECT custid FROM #supers)
 	
 DELETE cs
 FROM [dbo].custoverride cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
-	AND cs.Sporttype = 99 
 	AND cs.Bettype = 9999
+	AND cs.Sporttype = 99 	
 	AND c.srecommend IN (SELECT custid FROM #supers)
