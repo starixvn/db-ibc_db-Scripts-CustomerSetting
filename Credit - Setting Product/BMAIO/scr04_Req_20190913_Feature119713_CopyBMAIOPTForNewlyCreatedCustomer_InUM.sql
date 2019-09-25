@@ -30,7 +30,7 @@ WHERE ci.roleid = 4
 INSERT INTO #DownlineListTemp (CustID)
 SELECT ci.custid
 FROM Custinfo ci WITH (NOLOCK)
-WHERE Enabled = 1 AND custid > @MaxCustID
+WHERE custid > @MaxCustID
 	AND EXISTS (SELECT 1 FROM #supers WHERE custid = ci.srecommend )
 
 INSERT INTO custsetting (custid, sporttype,Bettype,apositiontaking, mpositiontaking, spositiontaking, alivepositiontaking, mlivepositiontaking, slivepositiontaking

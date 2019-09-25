@@ -32,7 +32,7 @@ BEGIN
 	INSERT INTO #DownlineListTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend  AND Enabled = 1 AND custid <= @maxcustid
+	WHERE srecommend = @srecommend AND custid <= @maxcustid
 	
 	WHILE EXISTS(SELECT TOP 1 1 FROM #DownlineListTemp)
 	BEGIN
