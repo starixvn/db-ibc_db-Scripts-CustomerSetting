@@ -54,12 +54,6 @@ WHERE (cs.playerdiscount <> cso.playerdiscount
 				 OR cs.discount <> cso.discount 
 				 OR cs.adiscount <> cso.adiscount 
 				 OR cs.sdiscount <> cso.sdiscount 
-				 OR cs.groupa <> cso.groupa 
-				 OR cs.groupb <> cso.groupb 
-				 OR cs.groupc <> cso.groupc 
-				 OR cs.groupd <> cso.groupd 
-				 OR cs.groupe <> cso.groupe 
-				 OR cs.groupf <> cso.groupf 
 				 OR cs.minbet <> cso.minbet 
 				 OR cs.maxbet <> cso.maxbet 				 
 			)
@@ -107,13 +101,7 @@ UPDATE cso
 		playerdiscount = cs.playerdiscount
 		, discount = cs.discount
 		, adiscount = cs.adiscount
-		, sdiscount = cs.sdiscount
-		, groupa= cs.groupa
-		, groupb = cs.groupb
-		, groupc = cs.groupc
-		, groupd = cs.groupd
-		, groupe = cs.groupe
-		, groupf = cs.groupf
+		, sdiscount = cs.sdiscount		
 		, minbet = cs.minbet
 		, maxbet = cs.maxbet		
 FROM #tmpComm c

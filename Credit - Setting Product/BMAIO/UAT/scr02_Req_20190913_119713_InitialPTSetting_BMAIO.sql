@@ -46,7 +46,7 @@ BEGIN
 					, autopositiontaking, autolivepositiontaking, isautopositiontaking, isautolivepositiontaking, autompositiontaking, autolivempositiontaking, isautompositiontaking, isautolivempositiontaking	)
 	
 		SELECT t.custid, cs.sporttype,9999,cs.apositiontaking, cs.mpositiontaking, cs.spositiontaking, cs.alivepositiontaking, cs.mlivepositiontaking, cs.slivepositiontaking
-					, csb.playerdiscount, csb.discount, csb.adiscount, csb.sdiscount, csb.groupa, csb.groupb, csb.groupc, csb.groupd, csb.groupe, csb.groupf, csb.minbet,csb.maxbet
+					, csb.playerdiscount, csb.discount, csb.adiscount, csb.sdiscount, 0, 0, 0, 0, 0, 0, csb.minbet,csb.maxbet
 					, cs.autopositiontaking, cs.autolivepositiontaking, cs.isautopositiontaking, cs.isautolivepositiontaking, cs.autompositiontaking, cs.autolivempositiontaking, 
 					cs.isautompositiontaking, cs.isautolivempositiontaking
 			FROM #TempBatch t
