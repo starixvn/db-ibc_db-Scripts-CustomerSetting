@@ -4,6 +4,102 @@
 	Task: add global setting for cash #120070  4 new currency 
 	DB: DBCUST/CUSTDB
 */
+DECLARE @MaxID INT
+SELECT @MaxID=MAX([StakeLevelID]) FROM [Dep_StakeLevel] WITH(NOLOCK) 
+INSERT INTO [dbo].[Dep_StakeLevel]
+           ([StakeLevelID]
+           ,[GameTypeID]
+           ,[GameGroupID]
+           ,[MinLabel]
+           ,[MaxLabel]
+           ,[MinStake]
+           ,[MaxStake]
+           ,[ExchangeID]
+           ,[ResourceId]
+           ,[SiteID])
+     VALUES
+           (@MaxID+1
+           ,4010
+           ,8
+           ,NULL
+           ,NULL
+           ,NULL
+           ,NULL
+           ,41
+           ,NULL
+           ,NULL)
+INSERT INTO [dbo].[Dep_StakeLevel]
+           ([StakeLevelID]
+           ,[GameTypeID]
+           ,[GameGroupID]
+           ,[MinLabel]
+           ,[MaxLabel]
+           ,[MinStake]
+           ,[MaxStake]
+           ,[ExchangeID]
+           ,[ResourceId]
+           ,[SiteID])
+     VALUES
+           (@MaxID+2
+           ,4010
+           ,8
+           ,NULL
+           ,NULL
+           ,NULL
+           ,NULL
+           ,52
+           ,NULL
+           ,NULL)
+
+INSERT INTO [dbo].[Dep_StakeLevel]
+           ([StakeLevelID]
+           ,[GameTypeID]
+           ,[GameGroupID]
+           ,[MinLabel]
+           ,[MaxLabel]
+           ,[MinStake]
+           ,[MaxStake]
+           ,[ExchangeID]
+           ,[ResourceId]
+           ,[SiteID])
+     VALUES
+           (@MaxID+3
+           ,4010
+           ,8
+           ,NULL
+           ,NULL
+           ,NULL
+           ,NULL
+           ,53
+           ,NULL
+           ,NULL)
+
+
+INSERT INTO [dbo].[Dep_StakeLevel]
+           ([StakeLevelID]
+           ,[GameTypeID]
+           ,[GameGroupID]
+           ,[MinLabel]
+           ,[MaxLabel]
+           ,[MinStake]
+           ,[MaxStake]
+           ,[ExchangeID]
+           ,[ResourceId]
+           ,[SiteID])
+     VALUES
+           (@MaxID+4
+           ,4010
+           ,8
+           ,NULL
+           ,NULL
+           ,NULL
+           ,NULL
+           ,54
+           ,NULL
+           ,NULL)
+GO
+
+-------------------
 CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
 CREATE TABLE #tmp1(
 	[Game ] [varchar](50) NULL,
