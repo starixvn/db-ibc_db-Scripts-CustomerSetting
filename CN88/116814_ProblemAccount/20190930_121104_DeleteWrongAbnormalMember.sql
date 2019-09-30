@@ -6,17 +6,15 @@
 USE CustDB
 GO
 
+SELECT DISTINCT c.CustId
+INTO #CustList
+FROM DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction v WITH (NOLOCK)
+	INNER JOIN CS_ProblemAccount c WITH (ROWLOCK) ON c.custid = v.CustID
+WHERE v.IssueTypeId = 11 AND c.IsAbnormalMember = 1
+
 --42 affected rows
 DELETE c
 FROM DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction v WITH (NOLOCK)
 	INNER JOIN CS_ProblemAccount c WITH (ROWLOCK) ON c.custid = v.CustID
 WHERE (v.IssueTypeId <> 11 OR v.IssueTypeId IS NULL) AND c.IsAbnormalMember = 1
-
-/*
---check data
-SELECT c.*, ci.username, ci.roleid
-FROM DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction v WITH (NOLOCK)
-	INNER JOIN CS_ProblemAccount c WITH (NOLOCK) ON c.custid = v.CustID
-	INNER JOIN CustInfo ci WITH (NOLOCK) ON c.custid = ci.CustID
-WHERE (v.IssueTypeId <> 11 OR v.IssueTypeId IS NULL) AND c.IsAbnormalMember = 1
-*/
+	AND NOT EXISTS (SELECT 1 FROM #CustList t WHERE t.CustID = c.CustId)
