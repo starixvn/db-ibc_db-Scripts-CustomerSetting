@@ -12,7 +12,7 @@ FROM DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction v WITH (NOLOCK)
 	INNER JOIN CS_ProblemAccount c WITH (ROWLOCK) ON c.custid = v.CustID
 WHERE v.IssueTypeId = 11 AND c.IsAbnormalMember = 1
 
---42 affected rows
+--30 affected rows
 DELETE c
 FROM DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction v WITH (NOLOCK)
 	INNER JOIN CS_ProblemAccount c WITH (ROWLOCK) ON c.custid = v.CustID
