@@ -4,7 +4,7 @@
 	Task: add global setting for for cash #120070
 	DB: DBCUST/CUSTDB
 */
-CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8),PRIMARY KEY(GameTypeID,ExchangeID))
+CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
 INSERT INTO #tmpStake (GameTypeID ,ExchangeID ,MinLabel,MaxLabel ,MinStake ,MaxStake)
 
 SELECT 4190,15,'0.9','90',0.9,90 UNION ALL 
