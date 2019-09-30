@@ -135,7 +135,7 @@ SELECT a.GameTypeID,e.exchangeid,a.MinLabel,a.MaxLabel,a.MinStake,a.MaxStake
 FROM Dep_StakeLevelGroupDetail a WITH(NOLOCK)
 	INNER JOIN Dep_StakeLevel b WITH(NOLOCK) ON a.StakeLevelID=b.StakeLevelID
 	CROSS APPLY  Exchange e WITH(NOLOCK) 
-WHERE b.ExchangeID=1 AND b.GameTypeID=4101
+WHERE b.ExchangeID=13 AND b.GameTypeID=4101
 	AND Code IN('DKK','SEK','NOK')
 
 ;WITH T AS(
