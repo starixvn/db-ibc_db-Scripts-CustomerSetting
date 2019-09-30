@@ -19,7 +19,7 @@ INSERT INTO [dbo].[Dep_StakeLevel]
            ,[SiteID])
      VALUES
            (@MaxID+1
-           ,4010
+           ,4101
            ,8
            ,NULL
            ,NULL
@@ -41,7 +41,7 @@ INSERT INTO [dbo].[Dep_StakeLevel]
            ,[SiteID])
      VALUES
            (@MaxID+2
-           ,4010
+           ,4101
            ,8
            ,NULL
            ,NULL
@@ -64,7 +64,7 @@ INSERT INTO [dbo].[Dep_StakeLevel]
            ,[SiteID])
      VALUES
            (@MaxID+3
-           ,4010
+           ,4101
            ,8
            ,NULL
            ,NULL
@@ -88,7 +88,7 @@ INSERT INTO [dbo].[Dep_StakeLevel]
            ,[SiteID])
      VALUES
            (@MaxID+4
-           ,4010
+           ,4101
            ,8
            ,NULL
            ,NULL
