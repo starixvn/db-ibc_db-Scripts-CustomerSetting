@@ -4,4 +4,8 @@
 	DB: DBCUST/CustDB
 */
 
-ALTER TABLE CustAgent ADD IsMonitorPT BIT DEFAULT 0
+ALTER TABLE CustAgent ADD IsMonitorPT BIT NULL
+
+ALTER TABLE CustAgent ADD CONSTRAINT [DF_CustAgent_IsMonitorPT] DEFAULT 0 FOR  IsMonitorPT
+
+
