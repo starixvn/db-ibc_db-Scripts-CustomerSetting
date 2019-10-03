@@ -19,6 +19,9 @@ EXEC sp_rename 'Task_rptHRWinlost_Group','DEL_Task_rptHRWinlost_Group'
 EXEC sp_rename 'Task_rptHRWinlost_Group14','DEL_Task_rptHRWinlost_Group14'
 EXEC sp_rename 'Task_rptRacingWinlost_Group','DEL_Task_rptRacingWinlost_Group'
 EXEC sp_rename 'Task_rptRacingWinlost_Group14','DEL_Task_rptRacingWinlost_Group14'
+EXEC sp_rename 'Dot_Dep_ChkMemBetSetting','DEL_Dot_Dep_ChkMemBetSetting'
+EXEC sp_rename 'Dot_Dep_CustomerSelMemBetSetting','DEL_Dot_Dep_CustomerSelMemBetSetting'
+EXEC sp_rename 'Dot_Dep_CustomerSelMemBetSetting_Cust','DEL_Dot_Dep_CustomerSelMemBetSetting_Cust'
 
 USE bodb_ACC
 GO
