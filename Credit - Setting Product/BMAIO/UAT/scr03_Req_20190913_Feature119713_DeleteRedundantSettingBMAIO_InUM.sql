@@ -21,7 +21,7 @@ WHERE ci.roleid = 4
 	AND ci.currency=20
 
 DELETE cs
-FROM [dbo].CustSetting cs WITH(UPDLOCK,ROWLOCK)
+FROM [dbo].CustSetting cs
 	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
 	AND cs.Bettype = 9999
@@ -29,7 +29,7 @@ WHERE cs.CustID > @maxcustID
 	AND c.srecommend IN (SELECT custid FROM #supers)
 	
 DELETE cs
-FROM [dbo].custoverride cs WITH(UPDLOCK,ROWLOCK)
+FROM [dbo].custoverride cs
 	INNER JOIN custInfo c WITH(NOLOCK) ON cs.custid=c.custid
 WHERE cs.CustID > @maxcustID
 	AND cs.Bettype = 9999
