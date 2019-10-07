@@ -13,7 +13,7 @@ INSERT INTO [dbo].[crmLogAction]
            ,[IsInternal]
            ,[ExcludedForCn88])
      VALUES
-           (305
+           (206
            ,'Acc_CRM_CustomerFeedbackQuickUpd'
            ,'Quick update feedback'
            ,0
