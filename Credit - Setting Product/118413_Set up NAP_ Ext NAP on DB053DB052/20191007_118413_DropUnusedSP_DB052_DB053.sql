@@ -1,0 +1,100 @@
+/*	
+	Created: 20191007@Eden
+	Task: Drop all unused SP in DB052/DB053
+	Redmine: https://redmine.nexcel.vn/issues/118413
+	DB: DB052/DB053
+*/
+
+USE bodb02
+GO 
+
+
+DROP PROCEDURE DEL_NAP_SMATurnover_CountrySel
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_xpre
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_xtest
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_UAT1
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_UAT2
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_UAT3
+GO
+DROP PROCEDURE NAP_SMATurnover_CountrySel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_SMATurnover_LeagueSel
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_xpre
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_xtest
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_UAT1
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_UAT2
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_UAT3
+GO
+DROP PROCEDURE NAP_SMATurnover_LeagueSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_SMATurnover_MatchSel
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_xpre
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_xtest
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_UAT1
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_UAT2
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_UAT3
+GO
+DROP PROCEDURE NAP_SMATurnover_MatchSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_SMATurnover_SpecialLeagueSel
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_xpre
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_xtest
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_UAT1
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_UAT2
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_UAT3
+GO
+DROP PROCEDURE NAP_SMATurnover_SpecialLeagueSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_SMATurnover_SportSel
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_xpre
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_xtest
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_UAT1
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_UAT2
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_UAT3
+GO
+DROP PROCEDURE NAP_SMATurnover_SportSel_UAT4
+GO
+
+-----------------
+USE bodb_CustomerLog
+GO 
+
+DROP PROCEDURE DEL_NAP_WinLimit_GameHistorySel
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_GameHistorySel_UAT4
+GO

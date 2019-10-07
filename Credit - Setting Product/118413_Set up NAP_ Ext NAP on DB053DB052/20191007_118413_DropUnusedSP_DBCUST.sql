@@ -1,0 +1,263 @@
+/*	
+	Created: 20191007@Eden
+	Task: Drop all unused SP in DBCUST
+	Redmine: https://redmine.nexcel.vn/issues/118413
+	DB: DBCUST
+*/
+
+USE CUSTDB
+GO 
+
+
+DROP PROCEDURE DEL_Acc_CustomerMaxNewMemPerDay_SAg
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_xpre
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_xtest
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_UAT1
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_UAT2
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_UAT3
+GO
+DROP PROCEDURE Acc_CustomerMaxNewMemPerDay_SAg_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerSelByPlayerId
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_xpre
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_xtest
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_UAT1
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_UAT2
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_UAT3
+GO
+DROP PROCEDURE Acc_CustomerSelByPlayerId_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerSelIsDirectMaster
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_xpre
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_xtest
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_UAT1
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_UAT2
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_UAT3
+GO
+DROP PROCEDURE Acc_CustomerSelIsDirectMaster_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerSelMemberSearch_AutoSuspend
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_xpre
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_xtest
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_UAT1
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_UAT2
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_UAT3
+GO
+DROP PROCEDURE Acc_CustomerSelMemberSearch_AutoSuspend_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerUpdDisableEsports
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_xpre
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_xtest
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_UAT1
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_UAT2
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_UAT3
+GO
+DROP PROCEDURE Acc_CustomerUpdDisableEsports_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerUpdSecurityCode_Sub
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_xpre
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_xtest
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_UAT1
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_UAT2
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_UAT3
+GO
+DROP PROCEDURE Acc_CustomerUpdSecurityCode_Sub_UAT4
+GO
+DROP PROCEDURE DEL_Acc_Dep_CustomerUpdMoveAgent
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_xpre
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_xtest
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_UAT1
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_UAT2
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_UAT3
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveAgent_UAT4
+GO
+DROP PROCEDURE DEL_Acc_Dep_CustomerUpdMoveMaster
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_xpre
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_xtest
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_UAT1
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_UAT2
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_UAT3
+GO
+DROP PROCEDURE Acc_Dep_CustomerUpdMoveMaster_UAT4
+GO
+DROP PROCEDURE DEL_Acc_Rpt_CasinoSynchronise
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_xpre
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_xtest
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_UAT1
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_UAT2
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_UAT3
+GO
+DROP PROCEDURE Acc_Rpt_CasinoSynchronise_UAT4
+GO
+DROP PROCEDURE DEL_Acc_SelCustomerGivenCredit
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_xpre
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_xtest
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT1
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT2
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT3
+GO
+DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT4
+GO
+DROP PROCEDURE DEL_Age_LoginAdminVerifyTicket
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_xpre
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_xtest
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT1
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT2
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT3
+GO
+DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT4
+GO
+DROP PROCEDURE DEL_NAP_CustomerInsRobotAccount
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_xpre
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_xtest
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_UAT1
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_UAT2
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_UAT3
+GO
+DROP PROCEDURE NAP_CustomerInsRobotAccount_UAT4
+GO
+DROP PROCEDURE DEL_NAP_CustomerSelRobotAccounts
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_xpre
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_xtest
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_UAT1
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_UAT2
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_UAT3
+GO
+DROP PROCEDURE NAP_CustomerSelRobotAccounts_UAT4
+GO
+DROP PROCEDURE DEL_NAP_CustomerUpdInfoRobotAccount
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_xpre
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_xtest
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_UAT1
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_UAT2
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_UAT3
+GO
+DROP PROCEDURE NAP_CustomerUpdInfoRobotAccount_UAT4
+GO
+DROP PROCEDURE DEL_NAP_CustomerUpdStatusRobotAccount
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_xpre
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_xtest
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_UAT1
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_UAT2
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_UAT3
+GO
+DROP PROCEDURE NAP_CustomerUpdStatusRobotAccount_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CustNotConfigProductSel
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CustNotConfigProductSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CustSettingRelatedToCurrencySettingUpd_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_GreaterWinLimitPlayerSel
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_GreaterWinLimitPlayerSel_UAT4
+GO

@@ -1,0 +1,137 @@
+/*	
+	Created: 20191007@Eden
+	Task: Drop all unused SP in DBTXN/DBPRO
+	Redmine: https://redmine.nexcel.vn/issues/118413
+	DB: DBTXN/DBPRO
+*/
+
+USE bodb02
+GO 
+
+
+DROP PROCEDURE DEL_Acc_CustomerPwdUpd
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_xpre
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_xtest
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_UAT1
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_UAT2
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_UAT3
+GO
+DROP PROCEDURE Acc_CustomerPwdUpd_UAT4
+GO
+DROP PROCEDURE DEL_Acc_CustomerSyncUpd
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_xpre
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_xtest
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_UAT1
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_UAT2
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_UAT3
+GO
+DROP PROCEDURE Acc_CustomerSyncUpd_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CurrencySel
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingIns
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingSel
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingUpd
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_Game_Unblock
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_Game_Unblock_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_GameSel
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_GameSel_UAT4
+GO
+DROP PROCEDURE DEL_NAP_WinLimit_ProductSel
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_xpre
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_xtest
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_UAT1
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_UAT2
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_UAT3
+GO
+DROP PROCEDURE NAP_WinLimit_ProductSel_UAT4
+GO
