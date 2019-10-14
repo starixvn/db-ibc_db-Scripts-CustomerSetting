@@ -633,8 +633,16 @@ BEGIN
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
 	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 
+	UPDATE cs 
+	SET cs.SuperPT = 0.85,
+		cs.MasterPT = cs.MasterPT + 0.85 - cs.SuperPT,
+		cs.AgentPT = cs.AgentPT + 0.85 - cs.SuperPT
+	FROM CustPTSetting3rd_Member cs WITH (ROWLOCK)
+	WHERE cs.custid = @custid
+
 	UPDATE CustPTSetting3rd_Agent WITH(ROWLOCK, UPDLOCK)
-	SET MinPT = MasterPT
+	SET MinPT = 0.85,
+		MasterPT = 0.85
 	WHERE custid = @custid
 	
 	EXEC dbo.Acc_DynamicCustSetting3rd_08 

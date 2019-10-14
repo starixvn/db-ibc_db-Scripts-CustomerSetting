@@ -564,9 +564,18 @@ BEGIN
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
 	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 
+	UPDATE cs 
+	SET cs.spositiontaking = 0.85,
+		cs.mpositiontaking = cs.mpositiontaking + 0.85 - cs.spositiontaking,
+		cs.apositiontaking = cs.apositiontaking + 0.85 - cs.spositiontaking
+	FROM CustSetting cs WITH (ROWLOCK)
+	WHERE cs.custid = @custid
+
 	UPDATE custoverride WITH(ROWLOCK, UPDLOCK)
-	SET minpositiontaking = maxpositiontaking, 
-		minlivepositiontaking = maxlivepositiontaking
+	SET minpositiontaking = 0.85, 
+		minlivepositiontaking = 0.85,
+		maxpositiontaking = 0.85,
+		maxlivepositiontaking = 0.85
 	WHERE custoverride.custid = @custid
 	
 	IF @roleid = 2
