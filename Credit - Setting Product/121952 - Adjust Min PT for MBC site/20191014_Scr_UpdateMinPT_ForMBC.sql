@@ -14,8 +14,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME  IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2') ) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustOverride') = 0 RETURN	
 		
@@ -46,7 +46,7 @@ GO
 ------------------------------------------------------	
  
 ---
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #tmpCust (custid int, isfinished bit default(0))
     
@@ -1184,12 +1184,12 @@ BEGIN
 	EXEC dbo.[Acc_CustSetting3rd_19] @custid = @custid					
 			,@target = 'REPLICATED'
 
-	WAITFOR DELAY '00:00:0.280'
+	WAITFOR DELAY '00:00:0.100'
 END			
 
  DROP TABLE #tmpCust
 GO		
--- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 -----------------------------------------------------------------------------------
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST----
@@ -2330,7 +2330,7 @@ BEGIN
 	EXEC dbo.[Acc_CustSetting3rd_19] @custid = @custid					
 			,@target = 'DBCUST'
 
-	WAITFOR DELAY '00:00:0.280'
+	WAITFOR DELAY '00:00:0.100'
 END			
 
  DROP TABLE #tmpCust
