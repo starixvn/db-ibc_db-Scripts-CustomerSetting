@@ -6,6 +6,7 @@
 */
 
 CREATE TABLE #supers (custid INT,  isfinished BIT DEFAULT(0))
+DECLARE @tmpCust TABLE (custid INT)
 
 DECLARE @max_custid INT
 SELECT  @max_custid= xxx ---input maxcustid
