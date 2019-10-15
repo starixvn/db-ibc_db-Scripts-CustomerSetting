@@ -20,11 +20,12 @@ BEGIN
 
 	UPDATE cs 
 	SET cs.spositiontaking = @PT,
-		cs.mpositiontaking = cs.mpositiontaking + @PT - cs.spositiontaking,
-		cs.apositiontaking = cs.apositiontaking + @PT - cs.spositiontaking
+		cs.mpositiontaking = @PT,
+		cs.apositiontaking = @PT
 	FROM CustSettingGame cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
-		  AND sporttype = 202        
-		  AND Bettype IN (1501,1503,1504,1505,1507,1508,1509,1511,1513,1514,1515)      
+		  AND cs.sporttype = 202        
+		  AND cs.Bettype IN (1501,1503,1504,1505,1507,1508,1509,1511,1513,1514,1515)      
+
 END    
 GO

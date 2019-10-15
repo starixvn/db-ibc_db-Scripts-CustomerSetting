@@ -21,10 +21,13 @@ BEGIN
 	UPDATE cs 
 	SET cs.SuperPT = @PT,
 		cs.MasterPT = cs.MasterPT + @PT - cs.SuperPT,
-		cs.AgentPT = cs.AgentPT + @PT - cs.SuperPT
+		cs.AgentPT = cs.AgentPT + @PT - cs.SuperPT,
+		cs.MaxPT = ps.MaxPT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
+			ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 	WHERE cs.custid = @custid
-		AND sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		AND cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
 	              
 END    
 GO

@@ -7,8 +7,8 @@
  */
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid int,
-	@PT smallmoney,
 	@SportBettypeXML NVARCHAR(MAX),
+	@IsUpdateMaxPT BIT = 1, -- 1 : Update maxPT,s4/m4/a4 , 0 : Update MinPT = MaxPT and adjust PT
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -22,20 +22,10 @@ BEGIN
 		
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
 	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
-
-	--> FOR SportBook
-	UPDATE cs 
-	SET cs.spositiontaking = @PT,
-		cs.mpositiontaking = cs.mpositiontaking + @PT - cs.spositiontaking,
-		cs.apositiontaking = cs.apositiontaking + @PT - cs.spositiontaking
-	FROM CustSetting cs WITH (ROWLOCK)
-	WHERE cs.custid = @custid
-
+	
 	UPDATE custoverride WITH(ROWLOCK, UPDLOCK)
-	SET minpositiontaking = @PT, 
-		minlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
-		maxpositiontaking = @PT,
-		maxlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE maxlivepositiontaking END
+	SET minpositiontaking = maxpositiontaking, 
+		minlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN maxlivepositiontaking ELSE minlivepositiontaking END
 	WHERE custoverride.custid = @custid
 	
 	IF @roleid = 2
@@ -52,14 +42,8 @@ BEGIN
 	END		
 
 	--> FOR Muay Thai, E-Sports
-	DECLARE @DCS_PT tinyint
-	SET @DCS_PT = @PT * 100
-
 	UPDATE cs 
-	SET cs.SuperPT = @DCS_PT,
-		cs.MasterPT = cs.MasterPT + @DCS_PT - cs.SuperPT,
-		cs.AgentPT = cs.AgentPT + @DCS_PT - cs.SuperPT,
-		MinPT = @DCS_PT
+	SET MinPT = CS.SuperPT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
 		AND SportType IN (43,44)
