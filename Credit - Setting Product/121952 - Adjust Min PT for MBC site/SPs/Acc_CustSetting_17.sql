@@ -40,6 +40,13 @@ BEGIN
 		JOIN #CustList tmp ON cs.custid = tmp.CustID
 	WHERE tmp.roleID = 4
 
+	UPDATE cs 
+	SET maxpositiontaking = CASE WHEN tmp.PT > maxpositiontaking THEN tmp.PT ELSE maxpositiontaking END,
+		maxlivepositiontaking = CASE WHEN tmp.PT > maxlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE maxlivepositiontaking END
+	FROM custoverride cs WITH(ROWLOCK, UPDLOCK)
+			INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
+	WHERE tmp.roleID = 4 
+
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
 	SET cs.MaxPT = 90, --Profiles
@@ -50,12 +57,6 @@ BEGIN
 		INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44) AND tmp.roleID = 4
 
-	UPDATE cs 
-	SET maxpositiontaking = CASE WHEN tmp.PT > maxpositiontaking THEN tmp.PT ELSE maxpositiontaking END,
-		maxlivepositiontaking = CASE WHEN tmp.PT > maxlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE maxlivepositiontaking END
-	FROM custoverride cs WITH(ROWLOCK, UPDLOCK)
-			INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
-	WHERE tmp.roleID = 4 
 
 	-------------------dummy account -----------------------------
 
@@ -89,6 +90,7 @@ BEGIN
 		JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
 		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
 
+	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
 	SET cs.SuperPT = CASE WHEN ci.roleid = 4 THEN tmp.PT ELSE cs.SuperPT END,
 		cs.MasterPT = CASE WHEN ci.roleid = 4 THEN tmp.PT
@@ -110,21 +112,24 @@ BEGIN
 	FROM CustSetting cs WITH (ROWLOCK)
 		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
-
-	UPDATE cs 
-	SET cs.MasterPT = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
-		cs.MaxPT = 90
-	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
-	WHERE cs.SportType IN (43,44)
-
+	
 	UPDATE cs 
 	SET maxpositiontaking = CASE WHEN tmp.PT > maxpositiontaking THEN tmp.PT ELSE maxpositiontaking END,
 		maxlivepositiontaking = CASE WHEN tmp.PT > maxlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE maxlivepositiontaking END
 	FROM custoverride cs WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
+
+	--> FOR Muay Thai, E-Sports
+	UPDATE cs 
+	SET cs.MasterPT = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.MasterPT END,
+		cs.AgentPT = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
+		cs.MaxPT = 90, --Profiles
+	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
+		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
+	WHERE cs.SportType IN (43,44)
+
+	
 
 	DROP TABLE #CustList
 	DROP TABLE #DummyCustList
