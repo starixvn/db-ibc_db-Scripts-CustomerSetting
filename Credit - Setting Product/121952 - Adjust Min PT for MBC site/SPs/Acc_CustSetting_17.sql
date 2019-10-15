@@ -83,7 +83,6 @@ BEGIN
 									WHEN tmp.roleid = 3 THEN tmp.PT 
 									ELSE cs.mpositiontaking END,
 		cs.apositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
-									WHEN tmp.roleid = 2 THEN tmp.PT 
 									ELSE cs.apositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
@@ -95,7 +94,6 @@ BEGIN
 									WHEN tmp.roleid = 3 THEN tmp.PT 
 									ELSE cs.MasterPT END,
 		cs.AgentPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT
-									WHEN tmp.roleid = 2 THEN tmp.PT 
 									ELSE cs.AgentPT END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
