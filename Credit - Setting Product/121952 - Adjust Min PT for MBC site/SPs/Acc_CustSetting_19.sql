@@ -33,9 +33,9 @@ BEGIN
 
 	UPDATE custoverride WITH(ROWLOCK, UPDLOCK)
 	SET minpositiontaking = @PT, 
-		minlivepositiontaking = @PT,
+		minlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
 		maxpositiontaking = @PT,
-		maxlivepositiontaking = @PT
+		maxlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE maxlivepositiontaking END
 	WHERE custoverride.custid = @custid
 	
 	IF @roleid = 2
@@ -51,7 +51,7 @@ BEGIN
 		EXEC dbo.Acc_CustSetting_18 @srecommend = @srecommend, @roleid = @roleid, @Target = @Target						
 	END		
 
-	--> FOR Muay Thai
+	--> FOR Muay Thai, E-Sports
 	DECLARE @DCS_PT tinyint
 	SET @DCS_PT = @PT * 100
 
@@ -59,11 +59,10 @@ BEGIN
 	SET cs.SuperPT = @DCS_PT,
 		cs.MasterPT = cs.MasterPT + @DCS_PT - cs.SuperPT,
 		cs.AgentPT = cs.AgentPT + @DCS_PT - cs.SuperPT,
-		MinPT = @DCS_PT,
-		MaxPT = @DCS_PT
+		MinPT = @DCS_PT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
-		AND SportType = 44
+		AND SportType IN (43,44)
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_08 
 				@AgentID = @recommend

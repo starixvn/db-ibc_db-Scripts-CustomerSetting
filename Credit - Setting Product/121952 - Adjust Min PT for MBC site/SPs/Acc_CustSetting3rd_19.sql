@@ -24,6 +24,7 @@ BEGIN
 		cs.apositiontaking = cs.apositiontaking + @PT - cs.spositiontaking
 	FROM CustSettingGame cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
-		  AND sporttype = 202              
+		  AND sporttype = 202        
+		  AND Bettype IN (1501,1503,1504,1505,1507,1508,1509,1511,1513,1514,1515)      
 END    
 GO

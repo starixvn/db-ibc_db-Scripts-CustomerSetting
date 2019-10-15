@@ -12,7 +12,7 @@ CREATE TABLE #tmpCust (custid int, PT smallmoney, isfinished bit default(0))
     
 DECLARE @custid INT, @PT smallmoney
 
---> FOR Muay Thai
+--> FOR Muay Thai, E-Sports
 DECLARE @xml XML;
 	SET @xml = (
 				SELECT (
@@ -21,7 +21,7 @@ DECLARE @xml XML;
 							, IsLive AS '@IsLive'
 						FROM dbo.ProductSettingDetail WITH(NOLOCK)
 						WHERE settingtype = 1 
-							  AND SportType = 44
+							  AND SportType IN (43,44)
 						FOR XML PATH('PT')
 							, TYPE
 						)
@@ -1179,7 +1179,7 @@ CREATE TABLE #tmpCust (custid int, PT smallmoney, isfinished bit default(0))
     
 DECLARE @custid INT, @PT smallmoney
 
---> FOR Muay Thai
+--> FOR Muay Thai, E-Sports
 DECLARE @xml XML;
 	SET @xml = (
 				SELECT (
@@ -1188,7 +1188,7 @@ DECLARE @xml XML;
 							, IsLive AS '@IsLive'
 						FROM dbo.ProductSettingDetail WITH(NOLOCK)
 						WHERE settingtype = 1 
-							  AND SportType = 44
+							  AND SportType IN (43,44)
 						FOR XML PATH('PT')
 							, TYPE
 						)
