@@ -46,12 +46,14 @@ BEGIN
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET cs.MaxPT = 90, --Profiles
+	SET cs.MaxPT = PS.MaxPT, --Profiles
 		cs.SuperPT  =  tmp.PT ,
 		cs.MasterPT =  cs.MasterPT + tmp.PT - cs.SuperPT ,
 		cs.AgentPT  =  cs.AgentPT + tmp.PT - cs.SuperPT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
+			ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 	WHERE cs.SportType IN (43,44) AND tmp.roleID = 4
 
 
@@ -76,39 +78,36 @@ BEGIN
 
 	--> FOR SportBook
 	UPDATE cs 
-	SET cs.spositiontaking = CASE WHEN ci.roleid = 4 THEN tmp.PT ELSE cs.spositiontaking END,
-		cs.mpositiontaking = CASE WHEN ci.roleid = 4 THEN tmp.PT
-									WHEN ci.roleid = 3 THEN tmp.PT 
+	SET cs.spositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT ELSE cs.spositiontaking END,
+		cs.mpositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+									WHEN tmp.roleid = 3 THEN tmp.PT 
 									ELSE cs.mpositiontaking END,
-		cs.apositiontaking = CASE WHEN ci.roleid = 4 THEN tmp.PT
-									WHEN ci.roleid = 2 THEN tmp.PT 
+		cs.apositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+									WHEN tmp.roleid = 2 THEN tmp.PT 
 									ELSE cs.apositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET cs.SuperPT = CASE WHEN ci.roleid = 4 THEN tmp.PT ELSE cs.SuperPT END,
-		cs.MasterPT = CASE WHEN ci.roleid = 4 THEN tmp.PT
-									WHEN ci.roleid = 3 THEN tmp.PT 
+	SET cs.SuperPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT ELSE cs.SuperPT END,
+		cs.MasterPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+									WHEN tmp.roleid = 3 THEN tmp.PT 
 									ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN ci.roleid = 4 THEN tmp.PT
-									WHEN ci.roleid = 2 THEN tmp.PT 
+		cs.AgentPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+									WHEN tmp.roleid = 2 THEN tmp.PT 
 									ELSE cs.AgentPT END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44)
 	
 	------------------------DIRECT acc---------------------------
 	--> FOR SportBook
 	UPDATE cs 
-	SET cs.mpositiontaking = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.mpositiontaking END,
-		cs.apositiontaking = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END
+	SET cs.mpositiontaking = CASE WHEN tmp.roleid = 3 THEN tmp.PT ELSE cs.mpositiontaking END,
+		cs.apositiontaking = CASE WHEN tmp.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 	
 	UPDATE cs 
 	SET maxpositiontaking = CASE WHEN tmp.PT > maxpositiontaking THEN tmp.PT ELSE maxpositiontaking END,
@@ -118,16 +117,16 @@ BEGIN
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET cs.MasterPT = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
-		cs.MaxPT = 90 --Profiles
+	SET cs.MasterPT = CASE WHEN tmp.roleid = 3 THEN tmp.PT ELSE cs.MasterPT END,
+		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
+		cs.MaxPT = PS.MaxPT --Profiles
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
+		INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
+			ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 	WHERE cs.SportType IN (43,44)
 
 	
-
 	DROP TABLE #CustList
 	DROP TABLE #DummyCustList
 	DROP TABLE #DirectCustList
