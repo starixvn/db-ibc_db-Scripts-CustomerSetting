@@ -6,9 +6,6 @@
 	DB: DBCUST/CUSTDB
  */
 ALTER PROCEDURE [dbo].[Acc_CustSetting_17]
-    --@custid int,
-	--@PT smallmoney = NULL,
-	--@IsUpdateMaxPT BIT = 1, -- 1 : Update maxPT,s4/m4/a4 , 0 : Update MinPT = MaxPT and adjust PT
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -37,7 +34,7 @@ BEGIN
 		cs.mpositiontaking = cs.mpositiontaking + tmp.PT - cs.spositiontaking ,
 		cs.apositiontaking = cs.apositiontaking + tmp.PT - cs.spositiontaking
 	FROM CustSetting cs WITH (ROWLOCK)
-		JOIN #CustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
 	WHERE tmp.roleID = 4
 
 	UPDATE cs 
@@ -87,8 +84,8 @@ BEGIN
 									WHEN ci.roleid = 2 THEN tmp.PT 
 									ELSE cs.apositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
-		JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
-		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
+		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
@@ -100,8 +97,8 @@ BEGIN
 									WHEN ci.roleid = 2 THEN tmp.PT 
 									ELSE cs.AgentPT END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
-		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
+		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44)
 	
 	------------------------DIRECT acc---------------------------
@@ -110,8 +107,8 @@ BEGIN
 	SET cs.mpositiontaking = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.mpositiontaking END,
 		cs.apositiontaking = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
-		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
+		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 	
 	UPDATE cs 
 	SET maxpositiontaking = CASE WHEN tmp.PT > maxpositiontaking THEN tmp.PT ELSE maxpositiontaking END,
@@ -125,8 +122,8 @@ BEGIN
 		cs.AgentPT = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
 		cs.MaxPT = 90 --Profiles
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
+		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON ci.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44)
 
 	

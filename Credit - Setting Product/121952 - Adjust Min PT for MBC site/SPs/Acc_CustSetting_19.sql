@@ -8,7 +8,6 @@
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid int,
 	@SportBettypeXML NVARCHAR(MAX),
-	@IsUpdateMaxPT BIT = 1, -- 1 : Update maxPT,s4/m4/a4 , 0 : Update MinPT = MaxPT and adjust PT
     @Target VARCHAR(20) = ''
 AS
 BEGIN
