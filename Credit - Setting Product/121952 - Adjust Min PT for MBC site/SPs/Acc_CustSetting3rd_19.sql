@@ -7,7 +7,7 @@
  */
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
     @custid int,
-	@PT smallint,
+	@PT smallmoney,
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -17,9 +17,6 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN	
-		
-	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
-	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 
 	UPDATE cs 
 	SET cs.spositiontaking = @PT,

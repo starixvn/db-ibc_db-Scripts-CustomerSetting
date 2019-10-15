@@ -8,7 +8,7 @@
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @custid int,
     @Target VARCHAR(20) = '',
-	@PT smallmoney,
+	@PT tinyint,
 	@SportBettypeXML NVARCHAR(MAX)
 AS
 BEGIN
@@ -18,9 +18,6 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN	
-		
-	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
-	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 
 	UPDATE cs 
 	SET cs.SuperPT = @PT,

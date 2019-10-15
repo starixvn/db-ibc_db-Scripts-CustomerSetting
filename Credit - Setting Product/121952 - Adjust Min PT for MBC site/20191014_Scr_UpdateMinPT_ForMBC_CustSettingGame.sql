@@ -1,15 +1,15 @@
  /*
 	Created: Eden
 	Date: 2019/10/14
-	Task: Adjust minpt = maxpt for MBC site for CustSetting3rd
+	Task: Adjust minpt = maxpt for MBC site for CustSettingGame
 	Redmine: https://nexdev.net/issues/121952
 	DB: DBCUST/CUSTDB
  */
 -- BEGIN STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #tmpCust (custid int, PT smallint, isfinished bit default(0))
+CREATE TABLE #tmpCust (custid int, PT smallmoney, isfinished bit default(0))
     
-DECLARE @custid INT, @PT smallint
+DECLARE @custid INT, @PT smallmoney
 
 ----CustomerList
 INSERT INTO #tmpCust(custid)					
@@ -1154,9 +1154,9 @@ GO
 -----------------------------------------------------------------------------------
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #tmpCust (custid int, PT smallint, isfinished bit default(0))
+CREATE TABLE #tmpCust (custid int, PT smallmoney, isfinished bit default(0))
     
-DECLARE @custid INT, @PT smallint
+DECLARE @custid INT, @PT smallmoney
 
 ----CustomerList
 INSERT INTO #tmpCust(custid)					
@@ -2296,6 +2296,6 @@ BEGIN
 END			
 
  DROP TABLE #tmpCust
-GO	
+GO		
 -- END STEP 2: RUN THIS SCRIPT AT DBCUST -----
 -----------------------------------------------------------------------------------

@@ -8,9 +8,9 @@
 
 -- BEGIN STEP 1: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #tmpCust (custid int, PT smallint, isfinished bit default(0))
+CREATE TABLE #tmpCust (custid int, PT tinyint, isfinished bit default(0))
     
-DECLARE @custid INT, @PT smallint
+DECLARE @custid INT, @PT tinyint
 
 DECLARE @xml XML;
 	SET @xml = (
@@ -1174,9 +1174,9 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #tmpCust (custid int, PT smallint, isfinished bit default(0))
+CREATE TABLE #tmpCust (custid int, PT tinyint, isfinished bit default(0))
     
-DECLARE @custid INT, @PT smallint
+DECLARE @custid INT, @PT tinyint
 
 DECLARE @xml XML;
 	SET @xml = (

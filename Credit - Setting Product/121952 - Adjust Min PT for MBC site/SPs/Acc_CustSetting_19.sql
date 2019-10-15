@@ -7,7 +7,7 @@
  */
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid int,
-	@PT smallint,
+	@PT smallmoney,
 	@SportBettypeXML NVARCHAR(MAX),
     @Target VARCHAR(20) = ''
 AS
@@ -52,12 +52,15 @@ BEGIN
 	END		
 
 	--> FOR Muay Thai
+	DECLARE @DCS_PT tinyint
+	SET @DCS_PT = @PT * 100
+
 	UPDATE cs 
-	SET cs.SuperPT = @PT,
-		cs.MasterPT = cs.MasterPT + @PT - cs.SuperPT,
-		cs.AgentPT = cs.AgentPT + @PT - cs.SuperPT,
-		MinPT = @PT,
-		MaxPT = @PT
+	SET cs.SuperPT = @DCS_PT,
+		cs.MasterPT = cs.MasterPT + @DCS_PT - cs.SuperPT,
+		cs.AgentPT = cs.AgentPT + @DCS_PT - cs.SuperPT,
+		MinPT = @DCS_PT,
+		MaxPT = @DCS_PT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
 		AND SportType = 44
