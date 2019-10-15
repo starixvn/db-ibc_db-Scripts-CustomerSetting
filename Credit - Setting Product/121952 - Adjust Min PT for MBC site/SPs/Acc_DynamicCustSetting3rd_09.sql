@@ -8,8 +8,7 @@
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @custid int,
     @Target VARCHAR(20) = '',
-	@PT tinyint,
-	@SportBettypeXML NVARCHAR(MAX)
+	@PT tinyint
 AS
 BEGIN
 	SET NOCOUNT ON

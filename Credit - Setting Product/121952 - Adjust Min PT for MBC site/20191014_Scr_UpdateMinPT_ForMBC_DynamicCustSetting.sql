@@ -12,23 +12,6 @@ CREATE TABLE #tmpCust (custid int, PT tinyint, isfinished bit default(0))
     
 DECLARE @custid INT, @PT tinyint
 
-DECLARE @xml XML;
-	SET @xml = (
-				SELECT (
-						SELECT SportType AS '@SportType'
-							, BetType AS '@BetType'
-							, IsLive AS '@IsLive'
-						FROM dbo.ProductSettingDetail WITH(NOLOCK)
-						WHERE settingtype = 1
-						AND sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
-						FOR XML PATH('PT')
-							, TYPE
-						)
-				FOR XML PATH('ROOT')
-					, TYPE
-				);
-DECLARE @SportBettypeXML NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX),@xml);
-
 ----CustomerList
 INSERT INTO #tmpCust(custid)					
 	  SELECT '5603319'				--BHK
@@ -1162,7 +1145,6 @@ BEGIN
 	EXEC dbo.[Acc_DynamicCustSetting3rd_09] @custid = @custid					
 			,@target = 'REPLICATED'
 			,@PT = @PT
-			,@SportBettypeXML = @SportBettypeXML
 
 	--WAITFOR DELAY '00:00:0.100'
 END			
@@ -1177,23 +1159,6 @@ GO
 CREATE TABLE #tmpCust (custid int, PT tinyint, isfinished bit default(0))
     
 DECLARE @custid INT, @PT tinyint
-
-DECLARE @xml XML;
-	SET @xml = (
-				SELECT (
-						SELECT SportType AS '@SportType'
-							, BetType AS '@BetType'
-							, IsLive AS '@IsLive'
-						FROM dbo.ProductSettingDetail WITH(NOLOCK)
-						WHERE settingtype = 1
-						AND sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
-						FOR XML PATH('PT')
-							, TYPE
-						)
-				FOR XML PATH('ROOT')
-					, TYPE
-				);
-DECLARE @SportBettypeXML NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX),@xml);
 
 ----CustomerList
 INSERT INTO #tmpCust(custid)					
@@ -2328,13 +2293,12 @@ BEGIN
 	EXEC dbo.[Acc_DynamicCustSetting3rd_09] @custid = @custid					
 			,@target = 'DBCUST'
 			,@PT = @PT
-			,@SportBettypeXML = @SportBettypeXML
 
 	--WAITFOR DELAY '00:00:0.100'
 END			
 
  DROP TABLE #tmpCust
-GO	
+GO
 
 -- END STEP 2: RUN THIS SCRIPT AT DBCUST -----
 -----------------------------------------------------------------------------------
