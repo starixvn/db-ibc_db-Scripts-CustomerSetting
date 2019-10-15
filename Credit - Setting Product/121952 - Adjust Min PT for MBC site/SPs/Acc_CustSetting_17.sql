@@ -123,7 +123,7 @@ BEGIN
 	UPDATE cs 
 	SET cs.MasterPT = CASE WHEN ci.roleid = 3 THEN tmp.PT ELSE cs.MasterPT END,
 		cs.AgentPT = CASE WHEN ci.roleid = 2 THEN tmp.PT ELSE cs.AgentPT END,
-		cs.MaxPT = 90, --Profiles
+		cs.MaxPT = 90 --Profiles
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 		JOIN custinfo ci  WITH (ROWLOCK) ON ci.custid = tmp.CustID
