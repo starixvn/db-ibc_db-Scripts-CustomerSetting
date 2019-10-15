@@ -636,15 +636,12 @@ BEGIN
 	UPDATE cs 
 	SET cs.SuperPT = 0.85,
 		cs.MasterPT = cs.MasterPT + 0.85 - cs.SuperPT,
-		cs.AgentPT = cs.AgentPT + 0.85 - cs.SuperPT
-	FROM CustPTSetting3rd_Member cs WITH (ROWLOCK)
+		cs.AgentPT = cs.AgentPT + 0.85 - cs.SuperPT,
+		MinPT = 0.85,
+		MasterPT = 0.85
+	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
 
-	UPDATE CustPTSetting3rd_Agent WITH(ROWLOCK, UPDLOCK)
-	SET MinPT = 0.85,
-		MasterPT = 0.85
-	WHERE custid = @custid
-	
 	EXEC dbo.Acc_DynamicCustSetting3rd_08 
 				@AgentID = @recommend
 				,@MasterID = @mrecommend
