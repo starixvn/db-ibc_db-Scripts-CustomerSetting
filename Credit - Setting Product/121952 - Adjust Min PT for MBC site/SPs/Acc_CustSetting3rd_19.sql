@@ -46,6 +46,7 @@ BEGIN
 
 		UPDATE cs 
 		SET cs.mpositiontaking = @PT
+		   ,cs.spositiontaking = 0
 		FROM CustSettingGame cs WITH (ROWLOCK)
 		WHERE cs.custid = @custid
 			  AND cs.sporttype = 202        
@@ -71,7 +72,8 @@ BEGIN
 			  AND cs.Bettype IN (1501,1503,1504,1505,1507,1508,1509,1511,1513,1514,1515) 
 		
 		UPDATE cs 
-		SET cs.apositiontaking = @PT
+		SET cs.apositiontaking = @PT,
+			cs.mpositiontaking = 0
 		FROM CustSettingGame cs WITH (ROWLOCK)
 		WHERE cs.custid = @custid
 			  AND cs.sporttype = 202        
