@@ -310,8 +310,7 @@ BEGIN
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
 	SET cs.MasterPT = CASE WHEN tmp.roleid = 3 THEN tmp.PT * 100  ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT * 100  ELSE cs.AgentPT END,
-		cs.MaxPT = tmp.PT * 100
+		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT * 100  ELSE cs.AgentPT END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44)

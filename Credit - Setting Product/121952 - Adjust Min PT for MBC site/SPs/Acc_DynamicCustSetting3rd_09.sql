@@ -45,8 +45,7 @@ BEGIN
 			AND cs.CustID = @srecommend
 	
 		UPDATE cs 
-		SET cs.MasterPT = @PT,
-			cs.MaxPT = @PT
+		SET cs.MasterPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
@@ -69,8 +68,7 @@ BEGIN
 			AND cs.CustID = @mrecommend
 	
 		UPDATE cs 
-		SET cs.AgentPT = @PT,
-			cs.MaxPT = @PT
+		SET cs.AgentPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
