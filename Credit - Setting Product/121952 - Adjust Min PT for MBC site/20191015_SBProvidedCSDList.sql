@@ -89,6 +89,7 @@ WHERE ci.roleid = 4
     and ci.username not like 'SIBC%'
     and ci.username not like '%ACCSuper%'
 	and cu.closed=0 
+	AND ci.username NOT IN ('MEA','MEB','S90AR','S90C','S90H','S90R','S90RM','SF8') --exclude headline mea, s90r, sf8
 
 
 
@@ -108,6 +109,7 @@ CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
 		AND ci.custid <= @max_custid 
 		AND c.Enabled=1
 		and c.closed=0 
+		AND c.username NOT IN ('M90RM') --exclude headline mea, s90r, sf8
 
 		
 	--- get direct agent
@@ -170,9 +172,11 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		inner join CustPTSetting3rd_Agent ca with (nolock) on ca.custid=co.custid and ca.sporttype in (43,44) --SB2,E-sports
 		 inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #supers s on s.custid=co.custid
-		where (co.minpositiontaking<>cs.spositiontaking
-		or (minlivepositiontaking <> cs.slivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		or ca.MinPT<>ca.SuperPT
+		where (
+		--co.minpositiontaking<>cs.spositiontaking
+		--or (minlivepositiontaking <> cs.slivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		--or 
+		ca.MinPT<>ca.SuperPT
 		)
 		and cs.sporttype <>154 --HR
 		union
@@ -184,11 +188,13 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		inner join CustPTSetting3rd_Agent ca with (nolock) on ca.custid=co.custid and ca.sporttype in (43,44) --SB2,E-sports
 		 inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #DirectMaster s on s.custid=co.custid
-		where (co.minpositiontaking<>cs.mpositiontaking
-		or (minlivepositiontaking <> cs.mlivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		or ca.MinPT<>ca.MasterPT
+		where (
+		--co.minpositiontaking<>cs.mpositiontaking
+		--or (minlivepositiontaking <> cs.mlivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		--or
+		 ca.MinPT<>ca.MasterPT
 		)
-		and cs.sporttype <>154 --HR
+		--and cs.sporttype <>154 --HR
 		union
 		select custid from #masterMaxPT where minpt=[Current MaxPT] 
 
@@ -198,15 +204,19 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		inner join CustPTSetting3rd_Agent ca with (nolock) on ca.custid=co.custid and ca.sporttype in (43,44) --SB2,E-sports
 		inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #DirectAgent s on s.custid=co.custid
-		where (co.minpositiontaking<>cs.apositiontaking
-		or (minlivepositiontaking <> cs.alivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		or ca.MinPT<>ca.AgentPT
+		where (
+		--co.minpositiontaking<>cs.apositiontaking
+		--or (minlivepositiontaking <> cs.alivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		--or 
+		ca.MinPT<>ca.AgentPT
 		)
-		and cs.sporttype <>154 --HR
+		--and cs.sporttype <>154 --HR
 		union
 		select custid from #agentMaxPT where minpt=[Current MaxPT]
 
-
+select top 100 minpositiontaking,mpositiontaking from custOverride co with (nolock)
+inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and co.bettype=cs.bettype
+		where co.custid=495957
 
 -- List 1. export excel file list update MaxPT
 	select  isnull (cu. username,'Not assign group' ) 'Headline',s.username,s.custid,'Super' 'Level',s .site, e.currency,
@@ -219,7 +229,6 @@ inner join exchange e with ( nolock) on e. exchangeid=s .currency
 left join vw_CustAccount ca with ( nolock) on ca. custid=s.custid and groupid>0
 left join CustGroupHeadline hl with ( nolock) on hl. GroupID=ca .groupID
 left join custinfo cu with ( nolock) on hl. custid=cu .custid
-where  ts.[Current MaxPT]<>ts.[Expected MaxPT]
 union all
 		select  isnull (cu. username,'Not assign group' ) 'Headline',s.username,s.custid,'Master',s .site, e.currency,
 		case when cus.closed=0 and cus.reject = 1 then 'Suspended'
@@ -231,7 +240,6 @@ inner join exchange e with ( nolock) on e. exchangeid=s .currency
 left join vw_CustAccount ca with ( nolock) on ca. custid=s.custid and groupid>0
 left join CustGroupHeadline hl with ( nolock) on hl. GroupID=ca .groupID
 left join custinfo cu with ( nolock) on hl. custid=cu .custid
-where  ts.[Current MaxPT]<>ts.[Expected MaxPT]
 union all
 select  isnull (cu. username,'Not assign group' ) 'Headline',s.username,s.custid,'Agent',s .site, e.currency,
 case when cus.closed=0 and cus.reject = 1 then 'Suspended'
@@ -243,7 +251,7 @@ inner join exchange e with ( nolock) on e. exchangeid=s .currency
 left join vw_CustAccount ca with ( nolock) on ca. custid=s.custid and groupid>0
 left join CustGroupHeadline hl with ( nolock) on hl. GroupID=ca .groupID
 left join custinfo cu with ( nolock) on hl. custid=cu .custid
-where  ts.[Current MaxPT]<>ts.[Expected MaxPT] 
+
 
 
 
