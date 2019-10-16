@@ -252,45 +252,45 @@ BEGIN
 	INSERT INTO #DirectCustList(CustID, PT, RoleID)
 	SELECT CustID, PT, RoleID FROM #CustList WHERE roleid IN (2,3)
 
-	INSERT INTO #DummyCustList(CustID,PT,roleID)
-	SELECT DISTINCT ci.srecommend,tmp.PT,4 -- Dummy super
-	FROM #DirectCustList tmp 
-		INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid 
+	--INSERT INTO #DummyCustList(CustID,PT,roleID)
+	--SELECT DISTINCT ci.srecommend,tmp.PT,4 -- Dummy super
+	--FROM #DirectCustList tmp 
+	--	INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid 
 
 
-	INSERT INTO #DummyCustList(CustID,PT,roleID)
-	SELECT DISTINCT ci.mrecommend,tmp.PT,3 -- Dummy master
-	FROM #DirectCustList tmp 
-		INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid AND ci.roleid = 2
+	--INSERT INTO #DummyCustList(CustID,PT,roleID)
+	--SELECT DISTINCT ci.mrecommend,tmp.PT,3 -- Dummy master
+	--FROM #DirectCustList tmp 
+	--	INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid AND ci.roleid = 2
 
-	--> FOR SportBook
-	UPDATE cs 
-	SET cs.spositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT ELSE cs.spositiontaking END,
-		cs.mpositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
-									WHEN tmp.roleid = 3 THEN tmp.PT 
-									ELSE cs.mpositiontaking END,
-		cs.apositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
-									ELSE cs.apositiontaking END,
-		cs.slivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.slivepositiontaking END,
-		cs.mlivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
-									WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT 
-									ELSE cs.mlivepositiontaking END,
-		cs.alivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
-									ELSE cs.alivepositiontaking END
-	FROM CustSetting cs WITH (ROWLOCK)
-		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
+	----> FOR SportBook
+	--UPDATE cs 
+	--SET cs.spositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT ELSE cs.spositiontaking END,
+	--	cs.mpositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+	--								WHEN tmp.roleid = 3 THEN tmp.PT 
+	--								ELSE cs.mpositiontaking END,
+	--	cs.apositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
+	--								ELSE cs.apositiontaking END,
+	--	cs.slivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.slivepositiontaking END,
+	--	cs.mlivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
+	--								WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT 
+	--								ELSE cs.mlivepositiontaking END,
+	--	cs.alivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
+	--								ELSE cs.alivepositiontaking END
+	--FROM CustSetting cs WITH (ROWLOCK)
+	--	INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
 
-	--> FOR Muay Thai, E-Sports
-	UPDATE cs 
-	SET cs.SuperPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100  ELSE cs.SuperPT END,
-		cs.MasterPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100 
-									WHEN tmp.roleid = 3 THEN tmp.PT * 100  
-									ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100 
-									ELSE cs.AgentPT END
-	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
-	WHERE cs.SportType IN (43,44)
+	----> FOR Muay Thai, E-Sports
+	--UPDATE cs 
+	--SET cs.SuperPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100  ELSE cs.SuperPT END,
+	--	cs.MasterPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100 
+	--								WHEN tmp.roleid = 3 THEN tmp.PT * 100  
+	--								ELSE cs.MasterPT END,
+	--	cs.AgentPT = CASE WHEN tmp.roleid = 4 THEN tmp.PT * 100 
+	--								ELSE cs.AgentPT END
+	--FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	--	INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
+	--WHERE cs.SportType IN (43,44)
 	
 	------------------------dirrect account---------------------------
 
