@@ -4,7 +4,7 @@
 	Task: add new log action for initial statuses for member cn88
 */
 
-INSERT INTO [dbo].[LogAction]ss
+INSERT INTO [dbo].[LogAction]
            ([ActionID]
            ,[ActionTypeID]
            ,[SPName]
