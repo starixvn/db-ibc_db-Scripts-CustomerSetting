@@ -4,9 +4,14 @@
 	Task: Get Super, Direct Master, Direct Agent for MBC site for SportBook (SportBook, SportBook2, E-sports)
 	Redmine: https://nexdev.net/issues/121952
 	DB: DBCUST/CUSTDB
+	Revision: 
+	- KEEP 'M63IRMB','M63IHK', 'M79CR' max pt 85%
+	- Remove ci.username NOT IN ('MEA','MEB','S90AR','S90C','S90H','S90R','S90RM','SF8') --exclude headline mea, s90r, sf8
+	- Remove c.username NOT IN ('M90RM') --exclude headline mea, s90r, sf8
  */
 
- 
+
+
 create table #UpdateMinPT (site nvarchar(50), currency nvarchar(50), MaxPT int)
 insert into #UpdateMinPT (site,currency,MaxPT)
 SELECT 'BEST-ODDS','EURO', 85 UNION ALL
@@ -89,9 +94,7 @@ WHERE ci.roleid = 4
     and ci.username not like 'SIBC%'
     and ci.username not like '%ACCSuper%'
 	and cu.closed=0 
-	AND ci.username NOT IN ('MEA','MEB','S90AR','S90C','S90H','S90R','S90RM','SF8') --exclude headline mea, s90r, sf8
-
-
+	
 
 
 CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
@@ -109,7 +112,6 @@ CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
 		AND ci.custid <= @max_custid 
 		AND c.Enabled=1
 		and c.closed=0 
-		AND c.username NOT IN ('M90RM') --exclude headline mea, s90r, sf8
 
 		
 	--- get direct agent
@@ -137,7 +139,9 @@ select distinct co.custid, co.minpositiontaking 'MinPT',cs.spositiontaking 'Curr
 		inner join vw_customer cu with (nolock) on cu.custid=c.custid
 		inner join exchange e with (nolock) on e.exchangeid=c.currency
 		inner join #UpdateMaxPT m on m.site=cu.site and m.currency=e.currency
-		where (superPT<>s.MaxPT or cs.spositiontaking<>s.MaxPT/100.0)
+		where (superPT<>s.MaxPT or cs.spositiontaking<>s.MaxPT/100.0 
+		or (cs.slivepositiontaking <> s.MaxPT/100.0 and cs.sporttype = 1 and cs.bettype in (1,3,7,8))
+		)
 		and cs.sporttype <>154
 
 -- get list  Master update maxPT 
@@ -150,8 +154,11 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.mpositiontaking 'Curre
 		inner join exchange e with (nolock) on e.exchangeid=c.currency
 		inner join #UpdateMaxPT m on m.site=cu.site and m.currency=e.currency
 		where 
-		(masterPT<>s.MaxPT or cs.mpositiontaking<>s.MaxPT/100.0)
+		(masterPT<>s.MaxPT or cs.mpositiontaking<>s.MaxPT/100.0
+		or (cs.mlivepositiontaking <> s.MaxPT/100.0 and cs.sporttype = 1 and cs.bettype in (1,3,7,8))
+		)
 		and cs.sporttype <>154 --HR
+		and c.username not in ('M63IRMB','M63IHK', 'M79CR')  --KEEP 'M63IRMB','M63IHK', 'M79CR' max pt 85%
 
 -- get list Agent update MaxPT
 select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Current MaxPT',s.MaxPT/100.0 'Expected MaxPT' into #agentMaxPT  from custOverride co with (nolock)
@@ -162,7 +169,9 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		inner join vw_customer cu with (nolock) on cu.custid=c.custid
 		inner join exchange e with (nolock) on e.exchangeid=c.currency
 		inner join #UpdateMaxPT m on m.site=cu.site and m.currency=e.currency
-		where (AgentPT<>s.MaxPT or cs.apositiontaking<>s.MaxPT/100.0)
+		where (AgentPT<>s.MaxPT or cs.apositiontaking<>s.MaxPT/100.0
+		or (cs.alivepositiontaking <> s.MaxPT/100.0 and cs.sporttype = 1 and cs.bettype in (1,3,7,8))
+		)
 		and cs.sporttype <>154 --HR
 
 
@@ -287,4 +296,15 @@ left join vw_CustAccount ca with ( nolock) on ca. custid=s.custid and groupid>0
 left join CustGroupHeadline hl with ( nolock) on hl. GroupID=ca .groupID
 left join custinfo cu with ( nolock) on hl. custid=cu .custid
 
-
+drop table #supers
+drop table #DirectMaster
+drop table #DirectAgent
+drop table #dummySuper
+drop table #UpdateMaxPT
+drop table #UpdateMinPT
+drop table #superMaxPT
+drop table #masterMaxPT
+drop table #agentMaxPT
+drop table #SuperMinPT
+drop table #AgentMinPT
+drop table #MasterMinPT
