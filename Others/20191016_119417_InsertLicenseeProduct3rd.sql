@@ -17,3 +17,4 @@ INSERT INTO [bodb_Licensee].[dbo].[LicenseeProduct3rd]
 SELECT a.LicenseeID,@ProductID,0,1,GETDATE()
 FROM Licensees a WITH(NOLOCK)
 WHERE NOT EXISTS(SELECT TOP 1 1 FROM [LicenseeProduct3rd] b WITH(NOLOCK) WHERE b.LicenseeID=a.LicenseeID AND b.ProductID=@ProductID)
+	AND isDeposit = 1
