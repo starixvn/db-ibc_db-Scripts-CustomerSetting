@@ -42,7 +42,10 @@ BEGIN
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET MinPT = CS.SuperPT
+	SET MinPT = CASE WHEN @roleid = 4 THEN CS.SuperPT
+					 WHEN @roleid = 3 THEN CS.MasterPT
+					 WHEN @roleid = 2 THEN CS.AgentPT
+				END
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.custid = @custid
 		AND SportType IN (43,44)
