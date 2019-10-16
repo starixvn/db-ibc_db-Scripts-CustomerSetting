@@ -246,7 +246,7 @@ BEGIN
 
 	-------------------dummy account -----------------------------
 
-	CREATE TABLE #DummyCustList (CustID INT PRIMARY KEY, PT smallmoney, roleID tinyint)
+	--CREATE TABLE #DummyCustList (CustID INT PRIMARY KEY, PT smallmoney, roleID tinyint)
 	CREATE TABLE #DirectCustList (CustID INT PRIMARY KEY, PT smallmoney, roleID tinyint)
 
 	INSERT INTO #DirectCustList(CustID, PT, RoleID)
@@ -322,7 +322,7 @@ BEGIN
 
 	
 	DROP TABLE #CustList
-	DROP TABLE #DummyCustList
+	--DROP TABLE #DummyCustList
 	DROP TABLE #DirectCustList
 
 END    
