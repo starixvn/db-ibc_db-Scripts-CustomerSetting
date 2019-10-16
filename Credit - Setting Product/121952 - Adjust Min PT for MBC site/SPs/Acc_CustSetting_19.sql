@@ -22,21 +22,40 @@ BEGIN
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
 	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 	
-	UPDATE custoverride WITH(ROWLOCK, UPDLOCK)
-	SET minpositiontaking = maxpositiontaking, 
-		minlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN maxlivepositiontaking ELSE minlivepositiontaking END
-	WHERE custoverride.custid = @custid
+	IF @roleid = 4
+	BEGIN
+		
 	
 	IF @roleid = 2
 	BEGIN
+		UPDATE co
+		SET minpositiontaking = cs.apositiontaking,
+			minlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN alivepositiontaking ELSE minlivepositiontaking END
+		FROM custoverride co WITH(ROWLOCK)
+			INNER JOIN dbo.custSetting cs WITH (NOLOCK) ON co.custid = cs.custid AND cs.sporttype = cs.sporttype AND cs.bettype = co.bettype
+		WHERE co.custid = @custid
+
 		EXEC dbo.Acc_CustSetting_18 @recommend = @recommend, @mrecommend = @mrecommend, @srecommend = @srecommend, @roleid = @roleid, @Target = @Target				
 	END
 	ELSE IF @roleid = 3
 	BEGIN
+		UPDATE co
+		SET minpositiontaking = cs.mpositiontaking,
+			minlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN mlivepositiontaking ELSE minlivepositiontaking END
+		FROM custoverride co WITH(ROWLOCK)
+			INNER JOIN dbo.custSetting cs WITH (NOLOCK) ON co.custid = cs.custid AND cs.sporttype = cs.sporttype AND cs.bettype = co.bettype
+		WHERE co.custid = @custid
+
 		EXEC dbo.Acc_CustSetting_18 @mrecommend = @mrecommend, @srecommend = @srecommend, @roleid = @roleid, @Target = @Target					
 	END
 	ELSE IF @roleid= 4 
 	BEGIN
+		UPDATE co
+		SET minpositiontaking = co.maxpositiontaking,
+			minlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN maxlivepositiontaking ELSE minlivepositiontaking END
+		FROM custoverride co WITH(ROWLOCK)		
+		WHERE co.custid = @custid
+
 		EXEC dbo.Acc_CustSetting_18 @srecommend = @srecommend, @roleid = @roleid, @Target = @Target						
 	END		
 
