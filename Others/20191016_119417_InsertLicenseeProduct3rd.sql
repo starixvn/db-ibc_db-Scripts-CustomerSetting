@@ -3,7 +3,7 @@
 	Date: 2019/10/16
 	Task: Deposit - Non Peak Hours Promotion
 	Redmine: https://nexdev.net/issues/119417
-	DB: DBLIC/bodb_Licensee
+	DB: DBCUST/bodb_Licensee
  */
 DECLARE @ProductID INT
 SELECT @ProductID=ProductID FROM Product3rd WITH(NOLOCK) WHERE ProductName='NPH Promotion'
