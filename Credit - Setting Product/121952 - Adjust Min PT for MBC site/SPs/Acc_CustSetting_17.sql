@@ -218,7 +218,10 @@ BEGIN
 	UPDATE cs 
 	SET cs.spositiontaking = tmp.PT ,
 		cs.mpositiontaking = cs.mpositiontaking + tmp.PT - cs.spositiontaking ,
-		cs.apositiontaking = cs.apositiontaking + tmp.PT - cs.spositiontaking
+		cs.apositiontaking = cs.apositiontaking + tmp.PT - cs.spositiontaking,
+		cs.slivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.slivepositiontaking END,
+		cs.mlivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN cs.mlivepositiontaking + tmp.PT - cs.slivepositiontaking ELSE cs.mlivepositiontaking END,
+		cs.alivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN cs.alivepositiontaking + tmp.PT - cs.slivepositiontaking ELSE cs.alivepositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
 	WHERE tmp.roleID = 4
@@ -252,13 +255,13 @@ BEGIN
 	SELECT CustID, PT, RoleID FROM #CustList WHERE roleid IN (2,3)
 
 	INSERT INTO #DummyCustList(CustID,PT,roleID)
-	SELECT ci.srecommend,tmp.PT,4 -- Dummy super
+	SELECT DISTINCT ci.srecommend,tmp.PT,4 -- Dummy super
 	FROM #DirectCustList tmp 
 		INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid 
 
 
 	INSERT INTO #DummyCustList(CustID,PT,roleID)
-	SELECT ci.mrecommend,tmp.PT,3 -- Dummy master
+	SELECT DISTINCT ci.mrecommend,tmp.PT,3 -- Dummy master
 	FROM #DirectCustList tmp 
 		INNER JOIN custinfo ci WITH(NOLOCK) ON tmp.CustID = ci.custid AND ci.roleid = 2
 
@@ -269,7 +272,13 @@ BEGIN
 									WHEN tmp.roleid = 3 THEN tmp.PT 
 									ELSE cs.mpositiontaking END,
 		cs.apositiontaking = CASE WHEN tmp.roleid = 4 THEN tmp.PT
-									ELSE cs.apositiontaking END
+									ELSE cs.apositiontaking END,
+		cs.slivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.slivepositiontaking END,
+		cs.mlivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
+									WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT 
+									ELSE cs.mlivepositiontaking END,
+		cs.alivepositiontaking = CASE WHEN tmp.roleid = 4 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT
+									ELSE cs.alivepositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DummyCustList tmp ON cs.custid = tmp.CustID
 
@@ -286,10 +295,13 @@ BEGIN
 	WHERE cs.SportType IN (43,44)
 	
 	------------------------dirrect account---------------------------
+
 	--> FOR SportBook
 	UPDATE cs 
 	SET cs.mpositiontaking = CASE WHEN tmp.roleid = 3 THEN tmp.PT ELSE cs.mpositiontaking END,
-		cs.apositiontaking = CASE WHEN tmp.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END
+		cs.apositiontaking = CASE WHEN tmp.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END,
+		cs.mlivepositiontaking = CASE WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.mlivepositiontaking END,
+		cs.alivepositiontaking = CASE WHEN tmp.roleid = 2 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.alivepositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 	
