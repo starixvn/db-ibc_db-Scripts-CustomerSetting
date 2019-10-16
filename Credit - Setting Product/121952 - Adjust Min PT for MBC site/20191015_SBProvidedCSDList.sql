@@ -173,9 +173,9 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		 inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #supers s on s.custid=co.custid
 		where (
-		--co.minpositiontaking<>cs.spositiontaking
-		--or (minlivepositiontaking <> cs.slivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		--or 
+		co.minpositiontaking<>cs.spositiontaking
+		or (minlivepositiontaking <> cs.slivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		or 
 		ca.MinPT<>ca.SuperPT
 		)
 		and cs.sporttype <>154 --HR
@@ -189,12 +189,12 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		 inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #DirectMaster s on s.custid=co.custid
 		where (
-		--co.minpositiontaking<>cs.mpositiontaking
-		--or (minlivepositiontaking <> cs.mlivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		--or
+		co.minpositiontaking<>cs.mpositiontaking
+		or (minlivepositiontaking <> cs.mlivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		or
 		 ca.MinPT<>ca.MasterPT
 		)
-		--and cs.sporttype <>154 --HR
+		and cs.sporttype <>154 --HR
 		union
 		select custid from #masterMaxPT where minpt=[Current MaxPT] 
 
@@ -205,18 +205,16 @@ select distinct co.custid,co.minpositiontaking 'MinPT',cs.apositiontaking 'Curre
 		inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and cs.bettype=co.bettype
 		inner join #DirectAgent s on s.custid=co.custid
 		where (
-		--co.minpositiontaking<>cs.apositiontaking
-		--or (minlivepositiontaking <> cs.alivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
-		--or 
+		co.minpositiontaking<>cs.apositiontaking
+		or (minlivepositiontaking <> cs.alivepositiontaking and co.sporttype = 1 and co.bettype in (1,3,7,8))
+		or 
 		ca.MinPT<>ca.AgentPT
 		)
-		--and cs.sporttype <>154 --HR
+		and cs.sporttype <>154 --HR
 		union
 		select custid from #agentMaxPT where minpt=[Current MaxPT]
 
-select top 100 minpositiontaking,mpositiontaking from custOverride co with (nolock)
-inner join custsetting cs with (nolock) on cs.custid=co.custid and cs.sporttype=co.sporttype and co.bettype=cs.bettype
-		where co.custid=495957
+
 
 -- List 1. export excel file list update MaxPT
 	select  isnull (cu. username,'Not assign group' ) 'Headline',s.username,s.custid,'Super' 'Level',s .site, e.currency,
