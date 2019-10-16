@@ -294,10 +294,16 @@ BEGIN
 
 	--> FOR SportBook
 	UPDATE cs 
-	SET cs.mpositiontaking = CASE WHEN tmp.roleid = 3 THEN tmp.PT ELSE cs.mpositiontaking END,
+	SET cs.mpositiontaking = CASE WHEN tmp.roleid = 3 THEN tmp.PT 
+								  WHEN tmp.roleid = 2 THEN 0
+								ELSE cs.mpositiontaking END,
 		cs.apositiontaking = CASE WHEN tmp.roleid = 2 THEN tmp.PT ELSE cs.apositiontaking END,
-		cs.mlivepositiontaking = CASE WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.mlivepositiontaking END,
-		cs.alivepositiontaking = CASE WHEN tmp.roleid = 2 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.alivepositiontaking END
+		cs.spositiontaking = 0,
+		cs.mlivepositiontaking = CASE WHEN tmp.roleid = 3 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT 
+									  WHEN tmp.roleid = 2 AND sporttype = 1 and bettype IN (1,3,7,8) THEN 0
+									ELSE cs.mlivepositiontaking END,
+		cs.alivepositiontaking = CASE WHEN tmp.roleid = 2 AND sporttype = 1 and bettype IN (1,3,7,8) THEN tmp.PT ELSE cs.alivepositiontaking END,
+		cs.slivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN 0 ELSE cs.slivepositiontaking END
 	FROM CustSetting cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 	
@@ -309,8 +315,11 @@ BEGIN
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET cs.MasterPT = CASE WHEN tmp.roleid = 3 THEN tmp.PT * 100  ELSE cs.MasterPT END,
-		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT * 100  ELSE cs.AgentPT END
+	SET cs.MasterPT = CASE  WHEN tmp.roleid = 3 THEN tmp.PT * 100  
+							WHEN tmp.roleid = 2 THEN 0
+							ELSE cs.MasterPT END,
+		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT * 100  ELSE cs.AgentPT END,
+		cs.SuperPT = 0
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
 	WHERE cs.SportType IN (43,44)
