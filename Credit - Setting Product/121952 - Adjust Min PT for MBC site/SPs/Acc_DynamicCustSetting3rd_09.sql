@@ -32,7 +32,7 @@ BEGIN
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
 				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			  AND cs.CustID = @custid
 	END
 
@@ -43,7 +43,7 @@ BEGIN
 			cs.MasterPT = @PT,					
 			cs.AgentPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @srecommend
 	
 		UPDATE cs 
@@ -52,7 +52,7 @@ BEGIN
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
 				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
 	END
 
@@ -63,13 +63,13 @@ BEGIN
 			cs.MasterPT = @PT,					
 			cs.AgentPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @srecommend
 
 		UPDATE cs 
 		SET cs.MasterPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @mrecommend
 	
 		UPDATE cs 
@@ -78,7 +78,7 @@ BEGIN
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
 				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
-		WHERE cs.sporttype IN (248,212,220,180,181,182,183,184,185,186,190,191,192,193,199) --PP, Macau, Lottery, Virtual Sports
+		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
 	END            
 END    
