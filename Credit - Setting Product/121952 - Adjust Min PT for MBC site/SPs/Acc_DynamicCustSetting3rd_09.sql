@@ -22,7 +22,6 @@ BEGIN
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
 	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
 
-	-------------------------------Normal account ----------------------------
 	IF @roleid = 4
 	BEGIN
 		UPDATE cs 
