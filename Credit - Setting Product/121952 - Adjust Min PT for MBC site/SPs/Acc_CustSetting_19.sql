@@ -20,11 +20,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN	
 		
 	DECLARE @roleid int, @srecommend int, @mrecommend int, @recommend int
-	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid
-	
-	IF @roleid = 4
-	BEGIN
-		
+	SELECT @roleid = roleid, @srecommend=srecommend, @mrecommend=mrecommend, @recommend=recommend FROM customer WITH (NOLOCK) WHERE custid = @custid		
 	
 	IF @roleid = 2
 	BEGIN
