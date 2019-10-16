@@ -25,13 +25,11 @@ BEGIN
 	IF @roleid = 4
 	BEGIN
 		UPDATE cs 
-		SET cs.MaxPT = PS.MaxPT, --Profiles
+		SET cs.MaxPT = @PT,
 			cs.SuperPT  =  @PT ,
 			cs.MasterPT =  cs.MasterPT + @PT - cs.SuperPT ,
 			cs.AgentPT  =  cs.AgentPT + @PT - cs.SuperPT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
-				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			  AND cs.CustID = @custid
 	END
@@ -48,10 +46,8 @@ BEGIN
 	
 		UPDATE cs 
 		SET cs.MasterPT = @PT,
-			cs.MaxPT = PS.MaxPT
+			cs.MaxPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
-				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
 	END
@@ -74,10 +70,8 @@ BEGIN
 	
 		UPDATE cs 
 		SET cs.AgentPT = @PT,
-			cs.MaxPT = PS.MaxPT
+			cs.MaxPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-			INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
-				ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 		WHERE cs.sporttype IN (212,220,180,181,182,183,184,185,186,190,191,192,193) -- Macau, Lottery, Virtual Sports
 			AND cs.CustID = @custid
 	END            

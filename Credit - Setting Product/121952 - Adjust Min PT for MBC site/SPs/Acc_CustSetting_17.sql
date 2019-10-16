@@ -233,14 +233,12 @@ BEGIN
 
 	--> FOR Muay Thai, E-Sports
 	UPDATE cs 
-	SET cs.MaxPT = PS.MaxPT, --Profiles
+	SET cs.MaxPT = tmp.PT * 100,
 		cs.SuperPT  =  tmp.PT * 100 ,
 		cs.MasterPT =  cs.MasterPT + tmp.PT * 100 - cs.SuperPT ,
 		cs.AgentPT  =  cs.AgentPT + tmp.PT * 100 - cs.SuperPT
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #CustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
-			ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 	WHERE cs.SportType IN (43,44) AND tmp.roleID = 4
 
 
@@ -313,11 +311,9 @@ BEGIN
 	UPDATE cs 
 	SET cs.MasterPT = CASE WHEN tmp.roleid = 3 THEN tmp.PT * 100  ELSE cs.MasterPT END,
 		cs.AgentPT = CASE WHEN tmp.roleid = 2 THEN tmp.PT * 100  ELSE cs.AgentPT END,
-		cs.MaxPT = PS.MaxPT --Profiles
+		cs.MaxPT = tmp.PT * 100
 	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #DirectCustList tmp ON cs.custid = tmp.CustID
-		INNER JOIN ProductSettingDetail ps  WITH (NOLOCK)
-			ON ps.SportType = cs.SportType and cs.BetType = ps.BetType and ps.SettingType = 1
 	WHERE cs.SportType IN (43,44)
 
 	
