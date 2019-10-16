@@ -89,6 +89,7 @@ WHERE ci.roleid = 4
     and ci.username not like 'SIBC%'
     and ci.username not like '%ACCSuper%'
 	and cu.closed=0 
+	AND ci.username NOT IN ('MEA','MEB','S90AR','S90C','S90H','S90R','S90RM','SF8') --exclude headline mea, s90r, sf8
 
 
 
@@ -108,6 +109,7 @@ CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
 		AND ci.custid <= @max_custid 
 		AND c.Enabled=1
 		and c.closed=0 
+		AND c.username NOT IN ('M90RM') --exclude headline mea, s90r, sf8
 
 		
 	--- get direct agent
