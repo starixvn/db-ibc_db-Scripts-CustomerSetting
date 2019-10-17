@@ -575,7 +575,7 @@ BEGIN
 		
 	UPDATE TOP (1) t 
 	SET isfinished = 1
-		,@custid = custid	
+		,@custid = ci.custid	
 		,@PT = PT	
 	FROM #tmpCust t	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = t.custid
