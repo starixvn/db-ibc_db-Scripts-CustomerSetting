@@ -556,11 +556,13 @@ UNION ALL SELECT 5994			--CHTB
 ------------- PROCESS --------------------
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #tmpCust
+	UPDATE TOP (1) t 
 	SET isfinished = 1
 		,@custid = custid	
-		,@PT = PT			
-	WHERE isfinished = 0
+		,@PT = PT	
+	FROM #tmpCust t	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = t.custid
+	WHERE isfinished = 0 AND ci.roleid = 4
 	
 	IF @@ROWCOUNT = 0 BREAK
 
