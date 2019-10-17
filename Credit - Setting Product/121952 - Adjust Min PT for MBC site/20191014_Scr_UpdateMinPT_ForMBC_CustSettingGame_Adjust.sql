@@ -583,7 +583,7 @@ BEGIN
 	EXEC dbo.Acc_CustSetting3rd_07 @srecommend = @custid , @roleid = 4, @mode = 'Keno', @sporttype=202, @bettype = 1513
 
 	EXEC dbo.Acc_CustSetting3rd_07 @srecommend = @custid , @roleid = 4, @mode = 'Keno', @sporttype=202, @bettype = 1514
-	WAITFOR DELAY '00:00:0.100'
+	--WAITFOR DELAY '00:00:0.100'
 END			
 
  DROP TABLE #tmpCust
