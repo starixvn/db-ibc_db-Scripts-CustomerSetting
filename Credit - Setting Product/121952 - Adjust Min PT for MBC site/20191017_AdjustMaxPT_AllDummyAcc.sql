@@ -14,7 +14,7 @@ BEGIN
 	
 	CREATE TABLE #tmp (custID INT)
 	CREATE TABLE #tmpBatch (Custid INT)
-	DECLARE @Batch INT = 2
+	DECLARE @Batch INT = 4000
 
 	INSERT INTO #tmp (custID) 	
 	SELECT DISTINCT cs.custid
@@ -39,6 +39,7 @@ BEGIN
 
 		TRUNCATE TABLE #tmpBatch
 
+		WAITFOR DELAY '00:00:0.100'
 	END
 END    
 GO
