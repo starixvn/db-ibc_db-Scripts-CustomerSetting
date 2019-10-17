@@ -43,3 +43,6 @@ BEGIN
 	END
 END    
 GO
+
+--Run on DBCUST
+EXEC Acc_CustSetting3rd_19
