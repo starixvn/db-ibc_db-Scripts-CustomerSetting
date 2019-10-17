@@ -549,8 +549,7 @@ UNION ALL SELECT 14592746		--MOD
 UNION ALL SELECT 23093813		--KFT
 UNION ALL SELECT 23288344		--THF
 UNION ALL SELECT 23343127		--KFU
-UNION ALL SELECT 29609449		--HTT
-UNION ALL SELECT 5994			--CHTB		  
+UNION ALL SELECT 29609449		--HTT	  
 
 
 ------------- PROCESS --------------------
@@ -558,11 +557,10 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) t 
 	SET isfinished = 1
-		,@custid = ci.custid	
+		,@custid = t.custid	
 		,@PT = PT	
 	FROM #tmpCust t	
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = t.custid
-	WHERE isfinished = 0 AND ci.roleid = 4
+	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
@@ -585,7 +583,7 @@ BEGIN
 	EXEC dbo.Acc_CustSetting3rd_07 @srecommend = @custid , @roleid = 4, @mode = 'Keno', @sporttype=202, @bettype = 1513
 
 	EXEC dbo.Acc_CustSetting3rd_07 @srecommend = @custid , @roleid = 4, @mode = 'Keno', @sporttype=202, @bettype = 1514
-	--WAITFOR DELAY '00:00:0.100'
+	WAITFOR DELAY '00:00:0.100'
 END			
 
  DROP TABLE #tmpCust

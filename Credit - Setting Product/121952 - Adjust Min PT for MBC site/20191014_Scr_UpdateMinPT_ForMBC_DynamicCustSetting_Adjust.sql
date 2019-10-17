@@ -567,7 +567,7 @@ UNION ALL SELECT 23093813		--KFT
 UNION ALL SELECT 23288344		--THF
 UNION ALL SELECT 23343127		--KFU
 UNION ALL SELECT 29609449		--HTT
-UNION ALL SELECT 5994			--CHTB		  		  
+ 		  
 
 ------------- PROCESS --------------------
 WHILE (1 = 1)
@@ -575,11 +575,10 @@ BEGIN
 		
 	UPDATE TOP (1) t 
 	SET isfinished = 1
-		,@custid = ci.custid	
+		,@custid = t.custid	
 		,@PT = PT	
 	FROM #tmpCust t	
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = t.custid
-	WHERE isfinished = 0 AND ci.roleid = 4
+	WHERE isfinished = 0
 
 	IF @@ROWCOUNT = 0 BREAK
 
