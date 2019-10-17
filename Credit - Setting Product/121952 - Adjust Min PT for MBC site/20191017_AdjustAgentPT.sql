@@ -6,13 +6,18 @@
 USE CustDB
 GO
 
+CREATE TABLE #CustList (CustID INT, RoleId TINYINT, NewPT SMALLMONEY)
+
+INSERT INTO #CustList(CustID, RoleId, NewPT)
+SELECT 1937408, 2, 0 -- 6666AHK
+
 UPDATE cs
-SET cs.apositiontaking = 0,
-	cs.alivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN 0 ELSE cs.alivepositiontaking END
+SET cs.apositiontaking = NewPT,
+	cs.alivepositiontaking = CASE WHEN sporttype = 1 and bettype IN (1,3,7,8) THEN NewPT ELSE cs.alivepositiontaking END
 FROM dbo.CustSetting cs WITH (ROWLOCK)
-WHERE cs.CustID IN (
-1937408 -- 6666AHK
-)
+	INNER JOIN #CustList t ON t.CustID = cs.custid
+WHERE t.RoleId = 2
+
 	
 
 
