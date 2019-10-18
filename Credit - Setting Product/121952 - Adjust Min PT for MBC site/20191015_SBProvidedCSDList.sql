@@ -9,12 +9,12 @@
 	- Remove ci.username NOT IN ('MEA','MEB','S90AR','S90C','S90H','S90R','S90RM','SF8') --exclude headline mea, s90r, sf8
 	- Remove c.username NOT IN ('M90RM') --exclude headline mea, s90r, sf8
 	- Remove wrong cust direct account list
-	- Remove phone betting list
+	- Exclude phone betting list
  */
 
 
-
  
+
 create table #UpdateMinPT (site nvarchar(50), currency nvarchar(50), MaxPT int)
 insert into #UpdateMinPT (site,currency,MaxPT)
 SELECT 'BEST-ODDS','EURO', 85 UNION ALL
@@ -57,14 +57,34 @@ SELECT 'XYZBet','RMB', 85
 select * into #UpdateMaxPT from #UpdateMinPT
 where MaxPT<>-1
 
+SELECT ci.custid, ci.username INTO #WrongDirectMaster
+FROM dbo.CustDirectAccount ca WITH (NOLOCK)
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = ca.CustID
+WHERE ci.srecommend NOT IN (SELECT custid FROM dbo.Acc_CustDirect cd WITH (NOLOCK))
+	AND ci.roleid = 3
+
+SELECT ci.custid, ci.username INTO #WrongDirectAgent
+FROM dbo.CustDirectAccount ca WITH (NOLOCK)
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = ca.CustID
+WHERE ci.mrecommend NOT IN (SELECT custid FROM dbo.Acc_CustDirect cd WITH (NOLOCK))
+	AND ci.roleid = 2
+
+	SELECT ci.custid, ci.username INTO #WrongDirectMember
+FROM dbo.CustDirectAccount ca WITH (NOLOCK)
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = ca.CustID
+WHERE ci.recommend NOT IN (SELECT custid FROM dbo.Acc_CustDirect cd WITH (NOLOCK))
+	AND ci.roleid = 1
+
+
+
 -- get dummy super list
 SELECT DISTINCT srecommend custid INTO #dummySuper
 FROM CustDirectAccount da WITH (NOLOCK)
      INNER JOIN vw_customer ci WITH(NOLOCK) ON da.CustID = ci.custid
 WHERE  ci.site in ('BEST-ODDS','XYZBET','INDO','611111','733333','722222','755555','222223','7aa666','KORIBC')
 and ci.roleid IN (2, 3) AND ci.currency <> 20
-and ci.username not in ('SA-SD$','831US','339HK','BA01RM','IBC-CASINORM','ALBERT','DELIRM','Z-ERIC','PLORM','BA03RM','BA07RM','M195RMB','7899HK','YENCASH','IBC 0506','RICHHILL','009RM','M46RM','MYKRM','MMYBSD','M68RMB','033rmb','MYONGRM','ACGRM','S33R91','SSTM','SB1R','12BETRMB01','12BETCBankRMB','VNM-AGRO-BOS USD SA','BMW1','271SD','AHBUSD','D1RMB','VNM-AMA-HSBC USD SA','BA06RM','PHERM','PHL-LSEE-M88 USD','ATUS','VNM-PRE-SOG USD SA','QCHMBCUSD','VNM-QCH-IPB USD SA','AWC','MJHK','VNM-PRE-RBS AUD SA','PHL-OneWork EUR','HLTestCY01','TPG001','TPG002','TPG003','TPG005','TPG006','TPG007','TPG008','TPG009','TPG010','TPG011','TPG012','TPG013','TPG015','TPG016','TPG017','TPG018','TPG019','TPG020','TPG021','TPG022','CN88','HL-CN88 CNY','HL-CN88 PHP','HL-CN88 HKD')
-
+and ci.custid not in (select custid from #WrongDirectMaster
+	union  select custid from #WrongDirectAgent )
 UNION
 SELECT DISTINCT ci.srecommend
 FROM CustDirectAccount da WITH (NOLOCK)
@@ -72,11 +92,9 @@ FROM CustDirectAccount da WITH (NOLOCK)
      INNER JOIN vw_customer ca WITH(NOLOCK) ON ci.recommend = ca.custid
 WHERE ca.site in ('BEST-ODDS','XYZBET','INDO','611111','733333','722222','755555','222223','7aa666','KORIBC')
      AND ci.roleid IN (1) AND ci.currency <> 20
-	 and ci.username not in ('SA-SD$','831US','339HK','BA01RM','IBC-CASINORM','ALBERT','DELIRM','Z-ERIC','PLORM','BA03RM','BA07RM','M195RMB','7899HK','YENCASH','IBC 0506','RICHHILL','009RM','M46RM','MYKRM','MMYBSD','M68RMB','033rmb','MYONGRM','ACGRM','S33R91','SSTM','SB1R','12BETRMB01','12BETCBankRMB','VNM-AGRO-BOS USD SA','BMW1','271SD','AHBUSD','D1RMB','VNM-AMA-HSBC USD SA','BA06RM','PHERM','PHL-LSEE-M88 USD','ATUS','VNM-PRE-SOG USD SA','QCHMBCUSD','VNM-QCH-IPB USD SA','AWC','MJHK','VNM-PRE-RBS AUD SA','PHL-OneWork EUR','HLTestCY01','TPG001','TPG002','TPG003','TPG005','TPG006','TPG007','TPG008','TPG009','TPG010','TPG011','TPG012','TPG013','TPG015','TPG016','TPG017','TPG018','TPG019','TPG020','TPG021','TPG022','CN88','HL-CN88 CNY','HL-CN88 PHP','HL-CN88 HKD')
+    and ci.custid not in (select custid from #WrongDirectMember)
 
 
-DECLARE @max_custid INT
---SELECT @max_custid =39193683
 
 SELECT ci.custid,m.MaxPT into #supers
 FROM vw_customer ci WITH (NOLOCK) 
@@ -88,7 +106,6 @@ inner join custinfo cu with (nolock) on cu.custid=ci.custid
 WHERE ci.roleid = 4  	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	--AND ci.custid <= @max_custid
 	AND ci.currency<>20
 	and cs.IsInternal=0
 	and ci.custid>=100
@@ -115,10 +132,10 @@ CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
 	inner join #UpdateMinPT m on m.site=ci.site and m.currency=e.currency
 	WHERE EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid=3 AND ci.srecommend in (select custid from #dummySuper)
-		--AND ci.custid <= @max_custid 
 		AND c.Enabled=1
 		and c.closed=0 
-		and ci.username not in ('M9999RM','ISN','ah501','M9999RM','MHK1','STELIM')
+		and c.custid not in (select custid from #WrongDirectMaster)
+		and ci.username not in ('M9999RM','ISN','ah501','STELIM','MHK1') -- exclude phone betting line
 
 		
 	--- get direct agent
@@ -130,14 +147,13 @@ CREATE TABLE #DirectMaster (CustID INT, MaxPT int )
 	inner join #UpdateMinPT m on m.site=ci.site and m.currency=e.currency
 	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		and ci.roleid = 2 AND ci.srecommend in (select custid from #dummySuper)
-		--AND ci.custid <= @max_custid
 		AND c.Enabled=1
 		and c.closed=0 
-		and c.custid not in (16129,922361)--7899HK ,BMW1 wrong data direct agent
-		and c.username not in ('MC-C1X2','MC-OS','MC-MTD','MC-PH','Mollybet','6666PEU','MBET','6666AHK','ccti','xyz100RM','8RM','BARM','ChesterHK')
+		and c.custid not in (select custid from #WrongDirectAgent)
+		and c.username not in ('MC-C1X2','MC-OS','MC-MTD','MC-PH','Mollybet','6666PEU','MBET','6666AHK','ccti','xyz100RM','8RM','BARM','ChesterHK')-- exclude phone betting line
 
 
-
+		
 -- get list super update maxPT
 select distinct co.custid, co.minpositiontaking 'MinPT',cs.spositiontaking 'Current MaxPT',s.MaxPT/100.0 'Expected MaxPT' into #superMaxPT  from custOverride co with (nolock)
 		inner join CustPTSetting3rd_Agent ca with (nolock) on ca.custid=co.custid and ca.sporttype in (43,44) --SB2,E-sports
