@@ -1,8 +1,8 @@
-declare @custid INT
-	,@roleid TINYINT  
-	,@SportType SMALLINT = 0  
-	,@RuleId SMALLINT = 0  
+declare   
+	@RuleId SMALLINT = 0  
  	
+	select distinct sporttype into #SportType from ProductSettingDetail with (nolock)
+	where SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports 
 -- get dummy super list
 SELECT DISTINCT srecommend custid INTO #dummySuper
 FROM CustDirectAccount da WITH (NOLOCK)
@@ -18,8 +18,7 @@ WHERE ca.site in ('BEST-ODDS','XYZBET','INDO','611111','733333','722222','755555
      AND ci.roleid IN (1) AND ci.currency <> 20
 
 
---DECLARE @max_custid INT
---SELECT @max_custid =39193683
+
 SELECT ci.custid into #supers
 FROM vw_customer ci WITH (NOLOCK) 
 inner join custinfo cu with (nolock) on cu.custid=ci.custid
@@ -28,7 +27,6 @@ inner join custinfo cu with (nolock) on cu.custid=ci.custid
 WHERE ci.roleid = 4  	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	--AND ci.custid <= @max_custid
 	AND ci.currency<>20
 	and cs.IsInternal=0
 	and ci.username not like '3rdSuper%'
@@ -42,14 +40,7 @@ WHERE ci.roleid = 4
 			@mrecommend INT = 0, 
 			@recommend INT = 0
 	
-	IF @roleid = 4
-		SELECT @srecommend = @custid
-	ELSE IF @roleid = 3
-		SELECT @srecommend = srecommend FROM dbo.CustInfo WITH (NOLOCK) WHERE custid = @custid
-	ELSE IF @roleid = 2
-		SELECT @srecommend = srecommend, @mrecommend = mrecommend FROM dbo.CustInfo WITH (NOLOCK) WHERE custid = @custid
-	ELSE 
-		SELECT @srecommend = srecommend, @mrecommend = mrecommend, @recommend = recommend FROM dbo.CustInfo WITH (NOLOCK) WHERE custid = @custid
+	
 	
 	-- Starting DATA PREPARATION
 	--TRUNCATE TABLE CheckPTResult_Credit	
@@ -82,13 +73,10 @@ WHERE ci.roleid = 4
 		INNER JOIN dbo.CustProductStatus stt WITH (NOLOCK) ON ci.CustID = stt.CustID
 		LEFT JOIN dbo.ProductStatusProfile prf WITH(NOLOCK) ON prf.Sporttype = cs.sporttype AND prf.bettype = cs.bettype
 	WHERE ci.srecommend in (select custid from #supers)  
-			AND ci.mrecommend = CASE WHEN @mrecommend = 0 THEN ci.mrecommend ELSE @mrecommend END
-			AND ci.recommend = CASE WHEN @recommend = 0 THEN ci.recommend ELSE @recommend END
-			AND ci.custid = CASE WHEN @roleid = 1 THEN @custid ELSE ci.custid END
 			AND ci.roleid = 1  
 			AND ci.Enabled = 1
 			AND ci.Currency NOT IN (20,27,28)     
-			AND cs.SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports 
+			AND cs.SportType in (select sporttype from #SportType)
 			AND (
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
@@ -102,14 +90,11 @@ WHERE ci.roleid = 4
 		INNER JOIN dbo.CustPTGroupSetting3rd_Member cs WITH (NOLOCK) ON cs.AgentID = ci.recommend  
 		INNER JOIN dbo.CustProductStatus stt WITH (NOLOCK) ON ci.CustID = stt.CustID
 		LEFT JOIN dbo.ProductStatusProfile prf WITH(NOLOCK) ON prf.Sporttype = cs.sporttype AND prf.bettype = cs.bettype
-	WHERE ci.srecommend = @srecommend  
-			AND ci.mrecommend = CASE WHEN @mrecommend = 0 THEN ci.mrecommend ELSE @mrecommend END
-			AND ci.recommend = CASE WHEN @recommend = 0 THEN ci.recommend ELSE @recommend END
-			AND ci.custid = CASE WHEN @roleid = 1 THEN @custid ELSE ci.custid END
+	WHERE ci.srecommend in (select custid from #supers)
 			AND ci.roleid = 1  
 			AND ci.Enabled = 1
 			AND ci.Currency NOT IN (20,27,28)     
-			AND cs.SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports 
+			AND cs.SportType in (select sporttype from #SportType)
 			AND (
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
@@ -122,13 +107,11 @@ WHERE ci.roleid = 4
 		INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON ci.CustID = cs.CustID
 		INNER JOIN dbo.CustProductStatus stt WITH (NOLOCK) ON ci.CustID = stt.CustID
 		LEFT JOIN dbo.ProductStatusProfile prf WITH(NOLOCK) ON prf.Sporttype = cs.sporttype AND prf.bettype = cs.bettype
-	WHERE ci.srecommend = @srecommend 
-			AND ci.mrecommend = CASE WHEN @mrecommend = 0 THEN ci.mrecommend ELSE @mrecommend END
-			AND ci.recommend = CASE WHEN @recommend = 0 THEN ci.recommend ELSE @recommend END
+	WHERE ci.srecommend in (select custid from #supers)
 			AND ci.roleid = 2  
 			AND ci.Enabled = 1
 			AND ci.Currency NOT IN (20,27,28)     
-			AND cs.SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports 
+			AND cs.SportType in (select sporttype from #SportType)
 			AND (
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
@@ -141,12 +124,11 @@ WHERE ci.roleid = 4
 		INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON ci.CustID = cs.CustID
 		INNER JOIN dbo.CustProductStatus stt WITH (NOLOCK) ON ci.CustID = stt.CustID
 		LEFT JOIN dbo.ProductStatusProfile prf WITH(NOLOCK) ON prf.Sporttype = cs.sporttype AND prf.bettype = cs.bettype
-	WHERE ci.srecommend = @srecommend  
-			AND ci.mrecommend = CASE WHEN @mrecommend = 0 THEN ci.mrecommend ELSE @mrecommend END
+	WHERE ci.srecommend in (select custid from #supers)
 			AND ci.roleid = 3  
 			AND ci.Enabled = 1
 			AND ci.Currency NOT IN (20,27,28)     
-			AND cs.SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports  
+			AND cs.SportType in (select sporttype from #SportType) 
 			AND (
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
@@ -159,18 +141,16 @@ WHERE ci.roleid = 4
 		INNER JOIN dbo.CustPTSetting3rd_Agent cs WITH (NOLOCK) ON ci.CustID = cs.CustID
 		INNER JOIN dbo.CustProductStatus stt WITH (NOLOCK) ON ci.CustID = stt.CustID
 		LEFT JOIN dbo.ProductStatusProfile prf WITH(NOLOCK) ON prf.Sporttype = cs.sporttype AND prf.bettype = cs.bettype
-	WHERE ci.srecommend = @srecommend  
+	WHERE ci.srecommend in (select custid from #supers)
 			AND ci.roleid = 4  
 			AND ci.Enabled = 1
 			AND ci.Currency NOT IN (20,27,28)     
-			AND cs.SportType in (43,44, 212,220,180,181,182,183,184,185,186,190,191,192,193) -- SB2, Esports,Macau, Lottery, Virtual Sports 
+			AND cs.SportType in (select sporttype from #SportType) 
 			AND (
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
 					CASE substring(bitmapHasSynced, 1+((bitmapOrder-1)/8), 1) & POWER(2, (bitmapOrder-1)%8) WHEN 0 THEN 0 ELSE 1 END = 1		 
 				)
-	
-	
 
 	CREATE CLUSTERED INDEX CIX_MemberPT ON #MemberPT(CustID, sporttype, bettype)
 	CREATE CLUSTERED INDEX CIX_AgentPT ON #AgentPT(CustID, sporttype, bettype)
@@ -729,4 +709,3 @@ WHERE ci.roleid = 4
 				AND mrecommend IN (SELECT custid FROM #DirectMaster)			
 		END
 	END		
-	
