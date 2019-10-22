@@ -1,11 +1,11 @@
-USE CustDB
-GO
+/*<info serverAlias="DBCUST-CUSTDB" executers="bodbAdminNet" viewers="" isFunction="0" isNested="0"></info>*/
 
 ALTER PROC NAP_CWL_Initialize_Settings 
 	@ProductID                              INT
    , @BetTypeID_Begin                        INT
    , @BetTypeID_End                          INT
    , @BettypeIDs                             VARCHAR(2000) = ''
+   , @RepresentativeBettype				INT		    
    , @GroupID                                INT
    , @GroupName                              VARCHAR(200)
    , @Level1                                 MONEY         = 10000
@@ -42,6 +42,7 @@ AS
 	Revisions	 : 
 				- 20180319@Robert: Initialize CWL Settings
 				- 20181108@Elodie: Migrate bodb_Licensee to DBCUST [Redmine:#99855]
+				- 20191103@Robert: create new table WinLimit_ProductOffer [#122849]
      Ex		 :
 
      EXEC NAP_CWL_Initialize_Settings 
@@ -292,6 +293,10 @@ BEGIN
 				 AND t.GroupName = setting.GroupName
 		 );
 
+	   EXEC dbtxn.bodb02.dbo.NAP_CWL_ProductOffer_Initialize_Settings 
+		   @ProductID = @ProductID
+		 , @RepresentativeBettype = @RepresentativeBettype;
+
     WITH CTE_ProductSettingDetail
 	    AS (SELECT p.ProductID
 			   , p.GroupId
@@ -448,10 +453,4 @@ BEGIN
     DROP TABLE #Temp;
     DROP TABLE #Currency_Deposit;
 END;
-GO
-
-GRANT EXECUTE ON dbo.NAP_CWL_Initialize_Settings TO [bodbAdminNet] AS [dbo]; 
-GO
-
-GRANT VIEW DEFINITION ON dbo.NAP_CWL_Initialize_Settings TO [vnteam] AS [dbo]; 
 GO
