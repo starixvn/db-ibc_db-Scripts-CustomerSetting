@@ -29,8 +29,6 @@ EXEC sp_rename 'Acc_Rpt_CasinoSynchronise','DEL_Acc_Rpt_CasinoSynchronise'
 GO
 EXEC sp_rename 'Acc_SelCustomerGivenCredit','DEL_Acc_SelCustomerGivenCredit'
 GO
-EXEC sp_rename 'Age_LoginAdminVerifyTicket','DEL_Age_LoginAdminVerifyTicket'
-GO
 EXEC sp_rename 'NAP_CustomerInsRobotAccount','DEL_NAP_CustomerInsRobotAccount'
 GO
 EXEC sp_rename 'NAP_CustomerSelRobotAccounts','DEL_NAP_CustomerSelRobotAccounts'

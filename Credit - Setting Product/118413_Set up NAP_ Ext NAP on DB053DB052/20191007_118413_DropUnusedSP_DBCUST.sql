@@ -149,20 +149,6 @@ DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT3
 GO
 DROP PROCEDURE Acc_SelCustomerGivenCredit_UAT4
 GO
-DROP PROCEDURE DEL_Age_LoginAdminVerifyTicket
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_xpre
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_xtest
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT1
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT2
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT3
-GO
-DROP PROCEDURE Age_LoginAdminVerifyTicket_UAT4
-GO
 DROP PROCEDURE DEL_NAP_CustomerInsRobotAccount
 GO
 DROP PROCEDURE NAP_CustomerInsRobotAccount_xpre
