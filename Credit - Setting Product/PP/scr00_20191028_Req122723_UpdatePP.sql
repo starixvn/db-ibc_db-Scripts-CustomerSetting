@@ -7,7 +7,7 @@
  UPDATE a
  SET a.MaxStake=750,MaxLabel='750'
  FROM StakeLevelGroupDetail a WITH(ROWLOCK,UPDLOCK)
- WHERE StakeLevelID=857 AND GameTypeID=4124 
+ WHERE StakeLevelID=857 AND GameTypeID=4121
   
  
  UPDATE a
