@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: INSERT Global setting for Virtual game
+	Task: INSERT Global setting for Virtual game CREDIT
 	DB: DBCust/CustDB
 */
 --> ProductSettingDetail
@@ -21,10 +21,10 @@ INSERT INTO ProductSettingDetail(
 	,SettingStatus
 	,IntervalValue
 	)
-		  SELECT 13, 245, 4601, 0, 38, NULL, NULL,    1,    0,    0, 1, 1, 0, NULL
-UNION ALL SELECT 1 , 245, 4601, 0, 38, 90  , NULL, NULL, NULL, NULL, 1, 2, 0, NULL
-UNION ALL SELECT 6 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 1, 3, 0, NULL
-UNION ALL SELECT 8 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 2, 4, 0, NULL
+		  SELECT 13, 245, 4601, 0, 38, NULL, NULL,    1,    0,    0, 1, 1, 0, NULL --Product Status
+UNION ALL SELECT 1 , 245, 4601, 0, 38, 90  , NULL, NULL, NULL, NULL, 1, 2, 0, NULL --PT
+UNION ALL SELECT 6 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 1, 3, 0, NULL --SMA Win/Loss Limit
+UNION ALL SELECT 8 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 2, 4, 0, NULL --Bet Setting
 
 --> ProductStatusProfile
 INSERT INTO ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
@@ -48,8 +48,7 @@ WHERE ProductId = 22
 
 --> Stake level
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
-		  SELECT 13, 245, 4601, 'Level 1', 0
-UNION ALL SELECT 14, 245, 4601, 'Level 1', 1
+SELECT 13, 245, 4601, 'Level 1', 0
 
 INSERT INTO StakeLevel(
 	 GameTypeID
@@ -62,17 +61,4 @@ SELECT GameTypeID = 4601
 	,ResourceId = NULL
 	,GameGroupID = 13 --Credit
 
-INSERT INTO DEP_StakeLevel(
-	 StakeLevelID
-	,GameTypeID
-	,ExchangeId
-	,ResourceId
-	,GameGroupID
-)
-SELECT StakeLevelID = MAX(StakeLevelID) + 1
-	,GameTypeID = 4601
-	,ExchangeId = 20
-	,ResourceId = NULL
-	,GameGroupID = 14 --DEPOSIT
-FROM DEP_StakeLevel WITH(NOLOCK)
-
+GO
