@@ -18,11 +18,13 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
-
-	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
 	
 	DECLARE @ProductID INT = 38, @currency INT--, @MaxPT TINYINT, @MinPT TINYINT
 
@@ -96,6 +98,28 @@ BEGIN
 		CROSS APPLY @SportBettype t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.tBetType AND PSP.Sporttype = t.tSportType
 		INNER JOIN  #MemberStatus temp ON temp.CustID = c.custid
+
+	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT dl.CustID
+		  ,dpt.ProductSettingID
+	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
+		 INNER JOIN  #SMATemp temp ON temp.CustID = dl.custid
+		 INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
+		 INNER JOIN Dep_ProductSetting dpt WITH(NOLOCK) ON dp.SettingType = dpt.SettingType AND dpt.ProductID = 38
+	WHERE dp.ProductID = 22
+		AND dp.SettingType IN (4,1,8) -- Product Status, PT, Bet Limit
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT dl.CustID
+		  ,dpt.ProductSettingID
+	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
+		 INNER JOIN  #MemberTemp temp ON temp.CustID = dl.custid
+		 INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
+		 INNER JOIN Dep_ProductSetting dpt WITH(NOLOCK) ON dp.SettingType = dpt.SettingType AND dpt.ProductID = 38
+	WHERE dp.ProductID = 22
+		AND dp.SettingType IN (4,1,8) -- Product Status, PT, Bet Limit
 
 	------------------------------------PT Setting-------------------------------------------------	
 	--SMA LEVEL
@@ -210,7 +234,7 @@ FROM customer c WITH (NOLOCK)
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 WHERE c.roleid = 4  
  AND s.islicensee = 1
- AND c.currency = 20
+ --AND c.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -258,7 +282,7 @@ FROM customer c WITH (NOLOCK)
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 WHERE c.roleid = 4  
  AND s.islicensee = 1
- AND c.currency = 20
+ --AND c.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

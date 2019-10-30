@@ -23,6 +23,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+	
 	
 	DECLARE @ProductID INT = 38, @currency INT--, @MaxPT TINYINT, @MinPT TINYINT
 
@@ -288,7 +291,7 @@ FROM customer c WITH (NOLOCK)
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 WHERE c.roleid = 4  
  AND s.islicensee = 0
- AND c.currency = 20
+ --AND c.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -337,7 +340,7 @@ FROM customer c WITH (NOLOCK)
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 WHERE c.roleid = 4  
  AND s.islicensee = 0
- AND c.currency = 20
+ --AND c.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

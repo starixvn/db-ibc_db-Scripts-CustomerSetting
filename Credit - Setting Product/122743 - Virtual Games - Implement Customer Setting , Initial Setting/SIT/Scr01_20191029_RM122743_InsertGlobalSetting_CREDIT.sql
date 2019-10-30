@@ -44,11 +44,13 @@ SELECT 38
 	,DefaultLossLimit
 FROM LossLimit_GlobalSetting WITH(NOLOCK) 
 WHERE ProductId = 22
-	  AND exchangeID = 20
+	  --AND exchangeID = 20
 
 --> Stake level
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
 SELECT 13, 245, 4601, 'Level 1', 0
+
+DECLARE  @list varchar (max) = 'RM, HKK, KHR, PLN,$US, US$, UT, Yen, PTU, CHF, MKK, MMK, TH, PS, SD$, UUS, YNG,AUD,RMB, CY, YUN, PTH, HK$, DKK, SEK, NOK,IND, IDR, IN, IDD, DDD,THB, TB,WON,INH,INR, RUB,GBP, EURO, EUR,JPY'
 
 INSERT INTO StakeLevel(
 	 GameTypeID
@@ -57,8 +59,12 @@ INSERT INTO StakeLevel(
 	,GameGroupID
 )
 SELECT GameTypeID = 4601
-	,ExchangeId = 20
+	,ExchangeId = e.exchangeid
 	,ResourceId = NULL
-	,GameGroupID = 13 --Credit
+	,GameGroupID = 13 --Cred
+FROM exchange e WITH(NOLOCK) 
+	LEFT JOIN StakeLevel s WITH(NOLOCK) ON e.exchangeid = s.ExchangeId AND s.GameTypeID = 4601
+WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@list ,','))
+	AND s.ExchangeId IS NULL
 
 GO
