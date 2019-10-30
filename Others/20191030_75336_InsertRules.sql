@@ -4,6 +4,12 @@
 	Task: Insert Rules
 */
 
+
+ALTER TABLE Rule_Credit 
+ALTER COLUMN RuleName VARCHAR(200)
+
+DELETE FROM Rule_Credit WHERE RuleID BETWEEN 401 AND 425
+ 
 INSERT INTO Rule_Credit(RuleID,RuleName,ModifiedDate)
 SELECT 401	,'Super level: custid <> sreccomend',GETDATE() UNION ALL
 SELECT 402	,'Master level: custid <> mrecommend',GETDATE() UNION ALL
