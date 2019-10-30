@@ -1,7 +1,7 @@
 /*
 	Created By: Eden
 	Created Date: 20191029
-	Description: Stakelevel for Virtual Games DEPOSIT
+	Description: Stakelevel for Virtual Games CREDIT
 	DB: DBCust/CustDB	
 */
 USE CustDB
