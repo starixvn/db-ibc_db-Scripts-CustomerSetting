@@ -7,6 +7,93 @@
 
 	DECLARE @max_custid INT = xxx
 
+	DECLARE @VGSportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
+
+	INSERT INTO @VGSportBettype(SportType, BetType) VALUES (245, 4601)
+
+	--DELETE existing data
+	------------------------------------PT Setting-------------------------------------------------	
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustPTSetting3rd_Agent
+	FROM CustPTSetting3rd_Agent a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustPTSetting3rd_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustPTSetting3rd_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustPTSetting3rd_Member
+	FROM CustPTSetting3rd_Member a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustPTSetting3rd_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustPTSetting3rd_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.AgentID,a.SportType,a.BetType
+	INTO #CustPTGroupSetting3rd_Member
+	FROM CustPTGroupSetting3rd_Member a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.AgentID >@max_custid
+
+	DELETE a
+	FROM CustPTGroupSetting3rd_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustPTGroupSetting3rd_Member t ON a.AgentID = t.AgentID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	----------------------------------------WinLoss Limit Setting-------------------------------------------------		
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustWinLossLimit_Agent
+	FROM CustWinLossLimit_Agent a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustWinLossLimit_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustWinLossLimit_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustWinLossLimit_Member
+	FROM CustWinLossLimit_Member a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustWinLossLimit_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustWinLossLimit_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustStakeLevel_Agent
+	FROM CustStakeLevel_Agent a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #CustStakeLevel_Member
+	FROM CustStakeLevel_Member a WITH(NOLOCK)
+	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
+
+	DELETE a
+	FROM CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	DROP TABLE #CustPTGroupSetting3rd_Member
+	DROP TABLE #CustPTSetting3rd_Agent
+	DROP TABLE #CustPTSetting3rd_Member
+	DROP TABLE #CustStakeLevel_Agent
+	DROP TABLE #CustStakeLevel_Member
+	DROP TABLE #CustWinLossLimit_Agent
+	DROP TABLE #CustWinLossLimit_Member
+
+	---------------------CREATE setting for NEW ACCs-----------------------------------
 	CREATE TABLE #TempCust
 	(
 		CustID INT PRIMARY KEY CLUSTERED 
