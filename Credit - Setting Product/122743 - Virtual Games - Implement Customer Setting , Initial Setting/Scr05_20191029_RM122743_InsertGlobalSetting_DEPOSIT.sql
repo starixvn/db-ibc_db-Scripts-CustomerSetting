@@ -37,9 +37,9 @@ INSERT INTO Dep_ProductSettingDetail(
 	,MinDefaultValue
 	,IsApplyBA
 	)
-	  SELECT @MaxProductSettingID + 1 , 245, 4601, 0, 0, 0, NULL, 0
-UNION SELECT @MaxProductSettingID + 2 , 245, 4601, 0, 0, 0, NULL, 0
-UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 0, NULL, 0
+	  SELECT @MaxProductSettingID + 1 , 245, 4601, 0, 0, 1, NULL, 0
+UNION SELECT @MaxProductSettingID + 2 , 245, 4601, 0, 0, 1, NULL, 0
+UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 1, NULL, 0
 
 --> Stake level
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)

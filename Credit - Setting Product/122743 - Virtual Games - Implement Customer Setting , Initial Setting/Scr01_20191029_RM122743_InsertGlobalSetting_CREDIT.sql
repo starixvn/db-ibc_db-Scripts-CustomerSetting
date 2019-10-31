@@ -21,10 +21,10 @@ INSERT INTO ProductSettingDetail(
 	,SettingStatus
 	,IntervalValue
 	)
-		  SELECT 13, 245, 4601, 0, 38, NULL, NULL,    1,    0,    0, 1, 1, 0, NULL --Product Status
-UNION ALL SELECT 1 , 245, 4601, 0, 38, 90  , NULL, NULL, NULL, NULL, 1, 2, 0, NULL --PT
-UNION ALL SELECT 6 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 1, 3, 0, NULL --SMA Win/Loss Limit
-UNION ALL SELECT 8 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 2, 4, 0, NULL --Bet Setting
+		  SELECT 13, 245, 4601, 0, 38, NULL, NULL,    1,    0,    0, 1, 1, 1, NULL --Product Status
+UNION ALL SELECT 1 , 245, 4601, 0, 38, 90  , NULL, NULL, NULL, NULL, 1, 2, 1, NULL --PT
+UNION ALL SELECT 6 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 1, 3, 1, NULL --SMA Win/Loss Limit
+UNION ALL SELECT 8 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 2, 4, 1, NULL --Bet Setting
 
 --> ProductStatusProfile
 INSERT INTO ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
