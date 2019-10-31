@@ -1,0 +1,23 @@
+/*	
+	Created: 20191031@Elodie
+	Task: Delete permission on Ext
+	Redmine: https://redmine.nexcel.vn/issues/118699
+	DB: DBCUST/NAP_UserControl
+*/
+USE NAP_UserControl
+GO 
+
+DELETE FROM eaFunction WITH (ROWLOCK)
+WHERE FuncID IN (90,91,112,113,114,115,116,117,119,120)
+
+DELETE FROM eaGroupPolicy WITH (ROWLOCK)
+WHERE FuncID IN (90,91,112,113,114,115,116,117,119,120)
+
+DELETE FROM eaUserPolicy WITH (ROWLOCK)
+WHERE FuncID IN (90,91,112,113,114,115,116,117,119,120)
+
+/*
+SELECT * 
+FROM eaFunction WITH (NOLOCK)
+WHERE FuncID IN (90,91,112,113,114,115,116,117,119,120)
+*/
