@@ -8,6 +8,8 @@
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	 @srecommend INT		
 	,@target VARCHAR(20)
+	,@max_custid INT
+	
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -27,10 +29,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	
 	
-	DECLARE @ProductID INT = 38, @currency INT--, @MaxPT TINYINT, @MinPT TINYINT
+	DECLARE @currency INT--, @MaxPT TINYINT, @MinPT TINYINT
 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
-	--SELECT TOP 1 @MaxPT= MaxPT from ProductSettingDetail WITH(NOLOCK) where ProductID = @ProductID and SettingType = 1
 
 	CREATE TABLE #MemberTemp
 	(
@@ -45,13 +46,13 @@ BEGIN
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1
+	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
 
 	
 	INSERT INTO #SMATemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1
+	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
 
 	
 	DECLARE @SportBettype TABLE
@@ -86,7 +87,7 @@ BEGIN
 		c.CustID
 	INTO #MemberStatus
 	FROM CustProductStatus c WITH (NOLOCK)
-		INNER JOIN #SMATemp d ON c.CustID = d.CustID
+		INNER JOIN #MemberTemp d ON c.CustID = d.CustID
 		CROSS APPLY @SportBettype t
 		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
 
@@ -281,16 +282,19 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @srecommend INT
+DECLARE @srecommend INT,@max_custid INT
 
---SELECT @max_custid = xxx
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
 WHERE c.roleid = 4  
  AND s.islicensee = 0
+ AND ci.Enabled = 1
+ AND c.custid <= @max_custid
  --AND c.currency = 20
 
 -- For deployer info
@@ -315,6 +319,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
 			,@target = 'REPLICATED'
+			,@max_custid = @max_custid
 						
 	waitfor delay '00:00:0.100'
 END
@@ -330,16 +335,19 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @srecommend INT
+DECLARE @srecommend INT,@max_custid INT
 
---SELECT @max_custid = xxx
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
 WHERE c.roleid = 4  
  AND s.islicensee = 0
+ AND ci.Enabled = 1
+ AND c.custid <= @max_custid
  --AND c.currency = 20
 
 -- For deployer info
@@ -364,6 +372,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
 			,@target = 'DBCUST'
+			,@max_custid = @max_custid
 						
 	waitfor delay '00:00:0.100'
 END
