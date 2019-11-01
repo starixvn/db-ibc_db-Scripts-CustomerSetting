@@ -182,7 +182,6 @@ EXEC sp_rename 'Acc_Dep_CustomerUpdMemberVirtualSports_SAg','DEL_Acc_Dep_Custome
 EXEC sp_rename 'Acc_RacingBetSettingSel','DEL_Acc_RacingBetSettingSel'
 EXEC sp_rename 'Acc_UpdBingoStatus','DEL_Acc_UpdBingoStatus'
 EXEC sp_rename 'Age_CustomerSelAgentList_Bingo','DEL_Age_CustomerSelAgentList_Bingo'
-EXEC sp_rename 'Age_CustomerSelAgentList_Cas','DEL_Age_CustomerSelAgentList_Cas'
 EXEC sp_rename 'Age_CustomerSelLiveCasinoComm_Ag','DEL_Age_CustomerSelLiveCasinoComm_Ag'
 EXEC sp_rename 'Age_CustomerSelLiveCasinoComm_MAg','DEL_Age_CustomerSelLiveCasinoComm_MAg'
 EXEC sp_rename 'Age_CustomerSelLiveCSPositionTakingByAg','DEL_Age_CustomerSelLiveCSPositionTakingByAg'
