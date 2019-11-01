@@ -203,6 +203,14 @@ CREATE TABLE #BetlimitCredit(
 	 PRIMARY KEY (StakeLevelID,GameTypeID)
 );
 
+DECLARE @GameGroupID INT
+SELECT @GameGroupID = GameGroupID 
+FROM GameGroup WITH(NOLOCK) 
+WHERE RefBetType = 4601 
+	AND RefSportType = 245 
+	AND IsDeposit = 0 
+	AND GroupName = 'Level 1'
+
 INSERT INTO #BetlimitCredit(GameTypeID,Level,CurrencyID,MinStake,MaxStake,StakeLevelID)
 SELECT t.GameTypeID, 
        Level,
@@ -214,7 +222,7 @@ FROM @CRE_Stake t
      LEFT JOIN exchange e WITH(NOLOCK) ON t.Currency = e.Currency
      INNER JOIN StakeLevel s WITH(NOLOCK) 
 		ON s.GameTypeID = 4601
-        AND s.GameGroupID = 13
+        AND s.GameGroupID = @GameGroupID
         AND t.Level = 1
         AND e.exchangeid = s.ExchangeID
 

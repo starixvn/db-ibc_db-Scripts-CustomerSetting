@@ -66,10 +66,6 @@ BEGIN
 
 	--------------------------------------------Product Status------------------------------------------------
 	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapHasSynced, PSP.bitmapOrder)) as IsSync,
-
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, PSP.bitmapOrder)) as isHidden,
-
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
 		c.CustID
 	INTO #SMAStatus
@@ -79,10 +75,6 @@ BEGIN
 		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
 	
 	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapHasSynced, PSP.bitmapOrder)) as IsSync,
-
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, PSP.bitmapOrder)) as isHidden,
-
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
 		c.CustID
 	INTO #MemberStatus
@@ -247,27 +239,25 @@ BEGIN
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+
+	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
 	INSERT INTO CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
-	SELECT ca.CustID
+	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
 		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
-	FROM CustStakeLevel_Agent ca WITH (NOLOCK)
-		INNER JOIN #SMATemp tmp ON tmp.CustID = ca.CustID
+	FROM #SMATemp tmp
 		CROSS APPLY @SportBettype t
 		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = @currency AND s.GameTypeID = t.tBetType) st
-	WHERE ca.SportType  = t.fSportType and ca.BetType = t.fBetType
 
 	INSERT INTO CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
-	SELECT ca.CustID
+	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
 		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
-	FROM CustStakeLevel_Member ca WITH (NOLOCK)
-		INNER JOIN #MemberTemp tmp ON tmp.CustID = ca.CustID
+	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t
 		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = @currency AND s.GameTypeID = t.tBetType) st
-	WHERE ca.SportType  = t.fSportType and ca.BetType = t.fBetType
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

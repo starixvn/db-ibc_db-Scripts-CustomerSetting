@@ -175,28 +175,13 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 DECLARE @srecommend INT
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
-FROM Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (
-		13869621,
-		5340162,
-		12262401,
-		12141653,
-		4138910,
-		6379932,
-		16112208,
-		12141529,
-		1539339,
-		720475
-		--UUS
-		,17287861
-		,18879367
-		,14373244
-		,18362423
-		,18479460
-		,18289591
-	)
-	AND ci.currency <> 20
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+WHERE s.islicensee = 0
+	AND ci.Enabled = 1
+	AND c.roleid = 4
 
 WHILE (1 = 1)
 BEGIN
@@ -216,35 +201,19 @@ GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-PRINT N'Step 11: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
-
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
-FROM Customer ci WITH(NOLOCK)
-WHERE ci.custid IN (
-		13869621,
-		5340162,
-		12262401,
-		12141653,
-		4138910,
-		6379932,
-		16112208,
-		12141529,
-		1539339,
-		720475
-		--UUS
-		,17287861
-		,18879367
-		,14373244
-		,18362423
-		,18479460
-		,18289591
-	)
-	
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+WHERE s.islicensee = 0
+	AND ci.Enabled = 1
+	AND c.roleid = 4
+
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
@@ -259,5 +228,4 @@ BEGIN
 			
 	waitfor delay '00:00:0.280'
 END
-
-PRINT N'Step 11: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+GO

@@ -22,12 +22,27 @@ BEGIN
 			, @tBetType SMALLINT	= 4601
 
 	-----------------------------------PRODUCT STATUS----------------------------------------------------
-	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
-		c.CustID
+	;WITH tmpMacau AS
+	(
+		SELECT
+			(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
+			c.CustID
+		FROM CustProductStatus c WITH (NOLOCK)
+			INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @fBetType AND PSP.Sporttype = @fSportType
+	)
+	,tmpVG AS
+	(
+		SELECT
+			(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
+			c.CustID
+		FROM CustProductStatus c WITH (NOLOCK)
+			INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @tBetType AND PSP.Sporttype = @tSportType
+	)
+	SELECT a.isDisabled,a.CustID
 	INTO #CustStatus
-	FROM CustProductStatus c WITH (NOLOCK)
-		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @fBetType AND PSP.Sporttype = @fSportType
+	FROM tmpMacau a 
+		INNER JOIN tmpVG b ON a.CustID = b.CustID
+	WHERE a.isDisabled <> b.isDisabled
 	
 	CREATE CLUSTERED INDEX PK_tempCustStatus_CustID ON #CustStatus(CustID)
 
@@ -176,6 +191,7 @@ BEGIN
 	DROP TABLE #CustPTSetting3rd_Member
 	DROP TABLE #CustWinLossLimit_Agent
 	DROP TABLE #CustWinLossLimit_Member
+	DROP TABLE #CustStatus
 
 END
 GO

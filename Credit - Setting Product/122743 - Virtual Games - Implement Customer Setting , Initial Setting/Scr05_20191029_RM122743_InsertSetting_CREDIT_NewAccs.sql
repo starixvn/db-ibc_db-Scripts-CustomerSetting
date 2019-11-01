@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191031
-	Task: Adjust setting for Virtual game follow by Macau games (UM)
+	Task: Create setting for Virtual game follow by Macau games ( New accounts)
 	DB: DBCust/CustDB
 */
 
@@ -94,19 +94,36 @@
 	DROP TABLE #CustWinLossLimit_Member
 
 	---------------------CREATE setting for NEW ACCs-----------------------------------
-	CREATE TABLE #TempCust
+	CREATE TABLE #MemberTemp
 	(
-		CustID INT PRIMARY KEY CLUSTERED 
+		CustID INT PRIMARY KEY CLUSTERED
+	   ,Currency INT
+	)
+
+	CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
 	)
 	
-	INSERT INTO #TempCust (CustID,Currency)
+	INSERT INTO #SMATemp(CustID,Currency)
 	SELECT c.custid,c.currency
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
 	WHERE s.islicensee = 0
 	 AND ci.Enabled = 1
+	 AND c.roleid IN (2,3,4)
+	 AND c.custid > @max_custid
+
+	INSERT INTO #MemberTemp(CustID,Currency)
+	SELECT c.custid,c.currency
+	FROM customer c WITH (NOLOCK) 
+		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	WHERE s.islicensee = 0
+	 AND ci.Enabled = 1
+	 AND c.roleid = 1
 	 AND c.custid > @max_custid
 	
 	DECLARE @SportBettype TABLE
@@ -120,13 +137,20 @@
 
 	--------------------------------------------Product Status------------------------------------------------
 	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapHasSynced, PSP.bitmapOrder)) as IsSync,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, PSP.bitmapOrder)) as isHidden,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
 		c.CustID
-	INTO #CustStatus
+	INTO #SMAStatus
 	FROM CustProductStatus c WITH (NOLOCK)
-		INNER JOIN #TempCust tmp ON c.CustID = tmp.CustID
+		INNER JOIN #SMATemp d ON c.CustID = d.CustID
+		CROSS APPLY @SportBettype t
+		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
+	
+	SELECT
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
+		c.CustID
+	INTO #MemberStatus
+	FROM CustProductStatus c WITH (NOLOCK)
+		INNER JOIN #MemberTemp d ON c.CustID = d.CustID
 		CROSS APPLY @SportBettype t
 		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
 
@@ -137,7 +161,16 @@
 	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 		CROSS APPLY @SportBettype t
 		INNER JOIN  dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.tBetType AND PSP.Sporttype = t.tSportType
-		INNER JOIN  #CustStatus temp ON temp.CustID = c.custid
+		INNER JOIN  #SMAStatus temp ON temp.CustID = c.custid
+
+	UPDATE c 
+	SET  c.bitmapHasSynced = dbo.f_GenerateProductStatus (c.bitmapHasSynced,psp.bitmapOrder,1)
+		,c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,isDisabled)
+	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		CROSS APPLY @SportBettype t
+		INNER JOIN  dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.tBetType AND PSP.Sporttype = t.tSportType
+		INNER JOIN  #MemberStatus temp ON temp.CustID = c.custid
 
 	------------------------------------PT Setting-------------------------------------------------	
 	--SMA LEVEL
@@ -170,7 +203,7 @@
 			,c.[MinPT]
 			,c.[MaxPT]
 	FROM CustPTSetting3rd_Agent c WITH(NOLOCK)
-		INNER JOIN #TempCust d ON c.CustID = d.CustID
+		INNER JOIN #SMATemp d ON c.CustID = d.CustID
 		CROSS APPLY @SportBettype t
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 
@@ -199,7 +232,7 @@
 			,c.[IsAutoSuperPT]
 			,c.[AutoSuperPT]
 	FROM CustPTSetting3rd_Member c WITH(NOLOCK)
-		 INNER JOIN #TempCust d ON c.CustID = d.CustID
+		 INNER JOIN #MemberTemp d ON c.CustID = d.CustID
 		 CROSS APPLY @SportBettype t
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 	
@@ -228,7 +261,7 @@
 		,IsAutoSuperPT
 		,AutoSuperPT 
 	FROM CustPTGroupSetting3rd_Member c WITH(NOLOCK) 
-		JOIN #TempCust tmp ON c.AgentID = tmp.CustID
+		JOIN #SMATemp tmp ON c.AgentID = tmp.CustID
 		CROSS APPLY @SportBettype t
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType	
 
@@ -251,7 +284,7 @@
               c.MaxLossLimit, 
               c.IsAutoReset
 		FROM CustWinLossLimit_Agent c WITH(NOLOCK)
-			INNER JOIN #TempCust d ON c.CustID = d.CustID
+			INNER JOIN #SMATemp d ON c.CustID = d.CustID
 			CROSS APPLY @SportBettype t
 		WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType	
 		 
@@ -272,32 +305,31 @@
 			c.MaxLossLimit, 
 			c.IsAutoReset
 	FROM CustWinLossLimit_Member c WITH(NOLOCK)
-		 INNER JOIN #TempCust d ON c.CustID = d.CustID
+		 INNER JOIN #MemberTemp d ON c.CustID = d.CustID
 		 CROSS APPLY @SportBettype t
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
 	INSERT INTO CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
-	SELECT ca.CustID
+	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
 		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
-	FROM CustStakeLevel_Agent ca WITH (NOLOCK)
-		INNER JOIN #TempCust tmp ON tmp.CustID = ca.CustID
+	FROM #SMATemp tmp
 		CROSS APPLY @SportBettype t
 		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType) st
-	WHERE ca.SportType  = t.fSportType and ca.BetType = t.fBetType
 
 	INSERT INTO CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
-	SELECT ca.CustID
+	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
 		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
-	FROM CustStakeLevel_Member ca WITH (NOLOCK)
-		INNER JOIN #TempCust tmp ON tmp.CustID = ca.CustID
+	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t
 		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType) st
-	WHERE ca.SportType  = t.fSportType and ca.BetType = t.fBetType
 
-	DROP TABLE #CustStatus
-	DROP TABLE #TempCust
+	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
+	DROP TABLE #SMAStatus
+	DROP TABLE #MemberStatus
