@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Adjust setting for Virtual game follow by Macau games (UM)
+	Task: Create setting for Virtual game ( New accounts)
 	DB: DBCust/CustDB
 */
 

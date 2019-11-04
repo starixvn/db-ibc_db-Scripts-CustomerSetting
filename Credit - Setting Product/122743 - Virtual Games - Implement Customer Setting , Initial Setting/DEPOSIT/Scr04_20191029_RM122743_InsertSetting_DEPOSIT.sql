@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert setting for Virtual game follow by Macau games 
+	Task: Insert setting for Virtual game 
 	DB: DBCust/CustDB
 */
 
