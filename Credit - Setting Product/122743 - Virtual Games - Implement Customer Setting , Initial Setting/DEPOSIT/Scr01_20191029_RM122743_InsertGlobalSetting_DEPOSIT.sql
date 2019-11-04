@@ -42,27 +42,24 @@ UNION SELECT @MaxProductSettingID + 2 , 245, 4601, 0, 0, 1, NULL, 0
 UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 1, NULL, 0
 
 --> Stake level
-INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
-SELECT 14, 245, 4601, 'Level 1', 1
-
 GO
-DECLARE  @list varchar (max) = 'RM, HKK, KHR, PLN,$US, US$, UT, Yen, PTU, CHF, MKK, MMK, TH, PS, SD$, UUS, YNG,AUD,RMB, CY, YUN, PTH, HK$, DKK, SEK, NOK,IND, IDR, IN, IDD, DDD,THB, TB,WON,INH,INR, RUB,GBP, EURO, EUR,JPY'
+DECLARE @maxID INT
+SELECT @maxID = MAX(GameGroupID) FROM GameGroup WITH(NOLOCK)
+INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
+SELECT @maxID + 1, 245, 4601, 'Level 1', 1
 
-DECLARE @MAXStakeLevelID INT
-SELECT @MAXStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK) 
+DECLARE  @list varchar (max) = 'RM, HKK, KHR, PLN,$US, US$, UT, Yen, PTU, CHF, MKK, MMK, TH, PS, SD$, UUS, YNG,AUD,RMB, CY, YUN, PTH, HK$, DKK, SEK, NOK,IND, IDR, IN, IDD, DDD,THB, TB,WON,INH,INR, RUB,GBP, EURO, EUR,JPY'
 
 INSERT INTO DEP_StakeLevel(
 	 GameTypeID
 	,ExchangeId
 	,ResourceId
 	,GameGroupID
-	,StakeLevelID
 )
 SELECT GameTypeID = 4601
 	,ExchangeId = e.exchangeid
 	,ResourceId = NULL
-	,GameGroupID = 14 --DEP
-	,ROW_NUMBER() OVER( ORDER BY e.exchangeid) + @MAXStakeLevelID
+	,GameGroupID = @maxID + 1 --DEP
 FROM exchange e WITH(NOLOCK) 
 	LEFT JOIN DEP_StakeLevel s WITH(NOLOCK) ON e.exchangeid = s.ExchangeId AND s.GameTypeID = 4601
 WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@list ,','))

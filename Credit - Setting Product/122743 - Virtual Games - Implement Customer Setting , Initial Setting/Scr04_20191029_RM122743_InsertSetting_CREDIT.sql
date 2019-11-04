@@ -29,7 +29,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	
 	
-	DECLARE @currency INT--, @MaxPT TINYINT, @MinPT TINYINT
+	DECLARE @currency INT
 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
