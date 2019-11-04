@@ -1,0 +1,44 @@
+/*
+	Created By: Winnie
+	Created Date: 20191104
+	RedmineID: #123160
+	DB: DBCRM/bodb_CRM	
+*/
+
+INSERT INTO [bodb_CRM].[dbo].[crmFeedbackCustomer]
+           ([FeedbackID]
+           ,[CustID]
+           ,[IsRelated])
+ SELECT 696030,-1005,0
+ UNION ALL
+ SELECT 696037,-1005,0
+ UNION ALL
+ SELECT 727634,10419083,0
+ UNION ALL
+ SELECT 731341,1606473,0
+ UNION ALL
+ SELECT 732652,7752444,0
+ UNION ALL
+ SELECT 742386,-1005,0
+ UNION ALL
+ SELECT 758638,17287861,0
+
+ UPDATE [crmFeedbackCustomer] WITH(ROWLOCK,UPDLOCK)
+ SET IsRelated=0
+ WHERE FeedbackID=708213 AND CustID=35726528
+
+ UPDATE [crmFeedbackCustomer] WITH(ROWLOCK,UPDLOCK)
+ SET IsRelated=0
+ WHERE FeedbackID=728141 AND CustID=32139686
+
+ UPDATE [crmFeedbackCustomer] WITH(ROWLOCK,UPDLOCK)
+ SET IsRelated=0
+ WHERE FeedbackID=742379 AND CustID=-1005
+
+ UPDATE [crmFeedbackCustomer] WITH(ROWLOCK,UPDLOCK)
+ SET IsRelated=0
+ WHERE FeedbackID=758642 AND CustID=17287861
+
+ UPDATE [crmFeedbackCustomer] WITH(ROWLOCK,UPDLOCK)
+ SET IsRelated=0
+ WHERE FeedbackID=758652 AND CustID=17287861
