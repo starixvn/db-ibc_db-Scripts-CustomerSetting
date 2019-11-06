@@ -2,10 +2,8 @@
 	Created: 20191105@Eden
 	Task: Rename 40 columns on Custinfo table
 	Redmine: https://nexdev.net/issues/118699
-	DB: DBCUST
+	DB: DBCUST/CUSTDB and ALL REPLICATIONS
 */
-
-USE CUSTDB
 GO 
 EXEC sp_rename 'custinfo.Disable151_AU','DEL_Disable151_AU', 'COLUMN'
 EXEC sp_rename 'custinfo.Disable152_AU','DEL_Disable152_AU', 'COLUMN'
