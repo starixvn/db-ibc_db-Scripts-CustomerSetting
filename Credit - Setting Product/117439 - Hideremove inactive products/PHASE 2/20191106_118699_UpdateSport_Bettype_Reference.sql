@@ -1,0 +1,32 @@
+/*	
+	Created: 20191106@Eden
+	Task: UPDATE IsActive = 0 for inactive products for Sport_Bettype_Reference
+	Redmine: https://nexdev.net/issues/118699
+	DB: DBTXN
+*/
+
+UPDATE a 
+SET a.isActive = 0
+FROM Sport_Bettype_Reference a  WITH(UPDLOCK,ROWLOCK) 
+WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
+	OR (a.Sporttype = 204 AND a.isLicensee = 0) --Credit ColosusBet
+	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
+	OR a.Sporttype IN (
+						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
+						,154 --Horse racing Fixed Odds
+						,151,152,153,180,181,182,183,184,185,186,187,201 --Racing, Virtual Sport, Financials
+						,203,205,162 --Microgame (LC & RNG), SLI Live Casino
+					  )
+
+UPDATE a 
+SET a.isActive = 0
+FROM Sport_Bettype_Reference_Setting a WITH(UPDLOCK,ROWLOCK) 
+WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
+	OR (a.Sporttype = 204 AND a.isLicensee = 0) --Credit ColosusBet
+	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
+	OR a.Sporttype IN (
+						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
+						,154 --Horse racing Fixed Odds
+						,151,152,153,180,181,182,183,184,185,186,187,201 --Racing, Virtual Sport, Financials
+						,203,205,162 --Microgame (LC & RNG), SLI Live Casino
+					  )
