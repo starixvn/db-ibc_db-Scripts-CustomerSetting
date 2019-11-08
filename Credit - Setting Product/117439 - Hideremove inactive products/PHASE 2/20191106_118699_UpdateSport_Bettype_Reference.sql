@@ -9,7 +9,6 @@ UPDATE a
 SET a.isActive = 0
 FROM Sport_Bettype_Reference a  WITH(UPDLOCK,ROWLOCK) 
 WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
-	OR (a.Sporttype = 204 AND a.isLicensee = 0) --Credit ColosusBet
 	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
 	OR a.Sporttype IN (
 						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
@@ -22,7 +21,6 @@ UPDATE a
 SET a.isActive = 0
 FROM Sport_Bettype_Reference_Setting a WITH(UPDLOCK,ROWLOCK) 
 WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
-	OR (a.Sporttype = 204 AND a.isLicensee = 0) --Credit ColosusBet
 	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
 	OR a.Sporttype IN (
 						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
