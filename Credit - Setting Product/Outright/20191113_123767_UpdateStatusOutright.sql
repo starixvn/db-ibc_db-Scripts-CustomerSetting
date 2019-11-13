@@ -19,7 +19,7 @@ BEGIN
 	CREATE TABLE #tempCustBatch(CustID INT PRIMARY KEY)
 
 	INSERT INTO #tempCust(CustID)
-	SELECT c.custid FROM Custinfo c WITH(ROWLOCK,UPDLOCK)
+	SELECT c.custid FROM Custinfo c WITH(NOLOCK)
 	WHERE srecommend = @srecommend	AND custid<=@maxCustID AND c.roleid IN(2,3,4) AND DisableOutright = 1
 	WHILE EXISTS (SELECT 1 FROM #tempCust )
 	BEGIN
