@@ -5,8 +5,7 @@
 */
  
 
-DECLARE @srecommend INT,
-		@max_custid INT
+DECLARE	@max_custid INT
 
 CREATE TABLE #Super(CustID INT)
 
