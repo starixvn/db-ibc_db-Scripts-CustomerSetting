@@ -15,17 +15,26 @@ BEGIN
 				
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 
-	WHILE(1=1)
+	CREATE TABLE #tempCust(CustID INT PRIMARY KEY)
+	CREATE TABLE #tempCustBatch(CustID INT PRIMARY KEY)
+
+	INSERT INTO #tempCust(CustID)
+	SELECT c.custid FROM Custinfo c WITH(ROWLOCK,UPDLOCK)
+	WHERE srecommend = @srecommend	AND custid<=@maxCustID AND c.roleid IN(2,3,4) AND DisableOutright = 1
+	WHILE EXISTS (SELECT 1 FROM #tempCust )
 	BEGIN
+	
+		DELETE TOP (3000) #tempCust OUTPUT DELETED.* INTO #tempCustBatch
+		
+		IF @@ROWCOUNT=0
+			BREAK		
 
 		UPDATE TOP(3000) c
 		SET DisableOutright = 0
 		FROM Custinfo c WITH(ROWLOCK,UPDLOCK)
-		WHERE srecommend = @srecommend	AND custid<=@maxCustID AND c.roleid IN(2,3,4) AND DisableOutright = 1
+			INNER JOIN #tempCustBatch t ON c.custid=t.CustID
 
-		IF @@ROWCOUNT = 0
-			BREAK;
-
+		TRUNCATE TABLE #tempCustBatch
 	END
 
 END
