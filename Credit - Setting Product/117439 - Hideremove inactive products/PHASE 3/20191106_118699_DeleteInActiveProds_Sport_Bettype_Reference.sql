@@ -7,7 +7,7 @@
 
 DELETE a 
 FROM Sport_Bettype_Reference a  WITH(UPDLOCK,ROWLOCK) 
-WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
+WHERE (a.Sporttype = 1 AND a.Bettype between 301 and 304) --Myanmar Odds
 	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
 	OR a.Sporttype IN (
 						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
@@ -18,7 +18,7 @@ WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
 
 DELETE a 
 FROM Sport_Bettype_Reference_Setting a WITH(UPDLOCK,ROWLOCK) 
-WHERE (a.Sporttype = 1 AND a.Bettype = 301) --Myanmar Odds
+WHERE (a.Sporttype = 1 AND a.Bettype between 301 and 304) --Myanmar Odds
 	OR (a.Sporttype = 50 AND a.Site = 'IMBC') --IMBC Cricket
 	OR a.Sporttype IN (
 						 160,163,207,206 --Lucky 3,Poker Games,Bullfighting,Cockfighting
