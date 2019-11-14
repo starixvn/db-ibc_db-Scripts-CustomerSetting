@@ -8,7 +8,7 @@
 USE bodb02
 GO 
 
-EXEC sp_rename 'NAP_WinLimit_CurrencySel','DEL_NAP_WinLimit_CurrencySel'
+EXEC sp_rename 'NAP_WinLimit_CurrencySettingIns','DEL_NAP_WinLimit_CurrencySettingIns'
 GO
 EXEC sp_rename 'NAP_WinLimit_CurrencySettingUpd','DEL_NAP_WinLimit_CurrencySettingUpd'
 GO

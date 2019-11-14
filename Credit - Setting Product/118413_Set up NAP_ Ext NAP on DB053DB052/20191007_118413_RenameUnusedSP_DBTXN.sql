@@ -13,7 +13,7 @@ EXEC sp_rename 'Acc_CustomerPwdUpd','DEL_Acc_CustomerPwdUpd'
 GO
 EXEC sp_rename 'Acc_CustomerSyncUpd','DEL_Acc_CustomerSyncUpd'
 GO
-EXEC sp_rename 'NAP_WinLimit_CurrencySettingIns','DEL_NAP_WinLimit_CurrencySettingIns'
+EXEC sp_rename 'NAP_WinLimit_CurrencySel','DEL_NAP_WinLimit_CurrencySel'
 GO
 EXEC sp_rename 'NAP_WinLimit_CurrencySettingSel','DEL_NAP_WinLimit_CurrencySettingSel'
 GO
