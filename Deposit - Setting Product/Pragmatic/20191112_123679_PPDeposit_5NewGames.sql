@@ -1,7 +1,7 @@
 /*
 	Date: 2019-11-13
 	Created: Tiara
-	Task: #123679 Pragmatic - Integrate 5 games - Add global setting for Cash
+	Task: #123592 Pragmatic - Integrate 5 games - Add global setting for Cash
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
