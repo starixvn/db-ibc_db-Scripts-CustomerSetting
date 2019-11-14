@@ -51,20 +51,6 @@ DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT3
 GO
 DROP PROCEDURE NAP_WinLimit_CurrencySel_UAT4
 GO
-DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingIns
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_xpre
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_xtest
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT1
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT2
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT3
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingIns_UAT4
-GO
 DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingSel
 GO
 DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_xpre
@@ -78,20 +64,6 @@ GO
 DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT3
 GO
 DROP PROCEDURE NAP_WinLimit_CurrencySettingSel_UAT4
-GO
-DROP PROCEDURE DEL_NAP_WinLimit_CurrencySettingUpd
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_xpre
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_xtest
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT1
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT2
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT3
-GO
-DROP PROCEDURE NAP_WinLimit_CurrencySettingUpd_UAT4
 GO
 DROP PROCEDURE DEL_NAP_WinLimit_Game_Unblock
 GO
