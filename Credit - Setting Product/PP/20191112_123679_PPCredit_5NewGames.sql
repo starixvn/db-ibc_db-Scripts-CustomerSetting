@@ -1,7 +1,7 @@
 /*
 	Date: 2019-11-12
 	Created: Tiara
-	Task: #123679 Pragmatic - Integrate 5 games - Add global setting for Credit
+	Task: #123592 Pragmatic - Integrate 5 games - Add global setting for Credit
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #tmpStake(GroupID INT,GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
