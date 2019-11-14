@@ -1,6 +1,6 @@
 /*	
 	Created: 20191007@Eden
-	Task: Rename all unused SP in DBTXN/DBPRO
+	Task: Rename all unused SP in DBTXN
 	Redmine: https://redmine.nexcel.vn/issues/118413
 	DB: DBTXN
 */

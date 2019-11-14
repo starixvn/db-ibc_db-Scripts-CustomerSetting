@@ -1,6 +1,6 @@
 /*	
 	Created: 20191007@Eden
-	Task: Drop all unused SP in DBTXN/DBPRO
+	Task: Drop all unused SP in DBTXN
 	Redmine: https://redmine.nexcel.vn/issues/118413
 	DB: DBTXN
 */
