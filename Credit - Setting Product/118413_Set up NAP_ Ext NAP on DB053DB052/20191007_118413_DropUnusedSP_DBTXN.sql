@@ -2,7 +2,7 @@
 	Created: 20191007@Eden
 	Task: Drop all unused SP in DBTXN/DBPRO
 	Redmine: https://redmine.nexcel.vn/issues/118413
-	DB: DBTXN/DBPRO
+	DB: DBTXN
 */
 
 USE bodb02
