@@ -1,7 +1,7 @@
 /*
 	Date: 2019-11-13
 	Created: Tiara
-	Task: #123679 Pragmatic - Integrate 5 games - Add global setting for Cash_UUS
+	Task: #123592 Pragmatic - Integrate 5 games - Add global setting for Cash_UUS
 	DB: DBCUST/CUSTDB
 */
 
