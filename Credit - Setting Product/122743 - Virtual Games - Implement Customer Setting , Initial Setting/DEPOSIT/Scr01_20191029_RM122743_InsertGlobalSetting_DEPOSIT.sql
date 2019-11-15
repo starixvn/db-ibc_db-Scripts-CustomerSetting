@@ -4,6 +4,29 @@
 	Task: INSERT Global setting for Virtual game DEPOSIT
 	DB: DBCust/CustDB
 */
+-----------------------------------------------------------------
+/*
+DELETE  
+FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
+WHERE Sporttype = 245
+
+DELETE  
+FROM Dep_ProductSetting WITH(ROWLOCK, UPDLOCK)
+WHERE ProductID = 38
+
+DELETE  
+FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
+WHERE Sporttype = 245
+
+DELETE  
+FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
+WHERE Sporttype = 245
+
+DELETE  
+FROM GameGroup WITH(ROWLOCK, UPDLOCK)
+WHERE RefSportType = 245 AND IsDeposit =1
+
+*/
 --> Dep_ProductStatusProfile
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
 SELECT 245,4601,11
@@ -59,8 +82,9 @@ INSERT INTO DEP_StakeLevel(
 SELECT GameTypeID = 4601
 	,ExchangeId = e.exchangeid
 	,ResourceId = NULL
-	,GameGroupID = @maxID + 1 --DEP
+	,GameGroupID = gg.GameGroupID --DEP
 FROM exchange e WITH(NOLOCK) 
+	CROSS APPLY (SELECT TOP 1 GameGroupID FROM GameGroup WITH(NOLOCK) WHERE RefSportType = 245 AND IsDeposit = 1) gg
 	LEFT JOIN DEP_StakeLevel s WITH(NOLOCK) ON e.exchangeid = s.ExchangeId AND s.GameTypeID = 4601
 WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@list ,','))
 	AND s.ExchangeId IS NULL

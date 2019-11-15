@@ -28,6 +28,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
 	
 	DECLARE @currency INT
+	DECLARE @PT smallmoney = 93.00 --Licensee fee :  7% (Licensees take 93%, House takes 7%)
 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
@@ -111,17 +112,15 @@ BEGIN
 			,[AgentPT]
 			)
 	SELECT 
-			 c.[CustID]
+			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,c.[IsLive]
-			,c.[SuperPT]
-			,c.[MasterPT]
-			,c.[AgentPT]
-	FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
-		INNER JOIN #SMATemp d ON c.CustID = d.CustID
+			,[IsLive] = 0
+			,[SuperPT] = @PT
+			,[MasterPT] = @PT
+			,[AgentPT] = @PT
+	FROM #SMATemp d
 		CROSS APPLY @SportBetType t
-	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 
 	----MEMBER LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Member
@@ -133,18 +132,17 @@ BEGIN
 			,	[masterPT]
 			,	[agentPT]
 		)
-	SELECT   c.[custid]
+	SELECT 
+			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,c.[islive]
-			,c.[superPT]
-			,c.[masterPT]
-			,c.[agentPT]
-	FROM Dep_CustPTSetting_Member c WITH(NOLOCK)
-		 INNER JOIN #MemberTemp d ON c.CustID = d.CustID
-		 CROSS APPLY @SportBetType t
-	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
-	
+			,[IsLive] = 0
+			,[SuperPT] = @PT
+			,[MasterPT] = @PT
+			,[AgentPT] = @PT
+	FROM #MemberTemp d
+		CROSS APPLY @SportBetType t
+
 	INSERT INTO Dep_CustPTGroupSetting_Member (
 		 AgentID
 		,SportType
@@ -154,17 +152,15 @@ BEGIN
 		,MasterPT
 		,AgentPT
 	)
-	SELECT AgentID
-		,t.SportType
-		,t.BetType
-		,IsLive
-		,SuperPT
-		,MasterPT
-		,AgentPT
-	FROM Dep_CustPTGroupSetting_Member c WITH(NOLOCK) 
-		JOIN #SMATemp tmp ON c.AgentID = tmp.CustID
-		CROSS APPLY @SportBetType t
-	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType	
+	SELECT d.[CustID]
+		,t.[SportType]
+		,t.[BetType]
+		,[IsLive] = 0
+		,[SuperPT] = @PT
+		,[MasterPT] = @PT
+		,[AgentPT] = @PT
+	FROM #SMATemp d
+		CROSS APPLY @SportBetType t	
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
