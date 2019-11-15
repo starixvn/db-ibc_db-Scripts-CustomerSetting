@@ -21,6 +21,11 @@ DELETE
 FROM GameGroup WITH(ROWLOCK, UPDLOCK)
 WHERE RefSportType = 245 AND IsDeposit = 0
 
+DELETE  
+FROM StakeLevel WITH(ROWLOCK, UPDLOCK)
+WHERE GameTypeID = 4601
+
+
 */
 --> ProductSettingDetail
 INSERT INTO ProductSettingDetail(
@@ -70,6 +75,8 @@ DECLARE @maxID INT
 SELECT @maxID = MAX(GameGroupID) FROM GameGroup WITH(NOLOCK)
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
 SELECT @maxID + 1, 245, 4601, 'Level 1', 0
+UNION ALL SELECT @maxID + 2, 245, 4601, 'Level 2', 0
+UNION ALL SELECT @maxID + 3, 245, 4601, 'Level 3', 0
 
 DECLARE  @list varchar (max) = 'RM, HKK, KHR, PLN,$US, US$, UT, Yen, PTU, CHF, MKK, MMK, TH, PS, SD$, UUS, YNG,AUD,RMB, CY, YUN, PTH, HK$, DKK, SEK, NOK,IND, IDR, IN, IDD, DDD,THB, TB,WON,INH,INR, RUB,GBP, EURO, EUR,JPY'
 
@@ -84,7 +91,7 @@ SELECT GameTypeID = 4601
 	,ResourceId = NULL
 	,GameGroupID = gg.GameGroupID --Cred
 FROM exchange e WITH(NOLOCK) 
-	CROSS APPLY (SELECT TOP 1 GameGroupID FROM GameGroup WITH(NOLOCK) WHERE RefSportType = 245 AND IsDeposit = 0) gg
+	CROSS APPLY (SELECT GameGroupID FROM GameGroup WITH(NOLOCK) WHERE RefSportType = 245 AND IsDeposit = 0) gg
 	LEFT JOIN StakeLevel s WITH(NOLOCK) ON e.exchangeid = s.ExchangeId AND s.GameTypeID = 4601
 WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@list ,','))
 	AND s.ExchangeId IS NULL

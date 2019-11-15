@@ -315,19 +315,29 @@
 	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
-		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
+		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
+										FROM StakeLevel s WITH(NOLOCK) 
+											CROSS APPLY @SportBetType t	
+										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
+										FOR XML PATH(''))
+							,2,200)
 	FROM #SMATemp tmp
 		CROSS APPLY @SportBettype t
-		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType) st
 
 	INSERT INTO CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
 	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
-		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
+		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
+										FROM StakeLevel s WITH(NOLOCK) 
+											INNER JOIN GameGroup gg WITH(NOLOCK) 
+												ON s.GameGroupID = gg.GameGroupID AND gg.GroupName = 'Level 1'
+											CROSS APPLY @SportBetType t	
+										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
+										FOR XML PATH(''))
+							,2,200)
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t
-		CROSS APPLY ( SELECT s.StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType) st
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

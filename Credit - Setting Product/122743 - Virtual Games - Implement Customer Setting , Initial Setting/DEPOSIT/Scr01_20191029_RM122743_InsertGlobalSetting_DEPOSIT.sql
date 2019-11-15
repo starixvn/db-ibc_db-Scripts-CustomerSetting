@@ -24,7 +24,11 @@ WHERE Sporttype = 245
 
 DELETE  
 FROM GameGroup WITH(ROWLOCK, UPDLOCK)
-WHERE RefSportType = 245 AND IsDeposit =1
+WHERE RefSportType = 245 AND IsDeposit = 1
+
+DELETE  
+FROM DEP_StakeLevel WITH(ROWLOCK, UPDLOCK)
+WHERE GameTypeID = 4601
 
 */
 --> Dep_ProductStatusProfile
@@ -34,7 +38,6 @@ SELECT 245,4601,11
 GO
 DECLARE @MaxProductSettingID INT
 SELECT @MaxProductSettingID = MAX(ProductSettingID) FROM Dep_ProductSetting WITH(NOLOCK)
-SELECT @MaxProductSettingID
 
 -->Dep_ProductSetting
 INSERT INTO Dep_ProductSetting (
@@ -66,25 +69,31 @@ UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 1, NULL, 0
 
 --> Stake level
 GO
-DECLARE @maxID INT
-SELECT @maxID = MAX(GameGroupID) FROM GameGroup WITH(NOLOCK)
+DECLARE @MaxGroupID INT
+SELECT @MaxGroupID = MAX(GameGroupID) FROM GameGroup WITH(NOLOCK)
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
-SELECT @maxID + 1, 245, 4601, 'Level 1', 1
+SELECT @MaxGroupID + 1, 245, 4601, 'Level 1', 1
+UNION ALL SELECT @MaxGroupID + 2, 245, 4601, 'Level 2', 1
+UNION ALL SELECT @MaxGroupID + 3, 245, 4601, 'Level 3', 1
 
 DECLARE  @list varchar (max) = 'RM, HKK, KHR, PLN,$US, US$, UT, Yen, PTU, CHF, MKK, MMK, TH, PS, SD$, UUS, YNG,AUD,RMB, CY, YUN, PTH, HK$, DKK, SEK, NOK,IND, IDR, IN, IDD, DDD,THB, TB,WON,INH,INR, RUB,GBP, EURO, EUR,JPY'
+DECLARE @MaxStakeLevelID INT
+SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
 INSERT INTO DEP_StakeLevel(
 	 GameTypeID
 	,ExchangeId
 	,ResourceId
 	,GameGroupID
+	,StakeLevelID
 )
 SELECT GameTypeID = 4601
 	,ExchangeId = e.exchangeid
 	,ResourceId = NULL
 	,GameGroupID = gg.GameGroupID --DEP
+	,StakeLevelID =  @MaxStakeLevelID + ROW_NUMBER() OVER (ORDER BY e.exchangeID) 
 FROM exchange e WITH(NOLOCK) 
-	CROSS APPLY (SELECT TOP 1 GameGroupID FROM GameGroup WITH(NOLOCK) WHERE RefSportType = 245 AND IsDeposit = 1) gg
+	CROSS APPLY (SELECT GameGroupID FROM GameGroup WITH(NOLOCK) WHERE RefSportType = 245 AND IsDeposit = 1) gg
 	LEFT JOIN DEP_StakeLevel s WITH(NOLOCK) ON e.exchangeid = s.ExchangeId AND s.GameTypeID = 4601
 WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@list ,','))
 	AND s.ExchangeId IS NULL
