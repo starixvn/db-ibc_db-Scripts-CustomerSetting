@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert setting for Virtual game 
+	Task: Insert setting for Virtual game - Real Currency
 	DB: DBCust/CustDB
 */
 
@@ -224,7 +224,8 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- --AND c.currency = 20
+ AND c.currency <> 20
+ AND c.CustID IN (0)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -276,7 +277,8 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- --AND c.currency = 20
+ AND c.currency <> 20
+ AND c.CustID IN (0)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

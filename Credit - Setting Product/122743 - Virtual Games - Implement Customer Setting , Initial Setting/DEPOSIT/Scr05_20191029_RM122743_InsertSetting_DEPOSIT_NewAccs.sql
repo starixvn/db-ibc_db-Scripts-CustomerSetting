@@ -94,10 +94,11 @@
 	(
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
+	   ,RoleID TINYINT
 	)
 	
-	INSERT INTO #SMATemp(CustID,Currency)
-	SELECT c.custid,c.currency
+	INSERT INTO #SMATemp(CustID,Currency,RoleID)
+	SELECT c.custid,c.currency,c.roleid
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
@@ -151,18 +152,80 @@
 						WHERE dp.ProductID = 38
 							AND dp.SettingType IN (4,1,8) -- Product Status, PT, Bet Limit
 						) st
-	
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT temp.CustID
-		  ,st.ProductSettingID
-	FROM #MemberTemp temp 
-		 CROSS APPLY (	SELECT ProductSettingID 
-						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 38
-							AND dp.SettingType IN (4,1,8) -- Product Status, PT, Bet Limit
-						) st
+	WHERE temp.RoleID = 4
 
 	------------------------------------PT Setting-------------------------------------------------		
+	DECLARE @PT smallmoney = 93.00 --Licensee fee :  7% (Licensees take 93%, House takes 7%)
+
+	--SMA LEVEL
+	INSERT INTO dbo.Dep_CustPTSetting_Agent
+		(	[CustID]
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			)
+	SELECT 
+			 d.[CustID]
+			,t.[SportType]
+			,t.[BetType]
+			,[IsLive] = 0
+			,[SuperPT] = CASE WHEN d.roleid = 4 THEN @PT ELSE 0 END
+			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN @PT ELSE 0 END
+			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN @PT ELSE 0 END
+	FROM #SMATemp d
+		CROSS APPLY @SportBetType t
+
+	----MEMBER LEVEL
+	INSERT INTO dbo.Dep_CustPTSetting_Member
+		(	    [custid]
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+		)
+	SELECT 
+			 d.[CustID]
+			,t.[SportType]
+			,t.[BetType]
+			,[IsLive] = 0
+			,[SuperPT] = 0
+			,[MasterPT] = 0
+			,[AgentPT] = @PT
+	FROM #MemberTemp d
+		CROSS APPLY @SportBetType t
+		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
+	WHERE m.IsGroupedPT = 0
+
+	INSERT INTO Dep_CustPTGroupSetting_Member (
+		 AgentID
+		,SportType
+		,BetType
+		,IsLive
+		,SuperPT
+		,MasterPT
+		,AgentPT
+	)
+	SELECT d.[CustID]
+		,t.[SportType]
+		,t.[BetType]
+		,[IsLive] = 0
+		,[SuperPT] = 0
+		,[MasterPT] = 0
+		,[AgentPT] = @PT
+	FROM #SMATemp d
+		CROSS APPLY @SportBetType t	
+	WHERE roleid = 2
+
+	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+	SELECT t.CustID,1
+	FROM #MemberTemp t WITH(NOLOCK)
+		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
+	WHERE d.CustID IS NULL
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
@@ -170,19 +233,29 @@
 	SELECT tmp.CustID
 		,SportType = t.SportType
 		,BetType = t.BetType
-		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
+		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
+										FROM DEP_StakeLevel s WITH(NOLOCK) 
+											CROSS APPLY @SportBetType t	
+										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType
+										FOR XML PATH(''))
+							,2,200)
 	FROM #SMATemp tmp
 		CROSS APPLY @SportBetType t
-		CROSS APPLY ( SELECT s.StakeLevelID FROM DEP_StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType) st
 
 	INSERT INTO DEP_CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
 	SELECT tmp.CustID
 		,SportType = t.SportType
 		,BetType = t.BetType
-		,StakeLevelList = CONVERT(VARCHAR(200),st.StakeLevelID)
+		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
+										FROM DEP_StakeLevel s WITH(NOLOCK) 
+											INNER JOIN GameGroup gg WITH(NOLOCK) 
+												ON s.GameGroupID = gg.GameGroupID AND gg.GroupName = 'Level 1'
+											CROSS APPLY @SportBetType t	
+										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType
+										FOR XML PATH(''))
+							,2,200)
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBetType t
-		CROSS APPLY ( SELECT s.StakeLevelID FROM DEP_StakeLevel s WITH(NOLOCK) WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType) st
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
