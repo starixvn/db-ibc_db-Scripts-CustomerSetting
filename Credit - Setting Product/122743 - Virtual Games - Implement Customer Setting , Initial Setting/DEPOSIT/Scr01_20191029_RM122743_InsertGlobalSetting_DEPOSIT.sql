@@ -22,10 +22,6 @@ DELETE
 FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
 WHERE Sporttype = 245
 
-DELETE  
-FROM GameGroup WITH(ROWLOCK, UPDLOCK)
-WHERE RefSportType = 245 AND IsDeposit = 1
-
 */
 --> Dep_ProductStatusProfile
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
@@ -62,12 +58,3 @@ INSERT INTO Dep_ProductSettingDetail(
 UNION SELECT @MaxProductSettingID + 2 , 245, 4601, 0, 0, 1, NULL, 0
 UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 1, NULL, 0
 
---> Stake level
-DECLARE @MaxGroupID INT
-SELECT @MaxGroupID = MAX(GameGroupID) FROM GameGroup WITH(NOLOCK)
-INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
-SELECT @MaxGroupID + 1, 245, 4601, 'Level 1', 1
-UNION ALL SELECT @MaxGroupID + 2, 245, 4601, 'Level 2', 1
-UNION ALL SELECT @MaxGroupID + 3, 245, 4601, 'Level 3', 1
-
-GO

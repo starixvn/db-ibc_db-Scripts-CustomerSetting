@@ -235,7 +235,6 @@
 		,BetType = t.BetType
 		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
 										FROM DEP_StakeLevel s WITH(NOLOCK) 
-											CROSS APPLY @SportBetType t	
 										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType
 										FOR XML PATH(''))
 							,2,200)
@@ -246,14 +245,10 @@
 	SELECT tmp.CustID
 		,SportType = t.SportType
 		,BetType = t.BetType
-		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
-										FROM DEP_StakeLevel s WITH(NOLOCK) 
-											INNER JOIN GameGroup gg WITH(NOLOCK) 
-												ON s.GameGroupID = gg.GameGroupID AND gg.GroupName = 'Level 1'
-											CROSS APPLY @SportBetType t	
-										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType
-										FOR XML PATH(''))
-							,2,200)
+		,StakeLevelList = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
+							FROM DEP_StakeLevel s WITH(NOLOCK) 
+							WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType 
+							ORDER BY s.MinStake)
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBetType t
 

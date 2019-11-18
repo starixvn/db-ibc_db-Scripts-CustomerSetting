@@ -74,14 +74,6 @@ DELETE a
 FROM CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
 INNER JOIN #CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
-SELECT a.StakeLevelID,a.GameTypeID
-INTO #StakeLevelGroupDetail
-FROM StakeLevelGroupDetail a WITH(NOLOCK)
-WHERE a.GameTypeID BETWEEN 4601 AND 4604
-
-DELETE a
-FROM StakeLevelGroupDetail a WITH(ROWLOCK,UPDLOCK)
-INNER JOIN #StakeLevelGroupDetail t ON a.StakeLevelID = t.StakeLevelID AND a.GameTypeID = t.GameTypeID
 
 DROP TABLE #CustPTGroupSetting3rd_Member
 DROP TABLE #CustPTSetting3rd_Agent
@@ -90,4 +82,3 @@ DROP TABLE #CustStakeLevel_Agent
 DROP TABLE #CustStakeLevel_Member
 DROP TABLE #CustWinLossLimit_Agent
 DROP TABLE #CustWinLossLimit_Member
-DROP TABLE #StakeLevelGroupDetail

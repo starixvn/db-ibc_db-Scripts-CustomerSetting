@@ -174,14 +174,11 @@ BEGIN
 										FOR XML PATH(''))
 							,2,200)
 
-	SELECT @StakeLevMember = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
-										FROM DEP_StakeLevel s WITH(NOLOCK) 
-											INNER JOIN GameGroup gg WITH(NOLOCK) 
-												ON s.GameGroupID = gg.GameGroupID AND gg.GroupName = 'Level 1'
-											CROSS APPLY @SportBetType t	
-										WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType 
-										FOR XML PATH(''))
-							,2,200)
+	SELECT @StakeLevMember = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
+								FROM DEP_StakeLevel s WITH(NOLOCK) 
+									CROSS APPLY @SportBetType t	
+								WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType 
+								ORDER BY s.MinStake)
 
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
 	INSERT INTO DEP_CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
