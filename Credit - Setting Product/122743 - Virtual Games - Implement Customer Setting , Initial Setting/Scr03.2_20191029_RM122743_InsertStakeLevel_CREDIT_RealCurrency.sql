@@ -1,7 +1,7 @@
 /*
 	Created By: Eden
 	Created Date: 20191029
-	Description: Stakelevel for Virtual Games CREDIT
+	Description: Stakelevel for Virtual Games CREDIT - Real Currency
 	DB: DBCust/CustDB	
 */
 USE CustDB
@@ -59,9 +59,6 @@ INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'SD$', 1, 5.00, 500.00) -- SGD
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'SD$', 2, 10.00, 1000.00) -- SGD
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'SD$', 3, 15.00, 2000.00) -- SGD
-INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 1, 5.00, 500.00) -- 
-INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 2, 10.00, 1000.00) -- 
-INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 3, 15.00, 2000.00) -- 
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'YNG', 1, 5.00, 500.00) -- YNG
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'YNG', 2, 10.00, 1000.00) -- YNG
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [Level], [MinStake], [MaxStake]) VALUES (4601, N'YNG', 3, 15.00, 2000.00) -- YNG

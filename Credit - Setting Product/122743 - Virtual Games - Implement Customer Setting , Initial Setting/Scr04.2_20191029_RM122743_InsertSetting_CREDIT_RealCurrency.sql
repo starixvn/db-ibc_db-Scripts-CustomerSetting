@@ -300,7 +300,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 0
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- --AND c.currency = 20
+ AND c.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -353,7 +353,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 0
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- --AND c.currency = 20
+ AND c.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
