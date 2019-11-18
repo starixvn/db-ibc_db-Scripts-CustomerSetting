@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: INSERT Global setting for Virtual game CREDIT ( Loss Limit , StakeLevel UUS)
+	Task: INSERT Global setting for Virtual game CREDIT ( Loss Limit UUS)
 	DB: DBCust/CustDB
 */
 /*
