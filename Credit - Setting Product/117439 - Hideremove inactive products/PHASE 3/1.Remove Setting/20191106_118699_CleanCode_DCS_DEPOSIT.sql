@@ -7,7 +7,7 @@
 --------------------------------------------------------------------------------------
 -- BEGIN STEP 1
 --------------------------------------------------------------------------------------
-ALTER  PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER  PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	@target VARCHAR(20),
 	@srecommend INT,
 	@SportTypeListXML XML
@@ -255,7 +255,7 @@ BEGIN
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_DynamicCustSetting3rd_09 
+		EXEC dbo.Acc_Dep_DynamicCustSetting_09 
 				 @srecommend = @srecommend
 				,@target = 'REPLICATED'
 				,@SportTypeListXML = @SportTypeListXML
@@ -342,7 +342,7 @@ BEGIN
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_DynamicCustSetting3rd_09 
+		EXEC dbo.Acc_Dep_DynamicCustSetting_09 
 				 @srecommend = @srecommend
 				,@target = 'DBCUST'
 				,@SportTypeListXML = @SportTypeListXML
