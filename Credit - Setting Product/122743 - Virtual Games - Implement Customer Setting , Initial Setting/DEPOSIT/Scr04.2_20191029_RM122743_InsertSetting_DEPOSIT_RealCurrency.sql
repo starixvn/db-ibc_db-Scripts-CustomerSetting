@@ -17,8 +17,6 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
@@ -61,23 +59,6 @@ BEGIN
 		BetType   SMALLINT
 	)
 	INSERT INTO @SportBetType(SportType, BetType) VALUES (245, 4601)
-
-	--------------------------------------------Product Status------------------------------------------------
-	UPDATE c 
-	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
-		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
-
-	UPDATE c 
-	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
-		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 

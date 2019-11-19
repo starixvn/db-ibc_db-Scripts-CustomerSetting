@@ -23,8 +23,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	
@@ -63,43 +61,6 @@ BEGIN
 		tBetType   SMALLINT
 	)
 	INSERT INTO @SportBettype(fSportType, fBetType, tSportType, tBetType) VALUES (212, 4001, 245, 4601)
-
-	--------------------------------------------Product Status------------------------------------------------
-	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
-		c.CustID
-	INTO #SMAStatus
-	FROM CustProductStatus c WITH (NOLOCK)
-		INNER JOIN #SMATemp d ON c.CustID = d.CustID
-		CROSS APPLY @SportBettype t
-		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
-	
-	SELECT
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
-		c.CustID
-	INTO #MemberStatus
-	FROM CustProductStatus c WITH (NOLOCK)
-		INNER JOIN #MemberTemp d ON c.CustID = d.CustID
-		CROSS APPLY @SportBettype t
-		INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.fBetType AND PSP.Sporttype = t.fSportType
-
-	UPDATE c 
-	SET  c.bitmapHasSynced = dbo.f_GenerateProductStatus (c.bitmapHasSynced,psp.bitmapOrder,1)
-		,c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,isDisabled)
-	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-		CROSS APPLY @SportBettype t
-		INNER JOIN  dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.tBetType AND PSP.Sporttype = t.tSportType
-		INNER JOIN  #SMAStatus temp ON temp.CustID = c.custid
-
-	UPDATE c 
-	SET  c.bitmapHasSynced = dbo.f_GenerateProductStatus (c.bitmapHasSynced,psp.bitmapOrder,1)
-		,c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,isDisabled)
-	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-		CROSS APPLY @SportBettype t
-		INNER JOIN  dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.tBetType AND PSP.Sporttype = t.tSportType
-		INNER JOIN  #MemberStatus temp ON temp.CustID = c.custid
 
 	------------------------------------PT Setting-------------------------------------------------	
 	--SMA LEVEL
