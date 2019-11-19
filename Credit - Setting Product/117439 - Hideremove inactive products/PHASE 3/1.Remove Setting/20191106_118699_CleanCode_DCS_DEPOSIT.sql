@@ -22,7 +22,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('DEP_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('DEP_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('DEP_CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('DEP_CustStakeLevel_Member') = 0 RETURN				
+	IF dbo.f_CheckRepTable('DEP_CustStakeLevel_Member') = 0 RETURN	
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN				
+	IF dbo.f_CheckRepTable('Dep_ProductSettingDetail') = 0 RETURN		
 
 	CREATE TABLE #Sporttype (Sporttype SMALLINT PRIMARY KEY)
 	INSERT INTO #Sporttype (Sporttype)
