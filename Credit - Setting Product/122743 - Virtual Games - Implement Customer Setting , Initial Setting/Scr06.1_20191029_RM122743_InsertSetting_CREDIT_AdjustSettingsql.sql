@@ -21,37 +21,6 @@ BEGIN
 			, @tSportType SMALLINT	= 245
 			, @tBetType SMALLINT	= 4601
 
-	-----------------------------------PRODUCT STATUS----------------------------------------------------
-	;WITH tmpMacau AS
-	(
-		SELECT
-			(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
-			c.CustID
-		FROM CustProductStatus c WITH (NOLOCK)
-			INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @fBetType AND PSP.Sporttype = @fSportType
-	)
-	,tmpVG AS
-	(
-		SELECT
-			(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, PSP.bitmapOrder)) as isDisabled,
-			c.CustID
-		FROM CustProductStatus c WITH (NOLOCK)
-			INNER JOIN dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @tBetType AND PSP.Sporttype = @tSportType
-	)
-	SELECT a.isDisabled,a.CustID
-	INTO #CustStatus
-	FROM tmpMacau a 
-		INNER JOIN tmpVG b ON a.CustID = b.CustID
-	WHERE a.isDisabled <> b.isDisabled
-	
-	CREATE CLUSTERED INDEX PK_tempCustStatus_CustID ON #CustStatus(CustID)
-
-	UPDATE c 
-	SET  c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,isDisabled)
-	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-		INNER JOIN  dbo.ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @tBetType AND PSP.Sporttype = @tSportType
-		INNER JOIN  #CustStatus temp ON temp.CustID = c.custid
-
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT f.CustID, f.IsLive, f.SuperPT, f.MasterPT, f.AgentPT, f.IsAutoMasterPT, f.AutoMasterPT, f.IsAutoSuperPT, f.AutoSuperPT, f.MinPT, f.MaxPT
 	INTO #CustPTSetting3rd_Agent
@@ -191,7 +160,6 @@ BEGIN
 	DROP TABLE #CustPTSetting3rd_Member
 	DROP TABLE #CustWinLossLimit_Agent
 	DROP TABLE #CustWinLossLimit_Member
-	DROP TABLE #CustStatus
 
 END
 GO
