@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert Dep_ProductStatusProfile setting for Virtual game - UUS
+	Task: Insert Dep_ProductStatusProfile setting for Virtual game - Real Currency
 	DB: DBCust/CustDB
 */
 
@@ -69,7 +69,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND c.currency = 20
+ AND c.currency <> 20
  AND c.CustID IN (0)
 
 -- For deployer info
@@ -122,7 +122,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND c.currency = 20
+ AND c.currency <> 20
  AND c.CustID IN (0)
 
 -- For deployer info

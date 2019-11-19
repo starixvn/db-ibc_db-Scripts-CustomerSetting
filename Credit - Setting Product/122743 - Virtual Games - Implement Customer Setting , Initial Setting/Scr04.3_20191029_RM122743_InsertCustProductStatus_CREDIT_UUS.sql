@@ -20,9 +20,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
 	
-
 	CREATE TABLE #CustTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
