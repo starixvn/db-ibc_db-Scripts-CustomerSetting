@@ -10,7 +10,7 @@ GO
 DECLARE @Sporttype SMALLINT
 SELECT @Sporttype = 245
 
---Import sites which offered BullFighting for batch 1
+--Import sites which offered this game for batch 1
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
