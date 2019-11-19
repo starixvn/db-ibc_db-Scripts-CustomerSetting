@@ -5,7 +5,7 @@
 	DB: DBCust/CustDB
 */
 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_19]
 	 @srecommend INT		
 	,@target VARCHAR(20)
 	,@max_custid INT
@@ -106,7 +106,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+	EXEC dbo.Acc_CustomerInfo_Execrep_19 @srecommend = @srecommend
 			,@target = 'REPLICATED'
 			,@max_custid = @max_custid
 						
@@ -159,7 +159,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+	EXEC dbo.Acc_CustomerInfo_Execrep_19 @srecommend = @srecommend
 			,@target = 'DBCUST'
 			,@max_custid = @max_custid
 						

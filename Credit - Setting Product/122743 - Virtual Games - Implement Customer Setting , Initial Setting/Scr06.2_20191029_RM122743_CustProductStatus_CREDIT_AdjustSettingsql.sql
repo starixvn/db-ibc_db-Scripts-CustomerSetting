@@ -4,12 +4,16 @@
 	DB: DBCUST/CustDB
 	Date: 20191031
 */ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09] 
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09] 
+@target VARCHAR(20)
 AS
 
 BEGIN
 	
 	SET NOCOUNT ON
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+
 	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN	
 
@@ -56,11 +60,18 @@ GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
+PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+
+EXEC dbo.[Acc_CustomerInfo_Execrep_09] @target = 'REPLICATED'
+
+PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
 PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 
+EXEC dbo.[Acc_CustomerInfo_Execrep_09] @target = 'DBCUST'
 
 PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
  
