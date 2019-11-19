@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert setting for Virtual game - Real Currency
+	Task: Insert setting for Virtual game - RealCurrency
 	DB: DBCust/CustDB
 */
 
@@ -24,7 +24,9 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
-	
+	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
+
 	DECLARE @currency INT
 	DECLARE @PT smallmoney = 93.00 --Licensee fee :  7% (Licensees take 93%, House takes 7%)
 
@@ -59,6 +61,23 @@ BEGIN
 		BetType   SMALLINT
 	)
 	INSERT INTO @SportBetType(SportType, BetType) VALUES (245, 4601)
+
+	--------------------------------------------Product Status------------------------------------------------
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		CROSS APPLY @SportBetType t
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		CROSS APPLY @SportBetType t
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 
