@@ -34,21 +34,23 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
+		,Currency INT
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
+		,Currency INT
 	)
 	
-	INSERT INTO #MemberTemp (CustID)
-	SELECT custid
+	INSERT INTO #MemberTemp (CustID,Currency)
+	SELECT custid,Currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
 
 	
-	INSERT INTO #SMATemp (CustID)
-	SELECT custid
+	INSERT INTO #SMATemp (CustID,Currency)
+	SELECT custid,Currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
 
@@ -200,27 +202,15 @@ BEGIN
 	WHERE c.SportType  = t.fSportType and c.BetType = t.fBetType
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
-	DECLARE @StakeLevAgent VARCHAR(200)
-	DECLARE @StakeLevMember VARCHAR(200)
-	SELECT @StakeLevAgent = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
-										FROM StakeLevel s WITH(NOLOCK) 
-											CROSS APPLY @SportBetType t	
-										WHERE s.ExchangeId = @currency AND s.GameTypeID = t.tBetType 
-										FOR XML PATH(''))
-							,2,200)
-
-	SELECT @StakeLevMember = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
-								FROM StakeLevel s WITH(NOLOCK) 
-									CROSS APPLY @SportBetType t	
-								WHERE s.ExchangeId = @currency AND s.GameTypeID = t.tBetType 
-								ORDER BY s.MinStake)
-
-	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
 	INSERT INTO CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
 	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
-		,StakeLevelList = @StakeLevAgent
+		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
+										FROM StakeLevel s WITH(NOLOCK) 
+										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
+										FOR XML PATH(''))
+							,2,200)
 	FROM #SMATemp tmp
 		CROSS APPLY @SportBettype t
 
@@ -228,14 +218,16 @@ BEGIN
 	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
-		,StakeLevelList = @StakeLevMember
+		,StakeLevelList = ( SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
+							FROM StakeLevel s WITH(NOLOCK) 
+							WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
+							ORDER BY s.MinStake
+							)
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
-	DROP TABLE #SMAStatus
-	DROP TABLE #MemberStatus
 END
 GO
 
