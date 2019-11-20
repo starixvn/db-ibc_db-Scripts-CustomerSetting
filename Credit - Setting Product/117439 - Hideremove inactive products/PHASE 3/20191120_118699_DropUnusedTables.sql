@@ -6,7 +6,9 @@
 */
 DROP TABLE DEL_AgentCommRate
 DROP TABLE DEL_CustCommRate 
---DROP TABLE DEL_P2PGameSetting
---DROP TABLE DEL_P2PGroupComm
---DROP TABLE P2PDefaultSetting
+
+--P2P table was removed from Publication
+DROP TABLE DEL_P2PGameSetting
+DROP TABLE DEL_P2PGroupComm
+DROP TABLE P2PDefaultSetting
 GO
