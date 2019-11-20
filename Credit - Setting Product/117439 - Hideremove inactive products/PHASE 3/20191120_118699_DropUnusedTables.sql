@@ -6,6 +6,7 @@
 */
 DROP TABLE DEL_AgentCommRate
 DROP TABLE DEL_CustCommRate 
-DROP TABLE DEL_P2PGameSetting
-DROP TABLE DEL_P2PGroupComm
+--DROP TABLE DEL_P2PGameSetting
+--DROP TABLE DEL_P2PGroupComm
+--DROP TABLE P2PDefaultSetting
 GO

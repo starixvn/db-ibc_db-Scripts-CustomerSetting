@@ -6,7 +6,8 @@
 */
 
 EXEC sp_rename 'DEL_AgentCommRate','AgentCommRate'	
-EXEC sp_rename 'DEL_CustCommRate','CustCommRate '	
-EXEC sp_rename 'DEL_P2PGameSetting','P2PGameSetting '
-EXEC sp_rename 'DEL_P2PGroupComm','P2PGroupComm '	
+EXEC sp_rename 'DEL_CustCommRate','CustCommRate'	
+--EXEC sp_rename 'DEL_P2PGameSetting','P2PGameSetting'
+--EXEC sp_rename 'DEL_P2PGroupComm','P2PGroupComm'	
+--EXEC sp_rename 'DEL_P2PDefaultSetting','P2PDefaultSetting'	
 GO
