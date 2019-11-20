@@ -1,6 +1,6 @@
 /*	
 	Created: 20191120Eden
-	Task: Remove code for BalanceDebitGame, BalanceCreditGame 
+	Task: Clean data for LiveCasino on BalanceDebitGame, BalanceCreditGame tables : bettype = 1101
 	Redmine: https://nexdev.net/issues/118699
 	DB: DBTXN/bodb02
 */
