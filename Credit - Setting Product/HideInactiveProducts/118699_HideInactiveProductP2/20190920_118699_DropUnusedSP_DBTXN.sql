@@ -9,6 +9,7 @@ GO
 
 DROP PROCEDURE DEL_Acc_CheckAllowedShow
 DROP PROCEDURE DEL_Acc_CustomerInsBalanceLiveCS_WinLimit
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS
 DROP PROCEDURE DEL_Acc_CustomerUpdAgent_MinMaxBetHR
 DROP PROCEDURE DEL_Acc_CustomerUpdAgent_MinMaxBetOpenTote
 DROP PROCEDURE DEL_Acc_CustomerUpdAllSettingHR
@@ -118,6 +119,7 @@ DROP PROCEDURE DEL_Admin_3rdAutoSettlement_s151_Step2
 
 DROP PROCEDURE Acc_CheckAllowedShow_xpre
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_xpre
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_xpre
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_xpre
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_xpre
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_xpre
@@ -227,6 +229,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_xpre
 
 DROP PROCEDURE Acc_CheckAllowedShow_xtest
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_xtest
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_xtest
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_xtest
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_xtest
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_xtest
@@ -336,6 +339,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_xtest
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT1
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_UAT1
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_UAT1
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_UAT1
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_UAT1
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_UAT1
@@ -445,6 +449,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT1
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT2
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_UAT2
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_UAT2
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_UAT2
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_UAT2
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_UAT2
@@ -554,6 +559,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT2
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT3
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_UAT3
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_UAT3
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_UAT3
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_UAT3
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_UAT3
@@ -663,6 +669,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT3
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT4
 DROP PROCEDURE Acc_CustomerInsBalanceLiveCS_WinLimit_UAT4
+DROP PROCEDURE Acc_CustomerSelWinLimitLiveCS_UAT4
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetHR_UAT4
 DROP PROCEDURE Acc_CustomerUpdAgent_MinMaxBetOpenTote_UAT4
 DROP PROCEDURE Acc_CustomerUpdAllSettingHR_UAT4
