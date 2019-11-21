@@ -4,7 +4,7 @@
 	Task: Delete existing settings for Microgame (LC & RNG), SLI Live Casino
 	DB: DBCUST/CUSTDB
 */	
-ALTER PROCEDURE [dbo].[Acc_CustSettingGame_19]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_18]
 	@srecommend INT, 
 	@target VARCHAR(20),
 	@SportTypeBetTypeListXML XML
@@ -174,7 +174,7 @@ BEGIN
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_CustSettingGame_19 
+		EXEC dbo.Acc_CustSetting_18 
 				 @srecommend = @srecommend
 				,@target = 'REPLICATED'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
@@ -262,7 +262,7 @@ BEGIN
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_CustSettingGame_19 
+		EXEC dbo.Acc_CustSetting_18 
 				 @srecommend = @srecommend
 				,@target = 'DBCUST'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
