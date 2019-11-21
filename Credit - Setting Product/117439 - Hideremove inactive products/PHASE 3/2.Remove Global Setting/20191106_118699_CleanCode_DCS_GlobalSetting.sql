@@ -13,6 +13,8 @@ UNION ALL SELECT 163, 33 -- Poker Games
 UNION ALL SELECT 207, 30 --Bullfighting
 UNION ALL SELECT 50, 20 --IMBC Cricket
 UNION ALL SELECT 206, 19 --Cockfighting
+UNION ALL SELECT 203, 13 --Microgaming - Live Casino
+UNION ALL SELECT 205, 17 --Microgaming - RNG Casino
 
 --> LossLimit_GlobalSetting
 DELETE a
