@@ -133,7 +133,7 @@ BEGIN
 			FOR XML PATH('SportTypeBetType') ,ROOT('SportTypeBetTypeList') ) 
 
 	INSERT INTO #Supers(custid)
-	SELECT top 1 ci.custid 
+	SELECT ci.custid 
 	FROM dbo.customer ci WITH (NOLOCK) 
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
@@ -220,7 +220,7 @@ BEGIN
 			FOR XML PATH('SportTypeBetType') ,ROOT('SportTypeBetTypeList') ) 
 
 	INSERT INTO #Supers(custid)
-	SELECT top 1 ci.custid 
+	SELECT ci.custid 
 	FROM dbo.customer ci WITH (NOLOCK) 
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
