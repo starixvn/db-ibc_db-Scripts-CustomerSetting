@@ -39,5 +39,5 @@ UNION ALL SELECT 7 , 245, 4601, 0, 38, NULL, NULL, NULL, NULL, NULL, 2, 4, 1, NU
 
 --> ProductStatusProfile
 INSERT INTO ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
-SELECT 245,4601,20
+SELECT 245,4601,19
 
