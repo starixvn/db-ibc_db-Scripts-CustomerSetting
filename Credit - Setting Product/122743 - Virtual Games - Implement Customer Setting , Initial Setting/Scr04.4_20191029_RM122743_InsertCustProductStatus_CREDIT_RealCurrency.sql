@@ -84,6 +84,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency <> 20
+ AND c.site <> 'CN88'
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -119,7 +120,7 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 
-PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
@@ -137,6 +138,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency <> 20
+ AND c.site <> 'CN88'
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -165,7 +167,7 @@ BEGIN
 	waitfor delay '00:00:0.100'
 END
 
-PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
 DROP TABLE #supers
 GO

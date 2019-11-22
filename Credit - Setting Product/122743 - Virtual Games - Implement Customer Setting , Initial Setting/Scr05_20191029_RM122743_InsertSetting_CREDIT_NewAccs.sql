@@ -115,6 +115,7 @@
 	 AND ci.Enabled = 1
 	 AND c.roleid IN (2,3,4)
 	 AND c.custid > @max_custid
+	 AND c.site <> 'CN88'
 
 	INSERT INTO #MemberTemp(CustID,Currency)
 	SELECT c.custid,c.currency
@@ -125,6 +126,7 @@
 	 AND ci.Enabled = 1
 	 AND c.roleid = 1
 	 AND c.custid > @max_custid
+	 AND c.site <> 'CN88'
 	
 	DECLARE @SportBettype TABLE
 	(
