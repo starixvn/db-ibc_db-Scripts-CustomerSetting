@@ -42,17 +42,17 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend
 
-	CREATE TABLE #CustPTSetting3rd_Agent		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustPTSetting3rd_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustPTGroupSetting3rd_Member	(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustBetSetting3rd_Agent		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustBetSetting3rd_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustDiscount3rd_Agent			(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustDiscount3rd_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustWinLossLimit_Agent		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustWinLossLimit_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustStakeLevel_Agent			(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #CustStakeLevel_Member			(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
+	CREATE TABLE #CustPTSetting3rd_Agent		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustPTSetting3rd_Member		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustPTGroupSetting3rd_Member	(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustBetSetting3rd_Agent		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustBetSetting3rd_Member		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustDiscount3rd_Agent			(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustDiscount3rd_Member		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustWinLossLimit_Agent		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustWinLossLimit_Member		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustStakeLevel_Agent			(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #CustStakeLevel_Member			(CustID INT, Sporttype SMALLINT)
 
 	DECLARE @RowCount1 INT = 1
 	DECLARE @RowCount2 INT = 1

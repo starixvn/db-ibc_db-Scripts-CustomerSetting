@@ -26,9 +26,9 @@ BEGIN
 		  ,Data.value('(BetType/text())[1]','smallint') as BetType
 	FROM @SportTypeBetTypeListXML.nodes('SportTypeBetTypeList/SportTypeBetType') Node(Data)
 
-	CREATE TABLE #custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT, PRIMARY KEY(CustID,Bettype,SportType))
-	CREATE TABLE #custoverride (CustID INT, Sporttype SMALLINT, Bettype SMALLINT, PRIMARY KEY(CustID,Bettype,SportType))
-	CREATE TABLE #DEP_custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT, PRIMARY KEY(CustID,Bettype,SportType))
+	CREATE TABLE #custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
+	CREATE TABLE #custoverride (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
+	CREATE TABLE #DEP_custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
 
 	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
 

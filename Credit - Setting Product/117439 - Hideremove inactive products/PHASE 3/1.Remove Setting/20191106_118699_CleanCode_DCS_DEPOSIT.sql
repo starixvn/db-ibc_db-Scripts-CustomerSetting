@@ -38,11 +38,11 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend
 
-	CREATE TABLE #DEP_CustPTSetting_Agent		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #DEP_CustPTSetting_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #DEP_CustPTGroupSetting_Member	(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #DEP_CustStakeLevel_Agent		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
-	CREATE TABLE #DEP_CustStakeLevel_Member		(CustID INT, Sporttype SMALLINT, PRIMARY KEY(CustID,SportType))
+	CREATE TABLE #DEP_CustPTSetting_Agent		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #DEP_CustPTSetting_Member		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #DEP_CustPTGroupSetting_Member	(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #DEP_CustStakeLevel_Agent		(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #DEP_CustStakeLevel_Member		(CustID INT, Sporttype SMALLINT)
 	CREATE TABLE #Dep_LicenseeProductSetting    (CustID INT, ProductSettingID INT)
 
 	DECLARE @RowCount1 INT = 1
