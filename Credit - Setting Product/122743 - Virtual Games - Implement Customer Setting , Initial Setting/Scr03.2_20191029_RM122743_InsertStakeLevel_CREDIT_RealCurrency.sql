@@ -152,8 +152,8 @@ BEGIN --/* Insert StakeLevel
 		,GameGroupID
 	)
 	SELECT	t.GameTypeID,
-			CONVERT(VARCHAR(20),CONVERT(FLOAT,t.MinStake)) AS MinLabel,
-			CONVERT(VARCHAR(20),CONVERT(FLOAT,t.MaxStake)) AS MaxLabel,
+			CONVERT(VARCHAR(20),CONVERT(DECIMAL(19,0),t.MinStake)) AS MinLabel,
+			CONVERT(VARCHAR(20),CONVERT(DECIMAL(19,0),t.MaxStake)) AS MaxLabel,
 			CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
 			CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
 			ExchangeId = e.exchangeid,
