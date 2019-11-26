@@ -70,7 +70,7 @@ INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
 SELECT 23,SportType,Bettype
 FROM dbo.f_CustSetting_SportBetTypeSettingSelect(23,11) AS F
 
-SELECT * FROM #SportBettypeFilterStatus WITH (NOLOCK)
+--SELECT * FROM #SportBettypeFilterOtherSetting WITH (NOLOCK)
 
 CREATE TABLE #SportBettypeFilterOtherSetting
 (
@@ -90,7 +90,12 @@ FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Prod
 INSERT INTO #SportBettypeFilterOtherSetting(Productid,SportType,Bettype)
 SELECT P.Productid,SportType,Bettype
 FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,8) AS F
---DROP TABLE  #SportBettypeFilterStatus
+
+INSERT INTO #SportBettypeFilterOtherSetting(Productid,SportType,Bettype)
+SELECT 23,SportType,Bettype
+FROM dbo.f_CustSetting_SportBetTypeSettingSelect(23,9) AS F
+
+--DROP TABLE  #SportBettypeFilterOtherSetting
 
 
 -----3-SB2 (Esport, Muay Thai)- Enabled-0,0,0/0.1,0.1,0.1
