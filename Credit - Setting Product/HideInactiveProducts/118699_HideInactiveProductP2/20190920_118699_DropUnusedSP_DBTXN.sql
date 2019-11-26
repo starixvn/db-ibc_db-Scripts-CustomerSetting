@@ -114,7 +114,7 @@ DROP PROCEDURE DEL_Agw_LoginDownline_Sub
 DROP PROCEDURE DEL_DBA_Bingo_UpdTicket
 DROP PROCEDURE DEL_DBA_Casino_BetIns_CorrectMissingTickets
 DROP PROCEDURE DEL_DBA_EnableDisableBingo
-DROP PROCEDURE DEL_DEL_f_GetHRAllowedCurr
+DROP FUNCTION DEL_DEL_f_GetHRAllowedCurr
 DROP PROCEDURE DEL_Admin_3rdAutoSettlement_s151_Step2
 
 DROP PROCEDURE Acc_CheckAllowedShow_xpre
@@ -224,7 +224,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_xpre
 DROP PROCEDURE DBA_Bingo_UpdTicket_xpre
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_xpre
 DROP PROCEDURE DBA_EnableDisableBingo_xpre
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_xpre
+DROP FUNCTION DEL_f_GetHRAllowedCurr_xpre
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_xpre
 
 DROP PROCEDURE Acc_CheckAllowedShow_xtest
@@ -334,7 +334,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_xtest
 DROP PROCEDURE DBA_Bingo_UpdTicket_xtest
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_xtest
 DROP PROCEDURE DBA_EnableDisableBingo_xtest
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_xtest
+DROP FUNCTION DEL_f_GetHRAllowedCurr_xtest
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_xtest
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT1
@@ -444,7 +444,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_UAT1
 DROP PROCEDURE DBA_Bingo_UpdTicket_UAT1
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_UAT1
 DROP PROCEDURE DBA_EnableDisableBingo_UAT1
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_UAT1
+DROP FUNCTION DEL_f_GetHRAllowedCurr_UAT1
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT1
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT2
@@ -554,7 +554,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_UAT2
 DROP PROCEDURE DBA_Bingo_UpdTicket_UAT2
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_UAT2
 DROP PROCEDURE DBA_EnableDisableBingo_UAT2
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_UAT2
+DROP FUNCTION DEL_f_GetHRAllowedCurr_UAT2
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT2
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT3
@@ -664,7 +664,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_UAT3
 DROP PROCEDURE DBA_Bingo_UpdTicket_UAT3
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_UAT3
 DROP PROCEDURE DBA_EnableDisableBingo_UAT3
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_UAT3
+DROP FUNCTION DEL_f_GetHRAllowedCurr_UAT3
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT3
 
 DROP PROCEDURE Acc_CheckAllowedShow_UAT4
@@ -774,7 +774,7 @@ DROP PROCEDURE Agw_LoginDownline_Sub_UAT4
 DROP PROCEDURE DBA_Bingo_UpdTicket_UAT4
 DROP PROCEDURE DBA_Casino_BetIns_CorrectMissingTickets_UAT4
 DROP PROCEDURE DBA_EnableDisableBingo_UAT4
-DROP PROCEDURE DEL_f_GetHRAllowedCurr_UAT4
+DROP FUNCTION DEL_f_GetHRAllowedCurr_UAT4
 DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT4
 
 USE CustDB

@@ -1681,7 +1681,7 @@ DROP PROCEDURE Las_Dep_UpdateMemberBetLimit3rd_UAT4
 
 --Add more
 DROP PROCEDURE DEL_Acc_CheckHRAllowedCurrency
-DROP PROCEDURE DEL_f_DepSuperAllowedHR
+DROP FUNCTION DEL_f_DepSuperAllowedHR
 DROP PROCEDURE DEL_Acc_CustOverrideUpdFI
 DROP PROCEDURE DEL_Acc_MT_GetLiveCSPT
 DROP PROCEDURE DEL_Acc_CustOverrideUpdVS
@@ -1692,7 +1692,7 @@ DROP PROCEDURE DEL_Acc_CustomerUpdMemberVS_Positiontaking
 DROP PROCEDURE DEL_Acc_CustomerUpdMemberVS_MAg
 DROP PROCEDURE DEL_Acc_CustomerUpdMemberVS_SAg
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_xpre
-DROP PROCEDURE f_DepSuperAllowedHR_xpre
+DROP FUNCTION f_DepSuperAllowedHR_xpre
 DROP PROCEDURE Acc_CustOverrideUpdFI_xpre
 DROP PROCEDURE Acc_MT_GetLiveCSPT_xpre
 DROP PROCEDURE Acc_CustOverrideUpdVS_xpre
@@ -1703,7 +1703,7 @@ DROP PROCEDURE Acc_CustomerUpdMemberVS_Positiontaking_xpre
 DROP PROCEDURE Acc_CustomerUpdMemberVS_MAg_xpre
 DROP PROCEDURE Acc_CustomerUpdMemberVS_SAg_xpre
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_xtest
-DROP PROCEDURE f_DepSuperAllowedHR_xtest
+DROP FUNCTION f_DepSuperAllowedHR_xtest
 DROP PROCEDURE Acc_CustOverrideUpdFI_xtest
 DROP PROCEDURE Acc_MT_GetLiveCSPT_xtest
 DROP PROCEDURE Acc_CustOverrideUpdVS_xtest
@@ -1714,7 +1714,7 @@ DROP PROCEDURE Acc_CustomerUpdMemberVS_Positiontaking_xtest
 DROP PROCEDURE Acc_CustomerUpdMemberVS_MAg_xtest
 DROP PROCEDURE Acc_CustomerUpdMemberVS_SAg_xtest
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_UAT1
-DROP PROCEDURE f_DepSuperAllowedHR_UAT1
+DROP FUNCTION f_DepSuperAllowedHR_UAT1
 DROP PROCEDURE Acc_CustOverrideUpdFI_UAT1
 DROP PROCEDURE Acc_MT_GetLiveCSPT_UAT1
 DROP PROCEDURE Acc_CustOverrideUpdVS_UAT1
@@ -1725,7 +1725,7 @@ DROP PROCEDURE Acc_CustomerUpdMemberVS_Positiontaking_UAT1
 DROP PROCEDURE Acc_CustomerUpdMemberVS_MAg_UAT1
 DROP PROCEDURE Acc_CustomerUpdMemberVS_SAg_UAT1
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_UAT2
-DROP PROCEDURE f_DepSuperAllowedHR_UAT2
+DROP FUNCTION f_DepSuperAllowedHR_UAT2
 DROP PROCEDURE Acc_CustOverrideUpdFI_UAT2
 DROP PROCEDURE Acc_MT_GetLiveCSPT_UAT2
 DROP PROCEDURE Acc_CustOverrideUpdVS_UAT2
@@ -1736,7 +1736,7 @@ DROP PROCEDURE Acc_CustomerUpdMemberVS_Positiontaking_UAT2
 DROP PROCEDURE Acc_CustomerUpdMemberVS_MAg_UAT2
 DROP PROCEDURE Acc_CustomerUpdMemberVS_SAg_UAT2
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_UAT3
-DROP PROCEDURE f_DepSuperAllowedHR_UAT3
+DROP FUNCTION f_DepSuperAllowedHR_UAT3
 DROP PROCEDURE Acc_CustOverrideUpdFI_UAT3
 DROP PROCEDURE Acc_MT_GetLiveCSPT_UAT3
 DROP PROCEDURE Acc_CustOverrideUpdVS_UAT3
@@ -1747,7 +1747,7 @@ DROP PROCEDURE Acc_CustomerUpdMemberVS_Positiontaking_UAT3
 DROP PROCEDURE Acc_CustomerUpdMemberVS_MAg_UAT3
 DROP PROCEDURE Acc_CustomerUpdMemberVS_SAg_UAT3
 DROP PROCEDURE Acc_CheckHRAllowedCurrency_UAT4
-DROP PROCEDURE f_DepSuperAllowedHR_UAT4
+DROP FUNCTION f_DepSuperAllowedHR_UAT4
 DROP PROCEDURE Acc_CustOverrideUpdFI_UAT4
 DROP PROCEDURE Acc_MT_GetLiveCSPT_UAT4
 DROP PROCEDURE Acc_CustOverrideUpdVS_UAT4
