@@ -670,7 +670,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 	
 --Members
@@ -682,7 +682,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = '' 
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '') 
 	AND isDisabled.value = 1
 --Select top SMA
 
@@ -694,7 +694,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 		
 --Select top MEMBER		
@@ -707,7 +707,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 	
 	
@@ -722,7 +722,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 --Members
@@ -734,7 +734,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 --Select top SMA
 
@@ -746,7 +746,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 		
@@ -760,7 +760,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 ----10-	Allbet- Disabled- Already has stake level
@@ -775,7 +775,8 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 	
 --Members
@@ -788,7 +789,8 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 --Select top SMA
 
 SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
@@ -800,7 +802,8 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 		
 --Select top MEMBER		
@@ -814,7 +817,8 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 -----11-Macau Game (MG, Card Club, Pragmatic)-Disable - No stake Level group
 
@@ -827,9 +831,9 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
-	
+
 --Members
 SELECT COUNT (DISTINCT C.CustID) AS MEMBERS
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
@@ -839,7 +843,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 --Select top SMA
 
@@ -851,7 +855,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 	
 		
@@ -865,7 +869,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 1
 	
 -----12-Macau Game (MG, Card Club, Pragmatic)-Enabled - No stake Level group
@@ -879,7 +883,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 --Members
@@ -891,7 +895,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 --Select top SMA
 
@@ -903,7 +907,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 		
@@ -917,7 +921,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
+	AND (C.StakeLevelList IS NULL OR C.StakeLevelList = '')
 	AND isDisabled.value = 0
 	
 -----13-Macau Game (MG, Card Club, Pragmatic)-Disable - Already has stake Level group
@@ -932,7 +936,8 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 --Members
 SELECT COUNT (DISTINCT C.CustID) AS MEMBERS
@@ -944,7 +949,8 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 --Select top SMA
 
 SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
@@ -956,7 +962,8 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 		
 --Select top MEMBER		
@@ -970,7 +977,8 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
-	AND C.StakeLevelList IS NOT NULL AND C.StakeLevelList <> ''
+	AND C.StakeLevelList IS NOT NULL 
+	AND C.StakeLevelList <> ''
 	
 -----14-Fishing World- Disabled
 
