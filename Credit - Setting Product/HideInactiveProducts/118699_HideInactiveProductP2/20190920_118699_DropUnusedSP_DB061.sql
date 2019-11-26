@@ -1,8 +1,8 @@
 /*	
 	Created: 20190920@Elodie
-	Task: Drop all unused SP in DBCUST
+	Task: Drop all unused SP in DBACC
 	Redmine: https://redmine.nexcel.vn/issues/118699
-	DB: DBCUST
+	DB: DBACC
 */
 USE bodb02
 GO 
@@ -137,8 +137,6 @@ DROP PROCEDURE DEL_Task_Archive_Event_DBSPARE
 DROP PROCEDURE DEL_Task_Archive_Event_DBSPARE_2010
 DROP PROCEDURE DEL_Task_Archive_Event_DBSPARE_2011
 DROP PROCEDURE DEL_Task_Archive_Event_DBSPARE_2013
-DROP PROCEDURE DEL__DEL_Acc_Rpt_WinLostSummary
-DROP PROCEDURE DEL_Acc_Rpt_WinlostRacing_Group
 DROP PROCEDURE Task_Archive_Event_DBSPARE_xpre
 DROP PROCEDURE Task_Archive_Event_DBSPARE_2010_xpre
 DROP PROCEDURE Task_Archive_Event_DBSPARE_2011_xpre
@@ -175,3 +173,7 @@ DROP PROCEDURE Task_Archive_Event_DBSPARE_2011_UAT4
 DROP PROCEDURE Task_Archive_Event_DBSPARE_2013_UAT4
 DROP PROCEDURE _DEL_Acc_Rpt_WinLostSummary_UAT4
 DROP PROCEDURE Acc_Rpt_WinlostRacing_Group_UAT4
+
+USE bodb_Report
+GO
+DROP PROCEDURE _DEL_Acc_Rpt_WinLostSummary

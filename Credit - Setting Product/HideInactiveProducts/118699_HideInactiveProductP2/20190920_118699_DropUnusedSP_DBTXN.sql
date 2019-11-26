@@ -780,7 +780,7 @@ DROP PROCEDURE Admin_3rdAutoSettlement_s151_Step2_UAT4
 USE CustDB
 GO
 
-DROP PROCEDURE DEL_Age_CustomerSelWinLimitList_Ag
+DROP PROCEDURE Age_CustomerSelWinLimitList_Ag
 DROP PROCEDURE DEL_Dot_Dep_CustomerInsMember_Legend
 DROP PROCEDURE DEL_Dot_Dep_CustomerSelMemBetSetting_Cust
 DROP PROCEDURE DEL_Dot_Dep_CustomerSelMinMax_Cust
