@@ -16,7 +16,7 @@ FROM customer ci WITH (NOLOCK)
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
-			AND ci.site IN ('789y')
+	AND ci.site IN ('789y')
 
 CREATE TABLE #SMATemp
 (
@@ -100,19 +100,18 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 16
 		AND isDisabled.value = 0
-		
 --Members
 SELECT COUNT(DISTINCT S.CustID)
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 16
@@ -125,7 +124,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 16
@@ -137,7 +136,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 16
@@ -150,7 +149,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -163,7 +162,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -177,7 +176,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -191,7 +190,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -205,7 +204,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -217,7 +216,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -228,7 +227,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -240,7 +239,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -254,7 +253,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -266,7 +265,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -278,7 +277,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -290,7 +289,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -303,7 +302,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -315,7 +314,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -327,7 +326,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -339,7 +338,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -352,7 +351,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -364,7 +363,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -376,7 +375,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -388,7 +387,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 5
@@ -401,7 +400,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -413,7 +412,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -425,7 +424,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -437,7 +436,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 28
@@ -450,7 +449,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -462,7 +461,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -474,7 +473,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -486,7 +485,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
 		AND F.Productid = 23
@@ -500,7 +499,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -513,7 +512,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -527,7 +526,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -541,7 +540,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -557,7 +556,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -570,7 +569,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -584,7 +583,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -598,7 +597,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -613,7 +612,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -626,7 +625,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -640,7 +639,7 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -654,7 +653,7 @@ FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.Cust
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1) 
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
@@ -668,10 +667,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 	
 --Members
@@ -680,10 +679,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = '' 
 	AND isDisabled.value = 1
 --Select top SMA
 
@@ -692,12 +691,11 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
-	
 		
 --Select top MEMBER		
 
@@ -706,10 +704,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	Cross JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 	
 	
@@ -721,10 +719,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 --Members
@@ -733,10 +731,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 --Select top SMA
 
@@ -745,10 +743,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 		
@@ -759,10 +757,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 ----10-	Allbet- Disabled- Already has stake level
@@ -774,7 +772,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN StakeLevel S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
@@ -786,7 +784,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN StakeLevel S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
@@ -798,7 +796,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN StakeLevel S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
@@ -812,7 +810,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN StakeLevel S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 21 
 	AND isDisabled.value = 1
@@ -825,10 +823,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 	
 --Members
@@ -837,10 +835,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 --Select top SMA
 
@@ -849,10 +847,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 	
 		
@@ -863,10 +861,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 1
 	
 -----12-Macau Game (MG, Card Club, Pragmatic)-Enabled - No stake Level group
@@ -877,10 +875,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 --Members
@@ -889,10 +887,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 --Select top SMA
 
@@ -901,10 +899,10 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 		
@@ -915,10 +913,10 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
-	AND C.StakeLevelList IS NULL
+	AND C.StakeLevelList IS NULL OR C.StakeLevelList = ''
 	AND isDisabled.value = 0
 	
 -----13-Macau Game (MG, Card Club, Pragmatic)-Disable - Already has stake Level group
@@ -930,7 +928,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN StakeLevelGroupDetail S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
@@ -942,7 +940,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN StakeLevelGroupDetail S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
 	AND isDisabled.value = 1
@@ -954,7 +952,7 @@ FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) 
 	INNER JOIN StakeLevelGroupDetail S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22 
 	AND isDisabled.value = 1
@@ -968,7 +966,7 @@ FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK
 	INNER JOIN StakeLevelGroupDetail S WITH (NOLOCK) ON C.StakeLevelList LIKE S.StakeLevelID
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
-	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype
+	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE F.Productid = 22
 	AND isDisabled.value = 1
