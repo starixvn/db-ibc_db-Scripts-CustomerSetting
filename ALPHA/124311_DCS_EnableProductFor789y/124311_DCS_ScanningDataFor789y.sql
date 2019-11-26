@@ -4,7 +4,7 @@ GO
 	Created: Tiara
 	Task: Scanning data for 789y headlines RedmineID: #124311
 	DB: DBCUST/CustDB
-	Date: 20191126
+	Date: 20191126 
 */ 
 
 --Get SMA of group headline 789y
@@ -12,11 +12,11 @@ CREATE TABLE #supers (custid int)
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
+FROM vw_customer ci WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
-	AND ci.site IN ('789y')
+			AND ci.site IN ('789y')
 
 CREATE TABLE #SMATemp
 (
@@ -49,7 +49,7 @@ CREATE TABLE #ProductID
 INSERT INTO #ProductID(Productid) 
 	SELECT 5 UNION ALL
 	SELECT 16 UNION ALL
-    SELECT 21 UNION ALL
+	SELECT 21 UNION ALL
 	SELECT 22 UNION ALL
 	SELECT 24 UNION ALL
 	SELECT 28 UNION ALL
@@ -103,8 +103,9 @@ FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID =
 	INNER JOIN #SportBettypeFilterOtherSetting O WITH (NOLOCK) ON C.SportType = O.SportType AND C.BetType = O.Bettype AND F.Productid = O.Productid
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, P.bitmapOrder) as isDisabled
 WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet = 0 AND C.MaxBet = 0 AND C.MaxPerMatch = 0) OR (C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1)) 
-		AND F.Productid = 16
+		AND F.Productid = 16 
 		AND isDisabled.value = 0
+		
 --Members
 SELECT COUNT(DISTINCT S.CustID)
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
@@ -119,7 +120,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, c.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -131,7 +132,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, 1 AS roleid, c.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -171,7 +172,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, c.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -185,7 +186,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, 1 AS roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -222,7 +223,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND F.Productid = 5
 		AND isDisabled.value = 0
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, c.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -234,7 +235,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID,1, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -272,7 +273,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -284,7 +285,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, 1, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -321,7 +322,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -333,7 +334,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 0
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -370,7 +371,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -382,7 +383,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, 1, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -419,7 +420,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -431,7 +432,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID,1, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -468,7 +469,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -480,7 +481,7 @@ WHERE ((C.MinBet = 0.1 AND C.MaxBet = 0.1 AND C.MaxPerMatch = 0.1) OR (C.MinBet 
 		AND isDisabled.value = 1
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -521,7 +522,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID,s.roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -535,7 +536,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, 1,C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -578,7 +579,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, s.roleid, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -592,7 +593,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID,1, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -634,7 +635,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top SMA
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #SMATemp S INNER JOIN CustBetSetting3rd_Agent C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -648,7 +649,7 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		
 		
 --Select top MEMBER		
-SELECT  DISTINCT TOP 1000 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
+SELECT  DISTINCT TOP 100 S.CustID, C.MinBet, C.MaxBet, C.MaxPerMatch, C.SportType, C.BetType
 FROM #MemberTemp S INNER JOIN CustBetSetting3rd_Member C WITH (NOLOCK) ON S.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -659,7 +660,8 @@ WHERE (C.MinBet != 0.1 OR C.MaxBet != 0.1 OR C.MaxPerMatch != 0.1)
 		AND (C.MinBet != 0 OR C.MaxBet != 0 OR C.MaxPerMatch != 0)
 		AND F.Productid = 23
 		AND isDisabled.value = 1
-				
+
+			
 -----8-	Allbet- Disabled- No stake level
 --SMA
 SELECT COUNT (DISTINCT C.CustID) AS SMA
@@ -686,7 +688,7 @@ WHERE F.Productid = 21
 	AND isDisabled.value = 1
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID, sma.roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -699,7 +701,7 @@ WHERE F.Productid = 21
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID, 1 as roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	Cross JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -738,7 +740,7 @@ WHERE F.Productid = 21
 	AND isDisabled.value = 0
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID, sma.roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -752,7 +754,7 @@ WHERE F.Productid = 21
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID, 1 roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -793,7 +795,7 @@ WHERE F.Productid = 21
 	AND C.StakeLevelList <> ''
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID,roleid, c.SportType, c.BetType,  C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -808,7 +810,7 @@ WHERE F.Productid = 21
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID, 1 as roleid, c.SportType, c.BetType,  C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -847,7 +849,7 @@ WHERE F.Productid = 22
 	AND isDisabled.value = 1
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID, roleid, c.SportType, c.BetType,  C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -861,7 +863,7 @@ WHERE F.Productid = 22
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID, 1 roleid, c.SportType, c.BetType,  C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -899,7 +901,7 @@ WHERE F.Productid = 22
 	AND isDisabled.value = 0
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID, roleid, c.SportType, c.BetType,C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -913,7 +915,7 @@ WHERE F.Productid = 22
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID,1 roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -953,7 +955,7 @@ WHERE F.Productid = 22
 	AND C.StakeLevelList <> ''
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 SMA.CustID, roleid, c.SportType, c.BetType, C.StakeLevelList
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustStakeLevel_Agent C WITH (NOLOCK) ON SMA.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -968,7 +970,7 @@ WHERE F.Productid = 22
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID, C.StakeLevelList
+SELECT DISTINCT TOP 100 M.CustID, 1 roleid, c.SportType, c.BetType,C.StakeLevelList
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustStakeLevel_Member C WITH (NOLOCK) ON M.CustID = C.CustID 
 	INNER JOIN CustProductStatus CS WITH (NOLOCK) ON CS.CustID = C.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
@@ -1001,7 +1003,7 @@ WHERE F.Productid = 24
 	AND isDisabled.value = 1
 --Select top SMA
 
-SELECT DISTINCT TOP 1000 SMA.CustID
+SELECT DISTINCT TOP 100 SMA.CustID, roleid
 FROM #SMATemp SMA WITH (NOLOCK) INNER JOIN CustProductStatus CS WITH (NOLOCK) ON SMA.CustID = CS.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
@@ -1012,7 +1014,7 @@ WHERE F.Productid = 24
 		
 --Select top MEMBER		
 
-SELECT DISTINCT TOP 1000 M.CustID
+SELECT DISTINCT TOP 100 M.CustID, 1
 FROM #MemberTemp M WITH (NOLOCK) INNER JOIN CustProductStatus CS WITH (NOLOCK) ON M.CustID = CS.CustID 
 	CROSS JOIN ProductStatusProfile P WITH (NOLOCK) 
 	INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype
