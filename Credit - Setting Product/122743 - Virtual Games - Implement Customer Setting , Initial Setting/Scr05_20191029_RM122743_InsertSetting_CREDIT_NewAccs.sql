@@ -336,7 +336,7 @@
 		,StakeLevelList = ( SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
 							FROM StakeLevel s WITH(NOLOCK) 
 							WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
-							ORDER BY s.MinStake
+							ORDER BY s.MaxStake
 							)
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t

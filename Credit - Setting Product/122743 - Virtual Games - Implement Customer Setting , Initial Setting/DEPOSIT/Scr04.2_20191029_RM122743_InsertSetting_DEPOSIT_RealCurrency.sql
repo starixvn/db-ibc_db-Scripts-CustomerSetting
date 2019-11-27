@@ -201,7 +201,7 @@ BEGIN
 								FROM DEP_StakeLevel s WITH(NOLOCK) 
 									CROSS APPLY @SportBetType t	
 								WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType 
-								ORDER BY s.MinStake)
+								ORDER BY s.MaxStake)
 
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
 	INSERT INTO DEP_CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
