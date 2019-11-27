@@ -16,6 +16,7 @@
 	INTO #Dep_CustPTSetting_Agent
 	FROM Dep_CustPTSetting_Agent a WITH(NOLOCK)
 	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -26,6 +27,7 @@
 	INTO #Dep_CustPTSetting_Member
 	FROM Dep_CustPTSetting_Member a WITH(NOLOCK)
 	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -36,6 +38,7 @@
 	INTO #Dep_CustPTGroupSetting_Member
 	FROM Dep_CustPTGroupSetting_Member a WITH(NOLOCK)
 	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.AgentID = ci.custid AND ci.currency <> 20
 	WHERE a.AgentID >@max_custid
 
 	DELETE a
@@ -47,6 +50,7 @@
 	INTO #Dep_CustStakeLevel_Agent
 	FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
 	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -57,6 +61,7 @@
 	INTO #Dep_CustStakeLevel_Member
 	FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
 	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -68,6 +73,7 @@
 	INTO #Dep_LicenseeProductSetting
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 	INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid AND ci.currency <> 20
 	WHERE dp.ProductID = 38
 		AND dl.CustID >@max_custid
 
