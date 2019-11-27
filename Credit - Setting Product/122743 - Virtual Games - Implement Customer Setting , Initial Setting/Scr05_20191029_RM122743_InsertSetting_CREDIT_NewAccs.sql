@@ -105,28 +105,32 @@
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
 	)
+
+	CREATE TABLE #supers (custid int)
+
+	INSERT INTO #supers(custid)
+	SELECT c.custid
+	FROM customer c WITH (NOLOCK) 
+		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+		INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid 
+	WHERE c.roleid = 4  
+	 AND s.islicensee = 0
+	 AND cs.isinternal = 0
+	 AND ci.username NOT LIKE '3rdSuper%'
+	 AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	 AND ci.Enabled = 1
+	 AND c.site <> 'CN88'
 	
 	INSERT INTO #SMATemp(CustID,Currency)
-	SELECT c.custid,c.currency
-	FROM customer c WITH (NOLOCK) 
-		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-	WHERE s.islicensee = 0
-	 AND ci.Enabled = 1
-	 AND c.roleid IN (2,3,4)
-	 AND c.custid > @max_custid
-	 AND c.site <> 'CN88'
+	SELECT custid, roleid, currency
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 
 	INSERT INTO #MemberTemp(CustID,Currency)
-	SELECT c.custid,c.currency
-	FROM customer c WITH (NOLOCK) 
-		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-	WHERE s.islicensee = 0
-	 AND ci.Enabled = 1
-	 AND c.roleid = 1
-	 AND c.custid > @max_custid
-	 AND c.site <> 'CN88'
+	SELECT custid, currency
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	
 	DECLARE @SportBettype TABLE
 	(

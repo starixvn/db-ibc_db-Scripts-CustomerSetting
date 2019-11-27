@@ -80,8 +80,12 @@ SELECT c.custid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid 
 WHERE c.roleid = 4  
  AND s.islicensee = 0
+ AND cs.isinternal = 0
+ AND ci.username NOT LIKE '3rdSuper%'
+ AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency = 20
@@ -134,8 +138,12 @@ SELECT c.custid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid 
 WHERE c.roleid = 4  
  AND s.islicensee = 0
+ AND cs.isinternal = 0
+ AND ci.username NOT LIKE '3rdSuper%'
+ AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency = 20
