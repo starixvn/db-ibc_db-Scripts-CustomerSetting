@@ -124,7 +124,7 @@
 	 AND c.site <> 'CN88'
 	
 	INSERT INTO #SMATemp(CustID,Currency)
-	SELECT custid, roleid, currency
+	SELECT custid, currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 
