@@ -120,6 +120,7 @@
 	 AND ci.username NOT LIKE '3rdSuper%'
 	 AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	 AND ci.Enabled = 1
+	 AND ci.currency <> 20
 	 AND c.site <> 'CN88'
 	
 	INSERT INTO #SMATemp(CustID,Currency)

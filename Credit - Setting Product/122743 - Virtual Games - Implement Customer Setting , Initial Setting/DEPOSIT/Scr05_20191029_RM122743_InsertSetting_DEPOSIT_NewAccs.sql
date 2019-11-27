@@ -96,26 +96,29 @@
 	   ,Currency INT
 	   ,RoleID TINYINT
 	)
-	
-	INSERT INTO #SMATemp(CustID,Currency,RoleID)
-	SELECT c.custid,c.currency,c.roleid
+
+	CREATE TABLE #supers (custid int)
+
+	INSERT INTO #supers(custid)
+	SELECT c.custid
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-	WHERE s.islicensee = 1
+	WHERE c.roleid = 4  
+	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
-	 AND c.roleid IN (2,3,4)
-	 AND c.custid > @max_custid
+	 AND c.currency <> 20
+	 AND c.CustID IN (0)
+	
+	INSERT INTO #SMATemp(CustID,Currency)
+	SELECT custid, roleid, currency
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 
 	INSERT INTO #MemberTemp(CustID,Currency)
-	SELECT c.custid,c.currency
-	FROM customer c WITH (NOLOCK) 
-		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
-		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-	WHERE s.islicensee = 1
-	 AND ci.Enabled = 1
-	 AND c.roleid = 1
-	 AND c.custid > @max_custid
+	SELECT custid, currency
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	
 	DECLARE @SportBettype TABLE
 	(
