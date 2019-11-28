@@ -227,11 +227,12 @@ BEGIN
 	FROM #SMATemp tmp
 		CROSS APPLY @SportBetType t
 
-	INSERT INTO DEP_CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
+	INSERT INTO DEP_CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList,LastUpdated)
 	SELECT tmp.CustID
 		,SportType = t.SportType
 		,BetType = t.BetType
 		,StakeLevelList = @StakeLevMember
+		,GETDATE()
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBetType t
 

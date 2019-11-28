@@ -337,7 +337,7 @@
 	FROM #SMATemp tmp
 		CROSS APPLY @SportBettype t
 
-	INSERT INTO CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList)
+	INSERT INTO CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList,LastUpdated)
 	SELECT tmp.CustID
 		,SportType = t.tSportType
 		,BetType = t.tBetType
@@ -346,6 +346,7 @@
 							WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.tBetType
 							ORDER BY s.MaxStake
 							)
+		,GETDATE()
 	FROM #MemberTemp tmp
 		CROSS APPLY @SportBettype t
 
