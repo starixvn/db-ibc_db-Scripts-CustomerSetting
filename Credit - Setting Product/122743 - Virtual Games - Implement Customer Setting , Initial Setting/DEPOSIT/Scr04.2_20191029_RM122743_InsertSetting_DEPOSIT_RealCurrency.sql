@@ -35,40 +35,33 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
-		,mrecommend INT
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
 		,roleid	TINYINT
-		,mrecommend INT
 	)
 	
-	INSERT INTO #MemberTemp (CustID,mrecommend)
-	SELECT custid,mrecommend
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend=@srecommend AND roleid=3 AND username LIKE '%Acc%'
+		AND custid<=@max_custid 
+
+	INSERT INTO #MemberTemp (CustID)
+	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
+	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	
-	INSERT INTO #SMATemp (CustID,roleid,mrecommend)
-	SELECT custid,roleid,mrecommend
+	INSERT INTO #SMATemp (CustID,roleid)
+	SELECT custid,roleid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
+	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	DELETE #MemberTemp 
-	WHERE mrecommend IN (SELECT custid 
-						FROM dbo.custinfo WITH(NOLOCK)
-						WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
-	OPTION( optimize for (@srecommend = 0))	
-
-	DELETE #SMATemp 
-	WHERE mrecommend IN (SELECT custid 
-						FROM dbo.custinfo WITH(NOLOCK)
-						WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
-	OPTION( optimize for (@srecommend = 0))	
-
-	
 	DECLARE @SportBetType TABLE
 	(
 		SportType SMALLINT, 
@@ -76,45 +69,53 @@ BEGIN
 	)
 	INSERT INTO @SportBetType(SportType, BetType) VALUES (245, 4601)
 
-	DECLARE @bitmap_0 BINARY(32),@bitmapOrder INT
+	--------------------------------------------Product Status------------------------------------------------
+	DECLARE @bitmapOrder INT
 	 
 	SELECT @bitmapOrder = bitmapOrder 
 	FROM dbo.Dep_ProductStatusProfile m WITH (NOLOCK) 
 		INNER JOIN @SportBetType t ON t.Sporttype = m.SportType AND t.Bettype = m.BetType
 
-	SET @bitmap_0 =  dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)
+	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
+	CREATE TABLE #TempProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
 
-	--------------------------------------------Product Status------------------------------------------------
-	UPDATE c 
-	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
+	SELECT c.CustID
+		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
 	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 		CROSS APPLY @SportBetType t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
-
-	UPDATE c 
-	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	UNION ALL
+	SELECT c.CustID
+		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
 	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 		CROSS APPLY @SportBetType t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
+	
+	DECLARE @batch int = 3000
+	WHILE 1 <> 1 
+	BEGIN
+		TRUNCATE TABLE #TempProductStatus
 
-	-- Insert new	
-	INSERT INTO [dbo].[Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
-	SELECT	c.custid
-			, @bitmap_0 AS bitmapIsDisabled
-			, @bitmap_0  AS bitmapIsHidden
-	FROM #SMATemp C
-	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] T WITH (NOLOCK) WHERE t.custid = c.custid)
+		DELETE TOP (@batch) a
+		OUTPUT deleted.CustID,deleted.bitmapIsHidden,deleted.bitmapIsDisabled INTO #TempProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
+		FROM #Dep_CustProductStatus a 
 
-	INSERT INTO [dbo].[Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
-	SELECT	c.custid
-			, @bitmap_0 AS bitmapIsDisabled
-			, @bitmap_0  AS bitmapIsHidden
-	FROM #MemberTemp C
-	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] T WITH (NOLOCK) WHERE t.custid = c.custid)
+		IF @@ROWCOUNT = 0 
+			BREAK;
+
+		UPDATE c 
+		SET  c.bitmapIsHidden = tmp.bitmapIsHidden
+			,c.bitmapIsDisabled = tmp.bitmapIsHidden
+		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
+
+		WAITFOR DELAY '00:00:00.100'
+	END
 
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 

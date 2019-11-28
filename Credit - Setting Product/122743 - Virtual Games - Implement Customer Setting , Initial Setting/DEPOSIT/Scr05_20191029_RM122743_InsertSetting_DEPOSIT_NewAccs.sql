@@ -117,30 +117,23 @@
 	 AND ci.Enabled = 1
 	 AND c.currency <> 20
 	 AND s.site IN ('','')
+
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid=3 AND username LIKE '%Acc%'
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend)
 	SELECT custid, roleid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
+	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO #MemberTemp(CustID,Currency,mrecommend)
 	SELECT custid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
-
-	DELETE #MemberTemp 
-	WHERE mrecommend IN (SELECT custid 
-						FROM dbo.custinfo WITH(NOLOCK)
-						WHERE srecommend IN (SELECT custid FROM #supers) 
-							AND username like '%Acc%' 
-							AND roleid=3)
-
-	DELETE #SMATemp 
-	WHERE mrecommend IN (SELECT custid 
-						FROM dbo.custinfo WITH(NOLOCK)
-						WHERE srecommend IN (SELECT custid FROM #supers) 
-							AND username like '%Acc%' 
-							AND roleid=3)
+	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	DECLARE @SportBettype TABLE
 	(
