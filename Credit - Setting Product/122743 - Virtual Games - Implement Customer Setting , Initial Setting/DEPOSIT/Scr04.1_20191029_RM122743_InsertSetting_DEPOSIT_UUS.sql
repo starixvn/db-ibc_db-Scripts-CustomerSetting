@@ -35,24 +35,38 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
+		,mrecommend INT
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED
 		,roleid	TINYINT
+		,mrecommend INT
 	)
 	
-	INSERT INTO #MemberTemp (CustID)
-	SELECT custid
+	INSERT INTO #MemberTemp (CustID,mrecommend)
+	SELECT custid,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
 
 	
-	INSERT INTO #SMATemp (CustID,roleid)
-	SELECT custid,roleid
+	INSERT INTO #SMATemp (CustID,roleid,mrecommend)
+	SELECT custid,roleid,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
+
+	DELETE #MemberTemp 
+	WHERE mrecommend IN (SELECT custid 
+						FROM dbo.custinfo WITH(NOLOCK)
+						WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
+	OPTION( optimize for (@srecommend = 0))	
+
+	DELETE #SMATemp 
+	WHERE mrecommend IN (SELECT custid 
+						FROM dbo.custinfo WITH(NOLOCK)
+						WHERE srecommend=@srecommend and username like '%Acc%' and roleid=3)
+	OPTION( optimize for (@srecommend = 0))	
 
 	
 	DECLARE @SportBetType TABLE
@@ -245,7 +259,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency = 20
- AND c.CustID IN (0)
+ AND s.site IN ('','')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -298,7 +312,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency = 20
- AND c.CustID IN (0)
+ AND s.site IN ('','')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

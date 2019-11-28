@@ -94,6 +94,7 @@
 	(
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
+	   ,mrecommend INT
 	)
 
 	CREATE TABLE #SMATemp
@@ -101,6 +102,7 @@
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
 	   ,RoleID TINYINT
+	   ,mrecommend INT
 	)
 
 	CREATE TABLE #supers (custid int)
@@ -114,18 +116,32 @@
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
 	 AND c.currency <> 20
-	 AND c.CustID IN (0)
+	 AND s.site IN ('','')
 	
-	INSERT INTO #SMATemp(CustID,RoleID,Currency)
-	SELECT custid, roleid, currency
+	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend)
+	SELECT custid, roleid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 
-	INSERT INTO #MemberTemp(CustID,Currency)
-	SELECT custid, currency
+	INSERT INTO #MemberTemp(CustID,Currency,mrecommend)
+	SELECT custid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
-	
+
+	DELETE #MemberTemp 
+	WHERE mrecommend IN (SELECT custid 
+						FROM dbo.custinfo WITH(NOLOCK)
+						WHERE srecommend IN (SELECT custid FROM #supers) 
+							AND username like '%Acc%' 
+							AND roleid=3)
+
+	DELETE #SMATemp 
+	WHERE mrecommend IN (SELECT custid 
+						FROM dbo.custinfo WITH(NOLOCK)
+						WHERE srecommend IN (SELECT custid FROM #supers) 
+							AND username like '%Acc%' 
+							AND roleid=3)
+
 	DECLARE @SportBettype TABLE
 	(
 		SportType SMALLINT, 
