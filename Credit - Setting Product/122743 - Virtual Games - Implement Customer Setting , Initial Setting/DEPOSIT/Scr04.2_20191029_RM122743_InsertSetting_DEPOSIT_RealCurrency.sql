@@ -261,7 +261,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency <> 20
- AND s.site IN ('','')
+ AND s.site IN ('Athena000')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -314,7 +314,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency <> 20
- AND s.site IN ('','')
+ AND s.site IN ('Athena000')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

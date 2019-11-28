@@ -116,7 +116,7 @@
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
 	 AND c.currency <> 20
-	 AND s.site IN ('','')
+	 AND s.site IN ('Athena000')
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
