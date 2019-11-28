@@ -83,7 +83,7 @@ BEGIN
 	SELECT c.CustID
 		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
 		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		CROSS APPLY @SportBetType t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
@@ -91,7 +91,7 @@ BEGIN
 	SELECT c.CustID
 		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
 		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		CROSS APPLY @SportBetType t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
