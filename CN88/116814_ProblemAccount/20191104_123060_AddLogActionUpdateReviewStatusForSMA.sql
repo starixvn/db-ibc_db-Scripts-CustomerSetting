@@ -10,7 +10,7 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT	31611, 'Update Review Status for SMA', 'CS_ProblemAccount_ReviewStatusUpd', 0, NULL, NULL
+SELECT	31605, 'Update Review Status for SMA', 'CS_ProblemAccount_ReviewStatusUpd', 0, NULL, NULL
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
 
