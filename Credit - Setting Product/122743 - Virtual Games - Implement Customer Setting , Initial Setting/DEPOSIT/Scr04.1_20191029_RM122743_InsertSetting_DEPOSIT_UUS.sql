@@ -110,7 +110,7 @@ BEGIN
 
 		UPDATE c 
 		SET  c.bitmapIsHidden = tmp.bitmapIsHidden
-			,c.bitmapIsDisabled = tmp.bitmapIsHidden
+			,c.bitmapIsDisabled = tmp.bitmapIsDisabled
 		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
 
