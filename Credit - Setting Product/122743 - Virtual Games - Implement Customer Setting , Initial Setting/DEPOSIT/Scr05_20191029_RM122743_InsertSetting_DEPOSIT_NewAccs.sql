@@ -142,13 +142,11 @@
 	)
 	INSERT INTO @SportBettype(SportType, BetType) VALUES (245, 4601)
 
-	DECLARE @bitmap_0 BINARY(32),@bitmapOrder INT
+	DECLARE @bitmapOrder INT
 	 
 	SELECT @bitmapOrder = bitmapOrder 
 	FROM dbo.Dep_ProductStatusProfile m WITH (NOLOCK) 
 		INNER JOIN @SportBetType t ON t.Sporttype = m.SportType AND t.Bettype = m.BetType
-
-	SET @bitmap_0 =  dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)
 
 	--------------------------------------------Product Status------------------------------------------------
 	UPDATE c 
@@ -166,21 +164,6 @@
 		CROSS APPLY @SportBetType t
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
-	
-	-- Insert new	
-	INSERT INTO [dbo].[Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
-	SELECT	c.custid
-			, @bitmap_0 AS bitmapIsDisabled
-			, @bitmap_0  AS bitmapIsHidden
-	FROM #SMATemp C
-	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] T WITH (NOLOCK) WHERE t.custid = c.custid)
-
-	INSERT INTO [dbo].[Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
-	SELECT	c.custid
-			, @bitmap_0 AS bitmapIsDisabled
-			, @bitmap_0  AS bitmapIsHidden
-	FROM #MemberTemp C
-	WHERE NOT EXISTS (SELECT 1 FROM [dbo].[Dep_CustProductStatus] T WITH (NOLOCK) WHERE t.custid = c.custid)
 
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 
