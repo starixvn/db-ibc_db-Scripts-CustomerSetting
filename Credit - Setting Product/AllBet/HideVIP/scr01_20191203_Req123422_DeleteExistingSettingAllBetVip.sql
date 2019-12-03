@@ -1,7 +1,7 @@
 /*
 	Created: Winnie
-	Date: 20190617
-	Task: Delete existing data of Sporttype=165. Cardclub RedmineID:#107643
+	Date: 20191203
+	Task: Delete existing data of Sporttype=211 bettype 2402 RedmineID:#124422
 	DB: DBCust/CustDB
 */
  
@@ -21,26 +21,23 @@ BEGIN
 	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
-	IF dbo.f_CheckRepTable('GameGroup') = 0 RETURN
 	
-	DECLARE @Sporttype SMALLINT 
+	DECLARE @Sporttype SMALLINT,@Bettype INT 
 	
-	SELECT @Sporttype = 165
+	SELECT @Sporttype = 211
 
-	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM GameGroup WITH(ROWLOCK,UPDLOCK) WHERE RefSportType=@Sporttype AND IsDeposit=0
-	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=1901
-	DELETE FROM StakeLevelGroupDetail  WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=1901
+	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
+	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
+	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=@Bettype
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype
 	END
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype
 	END	
 END	
 GO
