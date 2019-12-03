@@ -74,7 +74,7 @@ INSERT #tmp ([ID], [Headline], [Tool]) VALUES (55, N'M50RM', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (56, N'M53SD', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (57, N'S49RM', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (58, N'SSTM', N'Wechat ')
-INSERT #tmp ([ID], [Headline], [Tool]) VALUES (59, N'SSTM', N'What''sApp')
+INSERT #tmp ([ID], [Headline], [Tool]) VALUES (58, N'SSTM', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (60, N'M83ARM', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (61, N'S98R', N'Skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (62, N'SDRMB', N'What''sApp')
@@ -99,7 +99,7 @@ INSERT #tmp ([ID], [Headline], [Tool]) VALUES (80, N'M606HK', N'Wechat ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (81, N'S2R', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (82, N'S222H', N'Wechat ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (83, N'S688H', N'What''sApp')
-INSERT #tmp ([ID], [Headline], [Tool]) VALUES (84, N'S688H', N'skype ')
+INSERT #tmp ([ID], [Headline], [Tool]) VALUES (83, N'S688H', N'skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (85, N'M818H', N'Phone')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (86, N'S59BR', N'skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (87, N'SAKM', N'What''sApp')
@@ -172,7 +172,7 @@ INSERT #tmp ([ID], [Headline], [Tool]) VALUES (152, N'JJB', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (153, N'VVG', N'Wechat ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (154, N'87R', N'Skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (155, N'S359M', N'Skype ')
-INSERT #tmp ([ID], [Headline], [Tool]) VALUES (156, N'S359M', N'What''sApp')
+INSERT #tmp ([ID], [Headline], [Tool]) VALUES (155, N'S359M', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (157, N'JTRIHK', N'Skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (158, N'QQMA', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (159, N'QQTB', N'What''sApp')
@@ -206,7 +206,7 @@ INSERT #tmp ([ID], [Headline], [Tool]) VALUES (186, N'TS1', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (187, N'DS1', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (188, N'S8R', N'Skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (189, N'S7D', N'What''sApp')
-INSERT #tmp ([ID], [Headline], [Tool]) VALUES (190, N'S7D', N'Skype ')
+INSERT #tmp ([ID], [Headline], [Tool]) VALUES (189, N'S7D', N'Skype ')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (191, N'PK', N'Line')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (192, N'JYT', N'What''sApp')
 INSERT #tmp ([ID], [Headline], [Tool]) VALUES (193, N'JYT', N'What''sApp')
@@ -271,7 +271,7 @@ INSERT INTO [dbo].[crmDefaultCommTool]
            ,[SettingID]
            ,[SettingType])
 
-SELECT @maxID+t.ID,c.CustID,3024,1
+SELECT DISTINCT @maxID+t.ID,c.CustID,3024,1
 FROM bodb02.dbo.Customer  c WITH(NOLOCK)
 	INNER JOIN #tmp t ON c.UserName=t.Headline
 WHERE NOT EXISTS(SELECT TOP 1 1 FROM [crmDefaultCommTool] aa WITH(NOLOCK) WHERE aa.DefaultCommID=@maxID+t.ID AND aa.CustID=c.CustID AND aa.SettingID=3024 AND aa.SettingType=1)
@@ -283,7 +283,7 @@ INSERT INTO [dbo].[crmDefaultCommTool]
            ,[SettingID]
            ,[SettingType])
 
-SELECT @maxID+t.ID,c.CustID,4032,2
+SELECT DISTINCT @maxID+t.ID,c.CustID,4032,2
 FROM bodb02.dbo.Customer  c WITH(NOLOCK)
 	INNER JOIN #tmp t ON c.UserName=t.Headline
 WHERE NOT EXISTS(SELECT TOP 1 1 FROM [crmDefaultCommTool] aa WITH(NOLOCK) WHERE aa.DefaultCommID=@maxID+t.ID AND aa.CustID=c.CustID AND aa.SettingID=4032 AND aa.SettingType=2)
