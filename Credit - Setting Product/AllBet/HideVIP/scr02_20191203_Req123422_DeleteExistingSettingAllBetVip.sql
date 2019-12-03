@@ -13,8 +13,8 @@ SELECT @Sporttype = 211
 SELECT @Bettype=2402
 SELECT @maxcustid=xxx
 	
-DELETE FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-DELETE FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
-DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
-DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=@Bettype
+DELETE FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+DELETE FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
+DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
+DELETE FROM StakeLevel WITH(ROWLOCK)  WHERE GametypeID=@Bettype

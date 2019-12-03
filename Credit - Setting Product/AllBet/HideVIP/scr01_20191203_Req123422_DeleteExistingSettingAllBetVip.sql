@@ -27,12 +27,12 @@ BEGIN
 
 	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
 	END
 
 	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
 	END	
 END	
 GO
