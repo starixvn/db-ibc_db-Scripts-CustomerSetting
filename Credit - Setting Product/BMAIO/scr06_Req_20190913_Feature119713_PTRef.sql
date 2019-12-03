@@ -8,8 +8,8 @@
 
 UPDATE [Sport_Bettype_Reference_Setting] WITH(ROWLOCK)  
 SET	   IsActive = 1
-WHERE  sporttype =9 AND bettype BETWEEN 701 AND 714 
+WHERE  sporttype =9 AND (bettype BETWEEN 701 AND 714 OR Bettype=20)
 
 UPDATE [Sport_Bettype_Reference_VirtualRate] WITH(ROWLOCK)  
 SET	   IsActive = 1
-WHERE  sporttype =9 AND bettype BETWEEN 701 AND 714 
+WHERE  sporttype =9 AND (bettype BETWEEN 701 AND 714 OR Bettype=20)
