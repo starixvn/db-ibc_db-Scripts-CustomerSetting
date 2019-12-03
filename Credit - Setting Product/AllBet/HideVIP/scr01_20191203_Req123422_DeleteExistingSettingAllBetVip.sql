@@ -25,6 +25,7 @@ BEGIN
 	DECLARE @Sporttype SMALLINT,@Bettype INT 
 	
 	SELECT @Sporttype = 211
+	SELECT @Bettype=2402
 
 	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
 	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
