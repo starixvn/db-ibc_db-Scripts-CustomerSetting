@@ -6,6 +6,7 @@
 */	
 ALTER PROCEDURE [dbo].[Acc_custsetting_19]
 	@srecommend INT, 
+	@IsLicensee BIT,
 	@target VARCHAR(20),
 	@SportTypeBetTypeListXML XML
 AS
@@ -26,82 +27,58 @@ BEGIN
 		  ,Data.value('(BetType/text())[1]','smallint') as BetType
 	FROM @SportTypeBetTypeListXML.nodes('SportTypeBetTypeList/SportTypeBetType') Node(Data)
 
-	CREATE TABLE #custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
-	CREATE TABLE #custoverride (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
-	CREATE TABLE #DEP_custsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
+	CREATE TABLE #Tempcustsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
+	CREATE TABLE #TempCust(CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
 
-	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
+	INSERT INTO  #TempCust(CustID,Bettype,Sporttype)
+	SELECT c.custid,t.BetType,t.Sporttype
+	FROM Custinfo c WITH (NOLOCK)
+		 CROSS APPLY #SportTypeBetType t
+	WHERE c.srecommend = @srecommend
 
-	INSERT INTO  #TempCust(CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend
-
-	DECLARE @Rowcount1 INT = 1
-	DECLARE @Rowcount2 INT = 1
-	DECLARE @Rowcount3 INT = 1
 	DECLARE @Batch INT = 5000
 
 	WHILE(1=1)
 	BEGIN
-		TRUNCATE TABLE #custsetting
-		TRUNCATE TABLE #custoverride
-		TRUNCATE TABLE #DEP_custsetting
+		TRUNCATE TABLE #Tempcustsetting
 
-		IF @RowCount1 > 0
-			INSERT INTO #custsetting(CustID,Sporttype,Bettype)
-			SELECT TOP (@Batch) ac.CustID,ac.Sporttype,ac.Bettype
-			FROM custsetting ac WITH(NOLOCK) 
-				INNER JOIN #TempCust tmp ON tmp.CustID = ac.CustId
-				INNER JOIN #SportTypeBetType s ON ac.SportType = s.Sporttype	AND ac.bettype = s.BetType
+		DELETE TOP (@Batch) a
+		OUTPUT deleted.CustID,deleted.Bettype,deleted.Sporttype INTO #Tempcustsetting(CustID,Bettype,Sporttype)
+		FROM #TempCust a
 
-		SELECT @Rowcount1 = @@ROWCOUNT
-
-		IF @RowCount2 > 0
-			INSERT INTO #custoverride(CustID,Sporttype,Bettype)
-			SELECT TOP (@Batch) ac.CustID,ac.Sporttype,ac.Bettype
-			FROM custoverride ac WITH(NOLOCK) 
-				INNER JOIN #TempCust tmp ON tmp.CustID = ac.CustId
-				INNER JOIN #SportTypeBetType s ON ac.SportType = s.Sporttype	AND ac.bettype = s.BetType
-
-		SELECT @Rowcount2 = @@ROWCOUNT
-
-		IF @RowCount3 > 0
-			INSERT INTO #DEP_custsetting(CustID,Sporttype,Bettype)
-			SELECT TOP (@Batch) ac.CustID,ac.Sporttype,ac.Bettype
-			FROM DEP_custsetting ac WITH(NOLOCK) 
-				INNER JOIN #TempCust tmp ON tmp.CustID = ac.CustId
-				INNER JOIN #SportTypeBetType s ON ac.SportType = s.Sporttype	AND ac.bettype = s.BetType
-
-		SELECT @Rowcount3 = @@ROWCOUNT
-
-		IF @Rowcount1 = 0 AND  @Rowcount2 = 0 AND  @Rowcount3 = 0
+		IF @@ROWCOUNT = 0
 			BREAK;
 		
-		IF @RowCount1 > 0
+		IF @IsLicensee = 0
+		BEGIN
 			DELETE a
 			FROM custsetting a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #custsetting temp 
-					ON a.CustId = temp.CustID 
-					AND a.Sporttype = temp.Sporttype
-					AND a.Bettype = temp.Bettype
-		
-		IF @RowCount2 > 0
-			DELETE a
-			FROM custoverride a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #custoverride temp 
+				 INNER JOIN #Tempcustsetting temp 
 					ON a.CustId = temp.CustID 
 					AND a.Sporttype = temp.Sporttype
 					AND a.Bettype = temp.Bettype
 
-		IF @RowCount3 > 0
 			DELETE a
-			FROM DEP_custsetting a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #DEP_custsetting temp 
+			FROM custoverride a WITH(UPDLOCK,ROWLOCK) 
+				 INNER JOIN #Tempcustsetting temp 
 					ON a.CustId = temp.CustID 
 					AND a.Sporttype = temp.Sporttype
 					AND a.Bettype = temp.Bettype
+		END
+		ELSE
+		BEGIN
+			DELETE a
+			FROM DEP_custsetting a WITH(UPDLOCK,ROWLOCK) 
+				 INNER JOIN #Tempcustsetting temp 
+					ON a.CustId = temp.CustID 
+					AND a.Sporttype = temp.Sporttype
+					AND a.Bettype = temp.Bettype
+		END
 	END
+
+	DROP TABLE #SportTypeBetType
+	DROP TABLE #Tempcustsetting
+	DROP TABLE #TempCust
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -111,9 +88,9 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 BEGIN
-	DECLARE @srecommend INT
+	DECLARE @srecommend INT,@isLicensee BIT
 	DECLARE @SportTypeBetTypeListXML XML 
-	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
+	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isLicensee BIT,isfinished bit default(0))
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	CREATE TABLE #SportTypeList (Sporttype SMALLINT PRIMARY KEY)
 
@@ -132,9 +109,10 @@ BEGIN
 			FROM  #SportTypeBetType c
 			FOR XML PATH('SportTypeBetType') ,ROOT('SportTypeBetTypeList') ) 
 
-	INSERT INTO #Supers(custid)
-	SELECT ci.custid 
+	INSERT INTO #Supers(custid,isLicensee)
+	SELECT ci.custid, s.isLicensee
 	FROM dbo.customer ci WITH (NOLOCK) 
+		INNER JOIN site s WITH(NOLOCK) ON ci.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
 						   FROM custinfo ci WITH(NOLOCK) 
@@ -164,7 +142,8 @@ BEGIN
 	BEGIN
 		UPDATE TOP (1) #Supers
 		SET isfinished = 1
-			,@srecommend = custid	
+			,@srecommend = custid
+			,@isLicensee = isLicensee
 		WHERE isfinished = 0
 	
 		IF @@ROWCOUNT = 0 BREAK
@@ -174,6 +153,7 @@ BEGIN
 
 		EXEC dbo.Acc_custsetting_19 
 				 @srecommend = @srecommend
+				,@isLicensee = @isLicensee
 				,@target = 'REPLICATED'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
 						
@@ -198,9 +178,9 @@ GO
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------	
 BEGIN
-	DECLARE @srecommend INT
+	DECLARE @srecommend INT,@isLicensee BIT
 	DECLARE @SportTypeBetTypeListXML XML 
-	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
+	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isLicensee BIT,isfinished bit default(0))
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	CREATE TABLE #SportTypeList (Sporttype SMALLINT PRIMARY KEY)
 
@@ -219,9 +199,10 @@ BEGIN
 			FROM  #SportTypeBetType c
 			FOR XML PATH('SportTypeBetType') ,ROOT('SportTypeBetTypeList') ) 
 
-	INSERT INTO #Supers(custid)
-	SELECT ci.custid 
+	INSERT INTO #Supers(custid,isLicensee)
+	SELECT ci.custid, s.isLicensee
 	FROM dbo.customer ci WITH (NOLOCK) 
+		INNER JOIN site s WITH(NOLOCK) ON ci.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
 						   FROM custinfo ci WITH(NOLOCK) 
@@ -251,7 +232,8 @@ BEGIN
 	BEGIN
 		UPDATE TOP (1) #Supers
 		SET isfinished = 1
-			,@srecommend = custid	
+			,@srecommend = custid
+			,@isLicensee = isLicensee
 		WHERE isfinished = 0
 	
 		IF @@ROWCOUNT = 0 BREAK
@@ -261,6 +243,7 @@ BEGIN
 
 		EXEC dbo.Acc_custsetting_19 
 				 @srecommend = @srecommend
+				,@isLicensee = @isLicensee
 				,@target = 'DBCUST'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
 						
@@ -272,7 +255,6 @@ BEGIN
 	DROP TABLE #SportTypeBetType
 	DROP TABLE #SportTypeList
 END
-GO
-					
+GO			
 ----------------------------------------------------------------
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST -----

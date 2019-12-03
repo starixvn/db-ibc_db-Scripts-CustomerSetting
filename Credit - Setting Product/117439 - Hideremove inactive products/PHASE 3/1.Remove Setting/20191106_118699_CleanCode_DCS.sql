@@ -35,256 +35,105 @@ BEGIN
 	SELECT Data.value('(Sporttype/text())[1]','smallint') as Sporttype
 	FROM @SportTypeListXML.nodes('SportTypeList/SportType') Node(Data)
 
-	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
+	CREATE TABLE #Tempcustsetting(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #TempCust(CustID INT,Sporttype SMALLINT)
 
-	INSERT INTO  #TempCust(CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend
+	INSERT INTO  #TempCust(CustID,Sporttype)
+	SELECT c.custid,t.Sporttype
+	FROM Custinfo c WITH (NOLOCK)
+		CROSS APPLY #Sporttype t
+	WHERE c.srecommend = @srecommend
 
-	CREATE TABLE #CustPTSetting3rd_Agent		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustPTSetting3rd_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustPTGroupSetting3rd_Member	(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustBetSetting3rd_Agent		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustBetSetting3rd_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustDiscount3rd_Agent			(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustDiscount3rd_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustWinLossLimit_Agent		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustWinLossLimit_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustStakeLevel_Agent			(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #CustStakeLevel_Member			(CustID INT, Sporttype SMALLINT)
-
-	DECLARE @RowCount1 INT = 1
-	DECLARE @RowCount2 INT = 1
-	DECLARE @RowCount3 INT = 1
-	DECLARE @RowCount4 INT = 1
-	DECLARE @RowCount5 INT = 1
-	DECLARE @RowCount6 INT = 1
-	DECLARE @RowCount7 INT = 1
-	DECLARE @RowCount8 INT = 1
-	DECLARE @RowCount9 INT = 1
-	DECLARE @RowCount10 INT = 1
-	DECLARE @RowCount11 INT = 1
 	DECLARE @Batch INT = 5000
 
 	WHILE (1=1)
 	BEGIN
-		TRUNCATE TABLE #CustPTSetting3rd_Agent		
-		TRUNCATE TABLE #CustPTSetting3rd_Member		
-		TRUNCATE TABLE #CustPTGroupSetting3rd_Member	
-		TRUNCATE TABLE #CustBetSetting3rd_Agent		
-		TRUNCATE TABLE #CustBetSetting3rd_Member		
-		TRUNCATE TABLE #CustDiscount3rd_Agent			
-		TRUNCATE TABLE #CustDiscount3rd_Member		
-		TRUNCATE TABLE #CustWinLossLimit_Agent		
-		TRUNCATE TABLE #CustWinLossLimit_Member	
-		TRUNCATE TABLE #CustStakeLevel_Agent
-		TRUNCATE TABLE #CustStakeLevel_Member
-			
-
-		IF @RowCount1 > 0
-			INSERT INTO #CustPTSetting3rd_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustPTSetting3rd_Agent cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
+		TRUNCATE TABLE #Tempcustsetting		
 		
-		SET @RowCount1 = @@ROWCOUNT
-						
-		IF @RowCount2 > 0
-			INSERT INTO #CustPTSetting3rd_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustPTSetting3rd_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
+		DELETE TOP (@Batch) a
+		OUTPUT deleted.CustID,deleted.Sporttype INTO #Tempcustsetting(CustID,Sporttype)
+		FROM #TempCust a	
 
-		SET @RowCount2 = @@ROWCOUNT
-		
-		IF @RowCount3 > 0
-			INSERT INTO #CustPTGroupSetting3rd_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.AgentID,cg.SportType
-			FROM CustPTGroupSetting3rd_Member cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.AgentID  = tmp.CustID
-
-		SET @RowCount3 = @@ROWCOUNT
-				
-		IF @RowCount4 > 0
-			INSERT INTO #CustBetSetting3rd_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustBetSetting3rd_Agent cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-	    
-		SET @RowCount4 = @@ROWCOUNT
-
-		IF @RowCount5 > 0
-			INSERT INTO #CustBetSetting3rd_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustBetSetting3rd_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-		
-		SET @RowCount5 = @@ROWCOUNT
-
-		IF @RowCount6 > 0
-			INSERT INTO #CustDiscount3rd_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM dbo.CustDiscount3rd_Agent cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-
-		SET @RowCount6 = @@ROWCOUNT
-		
-		IF @RowCount7 > 0
-			INSERT INTO #CustDiscount3rd_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM dbo.CustDiscount3rd_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-
-		SET @RowCount7 = @@ROWCOUNT
-		
-		IF @RowCount8 > 0
-			INSERT INTO #CustWinLossLimit_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM dbo.CustWinLossLimit_Agent cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-
-		SET @RowCount8 = @@ROWCOUNT
-		
-		IF @RowCount9 > 0
-			INSERT INTO #CustWinLossLimit_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM dbo.CustWinLossLimit_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-		
-		SET @RowCount9 = @@ROWCOUNT
-
-		IF @RowCount10 > 0
-			INSERT INTO #CustStakeLevel_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustStakeLevel_Agent cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-		
-		SET @RowCount10 = @@ROWCOUNT
-						
-		IF @RowCount11 > 0
-			INSERT INTO #CustStakeLevel_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM CustStakeLevel_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-
-		SET @RowCount11 = @@ROWCOUNT
-
-
-		IF (@RowCount1 = 0 AND @RowCount2 = 0 AND @RowCount3 = 0 AND @RowCount4 = 0 AND @RowCount5 = 0 AND @RowCount6 = 0 AND @RowCount7 = 0 AND @RowCount8 = 0 AND @RowCount9 = 0  AND @RowCount10 = 0 AND @RowCount11 = 0)
+		IF @@ROWCOUNT = 0
 			BREAK;
 
 		--> DELETE DATA
 		--> PT
-		IF @RowCount1 > 0
 			DELETE cg
 			FROM CustPTSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #CustPTSetting3rd_Agent c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 						
-		IF @RowCount2 > 0
 			DELETE cg
 			FROM CustPTSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #CustPTSetting3rd_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 		
-		IF @RowCount3 > 0
 			DELETE cg
 			FROM CustPTGroupSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #CustPTGroupSetting3rd_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.AgentID
 					AND c.Sporttype = cg.SportType
 	
-		--> Bet Setting	
-		IF @RowCount4 > 0		
+		--> Bet Setting			
 			DELETE cg
 			FROM CustBetSetting3rd_Agent cg WITH(UPDLOCK,ROWLOCK)		
-				INNER JOIN #CustBetSetting3rd_Agent c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 
-		IF @RowCount5 > 0
 			DELETE cg
 			FROM CustBetSetting3rd_Member cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #CustBetSetting3rd_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType	
 	
 		--> Commission
-		IF @RowCount6 > 0
 			DELETE cg
 			FROM dbo.CustDiscount3rd_Agent cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #CustDiscount3rd_Agent c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 
-		IF @RowCount7 > 0
 			DELETE cg
 			FROM dbo.CustDiscount3rd_Member cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #CustDiscount3rd_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType	
 	
 		--> Win/Loss Limit
-		IF @RowCount8 > 0
 			DELETE cg
 			FROM dbo.CustWinLossLimit_Agent cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #CustWinLossLimit_Agent c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 
-		IF @RowCount9 > 0
 			DELETE cg
 			FROM dbo.CustWinLossLimit_Member cg WITH(UPDLOCK,ROWLOCK)		
-				INNER JOIN #CustWinLossLimit_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 
 		--> StakeLevel
-		IF @RowCount10 > 0
 			DELETE cg
 			FROM dbo.CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #CustStakeLevel_Agent c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
 
-		IF @RowCount11 > 0
 			DELETE cg
 			FROM dbo.CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)		
-				INNER JOIN #CustStakeLevel_Member c 
+				INNER JOIN #Tempcustsetting c 
 					ON c.CustID = cg.CustID
 					AND c.Sporttype = cg.SportType
-
-		WAITFOR DELAY '00:00:00.100'
 
 	END
 
 	DROP TABLE #Sporttype	
-	DROP TABLE #CustPTSetting3rd_Agent		
-	DROP TABLE #CustPTSetting3rd_Member		
-	DROP TABLE #CustPTGroupSetting3rd_Member	
-	DROP TABLE #CustBetSetting3rd_Agent		
-	DROP TABLE #CustBetSetting3rd_Member		
-	DROP TABLE #CustDiscount3rd_Agent			
-	DROP TABLE #CustDiscount3rd_Member		
-	DROP TABLE #CustWinLossLimit_Agent		
-	DROP TABLE #CustWinLossLimit_Member		
-	DROP TABLE #CustStakeLevel_Agent
-	DROP TABLE #CustStakeLevel_Member
 	DROP TABLE #TempCust
+	DROP TABLE #Tempcustsetting
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -386,7 +235,7 @@ BEGIN
 				,@target = 'REPLICATED'
 				,@SportTypeListXML = @SportTypeListXML
 						
-		--WAITFOR DELAY '00:00:0.100'
+		WAITFOR DELAY '00:00:00.100'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
@@ -492,7 +341,7 @@ BEGIN
 				,@target = 'DBCUST'
 				,@SportTypeListXML = @SportTypeListXML
 						
-		--WAITFOR DELAY '00:00:0.100'
+		WAITFOR DELAY '00:00:0.100'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

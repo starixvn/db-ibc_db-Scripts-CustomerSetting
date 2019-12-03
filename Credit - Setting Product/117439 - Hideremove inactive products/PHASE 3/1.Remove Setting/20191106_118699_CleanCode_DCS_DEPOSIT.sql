@@ -31,83 +31,68 @@ BEGIN
 	SELECT Data.value('(Sporttype/text())[1]','smallint') as Sporttype
 	FROM @SportTypeListXML.nodes('SportTypeList/SportType') Node(Data)
 
-	CREATE TABLE #TempCust(CustID INT PRIMARY KEY)
+	CREATE TABLE #Tempcustsetting(CustID INT, Sporttype SMALLINT)
+	CREATE TABLE #TempCust(CustID INT,Sporttype SMALLINT)
 
-	INSERT INTO  #TempCust(CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend
+	INSERT INTO  #TempCust(CustID,Sporttype)
+	SELECT c.custid,t.Sporttype
+	FROM Custinfo c WITH (NOLOCK)
+		CROSS APPLY #Sporttype t
+	WHERE c.srecommend = @srecommend
 
-	CREATE TABLE #DEP_CustPTSetting_Agent		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #DEP_CustPTSetting_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #DEP_CustPTGroupSetting_Member	(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #DEP_CustStakeLevel_Agent		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #DEP_CustStakeLevel_Member		(CustID INT, Sporttype SMALLINT)
-	CREATE TABLE #Dep_LicenseeProductSetting    (CustID INT, ProductSettingID INT)
-
-	DECLARE @RowCount1 INT = 1
-	DECLARE @RowCount2 INT = 1
-	DECLARE @RowCount3 INT = 1
-	DECLARE @RowCount4 INT = 1
-	DECLARE @RowCount5 INT = 1
-	DECLARE @RowCount6 INT = 1
 	DECLARE @Batch INT = 5000
 
 	WHILE (1=1)
 	BEGIN
-		TRUNCATE TABLE #DEP_CustPTSetting_Agent		
-		TRUNCATE TABLE #DEP_CustPTSetting_Member		
-		TRUNCATE TABLE #DEP_CustPTGroupSetting_Member	
-		TRUNCATE TABLE #DEP_CustStakeLevel_Agent
-		TRUNCATE TABLE #DEP_CustStakeLevel_Member
-			
-
-		IF @RowCount1 > 0
-			INSERT INTO #DEP_CustPTSetting_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM DEP_CustPTSetting_Agent cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
+		TRUNCATE TABLE #Tempcustsetting		
 		
-		SET @RowCount1 = @@ROWCOUNT
+		DELETE TOP (@Batch) a
+		OUTPUT deleted.CustID,deleted.Sporttype INTO #Tempcustsetting(CustID,Sporttype)
+		FROM #TempCust a
+	
+
+		IF @@ROWCOUNT = 0
+			BREAK;
+
+		--> DELETE DATA
+		--> PT
+			DELETE cg
+			FROM DEP_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)
+				INNER JOIN #Tempcustsetting c 
+					ON c.CustID = cg.CustID
+					AND c.Sporttype = cg.SportType
 						
-		IF @RowCount2 > 0
-			INSERT INTO #DEP_CustPTSetting_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM DEP_CustPTSetting_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-
-		SET @RowCount2 = @@ROWCOUNT
+			DELETE cg
+			FROM DEP_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
+				INNER JOIN #Tempcustsetting c 
+					ON c.CustID = cg.CustID
+					AND c.Sporttype = cg.SportType
 		
-		IF @RowCount3 > 0
-			INSERT INTO #DEP_CustPTGroupSetting_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.AgentID,cg.SportType
-			FROM DEP_CustPTGroupSetting_Member cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.AgentID  = tmp.CustID
+			DELETE cg
+			FROM DEP_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
+				INNER JOIN #Tempcustsetting c 
+					ON c.CustID = cg.AgentID
+					AND c.Sporttype = cg.SportType
 
-		SET @RowCount3 = @@ROWCOUNT
+		--> StakeLevel
+			DELETE cg
+			FROM dbo.DEP_CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)
+				INNER JOIN #Tempcustsetting c 
+					ON c.CustID = cg.CustID
+					AND c.Sporttype = cg.SportType
 
-		IF @RowCount4 > 0
-			INSERT INTO #DEP_CustStakeLevel_Agent(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM DEP_CustStakeLevel_Agent cg  WITH(NOLOCK)	
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
-		
-		SET @RowCount4 = @@ROWCOUNT
-						
-		IF @RowCount5 > 0
-			INSERT INTO #DEP_CustStakeLevel_Member(CustID, Sporttype)
-			SELECT TOP (@Batch) cg.CustID,cg.SportType
-			FROM DEP_CustStakeLevel_Member cg  WITH(NOLOCK)		
-				INNER JOIN #Sporttype s ON cg.SportType = s.Sporttype	
-				INNER JOIN #TempCust tmp ON cg.CustID  = tmp.CustID
+			DELETE cg
+			FROM dbo.DEP_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)		
+				INNER JOIN #Tempcustsetting c 
+					ON c.CustID = cg.CustID
+					AND c.Sporttype = cg.SportType
 
-		SET @RowCount5 = @@ROWCOUNT
+	END
 
-		IF @RowCount6 > 0
+	CREATE TABLE #Dep_LicenseeProductSetting (CustID INT, ProductSettingID INT)
+
+	WHILE 1 <> 1
+	BEGIN
 		INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT d.CustID
 			  ,d.ProductSettingID
@@ -116,68 +101,21 @@ BEGIN
 			INNER JOIN #Sporttype s ON dps.SportType = s.Sporttype	
 		WHERE d.CustID = @srecommend
 
-		SET @RowCount6 = @@ROWCOUNT
+		IF @@ROWCOUNT = 0
+		BREAK
 
-		IF (@RowCount1 = 0 AND @RowCount2 = 0 AND @RowCount3 = 0 AND @RowCount4 = 0 AND @RowCount5 = 0 AND @RowCount6 = 0)
-			BREAK;
-
-		--> DELETE DATA
-		--> PT
-		IF @RowCount1 > 0
-			DELETE cg
-			FROM DEP_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #DEP_CustPTSetting_Agent c 
-					ON c.CustID = cg.CustID
-					AND c.Sporttype = cg.SportType
-						
-		IF @RowCount2 > 0
-			DELETE cg
-			FROM DEP_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #DEP_CustPTSetting_Member c 
-					ON c.CustID = cg.CustID
-					AND c.Sporttype = cg.SportType
-		
-		IF @RowCount3 > 0
-			DELETE cg
-			FROM DEP_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
-				INNER JOIN #DEP_CustPTGroupSetting_Member c 
-					ON c.CustID = cg.AgentID
-					AND c.Sporttype = cg.SportType
-
-		--> StakeLevel
-		IF @RowCount4 > 0
-			DELETE cg
-			FROM dbo.DEP_CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)
-				INNER JOIN #DEP_CustStakeLevel_Agent c 
-					ON c.CustID = cg.CustID
-					AND c.Sporttype = cg.SportType
-
-		IF @RowCount5 > 0
-			DELETE cg
-			FROM dbo.DEP_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)		
-				INNER JOIN #DEP_CustStakeLevel_Member c 
-					ON c.CustID = cg.CustID
-					AND c.Sporttype = cg.SportType
-
-		IF @RowCount6 > 0
-			DELETE cg
-			FROM dbo.Dep_LicenseeProductSetting cg WITH(UPDLOCK,ROWLOCK)		
-				INNER JOIN #Dep_LicenseeProductSetting c 
-					ON c.CustID = cg.CustID
-					AND c.ProductSettingID = cg.ProductSettingID
-
-		WAITFOR DELAY '00:00:00.100'
+		DELETE cg
+		FROM dbo.Dep_LicenseeProductSetting cg WITH(UPDLOCK,ROWLOCK)		
+			INNER JOIN #Dep_LicenseeProductSetting c 
+				ON c.CustID = cg.CustID
+				AND c.ProductSettingID = cg.ProductSettingID
 
 	END
 
 	DROP TABLE #Sporttype	
-	DROP TABLE #DEP_CustPTSetting_Agent		
-	DROP TABLE #DEP_CustPTSetting_Member		
-	DROP TABLE #DEP_CustPTGroupSetting_Member		
-	DROP TABLE #DEP_CustStakeLevel_Agent
-	DROP TABLE #DEP_CustStakeLevel_Member
-	DROP TABLE #Dep_LicenseeProductSetting
 	DROP TABLE #TempCust
+	DROP TABLE #Dep_LicenseeProductSetting
+	DROP TABLE #Tempcustsetting
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -260,7 +198,7 @@ BEGIN
 				,@target = 'REPLICATED'
 				,@SportTypeListXML = @SportTypeListXML
 						
-		--WAITFOR DELAY '00:00:0.100'
+		WAITFOR DELAY '00:00:0.100'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
@@ -347,7 +285,7 @@ BEGIN
 				,@target = 'DBCUST'
 				,@SportTypeListXML = @SportTypeListXML
 						
-		--WAITFOR DELAY '00:00:0.100'
+		WAITFOR DELAY '00:00:0.100'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
