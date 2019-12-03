@@ -48,6 +48,13 @@ BEGIN
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
+		
+		DELETE a
+		FROM custOverride3rd a WITH(UPDLOCK,ROWLOCK) 
+				INNER JOIN #Tempcustsetting temp 
+				ON a.CustId = temp.CustID 
+				AND a.Sporttype = temp.Sporttype
+				AND a.Bettype = temp.Bettype
 
 		IF @IsLicensee = 0
 		BEGIN
@@ -58,12 +65,6 @@ BEGIN
 					AND a.Sporttype = temp.Sporttype
 					AND a.Bettype = temp.Bettype
 	
-			DELETE a
-			FROM custOverride3rd a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #Tempcustsetting temp 
-					ON a.CustId = temp.CustID 
-					AND a.Sporttype = temp.Sporttype
-					AND a.Bettype = temp.Bettype
 		END
 		ELSE
 		BEGIN

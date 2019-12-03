@@ -45,6 +45,13 @@ BEGIN
 		IF @@ROWCOUNT = 0
 			BREAK;
 		
+		DELETE a
+		FROM CustOverrideGame a WITH(UPDLOCK,ROWLOCK) 
+				INNER JOIN #Tempcustsetting temp 
+				ON a.CustId = temp.CustID 
+				AND a.Sporttype = temp.Sporttype
+				AND a.Bettype = temp.Bettype
+
 		IF @IsLicensee = 0
 		BEGIN
 			DELETE a
@@ -54,12 +61,6 @@ BEGIN
 					AND a.Sporttype = temp.Sporttype
 					AND a.Bettype = temp.Bettype
 
-			DELETE a
-			FROM CustOverrideGame a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #Tempcustsetting temp 
-					ON a.CustId = temp.CustID 
-					AND a.Sporttype = temp.Sporttype
-					AND a.Bettype = temp.Bettype
 		END
 		ELSE	
 		BEGIN
