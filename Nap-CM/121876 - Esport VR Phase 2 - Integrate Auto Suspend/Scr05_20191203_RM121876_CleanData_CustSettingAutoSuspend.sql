@@ -5,4 +5,4 @@
 	DB: DBCUST/CustDB
 */
 
-DELETE CustSettingAutoSuspend WITH(UPDLOCK,ROWLOCK)
+DELETE FROM CustSettingAutoSuspend WITH(UPDLOCK,ROWLOCK)
