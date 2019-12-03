@@ -9,6 +9,7 @@
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@target VARCHAR(20)
+	,@maxcustid INT
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -18,27 +19,20 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
 	
 	DECLARE @Sporttype SMALLINT,@Bettype INT 
 	
 	SELECT @Sporttype = 211
 	SELECT @Bettype=2402
 
-	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
-	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
-	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID=@Bettype
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype AND Bettype=@Bettype)
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype
+		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
 	END
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE SportType=@Sporttype AND Bettype=@Bettype)
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype
+		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
 	END	
 END	
 GO
@@ -47,10 +41,16 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+DECLARE @max_custid INT
+
+SELECT @max_custid = xxx
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED',@maxcustid = @max_custid
 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+DECLARE @max_custid INT
+
+SELECT @max_custid = xxx
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST',@maxcustid = @max_custid
 
