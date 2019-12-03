@@ -138,6 +138,9 @@ BEGIN
 		 INNER JOIN #SportTypeList b 
 			ON a.Sporttype = b.Sporttype
 
+	INSERT INTO #SportTypeBetType (sporttype, bettype) 
+	VALUES (151,41), (151,42), (151,51), (151,52), (152, 41), (152,42), (152,51), (152,52), (153,51), (153,52)
+
 	SET @SportTypeBetTypeListXML = (
 			SELECT c.Sporttype,c.BetType
 			FROM  #SportTypeBetType c
@@ -235,6 +238,9 @@ BEGIN
 	FROM DBPRO.bodb02.dbo.SportBettypeMatrix a WITH(NOLOCK)
 		 INNER JOIN #SportTypeList b 
 			ON a.Sporttype = b.Sporttype
+
+	INSERT INTO #SportTypeBetType (sporttype, bettype) 
+	VALUES (151,41), (151,42), (151,51), (151,52), (152, 41), (152,42), (152,51), (152,52), (153,51), (153,52)
 
 	SET @SportTypeBetTypeListXML = (
 			SELECT c.Sporttype,c.BetType
