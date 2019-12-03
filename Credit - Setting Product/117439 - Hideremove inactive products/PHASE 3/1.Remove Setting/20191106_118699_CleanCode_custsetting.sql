@@ -113,7 +113,7 @@ BEGIN
 	INSERT INTO #Supers(custid,isLicensee)
 	SELECT ci.custid, s.isLicensee
 	FROM dbo.customer ci WITH (NOLOCK) 
-		INNER JOIN site s WITH(NOLOCK) ON ci.site = ci.site
+		INNER JOIN site s WITH(NOLOCK) ON s.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
 						   FROM custinfo ci WITH(NOLOCK) 
@@ -203,7 +203,7 @@ BEGIN
 	INSERT INTO #Supers(custid,isLicensee)
 	SELECT ci.custid, s.isLicensee
 	FROM dbo.customer ci WITH (NOLOCK) 
-		INNER JOIN site s WITH(NOLOCK) ON ci.site = ci.site
+		INNER JOIN site s WITH(NOLOCK) ON s.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid IN ( SELECT srecommend 
 						   FROM custinfo ci WITH(NOLOCK) 
