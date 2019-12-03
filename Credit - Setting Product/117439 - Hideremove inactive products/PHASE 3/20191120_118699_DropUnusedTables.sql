@@ -10,5 +10,5 @@ DROP TABLE DEL_CustCommRate
 --P2P table was removed from Publication
 DROP TABLE DEL_P2PGameSetting
 DROP TABLE DEL_P2PGroupComm
-DROP TABLE P2PDefaultSetting
+DROP TABLE DEL_P2PDefaultSetting
 GO
