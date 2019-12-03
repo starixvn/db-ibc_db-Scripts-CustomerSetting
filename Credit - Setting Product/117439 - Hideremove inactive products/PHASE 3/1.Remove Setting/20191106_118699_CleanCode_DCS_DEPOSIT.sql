@@ -91,26 +91,20 @@ BEGIN
 
 	CREATE TABLE #Dep_LicenseeProductSetting (CustID INT, ProductSettingID INT)
 
-	WHILE 1 <> 1
-	BEGIN
-		INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT d.CustID
-			  ,d.ProductSettingID
-		FROM Dep_LicenseeProductSetting d WITH(NOLOCK) 
-			INNER JOIN Dep_ProductSettingDetail dps WITH(NOLOCK) ON dps.ProductSettingID = d.ProductSettingID 
-			INNER JOIN #Sporttype s ON dps.SportType = s.Sporttype	
-		WHERE d.CustID = @srecommend
+	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT d.CustID
+			,d.ProductSettingID
+	FROM Dep_LicenseeProductSetting d WITH(NOLOCK) 
+		INNER JOIN Dep_ProductSettingDetail dps WITH(NOLOCK) ON dps.ProductSettingID = d.ProductSettingID 
+		INNER JOIN #Sporttype s ON dps.SportType = s.Sporttype	
+	WHERE d.CustID = @srecommend
 
-		IF @@ROWCOUNT = 0
-		BREAK
 
-		DELETE cg
-		FROM dbo.Dep_LicenseeProductSetting cg WITH(UPDLOCK,ROWLOCK)		
-			INNER JOIN #Dep_LicenseeProductSetting c 
-				ON c.CustID = cg.CustID
-				AND c.ProductSettingID = cg.ProductSettingID
-
-	END
+	DELETE cg
+	FROM dbo.Dep_LicenseeProductSetting cg WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN #Dep_LicenseeProductSetting c 
+			ON c.CustID = cg.CustID
+			AND c.ProductSettingID = cg.ProductSettingID
 
 	DROP TABLE #Sporttype	
 	DROP TABLE #TempCust
