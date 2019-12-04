@@ -168,7 +168,7 @@ BEGIN
 
 		EXEC dbo.Acc_CustSetting3rd_19 
 				 @srecommend = @srecommend
-				,@isLicensee = isLicensee
+				,@isLicensee = @isLicensee
 				,@target = 'REPLICATED'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
 						
@@ -272,7 +272,7 @@ BEGIN
 
 		EXEC dbo.Acc_CustSetting3rd_19 
 				 @srecommend = @srecommend
-				,@isLicensee = isLicensee
+				,@isLicensee = @isLicensee
 				,@target = 'DBCUST'
 				,@SportTypeBetTypeListXML = @SportTypeBetTypeListXML
 						
