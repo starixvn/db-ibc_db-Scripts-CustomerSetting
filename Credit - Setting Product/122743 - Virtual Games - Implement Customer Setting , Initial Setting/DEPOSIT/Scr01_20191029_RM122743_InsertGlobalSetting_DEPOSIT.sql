@@ -41,7 +41,7 @@ INSERT INTO Dep_ProductSetting (
 	)
 	  SELECT @MaxProductSettingID + 1 , 38, 4, 0, 1, 1 --Product Status
 UNION SELECT @MaxProductSettingID + 2 , 38, 1, 0, 2, 1 --PT
-UNION SELECT @MaxProductSettingID + 3 , 38, 7, 0, 3, 3 --BetLimit
+UNION SELECT @MaxProductSettingID + 3 , 38, 7, 0, 3, 4 --BetLimit
 
 -->Dep_ProductSettingDetail
 INSERT INTO Dep_ProductSettingDetail(
