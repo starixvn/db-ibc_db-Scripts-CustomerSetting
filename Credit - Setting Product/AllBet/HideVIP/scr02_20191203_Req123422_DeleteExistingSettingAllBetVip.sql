@@ -18,3 +18,4 @@ DELETE FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID>@maxcustid AND Spor
 DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
 DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
 DELETE FROM StakeLevel WITH(ROWLOCK)  WHERE GametypeID=@Bettype
+DELETE FROM StakeLevelGroupDetail WITH(ROWLOCK) WHERE ParentTypeID=@Bettype	

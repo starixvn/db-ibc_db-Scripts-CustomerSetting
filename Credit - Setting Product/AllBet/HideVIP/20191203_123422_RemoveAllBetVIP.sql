@@ -8,3 +8,6 @@
 
 DELETE  FROM ProductSettingDetail WITH(ROWLOCK) WHERE BetType=2402
 DELETE  FROM ProductStatusProfile WITH(ROWLOCK) WHERE BetType=2402
+
+select * from CustStakeLevel_Agent where SportType=211 AND BetType=2402
+select * from CustStakeLevel_Member where SportType=211 AND BetType=2402
