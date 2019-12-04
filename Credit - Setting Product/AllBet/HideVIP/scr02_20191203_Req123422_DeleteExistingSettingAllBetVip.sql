@@ -12,10 +12,10 @@ DECLARE @maxcustid INT,@Sporttype SMALLINT,@Bettype INT
 SELECT @Sporttype = 211
 SELECT @Bettype=2402
 SELECT @maxcustid=xxx
-	
-DELETE FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-DELETE FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+
 DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
 DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE SportType=@Sporttype AND Bettype=@Bettype	
 DELETE FROM StakeLevel WITH(ROWLOCK)  WHERE GametypeID=@Bettype
-DELETE FROM StakeLevelGroupDetail WITH(ROWLOCK) WHERE ParentTypeID=@Bettype	
+DELETE FROM StakeLevelGroupDetail WITH(ROWLOCK) WHERE ParentTypeID=@Bettype		
+DELETE FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+DELETE FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID>@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
