@@ -5,6 +5,7 @@
 	Original sp: DBA_CustSetting_GroupedPTSettingMaintenance
 	DB: DBCUST/CUSTDB
 */
+
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@AgentID INT		
 	,@target VARCHAR(20)
@@ -20,13 +21,17 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustSettingMode3rd') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	
+	declare @Threshold INT = 20--if number of grouped member is more than 20 percent the current one 
+
 	CREATE TABLE #tempData (custid int, cs1 bigint, cs2 int)
 	
 	CREATE TABLE #tempGroup(cs1 bigint, cs2 int, memberCNT int, repCustID int)
 	
 	SELECT CustID
 	INTO #tmpMembers
-	FROM CustInfo WITH (NOLOCK) WHERE Recommend = @AgentID AND roleid = 1
+	FROM CustInfo WITH (NOLOCK) 
+	WHERE Recommend = @AgentID 
+		AND roleid = 1
 	
 	;WITH _s as (
 		SELECT c.custid	
@@ -69,7 +74,7 @@ BEGIN
 			DECLARE @repCustID INT = (SELECT repCustID FROM #tempGroup)
 			IF EXISTS( SELECT 1 
 						FROM CustPTGroupSetting3rd_Member T1 WITH (NOLOCK) 
-							JOIN  CustPTSetting3rd_Member T2 ON T1.SportType =  T2.SportType AND T1.BetType = T2.BetType AND T1.IsLive = T2.IsLive
+							JOIN  CustPTSetting3rd_Member T2 WITH (NOLOCK) ON T1.SportType =  T2.SportType AND T1.BetType = T2.BetType AND T1.IsLive = T2.IsLive
 																	AND T1.SuperPT = T2.SuperPT AND T1.MasterPT = T2.MasterPT AND T1.AgentPT = T2.AgentPT
 																	AND T1.IsAutoMasterPT = T2.IsAutoMasterPT AND T1.AutoMasterPT =  T2.AutoMasterPT 
 																	AND T1.IsAutoSuperPT = T2.IsAutoSuperPT	AND T1.AutoSuperPT = T2.AutoSuperPT
@@ -79,7 +84,7 @@ BEGIN
 				-- Update isGroup for player
 				UPDATE T
 				SET IsGrouped = 1
-				FROM CustSettingMode3rd T
+				FROM CustSettingMode3rd T WITH(UPDLOCK,ROWLOCK)
 					JOIN #tempdata T1 ON T1.CustID = T.CustID  
 					JOIN #tempGroup T3 ON T3.CS1 = T1.CS1 AND T3.CS2=T1.CS2  
 				
@@ -96,7 +101,17 @@ BEGIN
 			BEGIN
 				--PRINT 'Starting creating new group for this agent ...'
 				-- Move Old PT Group to individual Setting
-				INSERT INTO CustPTSetting3rd_Member
+				INSERT INTO CustPTSetting3rd_Member([CustID]
+												   ,[SportType]
+												   ,[BetType]
+												   ,[IsLive]
+												   ,[SuperPT]
+												   ,[MasterPT]
+												   ,[AgentPT]
+												   ,[IsAutoMasterPT]
+												   ,[AutoMasterPT]
+												   ,[IsAutoSuperPT]
+												   ,[AutoSuperPT])
 				SELECT  cs.custid,T1.SportType,T1.BetType,T1.IsLive,T1.SuperPT,T1.MasterPT,T1.AgentPT,T1.IsAutoMasterPT,T1.AutoMasterPT,T1.IsAutoSuperPT,T1.AutoSuperPT
 				FROM CustSettingMode3rd CS WITH (NOLOCK) 
 					JOIN #tmpMembers m ON CS.Custid = m.Custid
@@ -105,19 +120,36 @@ BEGIN
 				
 				UPDATE CSM
 					SET IsGrouped = 0
-				FROM CustSettingMode3rd CSM
+				FROM CustSettingMode3rd CSM WITH(UPDLOCK,ROWLOCK)
 					JOIN #tmpMembers m ON m.CustID = CSM.custid
 				WHERE CSM.IsGrouped = 1 
 				
 				-- Create new Group PT for agent
-				DELETE FROM CustPTGroupSetting3rd_Member WHERE AgentID = @AgentID
+				DELETE FROM CustPTGroupSetting3rd_Member WITH(UPDLOCK,ROWLOCK)
+				WHERE AgentID = @AgentID
 				
-				INSERT INTO CustPTGroupSetting3rd_Member
+				INSERT INTO CustPTGroupSetting3rd_Member([AgentID]
+													   ,[SportType]
+													   ,[BetType]
+													   ,[IsLive]
+													   ,[SuperPT]
+													   ,[MasterPT]
+													   ,[AgentPT]
+													   ,[IsAutoMasterPT]
+													   ,[AutoMasterPT]
+													   ,[IsAutoSuperPT]
+													   ,[AutoSuperPT])				
 				SELECT @agentID AS agentID ,
 						T1.SportType,T1.BetType,T1.IsLive,T1.SuperPT,T1.MasterPT,T1.AgentPT,T1.IsAutoMasterPT,T1.AutoMasterPT,T1.IsAutoSuperPT,T1.AutoSuperPT
 				FROM CustPTSetting3rd_Member T1
 				WHERE T1.CustID = @repCustID
-
+				
+				UPDATE T
+				SET IsGrouped = 1
+				FROM CustSettingMode3rd T WITH(UPDLOCK,ROWLOCK)
+					JOIN #tempdata T1 ON T1.CustID = T.CustID  
+					JOIN #tempGroup T3 ON T3.CS1 = T1.CS1 AND T3.CS2=T1.CS2
+					
 				-- Delete Individual setting for grouped players 
 				--will delete later
 				/*DELETE T
