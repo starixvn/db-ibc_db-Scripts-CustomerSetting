@@ -7,6 +7,8 @@
 USE bodb_Age
 GO
 
+TRUNCATE TABLE Age_CustProfilePicture
+
 INSERT INTO Age_CustProfilePicture (CustId, ImageId, Modified)
 SELECT cp.CustId, p.ImageId, cp.Modified
 FROM bodb02.dbo.Age_CustProfilePicture cp WITH (NOLOCK)

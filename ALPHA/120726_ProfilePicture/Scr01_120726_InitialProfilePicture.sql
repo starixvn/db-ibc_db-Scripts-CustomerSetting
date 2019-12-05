@@ -7,6 +7,8 @@
 USE bodb_Age
 GO
 
+DELETE FROM Age_ProfilePicture WITH (ROWLOCK) WHERE ImageId > 1000000
+
 CREATE TABLE #ProfileCustomer (ImageId INT IDENTITY(1000001,1), Image VARBINARY(MAX))
 
 INSERT INTO #ProfileCustomer (Image)
