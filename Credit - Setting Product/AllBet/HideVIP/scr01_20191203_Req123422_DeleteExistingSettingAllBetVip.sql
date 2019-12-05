@@ -10,6 +10,7 @@
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@target VARCHAR(20)
 	,@maxcustid INT
+	,@srecommend INT
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -24,19 +25,36 @@ BEGIN
 	
 	SELECT @Sporttype = 211
 	SELECT @Bettype=2402
-	
+
+	CREATE TABLE #Tempcustsetting (CustID INT)
+	CREATE TABLE #TempCust(CustID INT)
+
+	INSERT INTO  #TempCust(CustID)
+	SELECT c.custid
+	FROM Custinfo c WITH (NOLOCK)
+	WHERE c.srecommend = @srecommend AND c.custid<=@maxcustid
+
 	WHILE(1=1)
 	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-		IF @@ROWCOUNT<=3000
-			BREAK
-	END
+		TRUNCATE TABLE #Tempcustsetting
+
+		DELETE TOP (3000) a
+		OUTPUT deleted.CustID INTO #Tempcustsetting(CustID)
+		FROM #TempCust a
 			
-	WHILE(1=1)
-	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-		IF @@ROWCOUNT<=3000
-			BREAK
+		IF @@ROWCOUNT = 0
+			BREAK;
+		
+		DELETE TOP (3000) a
+		FROM CustStakeLevel_Agent a WITH(ROWLOCK) 
+			INNER JOIN #Tempcustsetting t ON a.CustID=t.CustID
+		WHERE SportType=@Sporttype AND Bettype=@Bettype
+
+		DELETE TOP (3000) a
+		FROM CustStakeLevel_Member a WITH(ROWLOCK) 
+			INNER JOIN #Tempcustsetting t ON a.CustID=t.CustID
+		WHERE SportType=@Sporttype AND Bettype=@Bettype
+
 	END
 END	
 GO
@@ -45,16 +63,104 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @max_custid INT
+PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+
+CREATE TABLE #supers (custid int,isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED',@maxcustid = @max_custid
 
+INSERT INTO #supers(custid)
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+ INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+ LEFT JOIN custsuper cs WITH (NOLOCK) ON c.custid = cs.custid
+WHERE c.roleid = 4  
+ AND c.username NOT LIKE '3rdSuper%'
+ AND cs.isinternal = 0
+ AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+ AND s.islicensee = 0 
+ AND c.custid <= @max_custid
+ AND c.Site<>'CN88'
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+			,@maxcustid = @max_custid
+			,@target = 'REPLICATED'
+						
+	waitfor delay '00:00:0.100'
+END
+
+PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-DECLARE @max_custid INT
+PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+
+CREATE TABLE #supers (custid int,isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST',@maxcustid = @max_custid
+
+INSERT INTO #supers(custid)
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+ INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+ LEFT JOIN custsuper cs WITH (NOLOCK) ON c.custid = cs.custid
+WHERE c.roleid = 4  
+ AND c.username NOT LIKE '3rdSuper%'
+ AND cs.isinternal = 0
+ AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+ AND s.islicensee = 0 
+ AND c.custid <= @max_custid
+ AND c.Site<>'CN88'
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+			,@maxcustid = @max_custid
+			,@target = 'DBCUST'
+						
+	waitfor delay '00:00:0.100'
+END
+
+PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
