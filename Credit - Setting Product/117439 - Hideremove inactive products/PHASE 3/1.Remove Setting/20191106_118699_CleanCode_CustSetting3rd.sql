@@ -19,10 +19,10 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustSetting3rd') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSetting3rd') = 0 RETURN
 	IF dbo.f_CheckRepTable('custOverride3rd') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 
 	DECLARE @SportbettypeRowcount INT
 
-	--DROP TABLE #SportTypeBetType
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	INSERT INTO #SportTypeBetType(Sporttype, BetType)
 	SELECT Data.value('(Sporttype/text())[1]','smallint') as Sporttype

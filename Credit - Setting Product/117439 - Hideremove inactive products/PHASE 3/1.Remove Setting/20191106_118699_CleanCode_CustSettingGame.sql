@@ -19,57 +19,59 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingGame') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustOverrideGame') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 
-	--DROP TABLE #SportTypeBetType
+	DECLARE @SportbettypeRowcount INT
+
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	INSERT INTO #SportTypeBetType(Sporttype, BetType)
 	SELECT Data.value('(Sporttype/text())[1]','smallint') as Sporttype
 		  ,Data.value('(BetType/text())[1]','smallint') as BetType
 	FROM @SportTypeBetTypeListXML.nodes('SportTypeBetTypeList/SportTypeBetType') Node(Data)
 
-	CREATE TABLE #Tempcustsetting (CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
-	CREATE TABLE #TempCust(CustID INT, Sporttype SMALLINT, Bettype SMALLINT)
+	SET @SportbettypeRowcount = @@ROWCOUNT
 
-	INSERT INTO  #TempCust(CustID,Bettype,Sporttype)
-	SELECT c.custid,t.BetType,t.Sporttype
+	CREATE TABLE #Tempcustsetting (CustID INT)
+	CREATE TABLE #TempCust(CustID INT)
+
+	INSERT INTO  #TempCust(CustID)
+	SELECT c.custid
 	FROM Custinfo c WITH (NOLOCK)
-		 CROSS APPLY #SportTypeBetType t
 	WHERE c.srecommend = @srecommend
 
-	DECLARE @Batch INT = 5000
+	DECLARE @Batch INT  
+	SET @Batch = 5000/@SportbettypeRowcount
 
 	WHILE(1=1)
 	BEGIN
 		TRUNCATE TABLE #Tempcustsetting
+
+		DELETE TOP (@Batch) a
+		OUTPUT deleted.CustID INTO #Tempcustsetting(CustID)
+		FROM #TempCust a
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 		
 		DELETE a
 		FROM CustOverrideGame a WITH(UPDLOCK,ROWLOCK) 
-				INNER JOIN #Tempcustsetting temp 
-				ON a.CustId = temp.CustID 
-				AND a.Sporttype = temp.Sporttype
-				AND a.Bettype = temp.Bettype
+			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+			INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 
 		IF @IsLicensee = 0
 		BEGIN
 			DELETE a
 			FROM CustSettingGame a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #Tempcustsetting temp 
-					ON a.CustId = temp.CustID 
-					AND a.Sporttype = temp.Sporttype
-					AND a.Bettype = temp.Bettype
+				 INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 
 		END
 		ELSE	
 		BEGIN
 			DELETE a
 			FROM Dep_CustSettingGame a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #Tempcustsetting temp 
-					ON a.CustId = temp.CustID 
-					AND a.Sporttype = temp.Sporttype
-					AND a.Bettype = temp.Bettype
+				INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 		END
 	END
 	DROP TABLE #SportTypeBetType
