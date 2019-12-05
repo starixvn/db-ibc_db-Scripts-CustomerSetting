@@ -56,14 +56,14 @@ BEGIN
 		DELETE a
 		FROM custOverride3rd a WITH(UPDLOCK,ROWLOCK) 
 			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
-			INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND s.BetType = s.BetType
+			INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 
 		IF @IsLicensee = 0
 		BEGIN
 			DELETE a
 			FROM CustSetting3rd a WITH(UPDLOCK,ROWLOCK) 
 				 INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
-				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND s.BetType = s.BetType
+				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 	
 		END
 		ELSE
@@ -71,7 +71,7 @@ BEGIN
 			DELETE a
 			FROM Dep_CustSetting3rd a WITH(UPDLOCK,ROWLOCK) 
 				 INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
-				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND s.BetType = s.BetType
+				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 		END
 	END
 
