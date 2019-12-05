@@ -24,16 +24,20 @@ BEGIN
 	
 	SELECT @Sporttype = 211
 	SELECT @Bettype=2402
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
+	
+	WHILE(1=1)
 	BEGIN
 		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
+		IF @@ROWCOUNT<=3000
+			BREAK
 	END
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype)
+			
+	WHILE(1=1)
 	BEGIN
 		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK) WHERE CustID<=@maxcustid AND SportType=@Sporttype AND Bettype=@Bettype
-	END	
+		IF @@ROWCOUNT<=3000
+			BREAK
+	END
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
