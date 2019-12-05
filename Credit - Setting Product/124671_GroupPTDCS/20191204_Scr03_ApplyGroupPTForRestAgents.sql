@@ -141,7 +141,7 @@ BEGIN
 													   ,[AutoSuperPT])				
 				SELECT @agentID AS agentID ,
 						T1.SportType,T1.BetType,T1.IsLive,T1.SuperPT,T1.MasterPT,T1.AgentPT,T1.IsAutoMasterPT,T1.AutoMasterPT,T1.IsAutoSuperPT,T1.AutoSuperPT
-				FROM CustPTSetting3rd_Member T1
+				FROM CustPTSetting3rd_Member T1 WITH(NOLOCK)
 				WHERE T1.CustID = @repCustID
 				
 				UPDATE T
