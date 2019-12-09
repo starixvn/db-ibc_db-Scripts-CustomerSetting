@@ -127,20 +127,18 @@
 	 AND ci.username NOT LIKE '3rdSuper%'
 	 AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	 AND ci.Enabled = 1
-	 AND ci.currency <> 20
+	 AND c.currency NOT IN (20,72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 	 AND c.site <> 'CN88'
 	
 	INSERT INTO #SMATemp(CustID,Currency)
 	SELECT custid, currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
-	AND currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 
 	INSERT INTO #MemberTemp(CustID,Currency)
 	SELECT custid, currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
-	AND currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 	
 	DECLARE @SportBettype TABLE
 	(
