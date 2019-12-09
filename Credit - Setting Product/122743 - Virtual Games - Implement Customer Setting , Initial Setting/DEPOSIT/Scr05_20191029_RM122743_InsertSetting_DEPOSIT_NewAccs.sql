@@ -128,12 +128,14 @@
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 
 	INSERT INTO #MemberTemp(CustID,Currency,mrecommend)
 	SELECT custid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 
 	DECLARE @SportBettype TABLE
 	(

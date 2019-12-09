@@ -29,6 +29,7 @@ BEGIN
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND Enabled = 1 AND custid <= @max_custid
+	AND currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
 	
 	DECLARE @SportBettype TABLE
 	(
