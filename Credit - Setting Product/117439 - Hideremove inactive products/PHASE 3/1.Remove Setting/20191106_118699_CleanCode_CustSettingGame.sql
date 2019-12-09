@@ -57,16 +57,13 @@ BEGIN
 		FROM CustOverrideGame a WITH(UPDLOCK,ROWLOCK) 
 			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
 			INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
+		
+		DELETE a
+		FROM CustSettingGame a WITH(UPDLOCK,ROWLOCK) 
+				INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+			INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
 
-		IF @IsLicensee = 0
-		BEGIN
-			DELETE a
-			FROM CustSettingGame a WITH(UPDLOCK,ROWLOCK) 
-				 INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
-				INNER JOIN #SportTypeBetType s ON  a.sporttype = s.Sporttype AND a.BetType = s.BetType
-
-		END
-		ELSE	
+		IF @IsLicensee = 1	
 		BEGIN
 			DELETE a
 			FROM Dep_CustSettingGame a WITH(UPDLOCK,ROWLOCK) 
