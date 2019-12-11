@@ -15,7 +15,8 @@ UPDATE a
 FROM CustGroupHeadline a WITH(ROWLOCK)
 	INNER JOIN #tmp t ON a.CustID=t.CustID
 	
-DELETE a
+UPDATE a
+	SET a.GroupID=0,a.isgroupHeadline=0
 FROM CustAccount a WITH(ROWLOCK)
 	INNER JOIN #tmp t ON a.CustID=t.CustID	
 	

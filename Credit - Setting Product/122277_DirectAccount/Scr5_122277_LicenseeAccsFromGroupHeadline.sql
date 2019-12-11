@@ -11,7 +11,8 @@ FROM CustGroupHeadline a WITH(ROWLOCK)
 WHERE c.Username IN('12BETRMB01','12BETCBankRMB')
 
 
-DELETE a
+UPDATE a
+	SET a.GroupID=0,a.isgroupHeadline=0
 FROM CustAccount a WITH(ROWLOCK)
 	INNER JOIN Customer c WITH(NOLOCK) ON a.CustID=c.CustID
 WHERE c.Username IN('12BETRMB01','12BETCBankRMB')
