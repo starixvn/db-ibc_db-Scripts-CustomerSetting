@@ -4,7 +4,8 @@
 	DB: DBCust/CustDB
 */
 
-DELETE a
+UPDATE a
+	SET a.GroupID=0
 FROM CustGroupHeadline a WITH(ROWLOCK)
 	INNER JOIN Customer c WITH(NOLOCK) ON a.CustID=c.CustID
 WHERE c.Username IN('12BETRMB01','12BETCBankRMB')
