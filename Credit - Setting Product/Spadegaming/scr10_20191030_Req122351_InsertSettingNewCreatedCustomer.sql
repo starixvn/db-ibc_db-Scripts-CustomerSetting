@@ -1,6 +1,6 @@
 /*
 	Created: Winnie
-	Task: Copy CardClub Setting for newly created customers. [RedmineID:#122351]
+	Task: Copy SG Setting for newly created customers. [RedmineID:#122351]
 	DB: DBCUST/CustDB
 	Date: 20191030
 */ 

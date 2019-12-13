@@ -1,7 +1,7 @@
 /*
 	Created: Winnie
 	Date: 20191030
-	Task: Delete existing data of CardClub. [RedmineID:#115322]
+	Task: Delete existing data of SG. [RedmineID:#115322]
 	DB: DBCust/CustDB
 */
  
