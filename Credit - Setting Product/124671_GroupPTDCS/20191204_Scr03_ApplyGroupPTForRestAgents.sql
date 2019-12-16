@@ -72,12 +72,12 @@ BEGIN
 			--PRINT 'Starting regroup ....'
 			
 			DECLARE @repCustID INT = (SELECT repCustID FROM #tempGroup)
-			IF EXISTS( SELECT 1 
+			IF NOT EXISTS( SELECT 1 
 						FROM CustPTGroupSetting3rd_Member T1 WITH (NOLOCK) 
 							JOIN  CustPTSetting3rd_Member T2 WITH (NOLOCK) ON T1.SportType =  T2.SportType AND T1.BetType = T2.BetType AND T1.IsLive = T2.IsLive
-																	AND T1.SuperPT = T2.SuperPT AND T1.MasterPT = T2.MasterPT AND T1.AgentPT = T2.AgentPT
-																	AND T1.IsAutoMasterPT = T2.IsAutoMasterPT AND T1.AutoMasterPT =  T2.AutoMasterPT 
-																	AND T1.IsAutoSuperPT = T2.IsAutoSuperPT	AND T1.AutoSuperPT = T2.AutoSuperPT
+																	AND (T1.SuperPT <> T2.SuperPT OR T1.MasterPT <> T2.MasterPT OR T1.AgentPT <> T2.AgentPT
+																	OR T1.IsAutoMasterPT <> T2.IsAutoMasterPT OR T1.AutoMasterPT <>  T2.AutoMasterPT 
+																	OR T1.IsAutoSuperPT <> T2.IsAutoSuperPT	OR T1.AutoSuperPT <> T2.AutoSuperPT)
 						WHERE T1.agentID = @AgentID	AND T2.CustID = @repCustID)
 			BEGIN
 				--PRINT 'Processing for old group and new group has the same setting for this agent ...'
