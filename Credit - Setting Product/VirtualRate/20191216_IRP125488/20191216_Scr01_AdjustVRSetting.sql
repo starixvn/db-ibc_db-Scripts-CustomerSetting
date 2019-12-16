@@ -45,9 +45,11 @@ BEGIN
 
 		UPDATE cs
 		SET 
-			--LIVE HDP/1H HDP Soccer
+			--LIVE HDP/1H HDP Soccer -80% to -85% 
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,2,1) = CAST(20 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 2, 1, CAST(CAST(15 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
-			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,2,1) = CAST(20 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 2, 1, CAST(CAST(15 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
+			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND SUBSTRING(cs.bitmapVirtual,8,1) = CAST(20 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 8, 1, CAST(CAST(15 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
+			
+			--Non live FT HDP & 1H HDP Soccer -85% to -88% 
 		bitmapVirtual = CASE WHEN seqNo = 1 THEN @bitmapVirtual_tmp 
 								WHEN seqNo = 2 THEN @bitmapVirtual_tmp2 
 								ELSE bitmapVirtual END
@@ -56,7 +58,7 @@ BEGIN
 				AND (
 					--LIVE HDP/1H HDP Soccer
 					SUBSTRING(cs.bitmapVirtual,2,1) = CAST(20 AS BINARY(1))
-					OR 1= 0
+					OR SUBSTRING(cs.bitmapVirtual,8,1) = CAST(20 AS BINARY(1))
 					)
 				))
 			AND cs.custid IN (SELECT custid FROM @tmpCust)	
