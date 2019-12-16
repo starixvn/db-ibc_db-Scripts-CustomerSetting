@@ -118,21 +118,24 @@ SELECT * FROM #AgentList --WHERE mrecommend = 35555506
 ------------------UPDATE-------------------------------------------------------------------
 --Update MinPT of Super
 UPDATE cs
-SET cs.MinPT = minpt.binaryStr_new
+SET cs.MinPT = minpt.binaryStr_new,
+	cs.MinPT2 = minpt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK)
 	INNER JOIN #SuperList s ON s.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MinPT, @MinPT_XML) minpt
 
 --Update s3 of Master
 UPDATE cs
-SET cs.SuperPT = spt.binaryStr_new
+SET cs.SuperPT = spt.binaryStr_new,
+	cs.SuperPT2 = spt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK) 
 	INNER JOIN #MasterList ml ON ml.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) spt
 WHERE ml.sporttype = 1 AND ml.bettype = 1
 
 UPDATE cs
-SET cs.SuperPT = spt.binaryStr_new
+SET cs.SuperPT = spt.binaryStr_new,
+	cs.SuperPT2 = spt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK) 
 	INNER JOIN #MasterList ml ON ml.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) spt
@@ -140,7 +143,8 @@ WHERE ml.sporttype = 9998 AND ml.bettype = 81
 
 --Update s3 of Member
 UPDATE cs
-SET cs.SuperPT = mpt.binaryStr_new
+SET cs.SuperPT = mpt.binaryStr_new,
+	cs.SuperPT2 = mpt.binaryStr_new
 FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK) 
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.AgentId
 	INNER JOIN #MasterList ml ON ml.CustId = ci.mrecommend
@@ -149,7 +153,8 @@ WHERE ci.roleid = 2
 	AND ml.sporttype = 1 AND ml.bettype = 1
 
 UPDATE cs
-SET cs.SuperPT = mpt.binaryStr_new
+SET cs.SuperPT = mpt.binaryStr_new,
+	cs.SuperPT2 = mpt.binaryStr_new
 FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK) 
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.AgentId
 	INNER JOIN #MasterList ml ON ml.CustId = ci.mrecommend
@@ -159,14 +164,16 @@ WHERE ci.roleid = 2
 
 --Update m2 of Agent
 UPDATE cs
-SET cs.MasterPT = apt.binaryStr_new
+SET cs.MasterPT = apt.binaryStr_new,
+	cs.MasterPT2 = apt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK) 
 	INNER JOIN #AgentList al ON al.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MasterPT, al.MasterPT_XML) apt
 WHERE al.sporttype = 1 AND al.bettype = 1
 
 UPDATE cs
-SET cs.MasterPT = apt.binaryStr_new
+SET cs.MasterPT = apt.binaryStr_new,
+	cs.MasterPT2 = apt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK) 
 	INNER JOIN #AgentList al ON al.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MasterPT, al.MasterPT_XML) apt
@@ -174,14 +181,16 @@ WHERE al.sporttype = 9998 AND al.bettype = 81
 
 --Update m2 of Member
 UPDATE cs
-SET cs.MasterPT = apt.binaryStr_new
+SET cs.MasterPT = apt.binaryStr_new,
+	cs.MasterPT2 = apt.binaryStr_new
 FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK) 
 	INNER JOIN #AgentList al ON al.CustId = cs.AgentId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MasterPT, al.MasterPT_XML) apt
 WHERE al.sporttype = 1 AND al.bettype = 1
 
 UPDATE cs
-SET cs.MasterPT = apt.binaryStr_new
+SET cs.MasterPT = apt.binaryStr_new,
+	cs.MasterPT2 = apt.binaryStr_new
 FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK) 
 	INNER JOIN #AgentList al ON al.CustId = cs.AgentId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MasterPT, al.MasterPT_XML) apt
