@@ -79,6 +79,7 @@ BEGIN
 																	OR T1.IsAutoMasterPT <> T2.IsAutoMasterPT OR T1.AutoMasterPT <>  T2.AutoMasterPT 
 																	OR T1.IsAutoSuperPT <> T2.IsAutoSuperPT	OR T1.AutoSuperPT <> T2.AutoSuperPT)
 						WHERE T1.agentID = @AgentID	AND T2.CustID = @repCustID)
+				AND EXISTS(SELECT 1 FROM CustPTGroupSetting3rd_Member WITH (NOLOCK) WHERE agentID = @AgentID)				
 			BEGIN
 				--PRINT 'Processing for old group and new group has the same setting for this agent ...'
 				-- Update isGroup for player
