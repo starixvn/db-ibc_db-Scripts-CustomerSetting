@@ -27,10 +27,11 @@ CREATE TABLE #AgentList (CustId INT, mrecommend INT, sporttype SMALLINT, bettype
 INSERT INTO #SuperList (CustId, sporttype, bettype, IsLive, L4)
 SELECT c.custid, spt.sporttype, spt.bettype, spt.isLive, spt.MaxPT 
 FROM vw_Customer c WITH (NOLOCK) 
+	INNER JOIN dbo.CustSuper s WITH (NOLOCK) ON s.custid = c.custid
 	CROSS APPLY dbo.f_CS_GetPT_Agent(c.CustId) spt
 WHERE c.roleid = 4 AND c.site = 'CN88'
 	AND c.currency <> 20
-	AND c.custid NOT IN (37639148,37639260,37639305)
+	AND s.IsInternal = 0
 
 INSERT INTO #MasterList (CustId, srecommend, sporttype, bettype, IsLive, S3, MaxM2A2, MinM2A2)
 SELECT c.custid, c.srecommend, mpt.sporttype, mpt.bettype, mpt.isLive, mpt.SuperPT, MAX(apt.MasterPT+apt.AgentPT), MIN(apt.MasterPT+apt.AgentPT)
