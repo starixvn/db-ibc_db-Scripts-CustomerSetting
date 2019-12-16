@@ -12,7 +12,7 @@
 		IF IncreaseS3 > 0
 			IF IncreaseS3 <= MaxRangeS3 THEN s3 = s3 + IncreaseS3
 			IF IncreaseS3 > MaxRangeS3 THEN s3 = s3 + MaxRangeS3, m2 = @MinPT_New - s3_new - a2
-		IF IncreaseS3 <= 0 AND A2 + S3_New < @MinPT_New THEN m2 = @MinPT_New - s3 - a2
+		IF IncreaseS3 <= 0 AND a2 + s3 < @MinPT_New THEN m2 = @MinPT_New - s3 - a2
 */
 USE CustDB
 GO
