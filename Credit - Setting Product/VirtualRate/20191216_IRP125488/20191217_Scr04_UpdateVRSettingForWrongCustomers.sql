@@ -126,7 +126,7 @@ DECLARE @custidlist VARCHAR(MAX) = '',
 
 SELECT * 
 INTO #Tmp_CustVirtual
-FROM Tmp_CustVirtual
+FROM DBSPARE.custdb_tmp2.dbo.Tmp_CustVirtual
 
 
 WHILE(1=1)
