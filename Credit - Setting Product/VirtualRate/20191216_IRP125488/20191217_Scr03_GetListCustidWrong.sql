@@ -2,7 +2,7 @@
 	Created: Johnson
 	Date: 2019-12-17
 	Task: adjust virtual rate for UT/YEN currency for credit & All licensees
-	DB: DBCUST/CUSTDB
+	DB: DBSPARE/CUSTDB_Temp2
 */
 
 
@@ -27,7 +27,7 @@ UNION ALL
 	SELECT custid
 	FROM dbo.Dep_CustSuper WITH(NOLOCK)
 	
-SELECT cs.*
+SELECT distinct ci.custid, 0 isFinished
 into Tmp_CustVirtual
 FROM custinfo ci (NOLOCK)
 	INNER JOIN dbo.CustVirtualSetting cs WITH(NOLOCK) ON cs.custid = ci.custid
