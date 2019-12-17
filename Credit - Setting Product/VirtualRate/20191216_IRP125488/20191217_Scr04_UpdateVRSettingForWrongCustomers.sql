@@ -21,7 +21,7 @@ BEGIN
 			@bitmapVirtual_tmp2 BINARY(64)
 	
 	INSERT INTO @tmpCust
-	SELECT custid	
+	SELECT val as custid	
 	FROM dbo.strSplit(@custidlist,',')
 		
 	UPDATE cs
