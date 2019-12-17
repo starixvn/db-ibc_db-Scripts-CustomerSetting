@@ -35,7 +35,7 @@ WHERE srecommend in (SELECT custid FROM #supers)
 WHERE ((cs.seqNo = 1
 				AND (					
 					--OU/1H OU
-					OR SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1))
+					SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,6,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,9,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,10,1) = CAST(15 AS BINARY(1))
