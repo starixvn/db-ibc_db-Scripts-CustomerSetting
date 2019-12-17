@@ -131,7 +131,7 @@ BEGIN
 	UPDATE TOP(2500) t
 	SET @custidlist = @custidlist+ CAST(custid AS VARCHAR(10)) +',',
 		isFinished = 1
-	FROM DBSPARE.custdb_tmp2.dbo.Tmp_CustVirtual WITH(UPDLOCK)
+	FROM DBSPARE.custdb_tmp2.dbo.Tmp_CustVirtual t WITH(UPDLOCK)
 	WHERE isFinished = 0
 	
 	SELECT @cnt = @@ROWCOUNT
