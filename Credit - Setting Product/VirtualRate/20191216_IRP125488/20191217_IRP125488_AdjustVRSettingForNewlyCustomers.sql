@@ -94,8 +94,6 @@ BEGIN
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND SUBSTRING(cs.bitmapVirtual,48,1) = CAST(12 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 48, 1, CAST(CAST(10 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND SUBSTRING(cs.bitmapVirtual,51,1) = CAST(12 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 51, 1, CAST(CAST(10 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND SUBSTRING(cs.bitmapVirtual,52,1) = CAST(12 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 52, 1, CAST(CAST(10 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
-			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND SUBSTRING(cs.bitmapVirtual,61,1) = CAST(12 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 61, 1, CAST(CAST(10 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
-			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND SUBSTRING(cs.bitmapVirtual,62,1) = CAST(12 AS BINARY(1)) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 62, 1, CAST(CAST(10 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 						
 			bitmapVirtual = CASE WHEN seqNo = 1 THEN @bitmapVirtual_tmp 
 								WHEN seqNo = 2 THEN @bitmapVirtual_tmp2 
@@ -149,9 +147,7 @@ BEGIN
 					OR SUBSTRING(cs.bitmapVirtual,47,1) = CAST(12 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,48,1) = CAST(12 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,51,1) = CAST(12 AS BINARY(1))
-					OR SUBSTRING(cs.bitmapVirtual,52,1) = CAST(12 AS BINARY(1))
-					OR SUBSTRING(cs.bitmapVirtual,61,1) = CAST(12 AS BINARY(1))
-					OR SUBSTRING(cs.bitmapVirtual,62,1) = CAST(12 AS BINARY(1))					
+					OR SUBSTRING(cs.bitmapVirtual,52,1) = CAST(12 AS BINARY(1))									
 				)
 				)
 			)
