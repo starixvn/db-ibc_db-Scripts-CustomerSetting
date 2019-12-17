@@ -106,7 +106,7 @@ BEGIN
 					OR SUBSTRING(cs.bitmapVirtual,8,1) = CAST(20 AS BINARY(1))
 					
 					--Non live FT HDP & 1H HDP Soccer -85% to -88% 
-					OR SUBSTRING(cs.bitmapVirtual,1,1) = CAST(20 AS BINARY(1))
+					OR SUBSTRING(cs.bitmapVirtual,1,1) = CAST(15 AS BINARY(1))
 					OR SUBSTRING(cs.bitmapVirtual,7,1) = CAST(15 AS BINARY(1))
 					
 					--Live and NonLive FT OU & 1H OU for ALL SPORTS -88% to -90%
