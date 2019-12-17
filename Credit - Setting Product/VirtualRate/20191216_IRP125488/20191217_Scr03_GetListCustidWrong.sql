@@ -32,7 +32,7 @@ into Tmp_CustVirtual
 FROM custinfo ci (NOLOCK)
 	INNER JOIN dbo.CustVirtualSetting cs WITH(NOLOCK) ON cs.custid = ci.custid
 WHERE srecommend in (SELECT custid FROM #supers)	
-WHERE ((cs.seqNo = 1
+AND ((cs.seqNo = 1
 				AND (					
 					--OU/1H OU
 					SUBSTRING(cs.bitmapVirtual,5,1) = CAST(15 AS BINARY(1))
