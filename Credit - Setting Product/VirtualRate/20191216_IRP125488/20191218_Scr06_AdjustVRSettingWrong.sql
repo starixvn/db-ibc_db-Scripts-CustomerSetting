@@ -2,7 +2,7 @@
 	Created: Johnson
 	Date: 2019-12-18
 	Task: adjust virtual rate wrong setting 
-	DB: DBCUST/CUSTDB
+	DB: DBSPARE/CUSTDB_tmp2
 */
 DECLARE @bitmapVirtual_tmp BINARY(64),
 			@bitmapVirtual_tmp2 BINARY(64)
