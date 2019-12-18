@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Create setting for Virtual game ( New accounts)
+	Task: Create setting for Virtual games Athena Site ( New accounts)
 	DB: DBCust/CustDB
 */
 
@@ -116,7 +116,27 @@
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
 	 AND c.currency NOT IN (20,72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
-	 AND s.site IN ('Athena000')
+	 AND s.site IN (
+				'spondemo'
+				,'Macaubet'
+				,'Aoncash'
+				,'ITCBet'
+				,'Athena000'
+				,'9bet'
+				,'M8bola'
+				,'Q8bola'
+				,'BE7'
+				,'NBCbet'
+				,'Unobet'
+				,'Bolanation'
+				,'Luckywin88'
+				,'Winn69'
+				,'Axiawin'
+				,'Jumbo88'
+				,'Lagadewa'
+				,'Ratugg'
+				,'Monstergol'
+				)
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
@@ -179,7 +199,7 @@
 	WHERE temp.RoleID = 4
 
 	------------------------------------PT Setting-------------------------------------------------		
-	DECLARE @PT smallmoney = 93.00 --Licensee fee :  7% (Licensees take 93%, House takes 7%)
+	DECLARE @PT smallmoney = 90.00 --Athena Licensee fee :  7% (Licensees take 93%, House takes 7%)
 
 	--SMA LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Agent

@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert setting for Virtual game - Real Currency
+	Task: Insert setting for Virtual game - Real Currency -  Athena Site
 	DB: DBCust/CustDB
 */
 
@@ -9,6 +9,7 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	 @srecommend INT		
 	,@target VARCHAR(20)
 	,@max_custid INT
+	,@PT smallmoney
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -28,7 +29,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 
 	DECLARE @currency INT
-	DECLARE @PT smallmoney = 93.00 --Licensee fee :  7% (Licensees take 93%, House takes 7%)
 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
@@ -248,6 +248,7 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
+DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
@@ -261,7 +262,27 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (20,72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND s.site IN ('Athena000')
+ AND s.site IN (
+				'spondemo'
+				,'Macaubet'
+				,'Aoncash'
+				,'ITCBet'
+				,'Athena000'
+				,'9bet'
+				,'M8bola'
+				,'Q8bola'
+				,'BE7'
+				,'NBCbet'
+				,'Unobet'
+				,'Bolanation'
+				,'Luckywin88'
+				,'Winn69'
+				,'Axiawin'
+				,'Jumbo88'
+				,'Lagadewa'
+				,'Ratugg'
+				,'Monstergol'
+				)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -286,6 +307,7 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'REPLICATED'
 			,@max_custid = @max_custid
+			,@PT = @PT
 						
 	waitfor delay '00:00:0.100'
 END
@@ -301,6 +323,7 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
+DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
@@ -314,7 +337,27 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (20,72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND s.site IN ('Athena000')
+ AND s.site IN (
+				'spondemo'
+				,'Macaubet'
+				,'Aoncash'
+				,'ITCBet'
+				,'Athena000'
+				,'9bet'
+				,'M8bola'
+				,'Q8bola'
+				,'BE7'
+				,'NBCbet'
+				,'Unobet'
+				,'Bolanation'
+				,'Luckywin88'
+				,'Winn69'
+				,'Axiawin'
+				,'Jumbo88'
+				,'Lagadewa'
+				,'Ratugg'
+				,'Monstergol'
+				)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -339,6 +382,7 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'DBCUST'
 			,@max_custid = @max_custid
+			,@PT = @PT
 						
 	waitfor delay '00:00:0.100'
 END
