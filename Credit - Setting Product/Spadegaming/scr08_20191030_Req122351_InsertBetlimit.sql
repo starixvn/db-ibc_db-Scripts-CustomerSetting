@@ -114,7 +114,6 @@ WHERE c.roleid = 4
  AND cs.isinternal = 0
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0 
- AND c.currency <> 20
  AND c.custid <= @max_custid
  AND c.Site<>'CN88'
 
@@ -167,7 +166,6 @@ WHERE c.roleid = 4
  AND cs.isinternal = 0
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0
- AND c.currency <> 20
  AND c.custid <= @max_custid
  AND c.Site<>'CN88'
 -- For deployer info
