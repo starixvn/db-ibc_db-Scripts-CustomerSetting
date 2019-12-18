@@ -80,7 +80,7 @@ BEGIN
 																	OR T1.IsAutoSuperPT <> T2.IsAutoSuperPT	OR T1.AutoSuperPT <> T2.AutoSuperPT)
 						WHERE T1.agentID = @AgentID	AND T2.CustID = @repCustID)
 				AND ((SELECT count(1) FROM CustPTGroupSetting3rd_Member WITH(NOLOCK) WHERE agentID = @AgentID)
-					= (SELECT count(1) FROM CustPTSetting3rd_Member WITH(NOLOCK) WHERE agentID = @repCustID))
+					= (SELECT count(1) FROM CustPTSetting3rd_Member WITH(NOLOCK) WHERE custid = @repCustID))
 			BEGIN
 				--PRINT 'Processing for old group and new group has the same setting for this agent ...'
 				-- Update isGroup for player
