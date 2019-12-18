@@ -925,7 +925,7 @@ FROM StakeLevelGroupDetail s WITH(ROWLOCK)
 WHERE t.GameTypeID=4301
 
 DELETE t
-FROM StakeLevel t WITH(NOLOCK) 
+FROM StakeLevel t WITH(ROWLOCK) 
 WHERE t.GameTypeID=4301
 
 INSERT INTO StakeLevel(GameTypeID	,GameGroupID,	MinLabel,	MaxLabel,	MinStake,	MaxStake,	ExchangeID,	ResourceID)
@@ -938,4 +938,3 @@ FROM StakeLevel e WITH(NOLOCK)
 INNER JOIN #temp t ON e.exchangeid=t.exchangeid
 WHERE e.GameTypeID=4301 AND GameGroupID=12
 
-select * from exchange where currency='HKK'
