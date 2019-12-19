@@ -14,3 +14,16 @@ FROM dbo.ProblemAccountReason WITH (NOLOCK)
 
 SELECT *
 FROM DBTXN.bodb02.dbo.TicketVoiding_SubIssueType WITH (NOLOCK)
+
+SELECT *
+FROM DBTXN.bodb02.dbo.TicketVoiding_ReasonTemplate  WITH (NOLOCK)
+
+/*
+
+DELETE FROM ProblemAccountReason WITH (ROWLOCK) WHERE ReasonID IN (37,108)
+
+DELETE FROM DBTXN.bodb02.dbo.TicketVoiding_SubIssueType WITH (ROWLOCK) WHERE SubIssueTypeId = 37
+
+DELETE FROM DBTXN.bodb02.dbo.TicketVoiding_ReasonTemplate WITH (ROWLOCK) WHERE SubIssueTypeId = 37
+
+*/
