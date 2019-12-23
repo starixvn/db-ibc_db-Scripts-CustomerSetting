@@ -85,3 +85,9 @@ SET CI.DisableGoldDeluxe = 0
 FROM custInfo CI WITH (UPDLOCK,ROWLOCK)
 	INNER JOIN #tmpSetting_GD T ON T.custid = CI.custid
 	
+--Drop all temp tables
+DROP TABLE #supers
+DROP TABLE #tmpSetting_NG
+DROP TABLE #tmpSetting_RK
+DROP TABLE #tmpSetting_RC
+DROP TABLE #tmpSetting_GD
