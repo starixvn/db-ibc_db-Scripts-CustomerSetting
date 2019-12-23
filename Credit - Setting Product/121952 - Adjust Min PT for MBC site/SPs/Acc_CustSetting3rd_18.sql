@@ -5,7 +5,7 @@
 	Redmine: https://nexdev.net/issues/121952
 	DB: DBCUST/CUSTDB
  */
-ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
+ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_18]
     @custid int,
 	@PT smallmoney,
     @Target VARCHAR(20) = ''
