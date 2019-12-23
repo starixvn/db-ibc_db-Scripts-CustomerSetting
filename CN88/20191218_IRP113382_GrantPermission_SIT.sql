@@ -1,8 +1,8 @@
 /*
 	Created by: Elodie
-	Date: 20181218
-	Task: Grant permission on SIT to use for CS_Customer_OnlineUserList_Sel
-	DB: SITDB05/bodb02	
+	Date: 20181223
+	Task: Grant permission on SIT to use for CS_MsgCustReadStatus_SelUnread
+	DB: SITDB05BK1/bodb02	
 */
 USE bodb02
 GO
