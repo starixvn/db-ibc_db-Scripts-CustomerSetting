@@ -88,7 +88,8 @@ BEGIN
 		INNER JOIN #MemberTemp c ON a.custid = c.custid
 	WHERE a.SportType = 43
 
-	------------------------------------PT Setting-------------------------------------------------	
+	------------------------------------PT Setting-------------------------------------------------
+
 	;WITH tmp AS (
 		SELECT  dc.CustID,
 				 (
@@ -146,126 +147,148 @@ BEGIN
 		CROSS APPLY dbo.f_SetBinaryValues(a.AgentPT, dc.apositiontakingXML) aPT
 		CROSS APPLY dbo.f_SetBinaryValues(a.MasterPT, dc.mpositiontakingXML) mPT
 		CROSS APPLY dbo.f_SetBinaryValues(a.SuperPT, dc.spositiontakingXML) sPT
-	
-	;WITH tmp AS (
-		SELECT  dc.CustID,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.AgentPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							) as apositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.MasterPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as mpositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.SuperPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as spositiontakingXML
-		FROM Dep_CustPTSetting_Member dc WITH(NOLOCK) 
-			INNER JOIN #MemberTemp c ON dc.custid = c.custid
-		WHERE  SportType = 43 and bettype = 1 and islive =0 
+
+
+	CREATE TABLE #MemberTemp1(
+		 CustID INT PRIMARY KEY CLUSTERED
+		 ,recommend INT
 	)
-	UPDATE a
-	SET	a.AgentPT = aPT.binaryStr_new,
-		a.MasterPT = mPT.binaryStr_new,
-		a.SuperPT = sPT.binaryStr_new 
-	FROM Tmp dc  
-		INNER JOIN DSB_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK) ON a.CustId = dc.CustID  
-		CROSS APPLY dbo.f_SetBinaryValues(a.AgentPT, dc.apositiontakingXML) aPT
-		CROSS APPLY dbo.f_SetBinaryValues(a.MasterPT, dc.mpositiontakingXML) mPT
-		CROSS APPLY dbo.f_SetBinaryValues(a.SuperPT, dc.spositiontakingXML) sPT
+		
+	DECLARE @batch int = 3000
+	WHILE 1 <> 1 
+	BEGIN
+		TRUNCATE TABLE #MemberTemp1
+
+		DELETE TOP (@batch) a
+		OUTPUT deleted.CustID,deleted.recommend INTO #MemberTemp1(CustID,recommend)
+		FROM #MemberTemp a 
+
+		IF @@ROWCOUNT = 0 
+			BREAK;
+
+		;WITH tmp AS (
+			SELECT  dc.CustID,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.AgentPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								) as apositiontakingXML,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.MasterPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								)  as mpositiontakingXML,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.SuperPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								)  as spositiontakingXML
+			FROM Dep_CustPTSetting_Member dc WITH(NOLOCK) 
+				INNER JOIN #MemberTemp1 c ON dc.custid = c.custid
+			WHERE  SportType = 43 and bettype = 1 and islive =0 
+		)
+		UPDATE a
+		SET	a.AgentPT = aPT.binaryStr_new,
+			a.MasterPT = mPT.binaryStr_new,
+			a.SuperPT = sPT.binaryStr_new 
+		FROM Tmp dc  
+			INNER JOIN DSB_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK) ON a.CustId = dc.CustID  
+			CROSS APPLY dbo.f_SetBinaryValues(a.AgentPT, dc.apositiontakingXML) aPT
+			CROSS APPLY dbo.f_SetBinaryValues(a.MasterPT, dc.mpositiontakingXML) mPT
+			CROSS APPLY dbo.f_SetBinaryValues(a.SuperPT, dc.spositiontakingXML) sPT
 	
-	;WITH tmp AS (
-		SELECT  c.CustID,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.AgentPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							) as apositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.MasterPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as mpositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.SuperPT
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as spositiontakingXML
-		FROM Dep_CustPTGroupSetting_Member dc WITH(NOLOCK) 
-			INNER JOIN #MemberTemp c ON dc.AgentID = c.recommend
-			INNER JOIN Dep_CustSettingMode ds WITH(NOLOCK)  ON ds.CustID = c.CustID AND ds.IsGroupedPT = 1
-		WHERE  SportType = 43 and bettype = 1 and islive =0 
-	)
-	UPDATE a
-	SET	a.AgentPT = aPT.binaryStr_new,
-		a.MasterPT = mPT.binaryStr_new,
-		a.SuperPT = sPT.binaryStr_new 
-	FROM Tmp dc  
-		INNER JOIN DSB_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK) ON a.CustId = dc.CustID  
-		CROSS APPLY dbo.f_SetBinaryValues(a.AgentPT, dc.apositiontakingXML) aPT
-		CROSS APPLY dbo.f_SetBinaryValues(a.MasterPT, dc.mpositiontakingXML) mPT
-		CROSS APPLY dbo.f_SetBinaryValues(a.SuperPT, dc.spositiontakingXML) sPT
+		;WITH tmp AS (
+			SELECT  c.CustID,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.AgentPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								) as apositiontakingXML,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.MasterPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								)  as mpositiontakingXML,
+					 (
+								SELECT (
+										SELECT	bs.ByteOrder	AS '@pos',
+												ct.ValueId AS '@val'
+										FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+											LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value * 100 = dc.SuperPT
+										WHERE bs.Type = 'PTSetting' 
+											AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+										FOR XML PATH('r')
+											, TYPE
+										)
+								FOR XML PATH('root')
+									, TYPE
+								)  as spositiontakingXML
+			FROM Dep_CustPTGroupSetting_Member dc WITH(NOLOCK) 
+				INNER JOIN #MemberTemp1 c ON dc.AgentID = c.recommend
+				INNER JOIN Dep_CustSettingMode ds WITH(NOLOCK)  ON ds.CustID = c.CustID AND ds.IsGroupedPT = 1
+			WHERE  SportType = 43 and bettype = 1 and islive =0 
+		)
+		UPDATE a
+		SET	a.AgentPT = aPT.binaryStr_new,
+			a.MasterPT = mPT.binaryStr_new,
+			a.SuperPT = sPT.binaryStr_new 
+		FROM Tmp dc  
+			INNER JOIN DSB_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK) ON a.CustId = dc.CustID  
+			CROSS APPLY dbo.f_SetBinaryValues(a.AgentPT, dc.apositiontakingXML) aPT
+			CROSS APPLY dbo.f_SetBinaryValues(a.MasterPT, dc.mpositiontakingXML) mPT
+			CROSS APPLY dbo.f_SetBinaryValues(a.SuperPT, dc.spositiontakingXML) sPT
+
+		WAITFOR DELAY '00:00:00.100'
+	END
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+	DROP TABLE #MemberTemp1
 END
 GO
 
