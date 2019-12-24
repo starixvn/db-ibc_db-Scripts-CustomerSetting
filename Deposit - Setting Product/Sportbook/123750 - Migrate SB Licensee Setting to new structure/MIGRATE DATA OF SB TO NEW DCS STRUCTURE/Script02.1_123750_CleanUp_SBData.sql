@@ -1,0 +1,13 @@
+/*
+	Created: Eden
+	Date: 20191029
+	Task: Cleanup data New tables for SB [RM:#123750]
+	DB: DBCust/CustDB
+*/
+
+DELETE FROM DSB_CustBetSetting_Agent WITH(ROWLOCK,UPDLOCK) 
+DELETE FROM DSB_CustBetSetting_Member WITH(ROWLOCK,UPDLOCK)
+DELETE FROM DSB_CustPTSetting_Agent WITH(ROWLOCK,UPDLOCK)  
+DELETE FROM DSB_CustPTSetting_Member WITH(ROWLOCK,UPDLOCK) 
+DELETE FROM DSB_CustDiscount_Agent WITH(ROWLOCK,UPDLOCK)   
+DELETE FROM DSB_CustDiscount_Member WITH(ROWLOCK,UPDLOCK)  
