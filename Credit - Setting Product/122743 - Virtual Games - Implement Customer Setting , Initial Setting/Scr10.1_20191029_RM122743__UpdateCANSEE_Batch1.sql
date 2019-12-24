@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Insert CanSee for Virtual games batch 1
+	Task: Insert CanSee for Virtual games batch 1 - KORIBC
 	DB: DBCust/CustDB
 */
 USE CustDB
@@ -15,7 +15,7 @@ SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
-	AND s.site IN ('')
+	AND s.site IN ('KORIBC')
 
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 
