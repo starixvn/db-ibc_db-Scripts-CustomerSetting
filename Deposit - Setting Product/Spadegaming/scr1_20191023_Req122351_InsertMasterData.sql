@@ -17,7 +17,7 @@ VALUES
 	,(@MaxProductSettingID+2,36,1,0,2,1)
 	-- Stakelevel group
 	,(@MaxProductSettingID+3,36,8,0,3,1)
-GO
+
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES 
 	(@MaxProductSettingID+1,247,4301,0,0,1)
