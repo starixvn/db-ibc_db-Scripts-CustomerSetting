@@ -7,8 +7,8 @@
 USE CustDB
 GO
 
-DECLARE @Sporttype SMALLINT
-SELECT @Sporttype = 245
+DECLARE @Sporttype SMALLINT, @Bettype SMALLINT 
+SELECT @Sporttype = 245, @Bettype = 4601
 
 --Import sites which offered this game
 SELECT siteid
@@ -19,8 +19,8 @@ WHERE s.isActive = 1 AND s.isLicensee = 0
 
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 
-INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, 0 AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest
+INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
+SELECT @Sporttype AS SportType, @Bettype AS BetType, 0 AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 
@@ -28,13 +28,13 @@ UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
-WHERE SportType = @Sporttype
+WHERE SportType = @Sporttype AND BetType = @Bettype
 
 --Offer site BEST-ODDS, UUS
 UPDATE ps
 SET ps.IsLaunched = 1,
 	currency = 20
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
-WHERE SportType = @Sporttype AND siteid = 1
+WHERE SportType = @Sporttype AND BetType = @Bettype AND siteid = 1
 
 
