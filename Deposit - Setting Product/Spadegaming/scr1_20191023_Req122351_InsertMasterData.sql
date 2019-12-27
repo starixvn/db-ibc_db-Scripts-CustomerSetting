@@ -6,23 +6,20 @@
 USE [CustDB]
 Go
 
-DECLARE @MaxProductSettingID INT
-SELECT @MaxProductSettingID = MAX(ProductSettingID) FROM Dep_ProductSetting WITH(NOLOCK)
-
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES 
 	--Status
-	(@MaxProductSettingID+1,36,4,0,1,1)
+	(29,36,4,0,1,1)
 	-- PT
-	,(@MaxProductSettingID+2,36,1,0,2,1)
+	,(30,36,1,0,2,1)
 	-- Stakelevel group
-	,(@MaxProductSettingID+3,36,8,0,3,1)
+	,(31,36,8,0,3,1)
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES 
-	(@MaxProductSettingID+1,247,4301,0,0,1)
-	,(@MaxProductSettingID+2,247,4301,0,0,1)
-	,(@MaxProductSettingID+3,247,4301,0,0,1)
+	(29,247,4301,0,0,1)
+	,(30,247,4301,0,0,1)
+	,(31,247,4301,0,0,1)
 GO
 
 INSERT INTO [dbo].Dep_ProductStatusProfile (Sporttype,Bettype,bitmapOrder)
