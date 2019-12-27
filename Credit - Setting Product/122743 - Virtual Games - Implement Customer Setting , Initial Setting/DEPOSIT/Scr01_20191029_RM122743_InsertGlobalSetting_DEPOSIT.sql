@@ -18,10 +18,6 @@ DELETE
 FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
 WHERE Sporttype = 245
 
-DELETE  
-FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
-WHERE Sporttype = 245
-
 */
 --> Dep_ProductStatusProfile
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
@@ -39,9 +35,9 @@ INSERT INTO Dep_ProductSetting (
 	,DisplayOrder
 	,SettingLevel
 	)
-	  SELECT @MaxProductSettingID + 1 , 38, 4, 0, 1, 1 --Product Status
-UNION SELECT @MaxProductSettingID + 2 , 38, 1, 0, 2, 1 --PT
-UNION SELECT @MaxProductSettingID + 3 , 38, 7, 0, 3, 4 --BetLimit
+	  SELECT 32, 38, 4, 0, 1, 1 --Product Status
+UNION SELECT 33, 38, 1, 0, 2, 1 --PT
+UNION SELECT 34, 38, 7, 0, 3, 4 --BetLimit
 
 -->Dep_ProductSettingDetail
 INSERT INTO Dep_ProductSettingDetail(
@@ -54,7 +50,7 @@ INSERT INTO Dep_ProductSettingDetail(
 	,MinDefaultValue
 	,IsApplyBA
 	)
-	  SELECT @MaxProductSettingID + 1 , 245, 4601, 0, 0, 1, NULL, 0
-UNION SELECT @MaxProductSettingID + 2 , 245, 4601, 0, 0, 1, NULL, 0
-UNION SELECT @MaxProductSettingID + 3 , 245, 4601, 0, 0, 1, NULL, 0
+	  SELECT 32, 245, 4601, 0, 0, 1, NULL, 0
+UNION SELECT 33, 245, 4601, 0, 0, 1, NULL, 0
+UNION SELECT 34, 245, 4601, 0, 0, 1, NULL, 0
 
