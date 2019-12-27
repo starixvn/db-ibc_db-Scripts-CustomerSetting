@@ -24,9 +24,6 @@ WHERE Sporttype = 245
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
 SELECT 245,4601,11
 
-DECLARE @MaxProductSettingID INT
-SELECT @MaxProductSettingID = MAX(ProductSettingID) FROM Dep_ProductSetting WITH(NOLOCK)
-
 -->Dep_ProductSetting
 INSERT INTO Dep_ProductSetting (
 	 ProductSettingID
