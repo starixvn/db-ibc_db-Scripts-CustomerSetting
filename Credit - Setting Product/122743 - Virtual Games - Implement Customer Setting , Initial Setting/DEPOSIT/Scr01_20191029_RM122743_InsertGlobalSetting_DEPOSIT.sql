@@ -5,7 +5,7 @@
 	DB: DBCust/CustDB
 */
 -----------------------------------------------------------------
-/*
+--Cleanup Data
 DELETE  
 FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
 WHERE Sporttype = 245
@@ -18,7 +18,8 @@ DELETE
 FROM Dep_ProductSettingDetail WITH(ROWLOCK, UPDLOCK)
 WHERE Sporttype = 245
 
-*/
+--> Insert new data
+
 --> Dep_ProductStatusProfile
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
 SELECT 245,4601,11
