@@ -4,7 +4,6 @@
 	DB: DBCUST/CustDB
 	Date: 20191223
 */ 
-
 DECLARE @max_custid INT
 SELECT @max_custid = xx
 
