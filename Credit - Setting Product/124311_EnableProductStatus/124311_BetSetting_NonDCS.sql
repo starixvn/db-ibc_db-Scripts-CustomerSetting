@@ -174,3 +174,10 @@ SET CG.StakeLevelList= X
 FROM CustGameType CG WITH (UPDLOCK,ROWLOCK)
 	INNER JOIN #SMAStakeLevel S ON S.custid = CG.custid
 WHERE S.roleid = 1
+
+--Drop all temp tables
+DROP TABLE #supers
+DROP TABLE #SMAStakeLevel
+DROP TABLE #SMAStakeLevel_GD
+DROP TABLE #tmpSetting_NG
+DROP TABLE #tmpSetting_RK

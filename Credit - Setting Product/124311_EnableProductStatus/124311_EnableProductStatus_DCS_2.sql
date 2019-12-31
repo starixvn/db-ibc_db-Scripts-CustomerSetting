@@ -141,12 +141,13 @@ BEGIN
 			,@target = 'REPLICATED'			
 	waitfor delay '00:00:0.280'
 END
-GO
+
 --Drop all temp tables
 DROP TABLE #ProductID
 DROP TABLE #SportBettypeFilterStatus
 DROP TABLE #supers
 DROP TABLE #DisableLine
+GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
@@ -250,7 +251,7 @@ BEGIN
 			,@target = 'REPLICATED'			
 	waitfor delay '00:00:0.280'
 END
-GO
+
 --Drop all temp tables
 DROP TABLE #ProductID
 DROP TABLE #SportBettypeFilterStatus
@@ -258,3 +259,4 @@ DROP TABLE #supers
 DROP TABLE #DisableLine
 
 PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+GO

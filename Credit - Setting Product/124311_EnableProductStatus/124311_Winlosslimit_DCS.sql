@@ -99,7 +99,7 @@ BEGIN
 		AND C.MaxLossLimit = 0 
 		AND C.MaxWinLimit = 0
 	
-	
+	--Drop all temp tables
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
 	DROP TABLE #ProductID
@@ -159,6 +159,9 @@ BEGIN
 						
 	waitfor delay '00:00:0.280'
 END
+
+--Drop all temp tables
+DROP TABLE #supers
 GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -209,3 +212,7 @@ BEGIN
 	waitfor delay '00:00:0.280'
 END
 PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+--Drop all temp tables
+DROP TABLE #supers
+GO

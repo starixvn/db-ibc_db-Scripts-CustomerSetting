@@ -169,6 +169,9 @@ BEGIN
 			
 	waitfor delay '00:00:0.200'
 END
+--Drop temp table
+DROP TABLE #supers
+
 GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
