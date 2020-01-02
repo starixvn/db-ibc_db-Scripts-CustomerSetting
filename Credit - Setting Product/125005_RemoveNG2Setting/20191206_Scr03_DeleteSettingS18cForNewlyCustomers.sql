@@ -20,10 +20,6 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
-	AND EXISTS(SELECT TOP 1 1 
-			FROM CustPTSetting3rd_Agent WITH(NOLOCK) 
-			WHERE custid = ci.custid AND sporttype = 216
-			)
 			
 CREATE TABLE #tblCust(custid INT PRIMARY KEY, roleid TINYINT)
 DECLARE @tmpCust TABLE(custid INT PRIMARY KEY)
