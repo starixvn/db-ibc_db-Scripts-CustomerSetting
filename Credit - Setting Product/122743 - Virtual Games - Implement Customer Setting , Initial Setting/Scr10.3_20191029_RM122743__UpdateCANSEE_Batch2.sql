@@ -15,7 +15,7 @@ SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
-	AND s.site NOT IN ('KORIBC')
+	AND s.site NOT IN ('KORIBC','CN88')
 
 UPDATE ps
 SET ps.IsLaunched = 1
