@@ -3,3 +3,9 @@ GO
 
 ALTER TABLE dbo.CS_UserLog_Credit ADD CreatedDate DATETIME NULL
 ALTER TABLE dbo.CS_UserLog_Login ADD CreatedDate DATETIME NULL
+
+USE bodb_CustomerLog_Archive
+GO
+
+ALTER TABLE dbo.CS_UserLog_Credit ADD CreatedDate DATETIME NULL
+ALTER TABLE dbo.CS_UserLog_Login ADD CreatedDate DATETIME NULL
