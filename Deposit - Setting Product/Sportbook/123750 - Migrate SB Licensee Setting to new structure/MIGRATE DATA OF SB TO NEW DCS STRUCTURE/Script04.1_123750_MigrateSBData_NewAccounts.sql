@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Migrate data of Sport Book to New tables - New accounts [RM:#123750]
+	Task: Migrate data of Sport Book and Sport Book 2 (Esport) to New tables - New accounts [RM:#123750]
 	DB: DBCust/CustDB
 */
 DECLARE @max_custid INT = xxx
@@ -138,7 +138,8 @@ WHERE roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid
 	AND srecommend IN (SELECT custid FROM #supers)
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-------------------------------------Bet Setting-------------------------------------------------	
+------------------------------------Bet Setting-------------------------------------------------
+--SportBook	
 INSERT INTO DSB_CustBetSetting_Agent(
 		CustID
 	,SportType
@@ -212,6 +213,44 @@ SELECT a.custid
 FROM Dep_CustSetting a WITH(NOLOCK) 
 	INNER JOIN #MemberTemp c ON a.custid = c.custid
 WHERE SportType = 99 and bettype = 9 
+
+--Esport
+INSERT INTO DSB_CustBetSetting_Agent(
+		CustID
+	,SportType
+	,BetType
+	,MinBet
+	,MaxBet
+	,MaxPerMatch
+)
+SELECT a.CustID
+	,a.SportType
+	,a.BetType
+	,a.MinBet
+	,a.MaxBet
+	,a.MaxPerMatch
+FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
+	INNER JOIN #SMATemp c ON a.custid = c.custid
+WHERE a.SportType = 43 
+
+
+INSERT INTO DSB_CustBetSetting_Member(
+		CustID
+	,SportType
+	,BetType
+	,MinBet
+	,MaxBet
+	,MaxPerMatch
+)
+SELECT a.CustID
+	,a.SportType
+	,a.BetType
+	,a.MinBet
+	,a.MaxBet
+	,a.MaxPerMatch
+FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
+	INNER JOIN #MemberTemp c ON a.custid = c.custid
+WHERE a.SportType = 43
 
 ------------------------------------PT Setting-------------------------------------------------	
 DECLARE @InitialBinaryStr binary(10) =  0x00000000000000000000

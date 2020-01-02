@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Migrate data of Sport Book to New tables [RM:#123750]
+	Task: Migrate data of Sport Book and Sport Book 2 (E-Sport) to New tables [RM:#123750]
 	DB: DBCust/CustDB
 */
 
@@ -27,6 +27,11 @@ BEGIN
 	--IF dbo.f_CheckRepTable('PositionTakingTemplate') = 0 RETURN
 	--IF dbo.f_CheckRepTable('CommissionTemplate') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_ByteSeq') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	
 	CREATE TABLE #MemberTemp(
 		 CustID INT PRIMARY KEY CLUSTERED
@@ -108,6 +113,7 @@ BEGIN
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
 
 	------------------------------------Bet Setting-------------------------------------------------	
+	--SportBook
 	INSERT INTO DSB_CustBetSetting_Agent(
 		 CustID
 		,SportType
@@ -181,6 +187,45 @@ BEGIN
 	FROM Dep_CustSetting a WITH(NOLOCK) 
 		INNER JOIN #MemberTemp c ON a.custid = c.custid
 	WHERE SportType = 99 and bettype = 9 
+
+
+	--Esport
+	INSERT INTO DSB_CustBetSetting_Agent(
+		 CustID
+		,SportType
+		,BetType
+		,MinBet
+		,MaxBet
+		,MaxPerMatch
+	)
+	SELECT a.CustID
+		,a.SportType
+		,a.BetType
+		,a.MinBet
+		,a.MaxBet
+		,a.MaxPerMatch
+	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
+		INNER JOIN #SMATemp c ON a.custid = c.custid
+	WHERE a.SportType = 43 
+
+
+	INSERT INTO DSB_CustBetSetting_Member(
+		 CustID
+		,SportType
+		,BetType
+		,MinBet
+		,MaxBet
+		,MaxPerMatch
+	)
+	SELECT a.CustID
+		,a.SportType
+		,a.BetType
+		,a.MinBet
+		,a.MaxBet
+		,a.MaxPerMatch
+	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
+		INNER JOIN #MemberTemp c ON a.custid = c.custid
+	WHERE a.SportType = 43
 
 	------------------------------------PT Setting-------------------------------------------------	
 	DECLARE @InitialBinaryStr binary(10) =  0x00000000000000000000

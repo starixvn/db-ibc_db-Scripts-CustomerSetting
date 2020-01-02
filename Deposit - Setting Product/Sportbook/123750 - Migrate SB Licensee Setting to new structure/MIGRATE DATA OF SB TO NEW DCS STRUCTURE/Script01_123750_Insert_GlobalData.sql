@@ -5,9 +5,6 @@
 	DB: DBCust/CustDB
 */
 -----------------------------------------------------------------
-	DECLARE @MaxProductSettingID_SB INT = 0
-	SELECT TOP 1 @MaxProductSettingID_SB =  ProductSettingID FROM DSB_ProductSetting WITH(NOLOCK) ORDER BY ProductSettingID DESC
-
 	-->DSB_ProductSetting
 	INSERT INTO DSB_ProductSetting (
 		 ProductSettingID
@@ -17,12 +14,10 @@
 		,DisplayOrder
 		,SettingLevel
 		)
-		  SELECT @MaxProductSettingID_SB + 1, 1, 1, 0, 1, 2 --PT - Product level
-	UNION SELECT @MaxProductSettingID_SB + 2, 1, 2, 0, 2, 4 --BetSetting - SportTypeBettype level
-	UNION SELECT @MaxProductSettingID_SB + 3, 1, 3, 0, 3, 4 --Discount - SportTypeBettype level
-
-	UNION SELECT @MaxProductSettingID_SB + 4, 16, 1, 0, 1, 2 --PT - Product level
-	UNION SELECT @MaxProductSettingID_SB + 5, 16, 2, 0, 2, 2 --BetSetting - SportTypeBettype level
+		  SELECT 1, 1, 1, 0, 1, 2 --PT - Product level
+	UNION SELECT 2, 1, 2, 0, 2, 4 --BetSetting - SportTypeBettype level
+	UNION SELECT 3, 1, 3, 0, 3, 4 --Discount - SportTypeBettype level
+	UNION SELECT 4, 16, 2, 0, 2, 2 --BetSetting - SportTypeBettype level Esport
 
 
 	-->DSB_ProductSettingDetail
@@ -36,29 +31,24 @@
 		,MinDefaultValue
 		,IsApplyBA
 		)
-		  SELECT @MaxProductSettingID_SB + 1, 1, 1, 0, 0, 0, NULL, 1
-	UNION SELECT @MaxProductSettingID_SB + 2, 1, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 2, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 3, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 5, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 8, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 10, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 11, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 99, 1, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 2, 99, 9, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID_SB + 3, 1, 1, 0, 0, 0, NULL, 0 --HDPComm
-	UNION SELECT @MaxProductSettingID_SB + 3, 1, 4, 0, 0, 0, NULL, 0 --@OtherComm
-	UNION SELECT @MaxProductSettingID_SB + 3, 1, 5, 0, 0, 0, NULL, 0 --@1x2Comm
-	UNION SELECT @MaxProductSettingID_SB + 3, 1, 9, 0, 0, 0, NULL, 0 --@OtherComm,@ParlayCommMember
-
-	UNION SELECT @MaxProductSettingID_SB + 4, 43, 1, 0, 0, 0, NULL, 1
-	UNION SELECT @MaxProductSettingID_SB + 5, 43, 1, 0, 0, 0, NULL, 0
+		  SELECT 1, 1, 1, 0, 0, 0, NULL, 1
+	UNION SELECT 2, 1, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 2, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 3, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 5, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 8, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 10, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 11, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 99, 1, 0, 0, 0, NULL, 0
+	UNION SELECT 2, 99, 9, 0, 0, 0, NULL, 0
+	UNION SELECT 3, 1, 1, 0, 0, 0, NULL, 0 --HDPComm
+	UNION SELECT 3, 1, 4, 0, 0, 0, NULL, 0 --@OtherComm
+	UNION SELECT 3, 1, 5, 0, 0, 0, NULL, 0 --@1x2Comm
+	UNION SELECT 3, 1, 9, 0, 0, 0, NULL, 0 --@OtherComm,@ParlayCommMember
+	UNION SELECT 4, 43, 1, 0, 0, 0, NULL, 0
 GO
 
 --> FOR NUMBER GAME & KENO
-	DECLARE @MaxProductSettingID INT
-	SELECT @MaxProductSettingID = MAX(ProductSettingID) FROM Dep_ProductSetting WITH(NOLOCK)
-
 	-->Dep_ProductSetting
 	INSERT INTO Dep_ProductSetting (
 		 ProductSettingID
@@ -68,12 +58,12 @@ GO
 		,DisplayOrder
 		,SettingLevel
 		)
-		  SELECT @MaxProductSettingID + 1, 3, 1, 0, 1, 1 --PT - Product level
-	UNION SELECT @MaxProductSettingID + 2, 3, 10, 0, 2, 2 --BetSettingGame - SportType level
-	UNION SELECT @MaxProductSettingID + 3, 3, 3, 0, 3, 1 --Discount - Product level
+		  SELECT 35, 3, 1, 0, 1, 1 --PT - Product level
+	UNION SELECT 36, 3, 10, 0, 2, 2 --BetSettingGame - SportType level
+	UNION SELECT 37, 3, 3, 0, 3, 1 --Discount - Product level
 
-	UNION SELECT @MaxProductSettingID + 4, 8, 1, 0, 1, 1 --PT - Product level
-	UNION SELECT @MaxProductSettingID + 5, 8, 2, 0, 2, 2 --BetSetting - SportType level
+	UNION SELECT 38, 8, 1, 0, 1, 1 --PT - Product level
+	UNION SELECT 39, 8, 2, 0, 2, 2 --BetSetting - SportType level
 
 	-->Dep_ProductSettingDetail
 	INSERT INTO Dep_ProductSettingDetail(
@@ -86,12 +76,12 @@ GO
 		,MinDefaultValue
 		,IsApplyBA
 		)
-		  SELECT @MaxProductSettingID + 1, 161, 81, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID + 2, 161, 81, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID + 3, 161, 81, 0, 0, 0, NULL, 0
+		  SELECT 35, 161, 81, 0, 0, 0, NULL, 0
+	UNION SELECT 36, 161, 81, 0, 0, 0, NULL, 0
+	UNION SELECT 37, 161, 81, 0, 0, 0, NULL, 0
 
-	UNION SELECT @MaxProductSettingID + 4, 202, 1501, 0, 0, 0, NULL, 0
-	UNION SELECT @MaxProductSettingID + 5, 202, 1501, 0, 0, 0, NULL, 0
+	UNION SELECT 38, 202, 1501, 0, 0, 0, NULL, 0
+	UNION SELECT 39, 202, 1501, 0, 0, 0, NULL, 0
 GO
 
 --> INSERT Reference Tables
@@ -102,10 +92,7 @@ GO
 	SELECT 'DiscountMember',1,	1,	0,	1 UNION ALL
 	SELECT 'DiscountMember',1,	4,	0,	2 UNION ALL
 	SELECT 'DiscountMember',1,	5,	0,	3 UNION ALL
-	SELECT 'DiscountMember',1,	9,	0,	4 UNION ALL
-	SELECT 'PTSetting',		43,	1,	0,	2 UNION ALL
-	SELECT 'DiscountAgent',	43,	1,	0,	2 UNION ALL
-	SELECT 'DiscountMember',43,	1,	0,	5 
+	SELECT 'DiscountMember',1,	9,	0,	4 
 
 	-->CommissionTemplate
 	INSERT INTO CommissionTemplate(ValueId, Value)
