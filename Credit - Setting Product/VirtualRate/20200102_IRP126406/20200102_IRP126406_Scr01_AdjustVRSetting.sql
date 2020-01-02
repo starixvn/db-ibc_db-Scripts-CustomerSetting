@@ -45,7 +45,7 @@ BEGIN
 
 		UPDATE cs
 		SET 
-			--LIVE HDP/1H HDP Soccer -80% OR -85% to -86%
+			--LIVE HDP/1H HDP All sports -80% OR -85% to -86%
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND (SUBSTRING(cs.bitmapVirtual,2,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,2,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(bitmapVirtual, 2, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE bitmapVirtual END,
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND (SUBSTRING(cs.bitmapVirtual,8,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,8,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 8, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
 			@bitmapVirtual_tmp = CASE WHEN seqNo = 1 AND (SUBSTRING(cs.bitmapVirtual,14,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,14,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp, 14, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp END,
@@ -61,7 +61,7 @@ BEGIN
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,12,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,12,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 12, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,20,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,20,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 20, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,28,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,28,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 28, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
-			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,35,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,35,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 35, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
+			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,36,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,36,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 36, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,44,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,44,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 44, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,50,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,50,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 50, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
 			@bitmapVirtual_tmp2 = CASE WHEN seqNo = 2 AND (SUBSTRING(cs.bitmapVirtual,58,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,58,1) = CAST(15 AS BINARY(1))) THEN CONVERT(BINARY(64),STUFF(@bitmapVirtual_tmp2, 58, 1, CAST(CAST(14 AS BINARY(1)) AS VARCHAR))) ELSE @bitmapVirtual_tmp2 END,
@@ -72,7 +72,7 @@ BEGIN
 		FROM dbo.CustVirtualSetting cs WITH(UPDLOCK,ROWLOCK)
 		WHERE ((cs.seqNo = 1
 				AND (
-					--LIVE HDP/1H HDP Soccer	
+					--LIVE HDP/1H HDP All Sports	
 					(SUBSTRING(cs.bitmapVirtual,2,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,2,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,8,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,8,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,14,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,14,1) = CAST(15 AS BINARY(1)))
@@ -92,7 +92,7 @@ BEGIN
 					OR (SUBSTRING(cs.bitmapVirtual,12,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,12,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,20,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,20,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,28,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,28,1) = CAST(15 AS BINARY(1)))
-					OR (SUBSTRING(cs.bitmapVirtual,35,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,35,1) = CAST(15 AS BINARY(1)))
+					OR (SUBSTRING(cs.bitmapVirtual,36,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,36,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,44,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,44,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,50,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,50,1) = CAST(15 AS BINARY(1)))
 					OR (SUBSTRING(cs.bitmapVirtual,58,1) = CAST(20 AS BINARY(1)) OR SUBSTRING(cs.bitmapVirtual,58,1) = CAST(15 AS BINARY(1)))					
