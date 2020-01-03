@@ -235,8 +235,7 @@ CREATE TABLE [dbo].[DSB_ProductSettingDetail](
 	[IsLive] [bit] NOT NULL,
 	[MaxDefaultValue] [decimal](19, 8) NULL DEFAULT ((0)),
 	[SettingStatus] [tinyint] NULL,
-	[MinDefaultValue] [decimal](19, 8) NULL,
-	[IsApplyBA] [bit] NOT NULL DEFAULT ((0)),
+	[MinDefaultValue] [decimal](19, 8) NULL
 	CONSTRAINT [PK_DSB_ProductSettingDetail] PRIMARY KEY CLUSTERED 
 (
 	[ProductSettingID] ASC,

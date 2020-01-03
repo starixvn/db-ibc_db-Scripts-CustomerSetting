@@ -5,6 +5,18 @@
 	DB: DBCust/CustDB
 */
 -----------------------------------------------------------------
+/*
+DELETE  a
+--select *
+FROM DSB_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
+INNER JOIN DSB_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
+WHERE b.ProductID IN(1,16)
+
+DELETE  
+--select *
+FROM DSB_ProductSetting WITH(ROWLOCK, UPDLOCK)
+WHERE ProductID IN(1,16)
+*/
 	-->DSB_ProductSetting
 	INSERT INTO DSB_ProductSetting (
 		 ProductSettingID
@@ -14,10 +26,9 @@
 		,DisplayOrder
 		,SettingLevel
 		)
-		  SELECT 1, 1, 1, 0, 1, 2 --PT - Product level
-	UNION SELECT 2, 1, 2, 0, 2, 4 --BetSetting - SportTypeBettype level
-	UNION SELECT 3, 1, 3, 0, 3, 4 --Discount - SportTypeBettype level
-	UNION SELECT 4, 16, 2, 0, 2, 2 --BetSetting - SportTypeBettype level Esport
+	SELECT 1, 1, 1, 0, 1, 2 --PT - Product level
+	UNION ALL SELECT 2, 1, 2, 0, 2, 4 --BetSetting - SportTypeBettype level
+	UNION ALL SELECT 3, 1, 3, 0, 3, 4 --Discount - SportTypeBettype level
 
 
 	-->DSB_ProductSettingDetail
@@ -29,26 +40,45 @@
 		,MaxDefaultValue
 		,SettingStatus
 		,MinDefaultValue
-		,IsApplyBA
 		)
-		  SELECT 1, 1, 1, 0, 0, 0, NULL, 1
-	UNION SELECT 2, 1, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 2, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 3, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 5, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 8, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 10, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 11, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 99, 1, 0, 0, 0, NULL, 0
-	UNION SELECT 2, 99, 9, 0, 0, 0, NULL, 0
-	UNION SELECT 3, 1, 1, 0, 0, 0, NULL, 0 --HDPComm
-	UNION SELECT 3, 1, 4, 0, 0, 0, NULL, 0 --@OtherComm
-	UNION SELECT 3, 1, 5, 0, 0, 0, NULL, 0 --@1x2Comm
-	UNION SELECT 3, 1, 9, 0, 0, 0, NULL, 0 --@OtherComm,@ParlayCommMember
-	UNION SELECT 4, 43, 1, 0, 0, 0, NULL, 0
+	SELECT 1, 1, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 1, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 2, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 3, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 5, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 8, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 10, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 11, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 99, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 99, 9, 0, 0, 0, NULL
+	UNION ALL SELECT 2, 43, 1, 0, 0, 0, NULL
+	UNION ALL SELECT 3, 1, 1, 0, 0, 0, NULL --HDPComm
+	UNION ALL SELECT 3, 1, 4, 0, 0, 0, NULL --@OtherComm
+	UNION ALL SELECT 3, 1, 5, 0, 0, 0, NULL --@1x2Comm
+	UNION ALL SELECT 3, 1, 9, 0, 0, 0, NULL --@OtherComm,@ParlayCommMember
+
 GO
 
 --> FOR NUMBER GAME & KENO
+
+/*
+DELETE  a
+--select a.*--,b.*
+FROM Dep_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
+INNER JOIN Dep_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
+WHERE b.ProductID IN(3,8)
+
+DELETE  
+--select *
+FROM Dep_ProductSetting WITH(ROWLOCK, UPDLOCK)
+WHERE ProductID IN(3,8)
+
+DELETE  
+--select *
+FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
+WHERE Sporttype IN(161,202)
+
+*/
 	-->Dep_ProductSetting
 	INSERT INTO Dep_ProductSetting (
 		 ProductSettingID
@@ -58,12 +88,14 @@ GO
 		,DisplayOrder
 		,SettingLevel
 		)
-		  SELECT 35, 3, 1, 0, 1, 1 --PT - Product level
-	UNION SELECT 36, 3, 10, 0, 2, 2 --BetSettingGame - SportType level
-	UNION SELECT 37, 3, 3, 0, 3, 1 --Discount - Product level
+	SELECT 35, 3, 4, 0, 1, 1 --Product Status - Product level
+	UNION ALL SELECT 36, 3, 1, 0, 2, 1 --PT - Product level
+	UNION ALL SELECT 37, 3, 10, 0, 3, 2 --BetSettingGame - SportType level
+	UNION ALL SELECT 38, 3, 3, 0, 4, 1 --Discount - Product level
 
-	UNION SELECT 38, 8, 1, 0, 1, 1 --PT - Product level
-	UNION SELECT 39, 8, 2, 0, 2, 2 --BetSetting - SportType level
+	UNION ALL SELECT 39, 8, 4, 0, 1, 1 --Product Status - Product level
+	UNION ALL SELECT 40, 8, 1, 0, 2, 1 --PT - Product level
+	UNION ALL SELECT 41, 8, 2, 0, 3, 2 --BetSetting - SportType level
 
 	-->Dep_ProductSettingDetail
 	INSERT INTO Dep_ProductSettingDetail(
@@ -76,12 +108,18 @@ GO
 		,MinDefaultValue
 		,IsApplyBA
 		)
-		  SELECT 35, 161, 81, 0, 0, 0, NULL, 0
-	UNION SELECT 36, 161, 81, 0, 0, 0, NULL, 0
-	UNION SELECT 37, 161, 81, 0, 0, 0, NULL, 0
+	SELECT 35, 161, 81, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 36, 161, 81, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 37, 161, 81, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 38, 161, 81, 0, 0, 0, NULL, 0
 
-	UNION SELECT 38, 202, 1501, 0, 0, 0, NULL, 0
-	UNION SELECT 39, 202, 1501, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 39, 202, 1501, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 40, 202, 1501, 0, 0, 0, NULL, 0
+	UNION ALL SELECT 41, 202, 1501, 0, 0, 0, NULL, 0
+
+	INSERT INTO Dep_ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
+	SELECT 161,81,12
+	UNION ALL SELECT 202,1501,13
 GO
 
 --> INSERT Reference Tables
