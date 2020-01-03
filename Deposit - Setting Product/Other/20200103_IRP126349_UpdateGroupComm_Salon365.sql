@@ -13,13 +13,16 @@ INSERT INTO [dbo].[Dep_DefaultOddGroup]
 SELECT custid, 'c',getdate(), 10278938--StarixIT
 ,1
 FROM Customer (nolock)
-WHERE srecommend in (SELECT custid from Dep_CustSuper where site = 'Salon365')
-	AND roleid = 2
+WHERE custid IN (13105570--Salon365RMB01
+				,13106578--Salon365UUS01
+				)
 
 --7699 rows affects
 UPDATE customer WITH(UPDLOCK,ROWLOCK)
 SET ugroup = 'c'
-WHERE srecommend in (SELECT custid FROM Dep_CustSuper WHERE site = 'Salon365')	
+WHERE recommend IN (13105570--Salon365RMB01
+					,13106578--Salon365UUS01
+					)
 	AND roleid = 1	
 	AND ugroup <> 'c'
 
