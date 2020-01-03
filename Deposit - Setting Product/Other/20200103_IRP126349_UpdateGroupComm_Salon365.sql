@@ -20,9 +20,7 @@ WHERE custid IN (13105570--Salon365RMB01
 --7699 rows affects
 UPDATE customer WITH(UPDLOCK,ROWLOCK)
 SET ugroup = 'c'
-WHERE recommend IN (13105570--Salon365RMB01
-					,13106578--Salon365UUS01
-					)
-	AND roleid = 1	
+WHERE srecommend IN (SELECT custid FROM Dep_CustSuper (NOLOCK) WHERE site = 'Salon365')
+	AND roleid = 1
 	AND ugroup <> 'c'
 
