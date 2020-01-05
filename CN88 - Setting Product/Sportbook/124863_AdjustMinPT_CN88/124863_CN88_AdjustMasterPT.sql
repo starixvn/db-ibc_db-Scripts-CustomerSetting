@@ -573,7 +573,6 @@ SET al.MasterPT_XML = (
 						)
 FROM #AgentList al
 
-DELETE FROM #AgentList WHERE CustId IN (40133168, 39354093)
 ------------------UPDATE-------------------------------------------------------------------
 
 --Update m2 of Agent
