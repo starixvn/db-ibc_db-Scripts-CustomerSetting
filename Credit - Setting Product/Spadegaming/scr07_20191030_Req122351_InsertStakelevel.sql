@@ -942,10 +942,3 @@ SELECT StakeLevelID,	t.GameTypeID,	t.MinLabel,t.MaxLabel,	t.Min , t.Max
 FROM StakeLevel e WITH(NOLOCK) 
 INNER JOIN #temp t ON e.exchangeid=t.exchangeid
 WHERE e.GameTypeID=4301 AND GameGroupID=12
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
-FROM StakeLevel e WITH(NOLOCK) 
-INNER JOIN StakeLevelGroupDetail t ON e.StakeLevelID=t.StakeLevelID
-WHERE e.GameTypeID=4301 AND GameGroupID=12
-	AND t.MaxStake > 999

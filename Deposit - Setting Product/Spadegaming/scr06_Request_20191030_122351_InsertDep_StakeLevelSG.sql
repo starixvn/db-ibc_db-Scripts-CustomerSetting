@@ -899,6 +899,11 @@ INSERT #temp1 ([exchangeid])
 SELECT DISTINCT exchangeid
 FROM #temp
 
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #temp t
+WHERE Max > 999
+
 DECLARE @maxStakeLevel INT
 SELECT @maxStakeLevel=MAX(StakeLevelID) FROM Dep_StakeLevel WITH(NOLOCK) 
 
@@ -909,7 +914,7 @@ FROM exchange  e WITH(NOLOCK)
 WHERE t.exchangeid<>20
 
 INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
-SELECT StakeLevelID,	t.GameTypeID,	CAST(CAST(t.Min AS float) AS NVARCHAR(50)),CAST(CAST(t.Max AS float) AS NVARCHAR(50)),	t.Min , t.Max
+SELECT StakeLevelID, t.GameTypeID, t.MinLabel, t.MaxLabel,	t.Min , t.Max
 FROM Dep_StakeLevel e WITH(NOLOCK) 
 INNER JOIN #temp t ON e.exchangeid=t.exchangeid
 WHERE e.GameTypeID=4301 AND GameGroupID=11 AND t.exchangeid<>20
