@@ -895,6 +895,8 @@ SELECT 4324,72,'0.3','75',0.3,75 UNION ALL
 SELECT 4325,72,'1','100',1,100 UNION ALL 
 SELECT 4301,72,'0.5','150',0.5,150 
 
+DELETE FROM #temp WHERE GameTypeID = 4313 -- Don't offer Ming Dynasty anymore
+
 INSERT #temp1 ([exchangeid]) 
 SELECT DISTINCT exchangeid
 FROM #temp

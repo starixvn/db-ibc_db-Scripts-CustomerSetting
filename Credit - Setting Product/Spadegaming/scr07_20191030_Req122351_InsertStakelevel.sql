@@ -924,6 +924,8 @@ SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #temp t
 WHERE Max > 999
 
+DELETE FROM #temp WHERE GameTypeID = 4313 -- Don't offer Ming Dynasty anymore
+
 DELETE s
 FROM StakeLevelGroupDetail s WITH(ROWLOCK)
 	INNER JOIN StakeLevel t WITH(NOLOCK) ON s.StakeLevelID=t.StakeLevelID
