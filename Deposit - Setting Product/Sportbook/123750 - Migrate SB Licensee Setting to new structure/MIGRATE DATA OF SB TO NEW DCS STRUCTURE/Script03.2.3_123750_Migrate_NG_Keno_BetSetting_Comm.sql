@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Migrate data of Keno and Number Games to DCS [RM:#123750]
+	Task: Migrate Comm and BetSetting of Keno and Number Games to DCS [RM:#123750]
 	DB: DBCust/CustDB
 */
 
@@ -21,8 +21,6 @@ BEGIN
 	--IF dbo.f_CheckRepTable('Dep_CustBetSettingGame_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
-	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
-	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Agent') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustSetting3rd') = 0 RETURN
@@ -146,33 +144,6 @@ BEGIN
 	FROM CustGameType a WITH(NOLOCK)
 		 INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid  
 	WHERE GameTypeID = 1
-
-	------------------------------------PT Setting-------------------------------------------------------
-	--Number games	
-	INSERT INTO Dep_CustPTSetting_Agent (CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-	SELECT a.CustID, SportType, BetType, IsLive, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-	FROM Dep_CustSetting3rd a WITH(NOLOCK) 
-		INNER JOIN #SMATemp c WITH(NOLOCK) ON a.custid = c.custid
-	WHERE SportType = 161 and bettype = 81 and islive = 0 
-
-	INSERT INTO Dep_CustPTSetting_Member(CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-	SELECT a.CustID, SportType, BetType, IsLive, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-	FROM Dep_CustSetting3rd a WITH(NOLOCK) 
-		INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid 
-	WHERE SportType = 161 and bettype = 81 and islive = 0 
-
-	--Keno
-	INSERT INTO Dep_CustPTSetting_Agent (CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-	SELECT a.CustID, SportType, BetType, IsLive = 0, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-	FROM CustSettingGame a WITH(NOLOCK) 
-		 INNER JOIN #SMATemp c WITH(NOLOCK) ON a.custid = c.custid
-	WHERE SportType = 202 AND bettype = 1501
-
-	INSERT INTO Dep_CustPTSetting_Member (CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-	SELECT a.CustID, SportType, BetType, IsLive = 0, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-	FROM CustSettingGame a WITH(NOLOCK) 
-		 INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid 
-	WHERE SportType = 202 AND bettype = 1501
 
 	------------------------------------Commisson Setting-------------------------------------------------	
 	--Number Games

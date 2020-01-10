@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Migrate data of Sport Book and Sport Book 2 (E-Sport) to New tables [RM:#123750]
+	Task: Migrate PT of Sport Book and Sport Book 2 (E-Sport) to New tables [RM:#123750]
 	DB: DBCust/CustDB
 */
 
@@ -22,6 +22,7 @@ BEGIN
 	--IF dbo.f_CheckRepTable('DSB_CustPTSetting_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('PositionTakingTemplate') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_ByteSeq') = 0 RETURN
+	--IF dbo.f_CheckRepTable('Dep_CustBAActive') = 0 RETURN
 
 	DECLARE @mrecommend INT ,@srecommend INT	
 	
@@ -37,13 +38,13 @@ BEGIN
 	SELECT c.custid
 	FROM Custinfo c WITH (NOLOCK)
 	WHERE c.recommend = @recommend AND c.roleid = 1 AND c.Enabled = 1 AND c.custid <= @max_custid
-		  AND c.currency NOT IN ( SELECT custid FROM Dep_CustBAActive ba WITH(NOLOCK))
+		  AND c.custid NOT IN ( SELECT custid FROM Dep_CustBAActive ba WITH(NOLOCK))
 
 	INSERT INTO #BAMemberTemp (CustID)
 	SELECT c.custid
 	FROM Custinfo c WITH (NOLOCK)
 	WHERE c.recommend = @recommend AND c.roleid = 1 AND c.Enabled = 1 AND c.custid <= @max_custid
-		  AND c.currency IN ( SELECT custid FROM Dep_CustBAActive ba WITH(NOLOCK))
+		  AND c.custid IN ( SELECT custid FROM Dep_CustBAActive ba WITH(NOLOCK))
 
 	------------------------------------PT Setting-------------------------------------------------	
 	DECLARE @InitialBinaryStr binary(10) =  0x00000000000000000000

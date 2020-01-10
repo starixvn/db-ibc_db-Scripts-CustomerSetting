@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Migrate data of Sport Book and Sport Book 2 (E-Sport) to New tables [RM:#123750]
+	Task: Migrate Comm and BetSetting of Sport Book and Sport Book 2 (E-Sport) to New tables [RM:#123750]
 	DB: DBCust/CustDB
 */
 
@@ -19,20 +19,14 @@ BEGIN
 	--IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_CustBetSetting_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_CustBetSetting_Agent') = 0 RETURN
-	--IF dbo.f_CheckRepTable('DSB_CustPTSetting_Agent') = 0 RETURN
-	--IF dbo.f_CheckRepTable('DSB_CustPTSetting_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_CustDiscount_Agent') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_CustDiscount_Member') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustSetting') = 0 RETURN
-	--IF dbo.f_CheckRepTable('PositionTakingTemplate') = 0 RETURN
 	--IF dbo.f_CheckRepTable('CommissionTemplate') = 0 RETURN
 	--IF dbo.f_CheckRepTable('DSB_ByteSeq') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	--IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
-	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
-	--IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
-	--IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
-	
+
 	CREATE TABLE #MemberTemp(
 		 CustID INT PRIMARY KEY CLUSTERED
 		,maxpermatch	money
@@ -227,126 +221,9 @@ BEGIN
 		INNER JOIN #MemberTemp c ON a.custid = c.custid
 	WHERE a.SportType = 43
 
-	------------------------------------PT Setting-------------------------------------------------	
+	------------------------------------Commisson Setting-------------------------------------------------	
 	DECLARE @InitialBinaryStr binary(10) =  0x00000000000000000000
 
-	;WITH tmp AS (
-		SELECT  dc.CustID,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.apositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							) as apositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.mpositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as mpositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.spositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as spositiontakingXML
-		FROM Dep_CustSetting dc WITH(NOLOCK) 
-			INNER JOIN #SMATemp c ON dc.custid = c.custid
-		WHERE  SportType = 1 and bettype = 1 and islive =0 
-	)
-	INSERT INTO DSB_CustPTSetting_Agent (CustID,AgentPT,MasterPT,SuperPT)
-	SELECT  dc.CustID,
-			aPT.binaryStr_new as AgentPT,
-			mPT.binaryStr_new as MasterPT,
-			sPT.binaryStr_new as SuperPT
-	FROM Tmp dc  
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.apositiontakingXML) aPT
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.mpositiontakingXML) mPT
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.spositiontakingXML) sPT
-	
-	;WITH tmp AS (
-		SELECT  dc.CustID,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.apositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							) as apositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.mpositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as mpositiontakingXML,
-				 (
-							SELECT (
-									SELECT	bs.ByteOrder	AS '@pos',
-											ct.ValueId AS '@val'
-									FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_PTTemplate ct WITH(NOLOCK) ON ct.Value = dc.spositiontaking
-									WHERE bs.Type = 'PTSetting' 
-										AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-									FOR XML PATH('r')
-										, TYPE
-									)
-							FOR XML PATH('root')
-								, TYPE
-							)  as spositiontakingXML
-		FROM Dep_CustSetting dc WITH(NOLOCK) 
-			INNER JOIN #MemberTemp c ON dc.custid = c.custid
-		WHERE  SportType = 1 and bettype = 1 and islive =0 
-	)
-	INSERT INTO DSB_CustPTSetting_Member (CustID,AgentPT,MasterPT,SuperPT)
-	SELECT  dc.CustID,
-			aPT.binaryStr_new as AgentPT,
-			mPT.binaryStr_new as MasterPT,
-			sPT.binaryStr_new as SuperPT
-	FROM Tmp dc  
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.apositiontakingXML) aPT
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.mpositiontakingXML) mPT
-		CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.spositiontakingXML) sPT
-
-	------------------------------------Commisson Setting-------------------------------------------------	
 	;WITH tmp AS (
 		SELECT dc.CustID,dc.SportType,dc.bettype,dc.islive,
 			  CASE WHEN c.roleid = 2 THEN dc.adiscount
