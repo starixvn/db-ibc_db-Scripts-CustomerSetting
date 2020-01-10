@@ -74,6 +74,8 @@ SELECT 4324,20,'0.3','75',0.3,75 UNION ALL
 SELECT 4325,20,'1','100',1,100 UNION ALL 
 SELECT 4301,20,'0.5','150',0.5,150 
 
+DELETE FROM #temp WHERE GameTypeID = 4313 -- Don't offer Ming Dynasty anymore
+
 INSERT INTO Dep_StakeLevel(StakeLevelID,GameTypeID	,GameGroupID,	MinLabel,	MaxLabel,	MinStake,	MaxStake,	ExchangeID,	ResourceID)
 SELECT @maxStakeLevel+1,4301 ,11 ,	NULL,	NULL,	NULL,	NULL,	20	,NULL
 
