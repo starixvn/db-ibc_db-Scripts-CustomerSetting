@@ -107,7 +107,36 @@ WHERE roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid
 	AND srecommend IN (SELECT custid FROM #supers)
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-DECLARE @Batch int = 1000
+------------------------------------PRODUC STATUS-----------------------------------------------
+DECLARE @bitmapOrder_NG TINYINT, @bitmapOrder_KN TINYINT
+SELECT @bitmapOrder_NG = bitmapOrder FROM Dep_ProductStatusProfile psp WITH (NOLOCK) WHERE PSP.Sporttype = 161 AND PSP.Bettype = 81
+SELECT @bitmapOrder_KN = bitmapOrder FROM Dep_ProductStatusProfile psp WITH (NOLOCK) WHERE PSP.Sporttype = 202 AND PSP.Bettype = 1501
+
+UPDATE c
+SET	 bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_KN,ci.HideKeno)
+	,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_NG,ci.DisableNumber)
+FROM Dep_CustProductStatus c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.CustID = ci.custid
+	INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+
+UPDATE c
+SET	 bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_KN,ci.HideKeno)
+	,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_NG,ci.DisableNumber)
+FROM Dep_CustProductStatus c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.CustID = ci.custid
+	INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
+
+UPDATE c
+SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+FROM Dep_CustProductStatus c
+	INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
+	INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+
+UPDATE c
+SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+FROM Dep_CustProductStatus c
+	INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
+	INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
 ------------------------------------Bet Setting-------------------------------------------------	
 --Number Gamnes

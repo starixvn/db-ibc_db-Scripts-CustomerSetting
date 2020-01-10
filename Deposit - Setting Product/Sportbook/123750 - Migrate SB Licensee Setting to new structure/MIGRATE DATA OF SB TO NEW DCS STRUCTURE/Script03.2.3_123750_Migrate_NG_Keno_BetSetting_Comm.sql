@@ -64,7 +64,61 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
 
-	DECLARE @Batch int = 1000
+	DECLARE @Batch int = 3000
+
+	------------------------------------PRODUC STATUS-----------------------------------------------
+	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
+	CREATE TABLE #TempProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
+	DECLARE @bitmapOrder_NG TINYINT, @bitmapOrder_KN TINYINT
+	SELECT @bitmapOrder_NG = bitmapOrder FROM Dep_ProductStatusProfile psp WITH (NOLOCK) WHERE PSP.Sporttype = 161 AND PSP.Bettype = 81
+	SELECT @bitmapOrder_KN = bitmapOrder FROM Dep_ProductStatusProfile psp WITH (NOLOCK) WHERE PSP.Sporttype = 202 AND PSP.Bettype = 1501
+
+	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
+	SELECT c.CustID
+		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_KN,ci.HideKeno)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_NG,ci.DisableNumber)
+	FROM Dep_CustProductStatus c WITH(NOLOCK)
+		INNER JOIN custinfo ci WITH(NOLOCK) ON c.CustID = ci.custid
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+	UNION ALL
+	SELECT c.CustID
+		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_KN,ci.HideKeno)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_NG,ci.DisableNumber)
+	FROM Dep_CustProductStatus c WITH(NOLOCK)
+		INNER JOIN custinfo ci WITH(NOLOCK) ON c.CustID = ci.custid
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
+
+	UPDATE c
+	SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+	FROM #Dep_CustProductStatus c
+		INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+
+	UPDATE c
+	SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+	FROM #Dep_CustProductStatus c
+		INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
+
+	WHILE 1 <> 1 
+	BEGIN
+		TRUNCATE TABLE #TempProductStatus
+
+		DELETE TOP (@batch) a
+		OUTPUT deleted.CustID,deleted.bitmapIsHidden,deleted.bitmapIsDisabled INTO #TempProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
+		FROM #Dep_CustProductStatus a 
+
+		IF @@ROWCOUNT = 0 
+			BREAK;
+
+		UPDATE c 
+		SET  c.bitmapIsHidden = tmp.bitmapIsHidden
+			,c.bitmapIsDisabled = tmp.bitmapIsDisabled
+		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
+
+		WAITFOR DELAY '00:00:00.100'
+	END
 
 	------------------------------------Bet Setting-------------------------------------------------	
 	--Number Gamnes
@@ -184,6 +238,8 @@ BEGIN
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+	DROP TABLE #Dep_CustProductStatus
+	DROP TABLE #TempProductStatus
 END
 GO
 

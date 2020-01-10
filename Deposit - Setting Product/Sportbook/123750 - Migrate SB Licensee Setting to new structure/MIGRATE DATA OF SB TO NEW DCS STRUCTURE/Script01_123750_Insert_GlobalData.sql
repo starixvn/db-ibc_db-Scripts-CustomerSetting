@@ -6,16 +6,40 @@
 */
 -----------------------------------------------------------------
 /*
-DELETE  a
---select *
-FROM DSB_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
-INNER JOIN DSB_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
-WHERE b.ProductID IN(1,16)
+---SB
+	DELETE  a
+	--select *
+	FROM DSB_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN DSB_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
+	WHERE b.ProductID IN(1,16)
 
-DELETE  
---select *
-FROM DSB_ProductSetting WITH(ROWLOCK, UPDLOCK)
-WHERE ProductID IN(1,16)
+	DELETE  
+	--select *
+	FROM DSB_ProductSetting WITH(ROWLOCK, UPDLOCK)
+	WHERE ProductID IN(1,16)
+
+--NG and Keno
+	DELETE  a
+	--select a.*--,b.*
+	FROM Dep_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
+	INNER JOIN Dep_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
+	WHERE b.ProductID IN(3,8)
+
+	DELETE  
+	--select *
+	FROM Dep_ProductSetting WITH(ROWLOCK, UPDLOCK)
+	WHERE ProductID IN(3,8)
+
+	DELETE  
+	--select *
+	FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
+	WHERE Sporttype IN(161,202)
+	
+-- Reference table
+	DELETE FROM DSB_ByteSeq WITH(ROWLOCK, UPDLOCK) WHERE sporttype = 1 
+	DELETE FROM CommissionTemplate WITH(ROWLOCK, UPDLOCK)
+	DELETE FROM PositionTakingTemplate WITH(ROWLOCK, UPDLOCK)
+
 */
 	-->DSB_ProductSetting
 	INSERT INTO DSB_ProductSetting (
@@ -60,25 +84,6 @@ WHERE ProductID IN(1,16)
 GO
 
 --> FOR NUMBER GAME & KENO
-
-/*
-DELETE  a
---select a.*--,b.*
-FROM Dep_ProductSettingDetail a WITH(ROWLOCK, UPDLOCK)
-INNER JOIN Dep_ProductSetting b WITH(NOLOCK) ON a.ProductSettingID = b.ProductSettingID
-WHERE b.ProductID IN(3,8)
-
-DELETE  
---select *
-FROM Dep_ProductSetting WITH(ROWLOCK, UPDLOCK)
-WHERE ProductID IN(3,8)
-
-DELETE  
---select *
-FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
-WHERE Sporttype IN(161,202)
-
-*/
 	-->Dep_ProductSetting
 	INSERT INTO Dep_ProductSetting (
 		 ProductSettingID
