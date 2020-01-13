@@ -27,7 +27,7 @@ INSERT INTO	@tblVirtualrate (
 				)
 SELECT	sporttype,bettype,islive,1
 from ProfileVirtualSetting 		
-WHERE sporttype NOT IN (1,43)--200%
+WHERE sporttype NOT IN (1,43)--0%
 
 DECLARE	@virtualXML			TABLE (
 									seqNo		TINYINT PRIMARY KEY
