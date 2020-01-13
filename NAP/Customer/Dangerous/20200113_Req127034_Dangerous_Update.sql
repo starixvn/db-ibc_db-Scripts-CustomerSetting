@@ -43,7 +43,6 @@ WHERE ci.srecommend IN (SELECT custid FROM Dep_CustSuper WITH (NOLOCK) WHERE cur
 	AND ci.currency IN (13 -- RMB
 						, 66 -- YUN
 						)
-	AND danger2 = 0
 	AND roleid = 1
 
 
