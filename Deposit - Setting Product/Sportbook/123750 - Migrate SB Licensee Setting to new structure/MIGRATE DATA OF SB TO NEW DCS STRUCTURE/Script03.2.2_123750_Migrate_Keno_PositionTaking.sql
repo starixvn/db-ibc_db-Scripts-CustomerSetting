@@ -5,7 +5,7 @@
 	DB: DBCust/CustDB
 */
 
-ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_08]
+ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	 @recommend INT		
 	,@target VARCHAR(20)
 	,@PT smallmoney
