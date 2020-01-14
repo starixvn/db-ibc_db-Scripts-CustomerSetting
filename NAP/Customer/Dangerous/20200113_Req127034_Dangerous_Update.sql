@@ -58,10 +58,10 @@ BEGIN
 	
 	SELECT @cnt = @@ROWCOUNT
 	
-	IF @@ROWCOUNT < 2500 
-		BREAK
-		
 	EXEC Acc_CustomerInfo_Execrep_19 @custidlist = @custidlist
+
+	IF @cnt < 2500 
+		BREAK
 	
 	WAITFOR DELAY '00:00:00.28'
 END
