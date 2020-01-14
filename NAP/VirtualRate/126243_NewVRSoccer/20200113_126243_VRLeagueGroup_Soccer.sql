@@ -7,7 +7,6 @@
 USE CustDB
 GO
 
-INSERT INTO [dbo].[VRLeagueGroup]  ([GroupID], [GroupName], [SportType]) VALUES (6,'None',0)
 INSERT INTO [dbo].[VRLeagueGroup]  ([GroupID], [GroupName], [SportType]) VALUES (7,'Major League',1)
 INSERT INTO [dbo].[VRLeagueGroup]  ([GroupID], [GroupName], [SportType]) VALUES (8,'Minor League 1',1)
 INSERT INTO [dbo].[VRLeagueGroup]  ([GroupID], [GroupName], [SportType]) VALUES (9,'Minor League 2',1)
