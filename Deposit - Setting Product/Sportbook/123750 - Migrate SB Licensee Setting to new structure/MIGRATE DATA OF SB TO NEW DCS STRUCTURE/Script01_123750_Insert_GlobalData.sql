@@ -61,25 +61,26 @@
 		,SportType
 		,BetType
 		,IsLive
+		,DisplayOrder
 		,MaxDefaultValue
 		,SettingStatus
 		,MinDefaultValue
 		)
-	SELECT 1, 1, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 1, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 2, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 3, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 5, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 8, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 10, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 11, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 99, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 99, 9, 0, 0, 0, NULL
-	UNION ALL SELECT 2, 43, 1, 0, 0, 0, NULL
-	UNION ALL SELECT 3, 1, 1, 0, 0, 0, NULL --HDPComm
-	UNION ALL SELECT 3, 1, 4, 0, 0, 0, NULL --@OtherComm
-	UNION ALL SELECT 3, 1, 5, 0, 0, 0, NULL --@1x2Comm
-	UNION ALL SELECT 3, 1, 9, 0, 0, 0, NULL --@OtherComm,@ParlayCommMember
+	SELECT 1, 1, 1, 0, 1, 0, 0, NULL
+	UNION ALL SELECT 2, 1, 1, 0, 1, 0, 0, NULL
+	UNION ALL SELECT 2, 2, 1, 0, 2, 0, 0, NULL
+	UNION ALL SELECT 2, 3, 1, 0, 4, 0, 0, NULL
+	UNION ALL SELECT 2, 5, 1, 0, 5, 0, 0, NULL
+	UNION ALL SELECT 2, 8, 1, 0, 6, 0, 0, NULL
+	UNION ALL SELECT 2, 10, 1, 0, 7, 0, 0, NULL
+	UNION ALL SELECT 2, 11, 1, 0, 8, 0, 0, NULL
+	UNION ALL SELECT 2, 99, 1, 0, 9, 0, 0, NULL
+	UNION ALL SELECT 2, 99, 9, 0, 10, 0, 0, NULL
+	UNION ALL SELECT 2, 43, 1, 0, 3, 0, 0, NULL
+	UNION ALL SELECT 3, 1, 1, 0, 1, 0, 0, NULL --HDPComm
+	UNION ALL SELECT 3, 1, 4, 0, 2, 0, 0, NULL --@OtherComm
+	UNION ALL SELECT 3, 1, 5, 0, 3, 0, 0, NULL --@1x2Comm
+	UNION ALL SELECT 3, 1, 9, 0, 4, 0, 0, NULL --@OtherComm,@ParlayCommMember
 
 GO
 

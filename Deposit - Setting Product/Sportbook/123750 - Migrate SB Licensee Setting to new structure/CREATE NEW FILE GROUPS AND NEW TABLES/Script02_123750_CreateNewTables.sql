@@ -233,6 +233,7 @@ CREATE TABLE [dbo].[DSB_ProductSettingDetail](
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
 	[IsLive] [bit] NOT NULL,
+	[DisplayOrder] [tinyint] NOT NULL,
 	[MaxDefaultValue] [decimal](19, 8) NULL DEFAULT ((0)),
 	[SettingStatus] [tinyint] NULL,
 	[MinDefaultValue] [decimal](19, 8) NULL
