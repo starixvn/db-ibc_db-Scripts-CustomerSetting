@@ -16,6 +16,7 @@ SET @AgentPT_XML =(
 											@AgentPT_New	AS '@val'
 									FROM dbo.CS_ByteSeq bs WITH (NOLOCK)
 									WHERE bs.Type = 'PTSetting'
+										AND bs.SportType = 1 AND bs.BetType = 1 AND bs.IsLive = 0
 									FOR XML PATH('r')
 										, TYPE
 									)
