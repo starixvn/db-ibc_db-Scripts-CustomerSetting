@@ -6,6 +6,7 @@
 */
 USE bodb02
 GO
+/*
 DROP TRIGGER [dbo].[DSB_CustBetSetting_Member_update]
 GO
 
@@ -41,6 +42,8 @@ GO
 
 DROP TRIGGER [dbo].[Dep_CustBetSettingGame_Member_update]
 GO
+
+*/
 
 SET ANSI_NULLS ON
 GO
