@@ -30,7 +30,6 @@ BEGIN
 		AND MinStake = 2
 		AND MaxStake = 200
 		AND ResourceId = 25
-	SELECT @StakeLevelID_Update
 
 	IF @@ROWCOUNT =0 RETURN	
 	--Get list of downline whose StakeLevelList need to be updated 
@@ -45,33 +44,31 @@ BEGIN
 		)
 	
 	INSERT INTO #CustStakeLevelDownlines (CustID,DirectUplineID, roleid ,Bettype ,StakeLevelList,StakeLevelList_new)
-	SELECT ci.custid,
+	SELECT CI.custid,
 		  CASE 
-				WHEN ci.roleid = 3 THEN srecommend
-				WHEN ci.roleid = 2 THEN mrecommend				 	
+				WHEN CI.roleid = 3 THEN srecommend
+				WHEN CI.roleid = 2 THEN mrecommend				 	
 		  END AS DirectUplineID,		
-		 ci.roleid,cs.Bettype,cs.StakeLevelList,cs.StakeLevelList
-	FROM dbo.custinfo ci WITH(NOLOCK)
-		INNER JOIN dbo.CustStakeLevel_Agent cs WITH(NOLOCK) ON ci.custid = cs.custid			
-	WHERE ci.srecommend = @srecommend
-		AND roleid IN (2,3)
+		 CI.roleid,cs.Bettype,cs.StakeLevelList,cs.StakeLevelList
+	FROM dbo.custinfo CI WITH(NOLOCK)
+		INNER JOIN dbo.CustStakeLevel_Agent CS WITH(NOLOCK) ON CI.custid = CS.custid			
+	WHERE CI.srecommend = @srecommend
+		AND roleid IN (2,3,4)
 		AND Bettype = 2401
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
-		
 	UNION ALL
-	SELECT ci.custid,
+	SELECT CI.custid,
 		  recommend as DirectUplineID,		
-		 ci.roleid,cs.bettype,cs.StakeLevelList,cs.StakeLevelList
-	FROM dbo.custinfo ci WITH(NOLOCK)
-		INNER JOIN dbo.CustStakeLevel_Member cs WITH(NOLOCK) ON ci.custid = cs.custid			
-	WHERE ci.srecommend = @srecommend
-		AND ci.roleid = 1
+		 CI.roleid,CS.bettype,CS.StakeLevelList,CS.StakeLevelList
+	FROM dbo.custinfo CI WITH(NOLOCK)
+		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid			
+	WHERE CI.srecommend = @srecommend
+		AND CI.roleid = 1
 		AND Bettype = 2401
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
 		
-
 	--Apply highest stakelevel from upline when downline has only new stakelevel
 	--Update master
 	UPDATE T
@@ -81,7 +78,7 @@ BEGIN
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
 						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  CD
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
 						ORDER BY MaxStake DESC
 					) T1 -- Direct Upline
@@ -94,10 +91,10 @@ BEGIN
 		INNER JOIN #CustStakeLevelDownlines Upline ON t.DirectUplineID = Upline.CustID 		 		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  CD
+							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake DESC
+						ORDER BY MaxStake DESC
 					) T1 -- Direct Upline
 	WHERE T.roleid = 2
 		AND T.StakeLevelList_new LIKE @StakeLevelID_Update
@@ -108,10 +105,10 @@ BEGIN
 		INNER JOIN #CustStakeLevelDownlines Upline ON t.DirectUplineID = Upline.CustID 		 		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID
+						  FROM dbo.strSplit(Upline.StakeLevelList_new,','))  CD
+							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
 						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake DESC
+						ORDER BY MaxStake DESC
 					) T1 -- Direct Upline
 	WHERE T.roleid = 1
 		AND T.StakeLevelList_new LIKE @StakeLevelID_Update
@@ -199,7 +196,7 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #supers
+	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@currency = currency
 		,@srecommend = custid		
@@ -282,7 +279,7 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #supers
+	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@currency = currency
 		,@srecommend = custid		
@@ -297,7 +294,7 @@ BEGIN
 	EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
 			@srecommend = @srecommend, 
 			@currency = @currency,
-			@target = 'REPLICATED' 	
+			@target = 'DBCUST' 	
 	--Run in UM so dont need to delay 280ms			
 	WAITFOR DELAY '00:00:00.100'			
 END		
