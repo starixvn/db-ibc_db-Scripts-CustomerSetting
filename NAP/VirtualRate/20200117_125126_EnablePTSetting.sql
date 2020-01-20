@@ -12,4 +12,4 @@ SET S.isActive = 1
 FROM Sport_Bettype_Reference_Setting S WITH (ROWLOCK, UPDLOCK)
 WHERE S.isActive = 0 
 	AND S.SportType = 1
-	AND S.BetType IN (381,382,383,384,385,386,387,388,389,400)
+	AND S.BetType BETWEEN 381 AND 400
