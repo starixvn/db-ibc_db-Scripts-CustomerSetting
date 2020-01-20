@@ -63,7 +63,7 @@ BEGIN
 	SELECT t.custid,@Sporttype, @Bettype, CAST(StakeLevelID AS varchar(50))
 	FROM StakeLevel WITH(NOLOCK) 
 	CROSS JOIN  #SMATemp t
-	WHERE GameGroupID=12 AND GameTypeID=4301 AND ExchangeId=20
+	WHERE GameGroupID=12 AND GameTypeID=4301 AND ExchangeId=@currency
 
 	--Member Level
 
@@ -82,7 +82,7 @@ BEGIN
 		SELECT t.custid,@Sporttype, @Bettype, CAST(StakeLevelID AS varchar(50)),GETDATE()
 		FROM StakeLevel WITH(NOLOCK) 
 		CROSS JOIN  #MemberTempBatch t
-		WHERE GameGroupID=12 AND GameTypeID=4301 AND ExchangeId=20
+		WHERE GameGroupID=12 AND GameTypeID=4301 AND ExchangeId=@currency
 
 		TRUNCATE TABLE #MemberTempBatch
 	END
@@ -115,7 +115,7 @@ WHERE c.roleid = 4
  AND cs.isinternal = 0
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0 
- AND c.currency = 20
+ AND c.currency = 72
  AND c.custid <= @max_custid
  AND s.site<>'CN88'
 -- For deployer info
@@ -167,7 +167,7 @@ WHERE c.roleid = 4
  AND cs.isinternal = 0
  AND c.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
  AND s.islicensee = 0 
- AND c.currency = 20
+ AND c.currency = 72
  AND c.custid <= @max_custid
  AND s.site<>'CN88'
 
