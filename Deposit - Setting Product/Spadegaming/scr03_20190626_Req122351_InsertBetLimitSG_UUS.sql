@@ -238,7 +238,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('spondemo')
+	AND cs.site IN('spondemo','Athena000')
 	AND ci.currency=20
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -291,7 +291,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-		AND cs.site IN('spondemo')
+		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency=20
 
 
