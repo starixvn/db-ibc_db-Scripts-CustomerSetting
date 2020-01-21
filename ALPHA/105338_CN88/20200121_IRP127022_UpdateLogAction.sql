@@ -9,13 +9,13 @@ GO
 
 UPDATE l 
 SET l.ActionNameEN = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameCH = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameCS = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameJP = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameTH = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameKO = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameVI = REPLACE(ActionNameEN,'5','6'),
-	l.ActionNameCN = REPLACE(ActionNameEN,'5','6')
+	l.ActionNameCH = REPLACE(ActionNameCH,'5','6'),
+	l.ActionNameCS = REPLACE(ActionNameCS,'5','6'),
+	l.ActionNameJP = REPLACE(ActionNameJP,'5','6'),
+	l.ActionNameTH = REPLACE(ActionNameTH,'5','6'),
+	l.ActionNameKO = REPLACE(ActionNameKO,'5','6'),
+	l.ActionNameVI = REPLACE(ActionNameVI,'5','6'),
+	l.ActionNameCN = REPLACE(ActionNameCN,'5','6')
 FROM dbo.LogAction L WITH (ROWLOCK)
 WHERE ActionID IN (934,939,940)
 
