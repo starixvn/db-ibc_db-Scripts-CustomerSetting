@@ -28,7 +28,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'	
 		AND ci.CustID <= @MaxCustID
 		AND ci.Enabled=1				
-		AND cs.site  IN('Monstergol','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg')
+		AND cs.site  IN('Monstergol','Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg')
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -37,7 +37,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'	
 		AND ci.CustID <= @MaxCustID
 		AND ci.Enabled=1				
-		AND cs.site IN('spondemo')
+		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency<>20
 
 	DELETE cg

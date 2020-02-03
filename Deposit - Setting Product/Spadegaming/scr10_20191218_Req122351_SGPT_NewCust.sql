@@ -17,7 +17,7 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1		
-		AND cs.site IN('Monstergol','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg')
+		AND cs.site IN('Monstergol','Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg')
 
 
 	INSERT INTO #supers(custid)
@@ -26,7 +26,7 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1		
-		AND cs.site IN('spondemo')
+		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency<>20
 
 	DECLARE @SportType INT = 247, @BetType INT=4301
