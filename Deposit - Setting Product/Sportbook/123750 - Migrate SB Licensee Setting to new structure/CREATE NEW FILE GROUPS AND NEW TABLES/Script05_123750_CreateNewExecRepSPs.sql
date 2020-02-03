@@ -34,6 +34,7 @@ CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09]
 AS
 GO
 --_xpre
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_xpre]
 AS
 GO
@@ -62,6 +63,7 @@ CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09_xpre]
 AS
 GO
 --_xtest
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_xtest]
 AS
 GO
@@ -89,7 +91,8 @@ GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09_xtest]
 AS
 GO
---_UAT1
+--UAT1
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_UAT1]
 AS
 GO
@@ -118,6 +121,7 @@ CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09_UAT1]
 AS
 GO
 --_UAT2
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_UAT2]
 AS
 GO
@@ -146,6 +150,7 @@ CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09_UAT2]
 AS
 GO
 --_UAT3
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_UAT3]
 AS
 GO
@@ -174,6 +179,7 @@ CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_09_UAT3]
 AS
 GO
 --_UAT4
+GO
 CREATE PROCEDURE [dbo].[Acc_DSB_DynamicCustSetting_01_UAT4]
 AS
 GO
