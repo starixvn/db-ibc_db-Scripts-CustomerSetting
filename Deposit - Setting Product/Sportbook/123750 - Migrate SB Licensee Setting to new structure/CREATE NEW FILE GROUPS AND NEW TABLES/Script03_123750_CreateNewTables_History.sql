@@ -6,7 +6,7 @@
 */
 USE bodb_CustHistory
 GO
-DROP TABLE [dbo].[DSB_CustBetSetting_Member_History]
+DROP TABLE [dbo].[DSB_CustBetSetting_Member_History] 
 GO
 
 DROP TABLE [dbo].[DSB_CustBetSetting_Agent_History]
@@ -63,6 +63,12 @@ CREATE TABLE [dbo].[DSB_CustBetSetting_Member_History](
 ) ON [Dep_CustSetting3rd_table]
 
 GO
+CREATE CLUSTERED INDEX [DSB_CustBetSetting_Member_History_Index] ON [dbo].[DSB_CustBetSetting_Member_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 CREATE TABLE [dbo].[DSB_CustBetSetting_Agent_History](
 	[CustID] [int] NOT NULL,
@@ -74,6 +80,12 @@ CREATE TABLE [dbo].[DSB_CustBetSetting_Agent_History](
 	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
 ) ON [Dep_CustSetting3rd_table]
 
+GO
+CREATE CLUSTERED INDEX [DSB_CustBetSetting_Agent_History_Index] ON [dbo].[DSB_CustBetSetting_Agent_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO
 
 CREATE TABLE [dbo].[DSB_CustGroupBetSetting_Member_History](
@@ -87,6 +99,12 @@ CREATE TABLE [dbo].[DSB_CustGroupBetSetting_Member_History](
 ) ON [Dep_CustSetting3rd_table]
 
 GO
+CREATE CLUSTERED INDEX [DSB_CustGroupBetSetting_Member_History_Index] ON [dbo].[DSB_CustGroupBetSetting_Member_History]
+(
+	[UpdateTime] ASC,
+	[AgentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 --> Commission
 CREATE TABLE [dbo].[DSB_CustDiscount_Agent_History](
@@ -95,6 +113,12 @@ CREATE TABLE [dbo].[DSB_CustDiscount_Agent_History](
 	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
 ) ON [Dep_CustSetting3rd_table]
 
+GO
+CREATE CLUSTERED INDEX [DSB_CustDiscount_Agent_History_Index] ON [dbo].[DSB_CustDiscount_Agent_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO
 
 CREATE TABLE [dbo].[DSB_CustDiscount_Member_History](
@@ -107,6 +131,12 @@ CREATE TABLE [dbo].[DSB_CustDiscount_Member_History](
 ) ON [Dep_CustSetting3rd_table]
 
 GO
+CREATE CLUSTERED INDEX [DSB_CustDiscount_Member_History_Index] ON [dbo].[DSB_CustDiscount_Member_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 CREATE TABLE [dbo].[DSB_CustGroupDiscount_Member_History](
 	[AgentId] [int] NOT NULL,
@@ -117,6 +147,12 @@ CREATE TABLE [dbo].[DSB_CustGroupDiscount_Member_History](
 	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
 ) ON [Dep_CustSetting3rd_table]
 
+GO
+CREATE CLUSTERED INDEX [DSB_CustGroupDiscount_Member_History_Index] ON [dbo].[DSB_CustGroupDiscount_Member_History]
+(
+	[UpdateTime] ASC,
+	[AgentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO
 
 --> PT
@@ -129,6 +165,12 @@ CREATE TABLE [dbo].[DSB_CustPTSetting_Agent_History](
 ) ON [Dep_CustSetting3rd_table]
 
 GO
+CREATE CLUSTERED INDEX [DSB_CustPTSetting_Agent_History_Index] ON [dbo].[DSB_CustPTSetting_Agent_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 CREATE TABLE [dbo].[DSB_CustPTSetting_Member_History](
 	[CustId] [int] NOT NULL,
@@ -139,6 +181,12 @@ CREATE TABLE [dbo].[DSB_CustPTSetting_Member_History](
 ) ON [Dep_CustSetting3rd_table]
 
 GO
+CREATE CLUSTERED INDEX [DSB_CustPTSetting_Member_History_Index] ON [dbo].[DSB_CustPTSetting_Member_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 CREATE TABLE [dbo].[DSB_CustPTGroupSetting_Member_History](
 	[AgentID] [int] NOT NULL,
@@ -148,6 +196,12 @@ CREATE TABLE [dbo].[DSB_CustPTGroupSetting_Member_History](
 	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
 ) ON [Dep_CustSetting3rd_table]
 
+GO
+CREATE CLUSTERED INDEX [DSB_CustPTGroupSetting_Member_History_Index] ON [dbo].[DSB_CustPTGroupSetting_Member_History]
+(
+	[UpdateTime] ASC,
+	[AgentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO
 
 --> Setting
@@ -160,6 +214,12 @@ CREATE TABLE [dbo].[DSB_CustSettingMode_History](
 ) ON [Dep_CustSetting3rd_table]
 
 
+GO
+CREATE CLUSTERED INDEX [DSB_CustSettingMode_History_Index] ON [dbo].[DSB_CustSettingMode_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO
 
 --> Bet setting table for Number games
@@ -176,6 +236,12 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Member_History](
 
 
 GO
+CREATE CLUSTERED INDEX [Dep_CustBetSettingGame_Member_History_Index] ON [dbo].[Dep_CustBetSettingGame_Member_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
+GO
 
 CREATE TABLE [dbo].[Dep_CustBetSettingGame_Agent_History](
 	[CustID] [int] NOT NULL,
@@ -188,4 +254,10 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Agent_History](
 	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
 ) ON [Dep_CustSetting3rd_table]
 
+GO
+CREATE CLUSTERED INDEX [Dep_CustBetSettingGame_Agent_History_Index] ON [dbo].[Dep_CustBetSettingGame_Agent_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Dep_CustSetting3rd_table]
 GO

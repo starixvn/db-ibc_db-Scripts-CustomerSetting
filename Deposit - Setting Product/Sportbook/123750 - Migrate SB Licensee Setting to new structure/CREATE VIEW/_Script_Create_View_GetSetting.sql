@@ -1,3 +1,9 @@
+/*
+	Created: 20191212@Eden
+	Task:  - [Redmine: 107131]
+	DB: DBCust/custdb - DBACC/bodbo2
+*/
+
 DROP VIEW VW_DSB_CustPTSetting_Agent 
 DROP VIEW VW_DSB_CustPTSetting_Member 
 DROP VIEW VW_DSB_CustDiscount_Agent 
