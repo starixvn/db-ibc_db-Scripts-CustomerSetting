@@ -35,6 +35,11 @@ DELETE a
 FROM Dep_CustPTSetting_Member a WITH(ROWLOCK) 
 INNER JOIN custinfo c WITH(NOLOCK) ON a.CustID = c.custid AND c.currency <> 20
 WHERE a.Sporttype IN (161,202) AND a.CustID > @max_custid
+
+DELETE a 
+FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK) 
+INNER JOIN custinfo c WITH(NOLOCK) ON a.AgentID = c.custid AND c.currency <> 20
+WHERE a.Sporttype IN (161,202) AND c.CustID > @max_custid
  
 DELETE a 
 FROM Dep_CustDiscountSetting_Agent a WITH(ROWLOCK) 
@@ -53,6 +58,7 @@ CREATE TABLE #MemberTemp(
 		CustID INT PRIMARY KEY CLUSTERED
 	,maxpermatch161	money
 	,MaxPerBall161	money
+	,recommend INT
 )
 CREATE TABLE #SMATemp(
 		CustID INT PRIMARY KEY CLUSTERED
@@ -82,10 +88,12 @@ INSERT INTO #MemberTemp (
 		CustID
 	,maxpermatch161	
 	,MaxPerBall161	
+	,recommend
 	)
 SELECT custid
 	,maxpermatch161	
-	,MaxPerBall161	
+	,MaxPerBall161
+	,recommend	
 FROM Custinfo WITH (NOLOCK)
 WHERE roleid = 1  AND Enabled = 1 AND custid > @max_custid
 	AND srecommend IN (SELECT custid FROM #supers)
@@ -226,10 +234,33 @@ FROM Dep_CustSetting3rd a WITH(NOLOCK)
 WHERE SportType = 161 and bettype = 81 and islive = 0 
 
 INSERT INTO Dep_CustPTSetting_Member(CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-SELECT a.CustID, SportType, BetType, IsLive, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-FROM Dep_CustSetting3rd a WITH(NOLOCK) 
-	INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid 
-WHERE SportType = 161 and bettype = 81 and islive = 0 
+SELECT 
+		d.[CustID]
+		,a.sporttype
+		,a.bettype
+		,[IsLive] = 0
+		,[AgentPT] = a.apositiontaking * 100 
+		,[MasterPT] = 0
+		,[SuperPT] = 0
+FROM #MemberTemp d
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
+	INNER JOIN Dep_CustSetting3rd a WITH(NOLOCK) ON a.custid = d.recommend
+WHERE m.IsGroupedPT = 0
+	AND a.SportType = 161 and a.bettype = 81 and a.islive = 0 
+
+INSERT INTO Dep_CustPTGroupSetting_Member (AgentID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
+SELECT 
+		 d.CustID
+		,a.sporttype
+		,a.bettype
+		,[IsLive] = 0
+		,[AgentPT] = a.apositiontaking * 100 
+		,[MasterPT] = 0
+		,[SuperPT] = 0
+FROM #SMATemp d
+	INNER JOIN Dep_CustSetting3rd a WITH(NOLOCK) ON a.custid = d.CustID
+WHERE d.roleid = 2 
+	AND a.SportType = 161 and a.bettype = 81 and a.islive = 0 
 
 --Keno
 INSERT INTO Dep_CustPTSetting_Agent (CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
@@ -238,11 +269,40 @@ FROM CustSettingGame a WITH(NOLOCK)
 		INNER JOIN #SMATemp c WITH(NOLOCK) ON a.custid = c.custid
 WHERE SportType = 202 AND bettype = 1501
 
-INSERT INTO Dep_CustPTSetting_Member (CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
-SELECT a.CustID, SportType, BetType, IsLive = 0, apositiontaking * 100, mpositiontaking * 100, spositiontaking * 100
-FROM CustSettingGame a WITH(NOLOCK) 
-		INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid 
-WHERE SportType = 202 AND bettype = 1501
+INSERT INTO Dep_CustPTSetting_Member(CustID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
+SELECT 
+		d.[CustID]
+		,a.sporttype
+		,a.bettype
+		,[IsLive] = 0
+		,[AgentPT] = a.apositiontaking * 100 
+		,[MasterPT] = 0
+		,[SuperPT] = 0
+FROM #MemberTemp d
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
+	INNER JOIN CustSettingGame a WITH(NOLOCK) ON a.custid = d.recommend
+WHERE m.IsGroupedPT = 0
+	AND a.SportType = 202 and a.bettype = 1501
+
+INSERT INTO Dep_CustPTGroupSetting_Member (AgentID, SportType, BetType, IsLive, AgentPT, MasterPT, SuperPT)
+SELECT 
+		 d.CustID
+		,a.sporttype
+		,a.bettype
+		,[IsLive] = 0
+		,[AgentPT] = a.apositiontaking * 100 
+		,[MasterPT] = 0
+		,[SuperPT] = 0
+FROM #SMATemp d
+	INNER JOIN CustSettingGame a WITH(NOLOCK) ON a.custid = d.CustID
+WHERE d.roleid = 2 
+	AND a.SportType = 202 and a.bettype = 1501
+
+INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+SELECT t.CustID,1
+FROM #MemberTemp t WITH(NOLOCK)
+	LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
+WHERE d.CustID IS NULL
 
 ------------------------------------Commisson Setting-------------------------------------------------	
 --Number Games

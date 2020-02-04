@@ -10,6 +10,7 @@ SELECT custid,sporttype,bettype INTO #Dep_CustBetSettingGame_Agent		FROM Dep_Cus
 SELECT custid,sporttype,bettype INTO #Dep_CustBetSettingGame_Member		FROM Dep_CustBetSettingGame_Member WITH(NOLOCK)		WHERE Sporttype IN (161, 202)
 SELECT custid,sporttype,bettype INTO #Dep_CustPTSetting_Agent			FROM Dep_CustPTSetting_Agent WITH(NOLOCK)			WHERE Sporttype IN (161, 202)  
 SELECT custid,sporttype,bettype INTO #Dep_CustPTSetting_Member			FROM Dep_CustPTSetting_Member WITH(NOLOCK)			WHERE Sporttype IN (161, 202) 
+SELECT AgentID,sporttype,bettype INTO #Dep_CustPTGroupSetting_Member 	FROM Dep_CustPTGroupSetting_Member  WITH(NOLOCK)	WHERE Sporttype IN (161, 202) 
 SELECT custid,sporttype,bettype INTO #Dep_CustDiscountSetting_Agent		FROM Dep_CustDiscountSetting_Agent WITH(NOLOCK)		WHERE Sporttype IN (161, 202)   
 SELECT custid,sporttype,bettype INTO #Dep_CustDiscountSetting_Member	FROM Dep_CustDiscountSetting_Member WITH(NOLOCK)	WHERE Sporttype IN (161, 202)  
 
@@ -38,6 +39,10 @@ FROM Dep_CustPTSetting_Member a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustPTSetting_Member b WITH(NOLOCK) ON a.custid = b.custid AND a.sporttype = b.sporttype AND a.bettype = b.bettype
 
 DELETE a
+FROM Dep_CustPTGroupSetting_Member  a WITH(ROWLOCK) 
+	INNER JOIN #Dep_CustPTGroupSetting_Member b WITH(NOLOCK) ON a.AgentID = b.AgentID AND a.sporttype = b.sporttype AND a.bettype = b.bettype
+
+DELETE a
 FROM Dep_CustDiscountSetting_Agent a WITH(ROWLOCK) 
 	INNER JOIN #Dep_CustDiscountSetting_Agent b WITH(NOLOCK) ON a.custid = b.custid AND a.sporttype = b.sporttype AND a.bettype = b.bettype
 
@@ -54,3 +59,4 @@ DROP TABLE #Dep_CustDiscountSetting_Agent
 DROP TABLE #Dep_CustDiscountSetting_Member
 DROP TABLE #Dep_CustPTSetting_Agent
 DROP TABLE #Dep_CustPTSetting_Member
+DROP TABLE #Dep_CustPTGroupSetting_Member
