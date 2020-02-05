@@ -478,7 +478,7 @@ BEGIN
 	
 	SELECT @BetLimit='<ROOT><BetLimit SportType="43" BetType="1" MinBet="'+CAST(@MinBetv43 as VARCHAR(10))+'"'+ 
 			' MaxBet="'+CAST(@MaxBetV43 AS VARCHAR(10))+'" MaxPerMatch="'+CAST(@MaxPerMatchv43 AS VARCHAR(10))+'"/>'+
-			'<BetLimit SportType="44" BetType="4" MinBet="'+CAST(@MinBetv44 as VARCHAR(10))+'"'+ 
+			'<BetLimit SportType="44" BetType="3" MinBet="'+CAST(@MinBetv44 as VARCHAR(10))+'"'+ 
 			' MaxBet="'+CAST(@MaxBetV44 AS VARCHAR(10))+'" MaxPerMatch="'+CAST(@MaxPerMatchv44 AS VARCHAR(10))+'"/>'+
 			'</ROOT>'
 	
