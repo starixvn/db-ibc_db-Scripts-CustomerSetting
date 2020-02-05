@@ -696,6 +696,8 @@ BEGIN
 		
 		IF @i > @toID
 			BREAK;
+			
+		WAITFOR	DELAY '0:0:0.28'
 	END
 END			 
 
