@@ -157,7 +157,7 @@ INSERT INTO @tblCust(recommend,agentName,repCustID,fromID,toID)
 SELECT 41431380,'999MYR0101',41431502,108,800 -- 999MYR0101 , 999MYR0101001
 UNION SELECT 41431395,'999MYR0102',41431801,101,600 -- 999MYR0102, 999MYR0102001
 UNION SELECT 41431412,'999MYR0103',41431706,101,600 -- 999MYR0103, 999MYR0103001
-UNION SELECT 41431419,'999MYR0105',41434633,101,600 -- 999MYR0105, 999MYR0105001
+UNION SELECT 41431419,'999MYR0105',41434633,021,600 -- 999MYR0105, 999MYR0105001
 UNION SELECT 41431369,'999MYR0201',41434777,021,300 -- 999MYR0201, 999MYR0201001
 UNION SELECT 41431404,'999MYR0301',41431514,101,600 -- 999MYR0301, 999MYR0301001
 
@@ -416,7 +416,7 @@ BEGIN
 		@v161alivepositiontaking_85 = MAX(CASE WHEN sporttype = 161 AND bettype = 85 THEN alivepositiontaking ELSE 0 END),
 		@v161alivepositiontaking_86 = MAX(CASE WHEN sporttype = 161 AND bettype = 86 THEN alivepositiontaking ELSE 0 END),
 		@v161alivepositiontaking_87 = MAX(CASE WHEN sporttype = 161 AND bettype = 87 THEN alivepositiontaking ELSE 0 END),
-		@v161alivepositiontaking_89 = MAX(CASE WHEN sporttype = 161 AND bettype = 88 THEN alivepositiontaking ELSE 0 END),
+		@v161alivepositiontaking_89 = MAX(CASE WHEN sporttype = 161 AND bettype = 89 THEN alivepositiontaking ELSE 0 END),
 		@v161alivepositiontaking_90 = MAX(CASE WHEN sporttype = 161 AND bettype = 90 THEN alivepositiontaking ELSE 0 END)		
 	FROM custsetting3rd WITH(NOLOCK)
 	WHERE custid = @repCustID	
@@ -429,7 +429,7 @@ BEGIN
            ,[ModifiedDate]
            ,[Remark]
            ,[UserID])    
-	SELECT @recommend, CURRENT_TIMESTAMP, 'Request by Hock Lin' as Remark, 10278938 as userid --starixIT 
+	SELECT @recommend, CURRENT_TIMESTAMP, 'Requested by HockLin' as Remark, 10278938 as userid --starixIT 
 		
 	WHILE(1=1)
 	BEGIN
@@ -570,7 +570,7 @@ BEGIN
 		IF @p125 = 0
 		BEGIN 						
 			INSERT INTO phonebettingCustomerList (username,addedby,addedby_custid,DATE,remark)
-			SELECT @username, 'starixIT', 10278938, CURRENT_TIMESTAMP, 'Request by Hock Lin'
+			SELECT @username, 'starixIT', 10278938, CURRENT_TIMESTAMP, 'Requested by HockLin'
 		END 
 		
 		INSERT INTO #tblResult(custid,ErrCode,ErrMsg,i,Agent)
