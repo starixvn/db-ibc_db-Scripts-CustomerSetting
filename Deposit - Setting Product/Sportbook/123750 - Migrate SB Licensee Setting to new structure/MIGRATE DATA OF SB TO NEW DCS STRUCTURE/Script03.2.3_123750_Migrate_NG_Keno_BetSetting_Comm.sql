@@ -90,12 +90,14 @@ BEGIN
 
 	UPDATE c
 	SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+		,c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_NG,0)
 	FROM #Dep_CustProductStatus c
 		INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
 		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 
 	UPDATE c
 	SET c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder_KN,cg.IsDisabled)
+		,c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,@bitmapOrder_NG,0)
 	FROM #Dep_CustProductStatus c
 		INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND GameTypeID = 1
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
