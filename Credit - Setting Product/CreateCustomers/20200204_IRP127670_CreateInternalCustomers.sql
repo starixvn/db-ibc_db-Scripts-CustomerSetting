@@ -61,6 +61,14 @@ DECLARE @playerdiscount DECIMAL(9, 8),
 	@MaxBetv164 MONEY=0,	
 	@MaxPerMatchv164 MONEY=0,
 	
+	@MinBetv43 MONEY =0,
+	@MaxBetv43 MONEY=0,	
+	@MaxPerMatchv43 MONEY=0,
+	
+	@MinBetv44 MONEY =0,
+	@MaxBetv44 MONEY=0,	
+	@MaxPerMatchv44 MONEY=0,
+	
 	@credit MONEY,
 		
 	@DisableCasino BIT = 0, 
@@ -147,8 +155,18 @@ DECLARE @playerdiscount DECIMAL(9, 8),
 	@v161alivepositiontaking_86 SMALLMONEY,
 	@v161alivepositiontaking_87 SMALLMONEY,
 	@v161alivepositiontaking_89 SMALLMONEY = 0,
-	@v161alivepositiontaking_90 SMALLMONEY = 0
+	@v161alivepositiontaking_90 SMALLMONEY = 0,
 	
+	@v43apt_1 TINYINT=0,
+	@v43apt_2 TINYINT=0,
+	@v43apt_3 TINYINT=0,
+	@v43apt_10 TINYINT=0,
+	@v43apt_20 TINYINT=0,
+	@v43apt_9999 TINYINT=0,
+	@v44apt_1 TINYINT=0,
+	@v44apt_3 TINYINT=0, 
+	@disableV43 BIT,
+	@disableV44 BIT
 
 declare @tblCust TABLE (recommend INT,agentName VARCHAR(50),repCustID INT, fromID INT, toID INT, isFinished BIT DEFAULT 0)
 CREATE TABLE #tblResult (custid INT, ErrCode INT, ErrMsg VARCHAR(1000), i INT, Agent VARCHAR(50))
@@ -171,13 +189,25 @@ set @p125=0
 declare @p126 nvarchar(4000)
 set @p126=''
 
+declare @p4 nvarchar(4000)
+set @p4=N''
+declare @p5 int
+set @p5=0
+declare @p6 int
+declare @p7 int
+set @p7=0
+
+
 DECLARE @repCustID INT,
 		@fromID INT,
 		@toID INT,
 		@agentName VARCHAR(50),
 		@username VARCHAR(50),
 		@i INT, 
-		@Msg VARCHAR(1000)		
+		@Msg VARCHAR(1000),
+		@PT	VARCHAR(MAX),
+		@BetLimit VARCHAR(MAX),
+		@IsDisabled	VARCHAR(MAX)
 		
 WHILE(1=1)
 BEGIN
@@ -235,6 +265,13 @@ BEGIN
 		@MinBetv164=0,
 		@MaxBetv164=0,
 		@MaxPerMatchv164=0,
+		
+		@MinBetv43=0,
+		@MaxBetv43=0,
+		@MaxPerMatchv43=0,
+		@MinBetv44=0,
+		@MaxBetv44=0,
+		@MaxPerMatchv44=0,
 		
 		@apositiontaking_1=0,
 		@apositiontaking_2=0,
@@ -297,7 +334,16 @@ BEGIN
 		@v161alivepositiontaking_86=0,
 		@v161alivepositiontaking_87=0,
 		@v161alivepositiontaking_89=0,
-		@v161alivepositiontaking_90=0
+		@v161alivepositiontaking_90=0,
+		
+		@v43apt_1 =0,
+		@v43apt_2 =0,
+		@v43apt_3 =0,
+		@v43apt_10 =0,
+		@v43apt_20 =0,
+		@v43apt_9999 =0,
+		@v44apt_1 =0,
+		@v44apt_3 =0
 		
 	SELECT @MaxPerMatch = maxpermatch,
 		@MaxPerMatchv2 = maxpermatch2,
@@ -420,6 +466,49 @@ BEGIN
 		@v161alivepositiontaking_90 = MAX(CASE WHEN sporttype = 161 AND bettype = 90 THEN alivepositiontaking ELSE 0 END)		
 	FROM custsetting3rd WITH(NOLOCK)
 	WHERE custid = @repCustID	
+		
+	SELECT @MinBetV43 =  MAX(CASE WHEN sporttype = 43 AND bettype = 1 THEN MinBet ELSE 0 END),
+		@MaxBetv43 = MAX(CASE WHEN sporttype = 43 AND bettype = 1 THEN maxbet ELSE 0 END),
+		@MaxPerMatchv43 = MAX(CASE WHEN sporttype = 43 AND bettype = 1 THEN MaxPerMatch ELSE 0 END),
+		@MinBetV44 =  MAX(CASE WHEN sporttype = 44 AND bettype = 3 THEN MinBet ELSE 0 END),
+		@MaxBetv44 = MAX(CASE WHEN sporttype = 44 AND bettype = 3 THEN maxbet ELSE 0 END),
+		@MaxPerMatchv44 = MAX(CASE WHEN sporttype = 44 AND bettype = 3 THEN MaxPerMatch ELSE 0 END)
+	FROM CustBetSetting3rd_Member WITH(NOLOCK)
+	WHERE custid = @repCustID
+	
+	SELECT @BetLimit='<ROOT><BetLimit SportType="43" BetType="1" MinBet="'+CAST(@MinBetv43 as VARCHAR(10))+'"'+ 
+			' MaxBet="'+CAST(@MaxBetV43 AS VARCHAR(10))+'" MaxPerMatch="'+CAST(@MaxPerMatchv43 AS VARCHAR(10))+'"/>'+
+			'<BetLimit SportType="44" BetType="4" MinBet="'+CAST(@MinBetv44 as VARCHAR(10))+'"'+ 
+			' MaxBet="'+CAST(@MaxBetV44 AS VARCHAR(10))+'" MaxPerMatch="'+CAST(@MaxPerMatchv44 AS VARCHAR(10))+'"/>'+
+			'</ROOT>'
+	
+	SELECT @v43apt_1 = MAX(CASE WHEN sporttype = 43 AND bettype = 1 THEN AgentPT ELSE 0 END), 
+		@v43apt_2 = MAX(CASE WHEN sporttype = 43 AND bettype = 2 THEN AgentPT ELSE 0 END), 
+		@v43apt_3 = MAX(CASE WHEN sporttype = 43 AND bettype = 3 THEN AgentPT ELSE 0 END), 
+		@v43apt_10 = MAX(CASE WHEN sporttype = 43 AND bettype = 10 THEN AgentPT ELSE 0 END), 
+		@v43apt_20 = MAX(CASE WHEN sporttype = 43 AND bettype = 20 THEN AgentPT ELSE 0 END), 
+		@v43apt_9999 = MAX(CASE WHEN sporttype = 43 AND bettype = 9999 THEN AgentPT ELSE 0 END), 
+		@v44apt_1 = MAX(CASE WHEN sporttype = 44 AND bettype = 1 THEN AgentPT ELSE 0 END), 
+		@v44apt_3 = MAX(CASE WHEN sporttype = 44 AND bettype = 3 THEN AgentPT ELSE 0 END)
+	FROM CustPTSetting3rd_Member WITH(NOLOCK)
+	WHERE custid = @repCustID
+	
+	SELECT @PT='<ROOT><PT SportType="43" BetType="1" IsLive="0" AgentPT="'+CAST(@v43apt_1 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="43" BetType="2" IsLive="0" AgentPT="'+CAST(@v43apt_2 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="43" BetType="3" IsLive="0" AgentPT="'+CAST(@v43apt_3 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="43" BetType="10" IsLive="0" AgentPT="'+CAST(@v43apt_10 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="43" BetType="20" IsLive="0" AgentPT="'+CAST(@v43apt_20 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="43" BetType="9999" IsLive="0" AgentPT="'+CAST(@v43apt_9999 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="44" BetType="1" IsLive="0" AgentPT="'+CAST(@v44apt_1 AS VARCHAR(10))+'"/>'+
+				'<PT SportType="44" BetType="3" IsLive="0" AgentPT="'+CAST(@v44apt_3 AS VARCHAR(10))+'"/></ROOT>'
+	
+	SELECT @disableV43 = (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsDisabled, 18)),--sport 43
+		@disableV44 = (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsDisabled, 1))--sport 44
+	FROM dbo.CustProductStatus WITH(NOLOCK)
+	WHERE custid = @repCustID
+	
+	SELECT @IsDisabled='<ROOT><ProductStatus SportType="43" BetType="1" IsDisabled="'+CAST(@disableV43 AS VARCHAR(10))+'" UpdateAllMasters="0" UpdateAllAgents="0" UpdateAllMembers="0" DisableAllMasters="0" DisableAllAgents="0" DisableAllMembers="0"/>'+
+	'<ProductStatus SportType="44" BetType="3" IsDisabled="'+CAST(@disableV44 AS VARCHAR(10))+'" UpdateAllMasters="0" UpdateAllAgents="0" UpdateAllMembers="0" DisableAllMasters="0" DisableAllAgents="0" DisableAllMembers="0"/></ROOT>'
 	
 	SELECT  @agentName as 'Agent UserName'
 	
@@ -568,14 +657,41 @@ BEGIN
 				
 		--add phone betting
 		IF @p125 = 0
-		BEGIN 						
+		BEGIN 	
+			--update SB2
+			exec Acc_CustSetting_BetLimitUpd @BetLimit=@BetLimit,
+				@UserID=10278938,--starixIT
+				@IP=N'-',
+				@ErrMsg=@p4 output,
+				@ErrCode=@p5 output,
+				@CustID=@p1,
+				@MsgType=@p7 output,
+				@SubAccID=0
+			
+			exec Acc_CustSetting_AgentPTOnMemberUpd @SubAccID=0,
+				@UserID=10278938,--starixIT
+				@IP='-',
+				@ErrMsg=@p4 output,
+				@ErrCode=@p5 output,
+				@CustID=@p1,
+				@MsgType=@p7 output,
+				@PT= @PT
+			
+			exec Acc_Admin_DisableNewProductStatusUpd @CustID=@p1,
+				@IsDisabled=@IsDisabled,
+				@UserID=10278938,--starixIT
+				@IP='-',
+				@ErrCode=@p5 output,
+				@MsgType=@p6 output,
+				@ErrMsg=@p7 output
+				
 			INSERT INTO phonebettingCustomerList (username,addedby,addedby_custid,DATE,remark)
 			SELECT @username, 'starixIT', 10278938, CURRENT_TIMESTAMP, 'Requested by HockLin'
 		END 
 		
 		INSERT INTO #tblResult(custid,ErrCode,ErrMsg,i,Agent)
 		select @p1 as custid,@p125 as errcode,@p126 as errMsg,@i as i,@agentName
-		
+				
 		SELECT @i = @i + 1
 		
 		IF @i > @toID
