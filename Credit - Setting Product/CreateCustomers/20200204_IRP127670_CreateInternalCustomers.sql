@@ -513,7 +513,7 @@ BEGIN
 	SELECT  @agentName as 'Agent UserName'
 	
 	--add agent into custNoComm
-	INSERT INTO [CustDB].[dbo].[CustNoComm]
+	INSERT INTO [dbo].[CustNoComm]
            ([CustID]
            ,[ModifiedDate]
            ,[Remark]
