@@ -2,9 +2,9 @@
     Created: Elodie
     Date: 2020-01-17
     Task : Add new table VRLeague
-    DB: DBCUST/CustDB
+    DB: DB02/bodb02
 */
-USE CustDB
+USE bodb02
 GO
 
 CREATE TABLE VRLeague
@@ -14,6 +14,6 @@ CREATE TABLE VRLeague
 CONSTRAINT [PK_VRLeague] PRIMARY KEY CLUSTERED 
 (
 	LeagueId ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [virtualrate_table]
-) ON [virtualrate_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Event_table]
+) ON [Event_table]
 GO
