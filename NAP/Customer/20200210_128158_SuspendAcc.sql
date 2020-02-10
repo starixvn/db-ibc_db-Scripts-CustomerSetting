@@ -36,4 +36,6 @@ BEGIN
 		@IP = @IP,
 		@ErrCode = @ErrCode,
 		@ErrMsg = @ErrMsg
+
+	WAITFOR DELAY '00:00:0.100'
 END
