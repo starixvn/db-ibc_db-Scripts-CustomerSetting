@@ -18,7 +18,9 @@ CREATE TABLE ProblemAccount
 	MaxBet				MONEY NULL,
 	MaxPerEvent			MONEY NULL,
 	CreatedDate			DATETIME NOT NULL,
-	IsReviewed			BIT NOT NULL
+	IsReviewed			BIT NOT NULL,
+	Informed1By			INT NULL,
+	Informed2By			INT NULL
 CONSTRAINT [PK_ProblemAccount] PRIMARY KEY CLUSTERED 
 (
 	CustId ASC
@@ -30,3 +32,9 @@ ALTER TABLE [dbo].ProblemAccount ADD CONSTRAINT [DF_ProblemAccount_CreatedDate] 
 GO
 
 CREATE NONCLUSTERED INDEX IX_ProblemAccount_CreatedDate ON ProblemAccount (CreatedDate)
+
+GO
+
+ALTER TABLE dbo.ProblemAccountReason ADD IsCN88 BIT NOT NULL CONSTRAINT [DF_ProblemAccountReason_IsCN88] DEFAULT ((0))
+ALTER TABLE dbo.ProblemAccountReason ADD IsCredit BIT NOT NULL CONSTRAINT [DF_ProblemAccountReason_IsCredit] DEFAULT ((0))
+ALTER TABLE dbo.ProblemAccountReason ADD IsLicensee BIT NOT NULL CONSTRAINT [DF_ProblemAccountReason_IsLicensee] DEFAULT ((0))
