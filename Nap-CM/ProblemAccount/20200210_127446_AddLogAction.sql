@@ -1,5 +1,5 @@
 ﻿/*
-	Created: 20190808@Elodie
+	Created: 20200210@Elodie
 	Task: Insert LogAction for Problem Account
 	DB: DBLOG/bodb_CustomerLog
 */

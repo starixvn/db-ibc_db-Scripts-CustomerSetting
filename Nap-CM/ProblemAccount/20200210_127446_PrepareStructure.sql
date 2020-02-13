@@ -1,5 +1,5 @@
 /*
-	Created: 20190805@Elodie	
+	Created: 20200210@Elodie	
 	Task: Prepare structure for problem account 
 	DB: DBCUST/CustDB and all replicated server of CustDB_CustSetting pub
 */
@@ -39,7 +39,3 @@ ALTER TABLE dbo.ProblemAccountReason ADD IsCN88 BIT NOT NULL CONSTRAINT [DF_Prob
 ALTER TABLE dbo.ProblemAccountReason ADD IsCredit BIT NOT NULL CONSTRAINT [DF_ProblemAccountReason_IsCredit] DEFAULT ((0))
 ALTER TABLE dbo.ProblemAccountReason ADD IsLicensee BIT NOT NULL CONSTRAINT [DF_ProblemAccountReason_IsLicensee] DEFAULT ((0))
  
-UPDATE ProblemAccountReason
-SET IsCredit = 1,
-	IsLicensee = 1,
-	IsCN88 = 1
