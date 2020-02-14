@@ -122,7 +122,7 @@ GO
 --> Commission
 CREATE TABLE [dbo].[DSB_CustDiscount_Agent](
 	[CustId] [int] NOT NULL,
-	[Discount] [binary](10) NOT NULL,
+	[Discount] [binary](30) NOT NULL,
 	CONSTRAINT [PK_DSB_CustDiscount_Agent] PRIMARY KEY CLUSTERED 
 (
 	[CustId] ASC
@@ -133,10 +133,10 @@ GO
 
 CREATE TABLE [dbo].[DSB_CustDiscount_Member](
 	[CustId] [int] NOT NULL,
-	[PlayerDiscount] [binary](10) NOT NULL,
-	[AgentDiscount] [binary](10) NOT NULL,
-	[MasterDiscount] [binary](10) NOT NULL,
-	[SuperDiscount] [binary](10) NOT NULL,
+	[PlayerDiscount] [binary](30) NOT NULL,
+	[AgentDiscount] [binary](30) NOT NULL,
+	[MasterDiscount] [binary](30) NOT NULL,
+	[SuperDiscount] [binary](30) NOT NULL,
 	CONSTRAINT [PK_DSB_CustDiscount_Member] PRIMARY KEY CLUSTERED 
 (
 	[CustId] ASC
@@ -147,10 +147,10 @@ GO
 
 CREATE TABLE [dbo].[DSB_CustGroupDiscount_Member](
 	[AgentId] [int] NOT NULL,
-	[PlayerDiscount] [binary](10) NOT NULL,
-	[AgentDiscount] [binary](10) NOT NULL,
-	[MasterDiscount] [binary](10) NOT NULL,
-	[SuperDiscount] [binary](10) NOT NULL,
+	[PlayerDiscount] [binary](30) NOT NULL,
+	[AgentDiscount] [binary](30) NOT NULL,
+	[MasterDiscount] [binary](30) NOT NULL,
+	[SuperDiscount] [binary](30) NOT NULL,
 	CONSTRAINT [PK_DSB_CustGroupDiscount_Member] PRIMARY KEY CLUSTERED 
 (
 	[AgentId] ASC
@@ -266,7 +266,7 @@ CREATE TABLE [dbo].[DSB_ByteSeq](
 GO
 
 CREATE TABLE [dbo].[CommissionTemplate](
-	[ValueId] [tinyint] NOT NULL,
+	[ValueId] [smallint] NOT NULL,
 	[Value] [decimal](9, 8) NOT NULL,
 	CONSTRAINT [PK_CommissionTemplate] PRIMARY KEY CLUSTERED 
 (
