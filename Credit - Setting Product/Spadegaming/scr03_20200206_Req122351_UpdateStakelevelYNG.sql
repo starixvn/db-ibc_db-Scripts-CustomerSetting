@@ -1,0 +1,65 @@
+/*
+	Created: 20200214@Elodie
+	Task: Update StakeLevel of YNG for SG
+	DB: DBCUST/CustDB
+*/
+
+-- BEGIN STEP 1: DEPLOY THIS SCRIPT ON DBCUST/CustDB	 --
+-----------------------------------------------------------
+USE CustDB
+GO
+
+CREATE TABLE #temp(
+	GameTypeID		INT,
+	[exchangeid]	[int] ,
+	[MinLabel]		VARCHAR(30),
+	[MaxLabel]		VARCHAR(30),
+	[Min]			[decimal](19, 8) NULL,
+	[Max]			[decimal](19, 8) NULL,	
+) ON [PRIMARY]
+
+GO
+INSERT #temp (GameTypeID,[exchangeid],[MinLabel],[MaxLabel], [Min], [Max]) 
+SELECT 4301,72,'1','2000',1,2000 UNION ALL 
+SELECT 4302,72,'1','2000',1,2000 UNION ALL 
+SELECT 4303,72,'0.8','2000',0.8,2000 UNION ALL 
+SELECT 4304,72,'0.8','2000',0.8,2000 UNION ALL 
+SELECT 4305,72,'1','2000',1,2000 UNION ALL 
+SELECT 4306,72,'1','2000',1,2000 UNION ALL 
+SELECT 4307,72,'0.6','900',0.6,900 UNION ALL 
+SELECT 4308,72,'1.2','1800',1.2,1800 UNION ALL 
+SELECT 4309,72,'0.2','900',0.2,900 UNION ALL 
+SELECT 4310,72,'1','2000',1,2000 UNION ALL 
+SELECT 4311,72,'0.9','1800',0.9,1800 UNION ALL 
+SELECT 4312,72,'1.2','1800',1.2,1800 UNION ALL 
+SELECT 4313,72,'0.5','1250',0.5,1250 UNION ALL 
+SELECT 4314,72,'1','2000',1,2000 UNION ALL 
+SELECT 4315,72,'0.8','2000',0.8,2000 UNION ALL 
+SELECT 4316,72,'0.8','2000',0.8,2000 UNION ALL 
+SELECT 4317,72,'0.2','900',0.2,900 UNION ALL 
+SELECT 4318,72,'0.9','2250',0.9,2250 UNION ALL 
+SELECT 4319,72,'1','2000',1,2000 UNION ALL 
+SELECT 4320,72,'1','2000',1,2000 UNION ALL 
+SELECT 4321,72,'0.4','1000',0.4,1000 UNION ALL 
+SELECT 4322,72,'1','2000',1,2000 UNION ALL 
+SELECT 4323,72,'0.5','900',0.5,900 UNION ALL 
+SELECT 4324,72,'0.9','1800',0.9,1800 UNION ALL 
+SELECT 4325,72,'1','2000',1,2000 
+
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #temp t
+WHERE Max > 999
+
+DELETE FROM #temp WHERE GameTypeID = 4313 -- Don't offer Ming Dynasty anymore
+
+DELETE s
+FROM StakeLevelGroupDetail s WITH(ROWLOCK)
+	INNER JOIN StakeLevel t WITH(NOLOCK) ON s.StakeLevelID=t.StakeLevelID
+WHERE t.GameTypeID=4301 AND t.ExchangeId IN (72)
+
+INSERT INTO StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID,	t.GameTypeID,	t.MinLabel,t.MaxLabel,	t.Min , t.Max
+FROM StakeLevel e WITH(NOLOCK) 
+	INNER JOIN #temp t ON e.exchangeid=t.exchangeid
+WHERE e.GameTypeID=4301 AND GameGroupID=12 AND t.ExchangeId IN (72)
