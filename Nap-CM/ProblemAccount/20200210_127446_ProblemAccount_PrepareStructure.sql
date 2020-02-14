@@ -1,7 +1,7 @@
 /*
 	Created: 20200210@Elodie	
 	Task: Prepare structure for problem account 
-	DB: DBCUST/CustDB and all replicated server of CustDB_CustSetting pub
+	DB: DBCUST/CustDB and all replicated server of CustDB_Customer_Info pub
 */
 USE CustDB
 GO
