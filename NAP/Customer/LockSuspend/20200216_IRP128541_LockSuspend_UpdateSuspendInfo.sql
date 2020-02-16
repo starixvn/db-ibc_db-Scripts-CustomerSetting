@@ -1,17 +1,28 @@
 ﻿/*
 	Created by: Elodie
 	Date: 20200216
-	Task: Insert test data
+	Task: Update suspend info
 	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
 
+DECLARE @CustID INT, @roleid TINYINT, @Suspended BIT = 1
 
---25 affected rows
-INSERT INTO CustSuspendLockUpd (CustID)
-SELECT custid
+SELECT @CustID = custid, @roleid = ci.roleid
 FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.username IN ('2RM1ABY','S88MKHK','WRD33','KJM00JF','SMORMZAUU','SAE24','LHK11','D771201','S88AB1C1',
-						'S88AB1F3','SG51H01','SG6H31','2RM1A','2CURS','2CUTI','ALO05','LHKAB','MOXZA','SMORMZA',
-						'CKS23','KJM00','KJH00ZX','KJH003F','SWM83','2RBAK')
+WHERE ci.username IN ('D771201')
+
+UPDATE	cs 
+SET	SuspendInfo = (SELECT suspendinfo FROM dbo.f_GenerateSuspendInfo(@roleid,@Suspended,ISNULL(SuspendInfo,0)))	
+FROM CustProductStatus cs WITH (ROWLOCK, UPDLOCK) 		
+WHERE custid = @CustID
+	
+IF @RoleID BETWEEN 2 AND 4 
+BEGIN
+	EXEC Acc_DynamicCustomerInfo_04
+		@CustID		= @CustID
+		,@RoleID	= @RoleID
+		,@Action	= 'SuspendInfo'
+		,@Suspended	= @Suspended					
+END
