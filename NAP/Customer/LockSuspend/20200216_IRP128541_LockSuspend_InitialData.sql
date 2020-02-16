@@ -1,7 +1,7 @@
 ﻿/*
 	Created by: Elodie
 	Date: 20200216
-	Task: Insert test data
+	Task: Intial data
 	DB: DBCUST/CustDB
 */
 USE CustDB
