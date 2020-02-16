@@ -1,6 +1,6 @@
 /*
 	Created: 20200216@Elodie
-	Task: Add new table CustSuspendLockUpd and add CustDB_Customer_Info
+	Task: Add new table CustSuspendLockUpd and add CustDB_CustSetting
 	DB: DBCUST/CustDB
 */
 
