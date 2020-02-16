@@ -10,7 +10,9 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT 1173, 'Prevent un-suspend/reopen closed account.', 'Acc_CustomerLockSuspendUpd', 1, 5, NULL
+SELECT 1173, 'Prevent un-suspend or reopen closed account. (Mark direct suspend if required)', 'Acc_CustomerLockSuspendUpd', 1, 5, NULL
+
+DELETE FROM LogAction WITH (ROWLOCK) WHERE ActionID IN (SELECT ActionID FROM @tmpAction)
 
 INSERT INTO dbo.LogAction (ActionID, SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
 SELECT ActionID,SPName,ActionTypeID,ActionName,ActionName,ActionName,ActionName,ActionName,ActionName,IsInternal,ActionName
