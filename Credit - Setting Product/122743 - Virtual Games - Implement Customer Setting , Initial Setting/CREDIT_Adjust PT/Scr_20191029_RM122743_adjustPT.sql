@@ -9,7 +9,6 @@
 --------------------------------------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
     @custid int,
-    @Target VARCHAR(20) = '',
 	@PT tinyint
 AS
 BEGIN
@@ -162,7 +161,6 @@ BEGIN
 
 	--Update MaxPT
 	EXEC dbo.[Acc_DynamicCustSetting3rd_09] @custid = @custid					
-			,@target = 'REPLICATED'
 			,@PT = @PT
 	
 	--adjust PT

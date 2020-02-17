@@ -9,7 +9,6 @@
 --------------------------------------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_08]
     @custid int,
-    @Target VARCHAR(20) = '',
 	@PT tinyint
 AS
 BEGIN
@@ -119,19 +118,18 @@ BEGIN
 	UPDATE TOP (1) #agents
 	SET isfinished = 1
 		,@custid = custid
-		,@roleIid = roleid			
+		,@roleid = roleid			
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
 	--Update MaxPT
 	EXEC dbo.[Acc_DynamicCustSetting3rd_08] @custid = @custid					
-			,@target = 'REPLICATED'
 			,@PT = @PT
 	
 	--adjust PT
 	EXEC dbo.Acc_DynamicCustSetting3rd_07 @SuperID = @custid				
-			,@RoleID = @roleIid
+			,@RoleID = @roleid
 			,@SportBettypeXML = @SportBettypeXML  
 
 	WAITFOR DELAY '00:00:0.100'
@@ -141,4 +139,3 @@ END
 GO		
 -- END STEP 2: RUN THIS SCRIPT ON DBCUST/CUSTDB -----
 -----------------------------------------------------------------------------------
-
