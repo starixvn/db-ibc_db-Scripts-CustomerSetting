@@ -12,10 +12,6 @@ SET C.CurrencyModifier = 1.2
 FROM CustSuper C WITH (ROWLOCK, UPDLOCK)
 WHERE C.custid = 23003140
 
-UPDATE C
-SET C.CurrencyModifier = 2
-FROM CustSuper C WITH (ROWLOCK, UPDLOCK)
-WHERE C.custid = 35709781
 
 UPDATE D
 SET D.CurrencyModifier = 0.95
