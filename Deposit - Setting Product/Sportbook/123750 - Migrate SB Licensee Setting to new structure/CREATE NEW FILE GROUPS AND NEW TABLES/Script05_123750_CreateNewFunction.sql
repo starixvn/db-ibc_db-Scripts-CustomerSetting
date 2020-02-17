@@ -1,10 +1,17 @@
+/*
+	Created: Eden
+	Date: 20200217
+	Task: Create new function to update binary values with 2 bytes [RM:#123750]
+	DB: DBCust/CustDB , DBACC/bodb02
+*/
+GO
 /*<info serverAlias="DBCUST-CUSTDB,DBACC-bodb02" selecters="bodbAdminNet,bodbDownlineNet" viewers="" isFunction="1"></info>*/
-ALTER FUNCTION [dbo].[f_SetBinaryValues_2bytes] (@binStr VARBINARY(256), @xmlStr XML)   
+CREATE FUNCTION [dbo].[f_SetBinaryValues_2bytes] (@binStr VARBINARY(256), @xmlStr XML)   
 RETURNS TABLE
 AS  
 /*
 	Created: Eden@20200214
-	DB: DBCust/custDB
+	DB: DBCust/custDB,DBACC/bodb02
 
 	Revision:     
 		- 20200214@eden: Initial SP [Redmine: #123750]
