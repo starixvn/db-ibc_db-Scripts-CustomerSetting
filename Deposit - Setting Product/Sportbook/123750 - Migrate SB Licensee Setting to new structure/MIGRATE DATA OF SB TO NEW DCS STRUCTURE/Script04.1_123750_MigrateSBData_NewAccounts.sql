@@ -253,7 +253,7 @@ FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 WHERE a.SportType = 43
 
 ------------------------------------PT Setting-------------------------------------------------	
-DECLARE @InitialBinaryStr binary(10) =  0x00000000000000000000
+DECLARE @InitialBinaryStr binary(30) =  0x00
 
 ;WITH tmp AS (
 	SELECT  dc.CustID,
@@ -374,8 +374,8 @@ FROM Tmp dc
 ------------------------------------Commisson Setting-------------------------------------------------	
 ;WITH tmp AS (
 	SELECT dc.CustID,dc.SportType,dc.bettype,dc.islive,
-			CASE WHEN c.roleid = 2 THEN dc.adiscount
-				WHEN c.roleid = 3 THEN dc.discount
+			CASE WHEN c.roleid = 2 THEN dc.discount
+				WHEN c.roleid = 3 THEN dc.adiscount
 				WHEN c.roleid = 4 THEN dc.sdiscount END AS discount
 	FROM Dep_CustSetting dc WITH(NOLOCK) 
 		INNER JOIN #SMATemp c ON dc.custid = c.custid
@@ -402,7 +402,7 @@ FROM Tmp dc
 INSERT INTO DSB_CustDiscount_Agent (CustID,Discount)
 SELECT  dc.CustID,dis.binaryStr_new AS Discount
 FROM Tmp1 dc  
-	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.discountXML) dis
+	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.discountXML) dis
 
 ;WITH tmp AS (
 	SELECT  c.CustID,
@@ -428,7 +428,7 @@ FROM Tmp1 dc
 								ct.ValueId AS '@val'
 						FROM Dep_CustSetting dc WITH(NOLOCK) 
 							INNER JOIN dbo.DSB_ByteSeq bs WITH (NOLOCK) ON bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-							LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.adiscount
+							LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.discount
 						WHERE bs.Type = 'DiscountMember' 
 							AND  dc.SportType = 1 AND dc.bettype IN (1,4,5,9) AND dc.islive = 0 
 							AND  dc.custid = c.custid
@@ -444,7 +444,7 @@ FROM Tmp1 dc
 								ct.ValueId AS '@val'
 						FROM Dep_CustSetting dc WITH(NOLOCK) 
 							INNER JOIN dbo.DSB_ByteSeq bs WITH (NOLOCK) ON bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-							LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.discount
+							LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.adiscount
 						WHERE bs.Type = 'DiscountMember' 
 							AND  dc.SportType = 1 AND dc.bettype IN (1,4,5,9) AND dc.islive = 0 
 							AND  dc.custid = c.custid
@@ -479,10 +479,10 @@ SELECT  dc.CustID,
 		mdis.binaryStr_new AS MasterDiscount,
 		sdis.binaryStr_new AS SuperDiscount
 FROM Tmp dc  
-	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.pdiscountXML) pdis
-	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.adiscountXML) adis
-	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.mdiscountXML) mdis
-	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.sdiscountXML) sdis
+	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.pdiscountXML) pdis
+	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.adiscountXML) adis
+	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.mdiscountXML) mdis
+	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.sdiscountXML) sdis
 
 
 DROP TABLE #SMATemp

@@ -310,8 +310,8 @@ WHERE d.CustID IS NULL
 --Number Games
 INSERT INTO Dep_CustDiscountSetting_Agent (CustID,SportType,BetType,Discount)
 SELECT a.CustID,SportType,BetType
-	,Discount = CASE WHEN c.roleid = 2 THEN a.adiscount 
-						WHEN c.roleid = 3 THEN a.discount
+	,Discount = CASE WHEN c.roleid = 2 THEN a.discount 
+						WHEN c.roleid = 3 THEN a.adiscount
 						WHEN c.roleid = 4 THEN a.sdiscount
 				END
 FROM Dep_CustSetting3rd a WITH(NOLOCK) 
@@ -320,7 +320,7 @@ WHERE SportType = 161 and bettype = 81 and islive = 0
 
 
 INSERT INTO Dep_CustDiscountSetting_Member (CustID,SportType,BetType,PlayerDiscount,AgentDiscount,MasterDiscount,SuperDiscount)
-SELECT a.CustID,SportType,BetType,PlayerDiscount,adiscount,discount,sdiscount
+SELECT a.CustID,SportType,BetType,PlayerDiscount,discount,adiscount,sdiscount
 FROM Dep_CustSetting3rd a WITH(NOLOCK) 
 	INNER JOIN #MemberTemp c WITH(NOLOCK) ON a.custid = c.custid
 WHERE SportType = 161 and bettype = 81 and islive = 0
