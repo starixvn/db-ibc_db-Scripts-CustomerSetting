@@ -6,7 +6,18 @@
 USE CustDB
 GO
 
+--DROP TABLE ProblemAccountAction
 --DROP TABLE ProblemAccount
+CREATE TABLE ProblemAccountAction
+(
+	ActionID		TINYINT NOT NULL,
+	ActionName		VARCHAR(100) NOT NULL
+CONSTRAINT [PK_ProblemAccountAction] PRIMARY KEY CLUSTERED 
+(
+	ActionID ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+) ON [DATA]
+GO
 
 CREATE TABLE ProblemAccount
 (
@@ -20,7 +31,8 @@ CREATE TABLE ProblemAccount
 	CreatedDate			DATETIME NOT NULL,
 	IsReviewed			BIT NOT NULL,
 	Informed1By			INT NULL,
-	Informed2By			INT NULL
+	Informed2By			INT NULL,
+	ActionId			TINYINT NULL
 CONSTRAINT [PK_ProblemAccount] PRIMARY KEY CLUSTERED 
 (
 	CustId ASC
