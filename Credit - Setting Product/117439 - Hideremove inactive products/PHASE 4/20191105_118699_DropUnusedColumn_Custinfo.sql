@@ -6,7 +6,85 @@
 */
 USE CustDB
 GO
+--Drop constraint 
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch151_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableOpenTote
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch152_UK
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Maxpermatch151_OT
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch152_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableBingo
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch153_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_SyncBingo
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable151_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable152_UK
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable152_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_DisableLiveCasino
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_SyncLiveCasino
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch183
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable153_AU
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_IsAutoResetP2P
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch185
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_DisableP2P
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_DisableFunP2P
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableBinaryOptions
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch181
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_isAutoResetLiveCasino
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxWinLiveCasino
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_MaxTransferP2P
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_DisableMicrogameLC
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_DisableMicrogameRNG
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch182
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableVirtualSports
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_HideVirtualSports
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch180
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableHRFixedOdds
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch186
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch154
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableCasinoBonus
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_MaxPerMatch44
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableHorseRacing
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_DisableFinancial
+GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch184
+GO
 
+--> Drop column
 ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable151_AU
 GO
 ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable152_AU
