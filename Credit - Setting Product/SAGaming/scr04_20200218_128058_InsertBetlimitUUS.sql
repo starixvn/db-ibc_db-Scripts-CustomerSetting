@@ -22,9 +22,10 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN	
 	
-	DECLARE @ProductID INT = 39, @currency INT,@Sporttype INT = 244, @Bettype INT =3001
-
+	DECLARE @ProductID INT = 39, @currency INT,@Sporttype INT = 244
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
+
+	CREATE TABLE #tmpbettype (BettypeID INT PRIMARY KEY)
 
 	CREATE TABLE #MemberTemp
 	(
@@ -41,7 +42,15 @@ BEGIN
 		CustID				INT PRIMARY KEY CLUSTERED	
 	)
 
-	
+	INSERT INTO #tmpbettype(BettypeID)
+	SELECT 3001 UNION ALL
+	SELECT 3002 UNION ALL
+	SELECT 3003 UNION ALL
+	SELECT 3004 UNION ALL
+	SELECT 3005 UNION ALL
+	SELECT 3006 UNION ALL
+	SELECT 3007
+
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
@@ -60,10 +69,10 @@ BEGIN
 										   ,[SportType]
 										   ,[BetType]
 										   ,[StakeLevelList]) 
-	SELECT t.custid,@Sporttype, @Bettype, CAST(StakeLevelID AS varchar(50))
-	FROM StakeLevel WITH(NOLOCK) 
+	SELECT t.custid,@Sporttype, TB.BettypeID, CAST(StakeLevelID AS varchar(50))
+	FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpbettype TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 	CROSS JOIN  #SMATemp t
-	WHERE GameTypeID BETWEEN 3001 AND 3007 AND ExchangeId=@currency
+	WHERE ExchangeId=@currency
 
 	--Member Level
 
@@ -79,16 +88,18 @@ BEGIN
 										   ,[BetType]
 										   ,[StakeLevelList]
 										   ,LastUpdated) 
-		SELECT t.custid,@Sporttype, @Bettype, CAST(StakeLevelID AS varchar(50)),GETDATE()
-		FROM StakeLevel WITH(NOLOCK) 
+		SELECT t.custid,@Sporttype, TB.BettypeID, CAST(StakeLevelID AS varchar(50)),GETDATE()
+		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpbettype TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 		CROSS JOIN  #MemberTempBatch t
-		WHERE GameTypeID BETWEEN 3001 AND 3007 AND ExchangeId=@currency
+		WHERE ExchangeId=@currency
 
 		TRUNCATE TABLE #MemberTempBatch
 	END
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+	DROP TABLE #tmpbettype
+	DROP TABLE #MemberTempBatch
 
 END
 GO
