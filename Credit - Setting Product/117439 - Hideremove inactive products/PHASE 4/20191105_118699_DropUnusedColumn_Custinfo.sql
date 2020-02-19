@@ -2,7 +2,7 @@
 	Created: 20191105@Eden
 	Task: Drop 40 columns on Custinfo table
 	Redmine: https://nexdev.net/issues/118699
-	DB: DBCUST
+	DB: DBCUST/CustDB 
 */
 USE CustDB
 GO
@@ -85,83 +85,83 @@ ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch184
 GO
 
 --> Drop column
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable151_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN Disable151_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable152_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN Disable152_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable152_UK
+ALTER TABLE dbo.Custinfo DROP COLUMN Disable152_UK
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_Disable153_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN Disable153_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableBinaryOptions
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableBinaryOptions
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableBingo
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableBingo
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableCasinoBonus
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableCasinoBonus
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableFinancial
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableFinancial
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableFunP2P
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableFunP2P
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableHorseRacing
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableHorseRacing
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableHRFixedOdds
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableHRFixedOdds
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableLiveCasino
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableLiveCasino
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableMicrogameLC
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableMicrogameLC
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableMicrogameRNG
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableMicrogameRNG
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableOpenTote
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableOpenTote
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableP2P
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableP2P
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_DisableVirtualSports
+ALTER TABLE dbo.Custinfo DROP COLUMN DisableVirtualSports
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_HideVirtualSports
+ALTER TABLE dbo.Custinfo DROP COLUMN HideVirtualSports
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_isAutoResetLiveCasino
+ALTER TABLE dbo.Custinfo DROP COLUMN isAutoResetLiveCasino
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_IsAutoResetP2P
+ALTER TABLE dbo.Custinfo DROP COLUMN IsAutoResetP2P
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch151
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch151
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxPerMatch151_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch151_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch151_OT
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch151_OT
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxPerMatch152_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch152_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxPerMatch152_UK
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch152_UK
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxPerMatch153_AU
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch153_AU
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch154
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch154
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch180
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch180
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch181
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch181
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch182
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch182
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch183
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch183
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch184
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch184
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch185
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch185
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch186
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch186
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_maxpermatch201
+ALTER TABLE dbo.Custinfo DROP COLUMN maxpermatch201
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxPerMatch44
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch44
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxtransferP2P
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxtransferP2P
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_MaxWinLiveCasino
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxWinLiveCasino
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_SyncBingo
+ALTER TABLE dbo.Custinfo DROP COLUMN SyncBingo
 GO
-ALTER TABLE dbo.Custinfo DROP COLUMN DEL_SyncLiveCasino
+ALTER TABLE dbo.Custinfo DROP COLUMN SyncLiveCasino
 GO
