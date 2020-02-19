@@ -4,7 +4,15 @@
 	RM: #121876
 	DB: DBCUST/CustDB
 */
-
-DELETE
-FROM VRCustSetting WITH(ROWLOCK)
-WHERE ValueIDLIVE = 0 AND ValueIDNonLIVE = 0
+---------Step 1-------------
+ALTER PROCEDURE [Acc_CustSetting3rd_19] 
+AS	
+BEGIN	
+	DELETE
+	FROM VRCustSetting WITH(ROWLOCK)
+	WHERE ValueIDLIVE = 0 AND ValueIDNonLIVE = 0
+END
+GO
+-------------Step 2---------
+EXEC [Acc_CustSetting3rd_19] 
+GO
