@@ -80,9 +80,10 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT ON DBCUST/CUSTDB -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #agents (custid int, roleid tinyint, isfinished bit default(0))
+CREATE TABLE #agents (custid int, AgentID INT, MasterID INT, SuperID INT, roleid tinyint, isfinished bit default(0))
     
 DECLARE @custid INT, @roleid tinyint, @PT tinyint = 90
+DECLARE @AgentID INT, @MasterID INT, @SuperID INT
 
 DECLARE @xml XML;
 	SET @xml = (
@@ -101,8 +102,8 @@ DECLARE @xml XML;
 DECLARE @SportBettypeXML NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX),@xml);
 
 --Dirrect Master/Agent
-INSERT INTO #agents(custid, roleid)
-SELECT c.custid,c.roleID
+INSERT INTO #agents(custid, roleid,AgentID,MasterID,SuperID)
+SELECT c.custid,c.roleID,c.recommend,c.mrecommend,c.srecommend
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
 	INNER JOIN CustPTSetting3rd_Agent pt WITH(NOLOCK) ON c.custid = pt.CustID AND pt.SportType = 245 AND pt.CustID = 4601
@@ -118,7 +119,10 @@ BEGIN
 	UPDATE TOP (1) #agents
 	SET isfinished = 1
 		,@custid = custid
-		,@roleid = roleid			
+		,@roleid = roleid
+		,@AgentID = AgentID
+		,@MasterID = MasterID	
+		,@SuperID = SuperID	
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -128,7 +132,9 @@ BEGIN
 			,@PT = @PT
 	
 	--adjust PT
-	EXEC dbo.Acc_DynamicCustSetting3rd_07 @SuperID = @custid				
+	EXEC dbo.Acc_DynamicCustSetting3rd_07 @SuperID = @SuperID				
+			,@MasterID = @MasterID
+			,@AgentID = @AgentID
 			,@RoleID = @roleid
 			,@SportBettypeXML = @SportBettypeXML  
 
