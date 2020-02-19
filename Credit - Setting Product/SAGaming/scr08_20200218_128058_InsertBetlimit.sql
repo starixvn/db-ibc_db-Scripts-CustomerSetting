@@ -126,6 +126,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 0 
  AND c.custid <= @max_custid
  AND s.site<>'CN88'
+ AND c.currency NOT IN (45,13) --Won (KRW) and RMB
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -177,6 +178,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 0 
  AND c.custid <= @max_custid
  AND s.site<>'CN88'
+ AND c.currency NOT IN (45,13) --Won (KRW) and RMB
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

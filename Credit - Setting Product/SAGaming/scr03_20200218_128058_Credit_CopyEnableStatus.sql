@@ -68,7 +68,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
 		AND NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.custid)
-		AND ci.currency <> 20
+		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -126,7 +126,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
 		AND NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.custid)
-		AND ci.currency <> 20
+		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

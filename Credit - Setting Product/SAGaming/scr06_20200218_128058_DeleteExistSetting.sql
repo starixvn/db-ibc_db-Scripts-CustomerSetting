@@ -41,6 +41,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
 		AND ci.Site<>'CN88'
+		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
 
 	SELECT DISTINCT cg.custid 

@@ -22,7 +22,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-			AND ci.currency <> 20
+			AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
 DECLARE @ProductID TINYINT = 39
 
@@ -171,10 +171,6 @@ WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
 
 /*******************************CUST PRODUCTSTATUS TABLE*******************************/
 DECLARE @BitmapOrder TINYINT = 20
-SELECT custid, roleid
-INTO #DisableLine
-FROM custInfo C WITH (NOLOCK) 
-WHERE C.currency IN (13,45) --For Credit: do not offer:  Won (KRW) and RMB
 
 SELECT custid, ci.roleid, ci.srecommend
 INTO #CustList
@@ -187,7 +183,6 @@ SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProduct
 FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabled
-WHERE NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.srecommend)
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
