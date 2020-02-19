@@ -11,7 +11,8 @@ GO
 CREATE TABLE ProblemAccountAction
 (
 	ActionID		TINYINT NOT NULL,
-	ActionName		VARCHAR(100) NOT NULL
+	ActionName		VARCHAR(100) NOT NULL,
+	IsActive		BIT
 CONSTRAINT [PK_ProblemAccountAction] PRIMARY KEY CLUSTERED 
 (
 	ActionID ASC
