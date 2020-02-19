@@ -51,10 +51,6 @@ DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
 
-SELECT custid, roleid
-INTO #DisableLine
-FROM custInfo C WITH (NOLOCK) 
-WHERE C.currency IN (13,45) --For Credit: do not offer:  Won (KRW) and RMB
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -67,7 +63,6 @@ WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
-		AND NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.custid)
 		AND ci.currency = 72
 
 -- For deployer info
@@ -109,10 +104,6 @@ DECLARE @max_custid INT, @srecommend INT
 
 SELECT @max_custid = xxx
 
-SELECT custid, roleid
-INTO #DisableLine
-FROM custInfo C WITH (NOLOCK) 
-WHERE C.currency IN (13,45) --For Credit: do not offer:  Won (KRW) and RMB
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -125,7 +116,6 @@ WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
-		AND NOT EXISTS (SELECT 1 FROM #DisableLine WHERE custid = ci.custid)
 		AND ci.currency = 72
 
 -- For deployer info
