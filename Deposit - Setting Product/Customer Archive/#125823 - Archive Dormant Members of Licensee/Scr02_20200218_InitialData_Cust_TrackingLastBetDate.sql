@@ -54,50 +54,7 @@ BEGIN
 	DELETE FROM #Member
 	WHERE custid IN (SELECT custid FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK))
 
-	--DELETE m
-	--FROM #Member m
-	--	INNER JOIN Cust_TrackingLastBetDate b ON m.custid = b.CustID
-
-	IF EXISTS(SELECT 1 FROM #Member)
-	BEGIN
-		-- 2. Get List Member have bet ticket in #Member table (can apply batch processing)
-		-- Apply loop by date for bodb_Report.dbo.STATEMENT table
-		DECLARE @fromDate_e DATETIME, @toDate_e DATETIME, @toDate DATETIME
-
-		SET @fromDate_e = @MinBettingDate
-		SET @toDate_e = DATEADD(DAY, @CheckStatement_DaysPerBatch, @fromDate_e)
-
-		SET @toDate = CAST(GETDATE() AS DATE)
-	
-		IF @toDate_e > @toDate 
-			SELECT @toDate_e = @toDate
-			
-		WHILE @fromDate_e <= @toDate	
-		BEGIN
-			INSERT INTO #BettingMember(custid,LastBetDate)	
-			SELECT  custid, MAX(accDate) AS accDate
-			FROM bodb_Report.dbo.STATEMENT st WITH  (NOLOCK, FORCESEEK)
-			WHERE accDate >= @fromDate_e AND accDate < @toDate_e
-				AND TransType <> N'bal' 
-				AND st.custid IN ( SELECT custid FROM #Member m)
-			GROUP BY custid
-					
-			UPDATE a
-			SET a.LastBetDate = b.LastBetDate
-			FROM #Member a 
-			INNER JOIN  #BettingMember b ON a.CustID = b.custid
-			WHERE b.LastBetDate > ISNULL(a.LastBetDate,'1900/01/01')
-				
-			TRUNCATE TABLE #BettingMember
-
-			IF @toDate_e = @toDate
-				BREAK;
-
-			SELECT @fromDate_e = @toDate_e
-			SELECT @toDate_e = DATEADD(DAY, @CheckStatement_DaysPerBatch, @fromDate_e)
-			IF @toDate_e > @toDate SELECT @toDate_e = @toDate
-		END
-	END
+	TRUNCATE TABLE Cust_TrackingLastBetDate
 
 	WHILE ( 1 = 1 )
 	BEGIN
@@ -172,7 +129,56 @@ BEGIN
 		SET isProcessed = 1
 		WHERE custid IN (SELECT custid FROM #tmpMember)
 	END
-	
+
+	INSERT INTO Cust_TrackingLastBetDate (custid,LastBetDate)
+	SELECT custid,LastBetDate FROM #Member WHERE LastBetDate IS NOT NULL
+
+	DELETE FROM #Member WHERE LastBetDate IS NOT NULL
+
+	IF EXISTS(SELECT 1 FROM #Member)
+	BEGIN
+		-- 2. Get List Member have bet ticket in #Member table (can apply batch processing)
+		-- Apply loop by date for bodb_Report.dbo.STATEMENT table
+		DECLARE @fromDate_e DATETIME, @toDate_e DATETIME, @FromDate DATETIME
+
+		SET @toDate_e = CAST(GETDATE() AS DATE)
+		SET @fromDate_e = DATEADD(DAY, - @CheckStatement_DaysPerBatch, @toDate_e)
+
+		SET @FromDate = @MinBettingDate
+
+		IF @fromDate_e < @FromDate 
+			SELECT @fromDate_e = @FromDate
+			
+		WHILE @fromDate_e <= @toDate_e	
+		BEGIN
+			TRUNCATE TABLE #BettingMember
+
+			INSERT INTO #BettingMember(custid,LastBetDate)	
+			SELECT  custid, MAX(accDate) AS accDate
+			FROM bodb_Report.dbo.STATEMENT st WITH  (NOLOCK, FORCESEEK)
+			WHERE accDate >= @fromDate_e AND accDate <= @toDate_e
+				AND TransType <> N'bal' 
+				AND st.custid IN ( SELECT custid FROM #Member m)
+			GROUP BY custid
+
+			INSERT INTO Cust_TrackingLastBetDate (custid,LastBetDate)
+			SELECT custid,LastBetDate FROM #BettingMember
+					
+			DELETE a
+			FROM #Member a 
+				INNER JOIN  #BettingMember b ON a.CustID = b.custid
+
+			IF @FromDate = @fromDate_e
+				BREAK;
+
+			SELECT @toDate_e = @fromDate_e  
+			SELECT @fromDate_e = DATEADD(DAY, -@CheckStatement_DaysPerBatch, @fromDate_e)
+
+			IF @fromDate_e < @FromDate 
+				SELECT @fromDate_e = @FromDate
+		END
+	END
+
 	INSERT INTO Cust_TrackingLastBetDate (custid,LastBetDate)
 	SELECT custid,LastBetDate FROM #Member
 
