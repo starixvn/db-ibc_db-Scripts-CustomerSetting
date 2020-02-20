@@ -48,15 +48,15 @@ BEGIN
 		AND ci.username NOT LIKE '%CashOut%' 
 		AND ci.username NOT LIKE '%ClearBal%'
 
-	--DELETE FROM #Member
-	--WHERE custid IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_Customer_Archived_Exception WITH (NOLOCK))
+	DELETE FROM #Member
+	WHERE custid IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_Customer_Archived_Exception WITH (NOLOCK))
 
-	--DELETE FROM #Member
-	--WHERE custid IN (SELECT custid FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK))
+	DELETE FROM #Member
+	WHERE custid IN (SELECT custid FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK))
 
-	DELETE m
-	FROM #Member m
-		INNER JOIN Cust_TrackingLastBetDate b ON m.custid = b.CustID
+	--DELETE m
+	--FROM #Member m
+	--	INNER JOIN Cust_TrackingLastBetDate b ON m.custid = b.CustID
 
 	IF EXISTS(SELECT 1 FROM #Member)
 	BEGIN
