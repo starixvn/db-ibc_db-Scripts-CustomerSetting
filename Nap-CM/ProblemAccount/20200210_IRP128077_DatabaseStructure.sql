@@ -10,11 +10,10 @@ GO
 ALTER TABLE Licensees ADD IsAcknowledgement BIT NULL
 GO
 
---Step 2: run this script at @DBCUST/CustDB
-USE CUSTDB
-GO
+--Step 2: run this script at @DBCUST/CustDB & DBACC/bodb02
+--Then add table Dep_CustVIP into replication pub CustDB_CustSetting
 
---create table Dep_CustVIP
+--script create table Dep_CustVIP
 CREATE TABLE Dep_CustVIP (
 	CustID INT NOT NULL,
 	ModifiedDate DATETIME NULL,
@@ -27,6 +26,7 @@ CONSTRAINT [PK_Dep_CustVIP] PRIMARY KEY CLUSTERED
 GO
 
 --add new column to mark player has void tickets
+--deploy this script on DBCUST/CustDB only
 ALTER TABLE ProblemAccount ADD isMarkVoid BIT NULL DEFAULT 0
 GO
 
