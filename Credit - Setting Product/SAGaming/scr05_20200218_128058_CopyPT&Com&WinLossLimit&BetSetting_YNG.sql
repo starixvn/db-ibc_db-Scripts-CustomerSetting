@@ -1,7 +1,7 @@
 /*
 	Created: 20200218@Tiara
 	Date: 20200218
-	Task: Copy PT & Comm & WinLossLimit for SA Gaming from Allbet - UUS [Redmine: #128128]
+	Task: Copy PT & Comm & WinLossLimit for SA Gaming from Allbet - YNG [Redmine: #128128]
 	DB: DBCUST/CustDB
 	
 */ 
@@ -18,6 +18,7 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
@@ -25,20 +26,30 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN	
 
-	DECLARE @ProductID TINYINT = 39
+	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 244
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
+	DECLARE @MaxPT TINYINT, @Currency INT
+	SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
+	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
 	FROM dbo.ProductSettingDetail WITH (NOLOCK)
 	WHERE ProductID = @ProductID AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
-
-
+	
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
+	)
+	CREATE TABLE #MemberTempBatch
+	(
+		CustID				INT PRIMARY KEY CLUSTERED	
 	)
 
 	CREATE TABLE #SMATemp
@@ -47,6 +58,9 @@ BEGIN
 		roleid TINYINT
 	)
 	
+	CREATE TABLE #tmpSTListSMA (BettypeID INT PRIMARY KEY, StakeLevelList VARCHAR(500))
+
+
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
@@ -58,9 +72,15 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
-	DECLARE @MaxPT TINYINT, @Currency INT
-	SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
-	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
+	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
+	FROM #SMATemp SMA CROSS JOIN StakeLevel ST
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE ST.GameTypeID BETWEEN 3001 AND 3007
+	ORDER BY ST.GameTypeID
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
@@ -169,8 +189,43 @@ BEGIN
 		CROSS APPLY dbo.LossLimit_GlobalSetting cs WITH(NOLOCK)
 	WHERE dest.SettingType = 6 AND cs.ExchangeId = @Currency AND cs.ProductId = @ProductID
 
+--------------------------------------BetSetting-------------------------------------------------
+	--Agent Level
+	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
+										   ,[SportType]
+										   ,[BetType]
+										   ,[StakeLevelList]) 
+	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
+	FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+	CROSS JOIN  #SMATemp t
+	WHERE ExchangeId=@currency
+
+	--Member Level
+
+	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
+	BEGIN
+		DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		INSERT INTO dbo.CustStakeLevel_Member([CustID]
+										   ,[SportType]
+										   ,[BetType]
+										   ,[StakeLevelList]
+										   ,LastUpdated) 
+		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+		CROSS JOIN  #MemberTempBatch t
+		WHERE ExchangeId=@currency
+		GROUP BY t.custid, TB.BettypeID
+
+		TRUNCATE TABLE #MemberTempBatch
+	END
+
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
+	DROP TABLE #tmpSTListSMA
 	DROP TABLE #DestinationSportBetType	
 
 END
@@ -197,7 +252,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.currency = 20
+	AND ci.currency = 72
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -209,7 +264,7 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #supers
+	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@srecommend = custid	
 	WHERE isfinished = 0
@@ -250,7 +305,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.currency = 20
+	AND ci.currency = 72
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

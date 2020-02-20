@@ -15,12 +15,19 @@ BEGIN
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
-
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+
 
 	
 	DECLARE @Sporttype SMALLINT 
@@ -28,10 +35,8 @@ BEGIN
 	SELECT @Sporttype = 244
 
 	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM GameGroup WITH(ROWLOCK,UPDLOCK) WHERE RefSportType=@Sporttype AND IsDeposit=0
 	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
 	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID BETWEEN 3001 AND 3007
-
 
 	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
 	BEGIN
@@ -42,6 +47,38 @@ BEGIN
 	BEGIN
 		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
 	END	
+
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustPTSetting3rd_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustPTSetting3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustPTSetting3rd_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustPTSetting3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+	
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustDiscount3rd_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustDiscount3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustDiscount3rd_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustDiscount3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustWinLossLimit_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustDiscount3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+
+	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustWinLossLimit_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
+	BEGIN
+		DELETE TOP (3000) FROM CustDiscount3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
+	END	
+
+
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

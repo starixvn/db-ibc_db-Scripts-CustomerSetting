@@ -852,3 +852,5 @@ INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,Excha
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
 FROM #temp T WITH(NOLOCK)
 WHERE T.GameTypeID BETWEEN 3001 AND 3007
+
+DROP TABLE #temp

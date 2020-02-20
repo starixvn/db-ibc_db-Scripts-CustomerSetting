@@ -10,4 +10,5 @@ GO
 UPDATE ps
 SET ps.SettingStatus = 0
 FROM dbo.ProductSettingDetail ps WITH(ROWLOCK,UPDLOCK)
-WHERE ProductID = 39 AND SportType=244
+WHERE ProductID = 41 AND (SportType = 244 OR SportType = 211)
+

@@ -50,7 +50,7 @@ BEGIN
 	CREATE TABLE #SMAList_CommSetting (custid INT, Discount DECIMAL(9,8))
 	CREATE TABLE #MemberList_CommSetting (custid INT, SuperDiscount DECIMAL(9,8), MasterDiscount DECIMAL(9,8), AgentDiscount DECIMAL(9,8), PlayerDiscount DECIMAL(9,8))
 
-	DECLARE @ProductID TINYINT = 39
+	DECLARE @ProductID TINYINT = 41
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
