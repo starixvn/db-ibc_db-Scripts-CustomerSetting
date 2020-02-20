@@ -24,7 +24,7 @@ WHERE ci.roleid = 4
 		AND ci.custid > @MaxCustID	
 		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
-DECLARE @ProductID TINYINT = 39
+DECLARE @ProductID TINYINT = 41
 
 
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	

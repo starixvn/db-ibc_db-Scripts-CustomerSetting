@@ -16,7 +16,7 @@ DECLARE @SettingStatus TINYINT,
 		@IsDisabled BIT 
 	
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
-SELECT @ProductID = 41 --SA Gaming
+SELECT @ProductID = 41 --LiveCasino dummy product
 SELECT @IsSync = 1
 SELECT @IsHidden = 0
 SELECT @IsDisabled = 0
