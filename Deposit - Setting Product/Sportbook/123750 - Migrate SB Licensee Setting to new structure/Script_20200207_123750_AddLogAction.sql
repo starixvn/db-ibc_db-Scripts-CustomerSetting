@@ -17,6 +17,7 @@ SELECT	200001, 'Add Position Taking For Super', 'Acc_Dep_CustomerInsMember_Com',
 SELECT	200002, 'Add Position Taking For Master', 'Acc_Dep_CustomerInsMember_SAg', 1, 1, NULL UNION ALL
 SELECT	200003, 'Add Position Taking For Agent', 'Acc_Dep_CustomerInsMember_MAg', 1, 1, NULL UNION ALL
 SELECT	200004, 'Add Position Taking For Member', 'Acc_Dep_CustomerInsMember_Ag', 1, 1, NULL UNION ALL
+SELECT	200005, 'Update Member''s Position Taking When On/Off BA', 'Lrf_CustomerUpdMemberBA_PositionTaking', 1, 1, NULL UNION ALL
 SELECT	201001, 'Add Bet Setting For Super', 'Acc_Dep_CustomerInsMember_Com', 1, 3, NULL UNION ALL
 SELECT	201002, 'Add Bet Setting For Master', 'Acc_Dep_CustomerInsMember_SAg', 1, 3, NULL UNION ALL
 SELECT	201003, 'Add Bet Setting For Agent', 'Acc_Dep_CustomerInsMember_MAg', 1, 3, NULL UNION ALL
