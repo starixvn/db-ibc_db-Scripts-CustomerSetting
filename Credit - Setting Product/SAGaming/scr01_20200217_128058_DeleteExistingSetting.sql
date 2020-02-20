@@ -15,9 +15,6 @@ BEGIN
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
-	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
@@ -33,50 +30,130 @@ BEGIN
 	DECLARE @Sporttype SMALLINT 
 	
 	SELECT @Sporttype = 244
-
-	DELETE FROM ProductSettingDetail WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM ProductStatusProfile WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	DELETE FROM StakeLevel WITH(ROWLOCK,UPDLOCK)  WHERE GametypeID BETWEEN 3001 AND 3007
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustStakeLevel_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustPTSetting3rd_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustPTSetting3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
-
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustPTSetting3rd_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustPTSetting3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
 	
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustDiscount3rd_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustDiscount3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
+	CREATE TABLE #supers (custid INT)
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustDiscount3rd_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustDiscount3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
+	INSERT INTO #supers(custid)
+	SELECT ci.custid
+	FROM customer ci WITH (NOLOCK) 
+		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+		LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND cs.isinternal = 0
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0			
+		AND ci.Site<>'CN88'
+		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustWinLossLimit_Agent WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustDiscount3rd_Member WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
 
-	WHILE EXISTS(SELECT TOP 1 1 CustID FROM CustWinLossLimit_Member WITH(NOLOCK)  WHERE SportType=@Sporttype)
-	BEGIN
-		DELETE TOP (3000) FROM CustDiscount3rd_Agent WITH(ROWLOCK,UPDLOCK) WHERE SportType=@Sporttype
-	END	
+	SELECT DISTINCT cg.custid 
+	INTO #CustStakeLevel_Agent
+	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustStakeLevel_Member
+	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype	
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustPTSetting3rd_Agent
+	FROM dbo.CustPTSetting3rd_Agent cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustPTSetting3rd_Member
+	FROM dbo.CustPTSetting3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.AgentID
+	INTO #CustPTGroupSetting3rd_Member
+	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.CustID
+	INTO #CustDiscount3rd_Member
+	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.CustID
+	INTO #CustDiscount3rd_Agent
+	FROM dbo.CustDiscount3rd_Agent cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.CustID
+	INTO #CustWinLossLimit_Agent
+	FROM dbo.CustWinLossLimit_Agent cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.CustID
+	INTO #CustWinLossLimit_Member
+	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustDiscount3rd_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustDiscount3rd_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustWinLossLimit_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
 
 
 END	

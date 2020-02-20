@@ -48,6 +48,10 @@ SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #temp t
 WHERE MaxStake > 999
 
+DELETE S
+FROM StakeLevel S WITH (ROWLOCK)
+WHERE S.GameTypeID BETWEEN 3001 AND 3007 AND S.ExchangeId IN (20)
+
 INSERT INTO StakeLevel(GameTypeID, MinLabel, MaxLabel, MinStake,MaxStake, ExchangeID)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
 FROM #temp T WITH(NOLOCK) 

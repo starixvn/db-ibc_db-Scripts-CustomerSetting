@@ -81,64 +81,64 @@ WHERE SettingType = 1
 
 --Agent Level
 INSERT INTO dbo.CustPTSetting3rd_Agent
-	(	[CustID]
-		,[SportType]
-		,[BetType]
-		,[IsLive]
-		,[SuperPT]
-		,[MasterPT]
-		,[AgentPT]
-		,[IsAutoMasterPT]
-		,[AutoMasterPT]
-		,[IsAutoSuperPT]
-		,[AutoSuperPT]
-		,[MinPT]
-		,[MaxPT])
+		(	[CustID]
+			,[SportType]
+			,[BetType]
+			,[IsLive]
+			,[SuperPT]
+			,[MasterPT]
+			,[AgentPT]
+			,[IsAutoMasterPT]
+			,[AutoMasterPT]
+			,[IsAutoSuperPT]
+			,[AutoSuperPT]
+			,[MinPT]
+			,[MaxPT])
 SELECT 
-	cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
-	,cs.spositiontaking  *100
-	,cs.mpositiontaking  *100
-	,cs.apositiontaking  *100
-	,cs.isautompositiontaking
-	,cs.autompositiontaking *100
-	,cs.isautopositiontaking 
-	,cs.autopositiontaking  *100
-	,CASE WHEN ci.roleid = 4 THEN 0 ELSE co.minpositiontaking  *100 END
-	,@MaxPT
-FROM dbo.custSetting cs WITH(NOLOCK) 
-	INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype
-	INNER JOIN #SMATemp ci ON ci.custid = cs.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 1
-	
+		C.custid, dest.tSportType, dest.tBetType, dest.IsLive
+		,C.SuperPT
+		,C.MasterPT
+		,C.AgentPT
+		,C.IsAutoMasterPT
+		,C.AutoMasterPT
+		,C.IsAutoSuperPT
+		,C.AutoSuperPT
+		,C.MinPT
+		,C.MaxPT
+FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK) 
+		INNER JOIN #SMATemp ci ON ci.custid = C.custid
+		CROSS APPLY #DestinationSportBetType dest
+WHERE C.bettype = @fBetType AND C.SportType = @fSportType
+		AND dest.SettingType = 1
+
 --Member Level
 INSERT INTO dbo.CustPTSetting3rd_Member
-	(	[custid]
-		,	[sporttype]
-		,	[bettype]
-		,	[islive]
-		,	[superPT]
-		,	[masterPT]
-		,	[agentPT]
-		,	[IsAutoMasterPT]
-		,	[AutoMasterPT]
-		,	[IsAutoSuperPT]
-		,	[AutoSuperPT])
+		(	[custid]
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+			,	[IsAutoMasterPT]
+			,	[AutoMasterPT]
+			,	[IsAutoSuperPT]
+			,	[AutoSuperPT])
 SELECT 
-	cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
-	,cs.spositiontaking  *100
-	,cs.mpositiontaking  *100
-	,cs.apositiontaking  *100
-	,cs.isautompositiontaking
-	,cs.autompositiontaking *100
-	,cs.isautopositiontaking 
-	,cs.autopositiontaking  *100
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #MemberTemp ci ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 1
+		C.custid, dest.tSportType, dest.tBetType, dest.IsLive
+		,C.SuperPT
+		,C.MasterPT
+		,C.AgentPT
+		,C.IsAutoMasterPT
+		,C.AutoMasterPT
+		,C.IsAutoSuperPT
+		,C.AutoSuperPT
+FROM CustPTSetting3rd_Member C WITH(NOLOCK) 
+		INNER JOIN #MemberTemp ci ON C.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
+		AND dest.SettingType = 1
+
 	
 --------------------------------------Commission Setting-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -148,59 +148,54 @@ WHERE SettingType = 3
 --Agent Level
 INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
 SELECT ci.custid, dest.tsporttype, dest.tbettype, 
-		CASE	WHEN roleid = 4 THEN cs.sdiscount
-				WHEN roleid = 3 THEN cs.adiscount
-				WHEN roleid = 2 THEN cs.discount END
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #SMATemp ci  ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 3
+			C.Discount
+FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
+		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
+		AND dest.SettingType = 3
 		 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.playerdiscount, cs.discount, cs.adiscount, cs.sdiscount
-FROM dbo.custSetting cs WITH(NOLOCK)
-	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-	AND dest.SettingType = 3
-
+SELECT ci.custid, dest.tsporttype, dest.tbettype, C.PlayerDiscount, C.AgentDiscount, C.MasterDiscount, C.SuperDiscount
+FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK)
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustID = ci.custid
+		CROSS APPLY #DestinationSportBetType dest
+WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
+		AND dest.SettingType = 3
 --------------------------------------Win Loss Limit-------------------------------------------------
 --Agent Level
 INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
-FROM #SMATemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
-	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 	
-WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
+SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
+FROM CustWinLossLimit_Agent C WITH (NOLOCK) INNER JOIN #SMATemp ci WITH (NOLOCK) ON C.CustId = CI.CustID
+		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+WHERE dest.SettingType = 6 AND C.bettype = @fBetType AND C.SportType = @fSportType
 
 --Member Level
 INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, cs.DefaultLossLimit, 1
-FROM #MemberTemp ci WITH(NOLOCK) 
-	INNER JOIN dbo.LossLimit_GlobalSetting cs WITH(NOLOCK) ON ci.currency = cs.ExchangeId
-	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
-WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
+SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
+FROM dbo.CustWinLossLimit_Member C WITH (NOLOCK) INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustId = CI.CustID
+		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+WHERE dest.SettingType = 6 AND C.bettype = @fBetType AND C.SportType = @fSportType
 --------------------------------------BetSetting-------------------------------------------------
 --Agent Level
-	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
+INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
 										   ,[SportType]
 										   ,[BetType]
 										   ,[StakeLevelList]) 
-	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
-	CROSS JOIN  #SMATemp t
-	WHERE ExchangeId=t.currency
+SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
+FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+CROSS JOIN  #SMATemp t
+WHERE ExchangeId=t.currency
 
-	--Member Level
+--Member Level
 
-	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
-	BEGIN
-		DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
+WHILE EXISTS(SELECT 1 FROM #MemberTemp)
+BEGIN
+	DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
 
-		IF @@ROWCOUNT=0
-			BREAK		
+	IF @@ROWCOUNT=0
+		BREAK		
 
 		INSERT INTO dbo.CustStakeLevel_Member([CustID]
 										   ,[SportType]
@@ -209,12 +204,12 @@ WHERE dest.SettingType = 6 AND cs.ProductId = @ProductID
 										   ,LastUpdated) 
 		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
 		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
-		CROSS JOIN  #MemberTempBatch t
+										CROSS JOIN  #MemberTempBatch t
 		WHERE S.ExchangeId=t.currency
 		GROUP BY t.custid, TB.BettypeID
 
-		TRUNCATE TABLE #MemberTempBatch
-	END
+	TRUNCATE TABLE #MemberTempBatch
+END
 /*******************************CUST PRODUCTSTATUS TABLE*******************************/
 DECLARE @BitmapOrder TINYINT = 20
 
