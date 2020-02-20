@@ -1,7 +1,7 @@
 /*
     Created: Elodie
     Date: 20200116
-    Task: Set Currency Modifier = 1 for RMB Licensee
+    Task: Add Currency Modifier history
     DB: DBCUST/CustDB
 */ 
 USE CustDB
