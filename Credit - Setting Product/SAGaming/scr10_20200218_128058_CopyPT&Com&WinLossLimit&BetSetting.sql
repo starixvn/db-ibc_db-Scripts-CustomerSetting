@@ -170,6 +170,10 @@ BEGIN
 	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
 		AND dest.SettingType = 3
 --------------------------------------Win Loss Limit-------------------------------------------------
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 6
+	
 	--Agent Level
 	INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
