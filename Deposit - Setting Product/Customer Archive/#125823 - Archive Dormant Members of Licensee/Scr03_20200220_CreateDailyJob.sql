@@ -6,11 +6,6 @@
 */
 USE [msdb]
 GO
-
-/****** Object:  Job [bodb02 - Archive Job : Daily Update Cust_TrackingLastBetDate]    Script Date: 2/20/2020 2:21:06 PM ******/
-EXEC msdb.dbo.sp_delete_job @job_id=N'05165d1a-4fa6-4191-8e54-3e7832147edb', @delete_unused_schedule=1
-GO
-
 /****** Object:  Job [bodb02 - Archive Job : Daily Update Cust_TrackingLastBetDate]    Script Date: 2/20/2020 2:21:06 PM ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
