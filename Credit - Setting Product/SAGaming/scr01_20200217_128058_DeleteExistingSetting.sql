@@ -1,11 +1,11 @@
 /*
 	Created: Tiara
 	Date: 20200217
-	Task: Delete existing data of Sporttype=244. RedmineID:#128058
+	Task: Delete existing data of Sporttype=244 - UUS. RedmineID:#128058
 	DB: DBCust/CustDB
 */
  
- -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+-- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@target VARCHAR(20)
@@ -15,23 +15,26 @@ BEGIN
 	
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+
+	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN	
+	IF dbo.f_CheckRepTable('site') = 0 RETURN
+	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
+	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
+	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN	
+		IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 
-
-	
 	DECLARE @Sporttype SMALLINT 
-	
-	SELECT @Sporttype = 244
-	
 	CREATE TABLE #supers (custid INT)
+
+	SELECT @Sporttype = 244
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -44,7 +47,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
 		AND ci.Site<>'CN88'
-		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
+		AND ci.currency = 20
 
 
 	SELECT DISTINCT cg.custid 
@@ -154,8 +157,6 @@ BEGIN
 	FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
-
-
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -169,4 +170,3 @@ EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
-
