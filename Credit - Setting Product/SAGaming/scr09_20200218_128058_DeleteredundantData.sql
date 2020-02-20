@@ -46,4 +46,57 @@ FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)
 WHERE SportType = @SportType
 	AND cg.custid > @maxcustID
 
+DELETE cg
+FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID= c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType
+	AND cg.AgentID > @maxcustID
+
+
+DELETE cg
+FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+
+DELETE cg
+FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid		
+WHERE SportType = @SportType
+	AND cg.custid > @maxcustID
+
+
+
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
