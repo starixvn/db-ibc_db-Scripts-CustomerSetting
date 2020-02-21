@@ -22,7 +22,7 @@ WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.custid > @MaxCustID	
-		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
+		AND ci.currency NOT IN (45,13,75,76,77) --Won (KRW), RMB, PTU, PS, PTH
 
 DECLARE @ProductID TINYINT = 41
 

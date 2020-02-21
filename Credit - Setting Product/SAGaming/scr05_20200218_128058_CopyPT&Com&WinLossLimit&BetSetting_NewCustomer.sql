@@ -24,7 +24,7 @@ WHERE ci.roleid = 4
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-			AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
+			AND ci.currency NOT IN (45,13,75,76,77) --Won (KRW), RMB, PTU, PS, PTH
 
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)

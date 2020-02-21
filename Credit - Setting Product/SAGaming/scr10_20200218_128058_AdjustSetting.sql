@@ -34,7 +34,7 @@ BEGIN
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
-		AND ci.currency NOT IN (13,45) --Won (KRW) and RMB
+		AND ci.currency NOT IN (45,13,75,76,77) --Won (KRW), RMB, PTU, PS, PTH
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 

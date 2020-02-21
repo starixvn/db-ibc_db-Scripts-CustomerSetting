@@ -62,7 +62,7 @@ WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
-		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
+		AND ci.currency NOT IN (45,13,75,76,77) --Won (KRW), RMB, PTU, PS, PTH
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -114,7 +114,7 @@ WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid	
-		AND ci.currency NOT IN (45,13) --Won (KRW) and RMB
+		AND ci.currency NOT IN (45,13,75,76,77) --Won (KRW), RMB, PTU, PS, PTH
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
