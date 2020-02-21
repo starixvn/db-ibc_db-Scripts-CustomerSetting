@@ -7,10 +7,14 @@
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
+	@target VARCHAR(20)
 AS
 BEGIN
 	SET NOCOUNT ON
 	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN -- run at dbcust only
+		
 	IF dbo.f_CheckRepTable('CustVirtualSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN	
 	
@@ -85,6 +89,20 @@ GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
 
 ------------------------------------------------------	
--- BEGIN STEP 2: Run this SP at DBCUST/CUSTDB Only -----
+-- BEGIN STEP 2: Run this SP at replicated DB -----
 --------------------------------------------------------------------------------------
-EXEC Acc_CustSetting3rd_19
+EXEC Acc_CustSetting3rd_19 @target = 'REPLICATED'
+
+
+-- END STEP 2: Run this SP at replicated DB -----
+-----------------------------------------------------------------------------------
+
+---
+-- BEGIN STEP 3: Run this SP at DBCust -----
+-------------------------------------------------	
+EXEC Acc_CustSetting3rd_19 @target = 'DBCUST'
+
+
+-- END STEP 3: Run this SP at DBCust -----
+-------------------------------------------------
+
