@@ -40,11 +40,11 @@ CREATE TABLE #TmpProductSettingDetail
 )
 
 INSERT INTO #TmpProductSettingDetail (SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue)
-SELECT p.SettingType, 244, 3001, P.IsLive, @ProductID, P.MaxPT, P.MaxDiscount, @IsSync, @IsHidden, @IsDisabled, 2, P.DisplayOrder, P.SettingStatus, P.IntervalValue
+SELECT p.SettingType, 244, 3001, P.IsLive, @ProductID, P.MaxPT, P.MaxDiscount, @IsSync, @IsHidden, @IsDisabled, 2, P.DisplayOrder, P.SettingStatus, CASE WHEN SettingType = 3 THEN P.IntervalValue ELSE 0 END 
 FROM ProductSettingDetail P WITH (NOLOCK)
 WHERE P.SportType = 211 -- SA Gaming copied from Allbet
 UNION ALL
-SELECT p.SettingType, 211, 2401, P.IsLive, @ProductID, P.MaxPT, P.MaxDiscount, @IsSync, @IsHidden, @IsDisabled, 2, P.DisplayOrder, P.SettingStatus, P.IntervalValue
+SELECT p.SettingType, 211, 2401, P.IsLive, @ProductID, P.MaxPT, P.MaxDiscount, @IsSync, @IsHidden, @IsDisabled, 2, P.DisplayOrder, P.SettingStatus, CASE WHEN SettingType = 3 THEN P.IntervalValue ELSE 0 END 
 FROM ProductSettingDetail P WITH (NOLOCK)
 WHERE P.SportType = 211 -- New Allbet under dummy product copied from Allbet
 
