@@ -50,8 +50,7 @@ WHERE P.SportType = 211 -- New Allbet under dummy product copied from Allbet
 
 DELETE P
 FROM ProductSettingDetail P WITH (ROWLOCK)
-WHERE P.ProductID = @ProductID
-
+WHERE P.SportType IN (211,244)
 
 INSERT INTO	dbo.ProductSettingDetail
 		(SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue)
@@ -60,7 +59,3 @@ FROM #TmpProductSettingDetail T WITH (NOLOCK)
 WHERE T.ProductID = @ProductID
 
 DROP TABLE #TmpProductSettingDetail
-
-
-
-
