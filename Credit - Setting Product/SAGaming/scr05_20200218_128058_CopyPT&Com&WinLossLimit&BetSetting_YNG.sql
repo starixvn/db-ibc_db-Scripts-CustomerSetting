@@ -170,6 +170,11 @@ BEGIN
 	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
 		AND dest.SettingType = 3
 --------------------------------------Win Loss Limit-------------------------------------------------
+
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 6
+
 	--Agent Level
 	INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
@@ -248,7 +253,6 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.currency = 72
-
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -259,7 +263,7 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Supers
+	UPDATE TOP (1) #supers
 	SET isfinished = 1
 		,@srecommend = custid	
 	WHERE isfinished = 0

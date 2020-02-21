@@ -36,11 +36,6 @@ BEGIN
 		AND s.islicensee = 0
 		AND ci.currency NOT IN (13,45) --Won (KRW) and RMB
 
-	INSERT INTO #supers(custid)
-	SELECT custid
-	FROM CustInfo ci WITH (NOLOCK)
-	WHERE custid IN (15)
-
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
 	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY)
@@ -66,42 +61,42 @@ BEGIN
 
 	--AGENT LEVEL
 	INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking)
-	SELECT ci.custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking
-	FROM dbo.custSetting cs WITH(NOLOCK) 
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
-		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-		INNER JOIN dbo.CustOverride co WITH(NOLOCK) ON cs.custid = co.custid and cs.sporttype = co.sporttype and cs.bettype = co.bettype	
-		INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid 
-	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
-			AND ci.roleid IN (2,3,4) AND Enabled = 1
-			AND (
-				cs.SPositionTaking * 100 <> csa.SuperPT
-				OR cs.MPositionTaking * 100 <> csa.MasterPT
-				OR cs.APositionTaking * 100 <> csa.AgentPT
-				OR cs.IsAutoMPositionTaking <> csa.IsAutoMasterPT
-				OR cs.AutoMPositionTaking * 100 <> csa.AutoMasterPT
-				OR cs.IsAutoPositionTaking <> csa.IsAutoSuperPT
-				OR cs.AutoPositionTaking * 100 <> csa.AutoSuperPT
-				OR (ci.roleid <> 4 AND co.MinPositionTaking  * 100 <> csa.MinPT)
-				)
+	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT, C.MinPT
+	FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
+		INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH (NOLOCK) ON C.custid = csa.custid
+		WHERE C.bettype = @fBetType	AND C.SportType = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+										AND ci.roleid IN (2,3,4) AND Enabled = 1
+										AND (
+										C.SuperPT <> csa.SuperPT
+										OR C.MasterPT  <> csa.MasterPT
+										OR C.AgentPT <> csa.AgentPT
+										OR C.IsAutoMasterPT <> csa.IsAutoMasterPT
+										OR C.AutoMasterPT  <> csa.AutoMasterPT
+										OR C.IsAutoSuperPT <> csa.IsAutoSuperPT
+										OR C.AutoSuperPT  <> csa.AutoSuperPT
+										OR C.MinPT  <> csa.MinPT
+										)
+
 
 	--MEMBER LEVEL
 	INSERT INTO #MemberList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking)
-	SELECT ci.custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking
-	FROM dbo.custSetting cs WITH(NOLOCK)
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
+	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
+	FROM dbo.CustPTSetting3rd_Member C WITH(NOLOCK)
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-		INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid 
-	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+		INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = c.custid 
+	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (
-				cs.SPositionTaking  * 100 <> csm.SuperPT
-				OR cs.MPositionTaking  * 100 <> csm.MasterPT
-				OR cs.APositionTaking  * 100 <> csm.AgentPT
-				OR cs.IsAutoMPositionTaking <> csm.IsAutoMasterPT
-				OR cs.AutoMPositionTaking * 100 <> csm.AutoMasterPT
-				OR cs.IsAutoPositionTaking <> csm.IsAutoSuperPT
-				OR cs.AutoPositionTaking  * 100 <> csm.AutoSuperPT
+				C.SuperPT <> csm.SuperPT
+				OR C.MasterPT <> csm.MasterPT
+				OR C.AgentPT<> csm.AgentPT
+				OR C.IsAutoMasterPT <> csm.IsAutoMasterPT
+				OR C.AutoMasterPT  <> csm.AutoMasterPT
+				OR C.IsAutoSuperPT <> csm.IsAutoSuperPT
+				OR C.AutoSuperPT <> csm.AutoSuperPT
 				)
 	
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
@@ -129,28 +124,28 @@ BEGIN
 		IF @@ROWCOUNT = 0 BREAK	
 
 		UPDATE csa
-		SET	csa.SuperPT = cs.spositiontaking  *100
-			,csa.MasterPT =  cs.mpositiontaking  *100
-			,csa.AgentPT = cs.apositiontaking  *100
-			,csa.IsAutoMasterPT = cs.isautompositiontaking
-			,csa.AutoMasterPT = cs.autompositiontaking *100
-			,csa.IsAutoSuperPT = cs.isautopositiontaking 
-			,csa.AutoSuperPT = cs.autopositiontaking  *100
-			,csa.MinPT = cs.minpositiontaking *100
+		SET	csa.SuperPT = C.spositiontaking 
+			,csa.MasterPT =  C.mpositiontaking 
+			,csa.AgentPT = C.apositiontaking
+			,csa.IsAutoMasterPT = C.isautompositiontaking
+			,csa.AutoMasterPT = C.autompositiontaking
+			,csa.IsAutoSuperPT = C.isautopositiontaking 
+			,csa.AutoSuperPT = C.autopositiontaking
+			,csa.MinPT = C.minpositiontaking
 		FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #SMAList_PT cs WITH(NOLOCK) ON csa.custid = cs.custid
+			INNER JOIN #SMAList_PT C WITH(NOLOCK) ON csa.custid = C.custid
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 	
 		UPDATE csm
-		SET	csm.SuperPT = cs.spositiontaking  *100
-			,csm.MasterPT =  cs.mpositiontaking  *100
-			,csm.AgentPT = cs.apositiontaking  *100
-			,csm.IsAutoMasterPT = cs.isautompositiontaking
-			,csm.AutoMasterPT = cs.autompositiontaking *100
-			,csm.IsAutoSuperPT = cs.isautopositiontaking 
-			,csm.AutoSuperPT = cs.autopositiontaking  *100
+		SET	csm.SuperPT = C.spositiontaking 
+			,csm.MasterPT =  C.mpositiontaking 
+			,csm.AgentPT = C.apositiontaking
+			,csm.IsAutoMasterPT = C.isautompositiontaking
+			,csm.AutoMasterPT = C.autompositiontaking
+			,csm.IsAutoSuperPT = C.isautopositiontaking 
+			,csm.AutoSuperPT = C.autopositiontaking 
 		FROM dbo.CustPTSetting3rd_Member csm WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #MemberList_PT cs WITH (NOLOCK) ON cs.custid = csm.custid
+			INNER JOIN #MemberList_PT C WITH (NOLOCK) ON C.custid = csm.custid
 		WHERE csm.bettype = @tBetType AND csm.sporttype = @tSportType
 
 		--Adjust m4 = s4 if m4 > s4; a4 = m4 if a4 > m4; a4 = s4 if a4 > s4
@@ -171,34 +166,29 @@ BEGIN
 
 	--Agent Level
 	INSERT INTO #SMAList_CommSetting (custid, Discount)
-	SELECT cs.custid, 
-			CASE	WHEN roleid = 4 THEN cs.sdiscount
-					WHEN roleid = 3 THEN cs.adiscount
-					WHEN roleid = 2 THEN cs.discount END
-	FROM dbo.custSetting cs WITH(NOLOCK)
-		INNER JOIN custInfo c WITH(NOLOCK) ON cs.CustID = c.custid
-		INNER JOIN #supers s WITH (NOLOCK) ON c.srecommend = s.custid
-		INNER JOIN dbo.CustDiscount3rd_Agent csa WITH(NOLOCK) ON csa.custid = cs.custid
-	WHERE cs.sporttype = @fSportType AND cs.bettype = @fBetType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
-			AND c.roleid IN (2,3,4) AND Enabled = 1
-			AND (CASE	WHEN roleid = 4 THEN cs.sdiscount
-						WHEN roleid = 3 THEN cs.adiscount
-						WHEN roleid = 2 THEN cs.discount END <> csa.Discount)
+	SELECT C.custid, C.Discount
+	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
+		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.CustDiscount3rd_Agent csa WITH(NOLOCK) ON csa.custid = C.custid
+	WHERE C.sporttype = @fSportType AND c.bettype = @fBetType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+			AND ci.roleid IN (2,3,4) AND Enabled = 1
+			AND C.Discount <> csa.Discount
 
 	--Member Level
 	INSERT INTO #MemberList_CommSetting (custid, SuperDiscount, MasterDiscount, AgentDiscount, PlayerDiscount)
-	SELECT cs.custid, cs.sdiscount, cs.adiscount, cs.discount, cs.playerdiscount
-	FROM dbo.custSetting cs WITH(NOLOCK)
-		INNER JOIN custInfo c WITH(NOLOCK) ON cs.CustID = c.custid
-		INNER JOIN #supers s WITH (NOLOCK) ON c.srecommend = s.custid
-		INNER JOIN dbo.CustDiscount3rd_Member csm WITH(NOLOCK) ON csm.custid = cs.custid
-	WHERE cs.sporttype = @fSportType AND cs.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
-			AND c.roleid = 1 AND Enabled = 1
+	SELECT C.custid, C.SuperDiscount, C.MasterDiscount, C.AgentDiscount, C.PlayerDiscount
+	FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK) 
+		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.CustDiscount3rd_Member csm WITH(NOLOCK) ON csm.custid = C.custid
+	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+			AND ci.roleid = 1 AND Enabled = 1
 			AND (
-				cs.sdiscount <> csm.SuperDiscount
-				OR cs.adiscount <> csm.MasterDiscount
-				OR cs.discount <> csm.AgentDiscount			
-				OR cs.playerdiscount <> csm.PlayerDiscount
+				C.SuperDiscount<> csm.SuperDiscount
+				OR C.MasterDiscount <> csm.MasterDiscount
+				OR C.AgentDiscount	 <> csm.AgentDiscount			
+				OR C.PlayerDiscount <> csm.PlayerDiscount
 				)
 
 	WHILE (1 = 1)
