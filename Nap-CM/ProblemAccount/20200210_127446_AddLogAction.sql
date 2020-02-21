@@ -20,7 +20,7 @@ SELECT	1172,  'Close Problem Account', 'NAP_ProblemAccount_ClosedAccount', @IsIn
 SELECT	31619, 'Unmark Problem Account - S/M/A', 'NAP_ProblemAccount_RemoveCustomer', @IsInternal, @ActionType, NULL UNION ALL
 SELECT	31623, 'Unmark Problem Account - Member', 'NAP_ProblemAccount_RemoveCustomer', @IsInternal, @ActionType, NULL UNION ALL
 SELECT	31618, 'Remove Reduced Bet Limit - Following Upline', 'NAP_ProblemAccount_RemoveReduceBetLimit', @IsInternal, @ActionType, NULL UNION ALL
-SELECT	31617, 'Update Preventive Action', 'NAP_ProblemAccount_PreventiveActionUpd', @IsInternal, @ActionType, NULL UNION ALL
+SELECT	31617, 'Update Problem Account', 'NAP_ProblemAccount_UpdateCustomer', @IsInternal, @ActionType, NULL UNION ALL
 
 SELECT	31620, 'Update Review Status for MA', 'NAP_ProblemAccount_ReviewStatusUpd', 0, @ActionType, NULL UNION ALL
 SELECT	31621, 'Update Review Status for Agent', 'NAP_ProblemAccount_ReviewStatusUpd', 0, @ActionType, NULL UNION ALL
