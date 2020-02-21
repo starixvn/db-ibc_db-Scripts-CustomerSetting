@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20200221
 */ 
---	Macau Games & PP & Card Club &Spadegaming
+--	AllBet
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@srecommend INT	
 	,@ProductId TINYINT
@@ -106,7 +106,7 @@ BEGIN
 	END
 
 	----------------------------------------Stake Level------------------------------------
-	DECLARE @MemberBatchStakeLevel table(CustId INT, IsDisable BIT)
+	DECLARE @MemberBatchStakeLevel TABLE(CustId INT, IsDisable BIT)
 	--Update super
 	UPDATE cs
 	SET cs.StakeLevelList = T1.LowestUpline
@@ -235,7 +235,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 
 			@srecommend = @srecommend
-			,@ProductId = 22
+			,@ProductId = 21
 			--,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 						
@@ -290,7 +290,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 
 		@srecommend = @srecommend
-		,@ProductId = 22
+		,@ProductId = 21
 		--,@maxcustid = @max_custid
 		,@target = 'REPLICATED'
 						
