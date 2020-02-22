@@ -112,9 +112,11 @@ BEGIN
 	SET cs.StakeLevelList = T1.LowestUpline
 	FROM CustStakeLevel_Agent cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp s ON s.CustID = cs.CustID
+		INNER JOIN #SportBettypeFilter7 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS LowestUpline
 					FROM StakeLevel SL WITH(NOLOCK)
-					ORDER BY MaxStake, SL.MinStake
+					WHERE SL.ExchangeId = @Currency AND SL.GameTypeID = cs.BetType
+					ORDER BY MaxStake, SL.MinStake, sl.GameGroupID
 					) T1 -- Direct Upline
 	WHERE cs.CustID = @srecommend
 		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR s.IsDisable = 1)
@@ -123,14 +125,15 @@ BEGIN
 	UPDATE cs
 	SET cs.StakeLevelList = T1.LowestUpline
 	FROM CustStakeLevel_Agent cs WITH (ROWLOCK)
+		INNER JOIN #SportBettypeFilter7 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 		INNER JOIN #SMATemp m ON m.CustID = cs.CustID
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.CustID
-		INNER JOIN CustStakeLevel_Agent css ON ci.srecommend = css.CustID	 		
+		INNER JOIN CustStakeLevel_Agent css ON ci.srecommend = css.CustID AND cs.SportType = css.SportType AND cs.BetType = css.BetType
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS LowestUpline
 					FROM (SELECT CAST(val AS INT) AS val
 						  FROM dbo.strSplit(css.StakeLevelList,','))  CD
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-						ORDER BY MaxStake, SL.MinStake
+						ORDER BY MaxStake, SL.MinStake, sl.GameGroupID
 					) T1 -- Direct Upline
 	WHERE m.roleid = 3
 		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR m.IsDisable = 1)
@@ -139,14 +142,15 @@ BEGIN
 	UPDATE cs
 	SET cs.StakeLevelList = T1.LowestUpline
 	FROM CustStakeLevel_Agent cs WITH (ROWLOCK)
+		INNER JOIN #SportBettypeFilter7 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 		INNER JOIN #SMATemp a ON a.CustID = cs.CustID
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.CustID
-		INNER JOIN CustStakeLevel_Agent csm ON ci.mrecommend = csm.CustID	 		
+		INNER JOIN CustStakeLevel_Agent csm ON ci.mrecommend = csm.CustID AND cs.SportType = csm.SportType AND cs.BetType = csm.BetType	 		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS LowestUpline
 					FROM (SELECT CAST(val AS INT) AS val
 						  FROM dbo.strSplit(csm.StakeLevelList,','))  CD
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-						ORDER BY MaxStake, SL.MinStake
+						ORDER BY MaxStake, SL.MinStake, sl.GameGroupID
 					) T1 -- Direct Upline
 	WHERE a.roleid = 2
 		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR a.IsDisable = 1)
@@ -166,14 +170,15 @@ BEGIN
 		UPDATE cs
 		SET cs.StakeLevelList = T1.LowestUpline
 		FROM dbo.CustStakeLevel_Member cs WITH (ROWLOCK)
+			INNER JOIN #SportBettypeFilter7 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 			INNER JOIN @MemberBatchStakeLevel mem ON mem.CustID = cs.CustID
 			INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.CustID
-			INNER JOIN CustStakeLevel_Agent csa ON ci.recommend = csa.CustID	 		
+			INNER JOIN CustStakeLevel_Agent csa ON ci.recommend = csa.CustID AND cs.SportType = csa.SportType AND cs.BetType = csa.BetType	 	 		
 			CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS LowestUpline
 						FROM (SELECT CAST(val AS INT) AS val
 								FROM dbo.strSplit(csa.StakeLevelList,','))  CD
 								INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-							ORDER BY MaxStake, SL.MinStake
+							ORDER BY MaxStake, SL.MinStake, sl.GameGroupID
 						) T1 -- Direct Upline
 		WHERE (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR mem.IsDisable = 1)
 		
