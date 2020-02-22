@@ -207,7 +207,7 @@
 					OR CAST(SUBSTRING(cs.bitmapVirtual,50,1) AS INT) IN (40,20,15)
 					
 					--Live FT OU & 1H OU All sports -60%, -80%, -85%, -86%, -88% to -90%
-					OR CAST(SUBSTRING(cs.bitmapVirtual,1,1) AS INT) IN (40,20,15,14,12)					
+					OR CAST(SUBSTRING(cs.bitmapVirtual,4,1) AS INT) IN (40,20,15,14,12)					
 					OR CAST(SUBSTRING(cs.bitmapVirtual,10,1) AS INT) IN (40,20,15,14,12)
 					OR CAST(SUBSTRING(cs.bitmapVirtual,14,1) AS INT) IN (40,20,15,14,12)
 					OR CAST(SUBSTRING(cs.bitmapVirtual,24,1) AS INT) IN (40,20,15,14,12)
