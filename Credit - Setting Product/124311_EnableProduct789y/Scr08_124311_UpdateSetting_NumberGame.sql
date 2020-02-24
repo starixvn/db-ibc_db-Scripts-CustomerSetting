@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	Number Game & Happy 5
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_16]
 	@srecommend INT	
 	,@target VARCHAR(20)
 AS
@@ -120,7 +120,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_16 
 			@srecommend = @srecommend
 			,@ProductId = 5
 			--,@maxcustid = @max_custid
@@ -175,7 +175,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_16 
 		@srecommend = @srecommend
 		,@ProductId = 5
 		--,@maxcustid = @max_custid

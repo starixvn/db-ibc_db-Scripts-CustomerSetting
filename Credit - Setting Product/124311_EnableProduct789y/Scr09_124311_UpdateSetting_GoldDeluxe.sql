@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	Gold Deluxe
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_17]
 	@srecommend INT	
 	,@target VARCHAR(20)
 AS
@@ -211,7 +211,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_17 
 			@srecommend = @srecommend
 			--,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
@@ -265,7 +265,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_17 
 		@srecommend = @srecommend
 		--,@maxcustid = @max_custid
 		,@target = 'DBCUST'

@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20191219
 */ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_18]
 	@Custid INT,
 	@target VARCHAR(20)
 AS
@@ -99,7 +99,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid
+	EXEC dbo.Acc_CustomerInfo_Execrep_18 @custid = @Custid
 			,@target = 'REPLICATED'			
 	WAITFOR DELAY '00:00:0.100'
 END
@@ -150,7 +150,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid
+	EXEC dbo.Acc_CustomerInfo_Execrep_18 @custid = @Custid
 			,@target = 'DBCUST'			
 	WAITFOR DELAY '00:00:0.100'
 END

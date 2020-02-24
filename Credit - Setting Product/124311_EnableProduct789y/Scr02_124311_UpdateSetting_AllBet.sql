@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	AllBet
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_12]
 	@srecommend INT	
 	,@ProductId TINYINT
 	,@target VARCHAR(20)
@@ -238,7 +238,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_12 
 			@srecommend = @srecommend
 			,@ProductId = 21
 			--,@maxcustid = @max_custid
@@ -293,7 +293,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_12 
 		@srecommend = @srecommend
 		,@ProductId = 21
 		--,@maxcustid = @max_custid

@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	NG2
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_CustSetting_14]
 	@srecommend INT	
 	,@ProductId TINYINT
 	,@target VARCHAR(20)
@@ -203,7 +203,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_14 
 			@srecommend = @srecommend
 			,@ProductId = 23
 			--,@maxcustid = @max_custid
@@ -258,7 +258,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 
+	EXEC dbo.Acc_CustSetting_14 
 		@srecommend = @srecommend
 		,@ProductId = 23
 		--,@maxcustid = @max_custid

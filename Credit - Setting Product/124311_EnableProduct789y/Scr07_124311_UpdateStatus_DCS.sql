@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20191219
 */ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_16]
 	@Custid INT,
 	@xmlStrBitmap VARCHAR(MAX),
 	@target VARCHAR(20)
@@ -149,7 +149,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
+	EXEC dbo.Acc_CustomerInfo_Execrep_16 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
 			,@target = 'REPLICATED'			
 	WAITFOR DELAY '00:00:0.100'
 END
@@ -245,7 +245,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
+	EXEC dbo.Acc_CustomerInfo_Execrep_16 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
 			,@target = 'DBCUST'			
 	WAITFOR DELAY '00:00:0.100'
 END
