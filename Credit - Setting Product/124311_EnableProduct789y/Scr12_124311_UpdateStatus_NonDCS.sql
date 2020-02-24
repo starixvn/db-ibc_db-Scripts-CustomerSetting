@@ -62,51 +62,10 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @Custid INT, @max_custid INT, @xmlStrBitmap XML
+DECLARE @Custid INT, @max_custid INT
 
 --SELECT @max_custid = xxx
 
-CREATE TABLE #ProductID
-(
-	Productid INT
-)
-
-INSERT INTO #ProductID(Productid) 
-	SELECT 5 UNION ALL
-    SELECT 21 UNION ALL
-	SELECT 22 UNION ALL
-	SELECT 24 UNION ALL
-	SELECT 28 UNION ALL
-	SELECT 23
-	
-CREATE TABLE #SportBettypeFilterStatus
-(
-	Productid INT,
-	SportType INT,
-	Bettype INT
-)
-
-INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
-SELECT P.Productid,SportType,Bettype
-FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,13) AS F
-
-INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
-SELECT P.Productid,SportType,Bettype
-FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,11) AS F
-
---Create XML string that contains bitmap order of all products 
-SET @xmlStrBitmap = (
-		SELECT (
-					SELECT P.bitmapOrder AS '@b'
-							, 0	AS '@s'
-					FROM dbo.ProductStatusProfile P WITH (NOLOCK)
-							INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype 
-					FOR XML PATH('r')
-							, TYPE
-						)
-				FOR XML PATH('root')
-					, TYPE
-				)
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT (0))
 
 INSERT INTO #supers(custid)
@@ -142,64 +101,22 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid
 			,@target = 'REPLICATED'			
 	WAITFOR DELAY '00:00:0.100'
 END
 
 --Drop all temp tables
-DROP TABLE #ProductID
-DROP TABLE #SportBettypeFilterStatus
 DROP TABLE #supers
 GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @Custid INT, @max_custid INT, @BitmapOrder TINYINT, @xmlStrBitmap XML
+DECLARE @Custid INT, @max_custid INT
 
 --SELECT @max_custid = xxx
 
-CREATE TABLE #ProductID
-(
-	Productid INT
-)
-
-INSERT INTO #ProductID(Productid) 
-	SELECT 5 UNION ALL
-    SELECT 21 UNION ALL
-	SELECT 22 UNION ALL
-	SELECT 24 UNION ALL
-	SELECT 28 UNION ALL
-	SELECT 23
-	
-CREATE TABLE #SportBettypeFilterStatus
-(
-	Productid INT,
-	SportType INT,
-	Bettype INT
-)
-
-INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
-SELECT P.Productid,SportType,Bettype
-FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,13) AS F
-
-INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
-SELECT P.Productid,SportType,Bettype
-FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,11) AS F
-
-SET @xmlStrBitmap = (
-		SELECT (
-					SELECT P.bitmapOrder AS '@b'
-							, 0	AS '@s'
-					FROM dbo.ProductStatusProfile P WITH (NOLOCK)
-							INNER JOIN #SportBettypeFilterStatus F WITH (NOLOCK) ON P.Sporttype = F.SportType AND P.Bettype = F.Bettype 
-					FOR XML PATH('r')
-							, TYPE
-						)
-				FOR XML PATH('root')
-					, TYPE
-				)
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #supers(custid)
@@ -235,14 +152,12 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @Custid) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid,@xmlStrBitmap=@xmlStrBitmap
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @Custid
 			,@target = 'DBCUST'			
 	WAITFOR DELAY '00:00:0.100'
 END
 
 --Drop all temp tables
-DROP TABLE #ProductID
-DROP TABLE #SportBettypeFilterStatus
 DROP TABLE #supers
 
 PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
