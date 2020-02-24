@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20200221
 */ 
---	Virtual Sports, Lottery
+--	Lottery
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@srecommend INT	
 	,@ProductId TINYINT
@@ -22,7 +22,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	
 	DECLARE @BitmapOrder TINYINT, @Currency INT, @MaxLossGlobal SMALLMONEY, @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY
-	SELECT @MinBetDefault = 3, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000
+	SELECT @MinBetDefault = 2, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000
 
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
 	SELECT @MaxLossGlobal = MinLossLimit FROM dbo.LossLimit_GlobalSetting WITH (NOLOCK) WHERE ProductId = @ProductId AND ExchangeId = @Currency
@@ -196,7 +196,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 
 			@srecommend = @srecommend
-			,@ProductId = 5
+			,@ProductId = 28
 			--,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 						
@@ -251,7 +251,7 @@ BEGIN
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 
 		@srecommend = @srecommend
-		,@ProductId = 5
+		,@ProductId = 28
 		--,@maxcustid = @max_custid
 		,@target = 'DBCUST'
 						
