@@ -17,6 +17,11 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustWinLimit') = 0 RETURN
 	
+	DECLARE @Currency INT, @MaxLossGlobal SMALLMONEY
+
+	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
+	SELECT @MaxLossGlobal = MinLossLimit FROM dbo.LossLimit_GlobalSetting WITH (NOLOCK) WHERE ProductId = 6 AND ExchangeId = @Currency
+
 	CREATE TABLE #DownlineTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
@@ -46,7 +51,7 @@ BEGIN
 			BREAK
 		
 		UPDATE cs
-		SET cs.MaxWinLimit = 3
+		SET cs.MaxWinLimit = 3, cs.MaxLossLimit = @MaxLossGlobal 
 		FROM CustWinLimit cs WITH (ROWLOCK) 
 			INNER JOIN @MemberBatch ci ON ci.CustID = cs.CustId
 		WHERE  cs.SportType = 208 AND cs.BetType = 2101
