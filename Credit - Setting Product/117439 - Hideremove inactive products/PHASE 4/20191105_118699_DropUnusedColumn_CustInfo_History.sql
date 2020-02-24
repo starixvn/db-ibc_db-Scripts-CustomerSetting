@@ -127,8 +127,8 @@ ALTER TABLE dbo.CustInfo_History  DROP COLUMN MaxPerMatch44
 GO
 ALTER TABLE dbo.CustInfo_History  DROP COLUMN MaxtransferP2P
 GO
-ALTER TABLE dbo.CustInfo_History  DROP COLUMN MaxWinLiveCasino
-GO
+--ALTER TABLE dbo.CustInfo_History  DROP COLUMN MaxWinLiveCasino
+--GO
 ALTER TABLE dbo.CustInfo_History  DROP COLUMN SyncBingo
 GO
 ALTER TABLE dbo.CustInfo_History  DROP COLUMN SyncLiveCasino
