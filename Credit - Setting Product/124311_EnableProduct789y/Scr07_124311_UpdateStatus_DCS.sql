@@ -22,12 +22,43 @@ BEGIN
 	   AND dbo.f_CheckRepTable ('customer') = 1
 	   )
 		RETURN
+
+	CREATE TABLE #DownlineTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		IsFinishedStatus BIT DEFAULT(0)
+	)	
+
+	INSERT INTO #DownlineTemp (CustID)
+	SELECT ci.custid
+	FROM Custinfo ci WITH (NOLOCK)
+	WHERE srecommend = @Custid 
+		AND Enabled = 1 
+
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	UPDATE cs
-	SET bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrBitmap)))					
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	WHERE ci.srecommend  = @Custid
+	DECLARE @MemberBatch table(CustId INT)
+
+	WHILE(1=1)
+	BEGIN
+		UPDATE TOP (5000) t 		 
+		SET IsFinishedStatus = 1
+		OUTPUT INSERTED.CustID INTO @MemberBatch
+		FROM #DownlineTemp t
+		WHERE IsFinishedStatus = 0
+	 
+		IF @@ROWCOUNT = 0
+			BREAK
+		
+		UPDATE cs
+		SET bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrBitmap)))					
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+			INNER JOIN @MemberBatch ci ON cs.CustID = ci.CustID
+
+		DELETE @MemberBatch
+	END
+
+	--Drop all temp tables
+	DROP TABLE #DownlineTemp
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
