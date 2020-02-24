@@ -99,7 +99,7 @@ SELECT P.Productid,SportType,Bettype
 FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,11) AS F
 
 --Create XML string that contains bitmap order of all products 
-SET @xmlStrBitmap = (
+SET @xmlBitmap = (
 		SELECT (
 					SELECT P.bitmapOrder AS '@b'
 							, 0	AS '@s'
@@ -195,7 +195,7 @@ INSERT INTO #SportBettypeFilterStatus (Productid,SportType,Bettype)
 SELECT P.Productid,SportType,Bettype
 FROM #ProductID P CROSS APPLY dbo.f_CustSetting_SportBetTypeSettingSelect(P.Productid,11) AS F
 
-SET @xmlStrBitmap = (
+SET @xmlBitmap = (
 		SELECT (
 					SELECT P.bitmapOrder AS '@b'
 							, 0	AS '@s'
