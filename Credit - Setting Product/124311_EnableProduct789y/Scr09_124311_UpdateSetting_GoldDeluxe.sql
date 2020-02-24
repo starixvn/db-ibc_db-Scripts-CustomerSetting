@@ -268,7 +268,7 @@ BEGIN
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 
 		@srecommend = @srecommend
 		--,@maxcustid = @max_custid
-		,@target = 'REPLICATED'
+		,@target = 'DBCUST'
 						
 	WAITFOR DELAY '00:00:0.1'
 END

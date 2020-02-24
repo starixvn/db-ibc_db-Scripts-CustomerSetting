@@ -248,7 +248,7 @@ BEGIN
 		@srecommend = @srecommend
 		,@ProductId = 22
 		--,@maxcustid = @max_custid
-		,@target = 'REPLICATED'
+		,@target = 'DBCUST'
 						
 	WAITFOR DELAY '00:00:0.1'
 END
