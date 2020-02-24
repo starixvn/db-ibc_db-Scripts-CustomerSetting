@@ -66,7 +66,7 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @Custid INT, @max_custid INT, @xmlStrBitmap XML
+DECLARE @Custid INT, @max_custid INT, @xmlStrBitmap VARCHAR(MAX), @xmlBitmap XML
 
 --SELECT @max_custid = xxx
 
@@ -111,6 +111,9 @@ SET @xmlStrBitmap = (
 				FOR XML PATH('root')
 					, TYPE
 				)
+
+SELECT @xmlStrBitmap = CONVERT(VARCHAR(MAX),@xmlBitmap)
+
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT (0))
 
 INSERT INTO #supers(custid)
@@ -160,7 +163,7 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @Custid INT, @max_custid INT, @BitmapOrder TINYINT, @xmlStrBitmap XML
+DECLARE @Custid INT, @max_custid INT, @BitmapOrder TINYINT, @xmlStrBitmap VARCHAR(MAX), @xmlBitmap XML
 
 --SELECT @max_custid = xxx
 
@@ -204,6 +207,9 @@ SET @xmlStrBitmap = (
 				FOR XML PATH('root')
 					, TYPE
 				)
+
+SELECT @xmlStrBitmap = CONVERT(VARCHAR(MAX),@xmlBitmap)
+
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #supers(custid)
