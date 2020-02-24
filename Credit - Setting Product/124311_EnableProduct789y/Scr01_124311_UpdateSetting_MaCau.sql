@@ -29,7 +29,7 @@ BEGIN
 	SELECT @BitmapOrder = ps.bitmapOrder
 	FROM dbo.ProductStatusProfile ps WITH (NOLOCK) 
 		INNER JOIN dbo.ProductSettingDetail psd WITH (NOLOCK) ON psd.SportType = ps.Sporttype AND psd.BetType = ps.Bettype
-	WHERE psd.ProductID = @ProductId
+	WHERE psd.ProductID = @ProductId AND psd.SettingType = 13
 
 	CREATE TABLE #MemberTemp
 	(

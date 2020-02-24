@@ -70,14 +70,12 @@ BEGIN
 	SELECT 215, 2592, 1, 100, 500 UNION ALL
 	SELECT 218, 2681, 1, 500, 500 UNION ALL
 	SELECT 218, 2682, 1, 500, 500 UNION ALL
-	SELECT 218, 2683, 1, 500, 500 UNION ALL
+	SELECT 218, 2683, 1, 500, 500
 
-	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
-	
 	SELECT @BitmapOrder = ps.bitmapOrder
 	FROM dbo.ProductStatusProfile ps WITH (NOLOCK) 
 		INNER JOIN dbo.ProductSettingDetail psd WITH (NOLOCK) ON psd.SportType = ps.Sporttype AND psd.BetType = ps.Bettype
-	WHERE psd.ProductID = @ProductId
+	WHERE psd.ProductID = @ProductId AND psd.SettingType = 11
 
 	CREATE TABLE #MemberTemp
 	(
