@@ -125,7 +125,7 @@ BEGIN
 		INNER JOIN #SMATemp sma ON sma.CustID = cs.custid
 		INNER JOIN #SportBettypeFilter9 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 		INNER JOIN #BetSettingDefault bd ON bd.SportType = cs.SportType AND bd.Bettype = cs.BetType
-	WHERE cs.MinBet < 1 OR cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR sma.IsDisable = 1
+	WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR sma.IsDisable = 1
 	
 	WHILE(1=1)
 	BEGIN
@@ -146,7 +146,7 @@ BEGIN
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
 			INNER JOIN #SportBettypeFilter9 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
 			INNER JOIN #BetSettingDefault bd ON bd.SportType = cs.SportType AND bd.Bettype = cs.BetType
-		WHERE cs.MinBet < 1 OR cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR mem.IsDisable = 1
+		WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR mem.IsDisable = 1
 		
 		DELETE @MemberBatchBetSetting
 	END

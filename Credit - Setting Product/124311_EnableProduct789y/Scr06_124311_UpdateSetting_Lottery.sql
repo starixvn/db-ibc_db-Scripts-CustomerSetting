@@ -116,7 +116,7 @@ BEGIN
 	FROM dbo.CustBetSetting3rd_Agent cs WITH (ROWLOCK) 
 		INNER JOIN #SMATemp sma ON sma.CustID = cs.custid
 		INNER JOIN #SportBettypeFilter2 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
-	WHERE cs.MinBet < 1 OR cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR sma.IsDisable = 1
+	WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR sma.IsDisable = 1
 	
 	WHILE(1=1)
 	BEGIN
@@ -136,7 +136,7 @@ BEGIN
 		FROM dbo.CustBetSetting3rd_Member cs WITH (ROWLOCK) 
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
 			INNER JOIN #SportBettypeFilter2 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
-		WHERE cs.MinBet < 1 OR cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR mem.IsDisable = 1
+		WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR mem.IsDisable = 1
 		
 		DELETE @MemberBatchBetSetting
 	END
