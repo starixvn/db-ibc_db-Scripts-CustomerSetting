@@ -57,14 +57,7 @@ BEGIN
 		StakeLevelList VARCHAR(100) NULL
 	)
 
-	CREATE CLUSTERED INDEX CIX_CustGameType ON #CustGameTypeMaster (CustId, GameTypeId)
-
-	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
-	SELECT ci.custid, GameTypeId, cs.StakeLevelList
-	FROM #SMATemp ci WITH (NOLOCK)
-		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
-	WHERE roleid = 3
-		AND cs.GameTypeID IN (1701,1702)
+	CREATE CLUSTERED INDEX CIX_CustGameType ON #CustGameTypeMaster (CustId, GameTypeId)	
 
 	----------------------------------------Win Loss Limit------------------------------------
 	DECLARE @MemberBatch table(CustId INT)
@@ -129,6 +122,13 @@ BEGIN
 		AND css.CustID = @srecommend
 		AND cs.GameTypeID IN (1701,1702)
 		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR m.IsDisable = 1)
+
+	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
+	SELECT ci.custid, GameTypeId, cs.StakeLevelList
+	FROM #SMATemp ci WITH (NOLOCK)
+		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
+	WHERE roleid = 3
+		AND cs.GameTypeID IN (1701,1702)
 
 	--Update agent
 	UPDATE cs
