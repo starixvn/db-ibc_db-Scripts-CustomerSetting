@@ -50,6 +50,23 @@ BEGIN
 		AND roleid = 1  
 		AND Enabled = 1 
 
+	CREATE TABLE #CustGameTypeMaster
+	(
+		CustID INT NOT NULL,
+		GameTypeID INT NOT NULL,
+		StakeLevelList VARCHAR(100) NULL
+	)
+
+	CREATE CLUSTERED INDEX CIX_CustGameType ON #CustGameTypeMaster (CustId, GameTypeId)
+
+	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
+	SELECT ci.custid, roleid, cs.StakeLevelList
+	FROM Custinfo ci WITH (NOLOCK)
+		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
+	WHERE srecommend = @srecommend 
+		AND roleid = 3
+		AND Enabled = 1 
+
 	----------------------------------------Win Loss Limit------------------------------------
 	DECLARE @MemberBatch table(CustId INT)
 	UPDATE cs
@@ -110,6 +127,7 @@ BEGIN
 						ORDER BY MinStake, MaxStake ASC
 					) T1 -- Direct Upline
 	WHERE m.roleid = 3
+		AND css.CustID = @srecommend
 		AND cs.GameTypeID IN (1701,1702)
 		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR m.IsDisable = 1)
 
@@ -119,7 +137,7 @@ BEGIN
 	FROM CustGameType cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp a ON a.CustID = cs.CustID
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.CustID
-		INNER JOIN CustGameType csm ON ci.mrecommend = csm.CustID AND cs.GameTypeID = csm.GameTypeID	 		
+		INNER JOIN #CustGameTypeMaster csm ON ci.mrecommend = csm.CustID AND cs.GameTypeID = csm.GameTypeID	 		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS LowestUpline
 					FROM (SELECT CAST(val AS INT) AS val
 						  FROM dbo.strSplit(csm.StakeLevelList,','))  CD
