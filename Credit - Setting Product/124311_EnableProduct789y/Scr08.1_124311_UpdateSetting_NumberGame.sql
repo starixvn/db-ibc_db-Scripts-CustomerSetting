@@ -30,7 +30,7 @@ FROM dbo.CustSetting3rd cs WITH (NOLOCK)
 WHERE cs.sporttype IN (161,164)
 	AND cs.maxbet < 1 
 	AND ci.DisableNumber = 0
-	AND ((cs.sporttype = 161 AND ci.maxpermatch161 > 1 AND ci.MaxPerBall161 > 1) OR (cs.sporttype = 164 AND ci.maxpermatch164 > 1))
+	AND ((cs.sporttype = 161 AND ci.maxpermatch161 >= 1 AND ci.MaxPerBall161 >= 1) OR (cs.sporttype = 164 AND ci.maxpermatch164 >= 1))
 
 UPDATE ci
 SET ci.maxpermatch161 = CASE WHEN c.sporttype = 161 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
