@@ -30,7 +30,7 @@ CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSp
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
 FROM dbo.ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
+WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 
