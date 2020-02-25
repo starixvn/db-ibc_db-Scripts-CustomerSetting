@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	Number Game & Happy 5
-DECLARE @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY, @MaxPerBallDefault SMALLMONEY
+DECLARE @MinBetDefault MONEY, @MaxBetDefault MONEY, @MaxPerMatchDefault MONEY, @MaxPerBallDefault MONEY
 SELECT @MinBetDefault = 3, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000, @MaxPerBallDefault = 1000
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))

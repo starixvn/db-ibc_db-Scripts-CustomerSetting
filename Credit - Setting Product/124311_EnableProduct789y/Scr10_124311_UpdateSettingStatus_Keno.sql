@@ -17,7 +17,7 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	
-	DECLARE @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY
+	DECLARE @MinBetDefault MONEY, @MaxBetDefault MONEY, @MaxPerMatchDefault MONEY
 	SELECT @MinBetDefault = 2, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000
 
 	CREATE TABLE #DownlineTemp
