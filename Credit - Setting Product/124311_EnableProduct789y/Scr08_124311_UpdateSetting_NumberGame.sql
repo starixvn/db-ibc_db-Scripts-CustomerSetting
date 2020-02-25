@@ -60,8 +60,7 @@ BEGIN
 									OR (cs.sporttype = 164 AND mem.MaxPerMatch164 < 1) THEN @MaxBetDefault ELSE cs.MaxBet END
 			FROM dbo.CustSetting3rd cs WITH (ROWLOCK) 
 				INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
-			WHERE cs.sporttype IN (161,164)
-				AND (mem.IsDisable = 1 OR mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.MaxPerMatch164 < 1)
+			WHERE cs.sporttype IN (161,164)				
 		END
 
 		UPDATE ci 
@@ -70,8 +69,6 @@ BEGIN
 			ci.maxpermatch164 = CASE WHEN mem.MaxPerMatch164 < 1 OR mem.IsDisable = 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
 		FROM dbo.custInfo ci WITH (ROWLOCK)
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = ci.custid
-		WHERE mem.IsDisable = 1
-			OR mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.MaxPerMatch164 < 1
 		
 		DELETE @MemberBatchBetSetting
 	END
