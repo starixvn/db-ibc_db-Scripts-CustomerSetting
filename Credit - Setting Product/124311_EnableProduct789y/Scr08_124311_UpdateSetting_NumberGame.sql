@@ -5,7 +5,7 @@
 	Date: 20200221
 */ 
 --	Number Game & Happy 5
-ALTER PROCEDURE [dbo].[Acc_CustSetting_16]
+ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_16]
 	@srecommend INT	
 	,@target VARCHAR(20)
 AS
@@ -51,23 +51,27 @@ BEGIN
 		IF @@ROWCOUNT = 0
 			BREAK
 
+		IF dbo.f_CheckRepTable('CustSetting3rd') = 1
+		BEGIN
+			UPDATE cs
+			SET cs.MinBet = CASE WHEN mem.IsDisable = 1 OR (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1)) 
+									OR (cs.sporttype = 164 AND mem.MaxPerMatch164 < 1) THEN @MinBetDefault ELSE cs.MinBet END,
+				cs.MaxBet = CASE WHEN mem.IsDisable = 1 OR (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1))
+									OR (cs.sporttype = 164 AND mem.MaxPerMatch164 < 1) THEN @MaxBetDefault ELSE cs.MaxBet END
+			FROM dbo.CustSetting3rd cs WITH (ROWLOCK) 
+				INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
+			WHERE cs.sporttype IN (161,164)
+				AND (mem.IsDisable = 1 OR mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.MaxPerMatch164 < 1)
+		END
+
 		UPDATE ci 
-		SET ci.maxpermatch161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
-			ci.MaxPerBall161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
-			ci.maxpermatch164 = CASE WHEN mem.MaxPerMatch164 < 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
+		SET ci.maxpermatch161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.IsDisable = 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
+			ci.MaxPerBall161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.IsDisable = 1 THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
+			ci.maxpermatch164 = CASE WHEN mem.MaxPerMatch164 < 1 OR mem.IsDisable = 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
 		FROM dbo.custInfo ci WITH (ROWLOCK)
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = ci.custid
 		WHERE mem.IsDisable = 1
-			OR (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.MaxPerMatch164 < 1)
-
-		UPDATE cs
-		SET cs.MinBet = @MinBetDefault,
-			cs.MaxBet = @MaxBetDefault
-		FROM dbo.CustSetting3rd cs WITH (ROWLOCK) 
-			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
-		WHERE mem.IsDisable = 1
-			OR (cs.sporttype = 161 AND (cs.minbet < 1 OR cs.maxbet < 1 OR mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1))
-			OR (cs.sporttype = 164 AND (cs.minbet < 1 OR cs.maxbet < 1 OR mem.MaxPerMatch164 < 1))
+			OR mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.MaxPerMatch164 < 1
 		
 		DELETE @MemberBatchBetSetting
 	END
@@ -122,9 +126,8 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_CustSetting_16 
+	EXEC dbo.Acc_CustomerInfo_Execrep_16 
 			@srecommend = @srecommend
-			,@ProductId = 5
 			--,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 						
@@ -177,9 +180,8 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_CustSetting_16 
+	EXEC dbo.Acc_CustomerInfo_Execrep_16 
 		@srecommend = @srecommend
-		,@ProductId = 5
 		--,@maxcustid = @max_custid
 		,@target = 'DBCUST'
 						
