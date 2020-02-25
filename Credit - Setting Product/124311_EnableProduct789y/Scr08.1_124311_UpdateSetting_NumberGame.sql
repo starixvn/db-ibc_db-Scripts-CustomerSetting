@@ -23,10 +23,7 @@ WHERE ci.roleid = 4
 	--AND s.islicensee = 0
 	AND Enabled = 1 
 
-UPDATE ci
-SET ci.maxpermatch161 = CASE WHEN cs.sporttype = 161 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
-	ci.MaxPerBall161 = CASE WHEN cs.sporttype = 161 THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
-	ci.maxpermatch164 = CASE WHEN cs.sporttype = 164 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
+SELECT DISTINCT ci.custid, cs.sporttype, cs.bettype INTO #CustList
 FROM dbo.CustSetting3rd cs WITH (NOLOCK) 
 	INNER JOIN dbo.custInfo ci WITH (ROWLOCK)ON ci.CustID = cs.custid
 	INNER JOIN #supers s ON ci.srecommend = s.custid
@@ -35,13 +32,15 @@ WHERE cs.sporttype IN (161,164)
 	AND ci.DisableNumber = 0
 	AND ((cs.sporttype = 161 AND ci.maxpermatch161 > 1 AND ci.MaxPerBall161 > 1) OR (cs.sporttype = 164 AND ci.maxpermatch164 > 1))
 
+UPDATE ci
+SET ci.maxpermatch161 = CASE WHEN c.sporttype = 161 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
+	ci.MaxPerBall161 = CASE WHEN c.sporttype = 161 THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
+	ci.maxpermatch164 = CASE WHEN c.sporttype = 164 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
+FROM dbo.custInfo ci WITH (ROWLOCK)
+	INNER JOIN #CustList c ON ci.custid = c.custid
+
 UPDATE cs
 SET cs.MinBet = @MinBetDefault,
 	cs.MaxBet = @MaxBetDefault
 FROM dbo.CustSetting3rd cs WITH (ROWLOCK) 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.CustID = cs.custid
-	INNER JOIN #supers s ON ci.srecommend = s.custid
-WHERE cs.sporttype IN (161,164)
-	AND cs.maxbet < 1 
-	AND ci.DisableNumber = 0
-	AND ((cs.sporttype = 161 AND ci.maxpermatch161 > 1 AND ci.MaxPerBall161 > 1) OR (cs.sporttype = 164 AND ci.maxpermatch164 > 1))
+	INNER JOIN #CustList ci WITH (NOLOCK) ON ci.CustID = cs.custid AND ci.sporttype = cs.sporttype AND ci.bettype = cs.bettype
