@@ -29,7 +29,10 @@ BEGIN
 	SELECT custid, ci.roleid
 	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE ci.srecommend = @Custid AND ci.custid <= @maxcustid
+	WHERE ci.srecommend = @Custid 
+		AND ci.Enabled = 1
+		AND ci.custid <= @maxcustid
+		
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),

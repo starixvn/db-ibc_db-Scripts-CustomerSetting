@@ -32,7 +32,7 @@ DECLARE @ProductID TINYINT = 41
 	SELECT CI.custid, ci.roleid
 	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK) INNER JOIN #supers S WITH (NOLOCK) ON CI.srecommend = S.custid
-
+	WHERE ci.Enabled = 1
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
