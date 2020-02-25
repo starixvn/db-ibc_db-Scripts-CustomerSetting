@@ -60,7 +60,7 @@ BEGIN
 	CREATE CLUSTERED INDEX CIX_CustGameType ON #CustGameTypeMaster (CustId, GameTypeId)
 
 	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
-	SELECT ci.custid, roleid, cs.StakeLevelList
+	SELECT ci.custid, GameTypeId, cs.StakeLevelList
 	FROM #SMATemp ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	WHERE roleid = 3
