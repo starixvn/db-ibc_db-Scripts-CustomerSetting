@@ -17,16 +17,16 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	
-	DECLARE @MinBetDefault MONEY, @MaxBetDefault MONEY, @MaxPerMatchDefault MONEY, @MaxPerBallDefault MONEY
+	DECLARE @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY, @MaxPerBallDefault SMALLMONEY
 	SELECT @MinBetDefault = 3, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000, @MaxPerBallDefault = 1000
 
 	CREATE TABLE #DownlineTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		IsDisable BIT,
-		MaxPerMatch161 MONEY,
-		MaxPerMatch164 MONEY,
-		MaxPerBall161 MONEY,
+		MaxPerMatch161 SMALLMONEY,
+		MaxPerMatch164 SMALLMONEY,
+		MaxPerBall161 SMALLMONEY,
 		IsFinishedBetLimit BIT DEFAULT(0)
 	)
 
@@ -38,7 +38,7 @@ BEGIN
 		AND (ci.DisableNumber = 1 OR ci.maxpermatch161 < 1 OR ci.maxpermatch164 < 1 OR ci.MaxPerBall161 < 1)
 
 	----------------------------------------BetSetting------------------------------------
-	DECLARE @MemberBatchBetSetting TABLE(CustId INT, IsDisable BIT, MaxPerMatch161 MONEY, MaxPerMatch164 MONEY, MaxPerBall161 MONEY)
+	DECLARE @MemberBatchBetSetting TABLE(CustId INT, IsDisable BIT, MaxPerMatch161 SMALLMONEY, MaxPerMatch164 SMALLMONEY, MaxPerBall161 SMALLMONEY)
 
 	WHILE(1=1)
 	BEGIN

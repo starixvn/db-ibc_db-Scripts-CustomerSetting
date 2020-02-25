@@ -17,7 +17,7 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustWinLimit') = 0 RETURN
 	
-	DECLARE @Currency INT, @MaxLossGlobal MONEY
+	DECLARE @Currency INT, @MaxLossGlobal SMALLMONEY
 
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
 	SELECT @MaxLossGlobal = MinLossLimit FROM dbo.LossLimit_GlobalSetting WITH (NOLOCK) WHERE ProductId = 6 AND ExchangeId = @Currency
