@@ -64,6 +64,7 @@ BEGIN
 	FROM #SMATemp ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	WHERE roleid = 3
+		AND cs.GameTypeID IN (1701,1702)
 
 	----------------------------------------Win Loss Limit------------------------------------
 	DECLARE @MemberBatch table(CustId INT)
