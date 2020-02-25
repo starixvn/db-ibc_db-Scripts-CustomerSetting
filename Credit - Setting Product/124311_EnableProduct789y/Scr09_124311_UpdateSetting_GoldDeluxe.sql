@@ -61,11 +61,9 @@ BEGIN
 
 	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
 	SELECT ci.custid, roleid, cs.StakeLevelList
-	FROM Custinfo ci WITH (NOLOCK)
+	FROM #SMATemp ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
-	WHERE srecommend = @srecommend 
-		AND roleid = 3
-		AND Enabled = 1 
+	WHERE roleid = 3
 
 	----------------------------------------Win Loss Limit------------------------------------
 	DECLARE @MemberBatch table(CustId INT)
