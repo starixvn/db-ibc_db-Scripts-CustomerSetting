@@ -17,10 +17,10 @@ GO
 CREATE TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate](
 	[CustId] [int] NOT NULL,
 	[IsLive] [bit] NOT NULL,
-	[SportType] [int] NOT NULL,
+	[SportType] [smallint] NOT NULL,
 	[VRLeagueGroupId] [int] NOT NULL,
 	[VRBettypeGroupId] [int] NOT NULL,
-	[BetType] [int] NOT NULL,
+	[BetType] [smallint] NOT NULL,
 	[VirtualMultiplier] [smallmoney] NULL,
 	[CreatedDate] [datetime] NULL,
 	CONSTRAINT [PK_VRSetting_AutoUpdate_VirtualRate] PRIMARY KEY CLUSTERED 
