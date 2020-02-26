@@ -11,8 +11,8 @@ SET NOCOUNT ON
 	SELECT vv.CustID, 
 		   vv.VRLeagueGroupID, 
 		   vv.VRBetTypeGroupID, 
-		   vv.BettypeId, 
-		   vv.SportID, 
+		   vv.BetType, 
+		   vv.SportType, 
 		   vv.VirtualMultiplier, 
 		   h.LevelID, 
 		   vrv.ValueID,
@@ -21,8 +21,8 @@ SET NOCOUNT ON
 		 INNER JOIN VRSetting_AutoUpdate_VirtualRate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
 			  AND h.VRBetTypeGroupID = vv.VRBetTypeGroupID
-			  AND h.BetType = vv.BettypeId
-			  AND h.SportType = vv.SportID
+			  AND h.BetType = vv.BetType
+			  AND h.SportType = vv.SportType
 		 LEFT JOIN VRCustSetting vr WITH(NOLOCK)
 		   ON vr.CustID = vv.CustID
 			  AND vr.LevelID = h.LevelID
@@ -35,8 +35,8 @@ SET NOCOUNT ON
 	SELECT vv.CustID, 
 		   vv.VRLeagueGroupID, 
 		   vv.VRBetTypeGroupID, 
-		   vv.BettypeId, 
-		   vv.SportID, 
+		   vv.BetType, 
+		   vv.SportType, 
 		   vv.VirtualMultiplier, 
 		   h.LevelID, 
 		   vrv.ValueID,
@@ -45,8 +45,8 @@ SET NOCOUNT ON
 		 INNER JOIN VRSetting_AutoUpdate_VirtualRate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
 			  AND h.VRBetTypeGroupID = vv.VRBetTypeGroupID
-			  AND h.BetType = vv.BettypeId
-			  AND h.SportType = vv.SportID
+			  AND h.BetType = vv.BetType
+			  AND h.SportType = vv.SportType
 		 LEFT JOIN VRCustSetting vr WITH(NOLOCK)
 		   ON vr.CustID = vv.CustID
 			  AND vr.LevelID = h.LevelID
@@ -55,7 +55,7 @@ SET NOCOUNT ON
 	WHERE vv.Islive = 0
 )
 ,TMP AS (
-	SELECT ISNULL(a1.SportID,a2.SportID) AS SportType
+	SELECT ISNULL(a1.SportType,a2.SportType) AS SportType
 		,ISNULL(a1.CustID,a2.CustID) AS CustID
 		,ISNULL(a1.LevelID,a2.LevelID) AS LevelID
 		,ISNULL(a1.ValueID,0) AS ValueIDLive 
@@ -65,8 +65,8 @@ SET NOCOUNT ON
 			ON a1.CustID = a2.CustID
 			AND a1.VRLeagueGroupID = a2.VRLeagueGroupID 
 			AND a1.VRBetTypeGroupID = a2.VRBetTypeGroupID
-			AND a1.BettypeId = a2.BettypeId
-			AND a1.SportID = a2.SportID
+			AND a1.BetType = a2.BetType
+			AND a1.SportType = a2.SportType
 	WHERE ISNULL(a1.ValueID,0) <> ISNULL(a1.OldValueID,0)
 		  OR ISNULL(a2.ValueID,0) <> ISNULL(a2.OldValueID,0)
 )

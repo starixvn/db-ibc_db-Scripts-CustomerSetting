@@ -9,10 +9,10 @@ TRUNCATE TABLE VRSetting_AutoUpdate_VirtualRate
 INSERT INTO VRSetting_AutoUpdate_VirtualRate(
 	 CustId
 	,IsLive
-	,SportId
+	,SportType
 	,VRLeagueGroupId
 	,VRBettypeGroupId
-	,BettypeId
+	,Bettype
 	,VirtualMultiplier
 	,CreatedDate
 )

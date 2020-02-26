@@ -17,20 +17,20 @@ GO
 CREATE TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate](
 	[CustId] [int] NOT NULL,
 	[IsLive] [bit] NOT NULL,
-	[SportId] [int] NOT NULL,
+	[SportType] [int] NOT NULL,
 	[VRLeagueGroupId] [int] NOT NULL,
 	[VRBettypeGroupId] [int] NOT NULL,
-	[BettypeId] [int] NOT NULL,
+	[BetType] [int] NOT NULL,
 	[VirtualMultiplier] [smallmoney] NULL,
 	[CreatedDate] [datetime] NULL,
 	CONSTRAINT [PK_VRSetting_AutoUpdate_VirtualRate] PRIMARY KEY CLUSTERED 
 	(
 		[CustId] ASC,
-		[SportId] ASC,
+		[SportType] ASC,
 		[IsLive] ASC,
 		[VRLeagueGroupId] ASC,
 		[VRBettypeGroupId] ASC,
-		[BettypeId] ASC
+		[BetType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON virtualrate_table
 ) ON virtualrate_table
 GO
