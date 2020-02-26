@@ -6,7 +6,7 @@
 */
 USE [CustDB]
 GO
---DROP TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate]
+--DROP TABLE [dbo].[VRSettingAutoUpdate]
 --GO
 SET ANSI_NULLS ON
 GO
@@ -14,7 +14,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate](
+CREATE TABLE [dbo].[VRSettingAutoUpdate](
 	[CustId] [int] NOT NULL,
 	[IsLive] [bit] NOT NULL,
 	[SportType] [int] NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate](
 	[BetType] [int] NOT NULL,
 	[VirtualMultiplier] [smallmoney] NULL,
 	[CreatedDate] [datetime] NULL,
-	CONSTRAINT [PK_VRSetting_AutoUpdate_VirtualRate] PRIMARY KEY CLUSTERED 
+	CONSTRAINT [PK_VRSettingAutoUpdate] PRIMARY KEY CLUSTERED 
 	(
 		[CustId] ASC,
 		[SportType] ASC,

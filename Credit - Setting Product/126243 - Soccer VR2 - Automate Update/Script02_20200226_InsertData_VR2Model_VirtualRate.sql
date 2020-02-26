@@ -4,9 +4,9 @@
 	Task: migarte data for table VRSetting_AutoUpdate_VirtualRate [Redmine:#126243]	
 	DB: DBCust/CustDB
 */
-TRUNCATE TABLE VRSetting_AutoUpdate_VirtualRate
+TRUNCATE TABLE VRSettingAutoUpdate
 
-INSERT INTO VRSetting_AutoUpdate_VirtualRate(
+INSERT INTO VRSettingAutoUpdate(
 	 CustId
 	,IsLive
 	,SportType

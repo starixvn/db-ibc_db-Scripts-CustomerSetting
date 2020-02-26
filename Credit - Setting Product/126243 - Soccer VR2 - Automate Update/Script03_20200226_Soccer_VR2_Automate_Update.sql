@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200226
-	Task: Soccer VR2 - Automate update from VRSetting_AutoUpdate_VirtualRate [Redmine:#126243]	
+	Task: Soccer VR2 - Automate update from VRSettingAutoUpdate [Redmine:#126243]	
 	DB: DBCust/CustDB
 */
 USE CustDB
@@ -18,7 +18,7 @@ SET NOCOUNT ON
 		   vrv.ValueID,
 		   vr.ValueIDLIVE as OldValueID
 	FROM VRSettingHierarchy h WITH(NOLOCK)
-		 INNER JOIN VRSetting_AutoUpdate_VirtualRate vv WITH(NOLOCK)
+		 INNER JOIN VRSettingAutoUpdate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
 			  AND h.VRBetTypeGroupID = vv.VRBetTypeGroupID
 			  AND h.BetType = vv.BetType
@@ -42,7 +42,7 @@ SET NOCOUNT ON
 		   vrv.ValueID,
 		   vr.ValueIDNonLIVE as OldValueID
 	FROM VRSettingHierarchy h WITH(NOLOCK)
-		 INNER JOIN VRSetting_AutoUpdate_VirtualRate vv WITH(NOLOCK)
+		 INNER JOIN VRSettingAutoUpdate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
 			  AND h.VRBetTypeGroupID = vv.VRBetTypeGroupID
 			  AND h.BetType = vv.BetType
