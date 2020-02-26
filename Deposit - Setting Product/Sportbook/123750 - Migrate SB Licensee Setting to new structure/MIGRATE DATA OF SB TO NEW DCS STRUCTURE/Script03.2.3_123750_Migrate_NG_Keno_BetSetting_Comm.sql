@@ -39,6 +39,13 @@ BEGIN
 		,MaxPerBall161	money
 	)
 
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend = @srecommend AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
+		AND custid <= @max_custid 
+
 	INSERT INTO #MemberTemp (
 		 CustID
 		,maxpermatch161	
@@ -49,7 +56,7 @@ BEGIN
 		,MaxPerBall161	
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
-
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 	INSERT INTO #SMATemp (
 		 CustID
@@ -63,6 +70,7 @@ BEGIN
 		,MaxPerBall161	
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @max_custid
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	DECLARE @Batch int = 3000
 
