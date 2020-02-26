@@ -17,13 +17,10 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	
-	DECLARE @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY
-	SELECT @MinBetDefault = 2, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000
-
 	CREATE TABLE #DownlineTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		IsFinishedBetLimit BIT DEFAULT(0)
+		IsFinishedStatus BIT DEFAULT(0)
 	)	
 	
 	INSERT INTO #DownlineTemp (CustID)
@@ -38,23 +35,19 @@ BEGIN
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t 		 
-		SET t.IsFinishedBetLimit = 1
+		SET t.IsFinishedStatus = 1
 		OUTPUT INSERTED.CustID INTO @MemberBatch
 		FROM #DownlineTemp t
-		WHERE IsFinishedBetLimit = 0
+		WHERE IsFinishedStatus = 0
 	 
 		IF @@ROWCOUNT = 0
 			BREAK
 
 		UPDATE cs
-		SET cs.MinBet = @MinBetDefault,
-			cs.MaxBet = @MaxBetDefault,
-			cs.MaxPerGameType = @MaxPerMatchDefault,
-			cs.IsDisabled = 0
+		SET cs.IsDisabled = 0
 		FROM dbo.CustGameType cs WITH (ROWLOCK) 
 			INNER JOIN @MemberBatch mem ON mem.CustID = cs.custid
 		WHERE cs.GameTypeID BETWEEN 1 AND 99
-			AND (cs.MaxBet < 1 OR cs.MaxPerGameType < 1 OR cs.IsDisabled = 1)
 		
 		DELETE @MemberBatch
 	END
