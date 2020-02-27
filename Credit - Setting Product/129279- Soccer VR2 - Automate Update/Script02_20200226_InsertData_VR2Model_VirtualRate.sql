@@ -16,15 +16,16 @@ INSERT INTO VRSettingAutoUpdate(
 	,VirtualMultiplier
 	,CreatedDate
 )
-SELECT CustId
+SELECT cv.CustId
 	,IsLive
 	,SportId
 	,VRLeagueGroupId
 	,VRBettypeGroupId
 	,BettypeId
-	,VirtualMultiplier
+	,cv.VirtualMultiplier
 	,CreatedDate
-FROM DBDW2.bodb_VR2Model.[dbo].[VR2Model_VirtualRate] WITH (NOLOCK)
+FROM DBDW2.bodb_VR2Model.[dbo].[VR2Model_VirtualRate] cv WITH (NOLOCK)
+	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cv.CustId
 UNION ALL
 SELECT CustId
 	,IsLive
