@@ -7,16 +7,13 @@
 USE CustDB
 GO
 SET NOCOUNT ON
+
+DECLARE @SportType INT = 1
+
 ;WITH VRlive AS(
 	SELECT vv.CustID, 
-		   vv.VRLeagueGroupID, 
-		   vv.VRBetTypeGroupID, 
-		   vv.BetType, 
-		   vv.SportType, 
-		   vv.VirtualMultiplier, 
 		   h.LevelID, 
-		   vrv.ValueID,
-		   vr.ValueIDLIVE as OldValueID
+		   vrv.ValueID
 	FROM VRSettingHierarchy h WITH(NOLOCK)
 		 INNER JOIN VRSettingAutoUpdate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
@@ -26,21 +23,19 @@ SET NOCOUNT ON
 		 LEFT JOIN VRCustSetting vr WITH(NOLOCK)
 		   ON vr.CustID = vv.CustID
 			  AND vr.LevelID = h.LevelID
-		 LEFT JOIN VRValueMapping vrv WITH(NOLOCK)
+		 INNER JOIN VRValueMapping vrv WITH(NOLOCK)
 		   ON vv.VirtualMultiplier = vrv.Value
 	WHERE vv.Islive = 1
+		AND (vrv.ValueID <> ISNULL(vr.ValueIDLIVE,0) 
+			 OR (vv.CustId = 0 AND h.LevelID IN (154,1))
+		)
+		AND vv.SportType = @SportType
 )
 ,VRNonlive AS
 (
 	SELECT vv.CustID, 
-		   vv.VRLeagueGroupID, 
-		   vv.VRBetTypeGroupID, 
-		   vv.BetType, 
-		   vv.SportType, 
-		   vv.VirtualMultiplier, 
 		   h.LevelID, 
-		   vrv.ValueID,
-		   vr.ValueIDNonLIVE as OldValueID
+		   vrv.ValueID
 	FROM VRSettingHierarchy h WITH(NOLOCK)
 		 INNER JOIN VRSettingAutoUpdate vv WITH(NOLOCK)
 		   ON h.VRLeagueGroupID = vv.VRLeagueGroupID
@@ -50,36 +45,40 @@ SET NOCOUNT ON
 		 LEFT JOIN VRCustSetting vr WITH(NOLOCK)
 		   ON vr.CustID = vv.CustID
 			  AND vr.LevelID = h.LevelID
-		 LEFT JOIN VRValueMapping vrv WITH(NOLOCK)
+		 INNER JOIN VRValueMapping vrv WITH(NOLOCK)
 		   ON vv.VirtualMultiplier = vrv.Value
 	WHERE vv.Islive = 0
+		AND (vrv.ValueID <> ISNULL(vr.ValueIDNonLIVE,0)
+			 OR (vv.CustId = 0 AND h.LevelID IN (154,1))
+		)
+		AND vv.SportType = @SportType
 )
-,TMP AS (
-	SELECT ISNULL(a1.SportType,a2.SportType) AS SportType
-		,ISNULL(a1.CustID,a2.CustID) AS CustID
+,TMP1 AS (
+	SELECT ISNULL(a1.CustID,a2.CustID) AS CustID
 		,ISNULL(a1.LevelID,a2.LevelID) AS LevelID
 		,ISNULL(a1.ValueID,0) AS ValueIDLive 
 		,ISNULL(a2.ValueID,0) AS ValueIDNonLive
 	FROM VRlive a1
 		FULL OUTER JOIN VRNonlive a2
 			ON a1.CustID = a2.CustID
-			AND a1.VRLeagueGroupID = a2.VRLeagueGroupID 
-			AND a1.VRBetTypeGroupID = a2.VRBetTypeGroupID
-			AND a1.BetType = a2.BetType
-			AND a1.SportType = a2.SportType
-	WHERE ISNULL(a1.ValueID,0) <> ISNULL(a1.OldValueID,0)
-		  OR ISNULL(a2.ValueID,0) <> ISNULL(a2.OldValueID,0)
+			AND a1.LevelID = a2.LevelID
 )
-SELECT  SportType
-		,CustID
+,TMP AS(
+	SELECT CustID,LevelID,ValueIDLive,ValueIDNonLive FROM TMP1 
+	UNION
+	SELECT vr.CustID,vr.LevelID,vr.ValueIDLive,vr.ValueIDNonLive
+	FROM VRCustSetting vr WITH(NOLOCK)
+		INNER JOIN VRSettingHierarchy h ON h.LevelID = vr.LevelID AND h.SportType = @SportType
+	WHERE EXISTS (SELECT 1 FROM  tmp1 t WHERE t.CustID = vr.CustID)
+)
+SELECT   CustID
 		,CONVERT(VARCHAR(MAX),(SELECT LevelID,ValueIDLive,ValueIDNonLive FROM TMP b WHERE a.CustID = b.CustID FOR XML RAW('Row'), ROOT ('Root')))  AS VirtualMultiplier
 		,0 AS IsProcessed
 INTO #VRUpdated
 FROM TMP a
-GROUP BY SportType,CustID
+GROUP BY CustID
 
 DECLARE @CustID INT
-	, @SportType INT 
 	, @VirtualMultiplier VARCHAR(MAX) = ''
 	, @UserID INT = 8
 	, @IP VARCHAR(15) = '0.0.0.0'
@@ -90,7 +89,6 @@ WHILE 1 = 1
 BEGIN
 	UPDATE TOP (1) #VRUpdated 
 	SET @CustID = custID,
-		@SportType = SportType,
 		@VirtualMultiplier = VirtualMultiplier,
 		IsProcessed = 1
 	WHERE IsProcessed = 0
@@ -111,6 +109,6 @@ BEGIN
 		--print error
 		PRINT 'CustID = ' + CONVERT (VARCHAR(10),@CustID) + ' - ' + @ErrMsg 
 	ELSE 
-		PRINT 'CustID = ' + CONVERT (VARCHAR(10),@CustID) + ' - ' + ' - SUCCEED'
+		PRINT 'CustID = ' + CONVERT (VARCHAR(10),@CustID) + ' - SUCCEED'
 END
 DROP TABLE #VRUpdated
