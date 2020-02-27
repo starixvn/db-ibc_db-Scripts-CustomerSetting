@@ -6,6 +6,8 @@
 */
 USE Bodb_Archive_Customer_Licensee
 GO
+--ADD COLUMN [DangerLevel]
+ALTER TABLE dbo.CustInfo ADD [DangerLevel] [tinyint] NULL 
 
 --DROP COLUMN
 ALTER TABLE dbo.CustInfo  DROP COLUMN Disable151_AU
