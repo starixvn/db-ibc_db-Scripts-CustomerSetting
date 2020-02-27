@@ -16,8 +16,8 @@ GO
 DROP TABLE [dbo].[DSB_CustGroupBetSetting_Member]
 GO
 
-DROP TABLE [dbo].[DSB_CustDiscount_Agent]
-GO
+--DROP TABLE [dbo].[DSB_CustDiscount_Agent]
+--GO
 
 DROP TABLE [dbo].[DSB_CustDiscount_Member]
 GO
@@ -119,17 +119,17 @@ CREATE TABLE [dbo].[DSB_CustGroupBetSetting_Member](
 
 GO
 
---> Commission
-CREATE TABLE [dbo].[DSB_CustDiscount_Agent](
-	[CustId] [int] NOT NULL,
-	[Discount] [binary](30) NOT NULL,
-	CONSTRAINT [PK_DSB_CustDiscount_Agent] PRIMARY KEY CLUSTERED 
-(
-	[CustId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DSB_CustDiscountSetting_table]
-) ON [DSB_CustDiscountSetting_table]
+----> Commission
+--CREATE TABLE [dbo].[DSB_CustDiscount_Agent](
+--	[CustId] [int] NOT NULL,
+--	[Discount] [binary](30) NOT NULL,
+--	CONSTRAINT [PK_DSB_CustDiscount_Agent] PRIMARY KEY CLUSTERED 
+--(
+--	[CustId] ASC
+--)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DSB_CustDiscountSetting_table]
+--) ON [DSB_CustDiscountSetting_table]
 
-GO
+--GO
 
 CREATE TABLE [dbo].[DSB_CustDiscount_Member](
 	[CustId] [int] NOT NULL,

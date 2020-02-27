@@ -161,35 +161,35 @@ END
 
 GO
 
-SET ANSI_NULLS ON
-GO
+--SET ANSI_NULLS ON
+--GO
 
-SET QUOTED_IDENTIFIER ON
-GO
+--SET QUOTED_IDENTIFIER ON
+--GO
 
-CREATE TRIGGER [dbo].[DSB_CustDiscount_Agent_update] ON [dbo].[DSB_CustDiscount_Agent] AFTER UPDATE
-AS
-/*
-	Created by: 20200116@Eden
-	Task: Trigger for updating [DSB_CustDiscount_Agent] table [#RM:123750]
-	DB: DBTP/bodb02
+--CREATE TRIGGER [dbo].[DSB_CustDiscount_Agent_update] ON [dbo].[DSB_CustDiscount_Agent] AFTER UPDATE
+--AS
+--/*
+--	Created by: 20200116@Eden
+--	Task: Trigger for updating [DSB_CustDiscount_Agent] table [#RM:123750]
+--	DB: DBTP/bodb02
 
-*/
-BEGIN 
-	SET NOCOUNT ON
+--*/
+--BEGIN 
+--	SET NOCOUNT ON
 	
-	INSERT INTO bodb_CustHistory.dbo.[DSB_CustDiscount_Agent_History] (
-		 CustId
-		,Discount
-	)
-	SELECT
-		 CustId
-		,Discount
-	FROM [DELETED]
-END
+--	INSERT INTO bodb_CustHistory.dbo.[DSB_CustDiscount_Agent_History] (
+--		 CustId
+--		,Discount
+--	)
+--	SELECT
+--		 CustId
+--		,Discount
+--	FROM [DELETED]
+--END
 
 
-GO
+--GO
 
 SET ANSI_NULLS ON
 GO

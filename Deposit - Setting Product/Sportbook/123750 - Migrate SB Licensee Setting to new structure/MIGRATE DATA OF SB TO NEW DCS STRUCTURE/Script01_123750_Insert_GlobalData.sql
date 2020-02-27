@@ -134,7 +134,7 @@ GO
 	--DSB_ByteSeq
 	INSERT INTO DSB_ByteSeq(Type, SportType, BetType, IsLive, ByteOrder)
 	SELECT 'PTSetting',		1,	1,	0,	1 UNION ALL
-	SELECT 'DiscountAgent',	1,	1,	0,	1 UNION ALL
+	--SELECT 'DiscountAgent',	1,	1,	0,	1 UNION ALL
 	SELECT 'DiscountMember',1,	1,	0,	1 UNION ALL
 	SELECT 'DiscountMember',1,	4,	0,	2 UNION ALL
 	SELECT 'DiscountMember',1,	5,	0,	3 UNION ALL

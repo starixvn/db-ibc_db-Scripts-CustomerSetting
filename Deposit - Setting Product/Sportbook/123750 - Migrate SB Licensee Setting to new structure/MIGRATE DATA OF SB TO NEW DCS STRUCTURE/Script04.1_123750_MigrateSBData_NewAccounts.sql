@@ -26,10 +26,10 @@ FROM DSB_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK)
 INNER JOIN custinfo c WITH(NOLOCK) ON a.CustID = c.custid AND c.currency <> 20
 WHERE a.CustID > @max_custid
  
-DELETE a
-FROM DSB_CustDiscount_Agent a WITH(ROWLOCK,UPDLOCK) 
-INNER JOIN custinfo c WITH(NOLOCK) ON a.CustID = c.custid AND c.currency <> 20
-WHERE a.CustID > @max_custid  
+--DELETE a
+--FROM DSB_CustDiscount_Agent a WITH(ROWLOCK,UPDLOCK) 
+--INNER JOIN custinfo c WITH(NOLOCK) ON a.CustID = c.custid AND c.currency <> 20
+--WHERE a.CustID > @max_custid  
  
 DELETE a
 FROM DSB_CustDiscount_Member a WITH(ROWLOCK,UPDLOCK) 
@@ -373,37 +373,37 @@ FROM Tmp dc
 	CROSS APPLY dbo.f_SetBinaryValues(@InitialBinaryStr, dc.spositiontakingXML) sPT
 
 ------------------------------------Commisson Setting-------------------------------------------------	
-;WITH tmp AS (
-	SELECT dc.CustID,dc.SportType,dc.bettype,dc.islive,
-			CASE WHEN c.roleid = 2 THEN dc.discount
-				WHEN c.roleid = 3 THEN dc.adiscount
-				WHEN c.roleid = 4 THEN dc.sdiscount END AS discount
-	FROM Dep_CustSetting dc WITH(NOLOCK) 
-		INNER JOIN #SMATemp c ON dc.custid = c.custid
-	WHERE  SportType = 1 and bettype = 1 and islive =0 
-)
-,tmp1 AS (
-	SELECT  dc.CustID,
-				(
-						SELECT (
-								SELECT	bs.ByteOrder	AS '@pos',
-										ct.ValueId AS '@val'
-								FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
-										LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.discount
-								WHERE bs.Type = 'DiscountAgent' 
-									AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
-								FOR XML PATH('r')
-									, TYPE
-								)
-						FOR XML PATH('root')
-							, TYPE
-						) as discountXML
-	FROM tmp dc
-)
-INSERT INTO DSB_CustDiscount_Agent (CustID,Discount)
-SELECT  dc.CustID,dis.binaryStr_new AS Discount
-FROM Tmp1 dc  
-	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.discountXML) dis
+--;WITH tmp AS (
+--	SELECT dc.CustID,dc.SportType,dc.bettype,dc.islive,
+--			CASE WHEN c.roleid = 2 THEN dc.discount
+--				WHEN c.roleid = 3 THEN dc.adiscount
+--				WHEN c.roleid = 4 THEN dc.sdiscount END AS discount
+--	FROM Dep_CustSetting dc WITH(NOLOCK) 
+--		INNER JOIN #SMATemp c ON dc.custid = c.custid
+--	WHERE  SportType = 1 and bettype = 1 and islive =0 
+--)
+--,tmp1 AS (
+--	SELECT  dc.CustID,
+--				(
+--						SELECT (
+--								SELECT	bs.ByteOrder	AS '@pos',
+--										ct.ValueId AS '@val'
+--								FROM dbo.DSB_ByteSeq bs WITH (NOLOCK)
+--										LEFT JOIN DSB_CommTemplate ct WITH(NOLOCK) ON ct.Value = dc.discount
+--								WHERE bs.Type = 'DiscountAgent' 
+--									AND bs.SportType = dc.sporttype AND bs.BetType = dc.BetType AND bs.IsLive = dc.IsLive
+--								FOR XML PATH('r')
+--									, TYPE
+--								)
+--						FOR XML PATH('root')
+--							, TYPE
+--						) as discountXML
+--	FROM tmp dc
+--)
+--INSERT INTO DSB_CustDiscount_Agent (CustID,Discount)
+--SELECT  dc.CustID,dis.binaryStr_new AS Discount
+--FROM Tmp1 dc  
+--	CROSS APPLY dbo.f_SetBinaryValues_2bytes(@InitialBinaryStr, dc.discountXML) dis
 
 ;WITH tmp AS (
 	SELECT  c.CustID,

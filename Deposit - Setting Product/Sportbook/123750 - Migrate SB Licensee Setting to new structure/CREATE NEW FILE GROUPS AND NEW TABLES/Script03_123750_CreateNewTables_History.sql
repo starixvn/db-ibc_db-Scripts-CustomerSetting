@@ -15,8 +15,8 @@ GO
 DROP TABLE [dbo].[DSB_CustGroupBetSetting_Member_History]
 GO
 
-DROP TABLE [dbo].[DSB_CustDiscount_Agent_History]
-GO
+--DROP TABLE [dbo].[DSB_CustDiscount_Agent_History]
+--GO
 
 DROP TABLE [dbo].[DSB_CustDiscount_Member_History]
 GO
@@ -107,13 +107,13 @@ CREATE CLUSTERED INDEX [DSB_CustGroupBetSetting_Member_History_Index] ON [dbo].[
 GO
 
 --> Commission
-CREATE TABLE [dbo].[DSB_CustDiscount_Agent_History](
-	[CustId] [int] NOT NULL,
-	[Discount] [binary](10) NOT NULL,
-	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
-) ON [Dep_CustSetting3rd_table]
+--CREATE TABLE [dbo].[DSB_CustDiscount_Agent_History](
+--	[CustId] [int] NOT NULL,
+--	[Discount] [binary](10) NOT NULL,
+--	[UpdateTime] [datetime] NOT NULL  DEFAULT (getdate())
+--) ON [Dep_CustSetting3rd_table]
 
-GO
+--GO
 CREATE CLUSTERED INDEX [DSB_CustDiscount_Agent_History_Index] ON [dbo].[DSB_CustDiscount_Agent_History]
 (
 	[UpdateTime] ASC,
