@@ -10,6 +10,17 @@ SET NOCOUNT ON
 
 DECLARE @SportType INT = 1
 
+IF EXISTS ( SELECT TOP 1 1
+			FROM VRSettingAutoUpdate vv WITH(NOLOCK)
+				LEFT JOIN VRValueMapping vrv WITH(NOLOCK)
+					ON vv.VirtualMultiplier = vrv.Value
+			WHERE vrv.ValueID IS NULL
+	)
+BEGIN
+	PRINT 'VirtualMultiplier of VRSettingAutoUpdate is not valid' 
+	RETURN
+END
+
 ;WITH VRlive AS(
 	SELECT vv.CustID, 
 		   h.LevelID, 
