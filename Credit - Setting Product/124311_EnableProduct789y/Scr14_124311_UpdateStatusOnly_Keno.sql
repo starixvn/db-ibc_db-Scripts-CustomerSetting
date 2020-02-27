@@ -19,12 +19,15 @@ BEGIN
 	
 	CREATE TABLE #DownlineTemp
 	(
-		CustID INT PRIMARY KEY CLUSTERED,
+		CustID INT,
+		GameTypeID INT,
 		IsFinishedStatus BIT DEFAULT(0)
 	)	
 	
-	INSERT INTO #DownlineTemp (CustID)
-	SELECT ci.custid
+	CREATE CLUSTERED INDEX CIX_DownlineTemp ON #DownlineTemp (CustID, GameTypeID)
+
+	INSERT INTO #DownlineTemp (CustID, GameTypeID)
+	SELECT ci.custid, cs.GameTypeID
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	WHERE srecommend = @srecommend 
@@ -33,13 +36,13 @@ BEGIN
 		AND cs.GameTypeID BETWEEN 1 AND 99
 
 	----------------------------------------BetSetting------------------------------------
-	DECLARE @MemberBatch TABLE(CustId INT)
+	DECLARE @MemberBatch TABLE(CustId INT, GameTypeID INT)
 	
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t 		 
 		SET t.IsFinishedStatus = 1
-		OUTPUT INSERTED.CustID INTO @MemberBatch
+		OUTPUT INSERTED.CustID, INSERTED.GameTypeID INTO @MemberBatch
 		FROM #DownlineTemp t
 		WHERE IsFinishedStatus = 0
 	 
@@ -49,7 +52,7 @@ BEGIN
 		UPDATE cs
 		SET cs.IsDisabled = 0
 		FROM dbo.CustGameType cs WITH (ROWLOCK) 
-			INNER JOIN @MemberBatch mem ON mem.CustID = cs.custid
+			INNER JOIN @MemberBatch mem ON mem.CustID = cs.custid AND cs.GameTypeID = mem.GameTypeID
 		WHERE cs.GameTypeID BETWEEN 1 AND 99
 		
 		DELETE @MemberBatch
