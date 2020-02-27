@@ -26,8 +26,11 @@ BEGIN
 	INSERT INTO #DownlineTemp (CustID)
 	SELECT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
+		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	WHERE srecommend = @srecommend 
 		AND Enabled = 1 
+		AND cs.IsDisabled = 1
+		AND cs.GameTypeID BETWEEN 1 AND 99
 
 	----------------------------------------BetSetting------------------------------------
 	DECLARE @MemberBatch TABLE(CustId INT)
