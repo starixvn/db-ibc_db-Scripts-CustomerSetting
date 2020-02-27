@@ -76,11 +76,12 @@ END
 )
 ,TMP AS(
 	SELECT CustID,LevelID,ValueIDLive,ValueIDNonLive FROM TMP1 
-	UNION
+	UNION ALL
 	SELECT vr.CustID,vr.LevelID,vr.ValueIDLive,vr.ValueIDNonLive
 	FROM VRCustSetting vr WITH(NOLOCK)
 		INNER JOIN VRSettingHierarchy h ON h.LevelID = vr.LevelID AND h.SportType = @SportType
 	WHERE EXISTS (SELECT 1 FROM  tmp1 t WHERE t.CustID = vr.CustID)
+		AND NOT EXISTS (SELECT 1 FROM  tmp1 t WHERE t.CustID = vr.CustID AND t.LevelID = vr.LevelID)
 )
 SELECT   CustID
 		,CONVERT(VARCHAR(MAX),(SELECT LevelID,ValueIDLive,ValueIDNonLive FROM TMP b WHERE a.CustID = b.CustID FOR XML RAW('Row'), ROOT ('Root')))  AS VirtualMultiplier
