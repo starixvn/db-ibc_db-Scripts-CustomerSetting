@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200226
-	Task: Soccer VR2 - Automate update from VRSettingAutoUpdate [Redmine:#126243]	
+	Task: Soccer VR2 - Automate update from VRSettingAutoUpdate [Redmine:#129279]	
 	DB: DBCust/CustDB
 */
 USE CustDB

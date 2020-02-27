@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200226
-	Task: migarte data for table VRSetting_AutoUpdate_VirtualRate [Redmine:#126243]	
+	Task: migarte data for table VRSetting_AutoUpdate_VirtualRate [Redmine:#129279]	
 	DB: DBCust/CustDB
 */
 TRUNCATE TABLE VRSettingAutoUpdate

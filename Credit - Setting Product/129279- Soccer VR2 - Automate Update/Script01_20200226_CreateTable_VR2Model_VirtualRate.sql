@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200226
-	Task: Create table VRSetting_AutoUpdate_VirtualRate [Redmine:#126243]	
+	Task: Create table VRSetting_AutoUpdate_VirtualRate [Redmine:#129279]	
 	DB: DBCust/CustDB
 */
 USE [CustDB]
