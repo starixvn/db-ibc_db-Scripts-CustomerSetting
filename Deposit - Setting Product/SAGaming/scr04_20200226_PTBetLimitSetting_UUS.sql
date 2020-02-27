@@ -207,7 +207,7 @@ BEGIN
 			BREAK	
 			--Bet limit
 			INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
-			SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+			SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, TB.StakeLevelList,GETDATE()
 			FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 			CROSS JOIN  #tmpCustInsert t
 			WHERE ExchangeId=@currency
@@ -215,10 +215,10 @@ BEGIN
 
 			TRUNCATE TABLE #tmpCustInsert
 	END
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=45)
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=44)
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,45
+		SELECT @srecommend,44
 	END
 	DROP TABLE #Dummy
 	DROP TABLE #tmpCust

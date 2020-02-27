@@ -12,9 +12,8 @@ VALUES (42,41,4,0,1,1) -- ProductSatus
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES (43,41,1,0,2,1) --PT
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (44,41,7,0,3,3) -- Discount
-INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (45,41,9,0,4,1) --Betlimit
+VALUES (44,41,7,0,3,3) -- StakeLevel
+
 
 --Dep_ProductSettingDetail
 
@@ -24,8 +23,7 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType
 VALUES (43,244,3001,0,0,0)
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES (44,244,3001,0,0,0)
-INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
-VALUES (45,244,3001,0,0,0)
+
 
 --Dep_ProductStatusProfile 
 

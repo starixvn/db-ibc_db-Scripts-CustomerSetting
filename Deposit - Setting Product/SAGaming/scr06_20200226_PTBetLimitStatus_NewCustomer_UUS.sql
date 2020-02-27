@@ -205,10 +205,10 @@
 
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT t.custid,45
+	SELECT t.custid,44
 	FROM #supers t
 	WHERE t.custid>@maxcustid	
-		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=45)
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=44)
 
 	--------------------------------------Status-------------------------------------------------
 	DECLARE @BitOrder INT
