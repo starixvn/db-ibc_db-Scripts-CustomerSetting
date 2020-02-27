@@ -67,12 +67,15 @@ END
 ,TMP1 AS (
 	SELECT ISNULL(a1.CustID,a2.CustID) AS CustID
 		,ISNULL(a1.LevelID,a2.LevelID) AS LevelID
-		,ISNULL(a1.ValueID,0) AS ValueIDLive 
-		,ISNULL(a2.ValueID,0) AS ValueIDNonLive
+		,COALESCE(a1.ValueID,vr.ValueIDLIVE,0) AS ValueIDLive 
+		,COALESCE(a2.ValueID,vr.ValueIDNonLIVE,0) AS ValueIDNonLive
 	FROM VRlive a1
 		FULL OUTER JOIN VRNonlive a2
 			ON a1.CustID = a2.CustID
 			AND a1.LevelID = a2.LevelID
+	LEFT JOIN VRCustSetting vr WITH(NOLOCK)
+		ON vr.CustID = ISNULL(a1.CustID,a2.CustID)
+			AND vr.LevelID = ISNULL(a1.LevelID,a2.LevelID)
 )
 ,TMP AS(
 	SELECT CustID,LevelID,ValueIDLive,ValueIDNonLive FROM TMP1 
