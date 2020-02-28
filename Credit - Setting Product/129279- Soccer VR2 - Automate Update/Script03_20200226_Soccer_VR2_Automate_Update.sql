@@ -64,27 +64,29 @@ END
 		)
 		AND vv.SportType = @SportType
 )
-,TMP1 AS (
-	SELECT ISNULL(a1.CustID,a2.CustID) AS CustID
-		,ISNULL(a1.LevelID,a2.LevelID) AS LevelID
-		,COALESCE(a1.ValueID,vr.ValueIDLIVE,0) AS ValueIDLive 
-		,COALESCE(a2.ValueID,vr.ValueIDNonLIVE,0) AS ValueIDNonLive
-	FROM VRlive a1
-		FULL OUTER JOIN VRNonlive a2
-			ON a1.CustID = a2.CustID
-			AND a1.LevelID = a2.LevelID
-	LEFT JOIN VRCustSetting vr WITH(NOLOCK)
-		ON vr.CustID = ISNULL(a1.CustID,a2.CustID)
-			AND vr.LevelID = ISNULL(a1.LevelID,a2.LevelID)
-)
-,TMP AS(
-	SELECT CustID,LevelID,ValueIDLive,ValueIDNonLive FROM TMP1 
+SELECT ISNULL(a1.CustID,a2.CustID) AS CustID
+	,ISNULL(a1.LevelID,a2.LevelID) AS LevelID
+	,COALESCE(a1.ValueID,vr.ValueIDLIVE,0) AS ValueIDLive 
+	,COALESCE(a2.ValueID,vr.ValueIDNonLIVE,0) AS ValueIDNonLive
+INTO #Tmp1
+FROM VRlive a1
+	FULL OUTER JOIN VRNonlive a2
+		ON a1.CustID = a2.CustID
+		AND a1.LevelID = a2.LevelID
+LEFT JOIN VRCustSetting vr WITH(NOLOCK)
+	ON vr.CustID = ISNULL(a1.CustID,a2.CustID)
+		AND vr.LevelID = ISNULL(a1.LevelID,a2.LevelID)
+
+CREATE CLUSTERED INDEX PK_Tmp1_LevelID ON #Tmp1(CustID,LevelID)
+
+;WITH TMP AS(
+	SELECT CustID,LevelID,ValueIDLive,ValueIDNonLive FROM #TMP1 
 	UNION ALL
 	SELECT vr.CustID,vr.LevelID,vr.ValueIDLive,vr.ValueIDNonLive
 	FROM VRCustSetting vr WITH(NOLOCK)
 		INNER JOIN VRSettingHierarchy h ON h.LevelID = vr.LevelID AND h.SportType = @SportType
-	WHERE EXISTS (SELECT 1 FROM  tmp1 t WHERE t.CustID = vr.CustID)
-		AND NOT EXISTS (SELECT 1 FROM  tmp1 t WHERE t.CustID = vr.CustID AND t.LevelID = vr.LevelID)
+	WHERE EXISTS (SELECT 1 FROM  #TMP1 t WHERE t.CustID = vr.CustID)
+		AND NOT EXISTS (SELECT 1 FROM  #TMP1 t WHERE t.CustID = vr.CustID AND t.LevelID = vr.LevelID)
 )
 SELECT   CustID
 		,CONVERT(VARCHAR(MAX),(SELECT LevelID,ValueIDLive,ValueIDNonLive FROM TMP b WHERE a.CustID = b.CustID FOR XML RAW('Row'), ROOT ('Root')))  AS VirtualMultiplier
@@ -127,3 +129,4 @@ BEGIN
 		PRINT 'CustID = ' + CONVERT (VARCHAR(10),@CustID) + ' - SUCCEED'
 END
 DROP TABLE #VRUpdated
+DROP TABLE #Tmp1
