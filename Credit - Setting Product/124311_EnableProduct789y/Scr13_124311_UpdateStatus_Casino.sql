@@ -4,7 +4,7 @@
 	DB: DBCUST/CustDB
 	Date: 20191219
 */ 
-ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_18]
+ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_19]
 	@Custid INT,
 	@target VARCHAR(20)
 AS
