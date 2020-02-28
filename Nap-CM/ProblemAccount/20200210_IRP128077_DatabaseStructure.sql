@@ -7,7 +7,7 @@
 USE bodb_Licensee
 GO
 
-ALTER TABLE Licensees ADD IsAcknowledgement BIT NULL CONSTRAINT [DF_ProblemAccount_IsAcknowledgement] DEFAULT ((0))
+ALTER TABLE Licensees ADD IsAcknowledgement BIT NULL CONSTRAINT [DF_Licensees_IsAcknowledgement] DEFAULT ((0))
 GO
 
 --Step 2: run this script at @DBCUST/CustDB & DBACC/bodb02
