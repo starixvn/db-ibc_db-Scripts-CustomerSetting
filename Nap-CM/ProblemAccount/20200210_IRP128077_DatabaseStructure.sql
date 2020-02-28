@@ -7,7 +7,7 @@
 USE bodb_Licensee
 GO
 
-ALTER TABLE Licensees ADD IsAcknowledgement BIT NULL
+ALTER TABLE Licensees ADD IsAcknowledgement BIT NULL CONSTRAINT [DF_ProblemAccount_IsAcknowledgement] DEFAULT ((0))
 GO
 
 --Step 2: run this script at @DBCUST/CustDB & DBACC/bodb02
@@ -27,7 +27,7 @@ GO
 
 --Step 3:deploy this script on DBCUST/CustDB only
 --add new column to mark player has void tickets
-ALTER TABLE ProblemAccount ADD isMarkVoid BIT NULL DEFAULT 0
+ALTER TABLE ProblemAccount ADD isMarkVoid BIT NULL CONSTRAINT [DF_ProblemAccount_isMarkVoid] DEFAULT ((0))
 GO
 
 ALTER TABLE ProblemAccount ADD Matchid1 INT NULL
