@@ -51,8 +51,8 @@ ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_maxpermatch181
 GO
 ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_isAutoResetLiveCasino
 GO
---ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxWinLiveCasino
---GO
+ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxWinLiveCasino
+GO
 ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_MaxTransferP2P
 GO
 ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_DisableMicrogameLC
@@ -159,8 +159,8 @@ ALTER TABLE dbo.Custinfo DROP COLUMN MaxPerMatch44
 GO
 ALTER TABLE dbo.Custinfo DROP COLUMN MaxtransferP2P
 GO
---ALTER TABLE dbo.Custinfo DROP COLUMN MaxWinLiveCasino
---GO
+ALTER TABLE dbo.Custinfo DROP COLUMN MaxWinLiveCasino
+GO
 ALTER TABLE dbo.Custinfo DROP COLUMN SyncBingo
 GO
 ALTER TABLE dbo.Custinfo DROP COLUMN SyncLiveCasino
