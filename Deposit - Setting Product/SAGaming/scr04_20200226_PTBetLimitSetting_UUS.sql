@@ -210,7 +210,7 @@ BEGIN
 			FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 			CROSS JOIN  #tmpCustInsert t
 			WHERE ExchangeId=@currency
-			GROUP BY t.custid, TB.BettypeID
+			GROUP BY t.custid, TB.BettypeID, TB.StakeLevelList
 
 			TRUNCATE TABLE #tmpCustInsert
 	END
@@ -222,6 +222,8 @@ BEGIN
 	DROP TABLE #Dummy
 	DROP TABLE #tmpCust
 	DROP TABLE #tmpSMA
+	DROP TABLE #tmpCustInsert
+	DROP TABLE #tmpSTListSMA
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
