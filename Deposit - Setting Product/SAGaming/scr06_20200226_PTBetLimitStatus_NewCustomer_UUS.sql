@@ -212,7 +212,7 @@
 	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 			CROSS JOIN  #MemberTemp t
 	WHERE ExchangeId = t.Currency
-	GROUP BY t.custid, TB.BettypeID
+	GROUP BY t.custid, TB.BettypeID, TB.StakeLevelList
 
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
