@@ -1,7 +1,7 @@
 /*
 	Created: 20200226@Tiara
 	Date: 20200226
-	Task: Delete existing data of SA Gaming Deposit [Redmine: 128058]
+	Task: Delete existing data of SA Gaming Deposit - UUS [Redmine: 128058]
 	DB: DBCUST/CustDB
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
