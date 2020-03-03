@@ -10,12 +10,13 @@ GO
 SET NOCOUNT ON
 DECLARE @SportType INT = 1
 
-SELECT CustID , 0 as IsProcessed
-INTO #VRUpdated
-FROM VRCustSetting  vr WITH(NOLOCK) 
-	INNER JOIN VRSettingHierarchy h WITH(NOLOCK) ON vr.LevelID = h.LevelID
-WHERE vr.CustID BETWEEN 1 AND 99
-	AND h.SportType = @SportType
+CREATE TABLE #VRUpdated ( CustID INT , IsProcessed BIT default 0)
+
+INSERT INTO #VRUpdated(CustID)
+SELECT DISTINCT vr.CustId
+FROM VRSettingAutoUpdate vr WITH(NOLOCK)
+	INNER JOIN custinfo c WITH(NOLOCK) On vr.CustId = c.custid
+WHERE c.roleid IN (2,3,4)
 
 DECLARE @CustID INT
 	, @VirtualMultiplier VARCHAR(MAX) = '<Root></Root>'
