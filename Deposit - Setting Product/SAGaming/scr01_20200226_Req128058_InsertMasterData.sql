@@ -9,14 +9,14 @@ Go
 --Dep_ProductSetting
 DELETE D
 FROM Dep_ProductSetting D WITH (ROWLOCK)
-WHERE D.ProductID = 41 AND D.ProductSettingID BETWEEN 42 AND 44
+WHERE D.ProductID = 39 AND D.ProductSettingID BETWEEN 42 AND 44
 
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (42,41,4,0,1,1) -- ProductSatus
+VALUES (42,39,4,0,1,1) -- ProductSatus
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (43,41,1,0,2,1) --PT
+VALUES (43,39,1,0,2,1) --PT
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (44,41,7,0,3,3) -- StakeLevel
+VALUES (44,39,7,0,3,3) -- StakeLevel
 
 --Dep_ProductSettingDetail
 
