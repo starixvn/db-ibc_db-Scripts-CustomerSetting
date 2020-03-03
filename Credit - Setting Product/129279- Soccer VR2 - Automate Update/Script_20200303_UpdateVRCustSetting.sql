@@ -1,7 +1,7 @@
 /*
     Created: Eden
     Date: 20200303
-    Task: DELETE VR setting for customers have custid < 100
+    Task: DELETE VR setting for SMA in VRSettingAutoUpdate
 	Redmine: #129279
     DB: DBCUST/CUSTDB
 */ 
