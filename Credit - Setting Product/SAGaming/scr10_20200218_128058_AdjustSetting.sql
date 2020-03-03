@@ -45,14 +45,14 @@ BEGIN
 	CREATE TABLE #SMAList_CommSetting (custid INT, Discount DECIMAL(9,8))
 	CREATE TABLE #MemberList_CommSetting (custid INT, SuperDiscount DECIMAL(9,8), MasterDiscount DECIMAL(9,8), AgentDiscount DECIMAL(9,8), PlayerDiscount DECIMAL(9,8))
 
-	DECLARE @ProductID TINYINT = 41
+	DECLARE @ProductID TINYINT = 41, @SportType INT = 244
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
 	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
+	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
 
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
@@ -220,6 +220,12 @@ BEGIN
 			INNER JOIN #MemberList_CommSetting cs WITH(NOLOCK) ON cs.custid = csm.CustID
 		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
 	END
+		--------------------------------------Commission Setting-------------------------------------------------		
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 6
+
+
 
 	DROP TABLE #DestinationSportBetType			
 END

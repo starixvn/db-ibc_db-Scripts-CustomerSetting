@@ -28,8 +28,14 @@ BEGIN
 	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
 	WHERE SportType=@Sporttype
 	
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	
 	CREATE TABLE #temp (CustID INT PRIMARY KEY)
 	CREATE TABLE #tempUpdate (CustID INT PRIMARY KEY)
+
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 
 	INSERT INTO #temp(CustID)
 	SELECT ci.custid
@@ -37,8 +43,8 @@ BEGIN
 	WHERE ci.srecommend = @srecommend 
 		AND ci.custid<=@maxcustid 
 		AND ci.Enabled=1
-		AND ci.username NOT LIKE '%Acc%' 
-		AND ci.username NOT LIKE '%LocalBank%'
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
 	
 	WHILE EXISTS(SELECT 1 FROM #temp)
 	BEGIN
