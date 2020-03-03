@@ -249,7 +249,7 @@ DECLARE @BitmapOrder TINYINT = 20
 SELECT custid, ci.roleid, ci.srecommend
 INTO #CustList
 FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.srecommend IN (SELECT custid FROM #supers) AND custid > @MaxCustID
+WHERE ci.srecommend IN (SELECT custid FROM #supers) AND custid > @MaxCustID AND Enabled = 1
 
 UPDATE cs
 SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
