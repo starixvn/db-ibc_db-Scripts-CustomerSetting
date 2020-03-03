@@ -20,6 +20,11 @@
 		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency=20
 
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+
 	DECLARE @SportType INT = 244, @BetType INT=3001
 
 	--------------------------------------PT Setting-------------------------------------------------	
@@ -44,7 +49,8 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=4
-	
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
 		   ,[SportType]
@@ -66,6 +72,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=3
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -88,6 +95,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -110,6 +118,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTSetting_Member
 		(	CustID
@@ -134,6 +143,7 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND m.IsGroupedPT=0
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 		SELECT ci.CustID,1
@@ -142,6 +152,7 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,43
@@ -169,13 +180,13 @@
 	SELECT custid,currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
-
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 	INSERT INTO #SMATemp (CustID,Currency)
 	SELECT custid,currency
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
-
+			AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
 	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
@@ -238,3 +249,5 @@
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
 	DROP TABLE #supers
+	DROP TABLE #Dummy
+	DROP TABLE #tmpSTListSMA

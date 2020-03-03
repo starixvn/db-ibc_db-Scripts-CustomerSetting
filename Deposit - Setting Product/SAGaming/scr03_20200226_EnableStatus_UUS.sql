@@ -34,7 +34,11 @@ BEGIN
 	INSERT INTO #temp(CustID)
 	SELECT ci.custid
 	FROM custInfo CI WITH (NOLOCK) 
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@maxcustid AND ci.Enabled=1	
+	WHERE ci.srecommend = @srecommend 
+		AND ci.custid<=@maxcustid 
+		AND ci.Enabled=1
+		AND ci.username NOT LIKE '%Acc%' 
+		AND ci.username NOT LIKE '%LocalBank%'
 	
 	WHILE EXISTS(SELECT 1 FROM #temp)
 	BEGIN

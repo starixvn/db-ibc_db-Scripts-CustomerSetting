@@ -7,6 +7,10 @@
 USE [CustDB]
 Go
 --Dep_ProductSetting
+DELETE D
+FROM Dep_ProductSetting D WITH (ROWLOCK)
+WHERE D.ProductID = 41 AND D.ProductSettingID BETWEEN 42 AND 44
+
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES (42,41,4,0,1,1) -- ProductSatus
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
@@ -14,8 +18,11 @@ VALUES (43,41,1,0,2,1) --PT
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES (44,41,7,0,3,3) -- StakeLevel
 
-
 --Dep_ProductSettingDetail
+
+DELETE D
+FROM Dep_ProductSettingDetail D WITH (ROWLOCK)
+WHERE D.SportType = 244 AND D.BetType = 3001
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES (42,244,3001,0,0,0)
@@ -24,18 +31,20 @@ VALUES (43,244,3001,0,0,0)
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES (44,244,3001,0,0,0)
 
-
 --Dep_ProductStatusProfile 
+
+DELETE D
+FROM Dep_ProductStatusProfile D WITH (ROWLOCK)
+WHERE D.SportType = 244 AND D.BetType = 3001
 
 INSERT INTO [dbo].Dep_ProductStatusProfile (Sporttype,Bettype,bitmapOrder)
 VALUES (244,3001,14)
 
-
 --StakeLevel
-DECLARE @maxStakeLevel INT
-SELECT @maxStakeLevel=MAX(StakeLevelID) FROM Dep_StakeLevel WITH(NOLOCK) 
-
+ 
 CREATE TABLE #temp(
+	ID INT IDENTITY (1,1),
+	StakeLevelID INT,
 	GameTypeID		INT,
 	[MinLabel]		VARCHAR(30),
 	[MaxLabel]		VARCHAR(30),
@@ -46,7 +55,7 @@ CREATE TABLE #temp(
 GO
 
 INSERT #temp (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
-
+SELECT 3001,'1','500',1,500,20 UNION ALL
 SELECT 3002,'1','500',1,500,20 UNION ALL
 SELECT 3003,'1','500',1,500,20 UNION ALL
 SELECT 3004,'1','500',1,500,20 UNION ALL
@@ -68,10 +77,19 @@ SELECT 3005,'100','2000',100,2000,20 UNION ALL
 SELECT 3006,'100','2000',100,2000,20 UNION ALL
 SELECT 3007,'100','2000',100,2000,20 
 
-INSERT INTO Dep_StakeLevel(StakeLevelID, GameTypeID, GameGroupID, MinLabel, MaxLabel,	MinStake, MaxStake,	ExchangeID)
-SELECT  @maxStakeLevel+1,3001, 0, '1','500',1,500,20
+DELETE D 
+FROM Dep_StakeLevel D WITH (ROWLOCK)
+WHERE D.GameTypeID BETWEEN 3001 AND 3007 AND D.ExchangeId IN (20)
+
+DECLARE @maxStakeLevel INT
+SELECT @maxStakeLevel=MAX(StakeLevelID) FROM Dep_StakeLevel WITH(NOLOCK)
+
+UPDATE #temp SET StakeLevelID = @maxStakeLevel + ID
 
 INSERT INTO Dep_StakeLevel(StakeLevelID, GameTypeID, GameGroupID, MinLabel, MaxLabel,	MinStake, MaxStake,	ExchangeID)
-SELECT StakeLevelID, 0, T.MinLabel,T.MaxLabel, T.MinStake,T.MaxStake
+SELECT DISTINCT T.StakeLevelID,T.GameTypeID, 0, T.MinLabel,T.MaxLabel, T.MinStake,T.MaxStake, T.ExchangeId
 FROM Dep_StakeLevel D WITH (NOLOCK) INNER JOIN #temp T WITH (NOLOCK) ON D.ExchangeID = T.ExchangeId
 WHERE T.GameTypeID BETWEEN 3001 AND 3007 AND D.ExchangeId IN (20)
+
+DROP TABLE #temp
+
