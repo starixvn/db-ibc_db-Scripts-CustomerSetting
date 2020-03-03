@@ -66,7 +66,7 @@ INSERT INTO #supers(custid)
 SELECT c.custid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-	INNER JOIN CustPTSetting3rd_Agent pt WITH (NOLOCK) ON c.custid = pt.CustID AND pt.SportType = 245 AND pt.CustID = 4601
+	INNER JOIN CustPTSetting3rd_Agent pt WITH (NOLOCK) ON c.custid = pt.CustID AND pt.SportType = 245 AND pt.BetType = 4601
 WHERE c.roleid = 4  
  AND ci.Enabled = 1
  AND c.currency <> 67 --HKK
