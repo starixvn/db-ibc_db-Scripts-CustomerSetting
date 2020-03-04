@@ -174,7 +174,7 @@
 	)
 
 
-	CREATE TABLE #tmpSTListSMA (BettypeID INT PRIMARY KEY, StakeLevelList VARCHAR(500))
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
 		
 	INSERT INTO #MemberTemp (CustID,Currency)
 	SELECT custid,currency

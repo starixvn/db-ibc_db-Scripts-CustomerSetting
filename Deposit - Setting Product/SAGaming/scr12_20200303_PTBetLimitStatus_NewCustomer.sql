@@ -174,7 +174,7 @@
 	)
 
 
-	CREATE TABLE #tmpSTListSMA (BettypeID INT PRIMARY KEY, StakeLevelList VARCHAR(500))
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 		
 	INSERT INTO #MemberTemp (CustID,Currency)
 	SELECT custid,currency
@@ -189,8 +189,8 @@
 			AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
-	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
-	FROM #SMATemp SMA CROSS JOIN Dep_StakeLevel ST
+	SELECT DISTINCT ST.GameTypeID, Currency,CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
+	FROM #SMATemp SMA INNER JOIN StakeLevel ST ON SMA.currency =ST.ExchangeId  
 	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM Dep_StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = SMA.Currency
@@ -201,19 +201,17 @@
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
-	CROSS JOIN  #SMATemp t
-	WHERE ExchangeId=t.Currency
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+		CROSS JOIN  #SMATemp t
+	WHERE S.ExchangeID = t.Currency
 
 	--Member Level
-
 	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
 	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, TB.StakeLevelList,GETDATE()
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
-			CROSS JOIN  #MemberTemp t
-	WHERE ExchangeId = t.Currency
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+		CROSS JOIN  #MemberTemp t
+	WHERE S.ExchangeId = t.Currency
 	GROUP BY t.custid, TB.BettypeID, TB.StakeLevelList
-
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,44
