@@ -188,7 +188,7 @@
 	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
 			AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
+	INSERT INTO #tmpSTListSMA(BettypeID, Currency, StakelevelList)
 	SELECT DISTINCT ST.GameTypeID, Currency,CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
 	FROM #SMATemp SMA INNER JOIN StakeLevel ST ON SMA.currency =ST.ExchangeId  
 	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
