@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200304
-	Task: Job daily - Soccer VR Setting Auto Update [RM:#129279]
+	Task: Job - Soccer VR Setting Auto Update [RM:#129279]
 	DB: DBCUST
 */
 USE [msdb]
@@ -62,22 +62,6 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Step 2 :
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id=@jobId, @name=N'Daily Job', 
-		@enabled=1, 
-		@freq_type=4, 
-		@freq_interval=1, 
-		@freq_subday_type=1, 
-		@freq_subday_interval=0, 
-		@freq_relative_interval=0, 
-		@freq_recurrence_factor=0, 
-		@active_start_date=20200304, 
-		@active_end_date=99991231, 
-		@active_start_time=0, 
-		@active_end_time=235959, 
-		@schedule_uid=N'dde0c294-52b4-477f-aadc-80a64eeb733e'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N'(local)'
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 COMMIT TRANSACTION
 GOTO EndSave
