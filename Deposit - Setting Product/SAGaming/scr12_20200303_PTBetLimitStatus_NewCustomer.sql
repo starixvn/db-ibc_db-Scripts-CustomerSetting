@@ -23,7 +23,7 @@
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 
 	DECLARE @SportType INT = 244, @BetType INT=3001
 

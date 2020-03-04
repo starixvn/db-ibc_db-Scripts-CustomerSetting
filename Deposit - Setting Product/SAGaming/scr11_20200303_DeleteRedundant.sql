@@ -8,7 +8,7 @@
 USE CustDB
 GO
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-(@MaxCustID INT)
+(@maxcustID INT)
 AS
 BEGIN			
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
@@ -27,7 +27,7 @@ BEGIN
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
-		AND ci.CustID <= @max_custid
+		AND ci.CustID <= @maxcustID
 		AND ci.Enabled=1
 		AND cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
 		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF 

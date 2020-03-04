@@ -25,11 +25,11 @@ FROM Dep_ProductSettingDetail D WITH (ROWLOCK)
 WHERE D.SportType = 244 AND D.BetType = 3001
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
-VALUES (42,244,3001,0,0,0)
+VALUES (42,244,3001,0,0,1)
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
-VALUES (43,244,3001,0,0,0)
+VALUES (43,244,3001,0,0,1)
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
-VALUES (44,244,3001,0,0,0)
+VALUES (44,244,3001,0,0,1)
 
 --Dep_ProductStatusProfile 
 
