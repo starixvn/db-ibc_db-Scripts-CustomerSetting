@@ -170,7 +170,8 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @custid INT
+DECLARE @custid INT,
+		@PT SMALLMONEY = 0.85
 		
 CREATE TABLE #tblSMA(CustID INT, isfinished BIT DEFAULT(0))
 
@@ -236,30 +237,38 @@ FROM dbo.PhoneBettingCustomerList p WITH(NOLOCK)
 	
 --Get supers normal/direct masters/direct agents
 INSERT INTO #tblSMA(custid)
-SELECT ci.custid
+SELECT DISTINCT ci.custid
 FROM vw_customer ci WITH (NOLOCK) 
-inner join custinfo cu with (nolock) on cu.custid=ci.custid
+	INNER JOIN custinfo cu with (nolock) on cu.custid=ci.custid
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid	
+	INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+	INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 WHERE ci.roleid = 4  	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.currency = 2
-	and cs.IsInternal=0
-	and ci.custid>=100
-	and ci.custid not in (select custid from #dummySuper)
-	and ci.username not like '3rdSuper%'
-    and ci.username not IN ( 'STAFF')
-    and ci.username not like 'SuperTest%'
-    and ci.username not like 'STEST%'
-    and ci.username not like 'SIBC%'
-    and ci.username not like '%ACCSuper%'
-	and cu.closed=0 
+	AND cs.IsInternal=0
+	AND ci.custid>=100
+	AND ci.custid not in (select custid from #dummySuper)
+	AND ci.username not like '3rdSuper%'
+    AND ci.username not IN ( 'STAFF')
+    AND ci.username not like 'SuperTest%'
+    AND ci.username not like 'STEST%'
+    AND ci.username not like 'SIBC%'
+    AND ci.username not like '%ACCSuper%'
+	AND cu.closed=0 
+	AND (co.spositiontaking = @PT 
+		OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+		OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+		)
 --Direct masters exclude who has  phone betting	members
 UNION ALL
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM vw_customer ci with(nolock)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
+		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid=3 
 		AND ci.currency = 2
@@ -268,11 +277,17 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid from #WrongDirectMaster)
 		AND c.custid NOT IN (SELECT mrecommend FROM #PhoneBetting)
+		AND (co.spositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+			)
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM vw_Customer ci WITH(NOLOCK)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
+		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid = 2 
 		AND ci.currency = 2
@@ -281,7 +296,10 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid FROM #WrongDirectAgent)
 		AND c.custid NOT IN (SELECT recommend FROM #PhoneBetting)
-
+		AND (co.spositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+			)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -322,7 +340,8 @@ GO
 ---
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB -----
 --------------------------------------------------------------------------------------
-DECLARE @custid INT
+DECLARE @custid INT,
+		@PT SMALLMONEY = 0.85
 		
 CREATE TABLE #tblSMA(CustID INT, isfinished BIT DEFAULT(0))
 
@@ -388,30 +407,38 @@ FROM dbo.PhoneBettingCustomerList p WITH(NOLOCK)
 	
 --Get supers normal/direct masters/direct agents
 INSERT INTO #tblSMA(custid)
-SELECT ci.custid
+SELECT DISTINCT ci.custid
 FROM vw_customer ci WITH (NOLOCK) 
-inner join custinfo cu with (nolock) on cu.custid=ci.custid
+	INNER JOIN custinfo cu with (nolock) on cu.custid=ci.custid
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid	
+	INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+	INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 WHERE ci.roleid = 4  	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.currency = 2
-	and cs.IsInternal=0
-	and ci.custid>=100
-	and ci.custid not in (select custid from #dummySuper)
-	and ci.username not like '3rdSuper%'
-    and ci.username not IN ( 'STAFF')
-    and ci.username not like 'SuperTest%'
-    and ci.username not like 'STEST%'
-    and ci.username not like 'SIBC%'
-    and ci.username not like '%ACCSuper%'
-	and cu.closed=0 
+	AND cs.IsInternal=0
+	AND ci.custid>=100
+	AND ci.custid not in (select custid from #dummySuper)
+	AND ci.username not like '3rdSuper%'
+    AND ci.username not IN ( 'STAFF')
+    AND ci.username not like 'SuperTest%'
+    AND ci.username not like 'STEST%'
+    AND ci.username not like 'SIBC%'
+    AND ci.username not like '%ACCSuper%'
+	AND cu.closed=0 
+	AND (co.spositiontaking = @PT 
+		OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+		OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+		)
 --Direct masters exclude who has  phone betting	members
 UNION ALL
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM vw_customer ci with(nolock)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
+		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid=3 
 		AND ci.currency = 2
@@ -420,11 +447,17 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid from #WrongDirectMaster)
 		AND c.custid NOT IN (SELECT mrecommend FROM #PhoneBetting)
+		AND (co.spositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+			)
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM vw_Customer ci WITH(NOLOCK)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
+		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
+		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid = 2 
 		AND ci.currency = 2
@@ -433,7 +466,10 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid FROM #WrongDirectAgent)
 		AND c.custid NOT IN (SELECT recommend FROM #PhoneBetting)
-
+		AND (co.spositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+			)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -465,7 +501,7 @@ BEGIN
 				
 	WAITFOR DELAY '00:00:00.280'			
 END			
-GO
+GO	
 
 			
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB -----
