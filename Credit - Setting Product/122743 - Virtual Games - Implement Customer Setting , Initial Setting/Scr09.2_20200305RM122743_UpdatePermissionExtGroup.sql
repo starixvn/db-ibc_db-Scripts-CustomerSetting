@@ -21,7 +21,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM CustDB.dbo.Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.site IN ('KORIBC')
+	AND ci.site <> 'CN88'
 
 SELECT DISTINCT u.GroupName
 INTO #Acc_CustGroup
