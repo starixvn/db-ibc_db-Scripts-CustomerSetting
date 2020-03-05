@@ -6,12 +6,9 @@
 */
 USE [msdb]
 GO
-
-/****** Object:  Job [DBCUST - CUSTDB - Soccer - VR Setting Auto Update]    Script Date: 3/4/2020 2:16:42 PM ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
-/****** Object:  JobCategory [[Uncategorized (Local)]]    Script Date: 3/4/2020 2:16:42 PM ******/
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
 BEGIN
 EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
@@ -31,7 +28,7 @@ EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'DBCUST - CUSTDB - Soccer - V
 		@category_name=N'[Uncategorized (Local)]', 
 		@owner_login_name=N'sa', @job_id = @jobId OUTPUT
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Step 1: Transfer data from VR2Model_VirtualRate to VRSettingAutoUpdate]    Script Date: 3/4/2020 2:16:42 PM ******/
+/****** Object:  Step [Step 1: Transfer data from VR2Model_VirtualRate to VRSettingAutoUpdate]    Script Date: 3/5/2020 10:22:32 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Step 1: Transfer data from VR2Model_VirtualRate to VRSettingAutoUpdate', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
@@ -46,7 +43,7 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Step 1: 
 		@database_name=N'CustDB', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Step 2 : Update VR Setting base on VRSettingAutoUpdate table]    Script Date: 3/4/2020 2:16:42 PM ******/
+/****** Object:  Step [Step 2 : Update VR Setting base on VRSettingAutoUpdate table]    Script Date: 3/5/2020 10:22:32 AM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Step 2 : Update VR Setting base on VRSettingAutoUpdate table', 
 		@step_id=2, 
 		@cmdexec_success_code=0, 
@@ -63,6 +60,8 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Step 2 :
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 COMMIT TRANSACTION
 GOTO EndSave
 QuitWithRollback:
@@ -70,5 +69,7 @@ QuitWithRollback:
 EndSave:
 
 GO
+
+
 
 
