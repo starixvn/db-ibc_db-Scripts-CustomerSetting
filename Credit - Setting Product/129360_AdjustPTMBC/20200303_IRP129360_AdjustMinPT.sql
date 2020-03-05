@@ -502,7 +502,6 @@ BEGIN
 	WAITFOR DELAY '00:00:00.280'			
 END			
 GO	
-
 			
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB -----
 -----------------------------------------------------------------------------------	
