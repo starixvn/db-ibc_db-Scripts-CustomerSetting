@@ -1,7 +1,7 @@
 ﻿/*
-	Created: 20200210@Elodie	
+	Created: 20200305@Elodie	
 	Task: Update data for problem account 
-	DB: DBTXN/bodb02
+	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
