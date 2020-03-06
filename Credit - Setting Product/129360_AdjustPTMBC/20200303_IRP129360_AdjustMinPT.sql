@@ -1,6 +1,6 @@
 /*
 	Created: 20200303@Johnson
-	Task: update min PT to supers under RM currency FOR SB & SB2
+	Task: update min PT to supers under requested sites & currencies FOR SB & SB2
 	DB: DBCUST/CUSTDB
 */
 
@@ -297,9 +297,9 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid from #WrongDirectMaster)
 		AND c.custid NOT IN (SELECT mrecommend FROM #PhoneBetting)
-		AND (co.spositiontaking = @PT 
-			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
-			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+		AND (co.mpositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.mlivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.MasterPT = @PT*100)
 			)
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
@@ -316,9 +316,9 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid FROM #WrongDirectAgent)
 		AND c.custid NOT IN (SELECT recommend FROM #PhoneBetting)
-		AND (co.spositiontaking = @PT 
-			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.slivepositiontaking = @PT)
-			OR (co2.sporttype IN (43,44) AND co2.SuperPT = @PT*100)
+		AND (co.apositiontaking = @PT 
+			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.alivepositiontaking = @PT)
+			OR (co2.sporttype IN (43,44) AND co2.AgentPT = @PT*100)
 			)
 
 -- For deployer info
