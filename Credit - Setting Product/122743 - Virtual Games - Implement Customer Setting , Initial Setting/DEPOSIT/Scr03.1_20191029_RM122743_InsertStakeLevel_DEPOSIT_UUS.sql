@@ -19,8 +19,8 @@ DECLARE @DEP_Stake TABLE (
 	[MaxStake] [money] NULL
 ) 
 INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 500.00) -- 
-INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 10.00, 1000.00) -- 
-INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 15.00, 2000.00) -- 
+INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 1000.00) -- 
+INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 2000.00) -- 
 
 DECLARE @MaxStakeLevelID INT
 SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)

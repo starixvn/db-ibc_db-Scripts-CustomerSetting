@@ -19,8 +19,8 @@ DECLARE @CRE_Stake TABLE (
 	[MaxStake] [money] NULL
 ) 
 INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 500.00) -- 
-INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 10.00, 1000.00) -- 
-INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 15.00, 2000.00) -- 
+INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 1000.00) -- 
+INSERT INTO @CRE_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 2000.00) -- 
  
 BEGIN --/* Insert StakeLevel
 	INSERT INTO StakeLevel(
