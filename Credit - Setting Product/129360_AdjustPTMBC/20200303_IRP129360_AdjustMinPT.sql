@@ -141,10 +141,10 @@ BEGIN
 		--update direct account & dummy
 		UPDATE cs 
 		SET 
-			cs.AgentPT = CASE WHEN @roleid = 2 AND custid IN (@custid,@srecommend) THEN @PT * 100  ELSE cs.AgentPT END,
+			cs.AgentPT = CASE WHEN (@roleid = 2 AND custid = @custid) OR (custid = @srecommend) THEN @PT * 100  ELSE cs.AgentPT END,
 			cs.MasterPT = CASE WHEN @roleid = 3 AND custid IN (@custid,@srecommend) THEN @PT * 100  ELSE cs.MasterPT END,
 			cs.SuperPT = CASE WHEN custid = @srecommend THEN @PT ELSE SuperPT END,
-			MinPT = CASE WHEN cs.MinPT < @PT*100 THEN @PT*100 ELSE cs.MinPT END,
+			MinPT = CASE WHEN custid = @custid AND cs.MinPT < @PT*100 THEN @PT*100 ELSE cs.MinPT END,
 			MaxPT = CASE WHEN MaxPT < 100*@PT THEN @PT*100 ELSE MaxPT END
 		FROM CustPTSetting3rd_Agent cs WITH (UPDLOCK,ROWLOCK)			
 		WHERE cs.SportType IN (43,44)
