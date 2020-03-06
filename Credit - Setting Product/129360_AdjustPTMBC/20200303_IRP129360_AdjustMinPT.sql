@@ -45,13 +45,13 @@ BEGIN
 		WHERE custid IN (@custid, @srecommend, @mrecommend)
 		
 		UPDATE co
-		SET minpositiontaking = @PT,
+		SET minpositiontaking = CASE WHEN custid = @custid THEN @PT ELSE minpositiontaking END,
 			maxpositiontaking = CASE WHEN @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,
 			
-			minlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
+			minlivepositiontaking = CASE WHEN custid = @custid AND co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
 			maxlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) AND @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END
 		FROM custoverride co WITH (UPDLOCK,ROWLOCK)		
-		WHERE co.custid = @custid
+		WHERE co.custid IN (@custid,@srecommend,@mrecommend)
 
 		EXEC dbo.Acc_CustSetting_18 @recommend = @recommend, @mrecommend = @mrecommend, @srecommend = @srecommend, @roleid = @roleid, @Target = @Target				
 	END
@@ -70,13 +70,13 @@ BEGIN
 		WHERE custid IN (@custid, @srecommend)
 		
 		UPDATE co
-		SET minpositiontaking = @PT,
+		SET minpositiontaking = CASE WHEN custid = @custid THEN @PT ELSE minpositiontaking END,
 			maxpositiontaking = CASE WHEN @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,
 			
-			minlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
+			minlivepositiontaking = CASE WHEN custid = @custid AND co.sporttype = 1 and co.bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END,
 			maxlivepositiontaking = CASE WHEN co.sporttype = 1 and co.bettype IN (1,3,7,8) AND @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END
 		FROM custoverride co WITH (UPDLOCK,ROWLOCK)		
-		WHERE co.custid = @custid
+		WHERE co.custid IN(@custid,@srecommend)
 
 		EXEC dbo.Acc_CustSetting_18 @mrecommend = @mrecommend, @srecommend = @srecommend, @roleid = @roleid, @Target = @Target					
 	END
