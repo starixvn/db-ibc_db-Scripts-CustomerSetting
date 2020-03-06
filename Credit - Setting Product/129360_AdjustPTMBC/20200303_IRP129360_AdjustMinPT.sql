@@ -127,8 +127,8 @@ BEGIN
 	IF @roleid = 4
 	BEGIN
 		UPDATE cs 
-		SET cs.MaxPT = @PT * 100,
-			cs.MinPT = @PT * 100,
+		SET cs.MaxPT = CASE WHEN cs.MaxPT < @PT * 100 THEN @PT*100 ELSE cs.MaxPT END,
+			cs.MinPT = CASE WHEN cs.MinPT < @PT * 100 THEN @PT*100 ELSE cs.MinPT END,
 			cs.SuperPT  =  @PT * 100 ,
 			cs.MasterPT =  cs.MasterPT + @PT * 100 - cs.SuperPT ,
 			cs.AgentPT  =  cs.AgentPT + @PT * 100 - cs.SuperPT
@@ -144,8 +144,8 @@ BEGIN
 			cs.AgentPT = CASE WHEN @roleid = 2 AND custid IN (@custid,@srecommend) THEN @PT * 100  ELSE cs.AgentPT END,
 			cs.MasterPT = CASE WHEN @roleid = 3 AND custid IN (@custid,@srecommend) THEN @PT * 100  ELSE cs.MasterPT END,
 			cs.SuperPT = CASE WHEN custid = @srecommend THEN @PT ELSE SuperPT END,
-			MinPT = @PT*100,
-			MaxPT = CASE WHEN @PT > MaxPT THEN @PT*100 ELSE MaxPT END
+			MinPT = CASE WHEN cs.MinPT < @PT*100 THEN @PT*100 ELSE cs.MinPT END,
+			MaxPT = CASE WHEN MaxPT < 100*@PT THEN @PT*100 ELSE MaxPT END
 		FROM CustPTSetting3rd_Agent cs WITH (UPDLOCK,ROWLOCK)			
 		WHERE cs.SportType IN (43,44)
 			AND custid IN (@custid, @srecommend, @mrecommend)
