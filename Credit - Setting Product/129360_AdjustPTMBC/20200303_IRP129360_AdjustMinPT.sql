@@ -142,7 +142,7 @@ BEGIN
 		UPDATE cs 
 		SET 
 			cs.AgentPT = CASE WHEN (@roleid = 2 AND custid = @custid) OR (custid = @srecommend) THEN @PT * 100  ELSE cs.AgentPT END,
-			cs.MasterPT = CASE WHEN (@roleid = 3 AND custid = @custid) OR (custid = @srecommend) THEN @PT * 100  ELSE cs.MasterPT END,
+			cs.MasterPT = CASE WHEN (@roleid = 3 AND custid = @custid) OR (@roleid = 2 AND custid = @mrecommend) OR (custid = @srecommend) THEN @PT * 100  ELSE cs.MasterPT END,
 			cs.SuperPT = CASE WHEN custid = @srecommend THEN @PT*100 ELSE SuperPT END,
 			MinPT = CASE WHEN custid = @custid AND cs.MinPT < @PT*100 THEN @PT*100 ELSE cs.MinPT END,
 			MaxPT = CASE WHEN MaxPT < 100*@PT THEN @PT*100 ELSE MaxPT END
