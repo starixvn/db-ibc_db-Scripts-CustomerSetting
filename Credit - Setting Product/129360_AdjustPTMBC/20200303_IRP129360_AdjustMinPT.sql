@@ -321,6 +321,8 @@ UNION ALL
 			OR (co2.sporttype IN (43,44) AND co2.AgentPT = @PT*100)
 			)
 
+DELETE #tblSMA WHERE custid IN (726582,13469206)--KAM,JARWRONG
+			
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -510,6 +512,8 @@ UNION ALL
 			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.alivepositiontaking = @PT)
 			OR (co2.sporttype IN (43,44) AND co2.AgentPT = @PT*100)
 			)
+
+DELETE #tblSMA WHERE custid IN (726582,13469206)--KAM,JARWRONG
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
