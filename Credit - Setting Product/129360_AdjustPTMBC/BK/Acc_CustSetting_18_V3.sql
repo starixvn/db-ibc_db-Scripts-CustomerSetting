@@ -94,9 +94,9 @@ BEGIN
 		BEGIN
 			DELETE @tmp
 			
-			UPDATE TOP (1000) t 
-			OUTPUT DELETED.custid INTO @tmp
+			UPDATE TOP (1000) t 			
 			SET isFinished = 1
+			OUTPUT DELETED.custid INTO @tmp
 			FROM #tblCust t
 			WHERE isFinished = 0
 			
