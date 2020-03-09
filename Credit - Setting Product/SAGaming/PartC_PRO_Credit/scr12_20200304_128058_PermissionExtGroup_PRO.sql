@@ -8,7 +8,7 @@ USE [NAP_UserControl]
 Go
 
 UPDATE [NAP_UserControl].[dbo].[eaFunction] WITH (ROWLOCK,UPDLOCK)
-SET FuncName = 'Edit LiveCasino Setting', FuncDesc = 'Edit LiveCasino Setting', FuncKey = 'LiveCasino'
+SET FuncName = 'Edit LiveCasino Setting', FuncDesc = 'Edit LiveCasino Setting', FuncKey = 'LiveCasinoSetting'
 WHERE FuncID = 96
 
 UPDATE [NAP_UserControl].[dbo].[eaFunction] WITH (ROWLOCK,UPDLOCK)
@@ -16,5 +16,5 @@ SET FuncName = 'Enable LiveCasino Status', FuncDesc = 'Enable LiveCasino Status'
 WHERE FuncID = 97
 
 UPDATE [NAP_UserControl].[dbo].[eaFunction] WITH (ROWLOCK,UPDLOCK)
-SET FuncName = 'Edit LiveCasino Betting Limit', FuncDesc = 'Edit LiveCasino Betting Limit', FuncKey = 'LiveCasino'
+SET FuncName = 'Edit LiveCasino Betting Limit', FuncDesc = 'Edit LiveCasino Betting Limit', FuncKey = 'LiveCasinoBetting'
 WHERE FuncID = 98
