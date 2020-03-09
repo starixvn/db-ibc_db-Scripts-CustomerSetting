@@ -2,13 +2,14 @@
 	Created: 20200309@Tiara
 	Date: 20200309
 	Task: Insert Winlimit_ProductOffer [Redmine: 128058]
-	DB: DBCUST/CustDB
+	DB: DBTRANS/bodb02
 */
 
 
 
-USE [CustDB]
+USE [bodb02]
 GO
+
 
 DELETE W
 FROM Winlimit_ProductOffer W WITH (ROWLOCK)
