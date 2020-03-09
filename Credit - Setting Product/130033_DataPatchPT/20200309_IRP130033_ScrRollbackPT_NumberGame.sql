@@ -1,6 +1,6 @@
 /*
 	Created: 20200309@Johnson
-	Task: rollback setting for NG [redmine: 30033]
+	Task: rollback setting for NG [redmine: 130033]
 	DB: DBCUST/CUSTDB
 */
 
