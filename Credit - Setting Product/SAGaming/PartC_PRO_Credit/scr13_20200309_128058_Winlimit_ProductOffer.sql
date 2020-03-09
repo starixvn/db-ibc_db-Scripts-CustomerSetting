@@ -5,19 +5,15 @@
 	DB: DBTRANS/bodb02
 */
 
-
-
 USE [bodb02]
 GO
 
 DELETE W
 FROM Winlimit_ProductOffer W WITH (ROWLOCK)
-WHERE W.BettypeID IN (2401,3001)
+WHERE W.ProductID = 39
 
-INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[BettypeID],[isActive_SMA],[isActive_Company])
-VALUES (41,2401,1,1)
-INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[BettypeID],[isActive_SMA],[isActive_Company])
-VALUES (41,3001,1,1)
+INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[Bettype],[isActive_SMA],[isActive_Company])
+VALUES (39,3001,1,1)
 
 
 
