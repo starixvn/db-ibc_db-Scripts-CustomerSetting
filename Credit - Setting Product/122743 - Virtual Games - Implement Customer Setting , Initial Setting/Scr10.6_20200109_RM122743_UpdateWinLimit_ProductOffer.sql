@@ -2,9 +2,9 @@
 	Created: Eden
 	Date: 20200309
 	Task: Update WinLimit_ProductOffer IsActive_SMA = 1
-	DB: DBCust/CustDB
+	DB: DBTXN/bodb02
 */
-USE CustDB
+USE bodb02
 GO
 IF EXISTS( SELECT 1 FROM WinLimit_ProductOffer WITH(NOLOCK) WHERE ProductId = 38 AND BettypeID = 4601)
 	UPDATE WinLimit_ProductOffer WITH(ROWLOCK)
