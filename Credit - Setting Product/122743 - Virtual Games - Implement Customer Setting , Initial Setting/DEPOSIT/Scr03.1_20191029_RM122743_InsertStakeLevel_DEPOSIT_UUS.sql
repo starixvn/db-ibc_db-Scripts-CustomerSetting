@@ -16,11 +16,13 @@ DECLARE @DEP_Stake TABLE (
 	[GameTypeID] [int] NOT NULL,
 	[Currency] [nvarchar](max) NULL,
 	[MinStake] [money] NULL,
-	[MaxStake] [money] NULL
+	[MaxStake] [money] NULL,
+	[MinLabel] [varchar](20) NULL,
+	[MaxLabel] [varchar](20) NULL
 ) 
-INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 500.00) -- 
-INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 1000.00) -- 
-INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake]) VALUES (4601, N'UUS', 5.00, 2000.00) -- 
+INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 500.00, '5', '500') -- 
+INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 1000.00, '5', '1,000') -- 
+INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 2000.00, '5', '2,000') -- 
 
 DECLARE @MaxStakeLevelID INT
 SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
@@ -37,8 +39,8 @@ BEGIN --/* Insert StakeLevel
 		,StakeLevelID
 	)
 	SELECT	t.GameTypeID,
-			CONVERT(VARCHAR(20),CONVERT(DECIMAL(19,0),t.MinStake)) AS MinLabel,
-			CONVERT(VARCHAR(20),CONVERT(DECIMAL(19,0),t.MaxStake)) AS MaxLabel,
+			t.MinLabel,
+			t.MaxLabel,
 			CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
 			CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
 			ExchangeId = e.exchangeid,
