@@ -4,14 +4,19 @@
 	DB: DBCUST/CUSTDB
 */
 
---18k rows affects
-SELECT cs.*, 0 isUpdate
-INTO #CustSetting3rd_History
+--16k rows affects
+WITH t AS ( 
+SELECT cs.*, ROW_NUMBER() OVER (PARTITION BY cs.custid, cs.sporttype, cs.bettype ORDER BY  cs.UpdateTime ASC) rn
 FROM DBTP.bodb_CustHistory.dbo.CustSetting3rd_History cs (nolock)
 	INNER JOIN DBTP.bodb02.dbo.custinfo ci (nolock) on cs.custid = ci.custid
 WHERE srecommend = 12300617
 	AND sporttype = 161
-	AND UpdateTime>= '3/9/2020 1:19:00'
+	AND UpdateTime>= '3/9/2020 1:19:00' and UpdateTime< '3/9/2020 1:21:00'
+)
+SELECT t.*, 0 isUpdate
+INTO #CustSetting3rd_History 
+FROM t
+WHERE rn = 1
 
 SELECT cs.*
 INTO #CustOverride3rd_History
@@ -19,7 +24,7 @@ FROM DBTP.bodb_CustHistory.dbo.CustOverride3rd_History cs (nolock)
 	INNER JOIN DBTP.bodb02.dbo.custinfo ci (nolock) on cs.custid = ci.custid
 WHERE srecommend = 12300617
 	AND sporttype = 161
-	AND UpdateTime>= '3/9/2020 1:19:00'
+	AND UpdateTime>= '3/9/2020 1:19:00' and UpdateTime< '3/9/2020 1:21:00'
 
 DECLARE @tmp TABLE (
 	[custid] [int] NOT NULL,
