@@ -1,6 +1,6 @@
 /*
 	Created: 20200309@Johnson
-	Task: update setting for NG for member POWTA40010[redmine: 130033]
+	Task: update setting for NG for member POWTRP2100,POWTA40010[redmine: 130033]
 	DB: DBCUST/CUSTDB
 */
 
