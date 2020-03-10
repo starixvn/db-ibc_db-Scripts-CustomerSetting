@@ -339,27 +339,26 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.currency = 20
  AND s.site IN (
-				'spondemo'
-				,'Macaubet'
-				,'Aoncash'
-				,'ITCBet'
-				,'Athena000'
-				,'9bet'
-				,'M8bola'
-				,'Q8bola'
-				,'BE7'
-				,'NBCbet'
-				,'Unobet'
-				,'Bolanation'
-				,'Luckywin88'
-				,'Winn69'
-				,'Axiawin'
-				,'Jumbo88'
-				,'Lagadewa'
-				,'Ratugg'
-				,'Monstergol'
+				 'Athena000'
+				--,'spondemo'
+				--,'Macaubet'
+				--,'Aoncash'
+				--,'ITCBet'
+				--,'9bet'
+				--,'M8bola'
+				--,'Q8bola'
+				--,'BE7'
+				--,'NBCbet'
+				--,'Unobet'
+				--,'Bolanation'
+				--,'Luckywin88'
+				--,'Winn69'
+				--,'Axiawin'
+				--,'Jumbo88'
+				--,'Lagadewa'
+				--,'Ratugg'
+				--,'Monstergol'
 				)
-
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
