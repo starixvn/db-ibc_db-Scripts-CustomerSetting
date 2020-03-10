@@ -97,7 +97,7 @@ BEGIN
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 	
 	DECLARE @batch int = 3000
-	WHILE 1 <> 1 
+	WHILE 1 = 1 
 	BEGIN
 		TRUNCATE TABLE #TempProductStatus
 
