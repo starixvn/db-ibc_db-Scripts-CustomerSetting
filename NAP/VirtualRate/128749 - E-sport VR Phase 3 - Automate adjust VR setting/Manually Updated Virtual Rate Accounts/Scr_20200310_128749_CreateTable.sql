@@ -25,4 +25,24 @@ CREATE TABLE [dbo].[VRSettingManualUpdAcc](
 GO
 
 
-
+CREATE TABLE [dbo].[VRSetting_AutoUpdate_VirtualRate_ByExcel](
+	[CustId] [int] NOT NULL,
+	[IsLive] [bit] NOT NULL,
+	[SportType] [int] NOT NULL,
+	[VRLeagueGroupId] [int] NOT NULL,
+	[VRBettypeGroupId] [int] NOT NULL,
+	[Bettype] [int] NOT NULL,
+	[VirtualMultiplier] [smallmoney] NULL,
+	[CreatedDate] [datetime] NULL DEFAULT GETDATE(),
+	[ImportedBy] [int] NOT NULL
+CONSTRAINT [PK_VRSetting_AutoUpdate_VirtualRate] PRIMARY KEY CLUSTERED 
+	(
+		[CustId] ASC,
+		[SportType] ASC,
+		[IsLive] ASC,
+		[VRLeagueGroupId] ASC,
+		[VRBettypeGroupId] ASC,
+		[Bettype] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON virtualrate_table
+) ON virtualrate_table
+GO
