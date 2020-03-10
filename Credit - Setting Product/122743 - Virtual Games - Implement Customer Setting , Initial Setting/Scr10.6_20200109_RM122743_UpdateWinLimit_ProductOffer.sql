@@ -6,10 +6,10 @@
 */
 USE bodb02
 GO
-IF EXISTS( SELECT 1 FROM WinLimit_ProductOffer WITH(NOLOCK) WHERE ProductId = 38 AND BettypeID = 4601)
+IF EXISTS( SELECT 1 FROM WinLimit_ProductOffer WITH(NOLOCK) WHERE ProductId = 38 AND Bettype = 4601)
 	UPDATE WinLimit_ProductOffer WITH(ROWLOCK)
 	SET  IsActive_SMA = 1
-	WHERE ProductId = 38 AND BettypeID = 4601
+	WHERE ProductId = 38 AND Bettype = 4601
 
 ELSE
 INSERT INTO dbo.WinLimit_ProductOffer(
