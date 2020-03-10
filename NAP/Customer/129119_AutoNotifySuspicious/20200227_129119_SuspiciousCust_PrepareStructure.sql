@@ -18,3 +18,7 @@ CONSTRAINT [PK_SuspiciousCust] PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [table_customer]
 ) ON [table_customer]
 GO
+
+-----Only run on DBACC.bodb02
+CREATE NONCLUSTERED INDEX IX_SuspiciousCust_NotifyStatus1 ON SuspiciousCust (NotifyStatus1)
+CREATE NONCLUSTERED INDEX IX_SuspiciousCust_NotifyStatus2 ON SuspiciousCust (NotifyStatus2)
