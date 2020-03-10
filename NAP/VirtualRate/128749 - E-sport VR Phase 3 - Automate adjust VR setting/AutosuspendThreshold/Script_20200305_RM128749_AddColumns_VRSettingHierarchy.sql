@@ -2,7 +2,7 @@
 	Created: 20200305@Eden
 	Task: Add more columns for VRSettingHierarchy table 
 	RM: #128749
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB and CustDB_CustSetting publication
 */
 
 USE CustDB
