@@ -14,7 +14,7 @@ IF EXISTS( SELECT 1 FROM WinLimit_ProductOffer WITH(NOLOCK) WHERE ProductId = 38
 ELSE
 INSERT INTO dbo.WinLimit_ProductOffer(
 	  ProductID
-	, BettypeID
+	, Bettype
 	, IsActive_SMA
 	, IsActive_Company
 )
