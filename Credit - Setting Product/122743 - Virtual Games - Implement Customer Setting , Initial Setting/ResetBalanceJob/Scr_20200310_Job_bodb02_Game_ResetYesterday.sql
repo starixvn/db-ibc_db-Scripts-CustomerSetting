@@ -2,8 +2,10 @@
 	Created: Eden
 	Date: 20200310
 	Task: Alter job bodb02 : Game : ResetYesterday 
-	DB: DBCust/CustDB
+	DB: DBTXN
 */
+--Step 1 : DROP Job:  'bodb02 : Game : ResetYesterday'
+--Step 2: ReCreate Job:  'bodb02 : Game : ResetYesterday'
 USE [msdb]
 GO
 BEGIN TRANSACTION
