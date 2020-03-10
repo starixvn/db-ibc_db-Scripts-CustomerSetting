@@ -26,7 +26,7 @@ WHERE ci.roleid = 4
 SELECT DISTINCT u.GroupName
 INTO #Acc_CustGroup
 FROM #supers c WITH(NOLOCK)
-	INNER join DBAGE.bodb_AGE.dbo.Acc_CustGroup u WITH(NOLOCK) ON c.custid= u.custid
+	INNER join CustDB.dbo.Acc_CustGroup u WITH(NOLOCK) ON c.custid= u.custid
 
 SELECT GroupID
 INTO #GroupExt
