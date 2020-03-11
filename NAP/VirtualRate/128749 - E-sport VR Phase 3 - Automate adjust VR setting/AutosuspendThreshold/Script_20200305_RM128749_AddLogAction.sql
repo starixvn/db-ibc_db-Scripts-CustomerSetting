@@ -10,7 +10,7 @@ GO
 
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT	811, 'Update Global AutoSuspendThreshold', 'Acc_VR_AutoSuspendThreshold_Upd', 1, NULL, NULL 
+SELECT	811, 'Update Global Auto Suspend Threshold', 'Acc_VR_AutoSuspendThreshold_Upd', 1, NULL, NULL 
 
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
