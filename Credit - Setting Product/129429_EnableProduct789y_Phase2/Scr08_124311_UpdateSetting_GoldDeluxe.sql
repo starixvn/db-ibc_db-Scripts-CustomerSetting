@@ -1,8 +1,8 @@
 /*
-	Created: Elodie	
-	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
+	Created: Tiara	
+	Task: Update betsetting for customers under 789y Headline - RedmineID: #129429
 	DB: DBCUST/CustDB
-	Date: 20200221
+	Date: 20200310
 */ 
 --	Gold Deluxe
 ALTER PROCEDURE [dbo].[Acc_CustSetting_17]
@@ -23,25 +23,23 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		IsDisable BIT,
 		IsFinishedStakeLevel BIT DEFAULT(0)
 	)
 
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT,
-		IsDisable BIT
+		roleid TINYINT
 	)	
 
-	INSERT INTO #SMATemp (CustID, roleid, IsDisable)
+	INSERT INTO #SMATemp (CustID, roleid)
 	SELECT DISTINCT ci.custid, roleid, ci.DisableGoldDeluxe
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE srecommend = @srecommend 
 		AND roleid IN (2,3,4) 
 		AND Enabled = 1 
 	
-	INSERT INTO #MemberTemp (CustID, IsDisable)
+	INSERT INTO #MemberTemp (CustID)
 	SELECT DISTINCT ci.custid, ci.DisableGoldDeluxe
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE srecommend = @srecommend 
@@ -59,7 +57,7 @@ BEGIN
 
 
 	----------------------------------------Stake Level------------------------------------
-	DECLARE @MemberBatchStakeLevel TABLE(CustId INT, IsDisable BIT)
+	DECLARE @MemberBatchStakeLevel TABLE(CustId INT)
 	--Update super
 	UPDATE cs
 	SET cs.StakeLevelList = T1.LowestUpline
@@ -72,7 +70,7 @@ BEGIN
 					) T1 -- Direct Upline
 	WHERE cs.CustID = @srecommend
 		AND cs.GameTypeID IN (1701,1702)
-		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR s.IsDisable = 1)
+		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' )
 
 	--Update master
 	UPDATE cs
@@ -90,7 +88,7 @@ BEGIN
 	WHERE m.roleid = 3
 		AND css.CustID = @srecommend
 		AND cs.GameTypeID IN (1701,1702)
-		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR m.IsDisable = 1)
+		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '')
 
 	INSERT INTO #CustGameTypeMaster (CustID, GameTypeId, StakeLevelList)
 	SELECT ci.custid, GameTypeId, cs.StakeLevelList
@@ -114,13 +112,13 @@ BEGIN
 					) T1 -- Direct Upline
 	WHERE a.roleid = 2
 		AND cs.GameTypeID IN (1701,1702)
-		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR a.IsDisable = 1)
+		AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '')
 
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t 		 
 		SET t.IsFinishedStakeLevel = 1
-		OUTPUT INSERTED.CustID, INSERTED.IsDisable INTO @MemberBatchStakeLevel(CustId, IsDisable)
+		OUTPUT INSERTED.CustID INTO @MemberBatchStakeLevel(CustId)
 		FROM #MemberTemp t
 		WHERE IsFinishedStakeLevel = 0
 	 
@@ -141,7 +139,7 @@ BEGIN
 							ORDER BY MinStake, MaxStake ASC
 						) T1 -- Direct Upline
 		WHERE cs.GameTypeID IN (1701,1702)
-			AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '' OR mem.IsDisable = 1)
+			AND (cs.StakeLevelList IS NULL OR cs.StakeLevelList = '')
 		
 		DELETE @MemberBatchStakeLevel
 	END

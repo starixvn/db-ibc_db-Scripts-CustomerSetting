@@ -1,9 +1,9 @@
 /*
-	Created: Elodie	
-	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
+	Created: Tiara	
+	Task: Update betsetting for customers under 789y Headline - RedmineID: #129429
 	DB: DBCUST/CustDB
-	Date: 20200221
-*/ 
+	Date: 20200310
+*/
 --	Virtual Sports
 ALTER PROCEDURE [dbo].[Acc_CustSetting_13]
 	@srecommend INT	
@@ -33,7 +33,6 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		IsDisable BIT,
 		IsFinishedBetLimit BIT DEFAULT(0)
 
 	)
@@ -41,8 +40,7 @@ BEGIN
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT,
-		IsDisable BIT
+		roleid TINYINT
 	)
 
 	SELECT t.* 
@@ -50,26 +48,22 @@ BEGIN
 	FROM ProductSettingDetail t WITH (NOLOCK)
 	WHERE t.SettingType = 2 AND t.ProductID = @ProductID
 
-	INSERT INTO #SMATemp (CustID, roleid, IsDisable)
-	SELECT DISTINCT ci.custid, roleid, st.value
+	INSERT INTO #SMATemp (CustID, roleid)
+	SELECT DISTINCT ci.custid, roleid
 	FROM Custinfo ci WITH (NOLOCK)
-		INNER JOIN dbo.CustProductStatus cps WITH (NOLOCK) ON cps.CustID = ci.custid		
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsDisabled, @BitmapOrder) st
 	WHERE srecommend = @srecommend 
 		AND roleid IN (2,3,4) 
 		AND Enabled = 1 
 	
-	INSERT INTO #MemberTemp (CustID, IsDisable)
-	SELECT DISTINCT ci.custid, st.value
+	INSERT INTO #MemberTemp (CustID)
+	SELECT DISTINCT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
-		INNER JOIN dbo.CustProductStatus cps WITH (NOLOCK) ON cps.CustID = ci.custid		
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsDisabled, @BitmapOrder) st
 	WHERE srecommend = @srecommend 
 		AND roleid = 1  
 		AND Enabled = 1 
 
 	----------------------------------------BetSetting------------------------------------
-	DECLARE @MemberBatchBetSetting TABLE(CustId INT, IsDisable BIT)
+	DECLARE @MemberBatchBetSetting TABLE(CustId INT)
 
 	UPDATE cs
 	SET cs.MinBet = @MinBetDefault,
@@ -78,13 +72,13 @@ BEGIN
 	FROM dbo.CustBetSetting3rd_Agent cs WITH (ROWLOCK) 
 		INNER JOIN #SMATemp sma ON sma.CustID = cs.custid
 		INNER JOIN #SportBettypeFilter2 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
-	WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR sma.IsDisable = 1
+	WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 
 	
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t 		 
 		SET t.IsFinishedBetLimit = 1
-		OUTPUT INSERTED.CustID, INSERTED.IsDisable INTO @MemberBatchBetSetting
+		OUTPUT INSERTED.CustID INTO @MemberBatchBetSetting
 		FROM #MemberTemp t
 		WHERE IsFinishedBetLimit = 0
 	 
@@ -98,7 +92,7 @@ BEGIN
 		FROM dbo.CustBetSetting3rd_Member cs WITH (ROWLOCK) 
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
 			INNER JOIN #SportBettypeFilter2 ft WITH (NOLOCK) ON ft.SportType = cs.SportType AND ft.BetType = cs.BetType 
-		WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 OR mem.IsDisable = 1
+		WHERE cs.MaxBet < 1 OR cs.MaxPerMatch < 1 
 		
 		DELETE @MemberBatchBetSetting
 	END

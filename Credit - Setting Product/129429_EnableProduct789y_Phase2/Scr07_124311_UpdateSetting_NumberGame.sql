@@ -1,8 +1,8 @@
 /*
-	Created: Elodie	
-	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
+	Created: Tiara	
+	Task: Update betsetting for customers under 789y Headline - RedmineID: #129429
 	DB: DBCUST/CustDB
-	Date: 20200221
+	Date: 20200310
 */ 
 --	Number Game & Happy 5
 ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_16]
@@ -23,28 +23,27 @@ BEGIN
 	CREATE TABLE #DownlineTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		IsDisable BIT,
 		MaxPerMatch161 MONEY,
 		MaxPerMatch164 MONEY,
 		MaxPerBall161 MONEY,
 		IsFinishedBetLimit BIT DEFAULT(0)
 	)
 
-	INSERT INTO #DownlineTemp (CustID, IsDisable, MaxPerMatch161, MaxPerMatch164, MaxPerBall161)
-	SELECT ci.custid, ci.DisableNumber, ci.maxpermatch161, ci.maxpermatch164, ci.MaxPerBall161
+	INSERT INTO #DownlineTemp (CustID, MaxPerMatch161, MaxPerMatch164, MaxPerBall161)
+	SELECT ci.custid, ci.maxpermatch161, ci.maxpermatch164, ci.MaxPerBall161
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE srecommend = @srecommend 
 		AND Enabled = 1 
-		AND (ci.DisableNumber = 1 OR ci.maxpermatch161 < 1 OR ci.maxpermatch164 < 1 OR ci.MaxPerBall161 < 1)
+		AND (ci.maxpermatch161 < 1 OR ci.maxpermatch164 < 1 OR ci.MaxPerBall161 < 1)
 
 	----------------------------------------BetSetting------------------------------------
-	DECLARE @MemberBatchBetSetting TABLE(CustId INT, IsDisable BIT, MaxPerMatch161 MONEY, MaxPerMatch164 MONEY, MaxPerBall161 MONEY)
+	DECLARE @MemberBatchBetSetting TABLE(CustId INT, MaxPerMatch161 MONEY, MaxPerMatch164 MONEY, MaxPerBall161 MONEY)
 
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t 		 
 		SET t.IsFinishedBetLimit = 1
-		OUTPUT INSERTED.CustID, INSERTED.IsDisable, INSERTED.MaxPerMatch161, INSERTED.MaxPerMatch164, INSERTED.MaxPerBall161 INTO @MemberBatchBetSetting
+		OUTPUT INSERTED.CustID, INSERTED.MaxPerMatch161, INSERTED.MaxPerMatch164, INSERTED.MaxPerBall161 INTO @MemberBatchBetSetting
 		FROM #DownlineTemp t
 		WHERE IsFinishedBetLimit = 0
 	 
@@ -54,9 +53,9 @@ BEGIN
 		IF dbo.f_CheckRepTable('CustSetting3rd') = 1
 		BEGIN
 			UPDATE cs
-			SET cs.MinBet = CASE WHEN mem.IsDisable = 1 OR (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1)) 
+			SET cs.MinBet = CASE WHEN (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1)) 
 									OR (cs.sporttype = 164 AND mem.MaxPerMatch164 < 1) THEN @MinBetDefault ELSE cs.MinBet END,
-				cs.MaxBet = CASE WHEN mem.IsDisable = 1 OR (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1))
+				cs.MaxBet = CASE WHEN  (cs.sporttype = 161 AND (mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1))
 									OR (cs.sporttype = 164 AND mem.MaxPerMatch164 < 1) THEN @MaxBetDefault ELSE cs.MaxBet END
 			FROM dbo.CustSetting3rd cs WITH (ROWLOCK) 
 				INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = cs.custid
@@ -64,9 +63,9 @@ BEGIN
 		END
 
 		UPDATE ci 
-		SET ci.maxpermatch161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.IsDisable = 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
-			ci.MaxPerBall161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1 OR mem.IsDisable = 1 THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
-			ci.maxpermatch164 = CASE WHEN mem.MaxPerMatch164 < 1 OR mem.IsDisable = 1 THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
+		SET ci.maxpermatch161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1  THEN @MaxPerMatchDefault ELSE ci.maxpermatch161 END, 			
+			ci.MaxPerBall161 = CASE WHEN mem.MaxPerMatch161 < 1 OR mem.MaxPerBall161 < 1  THEN @MaxPerBallDefault ELSE ci.MaxPerBall161 END,
+			ci.maxpermatch164 = CASE WHEN mem.MaxPerMatch164 < 1  THEN @MaxPerMatchDefault ELSE ci.maxpermatch164 END
 		FROM dbo.custInfo ci WITH (ROWLOCK)
 			INNER JOIN @MemberBatchBetSetting mem ON mem.CustID = ci.custid
 		

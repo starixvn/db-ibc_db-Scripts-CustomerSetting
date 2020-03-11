@@ -1,8 +1,8 @@
 /*
-	Created: Elodie	
-	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
+	Created: Tiara	
+	Task: Update betsetting for customers under 789y Headline - RedmineID: #129429
 	DB: DBCUST/CustDB
-	Date: 20200221
+	Date: 20200310
 */ 
 --	Number Game & Happy 5
 DECLARE @MinBetDefault MONEY, @MaxBetDefault MONEY, @MaxPerMatchDefault MONEY, @MaxPerBallDefault MONEY
@@ -29,7 +29,6 @@ FROM dbo.CustSetting3rd cs WITH (NOLOCK)
 	INNER JOIN #supers s ON ci.srecommend = s.custid
 WHERE cs.sporttype IN (161,164)
 	AND cs.maxbet < 1 
-	AND ci.DisableNumber = 0
 	AND ((cs.sporttype = 161 AND ci.maxpermatch161 >= 1 AND ci.MaxPerBall161 >= 1) OR (cs.sporttype = 164 AND ci.maxpermatch164 >= 1))
 
 UPDATE ci

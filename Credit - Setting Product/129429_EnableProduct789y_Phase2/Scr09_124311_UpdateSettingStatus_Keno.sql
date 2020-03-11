@@ -1,9 +1,9 @@
 /*
-	Created: Elodie	
-	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
+	Created: Tiara	
+	Task: Update betsetting for customers under 789y Headline - RedmineID: #129429
 	DB: DBCUST/CustDB
-	Date: 20200221
-*/ 
+	Date: 20200310
+*/
 --	Keno
 ALTER PROCEDURE [dbo].[Acc_CustSetting_18]
 	@srecommend INT	
@@ -49,12 +49,11 @@ BEGIN
 		UPDATE cs
 		SET cs.MinBet = @MinBetDefault,
 			cs.MaxBet = @MaxBetDefault,
-			cs.MaxPerGameType = @MaxPerMatchDefault,
-			cs.IsDisabled = 0
+			cs.MaxPerGameType = @MaxPerMatchDefault
 		FROM dbo.CustGameType cs WITH (ROWLOCK) 
 			INNER JOIN @MemberBatch mem ON mem.CustID = cs.custid
 		WHERE cs.GameTypeID BETWEEN 1 AND 99
-			AND (cs.MaxBet < 1 OR cs.MaxPerGameType < 1 OR cs.IsDisabled = 1)
+			AND (cs.MaxBet < 1 OR cs.MaxPerGameType < 1)
 		
 		DELETE @MemberBatch
 	END
