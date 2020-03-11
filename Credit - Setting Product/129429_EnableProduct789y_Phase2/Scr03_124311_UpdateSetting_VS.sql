@@ -19,12 +19,11 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	
-	DECLARE @BitmapOrder TINYINT, @Currency INT, @MaxLossGlobal SMALLMONEY, @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY
+	DECLARE @BitmapOrder TINYINT, @Currency INT, @MinBetDefault SMALLMONEY, @MaxBetDefault SMALLMONEY, @MaxPerMatchDefault SMALLMONEY
 	SELECT @MinBetDefault = 3, @MaxBetDefault = 500, @MaxPerMatchDefault = 2000
 
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
-	SELECT @MaxLossGlobal = MinLossLimit FROM dbo.LossLimit_GlobalSetting WITH (NOLOCK) WHERE ProductId = @ProductId AND ExchangeId = @Currency
-	
+
 	SELECT @BitmapOrder = ps.bitmapOrder
 	FROM dbo.ProductStatusProfile ps WITH (NOLOCK) 
 		INNER JOIN dbo.ProductSettingDetail psd WITH (NOLOCK) ON psd.SportType = ps.Sporttype AND psd.BetType = ps.Bettype

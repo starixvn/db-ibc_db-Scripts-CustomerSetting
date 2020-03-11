@@ -18,7 +18,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 	
-	DECLARE @BitmapOrder TINYINT, @Currency INT, @MaxLossGlobal SMALLMONEY
+	DECLARE @BitmapOrder TINYINT, @Currency INT
 
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
 	
