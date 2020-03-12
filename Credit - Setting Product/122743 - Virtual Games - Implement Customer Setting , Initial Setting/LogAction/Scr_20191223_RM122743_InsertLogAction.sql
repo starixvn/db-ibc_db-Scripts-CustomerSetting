@@ -1,4 +1,4 @@
-/*
+﻿/*
 	Created: 20191223@Eden
 	Task: Prepare for log status of Virtual Games [#RM:122743]
 	DB: DBLOG/bodb_CustomerLog
