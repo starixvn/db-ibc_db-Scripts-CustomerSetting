@@ -1,7 +1,7 @@
 /*
 	Created: 20200312@Tiara
 	Date: 20200312
-	Task: Update Max Discount ProductSettingDetail [Redmine: #128128]
+	Task: Update Max Discount ProductSettingDetail [Redmine: #128058]
 	DB: DBCUST/CustDB
 */
 
