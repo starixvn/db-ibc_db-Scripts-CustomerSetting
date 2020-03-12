@@ -126,7 +126,8 @@ WHERE ci.roleid = 4
 					WHERE CustID = ci.custid)													
 		AND ci.roleid=3 
 		AND ci.srecommend in (select custid from #dummySuper)
-	
+		AND ci.custid NOT IN (3645792)--M9999RM	
+		
 	IF @@rowcount > 0	
 		SELECT @isDummySuper = 1
 		
@@ -197,8 +198,8 @@ WHERE ci.roleid = 4
 					ISNULL(bitmapOrder,0) < 5 --From VB onwards
 					OR 
 					CASE substring(bitmapHasSynced, 1+((bitmapOrder-1)/8), 1) & POWER(2, (bitmapOrder-1)%8) WHEN 0 THEN 0 ELSE 1 END = 1		 
-				)
-	
+				)			
+			
 	INSERT INTO #SuperPT (CustID, SportType,BetType,IsLive,SuperPT,MasterPT,AgentPT,IsAutoMasterPT,AutoMasterPT,IsAutoSuperPT,AutoSuperPT,MinPT,MaxPT)			
 	SELECT cs.CustID, cs.SportType,cs.BetType,cs.IsLive,cs.SuperPT,cs.MasterPT,cs.AgentPT,cs.IsAutoMasterPT,cs.AutoMasterPT,cs.IsAutoSuperPT,cs.AutoSuperPT,cs.MinPT,cs.MaxPT
 	FROM dbo.CustInfo ci

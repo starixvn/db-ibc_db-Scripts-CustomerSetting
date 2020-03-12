@@ -291,6 +291,7 @@ UNION ALL
 			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.mlivepositiontaking = @PT)
 			OR (co2.sporttype IN (43,44) AND co2.MasterPT = @PT*100)
 			)
+		AND ci.custid NOT IN (3645792)--M9999RM	
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
 	SELECT DISTINCT ci.custid
@@ -473,6 +474,7 @@ UNION ALL
 			OR (co.sporttype = 1 AND co.bettype IN (1,3,7,8) AND co.mlivepositiontaking = @PT)
 			OR (co2.sporttype IN (43,44) AND co2.MasterPT = @PT*100)
 			)
+		AND ci.custid NOT IN (3645792)--M9999RM		
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
 	SELECT DISTINCT ci.custid

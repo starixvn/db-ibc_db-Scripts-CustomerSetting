@@ -126,7 +126,8 @@ WHERE ci.roleid = 4
 					WHERE CustID = ci.custid)													
 		AND ci.roleid=3 
 		AND ci.srecommend in (select custid from #dummySuper)
-	
+		AND ci.custid NOT IN (3645792)--M9999RM	
+		
 	IF @@rowcount > 0	
 		SELECT @isDummySuper = 1
 	
