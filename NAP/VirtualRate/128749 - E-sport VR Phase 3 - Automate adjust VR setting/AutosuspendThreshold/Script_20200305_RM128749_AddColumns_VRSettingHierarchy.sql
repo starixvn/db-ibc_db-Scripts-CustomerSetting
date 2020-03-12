@@ -8,6 +8,7 @@
 USE CustDB
 ALTER TABLE VRSettingHierarchy ADD VRAutoSuspendThresholdNonLive smallmoney
 ALTER TABLE VRSettingHierarchy ADD VRAutoSuspendThresholdLive smallmoney
+GO
 
 UPDATE VRSettingHierarchy WITH(ROWLOCK)
 SET VRAutoSuspendThresholdNonLive = 1.00,
