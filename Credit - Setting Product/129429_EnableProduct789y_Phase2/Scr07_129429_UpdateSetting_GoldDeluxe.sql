@@ -33,14 +33,14 @@ BEGIN
 	)	
 
 	INSERT INTO #SMATemp (CustID, roleid)
-	SELECT DISTINCT ci.custid, roleid, ci.DisableGoldDeluxe
+	SELECT DISTINCT ci.custid, roleid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE srecommend = @srecommend 
 		AND roleid IN (2,3,4) 
 		AND Enabled = 1 
 	
 	INSERT INTO #MemberTemp (CustID)
-	SELECT DISTINCT ci.custid, ci.DisableGoldDeluxe
+	SELECT DISTINCT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE srecommend = @srecommend 
 		AND roleid = 1  
