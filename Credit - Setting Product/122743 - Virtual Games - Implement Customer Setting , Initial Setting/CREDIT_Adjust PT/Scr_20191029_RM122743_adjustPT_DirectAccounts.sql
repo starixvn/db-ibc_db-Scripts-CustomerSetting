@@ -60,6 +60,7 @@ BEGIN
 
 		UPDATE cs 
 		SET cs.MasterPT = @PT,
+			cs.SuperPT = 0,
 			cs.MaxPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		WHERE cs.sporttype = 245 AND cs.bettype = 4601
@@ -68,6 +69,7 @@ BEGIN
 		UPDATE cs 
 		SET cs.AgentPT = @PT,
 			cs.MasterPT = 0,
+			cs.SuperPT = 0,
 			cs.MaxPT = @PT
 		FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		WHERE cs.sporttype = 245 AND cs.bettype = 4601
