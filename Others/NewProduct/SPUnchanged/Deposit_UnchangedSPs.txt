@@ -1,0 +1,3 @@
+Dep_DynamicCustSetting\UpdateSetting\Select\Acc_Dep_CustSetting_StatusSettingSelect.sql
+Dep_DynamicCustSetting\UpdateSetting\Update\2_BetLimit\Acc_Dep_CustSetting_BetLimitSettingSelect.sql
+Dep_DynamicCustSetting\Others\f_Dep_CustSetting_SportBetTypeSettingSelect.sql
