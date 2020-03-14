@@ -13,7 +13,7 @@ SELECT StakeLevelID, 1902, CAST(1 AS NVARCHAR(50)),CAST(500 AS NVARCHAR(50)), 1 
 FROM StakeLevel s WITH(NOLOCK) 
 	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
 WHERE GameTypeID=1901 AND GameGroupID=9
-	AND (e.Code = 'USD' OR e.exchangeid = 20)
+	AND e.Code = 'USD'
 
 SELECT TOP 1000 s.*, sd.* 
 FROM StakeLevelGroupDetail sd WITH (NOLOCK) 
