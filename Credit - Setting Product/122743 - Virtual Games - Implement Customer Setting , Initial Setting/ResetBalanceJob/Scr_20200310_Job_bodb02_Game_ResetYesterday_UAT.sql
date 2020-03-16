@@ -4,9 +4,10 @@
 	Task: Alter job bodb02 : Game : ResetYesterday  for UAT
 	DB: DBTXN
 */
---Step 1 : DROP Job:  'bodb02 : Game : ResetYesterday'
---Step 2: ReCreate Job:  'bodb02 : Game : ResetYesterday'
 USE [msdb]
+GO
+IF EXISTS (SELECT job_id FROM msdb.dbo.sysjobs_view WHERE name = N'bodb02 : Game : ResetYesterday')
+EXEC sp_delete_job @job_name = N'bodb02 : Game : ResetYesterday' , @delete_unused_schedule=1
 GO
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
