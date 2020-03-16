@@ -10,7 +10,7 @@ GO
 DECLARE @Sporttype SMALLINT
 SELECT @Sporttype = 244
 
---Import sites which offered Lottery
+--Import sites which offered SAGaming
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
