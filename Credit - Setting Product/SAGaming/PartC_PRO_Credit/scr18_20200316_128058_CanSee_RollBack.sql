@@ -1,6 +1,6 @@
 /*
 	Created: Tiara
-	Task: Rollback CanSee BullFighting for batch 1
+	Task: Rollback CanSee SA Gaming for batch 1
 	DB: DBCUST/CustDB
 	Date: 20200316
 */ 
@@ -10,7 +10,7 @@ GO
 DECLARE @Sporttype SMALLINT
 SELECT @Sporttype = 244
 
---Import sites which offered BullFighting for batch 1
+--Import sites which offered SA Gaming for batch 1
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
