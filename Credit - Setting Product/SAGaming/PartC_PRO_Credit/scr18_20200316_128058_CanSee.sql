@@ -32,10 +32,11 @@ WHERE SportType = @Sporttype AND BetType = @Bettype
 
 --Restrict RMB and Won (KRW) currency
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
-SELECT @Sporttype AS SportType, 13 AS Currency, 0 AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
+SELECT @Sporttype AS SportType, 13 AS Currency, S.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
+FROM #OfferedSites S WITH (NOLOCK)
 UNION ALL
-SELECT @Sporttype AS SportType, 45 AS Currency, 0 AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
-
+SELECT @Sporttype AS SportType, 45 AS Currency, S.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
+FROM #OfferedSites S WITH (NOLOCK)
 
 --Offer site BEST-ODDS, UUS
 UPDATE ps
