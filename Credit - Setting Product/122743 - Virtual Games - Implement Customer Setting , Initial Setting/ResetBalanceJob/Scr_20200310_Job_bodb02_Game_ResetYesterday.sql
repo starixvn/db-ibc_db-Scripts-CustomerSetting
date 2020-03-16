@@ -6,10 +6,11 @@
 */
 USE [msdb]
 GO
-IF EXISTS (SELECT job_id FROM msdb.dbo.sysjobs_view WHERE name = N'bodb02 : Game : ResetYesterday')
-EXEC sp_delete_job @job_name = N'bodb02 : Game : ResetYesterday' , @delete_unused_schedule=1
-GO
+
 BEGIN TRANSACTION
+IF EXISTS (SELECT job_id FROM msdb.dbo.sysjobs_view WHERE name = N'bodb02 : Game : ResetYesterday')
+	EXEC sp_delete_job @job_name = N'bodb02 : Game : ResetYesterday' , @delete_unused_schedule=1
+
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
