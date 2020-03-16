@@ -7,8 +7,8 @@
 USE CustDB
 GO
 
-DECLARE @Sporttype SMALLINT
-SELECT @Sporttype = 244
+DECLARE @Sporttype SMALLINT, @Bettype INT
+SELECT @Sporttype = 244, @Bettype = 3001
 
 --Import sites which offered SA Gaming for batch 1
 SELECT siteid
@@ -21,4 +21,4 @@ UPDATE ps
 SET ps.IsLaunched = 0
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
-WHERE SportType = @Sporttype
+WHERE SportType = @Sporttype AND BetType = @Bettype
