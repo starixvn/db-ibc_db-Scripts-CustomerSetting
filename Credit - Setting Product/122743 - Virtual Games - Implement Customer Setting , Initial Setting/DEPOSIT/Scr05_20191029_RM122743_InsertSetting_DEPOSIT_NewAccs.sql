@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20191029
-	Task: Create setting for Virtual games Athena Site ( New accounts)
+	Task: Create setting for Virtual games Athena Site and API Site (N88, N8B, N8G)( New accounts)
 	DB: DBCust/CustDB
 */
 
@@ -95,6 +95,7 @@
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
 	   ,mrecommend INT
+	   ,PT SMALLMONEY
 	)
 
 	CREATE TABLE #SMATemp
@@ -103,8 +104,10 @@
 	   ,Currency INT
 	   ,RoleID TINYINT
 	   ,mrecommend INT
+	   ,PT SMALLMONEY
 	)
 
+	--> Athena Licensee
 	CREATE TABLE #supers (custid int)
 
 	INSERT INTO #supers(custid)
@@ -143,17 +146,48 @@
 	SELECT CustID FROM Customer WITH(NOLOCK) 
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid=3 AND username LIKE '%Acc%'
 	
-	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend)
-	SELECT custid, roleid, currency,mrecommend
+	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT)
+	SELECT custid, roleid, currency,mrecommend,90.00
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	INSERT INTO #MemberTemp(CustID,Currency,mrecommend)
-	SELECT custid, currency,mrecommend
+	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT)
+	SELECT custid, currency,mrecommend,90.00
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	--> API Licensee
+	CREATE TABLE #APIsupers (custid int)
+
+	INSERT INTO #APIsupers(custid)
+	SELECT c.custid
+	FROM customer c WITH (NOLOCK) 
+		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	WHERE c.roleid = 4  
+	 AND s.islicensee = 1
+	 AND ci.Enabled = 1
+	 AND c.currency NOT IN (20,72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
+	 AND s.site IN ('N88','N8B','N8G ')
+
+	CREATE TABLE #APIDummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #APIDummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 AND username LIKE '%Acc%'
+	
+	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT)
+	SELECT custid, roleid, currency,mrecommend,94.00
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
+	AND mrecommend NOT IN (SELECT custid FROM #APIDummy)
+
+	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT)
+	SELECT custid, currency,mrecommend,94.00
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
+	AND mrecommend NOT IN (SELECT custid FROM #APIDummy)
 
 	DECLARE @SportBettype TABLE
 	(
@@ -199,8 +233,6 @@
 	WHERE temp.RoleID = 4
 
 	------------------------------------PT Setting-------------------------------------------------		
-	DECLARE @PT smallmoney = 90.00 --Athena Licensee fee :  7% (Licensees take 93%, House takes 7%)
-
 	--SMA LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -216,9 +248,9 @@
 			,t.[SportType]
 			,t.[BetType]
 			,[IsLive] = 0
-			,[SuperPT] = CASE WHEN d.roleid = 4 THEN @PT ELSE 0 END
-			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN @PT ELSE 0 END
-			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN @PT ELSE 0 END
+			,[SuperPT] = CASE WHEN d.roleid = 4 THEN d.PT ELSE 0 END
+			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN d.PT ELSE 0 END
+			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN d.PT ELSE 0 END
 	FROM #SMATemp d
 		CROSS APPLY @SportBetType t
 
@@ -239,7 +271,7 @@
 			,[IsLive] = 0
 			,[SuperPT] = 0
 			,[MasterPT] = 0
-			,[AgentPT] = @PT
+			,[AgentPT] = d.PT
 	FROM #MemberTemp d
 		CROSS APPLY @SportBetType t
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
@@ -260,7 +292,7 @@
 		,[IsLive] = 0
 		,[SuperPT] = 0
 		,[MasterPT] = 0
-		,[AgentPT] = @PT
+		,[AgentPT] = d.PT
 	FROM #SMATemp d
 		CROSS APPLY @SportBetType t	
 	WHERE roleid = 2
