@@ -162,7 +162,7 @@ BEGIN
 			,[AutoSuperPT]
 		)
 	SELECT 
-		C.AgentPT, dest.tSportType, dest.tBetType
+		C.AgentID, dest.tSportType, dest.tBetType
 		,C.IsLive
 		,C.SuperPT
 		,C.MasterPT
