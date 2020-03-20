@@ -1,7 +1,7 @@
 /*
 	Created: 20200310@Eden
 	Task: Create table CustQRCode to store members are created by QR code
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB and CustDB_DR_sync publication
 */
 USE [CustDB]
 GO
