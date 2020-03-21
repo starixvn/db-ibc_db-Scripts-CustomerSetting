@@ -13,3 +13,8 @@ SET ps.isActive = 1
 FROM dbo.Sport_Bettype_Reference_Setting ps WITH (ROWLOCK,UPDLOCK)
 WHERE SportType = 244
 
+UPDATE ps
+SET ps.isActive = 1
+FROM dbo.Sport_Bettype_Reference_Setting ps WITH (ROWLOCK,UPDLOCK)
+WHERE SportType = 243
+
