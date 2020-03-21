@@ -227,14 +227,14 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 3
 	--Update Discount info for members of direct master accounts
 	UPDATE C
-	SET C.SuperDiscount = 0, C.MasterDiscount = 0.005
+	SET  C.MasterDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
-	SET  C.SuperDiscount = 0, C.AgentDiscount = 0.005
+	SET  C.AgentDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
