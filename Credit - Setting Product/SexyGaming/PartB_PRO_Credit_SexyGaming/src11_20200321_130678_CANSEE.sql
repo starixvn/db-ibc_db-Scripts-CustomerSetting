@@ -28,7 +28,7 @@ UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
-WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 72, 20) --Supported currencies
+WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20) --Supported currencies
 
 --Offer site BEST-ODDS, UUS
 
