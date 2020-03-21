@@ -70,7 +70,7 @@ FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
 
 INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
-	SELECT ci.custid, ci.roleid, ci.currency
+	SELECT ci.custid, ci.roleid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.Enabled=1
