@@ -24,7 +24,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN	
-		IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN

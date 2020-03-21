@@ -13,4 +13,4 @@ FROM Winlimit_ProductOffer W WITH (ROWLOCK)
 WHERE W.ProductID = 45
 
 INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[Bettype],[isActive_SMA],[isActive_Company])
-VALUES (45,3001,1,1)
+VALUES (45,3101,1,1)
