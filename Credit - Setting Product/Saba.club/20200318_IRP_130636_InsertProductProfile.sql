@@ -45,6 +45,12 @@ UNION ALL
 SELECT 9,@ProductID,1,3
 UNION ALL 
 SELECT 9,@ProductID,6,3
+UNION ALL
+SELECT 6,@ProductID,13,3
+UNION ALL
+SELECT 7,@ProductID,13,3
+UNION ALL
+SELECT 8,@ProductID,13,3
 
 INSERT INTO [dbo].[ProductStatusSiteCurrency]
            ([SportType]
@@ -59,15 +65,23 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('789y')
 
+INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
+SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit
+FROM LossLimit_GlobalSetting lg WITH (NOLOCK)
+	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
+WHERE ProductId = 22 AND (e.Code = 'USD' OR e.currency = 20)
+
 --SELECT * FROM ProductSettingDetail WHERE ProductID = 42
 --SELECT * FROM ProductStatusProfile 
 --SELECT * FROM dbo.SettingSystem
 --SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 42
+--SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 200
 
 --DELETE FROM ProductSettingDetail WHERE ProductID = 42
 --DELETE FROM ProductStatusProfile WHERE Sporttype = 200
 --DELETE FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 42
 --DELETE FROM ProductStatusSiteCurrency WHERE Sporttype = 200
+--DELETE FROM LossLimit_GlobalSetting WHERE ProductId = 42
 
 
 
