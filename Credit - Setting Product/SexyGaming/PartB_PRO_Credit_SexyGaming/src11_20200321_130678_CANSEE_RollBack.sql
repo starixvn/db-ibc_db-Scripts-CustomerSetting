@@ -1,0 +1,24 @@
+/*
+	Created: Tiara
+	Task: Rollback CanSee Sexy Gaming for batch 1 [Redmine: #130678]
+	DB: DBCUST/CustDB
+	Date: 20200321
+*/ 
+USE CustDB
+GO
+
+DECLARE @Sporttype SMALLINT, @Bettype INT
+SELECT @Sporttype = 243, @Bettype = 3101
+
+--Import sites which offered SA Gaming for batch 1
+SELECT siteid
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('Indo')
+
+UPDATE ps
+SET ps.IsLaunched = 0
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
+WHERE SportType = @Sporttype AND BetType = @Bettype
