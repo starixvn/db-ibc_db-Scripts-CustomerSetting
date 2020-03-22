@@ -21,4 +21,6 @@ UPDATE ps
 SET ps.IsLaunched = 0
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
-WHERE SportType = @Sporttype AND BetType = @Bettype
+WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.IsLaunched = 1
+
+DROP TABLE #OfferedSites

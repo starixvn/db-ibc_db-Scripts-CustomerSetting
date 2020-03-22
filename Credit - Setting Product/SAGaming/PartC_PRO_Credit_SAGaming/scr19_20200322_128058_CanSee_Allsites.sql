@@ -1,0 +1,33 @@
+/*
+	Created: Tiara
+	Task: Insert CanSee SA Gaming for all sites [Redmine: #128058]
+	DB: DBCUST/CustDB
+	Date: 20200322
+*/ 
+USE CustDB
+GO
+
+DECLARE @Sporttype SMALLINT, @Bettype INT
+SELECT @Sporttype = 244, @Bettype = 3001
+
+--Import all active sites
+SELECT siteid
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 0
+
+DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
+--Offer all sites
+INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
+SELECT @Sporttype AS SportType, E.exchangeid AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
+FROM #OfferedSites S WITH(NOLOCK) CROSS JOIN exchange E WITH (NOLOCK)
+
+--Offer all currencies on all sites exclude RMB and Won (KRW)
+UPDATE ps
+SET ps.IsLaunched = 1
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
+WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency NOT IN (13,45)
+
+DROP TABLE #OfferedSites
+
