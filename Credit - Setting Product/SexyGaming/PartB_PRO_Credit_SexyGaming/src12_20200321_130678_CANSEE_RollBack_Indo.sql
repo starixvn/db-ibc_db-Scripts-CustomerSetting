@@ -10,7 +10,7 @@ GO
 DECLARE @Sporttype SMALLINT, @Bettype INT
 SELECT @Sporttype = 243, @Bettype = 3101
 
---Import sites which offered SA Gaming for batch 1
+--Import sites which offered Sexy Gaming for batch 1
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)

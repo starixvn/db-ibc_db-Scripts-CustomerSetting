@@ -23,7 +23,7 @@ INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched
 SELECT @Sporttype AS SportType, E.exchangeid AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
 FROM #OfferedSites S WITH(NOLOCK) CROSS JOIN exchange E WITH (NOLOCK)
 
---Offer all currency on Indo site exclude RMB and Won (KRW)
+--Offer supported currencies on Indo site
 UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
