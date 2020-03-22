@@ -246,7 +246,24 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
+--------------------------------------Win Loss Limit-------------------------------------------------
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 6
+	
+	--Agent Level
+	INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
+	FROM CustWinLossLimit_Agent C WITH (NOLOCK) INNER JOIN #SMATemp ci WITH (NOLOCK) ON C.CustId = CI.CustID
+		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+	WHERE dest.SettingType = 6 AND C.bettype = @fBetType AND C.SportType = @fSportType
 
+	--Member Level
+	INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, MaxWinLimit, MaxLossLimit, IsAutoReset
+	FROM dbo.CustWinLossLimit_Member C WITH (NOLOCK) INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustId = CI.CustID
+		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+	WHERE dest.SettingType = 6 AND C.bettype = @fBetType AND C.SportType = @fSportType
 --------------------------------------BetSetting-------------------------------------------------
 	--Agent Level
 	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]

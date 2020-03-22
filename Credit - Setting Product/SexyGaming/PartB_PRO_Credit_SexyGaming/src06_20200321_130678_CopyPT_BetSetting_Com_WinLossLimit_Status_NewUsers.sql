@@ -56,7 +56,8 @@ CREATE TABLE #SMATemp
 CREATE TABLE #DirectTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
-	roleid TINYINT
+	roleid TINYINT,
+	currency INT
 )
 
 INSERT INTO #MemberTemp (CustID, currency)
@@ -69,10 +70,11 @@ SELECT custid, roleid, currency
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
 
-INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
-	SELECT ci.custid, ci.roleid
+INSERT INTO #DirectTemp (CustID,roleid, currency) --Direct Master, Agent
+	SELECT ci.custid, ci.roleid, ci.currency
 	FROM Custinfo ci WITH (NOLOCK)
-	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
+	WHERE ci.srecommend IN (SELECT custid FROM #supers)
+		AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.Enabled=1
 		AND ci.roleid IN (2,3)
 		AND ci.custid <= @maxcustid 
