@@ -23,6 +23,7 @@ WHERE ci.roleid = 4
 			AND ci.username NOT LIKE '3rdSuper%'
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+			AND ci.Site<>'CN88'
 			AND s.islicensee = 0
 			AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20) --Supported currencies
 
