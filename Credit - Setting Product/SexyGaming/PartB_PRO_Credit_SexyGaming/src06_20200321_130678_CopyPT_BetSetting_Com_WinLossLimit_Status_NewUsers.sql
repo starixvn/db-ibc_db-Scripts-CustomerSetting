@@ -56,8 +56,7 @@ CREATE TABLE #SMATemp
 CREATE TABLE #DirectTemp
 (
 	CustID INT PRIMARY KEY CLUSTERED,
-	roleid TINYINT,
-	currency INT
+	roleid TINYINT
 )
 
 INSERT INTO #MemberTemp (CustID, currency)
@@ -70,14 +69,13 @@ SELECT custid, roleid, currency
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
 
-INSERT INTO #DirectTemp (CustID,roleid, currency) --Direct Master, Agent
-	SELECT ci.custid, ci.roleid, ci.currency
+INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
+	SELECT ci.custid, ci.roleid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.Enabled=1
 		AND ci.roleid IN (2,3)
-		AND ci.custid <= @maxcustid 
 
 INSERT INTO #tmpSTListSMA(BettypeID, Currency, StakeLevelList)
 SELECT DISTINCT ST.GameTypeID,currency, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
@@ -195,6 +193,7 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 3
 		AND ci.roleid = 4
+		AND CI.CustID > @maxcustid
 	
 	--Direct (Master, Agent)
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
@@ -205,6 +204,7 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE  dest.SettingType = 3
 		AND CI.roleid IN (2,3)
+		AND CI.CustID > @maxcustid
 	
 	--Master, Agent level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
@@ -216,6 +216,7 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 	WHERE dest.SettingType = 3
 		AND ci.roleid IN (2,3)
 		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = CI.CustID)
+		AND CI.CustID > @maxcustid
 	--Member Level
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
 	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 0, 0 , 0, 0.005
@@ -223,12 +224,14 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE  dest.SettingType = 3
+		AND CI.CustID > @maxcustid
 	--Update Discount info for members of direct master accounts
 	UPDATE C
 	SET  C.MasterDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
+		AND C.CustID > @maxcustid
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
@@ -236,6 +239,7 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
+		AND C.CustID > @maxcustid
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		
