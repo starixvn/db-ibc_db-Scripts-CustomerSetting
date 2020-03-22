@@ -49,7 +49,7 @@ BEGIN
 	)
 	CREATE TABLE #MemberTempBatch
 	(
-		CustID				INT PRIMARY KEY CLUSTERED	
+		CustID	INT PRIMARY KEY CLUSTERED	
 	)
 
 	CREATE TABLE #SMATemp
@@ -198,45 +198,41 @@ BEGIN
 --------------------------------------Commission Setting-------------------------------------------------
 	--Super level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
 			0.005
 	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = dest.tBetType AND C.sporttype = dest.tSportType
-		AND dest.SettingType = 3
+	WHERE dest.SettingType = 3
 		AND ci.roleid = 4
 	
 	--Direct (Master, Agent)
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
 			0.005
 	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 		INNER JOIN #DirectTemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = dest.tBetType AND C.sporttype = dest.tSportType
-		AND dest.SettingType = 3
+	WHERE  dest.SettingType = 3
 		AND CI.roleid IN (2,3)
 	
 	--Master, Agent level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 
+	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
 			0
 	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = dest.tBetType AND C.sporttype = dest.tSportType
-		AND dest.SettingType = 3
+	WHERE dest.SettingType = 3
 		AND ci.roleid IN (2,3)
 		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = CI.CustID)
 	--Member Level
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, 0, 0 , 0, 0.005
+	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 0, 0 , 0, 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK) 
 		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
-		AND dest.SettingType = 3
+	WHERE  dest.SettingType = 3
 	--Update Discount info for members of direct master accounts
 	UPDATE C
 	SET  C.MasterDiscount = 0.005
@@ -246,7 +242,7 @@ BEGIN
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
-	SET  C.AgentDiscount = 0.005
+	SET  C.AgentDiscount = 0.005, C.MasterDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
