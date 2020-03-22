@@ -329,6 +329,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
+	AND ci.Site<>'CN88'
 	AND ci.currency IN (20) --UUS
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -381,6 +382,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
+	AND ci.Site<>'CN88'
 	AND ci.currency IN (20) --UUS
 
 -- For deployer info
