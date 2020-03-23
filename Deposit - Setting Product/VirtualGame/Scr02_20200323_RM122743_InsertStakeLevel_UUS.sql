@@ -162,7 +162,7 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.currency = 20
  AND s.site IN (
-				 'Athena000'
+				 'Athena000', 'N88','N8B','N8G'
 				--,'spondemo'
 				--,'Macaubet'
 				--,'Aoncash'
@@ -238,7 +238,7 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.currency = 20
  AND s.site IN (
-				 'Athena000'
+				'Athena000', 'N88','N8B','N8G'
 				--,'spondemo'
 				--,'Macaubet'
 				--,'Aoncash'
