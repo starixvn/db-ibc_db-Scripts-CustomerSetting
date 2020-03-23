@@ -13,7 +13,7 @@ SELECT @Bettype = 2701
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
-WHERE s.isActive = 1 AND s.site NOT IN ('CN88')
+WHERE s.isActive = 1 AND s.isLicensee = 0 AND s.site NOT IN ('CN88')
 
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType IN (195,196)
 --Insert data for all active sites
@@ -28,6 +28,6 @@ FROM #OfferedSites S WITH(NOLOCK)
 UPDATE ps
 SET ps.IsLaunched = 1, PS.Currency = 20
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
-WHERE SportType IN (195,196) AND BetType = @Bettype AND siteid IN (1,66)
+WHERE SportType IN (195,196) AND BetType = @Bettype AND siteid IN (1)
 
 DROP TABLE #OfferedSites
