@@ -288,7 +288,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND NOT (c.currency = 20 AND s.site = 'Athena000')
+ AND NOT (c.currency = 20 AND s.site IN ('Athena000', 'N88','N8B','N8G'))
  AND s.site IN ('N88','N8B','N8G',
 				'spondemo'
 				,'Macaubet'
@@ -365,7 +365,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND NOT (c.currency = 20 AND s.site = 'Athena000')
+ AND NOT (c.currency = 20 AND s.site IN ('Athena000', 'N88','N8B','N8G'))
  AND s.site IN ('N88','N8B','N8G',
 				'spondemo'
 				,'Macaubet'
