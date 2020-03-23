@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20191029
-	Task: Insert setting for Virtual game - Real Currency -  Athena Site
+	Created: Elodie
+	Date: 20200323
+	Task: Insert stake level for Virtual game - Real Currency
 	DB: DBCust/CustDB
 */
 

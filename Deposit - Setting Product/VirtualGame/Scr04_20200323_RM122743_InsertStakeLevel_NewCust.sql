@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20191029
-	Task: Create setting for Virtual games Athena Site and API Site (N88, N8B, N8G)( New accounts)
+	Created: Elodie
+	Date: 20200323
+	Task: Create stake level for Virtual games Athena Site and API Site (N88, N8B, N8G)( New accounts)
 	DB: DBCust/CustDB
 */
 
