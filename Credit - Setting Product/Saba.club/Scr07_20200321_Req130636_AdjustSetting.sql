@@ -109,6 +109,8 @@ BEGIN
 		,csa.MinPT = cs.minpositiontaking
 	FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK)
 		INNER JOIN @tmp_PT cs ON csa.custid = cs.custid AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+
+	DELETE @tmp_PT
 END
 
 WHILE (1 = 1)
@@ -130,6 +132,8 @@ BEGIN
 		,csm.AutoSuperPT = cs.autopositiontaking
 	FROM dbo.CustPTSetting3rd_Member csm WITH(ROWLOCK)
 		INNER JOIN @tmp_PT cs ON cs.custid = csm.custid AND csm.bettype = @tBetType AND csm.sporttype = @tSportType
+
+	DELETE @tmp_PT
 END
 	
 --------------------------------------WinLoss Limit Setting-------------------------------------------------		
@@ -182,6 +186,8 @@ BEGIN
 		csa.IsAutoReset = cs.IsAutoReset
 	FROM dbo.CustWinLossLimit_Agent csa WITH(ROWLOCK)
 		INNER JOIN @tmp_WinLossLimit cs ON cs.custid = csa.CustID AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+
+	DELETE @tmp_WinLossLimit
 END
 
 WHILE (1 = 1)
@@ -198,7 +204,9 @@ BEGIN
 		csm.MaxLossLimit = cs.MaxLossLimit,   
 		csm.IsAutoReset = cs.IsAutoReset
 	FROM dbo.CustWinLossLimit_Member csm WITH(ROWLOCK)
-		INNER JOIN #MemberList_WinLossLimit cs WITH(NOLOCK) ON cs.custid = csm.CustID AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+		INNER JOIN @tmp_WinLossLimit cs ON cs.custid = csm.CustID AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+	
+	DELETE @tmp_WinLossLimit
 END
 
 DROP TABLE #DestinationSportBetType	

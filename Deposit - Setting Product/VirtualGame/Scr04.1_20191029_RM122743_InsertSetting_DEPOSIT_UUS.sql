@@ -9,7 +9,7 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	 @srecommend INT		
 	,@target VARCHAR(20)
 	,@max_custid INT
-	,@PT smallmoney
+	,@SiteId INT
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -18,15 +18,8 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 
 	DECLARE @currency INT
 
@@ -69,138 +62,44 @@ BEGIN
 	)
 	INSERT INTO @SportBetType(SportType, BetType) VALUES (245, 4601)
 
-	--------------------------------------------Product Status------------------------------------------------
-	DECLARE @bitmapOrder INT
-	 
-	SELECT @bitmapOrder = bitmapOrder 
-	FROM dbo.Dep_ProductStatusProfile m WITH (NOLOCK) 
-		INNER JOIN @SportBetType t ON t.Sporttype = m.SportType AND t.Bettype = m.BetType
+	DECLARE @DEP_Stake TABLE (
+		[GameTypeID] [int] NOT NULL,
+		[Currency] [nvarchar](max) NULL,
+		[MinStake] [money] NULL,
+		[MaxStake] [money] NULL,
+		[MinLabel] [varchar](20) NULL,
+		[MaxLabel] [varchar](20) NULL
+	) 
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 500.00, '5', '500') -- 
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 1000.00, '5', '1,000') -- 
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4601, N'UUS', 5.00, 2000.00, '5', '2,000') -- 
 
-	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
-	CREATE TABLE #TempProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
+	DECLARE @MaxStakeLevelID INT
+	SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
-	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
-	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(NOLOCK)
-		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
-		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
-	UNION ALL
-	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
-	FROM Dep_CustProductStatus c WITH(NOLOCK)
-		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
-		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
-	
-	DECLARE @batch int = 3000
-	WHILE 1 = 1 
-	BEGIN
-		TRUNCATE TABLE #TempProductStatus
-
-		DELETE TOP (@batch) a
-		OUTPUT deleted.CustID,deleted.bitmapIsHidden,deleted.bitmapIsDisabled INTO #TempProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
-		FROM #Dep_CustProductStatus a 
-
-		IF @@ROWCOUNT = 0 
-			BREAK;
-
-		UPDATE c 
-		SET  c.bitmapIsHidden = tmp.bitmapIsHidden
-			,c.bitmapIsDisabled = tmp.bitmapIsDisabled
-		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
-			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
-
-		WAITFOR DELAY '00:00:00.100'
-	END
-
-	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
-
-	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT temp.CustID
-		  ,st.ProductSettingID
-	FROM #SMATemp temp 
-		 CROSS APPLY (	SELECT ProductSettingID 
-						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 38
-							AND dp.SettingType IN (4,1,7) -- Product Status, PT, Bet Limit
-						) st
-	WHERE temp.roleid = 4
-
-	------------------------------------PT Setting-------------------------------------------------	
-	--SMA LEVEL
-	INSERT INTO dbo.Dep_CustPTSetting_Agent
-		(	[CustID]
-			,[SportType]
-			,[BetType]
-			,[IsLive]
-			,[SuperPT]
-			,[MasterPT]
-			,[AgentPT]
-			)
-	SELECT 
-			 d.[CustID]
-			,t.[SportType]
-			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = CASE WHEN d.roleid = 4 THEN @PT ELSE 0 END
-			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN @PT ELSE 0 END
-			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN @PT ELSE 0 END
-	FROM #SMATemp d
-		CROSS APPLY @SportBetType t
-
-	----MEMBER LEVEL
-	INSERT INTO dbo.Dep_CustPTSetting_Member
-		(	    [custid]
-			,	[sporttype]
-			,	[bettype]
-			,	[islive]
-			,	[superPT]
-			,	[masterPT]
-			,	[agentPT]
-		)
-	SELECT 
-			 d.[CustID]
-			,t.[SportType]
-			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = 0
-			,[MasterPT] = 0
-			,[AgentPT] = @PT
-	FROM #MemberTemp d
-		CROSS APPLY @SportBetType t
-		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
-	WHERE m.IsGroupedPT = 0
-
-	INSERT INTO Dep_CustPTGroupSetting_Member (
-		 AgentID
-		,SportType
-		,BetType
-		,IsLive
-		,SuperPT
-		,MasterPT
-		,AgentPT
+	INSERT INTO DEP_StakeLevel(
+			GameTypeID
+		,MinLabel
+		,MaxLabel
+		,MinStake
+		,MaxStake
+		,ExchangeId
+		,GameGroupID
+		,SiteID
+		,StakeLevelID
 	)
-	SELECT d.[CustID]
-		,t.[SportType]
-		,t.[BetType]
-		,[IsLive] = 0
-		,[SuperPT] = 0
-		,[MasterPT] = 0
-		,[AgentPT] = @PT
-	FROM #SMATemp d
-		CROSS APPLY @SportBetType t	
-	WHERE roleid = 2
-
-	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-	SELECT t.CustID,1
-	FROM #MemberTemp t WITH(NOLOCK)
-		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
-	WHERE d.CustID IS NULL
-
+	SELECT	t.GameTypeID,
+			t.MinLabel,
+			t.MaxLabel,
+			CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
+			CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
+			ExchangeId = e.exchangeid,
+			GameGroupID = 0,
+			@SiteId,
+			StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY e.exchangeid)
+	FROM @DEP_Stake t
+		INNER JOIN exchange e WITH(NOLOCK) ON t.Currency = e.Currency
+	WHERE e.exchangeid = @currency
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	DECLARE @StakeLevAgent VARCHAR(200)
@@ -208,14 +107,14 @@ BEGIN
 	SELECT @StakeLevAgent = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
 										FROM DEP_StakeLevel s WITH(NOLOCK) 
 											CROSS APPLY @SportBetType t	
-										WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType 
+										WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType AND s.SiteID = @SiteId
 										FOR XML PATH(''))
 							,2,200)
 
 	SELECT @StakeLevMember = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
 								FROM DEP_StakeLevel s WITH(NOLOCK) 
 									CROSS APPLY @SportBetType t	
-								WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType 
+								WHERE s.ExchangeId = @currency AND s.GameTypeID = t.BetType AND s.SiteID = @SiteId
 								ORDER BY s.MaxStake)
 
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
@@ -245,15 +144,15 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, SiteId INT, isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
 DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
-SELECT c.custid 
+INSERT INTO #supers(custid, SiteId)
+SELECT c.custid, s.siteid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
@@ -286,7 +185,7 @@ WHERE c.roleid = 4
 
 
 -- For deployer info
-DECLARE @super_cnt INT, @index INT = 0
+DECLARE @super_cnt INT, @index INT = 0, @siteId INT
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
 DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 
@@ -298,6 +197,7 @@ BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@srecommend = custid	
+		,@siteId = SiteId
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -308,8 +208,7 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'REPLICATED'
 			,@max_custid = @max_custid
-			,@PT = @PT
-						
+			,@siteId = @siteId
 	waitfor delay '00:00:0.100'
 END
 
@@ -321,15 +220,15 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, siteId INT, isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
 DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
-SELECT c.custid 
+INSERT INTO #supers(custid, siteId)
+SELECT c.custid, s.siteid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
@@ -373,6 +272,7 @@ BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@srecommend = custid	
+		,@siteId = siteId
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -383,8 +283,7 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'DBCUST'
 			,@max_custid = @max_custid
-			,@PT = @PT
-						
+			,@siteId = @siteId
 	waitfor delay '00:00:0.100'
 END
 
