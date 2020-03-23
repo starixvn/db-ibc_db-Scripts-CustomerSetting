@@ -13,7 +13,7 @@ DELETE P
 FROM ProductSettingDetail P WITH (ROWLOCK)
 WHERE P.SportType IN (211, 243, 244) --Allbet, Sexy Gaming, SA Gaming
 
-DECLARE @SettingStatus INT = 1 -- UAT
+DECLARE @SettingStatus INT = 0 -- PRO
 
 INSERT INTO [dbo].[ProductSettingDetail] ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,211,2401,0,41,93,NULL,NULL,NULL,NULL,2,3,@SettingStatus,0.0005)
 INSERT INTO [dbo].[ProductSettingDetail] ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(3,211,2401,0,41,NULL,0.01,NULL,NULL,NULL,2,2,@SettingStatus,0.0005)
