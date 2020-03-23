@@ -199,29 +199,34 @@ BEGIN
 	DECLARE @MaxStakeLevelID INT
 	SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
-	INSERT INTO DEP_StakeLevel(
-		GameTypeID
-		,MinLabel
-		,MaxLabel
-		,MinStake
-		,MaxStake
-		,ExchangeId
-		,GameGroupID
-		,SiteID
-		,StakeLevelID
-	)
-	SELECT	t.GameTypeID,
-			t.MinLabel,
-			t.MaxLabel,
-			CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
-			CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
-			ExchangeId = e.exchangeid,
-			GameGroupID = 0,
-			@SiteId,
-			StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY e.exchangeid)
-	FROM @DEP_Stake t
-		INNER JOIN exchange e WITH(NOLOCK) ON t.Currency = e.Currency
-	WHERE e.exchangeid = @currency
+	IF NOT EXISTS (	SELECT 1 
+					FROM DEP_StakeLevel WITH (NOLOCK)
+					WHERE SiteID = @SiteId AND ExchangeID = @currency)
+	BEGIN
+		INSERT INTO DEP_StakeLevel(
+				GameTypeID
+			,MinLabel
+			,MaxLabel
+			,MinStake
+			,MaxStake
+			,ExchangeId
+			,GameGroupID
+			,SiteID
+			,StakeLevelID
+		)
+		SELECT	t.GameTypeID,
+				t.MinLabel,
+				t.MaxLabel,
+				CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
+				CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
+				ExchangeId = e.exchangeid,
+				GameGroupID = 0,
+				@SiteId,
+				StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY e.exchangeid)
+		FROM @DEP_Stake t
+			INNER JOIN exchange e WITH(NOLOCK) ON t.Currency = e.Currency
+		WHERE e.exchangeid = @currency
+	END
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	DECLARE @StakeLevAgent VARCHAR(200)
