@@ -9,9 +9,10 @@
 USE CustDB
 GO
 
+
 DELETE P
 FROM ProductStatusProfile P WITH (ROWLOCK)
-WHERE P.Sporttype = 244 AND P.Bettype = 3001
+WHERE P.Sporttype IN (243, 244) AND P.Bettype IN (3001, 3101)
 
+INSERT INTO [dbo].[ProductStatusProfile]([Sporttype],[Bettype],[bitmapOrder]) VALUES (243,3101,22)
 INSERT INTO [dbo].[ProductStatusProfile]([Sporttype],[Bettype],[bitmapOrder]) VALUES (244,3001,20)
-
