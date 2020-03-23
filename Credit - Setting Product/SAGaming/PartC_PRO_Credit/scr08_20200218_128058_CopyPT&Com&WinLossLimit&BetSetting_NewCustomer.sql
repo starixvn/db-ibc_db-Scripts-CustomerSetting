@@ -9,7 +9,7 @@ DECLARE @ProductID TINYINT = 41, @Sporttype INT = 244
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 DECLARE @MaxPT TINYINT
 
-SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
+SELECT TOP 1 @MaxPT = MaxPT FROM #TmpProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 SELECT @MaxCustID = xxx
 
 CREATE TABLE #supers (custid int)
@@ -27,10 +27,40 @@ WHERE ci.roleid = 4
 			AND ci.Site<>'CN88'
 			AND ci.currency NOT IN (45,13,75,76,77,41) --Won (KRW), RMB, PTU, PS, PTH, CHF
 
+CREATE TABLE #TmpProductSettingDetail
+	(
+		SettingType SMALLINT,
+		SportType SMALLINT,
+		BetType SMALLINT,
+		IsLive BIT,
+		ProductID TINYINT,
+		MaxPT TINYINT,
+		MaxDiscount DECIMAL (9, 8),
+		IsSync BIT,
+		IsHidden BIT,
+		IsDisabled BIT,
+		SettingLevel TINYINT,
+		DisplayOrder TINYINT,
+		SettingStatus TINYINT,
+		IntervalValue DECIMAL (19, 8) 
+	)
+	
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,211,2401,0,41,93,NULL,NULL,NULL,NULL,2,3,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(3,211,2401,0,41,NULL,0.01,NULL,NULL,NULL,2,2,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(6,211,2401,0,41,NULL,NULL,NULL,NULL,NULL,2,4,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,211,2401,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,211,2401,0,41,NULL,NULL,1,0,0,2,1,0,0.0005)
+
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,244,3001,0,41,93,NULL,NULL,NULL,NULL,2,3,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(3,244,3001,0,41,NULL,0.01,NULL,NULL,NULL,2,2,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(6,244,3001,0,41,NULL,NULL,NULL,NULL,NULL,2,4,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,244,3001,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,0.0005)
+INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,244,3001,0,41,NULL,NULL,1,0,0,2,1,0,0.0005)
+
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
-FROM dbo.ProductSettingDetail WITH (NOLOCK)
+FROM #TmpProductSettingDetail WITH (NOLOCK)
 WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6) --PT, Comm, WinLossLimit
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
@@ -265,5 +295,6 @@ DROP TABLE #DestinationSportBetType
 DROP TABLE #tmpSTListSMA
 DROP TABLE #supers
 DROP TABLE #CustList
+DROP TABLE #TmpProductSettingDetail
 
 PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
