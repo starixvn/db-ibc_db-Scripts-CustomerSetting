@@ -134,24 +134,6 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	
 --------------------------------------Bet Setting-------------------------------------------------		
 --Agent Level
-INSERT INTO dbo.CustBetSetting3rd_Agent(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.minbet, cs.maxbet, cs.MaxPerGameType			
-FROM dbo.CustGameType cs WITH(NOLOCK)
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.GameTypeID = @fBetType
-	AND dest.SettingType = 2
-
---Member Level
-INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)
-SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.minbet, cs.maxbet, cs.MaxPerGameType					
-FROM dbo.CustGameType cs WITH(NOLOCK)
-	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
-	CROSS APPLY #DestinationSportBetType dest
-WHERE cs.GameTypeID = @fBetType
-	AND dest.SettingType = 2
-
---Agent Level
 INSERT INTO dbo.CustStakeLevel_Agent (CustID, SportType, BetType, StakeLevelList)	      
 SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20))		
 FROM dbo.StakeLevel s WITH(NOLOCK)
