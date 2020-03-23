@@ -9,7 +9,6 @@ DECLARE @ProductID TINYINT = 41, @Sporttype INT = 244
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 DECLARE @MaxPT TINYINT
 
-SELECT TOP 1 @MaxPT = MaxPT FROM #TmpProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 SELECT @MaxCustID = xxx
 
 CREATE TABLE #supers (custid int)
@@ -56,6 +55,8 @@ INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLi
 INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(6,244,3001,0,41,NULL,NULL,NULL,NULL,NULL,2,4,0,0.0005)
 INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,244,3001,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,0.0005)
 INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,244,3001,0,41,NULL,NULL,1,0,0,2,1,0,0.0005)
+
+SELECT TOP 1 @MaxPT = MaxPT FROM #TmpProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
