@@ -38,9 +38,9 @@ WHERE GroupName IN ('ACCYEN888','ACCUSD','ACCUT2','ACCUT','ACCUSDOTH','ACCIRR','
 
 --input Permission To
 INSERT INTO #PermissionMapping (PermissionFrom, PermissionTo)
-SELECT 82, 110 --Keno ==> Edit Lottery Setting
-UNION ALL SELECT 85, 111 --Keno Bet Setting ==> Edit Lottery Betting Limit
-UNION ALL SELECT 81, 109 --Enable Keno ==> Enable Lottery Status
+SELECT 100, 147 --Keno ==> Edit Lottery Setting
+UNION ALL SELECT 99, 148 --Enable Keno ==> Enable Lottery Status
+UNION ALL SELECT 101, 149 --Keno Bet Setting ==> Edit Lottery Betting Limit
 
 --SIT
 --SELECT 82, 102 --Keno ==> Edit NG2 Setting
