@@ -13,3 +13,9 @@ SET PS.IsTest = 0
 FROM dbo.ProductLaunchedSiteCurrency PS WITH (ROWLOCK,UPDLOCK)
 WHERE SportType IN (195,196)
 
+--Offer all currency for site Indo and 611111
+UPDATE ps
+SET ps.IsLaunched = 1
+FROM dbo.ProductLaunchedSiteCurrency PS WITH (ROWLOCK,UPDLOCK)
+WHERE SportType IN (195,196) AND PS.SiteID IN (11,16)
+
