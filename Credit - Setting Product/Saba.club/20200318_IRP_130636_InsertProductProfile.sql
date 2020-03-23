@@ -69,7 +69,7 @@ INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, De
 SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit
 FROM LossLimit_GlobalSetting lg WITH (NOLOCK)
 	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
-WHERE ProductId = 22 AND (e.Code = 'USD' OR e.currency = 20)
+WHERE ProductId = 22 AND (e.Code = 'USD' OR e.exchangeid = 20)
 
 --SELECT * FROM ProductSettingDetail WHERE ProductID = 42
 --SELECT * FROM ProductStatusProfile 
