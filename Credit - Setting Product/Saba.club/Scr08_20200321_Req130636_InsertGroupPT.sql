@@ -26,8 +26,6 @@ BEGIN
 	CREATE TABLE #AgentList (CustID INT)
 	DECLARE @AgentTmp TABLE (CustID INT)
 
-	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
-
 	DECLARE @ProductID TINYINT = 42
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
@@ -41,6 +39,11 @@ BEGIN
 		INNER JOIN dbo.custInfo ci ON ci.custid = cs.AgentID
 		INNER JOIN dbo.customer c ON ci.custid = c.custid
 	WHERE ci.Enabled = 1 AND c.site = '789y'
+
+	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 1
 
 	WHILE (1=1)
 	BEGIN
