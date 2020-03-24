@@ -1,0 +1,76 @@
+/*
+	Created: Elodie
+	Task: Group PT Setting for Saba.club
+	DB: DBCUST/CustDB
+	Date: 20170801
+*/  
+-- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+------------------------------------------------------
+ALTER PROCEDURE Acc_DynamicCustSetting3rd_09
+	@target VARCHAR(20)
+AS
+BEGIN  
+	SET NOCOUNT ON
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+
+	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
+	   AND dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 1
+	   AND dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 1
+	   AND dbo.f_CheckRepTable('CustSettingMode3rd') = 1
+	   AND dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 1
+	   )
+	  RETURN	
+
+	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
+
+	DECLARE @ProductID TINYINT = 42
+	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
+	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
+	SELECT	44, 1, SportType, BetType, 0, SettingType, 0
+	FROM dbo.ProductSettingDetail WITH (NOLOCK)
+	WHERE ProductID = @ProductID AND SettingType = 1
+
+	--MEMBER LEVEL
+	INSERT INTO dbo.CustPTGroupSetting3rd_Member
+		(	[AgentID]
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+			,	[IsAutoMasterPT]
+			,	[AutoMasterPT]
+			,	[IsAutoSuperPT]
+			,	[AutoSuperPT])
+	SELECT 
+		cs.AgentID, dest.tSportType, dest.tBetType, dest.IsLive
+		,cs.SuperPT
+		,cs.MasterPT
+		,cs.AgentPT
+		,cs.IsAutoMasterPT
+		,cs.AutoMasterPT
+		,cs.IsAutoSuperPT
+		,cs.AutoSuperPT
+	FROM dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK)
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 1
+END
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+--------------------------------------------------------------------------------------
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+
+
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
+--------------------------------------------------------------------------------------
+PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+
+PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
