@@ -23,6 +23,9 @@ BEGIN
 	   )
 	  RETURN	
 
+	CREATE TABLE #AgentList (CustID INT)
+	DECLARE @AgentTmp TABLE (CustID INT)
+
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 
 	DECLARE @ProductID TINYINT = 42
@@ -32,32 +35,49 @@ BEGIN
 	FROM dbo.ProductSettingDetail WITH (NOLOCK)
 	WHERE ProductID = @ProductID AND SettingType = 1
 
-	--MEMBER LEVEL
-	INSERT INTO dbo.CustPTGroupSetting3rd_Member
-		(	[AgentID]
-			,	[sporttype]
-			,	[bettype]
-			,	[islive]
-			,	[superPT]
-			,	[masterPT]
-			,	[agentPT]
-			,	[IsAutoMasterPT]
-			,	[AutoMasterPT]
-			,	[IsAutoSuperPT]
-			,	[AutoSuperPT])
-	SELECT 
-		cs.AgentID, dest.tSportType, dest.tBetType, dest.IsLive
-		,cs.SuperPT
-		,cs.MasterPT
-		,cs.AgentPT
-		,cs.IsAutoMasterPT
-		,cs.AutoMasterPT
-		,cs.IsAutoSuperPT
-		,cs.AutoSuperPT
-	FROM dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK)
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-		AND dest.SettingType = 1
+	INSERT INTO #AgentList (CustID)
+	SELECT DISTINCT AgentID
+	FROM CustPTGroupSetting3rd_Member WITH (NOLOCK)
+
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (4000) t 
+		OUTPUT Deleted.custid
+		INTO @AgentTmp
+		FROM #AgentList t
+
+		IF @@ROWCOUNT = 0 BREAK
+
+		--MEMBER LEVEL
+		INSERT INTO dbo.CustPTGroupSetting3rd_Member
+			(	[AgentID]
+				,	[sporttype]
+				,	[bettype]
+				,	[islive]
+				,	[superPT]
+				,	[masterPT]
+				,	[agentPT]
+				,	[IsAutoMasterPT]
+				,	[AutoMasterPT]
+				,	[IsAutoSuperPT]
+				,	[AutoSuperPT])
+		SELECT 
+			cs.AgentID, dest.tSportType, dest.tBetType, dest.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
+			,cs.IsAutoMasterPT
+			,cs.AutoMasterPT
+			,cs.IsAutoSuperPT
+			,cs.AutoSuperPT
+		FROM dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK)
+			INNER JOIN @AgentTmp a ON a.CustID = cs.AgentID
+			CROSS APPLY #DestinationSportBetType dest
+		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+			AND dest.SettingType = 1
+
+		DELETE @AgentTmp
+	END
 END
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
