@@ -40,6 +40,12 @@ INSERT INTO dbo.ProductSettingSystemDisplay
           SettingType ,
           DisplayMode
         )
+SELECT 5,@ProductID,13,3
+UNION ALL 
+SELECT 5,@ProductID,1,3
+UNION ALL 
+SELECT 5,@ProductID,6,3
+UNION ALL
 SELECT 9,@ProductID,13,3
 UNION ALL 
 SELECT 9,@ProductID,1,3
