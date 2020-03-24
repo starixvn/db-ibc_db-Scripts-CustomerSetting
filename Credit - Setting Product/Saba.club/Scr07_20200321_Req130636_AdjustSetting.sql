@@ -118,7 +118,7 @@ END
 WHILE (1 = 1)
 BEGIN				
 	DELETE TOP (4000) t 
-	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking
+	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking, NULL
 	INTO @tmp_PT
 	FROM #MemberList_PT t
 		
