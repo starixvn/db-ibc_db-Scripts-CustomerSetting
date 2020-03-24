@@ -31,6 +31,8 @@ BEGIN
 		DELETE csa
 		FROM dbo.Dep_CustStakeLevel_Agent csa WITH(ROWLOCK)
 			INNER JOIN @CustTmp cs ON cs.custid = csa.custid AND csa.bettype = cs.BetType AND csa.sporttype = cs.SportType
+
+		DELETE FROM @CustTmp
 	END
 
 	WHILE (1 = 1)
@@ -45,6 +47,8 @@ BEGIN
 		DELETE csm
 		FROM dbo.Dep_CustStakeLevel_Member csm WITH(ROWLOCK)
 			INNER JOIN @CustTmp cs ON cs.custid = csm.custid AND csm.bettype = cs.BetType AND csm.sporttype = cs.SportType
+
+		DELETE FROM @CustTmp
 	END
 END
 
