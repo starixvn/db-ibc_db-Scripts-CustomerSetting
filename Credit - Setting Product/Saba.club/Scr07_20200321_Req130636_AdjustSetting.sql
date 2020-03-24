@@ -112,7 +112,7 @@ BEGIN
 
 	DELETE @tmp_PT
 
-	WAITFOR DELAY '00:00:0.100'
+	WAITFOR DELAY '00:00:01'
 END
 
 WHILE (1 = 1)
@@ -137,7 +137,7 @@ BEGIN
 
 	DELETE @tmp_PT
 
-	WAITFOR DELAY '00:00:0.100'
+	WAITFOR DELAY '00:00:01'
 END
 	
 --------------------------------------WinLoss Limit Setting-------------------------------------------------		
@@ -193,7 +193,7 @@ BEGIN
 
 	DELETE @tmp_WinLossLimit
 
-	WAITFOR DELAY '00:00:0.100'
+	WAITFOR DELAY '00:00:0.500'
 END
 
 WHILE (1 = 1)
@@ -214,7 +214,7 @@ BEGIN
 	
 	DELETE @tmp_WinLossLimit
 
-	WAITFOR DELAY '00:00:0.100'
+	WAITFOR DELAY '00:00:0.500'
 END
 
 DROP TABLE #DestinationSportBetType	
