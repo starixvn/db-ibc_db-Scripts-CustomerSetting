@@ -9,5 +9,5 @@ GO
 
 UPDATE dbo.SettingSystem 
 SET BlockNewCusti7 = 1,
-	UnblockTime = '11:00 AM (GMT+8)'
+	UnblockTime = '01:30 PM (GMT+8)'
 WHERE SystemID = 1
