@@ -111,6 +111,8 @@ BEGIN
 		INNER JOIN @tmp_PT cs ON csa.custid = cs.custid AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 	DELETE @tmp_PT
+
+	WAITFOR DELAY '00:00:0.100'
 END
 
 WHILE (1 = 1)
@@ -134,6 +136,8 @@ BEGIN
 		INNER JOIN @tmp_PT cs ON cs.custid = csm.custid AND csm.bettype = @tBetType AND csm.sporttype = @tSportType
 
 	DELETE @tmp_PT
+
+	WAITFOR DELAY '00:00:0.100'
 END
 	
 --------------------------------------WinLoss Limit Setting-------------------------------------------------		
@@ -188,6 +192,8 @@ BEGIN
 		INNER JOIN @tmp_WinLossLimit cs ON cs.custid = csa.CustID AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 	DELETE @tmp_WinLossLimit
+
+	WAITFOR DELAY '00:00:0.100'
 END
 
 WHILE (1 = 1)
@@ -207,6 +213,8 @@ BEGIN
 		INNER JOIN @tmp_WinLossLimit cs ON cs.custid = csm.CustID AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 	
 	DELETE @tmp_WinLossLimit
+
+	WAITFOR DELAY '00:00:0.100'
 END
 
 DROP TABLE #DestinationSportBetType	
