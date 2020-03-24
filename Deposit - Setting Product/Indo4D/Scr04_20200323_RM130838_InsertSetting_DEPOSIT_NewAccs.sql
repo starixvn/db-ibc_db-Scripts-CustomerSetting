@@ -56,6 +56,7 @@
 	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
 	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
 
 	DELETE a
 	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
@@ -65,6 +66,7 @@
 	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	WHERE a.CustID >@max_custid
 
 	DELETE a
 	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
