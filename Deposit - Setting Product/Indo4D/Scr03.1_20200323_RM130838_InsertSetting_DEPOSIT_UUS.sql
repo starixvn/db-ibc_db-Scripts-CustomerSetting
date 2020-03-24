@@ -67,7 +67,7 @@ BEGIN
 		SportType SMALLINT, 
 		BetType   SMALLINT
 	)
-	INSERT INTO @SportBetType(SportType, BetType) VALUES (233, 5001)
+	INSERT INTO @SportBetType(SportType, BetType) VALUES (223, 5001)
 
 	--------------------------------------------Product Status------------------------------------------------
 	DECLARE @bitmapOrder INT
@@ -205,13 +205,13 @@ BEGIN
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY)
 	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet)
-	SELECT 233, 5001 , 20, 1 , 100 UNION ALL
-	SELECT 233, 5002 , 20, 1 , 250 UNION ALL
-	SELECT 233, 5003 , 20, 1 , 833 UNION ALL
-	SELECT 233, 5004 , 20, 1 , 833 UNION ALL
-	SELECT 233, 5005 , 20, 1 , 714 UNION ALL
-	SELECT 233, 5006 , 20, 1 , 6451 UNION ALL
-	SELECT 233, 5007 , 20, 1 , 1250 
+	SELECT 223, 5001 , 20, 1 , 100 UNION ALL
+	SELECT 223, 5002 , 20, 1 , 250 UNION ALL
+	SELECT 223, 5003 , 20, 1 , 833 UNION ALL
+	SELECT 223, 5004 , 20, 1 , 833 UNION ALL
+	SELECT 223, 5005 , 20, 1 , 714 UNION ALL
+	SELECT 223, 5006 , 20, 1 , 6451 UNION ALL
+	SELECT 223, 5007 , 20, 1 , 1250 
 
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
