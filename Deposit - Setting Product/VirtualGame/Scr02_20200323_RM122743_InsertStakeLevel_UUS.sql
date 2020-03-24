@@ -79,7 +79,7 @@ BEGIN
 	
 	IF NOT EXISTS (	SELECT 1 
 					FROM DEP_StakeLevel WITH (NOLOCK)
-					WHERE SiteID = @SiteId AND ExchangeID = @currency)
+					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID = 4601)
 	BEGIN
 		INSERT INTO DEP_StakeLevel(
 				GameTypeID
@@ -166,7 +166,8 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.currency = 20
  AND s.site IN (
-				 'Athena000', 'N88','N8B','N8G'
+				 'Athena000'
+				 --, 'N88','N8B','N8G'
 				--,'spondemo'
 				--,'Macaubet'
 				--,'Aoncash'
@@ -241,7 +242,8 @@ WHERE c.roleid = 4
  AND c.custid <= @max_custid
  AND c.currency = 20
  AND s.site IN (
-				'Athena000', 'N88','N8B','N8G'
+				'Athena000'
+				--, 'N88','N8B','N8G'
 				--,'spondemo'
 				--,'Macaubet'
 				--,'Aoncash'
@@ -263,7 +265,7 @@ WHERE c.roleid = 4
 				)
 
 -- For deployer info
-DECLARE @super_cnt INT, @index INT = 0
+DECLARE @super_cnt INT, @index INT = 0, @siteId INT
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
 DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 

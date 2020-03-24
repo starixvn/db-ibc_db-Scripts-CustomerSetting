@@ -201,7 +201,7 @@ BEGIN
 
 	IF NOT EXISTS (	SELECT 1 
 					FROM DEP_StakeLevel WITH (NOLOCK)
-					WHERE SiteID = @SiteId AND ExchangeID = @currency)
+					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID = 4601)
 	BEGIN
 		INSERT INTO DEP_StakeLevel(
 				GameTypeID
@@ -287,7 +287,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND NOT (c.currency = 20 AND s.site IN ('Athena000', 'N88','N8B','N8G'))
+ AND NOT (c.currency = 20 AND s.site IN ('Athena000'))
  AND s.site IN ('N88','N8B','N8G',
 				'spondemo'
 				,'Macaubet'
@@ -363,7 +363,7 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND NOT (c.currency = 20 AND s.site IN ('Athena000', 'N88','N8B','N8G'))
+ AND NOT (c.currency = 20 AND s.site IN ('Athena000'))
  AND s.site IN ('N88','N8B','N8G',
 				'spondemo'
 				,'Macaubet'
