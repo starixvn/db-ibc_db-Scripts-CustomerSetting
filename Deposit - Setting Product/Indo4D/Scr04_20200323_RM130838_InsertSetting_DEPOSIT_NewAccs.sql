@@ -78,7 +78,7 @@
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 	INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid AND ci.currency <> 20
-	WHERE dp.ProductID = 38
+	WHERE dp.ProductID = 43
 		AND dl.CustID >@max_custid
 
 	DELETE a
