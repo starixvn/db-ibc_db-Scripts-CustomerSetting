@@ -37,7 +37,10 @@ BEGIN
 
 	INSERT INTO #AgentList (CustID)
 	SELECT DISTINCT AgentID
-	FROM CustPTGroupSetting3rd_Member WITH (NOLOCK)
+	FROM CustPTGroupSetting3rd_Member cs WITH (NOLOCK)
+		INNER JOIN dbo.custInfo ci ON ci.custid = cs.AgentID
+		INNER JOIN dbo.customer c ON ci.custid = c.custid
+	WHERE ci.Enabled = 1 AND c.site = '789y'
 
 	WHILE (1=1)
 	BEGIN
