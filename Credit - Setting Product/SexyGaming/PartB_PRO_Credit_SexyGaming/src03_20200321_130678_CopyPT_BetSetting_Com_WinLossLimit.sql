@@ -127,7 +127,7 @@ BEGIN
 			FROM StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency
 			FOR XML PATH ('') ) AS A(STL)
-	WHERE ST.GameTypeID BETWEEN 3101 AND 3104
+	WHERE ST.GameTypeID BETWEEN 3101 AND 3105
 	ORDER BY ST.GameTypeID
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -358,7 +358,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.Site<>'CN88'
 	AND ci.custid <= @max_custid
-	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20) --Supported currencies
+	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20, 72) --Supported currencies
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -411,7 +411,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.Site<>'CN88'
 	AND ci.custid <= @max_custid
-	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20) --Supported currencies
+	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20, 72) --Supported currencies
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

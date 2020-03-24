@@ -195,7 +195,7 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
-	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20) --Supported currencies
+	AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20, 72) --Supported currencies
 
 WHILE (1 = 1)
 BEGIN
@@ -243,7 +243,7 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
-AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47,20) --Supported currencies
+AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47,20, 72) --Supported currencies
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
