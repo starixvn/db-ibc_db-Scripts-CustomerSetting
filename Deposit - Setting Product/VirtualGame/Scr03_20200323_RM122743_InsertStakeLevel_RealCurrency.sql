@@ -274,7 +274,6 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int, SiteId INT,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
@@ -351,7 +350,6 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int, SiteId INT,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 90.00 --10% of Athena Licensee fee (Licensees take 90%, House takes 10%)
 
 SELECT @max_custid = xxx
 
