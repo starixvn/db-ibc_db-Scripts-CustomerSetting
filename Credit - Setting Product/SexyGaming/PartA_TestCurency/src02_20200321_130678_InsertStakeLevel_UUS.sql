@@ -39,6 +39,7 @@ WHERE MaxStake > 999
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
 WHERE S.GameTypeID BETWEEN 3101 AND 3105
+	AND S.ExchangeId IN (20)
 
 
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
