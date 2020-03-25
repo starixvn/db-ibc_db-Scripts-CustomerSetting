@@ -114,8 +114,10 @@ BEGIN
 		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
 
-		INSERT INTO Dep_CustProductStatus (CustID,bitmapIsHidden,bitmapIsDisabled)
-		SELECT CustID,bitmapIsHidden,bitmapIsDisabled
+		INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+		SELECT	t.custid
+				, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+				, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
 		FROM #TempProductStatus t
 		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
