@@ -180,6 +180,10 @@
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsHidden,bitmapIsDisabled)
+	SELECT CustID,bitmapIsHidden,bitmapIsDisabled
+	FROM #TempProductStatus t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -267,13 +271,13 @@
 	-------------------------------------------------Bet Setting----------------------------------------------------------------
 	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY)
 	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet)
-	SELECT 223, 5001, 4, 10.00, 741.00 UNION ALL --THB, TB
-	SELECT 223, 5002, 4, 10.00, 1853.00 UNION ALL --THB, TB
-	SELECT 223, 5003, 4, 10.00, 6175.00 UNION ALL --THB, TB
-	SELECT 223, 5004, 4, 10.00, 6175.00 UNION ALL --THB, TB
-	SELECT 223, 5005, 4, 10.00, 5293.00 UNION ALL --THB, TB
-	SELECT 223, 5006, 4, 10.00, 47818.00 UNION ALL --THB, TB
-	SELECT 223, 5007, 4, 10.00, 9266.00 UNION ALL --THB, TB
+	SELECT 223, 5001, 4, 10.00, 700.00 UNION ALL --THB, TB
+	SELECT 223, 5002, 4, 10.00, 1750.00 UNION ALL --THB, TB
+	SELECT 223, 5003, 4, 10.00, 5831.00 UNION ALL --THB, TB
+	SELECT 223, 5004, 4, 10.00, 5831.00 UNION ALL --THB, TB
+	SELECT 223, 5005, 4, 10.00, 4998.00 UNION ALL --THB, TB
+	SELECT 223, 5006, 4, 10.00, 45157.00 UNION ALL --THB, TB
+	SELECT 223, 5007, 4, 10.00, 8750.00 UNION ALL --THB, TB
 	SELECT 223, 5001, 15, 1.00, 366.00 UNION ALL --IDR, IN
 	SELECT 223, 5002, 15, 1.00, 915.00 UNION ALL --IDR, IN
 	SELECT 223, 5003, 15, 1.00, 3048.00 UNION ALL --IDR, IN
@@ -281,6 +285,8 @@
 	SELECT 223, 5005, 15, 1.00, 2612.00 UNION ALL --IDR, IN
 	SELECT 223, 5006, 15, 1.00, 23603.00 UNION ALL --IDR, IN
 	SELECT 223, 5007, 15, 1.00, 4574.00  --IDR, IN
+	
+	
 
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
