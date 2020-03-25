@@ -7,15 +7,14 @@
 USE CustDB
 GO
 
---Update IsTest = 0
+--Update IsTest = 0, IsLaunched = 1 for all sites, all currencies
 UPDATE PS
-SET PS.IsTest = 0
+SET PS.IsTest = 0, ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency PS WITH (ROWLOCK,UPDLOCK)
-WHERE SportType IN (195,196)
+WHERE SportType IN (196)
 
---Offer all currency for site Indo and 611111
-UPDATE ps
-SET ps.IsLaunched = 1
+--Offer all currency for site BEST-ODDS
+UPDATE PS
+SET PS.Currency = 0
 FROM dbo.ProductLaunchedSiteCurrency PS WITH (ROWLOCK,UPDLOCK)
-WHERE SportType IN (195,196) AND PS.SiteID IN (11,16)
-
+WHERE PS.SportType IN (196) AND PS.SiteID = 1
