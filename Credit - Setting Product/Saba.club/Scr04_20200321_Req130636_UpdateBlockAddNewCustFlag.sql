@@ -8,6 +8,6 @@ USE CustDB
 GO
 
 UPDATE dbo.SettingSystem 
-SET BlockNewCusti7 = 0,
+SET BlockNewCusti7 = 1,
 	UnblockTime = '01:30 PM (GMT+8)'
 WHERE SystemID = 1
