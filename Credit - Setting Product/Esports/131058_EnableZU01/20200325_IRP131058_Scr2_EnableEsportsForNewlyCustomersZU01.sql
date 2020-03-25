@@ -33,7 +33,7 @@ INSERT INTO #tblCust(CustID)
 SELECT ci.custid
 FROM custInfo ci WITH (NOLOCK) 
 	INNER JOIN CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
-WHERE ci.srecommend = @srecommend 		
+WHERE ci.srecommend IN (SELECT custid FROM #supers)		
 	AND ci.Enabled=1	
 	AND ci.custid > @maxcustid
 	AND (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(bitmapIsDisabled,@BitOrder)) = 1
