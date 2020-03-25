@@ -48,7 +48,7 @@ BEGIN
 		BREAK	
 		
 	UPDATE cs
-	SET								
+	SET	bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),							
 		bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 	WHERE custid IN (SELECT custid FROM @tmpCust)
