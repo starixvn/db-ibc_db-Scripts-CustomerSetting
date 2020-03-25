@@ -2,7 +2,7 @@
 	Creator: Elodie
 	Date: 20170801
 	Task: Copy permission Lottery from Keno for Ext Group
-	DB: DBEAS/bodb_EAS
+	DB: DBCUST/Nap_UserControl
 */
 --Reference f_SiteBySystem
 
@@ -25,7 +25,7 @@
 --FROM #supers c WITH(NOLOCK)
 --	INNER join DBAGE.bodb_AGE.dbo.Acc_CustGroup u WITH(NOLOCK) ON c.custid= u.custid
 
-USE bodb_EAS
+USE Nap_UserControl
 GO
 
 CREATE TABLE #GroupExt (GroupID INT)
@@ -46,7 +46,7 @@ UPDATE gpt
 SET gpt.Policy = gpf.Policy
 --SELECT *
 FROM eaGroupPolicy gpf WITH (NOLOCK)
-	INNER JOIN eaGroupPolicy gpt WITH (NOLOCK) ON gpt.GroupID = gpf.GroupID
+	INNER JOIN eaGroupPolicy gpt WITH (ROWLOCK) ON gpt.GroupID = gpf.GroupID
 	INNER JOIN #GroupExt g ON g.GroupID = gpf.GroupID
 	INNER JOIN #PermissionMapping p ON gpf.FuncID = p.PermissionFrom AND gpt.FuncID = p.PermissionTo
 
@@ -54,7 +54,7 @@ UPDATE upt
 SET upt.Policy = upf.Policy
 --SELECT *
 FROM eaUserPolicy upf WITH (NOLOCK)
-	INNER JOIN eaUserPolicy upt WITH (NOLOCK) ON upt.UserID = upf.UserID
+	INNER JOIN eaUserPolicy upt WITH (ROWLOCK) ON upt.UserID = upf.UserID
 	INNER JOIN dbo.eaUserInfo u WITH (NOLOCK) ON u.UserID = upf.UserID
 	INNER JOIN #GroupExt g ON u.GroupID = g.GroupID
 	INNER JOIN #PermissionMapping p ON upf.FuncID = p.PermissionFrom AND upt.FuncID = p.PermissionTo
