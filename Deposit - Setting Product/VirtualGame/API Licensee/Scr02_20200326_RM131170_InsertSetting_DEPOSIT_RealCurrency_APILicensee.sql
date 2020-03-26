@@ -1,6 +1,6 @@
 /*
-	Created: Eden
-	Date: 20191029
+	Created: Elodie
+	Date: 20200326
 	Task: Insert setting for Virtual game - Real Currency -  API Site (N88, N8B, N8G)
 	DB: DBCust/CustDB
 */

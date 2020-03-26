@@ -1,6 +1,6 @@
 /*
-	Created: Eden
-	Date: 20191029
+	Created: Elodie
+	Date: 20200326
 	Task: Create setting for Virtual games Athena Site and API Site (N88, N8B, N8G)( New accounts)
 	DB: DBCust/CustDB
 */
