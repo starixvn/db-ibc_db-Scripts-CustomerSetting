@@ -299,13 +299,13 @@ BEGIN
 		IF @@ROWCOUNT = 0 BREAK
 
 		UPDATE csa
-		SET csa.MaxWinLimit = cs.MaxWinLimit, csa.MaxLossLimit = cs.MaxLossLimit      
+		SET csa.MaxWinLimit = cs.MaxWinLimit, csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset    
 		FROM dbo.CustWinLossLimit_Agent csa WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #SMAList_WL cs WITH(NOLOCK) ON cs.custid = csa.CustID
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 		UPDATE csm
-		SET csm.MaxWinLimit = cs.MaxWinLimit, csm.MaxLossLimit = cs.MaxLossLimit  
+		SET csm.MaxWinLimit = cs.MaxWinLimit, csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
 		FROM dbo.CustWinLossLimit_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_WL cs WITH(NOLOCK) ON cs.custid = csm.CustID
 		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
