@@ -522,7 +522,7 @@ WHERE c.roleid = 4
 				'weicai','HCVIP','Kraton','BBIN3','Mopgaming','pinbo','ID88','DingTai','ENT22','BOSSB','allwincity','TopGame',
 				'Onegaming','24AVIA','B24VN','Sunwin','Apollo','YTX','BOG22','Wanfang','MTech','JIDU','Leng4D','G2Win','erhaozhan',
 				'Okada','KUTECH','Siamgame','Datang001','hjccasino','BWGaming','Champion','shengboyun','Spark','afb99','Debet',
-				'633esports','Wanbo','Jarvis','Tianbo','WUYICP','CGame4','N88','TitanCraft','TaoCai','ZhiFeng032','TYCgame','HBO999',
+				'633esports','Wanbo','Jarvis','Tianbo','WUYICP','CGame4','TitanCraft','TaoCai','ZhiFeng032','TYCgame','HBO999',
 				'Yunji','JZFortune','OneSports','TCbet','Soon88','GGBOOK','INSERTGAME')
 
 -- For deployer info
