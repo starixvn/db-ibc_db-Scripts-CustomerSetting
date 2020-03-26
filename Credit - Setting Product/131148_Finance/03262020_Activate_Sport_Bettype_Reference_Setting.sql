@@ -13,7 +13,3 @@ SET S.isActive = 1
 FROM Sport_Bettype_Reference_Setting S WITH (ROWLOCK, UPDLOCK)
 WHERE S.SportType = 55 AND S.isActive = 0
 
-UPDATE S
-SET S.isActive = 1
-FROM Sport_Bettype_Reference_VirtualRate S WITH (ROWLOCK, UPDLOCK)
-WHERE S.SportType = 55 AND S.isActive = 0
