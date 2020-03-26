@@ -1,8 +1,8 @@
 /*
 	Created: Elodie
-	Task: Copy PT & Bet Setting & WinLossLimit for Saba.club
+	Task: Copy PT & Bet Setting & WinLossLimit for Table Games
 	DB: DBCUST/CustDB
-	Date: 20200321
+	Date: 20200326
 */ 
 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
@@ -16,33 +16,22 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
-	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN		
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN			
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 
-	DECLARE @ProductID TINYINT = 42
+	DECLARE @ProductID TINYINT = 28, @Sporttype SMALLINT = 222
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	44, 1, SportType, BetType, 0, SettingType, 0
+	SELECT	220, 1024, SportType, BetType, 0, SettingType, 0
 	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType = 1
-
-	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	212, 4001, SportType, BetType, 0, SettingType, 0 
-	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType = 6
-
-	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	NULL, NULL, SportType, BetType, 0, SettingType, 0 
-	FROM dbo.ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SettingType = 8
+	WHERE ProductID = @ProductID AND SettingType IN (1,2,6) AND SportType = @Sporttype
 
 	CREATE TABLE #MemberTemp
 	(
@@ -137,20 +126,22 @@ BEGIN
 
 	--------------------------------------Bet Setting-------------------------------------------------		
 	--Agent Level
-	INSERT INTO dbo.CustStakeLevel_Agent (CustID, SportType, BetType, StakeLevelList)	      
-	SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20))		
-	FROM dbo.StakeLevel s WITH(NOLOCK)
-		INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
-		CROSS APPLY #SMATemp ci WITH(NOLOCK) 
-	WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
+	INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+	SELECT cs.CustID, dest.tSportType, dest.tBetType, MinBet, MaxBet, MaxPerMatch	
+	FROM dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+		CROSS APPLY #DestinationSportBetType dest 
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 2
 
 	--Member Level
-	INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList, LastUpdated)	      
-	SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20)), GETDATE()
-	FROM dbo.StakeLevel s WITH(NOLOCK)
-		INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
-		CROSS APPLY #MemberTemp ci WITH(NOLOCK) 
-	WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
+	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+	SELECT cs.CustID, dest.tSportType, dest.tBetType, MinBet, MaxBet, MaxPerMatch
+	FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK)
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+		CROSS APPLY #DestinationSportBetType dest 
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 2
 
 	--------------------------------------Win Loss Limit-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -202,7 +193,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.site IN ('789y')
+	AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -254,7 +245,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.site IN ('789y')
+	AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

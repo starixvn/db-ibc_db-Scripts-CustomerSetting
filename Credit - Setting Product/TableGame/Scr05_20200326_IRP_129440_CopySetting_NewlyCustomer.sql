@@ -22,24 +22,14 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.site IN ('789y')
+	AND ci.currency <> 20
 
-DECLARE @ProductID TINYINT = 42
+DECLARE @ProductID TINYINT = 28, @Sporttype SMALLINT = 222
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-SELECT	44, 1, SportType, BetType, 0, SettingType, 0
+SELECT	220, 1024, SportType, BetType, 0, SettingType, 0
 FROM dbo.ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SettingType = 1
-
-INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-SELECT	212, 4001, SportType, BetType, 0, SettingType, 0 
-FROM dbo.ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SettingType = 6
-
-INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-SELECT	NULL, NULL, SportType, BetType, 0, SettingType, 0 
-FROM dbo.ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SettingType = 8
+WHERE ProductID = @ProductID AND SettingType IN (1,2,6) AND SportType = @Sporttype
 
 CREATE TABLE #MemberTemp
 (
@@ -134,20 +124,22 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	
 --------------------------------------Bet Setting-------------------------------------------------		
 --Agent Level
-INSERT INTO dbo.CustStakeLevel_Agent (CustID, SportType, BetType, StakeLevelList)	      
-SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20))		
-FROM dbo.StakeLevel s WITH(NOLOCK)
-	INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
-	CROSS APPLY #SMATemp ci WITH(NOLOCK) 
-WHERE dest.SettingType = 8 AND ci.currency = s.ExchangeId
+INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+SELECT cs.CustID, dest.tSportType, dest.tBetType, MinBet, MaxBet, MaxPerMatch	
+FROM dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK)
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+	CROSS APPLY #DestinationSportBetType dest 
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 2
 
 --Member Level
-INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList, LastUpdated)	      
-SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20)), GETDATE()
-FROM dbo.StakeLevel s WITH(NOLOCK)
-	INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
-	CROSS APPLY #MemberTemp ci WITH(NOLOCK) 
-WHERE dest.SettingType = 8 AND ci.currency = s.ExchangeId
+INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+SELECT cs.CustID, dest.tSportType, dest.tBetType, MinBet, MaxBet, MaxPerMatch
+FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK)
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+	CROSS APPLY #DestinationSportBetType dest 
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 2
 
 --------------------------------------Win Loss Limit-------------------------------------------------		
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -173,7 +165,7 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 6
 
 /*******************************CUST PRODUCTSTATUS TABLE*******************************/	
-DECLARE @BitmapOrder TINYINT = 21
+DECLARE @BitmapOrder TINYINT = 23
 
 SELECT custid, ci.roleid, ci.srecommend
 INTO #CustList
@@ -182,9 +174,10 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers) AND custid > @MaxCustID
 
 UPDATE cs
 SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))	
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 11) as isDisabled
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp

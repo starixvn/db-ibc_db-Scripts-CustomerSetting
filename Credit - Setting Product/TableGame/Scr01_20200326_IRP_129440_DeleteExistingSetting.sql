@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
-	Date: 20200321
-	Task: Delete existing data of Saba.club
+	Date: 20200326
+	Task: Delete existing data of Table Games
 	DB: DBCUST/CustDB
 */
  
@@ -19,12 +19,12 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN				
 
-	DECLARE @Sporttype SMALLINT = 200
+	DECLARE @Sporttype SMALLINT = 222
 
 	SELECT DISTINCT custid 
 	INTO #CustPT_Agent
@@ -43,12 +43,12 @@ BEGIN
 				
 	SELECT DISTINCT custid 
 	INTO #CustBet_Agent
-	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)		
+	FROM dbo.CustBetSetting3rd_Agent cg WITH(NOLOCK)		
 	WHERE SportType = @Sporttype
 
 	SELECT DISTINCT custid 
 	INTO #CustBet_Member
-	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
+	FROM dbo.CustBetSetting3rd_Member cg WITH(NOLOCK)		
 	WHERE SportType = @Sporttype
 
 	SELECT DISTINCT custid 
@@ -77,12 +77,12 @@ BEGIN
 	WHERE SportType = @Sporttype
 				
 	DELETE cg
-	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)
+	FROM dbo.CustBetSetting3rd_Agent cg WITH(ROWLOCK)
 		INNER JOIN #CustBet_Agent ci ON ci.custid = cg.CustID			
 	WHERE SportType = @Sporttype
 
 	DELETE cg
-	FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
+	FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustBet_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
 

@@ -440,22 +440,21 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND s.site IN ('KeenOcean','Champion','Sunrise','GESAB','Mayayule','CGame4','ID88','ANGbet','ALPHA88','SSSGaming','YBTech','JIBET','JGQP8','MICL','afb99','DTGW',
-				'WUYICP','Siamgame','gbkj','BPLE','TLC','BWGaming','ENTAPLAY','Lucky88','HCVIP','PKbet','MRCATSB','G2Win','ZhiFeng035','Webet88','Sunriseb2b','Aoncash',
-				'Huangma','Taipanbet','TaoCai','818Bet','erhaozhan','Brown888','mtegames','Happy1668','allwincity','BetDeal','12bet','Bobbet','Lagadewa','Datang','Haifa',
-				'AEUG','Fabet','Zowin','GGBOOKES','Hecbet','18Luck','Uwoniwin','NewFuture','WKCUR','NewHonbet','Lode88','396Club','Callmeboss','DEWA','368Cash','TYCgame',
-				'365online','9wickets','GamingSoft','hjccasino','TitanOne','Win88','Mopgaming','GMASTER','ALog','Soon88','Boma365','Wanbo','Onegaming','Dade','BOSSB',
-				'Mbet','IBO','Debet','WKPHIL','IvoryBet','sbt88','Liga','Happy8','Hong88','Opadmin','MAX88','A1game','VCBA','9Bet','9Wsports','FLC','HonorW','FB88',
-				'Raisetech','VN88','TitanCraft','PanguGame','B24VN','Xtu168','Winn69','Heaven','Sin88','Bodog','MTech','INSERTGAME','Mybet88','Nbbet','BETSUN','PKKing',
-				'VWIN66','KhmerG','ig128','shengboyun','Bonanza88','UN168','TopGame','Boying','ECLBET','Gampag','JIDU','Q8Bola','GGBOOK','m8bola','NBCbet','Monaco',
-				'Apollo','Bolanation','OCMS','Gameroom','Yabo3','Mansion88','txwl002','KUTECH','BOG22','XTD3','OPEBET','e8casino','DingTai','HBO999','Okada','Yibo',
-				'Luckywin88','Five88','Senibet','Monstergol','N8G','Bobo88','MARS','88Macao','Ratugg','AE88','Sunwin','UwinY','AsiaBet88','88Goals','XTDGT','dabo88',
-				'Yunji','Kudatogel','ZhiFeng032','zt828','W88','Pinbo','BBIN2','Sun988','JZFortune','Kraton','Heji888','ABcasino','Newbet','WBG88','Aplus','YongBao',
-				'One88','Red88','MFgame','Athena000','Unobet','YTX','633esports','Royal','ISC888','CGame','BE7','OneSports','12B','Macaubet','SampleSite','K8VN',
-				'WKIBPH','AnvoFH','starsoccer','Sunbet138','XinYo','iBET','Starnet','IONclub','Salon365','Xinbo','weicai','Leng4D','9Club','WBS','NextBet','HJTK',
-				'Sungame','ITCBET','Spondemo','Dawoo','3Star88','Gaobet','Storm88','Tianbo','IGPTech','BigGaming','Nova88','Axiawin','TCbet','WINCLUB88','AMG','HL8',
-				'TGame','Swin','Wanfang','Jarvis','KingBet','24AVIA','BBIN3','Honbet','GPIgame','11bet','DBP','LLGAME','N88','Ole777','Zbet','IBG','TangChao',
-				'Tripleone','YAYOU','N8B','skykey','Weiwei','Datang001','Opal88','QASite','AG','Spark','Jumbo88','ENT22','TGO','DF88')
+  AND s.site IN ('Happy8','GamingSoft','DBP','HL8','TLC','368Cash','Senibet','HonorW','W88','12Bet','alog','asiabet88','mansion88',
+				'OLE777','SunGame','HAIFA','Bodog','Boma365','Happy1668','KeenOcean','ISC888','3star88','Newhonbet','Abcasino',
+				'Hecbet ','iBET','Royal','XTD3','IBO','Liga','88Macao','9Club','Ae88','AG','HONBET','TGO','KhmerG','365online',
+				'IONclub','Mayayule','Sun988','DEWA','Gampag','HuangMa','Boying','webet88','PKbet','BigGaming','VCBA','Taipanbet',
+				'Dawoo','FLC','Sunrise','Uwoniwin','ECLBET','PanguGame','818Bet','Heaven','IGPTech','K8VN','GPIGAME','Swin','396Club',
+				'e8casino','Lucky88','MAX88','OPEBET','BBIN2','Bobo88','GMASTER','Opal88','Sunriseb2b','YongBao','ALPHA88','11bet',
+				'Aplus','zt828','ENTAPLAY','MICL','Tripleone','Yibo','TangChao','WBS','CGame','Xinbo','FB88','YBTech','Monaco','BETSUN',
+				'Mybet88','JIBET','Gameroom','Fabet','WINCLUB88','Callmeboss','SSSGaming','ANGbet','One88','Nbbet','Bobbet','TitanOne',
+				'18Luck','AEUG','XinYo','VWIN66','AMG','Starnet','gbkj','VN88','ig128','MARS','YAYOU','UwinY','Hong88','Gaobet',
+				'Five88','Zbet','A1game','IBG','Raisetech','txwl002','sbt88','WKCUR','WKPHIL','GESAB','Win88','AnvoFH','Xtu168',
+				'weicai','HCVIP','Kraton','BBIN3','Mopgaming','pinbo','ID88','DingTai','ENT22','BOSSB','allwincity','TopGame',
+				'Onegaming','24AVIA','B24VN','Sunwin','Apollo','YTX','BOG22','Wanfang','MTech','JIDU','Leng4D','G2Win','erhaozhan',
+				'Okada','KUTECH','Siamgame','Datang001','hjccasino','BWGaming','Champion','shengboyun','Spark','afb99','Debet',
+				'633esports','Wanbo','Jarvis','Tianbo','WUYICP','CGame4','TitanCraft','TaoCai','ZhiFeng032','TYCgame','HBO999',
+				'Yunji','JZFortune','OneSports','TCbet','Soon88','GGBOOK','INSERTGAME')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -510,22 +509,21 @@ WHERE c.roleid = 4
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
  AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
- AND s.site IN ('KeenOcean','Champion','Sunrise','GESAB','Mayayule','CGame4','ID88','ANGbet','ALPHA88','SSSGaming','YBTech','JIBET','JGQP8','MICL','afb99','DTGW',
-				'WUYICP','Siamgame','gbkj','BPLE','TLC','BWGaming','ENTAPLAY','Lucky88','HCVIP','PKbet','MRCATSB','G2Win','ZhiFeng035','Webet88','Sunriseb2b','Aoncash',
-				'Huangma','Taipanbet','TaoCai','818Bet','erhaozhan','Brown888','mtegames','Happy1668','allwincity','BetDeal','12bet','Bobbet','Lagadewa','Datang','Haifa',
-				'AEUG','Fabet','Zowin','GGBOOKES','Hecbet','18Luck','Uwoniwin','NewFuture','WKCUR','NewHonbet','Lode88','396Club','Callmeboss','DEWA','368Cash','TYCgame',
-				'365online','9wickets','GamingSoft','hjccasino','TitanOne','Win88','Mopgaming','GMASTER','ALog','Soon88','Boma365','Wanbo','Onegaming','Dade','BOSSB',
-				'Mbet','IBO','Debet','WKPHIL','IvoryBet','sbt88','Liga','Happy8','Hong88','Opadmin','MAX88','A1game','VCBA','9Bet','9Wsports','FLC','HonorW','FB88',
-				'Raisetech','VN88','TitanCraft','PanguGame','B24VN','Xtu168','Winn69','Heaven','Sin88','Bodog','MTech','INSERTGAME','Mybet88','Nbbet','BETSUN','PKKing',
-				'VWIN66','KhmerG','ig128','shengboyun','Bonanza88','UN168','TopGame','Boying','ECLBET','Gampag','JIDU','Q8Bola','GGBOOK','m8bola','NBCbet','Monaco',
-				'Apollo','Bolanation','OCMS','Gameroom','Yabo3','Mansion88','txwl002','KUTECH','BOG22','XTD3','OPEBET','e8casino','DingTai','HBO999','Okada','Yibo',
-				'Luckywin88','Five88','Senibet','Monstergol','N8G','Bobo88','MARS','88Macao','Ratugg','AE88','Sunwin','UwinY','AsiaBet88','88Goals','XTDGT','dabo88',
-				'Yunji','Kudatogel','ZhiFeng032','zt828','W88','Pinbo','BBIN2','Sun988','JZFortune','Kraton','Heji888','ABcasino','Newbet','WBG88','Aplus','YongBao',
-				'One88','Red88','MFgame','Athena000','Unobet','YTX','633esports','Royal','ISC888','CGame','BE7','OneSports','12B','Macaubet','SampleSite','K8VN',
-				'WKIBPH','AnvoFH','starsoccer','Sunbet138','XinYo','iBET','Starnet','IONclub','Salon365','Xinbo','weicai','Leng4D','9Club','WBS','NextBet','HJTK',
-				'Sungame','ITCBET','Spondemo','Dawoo','3Star88','Gaobet','Storm88','Tianbo','IGPTech','BigGaming','Nova88','Axiawin','TCbet','WINCLUB88','AMG','HL8',
-				'TGame','Swin','Wanfang','Jarvis','KingBet','24AVIA','BBIN3','Honbet','GPIgame','11bet','DBP','LLGAME','N88','Ole777','Zbet','IBG','TangChao',
-				'Tripleone','YAYOU','N8B','skykey','Weiwei','Datang001','Opal88','QASite','AG','Spark','Jumbo88','ENT22','TGO','DF88')
+ AND s.site IN ('Happy8','GamingSoft','DBP','HL8','TLC','368Cash','Senibet','HonorW','W88','12Bet','alog','asiabet88','mansion88',
+				'OLE777','SunGame','HAIFA','Bodog','Boma365','Happy1668','KeenOcean','ISC888','3star88','Newhonbet','Abcasino',
+				'Hecbet ','iBET','Royal','XTD3','IBO','Liga','88Macao','9Club','Ae88','AG','HONBET','TGO','KhmerG','365online',
+				'IONclub','Mayayule','Sun988','DEWA','Gampag','HuangMa','Boying','webet88','PKbet','BigGaming','VCBA','Taipanbet',
+				'Dawoo','FLC','Sunrise','Uwoniwin','ECLBET','PanguGame','818Bet','Heaven','IGPTech','K8VN','GPIGAME','Swin','396Club',
+				'e8casino','Lucky88','MAX88','OPEBET','BBIN2','Bobo88','GMASTER','Opal88','Sunriseb2b','YongBao','ALPHA88','11bet',
+				'Aplus','zt828','ENTAPLAY','MICL','Tripleone','Yibo','TangChao','WBS','CGame','Xinbo','FB88','YBTech','Monaco','BETSUN',
+				'Mybet88','JIBET','Gameroom','Fabet','WINCLUB88','Callmeboss','SSSGaming','ANGbet','One88','Nbbet','Bobbet','TitanOne',
+				'18Luck','AEUG','XinYo','VWIN66','AMG','Starnet','gbkj','VN88','ig128','MARS','YAYOU','UwinY','Hong88','Gaobet',
+				'Five88','Zbet','A1game','IBG','Raisetech','txwl002','sbt88','WKCUR','WKPHIL','GESAB','Win88','AnvoFH','Xtu168',
+				'weicai','HCVIP','Kraton','BBIN3','Mopgaming','pinbo','ID88','DingTai','ENT22','BOSSB','allwincity','TopGame',
+				'Onegaming','24AVIA','B24VN','Sunwin','Apollo','YTX','BOG22','Wanfang','MTech','JIDU','Leng4D','G2Win','erhaozhan',
+				'Okada','KUTECH','Siamgame','Datang001','hjccasino','BWGaming','Champion','shengboyun','Spark','afb99','Debet',
+				'633esports','Wanbo','Jarvis','Tianbo','WUYICP','CGame4','N88','TitanCraft','TaoCai','ZhiFeng032','TYCgame','HBO999',
+				'Yunji','JZFortune','OneSports','TCbet','Soon88','GGBOOK','INSERTGAME')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

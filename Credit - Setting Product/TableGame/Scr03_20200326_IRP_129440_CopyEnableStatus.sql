@@ -1,8 +1,8 @@
 /*
 	Created: Elodie	
-	Task: Initialize Product Status of Saba.club for Credit customers
+	Task: Initialize Product Status of Table Games for Credit customers
 	DB: DBCUST/CustDB
-	Date: 20200321
+	Date: 20200326
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
@@ -23,7 +23,7 @@ BEGIN
 		RETURN
 				
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrder TINYINT = 21
+	DECLARE @BitmapOrder TINYINT = 23
 	
 	SELECT custid, ci.roleid
 	INTO #CustList
@@ -32,9 +32,10 @@ BEGIN
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 		INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 11) as isDisabled
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -59,7 +60,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.site IN ('789y')
+	AND ci.currency <> 20
 
 
 -- For deployer info
@@ -112,7 +113,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.site IN ('789y')				
+	AND ci.currency <> 20			
 							
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

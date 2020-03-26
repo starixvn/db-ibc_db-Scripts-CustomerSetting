@@ -1,6 +1,6 @@
 /*
-	Created: 20200321@Elodie 
-	Task: Initial data for Saba.club
+	Created: 20200326@Elodie 
+	Task: Initial data for Table Games
 			Get MaxCustID AND Release Date.
 	DB: DB06/bodb02
 */

@@ -9,7 +9,7 @@ GO
 
 PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @MaxCustID INT, @Sporttype SMALLINT = 200
+DECLARE @MaxCustID INT, @Sporttype SMALLINT = 222
 	
 SELECT @MaxCustID = xxx
 	
