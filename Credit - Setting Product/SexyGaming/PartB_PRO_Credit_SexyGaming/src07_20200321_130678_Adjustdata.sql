@@ -36,12 +36,12 @@ BEGIN
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
-	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY)
+	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 	CREATE TABLE #MemberList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY)	
 	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
 
-	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY)
-	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY)
+	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
 
 	DECLARE @ProductID TINYINT = 41, @SportType INT = 243
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
@@ -104,6 +104,7 @@ BEGIN
 										OR C.IsAutoSuperPT <> csa.IsAutoSuperPT
 										OR C.AutoSuperPT  <> csa.AutoSuperPT
 										OR C.MinPT  <> csa.MinPT
+										OR C.MaxPT <> csa.MaxPT
 										)
 
 
@@ -159,6 +160,7 @@ BEGIN
 			,csa.IsAutoSuperPT = C.isautopositiontaking 
 			,csa.AutoSuperPT = C.autopositiontaking
 			,csa.MinPT = C.minpositiontaking
+			,csa.MaxPT = C.MaxPositionTaking
 		FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #SMAList_PT C WITH(NOLOCK) ON csa.custid = C.custid
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
@@ -170,7 +172,7 @@ BEGIN
 			,csm.IsAutoMasterPT = C.isautompositiontaking
 			,csm.AutoMasterPT = C.autompositiontaking
 			,csm.IsAutoSuperPT = C.isautopositiontaking 
-			,csm.AutoSuperPT = C.autopositiontaking 
+			,csm.AutoSuperPT = C.autopositiontaking
 		FROM dbo.CustPTSetting3rd_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_PT C WITH (NOLOCK) ON C.custid = csm.custid
 		WHERE csm.bettype = @tBetType AND csm.sporttype = @tSportType
@@ -200,7 +202,8 @@ BEGIN
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND CSM.SportType = @tSportType AND CSM.BetType = @tBetType
 		AND ci.roleid IN (2,3,4) AND Enabled = 1
 		AND (C.MaxLossLimit <> CSM.MaxLossLimit
-			OR C.MaxWinLimit <> CSM.MaxWinLimit)
+			OR C.MaxWinLimit <> CSM.MaxWinLimit
+			OR C.IsAutoReset <> CSM.IsAutoReset)
 	--Member Level
 	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit)
 	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit
@@ -211,7 +214,8 @@ BEGIN
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (C.MaxLossLimit <> CSM.MaxLossLimit
-			OR C.MaxWinLimit <> CSM.MaxWinLimit)
+			OR C.MaxWinLimit <> CSM.MaxWinLimit
+			OR C.IsAutoReset <> CSM.IsAutoReset)
 		
 	WHILE (1 = 1)
 	BEGIN	
