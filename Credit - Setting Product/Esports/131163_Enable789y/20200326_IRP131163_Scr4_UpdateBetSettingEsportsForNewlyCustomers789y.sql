@@ -40,7 +40,7 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 	FROM dbo.CustBetSetting3rd_Agent cs WITH (UPDLOCK,ROWLOCK) 		
 	WHERE custid IN (SELECT custid FROM #tblCust WHERE roleid IN(2,3,4))
 		AND sporttype = 43
-		AND ((cs.MinBet < 1 AND cs.MaxBet < 1 AND cs.MaxPerMatch < 1) 
+		AND ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
 			OR
 			(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
 		)
@@ -51,7 +51,7 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 	FROM #tblCust t
 		INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON t.custid = cs.custid
 	WHERE sporttype = 43
-		AND NOT ((cs.MinBet < 1 AND cs.MaxBet < 1 AND cs.MaxPerMatch < 1) 
+		AND NOT ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
 			OR
 			(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
 		)	
@@ -72,7 +72,7 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 		FROM dbo.CustBetSetting3rd_Member cs WITH (UPDLOCK,ROWLOCK) 		
 		WHERE custid IN (SELECT custid FROM @tmpCust)
 			AND sporttype = 43
-			AND ((cs.MinBet < 1 AND cs.MaxBet < 1 AND cs.MaxPerMatch < 1) 
+			AND ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
 				OR
 				(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
 			)
