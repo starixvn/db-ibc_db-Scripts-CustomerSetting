@@ -191,6 +191,67 @@ BEGIN
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 	END	
+	--------------------------------------Commission Setting-------------------------------------------------		
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
+	FROM #DestinationSportBetType		
+	WHERE SettingType = 3
+
+	--Agent Level
+	INSERT INTO #SMAList_CommSetting (custid, Discount)
+	SELECT C.custid, C.Discount
+	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
+		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.CustDiscount3rd_Agent csa WITH(NOLOCK) ON csa.custid = C.custid
+	WHERE C.sporttype = @fSportType AND c.bettype = @fBetType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+			AND ci.roleid IN (2,3,4) AND Enabled = 1
+			AND C.Discount <> csa.Discount
+
+	--Member Level
+	INSERT INTO #MemberList_CommSetting (custid, SuperDiscount, MasterDiscount, AgentDiscount, PlayerDiscount)
+	SELECT C.custid, C.SuperDiscount, C.MasterDiscount, C.AgentDiscount, C.PlayerDiscount
+	FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK) 
+		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.CustDiscount3rd_Member csm WITH(NOLOCK) ON csm.custid = C.custid
+	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+			AND ci.roleid = 1 AND Enabled = 1
+			AND (
+				C.SuperDiscount<> csm.SuperDiscount
+				OR C.MasterDiscount <> csm.MasterDiscount
+				OR C.AgentDiscount	 <> csm.AgentDiscount			
+				OR C.PlayerDiscount <> csm.PlayerDiscount
+				)
+
+	WHILE (1 = 1)
+	BEGIN	
+		UPDATE TOP (1) #DestinationSportBetType
+		SET IsFinished = 1
+			,@fBetType = fBetType	
+			,@fSportType = fSportType
+			,@tBetType = tBetType
+			,@tSportType = tSportType
+			,@IsLive = IsLive
+		WHERE IsFinished = 0
+			AND SettingType = 3
+
+		IF @@ROWCOUNT = 0 BREAK
+
+		UPDATE csa
+		SET csa.Discount = cs.Discount       
+		FROM dbo.CustDiscount3rd_Agent csa WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #SMAList_CommSetting cs WITH(NOLOCK) ON cs.custid = csa.CustID
+		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
+
+		UPDATE csm
+		SET csm.SuperDiscount = cs.SuperDiscount,       
+			csm.MasterDiscount = cs.MasterDiscount,   
+			csm.AgentDiscount = cs.AgentDiscount,
+			csm.PlayerDiscount = cs.PlayerDiscount
+		FROM dbo.CustDiscount3rd_Member csm WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #MemberList_CommSetting cs WITH(NOLOCK) ON cs.custid = csm.CustID
+		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
+	END
 		--------------------------------------Winloss Setting-------------------------------------------------		
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
