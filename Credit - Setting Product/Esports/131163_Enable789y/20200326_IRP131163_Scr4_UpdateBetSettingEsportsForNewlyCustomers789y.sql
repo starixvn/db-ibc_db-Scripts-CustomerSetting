@@ -1,6 +1,6 @@
 /*
 	Created: Johnson
-	Task: adjust bet setting Esports for newly customers of 789y [RedmineID: #131163]
+	Task: adjust bet setting Esports & Muay Thai for newly customers of 789y [RedmineID: #131163]
 	DB: DBCUST/CustDB
 	Date: 20200326
 */ 
@@ -39,7 +39,7 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 		cs.MaxPerMatch = 250
 	FROM dbo.CustBetSetting3rd_Agent cs WITH (UPDLOCK,ROWLOCK) 		
 	WHERE custid IN (SELECT custid FROM #tblCust WHERE roleid IN(2,3,4))
-		AND sporttype = 43
+		AND sporttype IN (43,44)
 		AND ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
 			OR
 			(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
@@ -49,12 +49,16 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 	
 	DELETE t
 	FROM #tblCust t
-		INNER JOIN dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) ON t.custid = cs.custid
-	WHERE sporttype = 43
-		AND NOT ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
-			OR
-			(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
-		)	
+	WHERE NOT EXISTS(
+		SELECT 1
+		FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK) 
+		WHERE sporttype IN(43,44)
+			AND cs.custid = t.custid
+			AND ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
+				OR
+				(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
+			)	
+	)	
 
 	WHILE(1=1)
 	BEGIN
@@ -71,7 +75,7 @@ CREATE TABLE #tblCust(custid INT,roleid TINYINT)
 			cs.MaxPerMatch = 250
 		FROM dbo.CustBetSetting3rd_Member cs WITH (UPDLOCK,ROWLOCK) 		
 		WHERE custid IN (SELECT custid FROM @tmpCust)
-			AND sporttype = 43
+			AND sporttype IN (43,44)
 			AND ((cs.MaxBet < 1 OR cs.MaxPerMatch < 1) 
 				OR
 				(cs.MinBet = cs.MaxBet AND cs.MinBet = cs.MaxPerMatch AND cs.MinBet <3)
