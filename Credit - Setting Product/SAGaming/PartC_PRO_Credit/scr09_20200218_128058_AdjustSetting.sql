@@ -93,8 +93,8 @@ BEGIN
 	WHERE SettingType = 1
 
 	--AGENT LEVEL
-	INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking)
-	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT, C.MinPT
+	INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking, MaxPositionTaking)
+	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT, C.MinPT, C.MaxPT
 	FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
@@ -261,8 +261,8 @@ BEGIN
 	FROM #DestinationSportBetType		
 	WHERE SettingType = 6
 	--Agent Level
-	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit)
-	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit
+	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
 	FROM dbo.CustWinLossLimit_Agent C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -273,8 +273,8 @@ BEGIN
 			OR C.MaxWinLimit <> CSM.MaxWinLimit
 			OR C.IsAutoReset <> CSM.IsAutoReset)
 	--Member Level
-	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit)
-	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit
+	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
 	FROM dbo.CustWinLossLimit_Member C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
