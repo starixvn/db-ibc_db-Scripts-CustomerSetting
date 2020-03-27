@@ -20,9 +20,9 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
+ AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
 				'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
-				'CLP','KRW','COP','VES','VND','PYG','UUS')
+				'CLP','KRW','COP','VES','VND','PYG','UUS') OR e.exchangeid = 20)
  AND s.site IN ('12B','18Luck','24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','9Wsports',
 				'A1game','Abcasino','AEUG','afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88',
 				'B24VN','BBIN2','BBIN3','BBIN4','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BOG22','BoinGroup',
@@ -86,6 +86,7 @@ INTO #Dep_CustBetSetting_Agent
 FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
 INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
+INNER JOIN #supers s ON ci.srecommend = s.custid
 
 DELETE a
 FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK)
@@ -96,6 +97,7 @@ INTO #Dep_CustBetSetting_Member
 FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
 INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
+INNER JOIN #supers s ON ci.srecommend = s.custid
 
 DELETE a
 FROM Dep_CustBetSetting_Member a WITH(ROWLOCK)

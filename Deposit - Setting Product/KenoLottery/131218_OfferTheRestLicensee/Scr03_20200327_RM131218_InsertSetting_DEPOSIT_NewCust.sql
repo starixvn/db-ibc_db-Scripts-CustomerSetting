@@ -122,7 +122,7 @@
 	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
 	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid 
 
 	DELETE a
 	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
@@ -132,7 +132,7 @@
 	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON a.CustID = ci.custid 
 
 	DELETE a
 	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
