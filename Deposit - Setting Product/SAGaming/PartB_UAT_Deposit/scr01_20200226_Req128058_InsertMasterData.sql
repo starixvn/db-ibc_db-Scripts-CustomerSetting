@@ -22,7 +22,7 @@ VALUES (44,39,7,0,3,3) -- StakeLevel
 
 DELETE D
 FROM Dep_ProductSettingDetail D WITH (ROWLOCK)
-WHERE D.SportType = 244 AND D.BetType = 3001
+WHERE D.SportType = 244 
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES (42,244,3001,0,0,1)
@@ -30,12 +30,24 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType
 VALUES (43,244,3001,0,0,1)
 INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
 VALUES (44,244,3001,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3002,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3003,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3004,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3005,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3006,0,0,1)
+INSERT INTO [dbo].[Dep_ProductSettingDetail] (ProductSettingID,SportType,BetType,IsLive,MaxDefaultValue,SettingStatus)
+VALUES (44,244,3007,0,0,1)
 
 --Dep_ProductStatusProfile 
 
 DELETE D
 FROM Dep_ProductStatusProfile D WITH (ROWLOCK)
-WHERE D.SportType = 244 AND D.BetType = 3001
+WHERE D.SportType = 244 
 
 INSERT INTO [dbo].Dep_ProductStatusProfile (Sporttype,Bettype,bitmapOrder)
 VALUES (244,3001,14)
