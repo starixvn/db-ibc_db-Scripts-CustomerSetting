@@ -1,23 +1,58 @@
 /*
 	Created: Elodie
-	Date: 20200314
-	Task: Insert stakelevel of Midas for 789y
+	Date: 20200327
+	Task: Insert stakelevel of Midas for nova cash
 */
 USE CustDB
 GO
 
---DELETE StakeLevelGroupDetail WITH (ROWLOCK) WHERE GameTypeID = 1902
+--DELETE Dep_StakeLevelGroupDetail WITH (ROWLOCK) WHERE GameTypeID = 1902
 
-INSERT INTO StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
 SELECT StakeLevelID, 1902, CAST(1 AS NVARCHAR(50)),CAST(500 AS NVARCHAR(50)), 1 , 500
-FROM StakeLevel s WITH(NOLOCK) 
+FROM Dep_StakeLevel s WITH(NOLOCK) 
 	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
-WHERE GameTypeID=1901 AND GameGroupID=9
-	AND e.Code = 'USD'
+WHERE GameTypeID = 1901 AND GameGroupID = 10
+	AND (e.Code  IN ('USD') OR e.exchangeid = 20)
+
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID, 1902, CAST(1 AS NVARCHAR(50)),CAST(1000 AS NVARCHAR(50)), 1 , 1000
+FROM Dep_StakeLevel s WITH(NOLOCK) 
+	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
+WHERE GameTypeID = 1901 AND GameGroupID = 10
+	AND e.Code = 'MYR'
+
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID, 1902, CAST(10 AS NVARCHAR(50)),CAST(10000 AS NVARCHAR(50)), 10 , 10000
+FROM Dep_StakeLevel s WITH(NOLOCK) 
+	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
+WHERE GameTypeID=1901 AND GameGroupID = 10
+	AND e.Code = 'THB'
+
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID, 1902, CAST(3 AS NVARCHAR(50)),CAST(4000 AS NVARCHAR(50)), 3 , 4000
+FROM Dep_StakeLevel s WITH(NOLOCK) 
+	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
+WHERE GameTypeID=1901 AND GameGroupID = 10
+	AND e.Code = 'IDR'
+
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID, 1902, CAST(5 AS NVARCHAR(50)),CAST(5000 AS NVARCHAR(50)), 5 , 5000
+FROM Dep_StakeLevel s WITH(NOLOCK) 
+	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
+WHERE GameTypeID=1901 AND GameGroupID = 10
+	AND e.Code = 'INH'
+
+INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
+SELECT StakeLevelID, 1902, CAST(2 AS NVARCHAR(50)),CAST(1500 AS NVARCHAR(50)), 2 , 1500
+FROM Dep_StakeLevel s WITH(NOLOCK) 
+	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
+WHERE GameTypeID=1901 AND GameGroupID = 10
+	AND e.Code = 'RMB'
 
 SELECT TOP 1000 s.*, sd.* 
-FROM StakeLevelGroupDetail sd WITH (NOLOCK) 
-	INNER JOIN dbo.StakeLevel s WITH (NOLOCK) ON s.StakeLevelID = sd.StakeLevelID
-WHERE s.GameTypeID = 1901 AND GameGroupID=9
+FROM Dep_StakeLevelGroupDetail sd WITH (NOLOCK) 
+	INNER JOIN dbo.Dep_StakeLevel s WITH (NOLOCK) ON s.StakeLevelID = sd.StakeLevelID
+WHERE s.GameTypeID = 1901 AND GameGroupID=10
 
 
