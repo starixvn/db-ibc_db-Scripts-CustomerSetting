@@ -22,9 +22,9 @@
 	WHERE c.roleid = 4  
 		AND s.islicensee = 1
 		AND ci.Enabled = 1
-		AND e.Code IN (	'GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
-						'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
-						'CLP','KRW','COP','VES','VND','PYG','UUS')
+		AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
+				'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
+				'CLP','KRW','COP','VES','VND','PYG','UUS') OR e.exchangeid = 20)
 		AND s.site IN (	'12B','18Luck','24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','9Wsports',
 						'A1game','Abcasino','AEUG','afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88',
 						'B24VN','BBIN2','BBIN3','BBIN4','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BOG22','BoinGroup',
@@ -282,6 +282,7 @@
 	-------------------------------------------------Bet Setting----------------------------------------------------------------
 	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,Code VARCHAR(3), MinBet MONEY,MaxBet MONEY)
 	INSERT INTO @SportBettype_BetSetting(SportType, BetType, Code, MinBet, MaxBet)
+	SELECT 220, 1021, 'UUS', 1, 3000, 15000 UNION ALL
 	SELECT 220, 1021, 'GBP', 1, 2000, 10000 UNION ALL
 	SELECT 220, 1021, 'EUR', 1, 2500, 12500 UNION ALL
 	SELECT 220, 1021, 'CHF', 1, 3000, 15000 UNION ALL
@@ -337,7 +338,7 @@
 	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
 	FROM #SMATemp t
 		CROSS APPLY @SportBettype_BetSetting b 
-		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = e.Code
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' ELSE e.Code END
 	WHERE e.exchangeid = t.currency
 
 	INSERT INTO Dep_CustBetSetting_Member(
@@ -351,7 +352,7 @@
 	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
 	FROM #MemberTemp t
 		CROSS APPLY @SportBettype_BetSetting b
-		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = e.Code
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' ELSE e.Code END
 	WHERE e.exchangeid = t.currency
 
 	DROP TABLE #SMATemp
