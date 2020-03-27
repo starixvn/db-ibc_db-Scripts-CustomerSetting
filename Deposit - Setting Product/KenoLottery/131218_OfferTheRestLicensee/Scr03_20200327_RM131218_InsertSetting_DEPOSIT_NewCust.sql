@@ -1,14 +1,14 @@
 /*
 	Created: Elodie
-	Date: 20200326
-	Task: Create setting for Virtual games Athena Site and API Site (N88, N8B, N8G)( New accounts)
+	Date: 20200327
+	Task: Create setting for Lottery ( New accounts)
 	DB: DBCust/CustDB
 */
 
 	DECLARE @max_custid INT = xxx
 
-	DECLARE @VGSportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
-	INSERT INTO @VGSportBettype(SportType, BetType) VALUES (245, 4601)
+	DECLARE @SportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
+	INSERT INTO @SportBettype(SportType, BetType) VALUES (220, 1021)
 
 	--> API Licensee
 	CREATE TABLE #APIsupers (custid int)
@@ -18,25 +18,32 @@
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON ci.currency = e.exchangeid
 	WHERE c.roleid = 4  
-	 AND s.islicensee = 1
-	 AND ci.Enabled = 1
-	 AND c.currency NOT IN (72,27,28,17,21,31,36,37,40,44,46,50,62,63,65,68,73)
-	 AND s.site IN ('Happy8','GamingSoft','DBP','HL8','TLC','368Cash','Senibet','HonorW','W88','12Bet','alog','asiabet88','mansion88',
-				'OLE777','SunGame','HAIFA','Bodog','Boma365','Happy1668','KeenOcean','ISC888','3star88','Newhonbet','Abcasino',
-				'Hecbet ','iBET','Royal','XTD3','IBO','Liga','88Macao','9Club','Ae88','AG','HONBET','TGO','KhmerG','365online',
-				'IONclub','Mayayule','Sun988','DEWA','Gampag','HuangMa','Boying','webet88','PKbet','BigGaming','VCBA','Taipanbet',
-				'Dawoo','FLC','Sunrise','Uwoniwin','ECLBET','PanguGame','818Bet','Heaven','IGPTech','K8VN','GPIGAME','Swin','396Club',
-				'e8casino','Lucky88','MAX88','OPEBET','BBIN2','Bobo88','GMASTER','Opal88','Sunriseb2b','YongBao','ALPHA88','11bet',
-				'Aplus','zt828','ENTAPLAY','MICL','Tripleone','Yibo','TangChao','WBS','CGame','Xinbo','FB88','YBTech','Monaco','BETSUN',
-				'Mybet88','JIBET','Gameroom','Fabet','WINCLUB88','Callmeboss','SSSGaming','ANGbet','One88','Nbbet','Bobbet','TitanOne',
-				'18Luck','AEUG','XinYo','VWIN66','AMG','Starnet','gbkj','VN88','ig128','MARS','YAYOU','UwinY','Hong88','Gaobet',
-				'Five88','Zbet','A1game','IBG','Raisetech','txwl002','sbt88','WKCUR','WKPHIL','GESAB','Win88','AnvoFH','Xtu168',
-				'weicai','HCVIP','Kraton','BBIN3','Mopgaming','pinbo','ID88','DingTai','ENT22','BOSSB','allwincity','TopGame',
-				'Onegaming','24AVIA','B24VN','Sunwin','Apollo','YTX','BOG22','Wanfang','MTech','JIDU','Leng4D','G2Win','erhaozhan',
-				'Okada','KUTECH','Siamgame','Datang001','hjccasino','BWGaming','Champion','shengboyun','Spark','afb99','Debet',
-				'633esports','Wanbo','Jarvis','Tianbo','WUYICP','CGame4','TitanCraft','TaoCai','ZhiFeng032','TYCgame','HBO999',
-				'Yunji','JZFortune','OneSports','TCbet','Soon88','GGBOOK','INSERTGAME')
+		AND s.islicensee = 1
+		AND ci.Enabled = 1
+		AND e.Code IN (	'GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
+						'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
+						'CLP','KRW','COP','VES','VND','PYG','UUS')
+		AND s.site IN (	'12B','18Luck','24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','9Wsports',
+						'A1game','Abcasino','AEUG','afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88',
+						'B24VN','BBIN2','BBIN3','BBIN4','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BOG22','BoinGroup',
+						'Boma365','Bonanza88','BOSSB','Boying','BPLE','BWGaming','Cali','Calibet','Callmeboss','CGame','CGame4','Champion',
+						'dabo88','Dachen','Dade','Datang','Datang001','Dawoo','DBP','DEWA','DF88','DingTai','DTGW','e8casino','ECLBET',
+						'ENT22','ENTAPLAY','erhaozhan','FB88','Five88','FLC','G2Win','Gameroom','GamingSoft','Gampag','Gaobet','gbkj',
+						'GESAB','GGBOOK','GGBOOKES','GMASTER','GPgaming88','GPIGAME','haifa','Happy1668','Happy8','HBO999','HCVIP',
+						'Heaven','Hecbet','Heji888','HeleThai','Hengcai88','hjccasino','HJTK','HL8','HONBET','HonorW','HOT88','HuangMa',
+						'IBG','IBO','ID88','ig128','IGPTech','INSERTGAME','ISC888','IvoryBet','JGQP8','JIBET','JIDU','Jinyazhou',
+						'JZFortune','K8VN','KeenOcean','KhmerG','Kraton','Kudatogel','KUTECH','Leng4D','Liga','LLGAME','Man1878',
+						'mansion88','MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Monaco','Mopgaming','MRCATSB','MTech',
+						'mtegames','Mybet88','N88','N8B','N8G','Nbbet','Newbet','NewFuture','NextBet','Nova88','OCMS','Okada','OLE777',
+						'Onegaming','OneSports','Opadmin','Opal88','OPEBET','PanguGame','Pinbo','PKbet','PKKing','Raisetech','Royal',
+						'Salon365','sbt88','shengboyun','Siamgame','skykey','Soon88','Spark','SSSGaming','Starnet','Sun988','Sunbet138',
+						'Sunrise','Sunriseb2b','Sunwin','Swin','TangChao','TaoCai','TCbet','TGO','TitanCraft','TitanOne','TLC','TopGame',
+						'Tripleone','TXG','txwl002','TYCgame','UN168','UwinY','VCBA','VN88','VWIN66','W88','Wanbo','Wanfang','WB101',
+						'WBG88','WBS','webet88','weicai','Weiwei','Win68Club','Win88','WINCLUB88','WKCUR','WKIBPH','WKPHIL','WUYICP',
+						'Xinbo','XinYo','XTD3','XTDGT','Xtu168','YAYOU','YBTech','Yibo','YongBao','YTX','Yunji','ZhiFeng032',
+						'ZhiFeng035','Zowin','zt828')
 
 	CREATE TABLE #MemberTemp
 	(
@@ -83,7 +90,7 @@
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustPTSetting_Agent
 	FROM Dep_CustPTSetting_Agent a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
 
 	DELETE a
@@ -93,7 +100,7 @@
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustPTSetting_Member
 	FROM Dep_CustPTSetting_Member a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON a.CustID = ci.custid
 
 	DELETE a
@@ -103,33 +110,33 @@
 	SELECT a.AgentID,a.SportType,a.BetType
 	INTO #Dep_CustPTGroupSetting_Member
 	FROM Dep_CustPTGroupSetting_Member a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.AgentID = ci.custid
 
 	DELETE a
 	FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #Dep_CustPTGroupSetting_Member t ON a.AgentID = t.AgentID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
-	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	-------------------------------------------------BetSetting----------------------------------------------------------------
 	SELECT a.CustID,a.SportType,a.BetType
-	INTO #Dep_CustStakeLevel_Agent
-	FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+	INTO #Dep_CustBetSetting_Agent
+	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
 
 	DELETE a
-	FROM Dep_CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #Dep_CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustBetSetting_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	SELECT a.CustID,a.SportType,a.BetType
-	INTO #Dep_CustStakeLevel_Member
-	FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+	INTO #Dep_CustBetSetting_Member
+	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid 
 
 	DELETE a
-	FROM Dep_CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #Dep_CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustBetSetting_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	-------------
 	SELECT dl.CustID,dl.ProductSettingID
@@ -137,7 +144,7 @@
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 	INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 	INNER JOIN #SMATemp ci WITH(NOLOCK) ON dl.CustID = ci.custid
-	WHERE dp.ProductID = 38
+	WHERE dp.ProductID = 28
 
 	DELETE a
 	FROM Dep_LicenseeProductSetting a WITH(ROWLOCK,UPDLOCK)
@@ -146,18 +153,11 @@
 	DROP TABLE #Dep_CustPTGroupSetting_Member
 	DROP TABLE #Dep_CustPTSetting_Agent
 	DROP TABLE #Dep_CustPTSetting_Member
-	DROP TABLE #Dep_CustStakeLevel_Agent
-	DROP TABLE #Dep_CustStakeLevel_Member
+	DROP TABLE #Dep_CustBetSetting_Agent
+	DROP TABLE #Dep_CustBetSetting_Member
 	DROP TABLE #Dep_LicenseeProductSetting
 
 	---------------------CREATE setting for NEW ACCs-----------------------------------
-
-	DECLARE @SportBettype TABLE
-	(
-		SportType SMALLINT, 
-		BetType   SMALLINT
-	)
-	INSERT INTO @SportBettype(SportType, BetType) VALUES (245, 4601)
 
 	DECLARE @bitmapOrder INT
 	 
@@ -203,8 +203,8 @@
 	FROM #SMATemp temp 
 		 CROSS APPLY (	SELECT ProductSettingID 
 						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 38
-							AND dp.SettingType IN (4,1,7) -- Product Status, PT, Bet Limit
+						WHERE dp.ProductID = 28
+							AND dp.SettingType IN (4,1,2) -- Product Status, PT, Bet Limit
 						) st
 	WHERE temp.RoleID = 4
 
@@ -279,31 +279,80 @@
 		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
 	WHERE d.CustID IS NULL
 
-	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
-	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
-	INSERT INTO DEP_CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
-	SELECT tmp.CustID
-		,SportType = t.SportType
-		,BetType = t.BetType
-		,StakeLevelList = SUBSTRING(( SELECT ',' + CONVERT(VARCHAR(5),s.StakeLevelID) 
-										FROM DEP_StakeLevel s WITH(NOLOCK) 
-										WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType AND s.SiteID = tmp.SiteId 
-										FOR XML PATH(''))
-							,2,200)
-	FROM #SMATemp tmp
-		CROSS APPLY @SportBetType t
+	-------------------------------------------------Bet Setting----------------------------------------------------------------
+	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,Code VARCHAR(3), MinBet MONEY,MaxBet MONEY)
+	INSERT INTO @SportBettype_BetSetting(SportType, BetType, Code, MinBet, MaxBet)
+	SELECT 220, 1021, 'GBP', 1, 2000, 10000 UNION ALL
+	SELECT 220, 1021, 'EUR', 1, 2500, 12500 UNION ALL
+	SELECT 220, 1021, 'CHF', 1, 3000, 15000 UNION ALL
+	SELECT 220, 1021, 'USD', 1, 3000, 15000 UNION ALL
+	SELECT 220, 1021, 'AUD', 1, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'BND', 1, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'CAD', 1, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'MKK', 1, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'NZD', 2, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'SGD', 2, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'PEN', 5, 9000, 45000 UNION ALL
+	SELECT 220, 1021, 'MYR', 5, 10000, 50000 UNION ALL
+	SELECT 220, 1021, 'PLN', 5, 10000, 50000 UNION ALL
+	SELECT 220, 1021, 'RON', 5, 10000, 50000 UNION ALL
+	SELECT 220, 1021, 'BRL', 5, 11000, 55000 UNION ALL
+	SELECT 220, 1021, 'KHR', 5, 12000, 60000 UNION ALL
+	SELECT 220, 1021, 'TRY', 10, 15000, 75000 UNION ALL
+	SELECT 220, 1021, 'GHS', 10, 16000, 80000 UNION ALL
+	SELECT 220, 1021, 'CNY', 10, 20000, 100000 UNION ALL
+	SELECT 220, 1021, 'DKK', 10, 20000, 100000 UNION ALL
+	SELECT 220, 1021, 'HKD', 10, 20000, 100000 UNION ALL
+	SELECT 220, 1021, 'NOK', 10, 20000, 100000 UNION ALL
+	SELECT 220, 1021, 'SEK', 10, 20000, 100000 UNION ALL
+	SELECT 220, 1021, 'ZAR', 20, 35000, 175000 UNION ALL
+	SELECT 220, 1021, 'IDR *', 15, 40000, 200000 UNION ALL
+	SELECT 220, 1021, 'MXN', 20, 50000, 250000 UNION ALL
+	SELECT 220, 1021, 'CZK', 20, 65000, 325000 UNION ALL
+	SELECT 220, 1021, 'INH *', 20, 65000, 325000 UNION ALL
+	SELECT 220, 1021, 'THB', 50, 100000, 500000 UNION ALL
+	SELECT 220, 1021, 'TWD', 50, 100000, 500000 UNION ALL
+	SELECT 220, 1021, 'UYU', 50, 100000, 500000 UNION ALL
+	SELECT 220, 1021, 'ARS', 50, 125000, 625000 UNION ALL
+	SELECT 220, 1021, 'PHP', 50, 150000, 750000 UNION ALL
+	SELECT 220, 1021, 'INR', 50, 200000, 1000000 UNION ALL
+	SELECT 220, 1021, 'RUB', 50, 200000, 1000000 UNION ALL
+	SELECT 220, 1021, 'KES', 100, 300000, 1500000 UNION ALL
+	SELECT 220, 1021, 'JPY', 100, 330000, 1650000 UNION ALL
+	SELECT 220, 1021, 'CLP', 500, 2000000, 10000000 UNION ALL
+	SELECT 220, 1021, 'KRW', 1000, 3000000, 15000000 UNION ALL
+	SELECT 220, 1021, 'COP', 1000, 9000000, 45000000 UNION ALL
+	SELECT 220, 1021, 'VES', 1000, 10000000, 50000000 UNION ALL
+	SELECT 220, 1021, 'VND', 20000, 65000000, 325000000 UNION ALL
+	SELECT 220, 1021, 'PYG', 1000, 15000000, 75000000
 
-	INSERT INTO DEP_CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList,LastUpdated)
-	SELECT tmp.CustID
-		,SportType = t.SportType
-		,BetType = t.BetType
-		,StakeLevelList = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID) 
-							FROM DEP_StakeLevel s WITH(NOLOCK) 
-							WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = t.BetType AND s.SiteID = tmp.SiteId 
-							ORDER BY s.MaxStake)
-		,GETDATE()
-	FROM #MemberTemp tmp
-		CROSS APPLY @SportBetType t
+	INSERT INTO Dep_CustBetSetting_Agent(
+		 CustID
+		,SportType
+		,BetType
+		,MinBet
+		,MaxBet
+		,MaxPerMatch
+	)
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	FROM #SMATemp t
+		CROSS APPLY @SportBettype_BetSetting b 
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = e.Code
+	WHERE e.exchangeid = t.currency
+
+	INSERT INTO Dep_CustBetSetting_Member(
+		 CustID
+		,SportType
+		,BetType
+		,MinBet
+		,MaxBet
+		,MaxPerMatch
+	)
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	FROM #MemberTemp t
+		CROSS APPLY @SportBettype_BetSetting b
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = e.Code
+	WHERE e.exchangeid = t.currency
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
