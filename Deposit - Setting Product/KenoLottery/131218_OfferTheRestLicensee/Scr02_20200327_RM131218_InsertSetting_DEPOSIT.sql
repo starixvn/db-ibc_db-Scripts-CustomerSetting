@@ -297,10 +297,10 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int,isfinished bit default(0), PT SMALLMONEY)
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 94.00 --6% of API Licensee fee (Licensees take 94%, House takes 6%)
+DECLARE @PT smallmoney
 
 SELECT @max_custid = xxx
 
@@ -337,6 +337,12 @@ WHERE c.roleid = 4
 				'Xinbo','XinYo','XTD3','XTDGT','Xtu168','YAYOU','YBTech','Yibo','YongBao','YTX','Yunji','ZhiFeng032',
 				'ZhiFeng035','Zowin','zt828')
 
+UPDATE s 
+SET s.PT = cs.spositiontaking
+FROM #supers s 
+	INNER JOIN dbo.custSettingGame cs WITH (NOLOCK) ON cs.CustID = s.custid
+WHERE cs.Sporttype = 202 AND cs.Bettype = 1501
+
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -350,6 +356,7 @@ BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@srecommend = custid	
+		,@PT = PT
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -373,10 +380,10 @@ GO
 --------------------------------------------------------------------------------------
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int,isfinished bit default(0), PT SMALLMONEY)
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 94.00 --6% of API Licensee fee (Licensees take 94%, House takes 6%)
+DECLARE @PT smallmoney
 
 SELECT @max_custid = xxx
 
@@ -413,6 +420,12 @@ WHERE c.roleid = 4
 				'Xinbo','XinYo','XTD3','XTDGT','Xtu168','YAYOU','YBTech','Yibo','YongBao','YTX','Yunji','ZhiFeng032',
 				'ZhiFeng035','Zowin','zt828')
 
+UPDATE s 
+SET s.PT = cs.spositiontaking
+FROM #supers s 
+	INNER JOIN dbo.custSettingGame cs WITH (NOLOCK) ON cs.CustID = s.custid
+WHERE cs.Sporttype = 202 AND cs.Bettype = 1501
+
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -426,6 +439,7 @@ BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
 		,@srecommend = custid	
+		,@PT = PT
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK

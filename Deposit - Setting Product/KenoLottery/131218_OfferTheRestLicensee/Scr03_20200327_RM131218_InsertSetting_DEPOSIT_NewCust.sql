@@ -70,17 +70,20 @@
 	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 AND username LIKE '%Acc%'
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,94.00,s.siteid
+	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,cs.spositiontaking ,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
+		INNER JOIN dbo.CustSettingGame cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.custid
 		INNER JOIN dbo.Site s WITH (NOLOCK) ON c.site = s.site
 	WHERE ci.srecommend IN (SELECT custid FROM #APIsupers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @max_custid 
-	AND ci.mrecommend NOT IN (SELECT custid FROM #APIDummy)
+		AND ci.mrecommend NOT IN (SELECT custid FROM #APIDummy)
+		AND cs.Sporttype = 202 AND cs.Bettype = 1501
 
 	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.currency,ci.mrecommend,94.00,s.siteid
+	SELECT ci.custid, ci.currency,ci.mrecommend,cs.spositiontaking,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.recommend
+		INNER JOIN dbo.CustSettingGame cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 		INNER JOIN dbo.Site s WITH (NOLOCK) ON c.site = s.site
 	WHERE ci.srecommend IN (SELECT custid FROM #APIsupers) AND ci.roleid = 1  AND Enabled = 1 AND ci.custid > @max_custid	
 	AND ci.mrecommend NOT IN (SELECT custid FROM #APIDummy)

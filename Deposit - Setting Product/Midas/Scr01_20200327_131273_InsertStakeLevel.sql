@@ -41,14 +41,14 @@ SELECT StakeLevelID, 1902, CAST(5 AS NVARCHAR(50)),CAST(5000 AS NVARCHAR(50)), 5
 FROM Dep_StakeLevel s WITH(NOLOCK) 
 	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
 WHERE GameTypeID=1901 AND GameGroupID = 10
-	AND e.Code = 'INH'
+	AND e.currency = 'INH'
 
 INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
 SELECT StakeLevelID, 1902, CAST(2 AS NVARCHAR(50)),CAST(1500 AS NVARCHAR(50)), 2 , 1500
 FROM Dep_StakeLevel s WITH(NOLOCK) 
 	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
 WHERE GameTypeID=1901 AND GameGroupID = 10
-	AND e.Code = 'RMB'
+	AND e.currency = 'RMB'
 
 SELECT TOP 1000 s.*, sd.* 
 FROM Dep_StakeLevelGroupDetail sd WITH (NOLOCK) 
