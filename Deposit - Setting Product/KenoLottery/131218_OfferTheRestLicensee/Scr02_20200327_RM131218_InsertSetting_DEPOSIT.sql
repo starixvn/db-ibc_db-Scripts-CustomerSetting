@@ -23,8 +23,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 
@@ -212,8 +212,8 @@ BEGIN
 
 
 	-------------------------------------------------BetSetting----------------------------------------------------------------
-	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,Code VARCHAR(3), MinBet MONEY,MaxBet MONEY)
-	INSERT INTO @SportBettype_BetSetting(SportType, BetType, Code, MinBet, MaxBet)
+	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,Code VARCHAR(3), MinBet MONEY,MaxBet MONEY, MaxPerMatch MONEY)
+	INSERT INTO @SportBettype_BetSetting(SportType, BetType, Code, MinBet, MaxBet, MaxPerMatch)
 	SELECT 220, 1021, 'UUS', 1, 3000, 15000 UNION ALL
 	SELECT 220, 1021, 'GBP', 1, 2000, 10000 UNION ALL
 	SELECT 220, 1021, 'EUR', 1, 2500, 12500 UNION ALL

@@ -13,7 +13,7 @@ SELECT StakeLevelID, 1902, CAST(1 AS NVARCHAR(50)),CAST(500 AS NVARCHAR(50)), 1 
 FROM Dep_StakeLevel s WITH(NOLOCK) 
 	INNER JOIN dbo.exchange e WITH (NOLOCK) ON e.exchangeid = s.exchangeid
 WHERE GameTypeID = 1901 AND GameGroupID = 10
-	AND (e.Code  IN ('USD') OR e.exchangeid = 20)
+	AND e.Code = 'USD'
 
 INSERT INTO Dep_StakeLevelGroupDetail(StakeLevelID,	GameTypeID,	MinLabel,	MaxLabel,	MinStake,	MaxStake)
 SELECT StakeLevelID, 1902, CAST(1 AS NVARCHAR(50)),CAST(1000 AS NVARCHAR(50)), 1 , 1000
