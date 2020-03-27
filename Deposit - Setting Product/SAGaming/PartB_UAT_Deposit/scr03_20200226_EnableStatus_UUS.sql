@@ -5,7 +5,7 @@
 	DB: DBCUST/CustDB
 */
 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	@srecommend INT			
 	,@maxcustid INT
 	,@target VARCHAR(20)
@@ -26,7 +26,7 @@ BEGIN
 
 	SELECT @BitOrder= bitmapOrder 
 	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
-	WHERE SportType=@Sporttype
+	WHERE SportType=@Sporttype 
 	
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	
@@ -115,7 +115,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
+	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 			
@@ -164,7 +164,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
+	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						

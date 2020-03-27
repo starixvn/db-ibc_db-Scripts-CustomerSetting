@@ -4,7 +4,7 @@
 	Task: Delete existing data of SA Gaming Deposit - UUS [Redmine: 128058]
 	DB: DBCUST/CustDB
 */
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	@target VARCHAR(20)
 AS
 BEGIN
@@ -116,8 +116,8 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-EXEC Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+EXEC Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+EXEC Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'

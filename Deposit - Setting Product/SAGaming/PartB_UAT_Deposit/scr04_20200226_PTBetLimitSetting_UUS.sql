@@ -32,6 +32,8 @@ BEGIN
 		OR dbo.f_CheckRepTable('Dep_StakeLevel') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 
+		OR dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 
+	    OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
 	   )
 		RETURN
 
@@ -44,6 +46,11 @@ BEGIN
 	DECLARE @SuperPT SMALLINT = 85
 	DECLARE @currency INT, @siteId INT
 	DECLARE @SportType SMALLINT = 244, @BetType SMALLINT = 3001
+	DECLARE @BitOrder INT
+
+	SELECT @BitOrder= bitmapOrder 
+	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
+	WHERE SportType=@Sporttype
 
 	SELECT @currency = c.currency, @siteId = s.siteid
 	FROM dbo.customer c WITH (NOLOCK) 
@@ -217,7 +224,7 @@ BEGIN
 					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID BETWEEN 3001 AND 3007)
 	BEGIN
 		INSERT INTO DEP_StakeLevel(
-				GameTypeID
+			GameTypeID
 			,MinLabel
 			,MaxLabel
 			,MinStake
@@ -279,6 +286,31 @@ BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT @srecommend,44
 	END
+
+	--------------------------------------------Enable Status--------------------------------------------------
+	CREATE TABLE #tempUpdate (CustID INT PRIMARY KEY)
+	WHILE EXISTS(SELECT 1 FROM #tmpCust)
+	BEGIN
+		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tempUpdate
+
+		IF @@ROWCOUNT=0
+			BREAK		
+		UPDATE cs
+		SET								
+			 bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
+			 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
+		FROM [dbo].Dep_CustProductStatus CS WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #tempUpdate CI WITH (NOLOCK) ON CS.CustID = CI.CustID
+
+		TRUNCATE TABLE #tempUpdate
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=42)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,42
+	END
+
 	DROP TABLE #Dummy
 	DROP TABLE #tmpCust
 	DROP TABLE #tmpSMA
