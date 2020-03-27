@@ -187,7 +187,7 @@ WHERE c.roleid = 4
 				--,'Ratugg'
 				--,'Monstergol'
 				)
-
+ORDER BY custid
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @siteId INT
@@ -263,6 +263,7 @@ WHERE c.roleid = 4
 				--,'Ratugg'
 				--,'Monstergol'
 				)
+ORDER BY custid
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @siteId INT

@@ -309,7 +309,7 @@ WHERE c.roleid = 4
 				,'Ratugg'
 				,'Monstergol'
 				)
-
+ORDER BY custid
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @siteId INT
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -385,7 +385,7 @@ WHERE c.roleid = 4
 				,'Ratugg'
 				,'Monstergol'
 				)
-
+ORDER BY custid
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @siteId INT
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'

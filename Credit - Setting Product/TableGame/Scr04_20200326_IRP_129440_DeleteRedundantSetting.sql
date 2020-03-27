@@ -32,13 +32,13 @@ WHERE SportType = @Sporttype
 	AND c.custid > @maxcustID
 				
 DELETE cg
-FROM CustStakeLevel_Agent cg WITH(ROWLOCK)	
+FROM CustBetSetting3rd_Agent cg WITH(ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 WHERE SportType = @Sporttype
 	AND cg.custid > @maxcustID
 
 DELETE cg
-FROM CustStakeLevel_Member cg WITH(ROWLOCK)
+FROM CustBetSetting3rd_Member cg WITH(ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 WHERE SportType = @Sporttype
 	AND cg.custid > @maxcustID

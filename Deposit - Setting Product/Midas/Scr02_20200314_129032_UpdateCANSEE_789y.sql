@@ -1,0 +1,32 @@
+/*
+	Created: Elodie
+	Date: 20200314
+	Task: Insert CanSee for Midas - 789y site
+	DB: DBCUST/CustDB
+*/
+USE CustDB
+GO
+
+DECLARE @Sporttype SMALLINT, @Bettype SMALLINT
+SELECT @Sporttype = 165, @Bettype = 1902
+
+--Import sites which offered this game
+SELECT siteid
+INTO #OfferedSites
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('789y')
+
+UPDATE ps
+SET ps.IsTest = 0
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+WHERE SportType = @Sporttype AND BetType = @Bettype
+
+UPDATE ps
+SET ps.IsLaunched = 1
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
+WHERE SportType = @Sporttype AND BetType = @Bettype
+
+
+
