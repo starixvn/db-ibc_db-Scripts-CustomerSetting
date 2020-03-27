@@ -42,8 +42,13 @@ BEGIN
 	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
 
 	DECLARE @SuperPT SMALLINT = 85
-	DECLARE @currency INT
+	DECLARE @currency INT, @siteId INT
 	DECLARE @SportType SMALLINT = 244, @BetType SMALLINT = 3001
+
+	SELECT @currency = c.currency, @siteId = s.siteid
+	FROM dbo.customer c WITH (NOLOCK) 
+		INNER JOIN site s ON s.site = c.site
+	WHERE c.custid = @srecommend
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -63,18 +68,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid IN(2,3,4)
 		AND ci.Enabled=1
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)							   
-	SELECT @currency = (SELECT Currency FROM custInfo WITH (NOLOCK) WHERE custid = @srecommend)
-
-	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
-	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
-	FROM #tmpSMA SMA CROSS JOIN Dep_StakeLevel ST
-	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
-			FROM Dep_StakeLevel S WITH (NOLOCK)
-			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency
-			FOR XML PATH ('') ) AS A(STL)
-	WHERE ST.GameTypeID BETWEEN 3001 AND 3007
-	ORDER BY ST.GameTypeID
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
 	-------------------------------------PT Setting-----------------------------------------------
 	--Agent Level
@@ -190,7 +184,73 @@ BEGIN
 		SELECT @srecommend,43
 	END
 
-	-------------------------------------Betlimit Setting-----------------------------------------------
+	-------------------------------------Insert Stake Level-----------------------------------------------
+	DECLARE @DEP_Stake TABLE (
+		[GameTypeID] [int] NOT NULL,
+		[MinStake] [money] NULL,
+		[MaxStake] [money] NULL,
+		[MinLabel] [varchar](20) NULL,
+		[MaxLabel] [varchar](20) NULL,
+		[ExchangeId] [INT] NULL
+	) 
+	INSERT INTO @DEP_Stake ([GameTypeID], [MinStake], [MaxStake],[MinLabel],[MaxLabel],[ExchangeId])
+	SELECT 3001,'50','1000',50,1000,20 UNION ALL
+	SELECT 3002,'50','1000',50,1000,20 UNION ALL
+	SELECT 3003,'50','1000',50,1000,20 UNION ALL
+	SELECT 3004,'50','1000',50,1000,20 UNION ALL
+	SELECT 3005,'50','1000',50,1000,20 UNION ALL
+	SELECT 3006,'50','1000',50,1000,20 UNION ALL
+	SELECT 3007,'50','1000',50,1000,20 UNION ALL
+	SELECT 3001,'100','2000',100,2000,20 UNION ALL
+	SELECT 3002,'100','2000',100,2000,20 UNION ALL
+	SELECT 3003,'100','2000',100,2000,20 UNION ALL
+	SELECT 3004,'100','2000',100,2000,20 UNION ALL
+	SELECT 3005,'100','2000',100,2000,20 UNION ALL
+	SELECT 3006,'100','2000',100,2000,20 UNION ALL
+	SELECT 3007,'100','2000',100,2000,20 
+
+	DECLARE @MaxStakeLevelID INT
+	SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
+
+	IF NOT EXISTS (	SELECT 1 
+					FROM DEP_StakeLevel WITH (NOLOCK)
+					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID BETWEEN 3001 AND 3007)
+	BEGIN
+		INSERT INTO DEP_StakeLevel(
+				GameTypeID
+			,MinLabel
+			,MaxLabel
+			,MinStake
+			,MaxStake
+			,ExchangeId
+			,GameGroupID
+			,SiteID
+			,StakeLevelID
+		)
+		SELECT	t.GameTypeID,
+				t.MinLabel,
+				t.MaxLabel,
+				CONVERT(DECIMAL(19,2),t.MinStake) AS MinStake,
+				CONVERT(DECIMAL(19,2),t.MaxStake) AS MaxStake,
+				ExchangeId = e.exchangeid,
+				GameGroupID = 0,
+				@SiteId,
+				StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY e.exchangeid)
+		FROM @DEP_Stake t
+			INNER JOIN exchange e WITH(NOLOCK) ON t.ExchangeId = e.exchangeid
+		WHERE e.exchangeid = @currency 
+	END
+
+	-------------------------------------Betlimit Setting----------------------------------------------
+	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
+	FROM #tmpSMA SMA CROSS JOIN Dep_StakeLevel ST
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM Dep_StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency AND S.SiteID = @siteId
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE ST.GameTypeID BETWEEN 3001 AND 3007 
+	ORDER BY ST.GameTypeID
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
