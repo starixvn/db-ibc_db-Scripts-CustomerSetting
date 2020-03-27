@@ -1026,6 +1026,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
 		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF 
+ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -1079,6 +1080,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
 		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF 
+ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
 

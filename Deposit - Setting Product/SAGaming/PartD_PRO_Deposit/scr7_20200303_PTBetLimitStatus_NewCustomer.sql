@@ -18,7 +18,8 @@
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF 
+		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF
+	ORDER BY CI.custid 
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
@@ -161,39 +162,45 @@
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=43)
 
 	--------------------------------------Bet Setting-------------------------------------------------
+		CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		Currency INT,
+		SiteID INT
+	)
+
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		Currency INT
+		Currency INT,
+		SiteID INT
+
 	)
 
-	CREATE TABLE #SMATemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		Currency INT
-	)
-
-
-	CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
 		
-	INSERT INTO #MemberTemp (CustID,Currency)
-	SELECT custid,currency
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
-	
-	INSERT INTO #SMATemp (CustID,Currency)
-	SELECT custid,currency
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
-			AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	INSERT INTO #SMATemp (CustID,Currency, SiteID)
+	SELECT CI.custid, CI.currency, S.siteid 
+	FROM Custinfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
+			AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	INSERT INTO #tmpSTListSMA(BettypeID, Currency, StakelevelList)
-	SELECT DISTINCT ST.GameTypeID, Currency,CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
-	FROM #SMATemp SMA INNER JOIN StakeLevel ST ON SMA.currency =ST.ExchangeId  
+	INSERT INTO #MemberTemp (CustID,Currency, SiteID)
+	SELECT CI.custid, CI.currency, S.siteid 
+	FROM custInfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.recommend
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE CI.srecommend IN(SELECT CustID FROM #supers) AND CI.roleid = 1  AND Enabled = 1 AND CI.custid > @maxcustid	
+		AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
+	FROM #SMATemp SMA CROSS JOIN Dep_StakeLevel ST
 	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM Dep_StakeLevel S WITH (NOLOCK)
-			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = SMA.Currency
+			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = SMA.Currency AND S.SiteID = SMA.SiteID
 			FOR XML PATH ('') ) AS A(STL)
 	WHERE ST.GameTypeID BETWEEN 3001 AND 3007
 	ORDER BY ST.GameTypeID
