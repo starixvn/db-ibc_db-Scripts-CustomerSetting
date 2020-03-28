@@ -27,7 +27,7 @@ BEGIN
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'	
-		AND ci.CustID <= @MaxCustID
+		AND ci.CustID > @MaxCustID
 		AND ci.Enabled=1				
 		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency=20

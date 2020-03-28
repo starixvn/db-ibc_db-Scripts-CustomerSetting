@@ -181,9 +181,11 @@ BEGIN
 	WHERE m.IsGroupedPT=0
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT t.CustID,1
-	FROM #tmpCust t WITH(NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
+	SELECT t.CustID,1
+	FROM #tmpCust t WITH(NOLOCK) 
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
+		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
+		
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=43)
 	BEGIN
@@ -202,26 +204,30 @@ BEGIN
 	) 
 	INSERT INTO @DEP_Stake ([GameTypeID], [MinStake], [MaxStake],[MinLabel],[MaxLabel],[ExchangeId])
 	SELECT 3001,'50','1000',50,1000,20 UNION ALL
-	SELECT 3002,'50','1000',50,1000,20 UNION ALL
-	SELECT 3003,'50','1000',50,1000,20 UNION ALL
-	SELECT 3004,'50','1000',50,1000,20 UNION ALL
-	SELECT 3005,'50','1000',50,1000,20 UNION ALL
-	SELECT 3006,'50','1000',50,1000,20 UNION ALL
-	SELECT 3007,'50','1000',50,1000,20 UNION ALL
-	SELECT 3001,'100','2000',100,2000,20 UNION ALL
-	SELECT 3002,'100','2000',100,2000,20 UNION ALL
-	SELECT 3003,'100','2000',100,2000,20 UNION ALL
-	SELECT 3004,'100','2000',100,2000,20 UNION ALL
-	SELECT 3005,'100','2000',100,2000,20 UNION ALL
-	SELECT 3006,'100','2000',100,2000,20 UNION ALL
-	SELECT 3007,'100','2000',100,2000,20 
+	SELECT 3001,'100','2000',100,2000,20 
+	
+	UPDATE t
+	SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
+	FROM @DEP_Stake t
+	WHERE MinStake > 999
+
+	UPDATE t
+	SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+	FROM @DEP_Stake t
+	WHERE MaxStake > 999
+
+	UPDATE t
+	SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
+	FROM @DEP_Stake t
+	WHERE MaxStake > 999999
+
 
 	DECLARE @MaxStakeLevelID INT
 	SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
 	IF NOT EXISTS (	SELECT 1 
 					FROM DEP_StakeLevel WITH (NOLOCK)
-					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID BETWEEN 3001 AND 3007)
+					WHERE SiteID = @SiteId AND ExchangeID = @currency AND GameTypeID = 3001)
 	BEGIN
 		INSERT INTO DEP_StakeLevel(
 			GameTypeID
@@ -256,12 +262,12 @@ BEGIN
 			FROM Dep_StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency AND S.SiteID = @siteId
 			FOR XML PATH ('') ) AS A(STL)
-	WHERE ST.GameTypeID BETWEEN 3001 AND 3007 
+	WHERE ST.GameTypeID = 3001
 	ORDER BY ST.GameTypeID
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = @siteId
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 	CROSS JOIN  #tmpSMA t
 	WHERE ExchangeId=@currency
 	--Member Level
@@ -274,10 +280,10 @@ BEGIN
 			--Bet limit
 			INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
 			SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-			FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = @siteId
+			FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
 			CROSS JOIN  #tmpCustInsert t
 			WHERE ExchangeId=@currency
-			GROUP BY t.custid, TB.BettypeID, TB.StakeLevelList
+			GROUP BY t.custid, TB.BettypeID
 
 			TRUNCATE TABLE #tmpCustInsert
 	END

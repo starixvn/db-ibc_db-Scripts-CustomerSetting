@@ -153,6 +153,7 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
+		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -178,7 +179,7 @@
 
 	)
 
-	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
 		
 		
 	INSERT INTO #SMATemp (CustID,Currency, SiteID)
@@ -198,31 +199,31 @@
 		AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 
-	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
-	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList
-	FROM #SMATemp SMA CROSS JOIN Dep_StakeLevel ST
+	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList, SiteID)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, ST.SiteID 
+	FROM #SMATemp SMA WITH (NOLOCK) CROSS JOIN Dep_StakeLevel ST
 	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM Dep_StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = SMA.Currency AND S.SiteID = SMA.SiteID
 			FOR XML PATH ('') ) AS A(STL)
-	WHERE ST.GameTypeID BETWEEN 3001 AND 3007
+	WHERE ST.GameTypeID = 3001
 	ORDER BY ST.GameTypeID
 
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
 	CROSS JOIN  #SMATemp t
-	WHERE ExchangeId=t.Currency
+	WHERE S.ExchangeId=t.Currency 
 
 	--Member Level
 
 	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
-	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, TB.StakeLevelList,GETDATE()
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
 			CROSS JOIN  #MemberTemp t
-	WHERE ExchangeId = t.Currency
-	GROUP BY t.custid, TB.BettypeID, TB.StakeLevelList
+	WHERE S.ExchangeID = t.Currency
+	GROUP BY t.custid, TB.BettypeID
 
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
