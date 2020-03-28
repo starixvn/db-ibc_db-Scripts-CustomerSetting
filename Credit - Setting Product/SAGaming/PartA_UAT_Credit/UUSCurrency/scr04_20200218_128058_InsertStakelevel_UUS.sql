@@ -34,6 +34,11 @@ SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #temp t
 WHERE MaxStake > 999
 
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
+FROM #temp t
+WHERE MaxStake > 999999
+
 DELETE S
 FROM StakeLevel S WITH (ROWLOCK)
 WHERE S.GameTypeID BETWEEN 3001 AND 3007 AND S.ExchangeId IN (20)
