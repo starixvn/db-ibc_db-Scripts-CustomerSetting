@@ -3,10 +3,10 @@
 	Task: adjust PT RnG Keno for some line [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
-CREATE TABLE #tblCust (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
-CREATE TABLE #tblCustSport (custid INT, sporttype INT, bettype INT, isFinished BIT DEFAULT 0)
+CREATE TABLE #tblMaster (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
+CREATE TABLE #tblMasterSport (custid INT, sporttype INT, bettype INT, isFinished BIT DEFAULT 0)
 
-INSERT INTO #tblCust(custid,srecommend)
+INSERT INTO #tblMaster(custid,srecommend)
 SELECT custid, srecommend
 FROM custinfo WITH(NOLOCK)
 WHERE srecommend IN (4664545,--	HD
@@ -16,9 +16,9 @@ WHERE srecommend IN (4664545,--	HD
 					)
 	AND roleid = 3					
 
-INSERT INTO #tblCustSport(custid,sporttype,bettype)	
+INSERT INTO #tblMasterSport(custid,sporttype,bettype)	
 SELECT cs.custid, cs.sporttype, cs.bettype
-FROM #tblCust t
+FROM #tblMaster t
 	CROSS JOIN (
 				SELECT 202 as sporttype, 1501 as bettype, 0 isLive
 				UNION ALL  SELECT 202, 1503, 0
@@ -35,8 +35,8 @@ FROM #tblCust t
 WHERE cs.autopositiontaking = 0.8 AND cs.isautopositiontaking = 1
 
 DELETE t
-FROM #tblCust t	
-WHERE custid NOT IN (SELECT DISTINCT custid FROM #tblCustSport)
+FROM #tblMaster t	
+WHERE custid NOT IN (SELECT DISTINCT custid FROM #tblMasterSport)
 
 DECLARE @srecommend INT,
 		@custid 	INT,
@@ -50,7 +50,7 @@ BEGIN
 	SET @custid = custid,
 		@srecommend = srecommend,
 		isFinished = 1
-	FROM #tblCust t 
+	FROM #tblMaster t 
 	WHERE isFinished = 0
 	
 	IF @@ROWCOUNT = 0
@@ -62,7 +62,7 @@ BEGIN
 		SET @sporttype = sporttype,
 			@bettype = bettype,
 			isFinished = 1
-		FROM #tblCustSport t
+		FROM #tblMasterSport t
 		WHERE custid = @custid 
 			AND isFinished = 0
 		
