@@ -3,9 +3,9 @@
 	Task: adjust PT Gold Deluxe for some line [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
-CREATE TABLE #tblCust (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
+CREATE TABLE #tblMaster (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
 
-INSERT INTO #tblCust(custid,srecommend)
+INSERT INTO #tblMaster(custid,srecommend)
 SELECT custid, srecommend
 FROM custinfo WITH(NOLOCK)
 WHERE srecommend IN (4664545,--	HD
@@ -16,7 +16,7 @@ WHERE srecommend IN (4664545,--	HD
 	AND roleid = 3					
 	
 DELETE t
-FROM #tblCust t
+FROM #tblMaster t
 	INNER JOIN CustSettingGame cs (NOLOCK) ON t.custid = cs.custid
 WHERE cs.sporttype = 255
 	AND cs.bettype = 1701
@@ -31,7 +31,7 @@ BEGIN
 	SET @custid = custid,
 		@srecommend = srecommend,
 		isFinished = 1
-	FROM #tblCust t 
+	FROM #tblMaster t 
 	WHERE isFinished = 0
 	
 	IF @@ROWCOUNT = 0
