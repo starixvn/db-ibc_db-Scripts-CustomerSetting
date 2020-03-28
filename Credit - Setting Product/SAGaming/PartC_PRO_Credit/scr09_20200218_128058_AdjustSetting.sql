@@ -41,6 +41,7 @@ BEGIN
 	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 	CREATE TABLE #MemberList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY)	
 	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
+	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
 	CREATE TABLE #SMAList_CommSetting (custid INT, Discount DECIMAL(9,8))
 	CREATE TABLE #MemberList_CommSetting (custid INT, SuperDiscount DECIMAL(9,8), MasterDiscount DECIMAL(9,8), AgentDiscount DECIMAL(9,8), PlayerDiscount DECIMAL(9,8))
@@ -133,23 +134,24 @@ BEGIN
 				OR C.AutoSuperPT <> csm.AutoSuperPT	
 				)
 
-		--Group PT
-	SELECT f.AgentID, f.IsLive, f.SuperPT, f.MasterPT, f.AgentPT, f.IsAutoMasterPT, f.AutoMasterPT, f.IsAutoSuperPT, f.AutoSuperPT	
-	INTO #CustPTGroupSetting3rd_Member
-	FROM CustPTGroupSetting3rd_Member f WITH (NOLOCK)
-		INNER JOIN CustPTGroupSetting3rd_Member t  WITH (NOLOCK)
-			ON f.AgentID = t.AgentID 
-			AND f.IsLive = t.IsLive
-			AND t.SportType = @tSportType 
-			AND t.BetType = @tBetType
-	WHERE f.SportType = @fSportType AND f.BetType = @fBetType
-	AND(   f.SuperPT		<> t.SuperPT				
-		OR f.MasterPT		<> t.MasterPT	
-		OR f.AgentPT		<> t.AgentPT
-		OR f.IsAutoMasterPT	<> t.IsAutoMasterPT
-		OR f.AutoMasterPT	<> t.AutoMasterPT
-		OR f.IsAutoSuperPT	<> t.IsAutoSuperPT
-		OR f.AutoSuperPT	<> t.AutoSuperPT)
+	--Group PT
+	INSERT INTO #AgentGroupPT (AgentID, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
+	SELECT C.AgentID, C.IsLive, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
+	FROM CustPTGroupSetting3rd_Member C WITH (NOLOCK)
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.AgentID
+		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
+		INNER JOIN dbo.CustPTGroupSetting3rd_Member csa WITH (NOLOCK) ON C.AgentID = csa.AgentID
+	WHERE C.SportType = @fSportType AND C.BetType = @fBetType 
+			AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+			AND ci.roleid IN (2) 
+			AND Enabled = 1
+			AND(   C.SuperPT		<> csa.SuperPT				
+				OR C.MasterPT		<> csa.MasterPT	
+				OR C.AgentPT		<> csa.AgentPT
+				OR C.IsAutoMasterPT	<> csa.IsAutoMasterPT
+				OR C.AutoMasterPT	<> csa.AutoMasterPT
+				OR C.IsAutoSuperPT	<> csa.IsAutoSuperPT
+				OR C.AutoSuperPT	<> csa.AutoSuperPT)
 	
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
 	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
@@ -201,17 +203,17 @@ BEGIN
 			INNER JOIN #MemberList_PT C WITH (NOLOCK) ON C.custid = csm.custid
 		WHERE csm.bettype = @tBetType AND csm.sporttype = @tSportType
 
-		UPDATE a
-		SET a.SuperPT		= t.SuperPT		
-			,a.MasterPT		= t.MasterPT	
-			,a.AgentPT			= t.AgentPT
-			,a.IsAutoMasterPT	= t.IsAutoMasterPT
-			,a.AutoMasterPT	= t.AutoMasterPT
-			,a.IsAutoSuperPT	= t.IsAutoSuperPT
-		 ,	a.AutoSuperPT		= t.AutoSuperPT
-		FROM CustPTGroupSetting3rd_Member a WITH(UPDLOCK,ROWLOCK)
-			INNER JOIN #CustPTGroupSetting3rd_Member t ON a.AgentID = t.AgentID
-		WHERE a.SportType = @tSportType AND a.BetType = @tBetType
+		UPDATE CSA
+		SET CSA.SuperPT		= C.SuperPT		
+			,CSA.MasterPT		= C.MasterPT	
+			,CSA.AgentPT			= C.AgentPT
+			,CSA.IsAutoMasterPT	= C.IsAutoMasterPT
+			,CSA.AutoMasterPT	= C.AutoMasterPT
+			,CSA.IsAutoSuperPT	= C.IsAutoSuperPT
+		 ,	CSA.AutoSuperPT		= C.AutoSuperPT
+		FROM CustPTGroupSetting3rd_Member CSA WITH (UPDLOCK,ROWLOCK)
+			INNER JOIN #AgentGroupPT C WITH (NOLOCK) ON CSA.AgentID = C.AgentID
+		WHERE CSA.SportType = @tSportType AND CSA.BetType = @tBetType
 
 		--Adjust m4 = s4 if m4 > s4; a4 = m4 if a4 > m4; a4 = s4 if a4 > s4
 		UPDATE csa
@@ -219,8 +221,8 @@ BEGIN
 			csa.AgentPT = CASE	WHEN csa.AgentPT > csa.SuperPT THEN csa.SuperPT 
 								WHEN csa.AgentPT > csa.MasterPT THEN csa.MasterPT
 								ELSE csa.AgentPT END
-		FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #Super_WrongPT cs WITH(NOLOCK) ON csa.custid = cs.custid
+		FROM dbo.CustPTSetting3rd_Agent csa WITH (ROWLOCK,UPDLOCK)
+			INNER JOIN #Super_WrongPT cs WITH (NOLOCK) ON csa.custid = cs.custid
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 	END
@@ -348,7 +350,7 @@ BEGIN
 	DROP TABLE #MemberList_WL
 	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
-	DROP TABLE #CustPTGroupSetting3rd_Member
+	DROP TABLE #AgentGroupPT
 	DROP TABLE #TmpProductSettingDetail
 END
 GO

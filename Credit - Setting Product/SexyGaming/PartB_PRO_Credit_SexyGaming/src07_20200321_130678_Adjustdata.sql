@@ -39,6 +39,7 @@ BEGIN
 	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 	CREATE TABLE #MemberList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY)	
 	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
+	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
 	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
 	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
@@ -63,13 +64,13 @@ BEGIN
 		SettingStatus TINYINT,
 		IntervalValue DECIMAL (19, 8) 
 	)
-	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,211,2401,0,41,93,NULL,NULL,NULL,NULL,2,3,0,NULL)
+
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(3,211,2401,0,41,NULL,0.01,NULL,NULL,NULL,2,2,0,0.0005)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(6,211,2401,0,41,NULL,NULL,NULL,NULL,NULL,2,4,0,NULL)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,211,2401,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,NULL)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,211,2401,0,41,NULL,NULL,1,0,0,2,1,0,NULL)
 
-	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,243,3101,0,41,93,NULL,NULL,NULL,NULL,2,3,0,NULL)
+	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(1,243,3101,0,41,90,NULL,NULL,NULL,NULL,2,3,0,NULL)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(3,243,3101,0,41,NULL,0.005,NULL,NULL,NULL,2,2,0,0.0005)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(6,243,3101,0,41,NULL,NULL,NULL,NULL,NULL,2,4,0,NULL)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,243,3101,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,NULL)
@@ -79,8 +80,12 @@ BEGIN
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
 	FROM #TmpProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (1,6) --PT, Comm, WinLossLimit
+	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (6) -- WinLossLimit
 
+	UNION ALL 
+	SELECT	212, 4001, SportType, BetType, 0, SettingType, 0 --Copy from Macau game
+	FROM #TmpProductSettingDetail WITH (NOLOCK)
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1) --PT
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
@@ -127,6 +132,26 @@ BEGIN
 				OR C.AutoSuperPT <> csm.AutoSuperPT
 				)
 	
+	--Group PT
+	INSERT INTO #AgentGroupPT (AgentID, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
+	SELECT C.AgentID, C.IsLive, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
+	FROM CustPTGroupSetting3rd_Member C WITH (NOLOCK)
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.AgentID
+		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
+		INNER JOIN dbo.CustPTGroupSetting3rd_Member csa WITH (NOLOCK) ON C.AgentID = csa.AgentID
+	WHERE C.SportType = @fSportType AND C.BetType = @fBetType 
+			AND csa.SportType = @tSportType AND csa.BetType = @tBetType
+			AND ci.roleid IN (2) 
+			AND Enabled = 1
+			AND(   C.SuperPT		<> csa.SuperPT				
+				OR C.MasterPT		<> csa.MasterPT	
+				OR C.AgentPT		<> csa.AgentPT
+				OR C.IsAutoMasterPT	<> csa.IsAutoMasterPT
+				OR C.AutoMasterPT	<> csa.AutoMasterPT
+				OR C.IsAutoSuperPT	<> csa.IsAutoSuperPT
+				OR C.AutoSuperPT	<> csa.AutoSuperPT)
+
+	--Wrong PT
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
 	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
 	FROM dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK)
@@ -176,6 +201,18 @@ BEGIN
 		FROM dbo.CustPTSetting3rd_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_PT C WITH (NOLOCK) ON C.custid = csm.custid
 		WHERE csm.bettype = @tBetType AND csm.sporttype = @tSportType
+
+		UPDATE CSA
+		SET CSA.SuperPT		= C.SuperPT		
+			,CSA.MasterPT		= C.MasterPT	
+			,CSA.AgentPT			= C.AgentPT
+			,CSA.IsAutoMasterPT	= C.IsAutoMasterPT
+			,CSA.AutoMasterPT	= C.AutoMasterPT
+			,CSA.IsAutoSuperPT	= C.IsAutoSuperPT
+		 ,	CSA.AutoSuperPT		= C.AutoSuperPT
+		FROM CustPTGroupSetting3rd_Member CSA WITH (UPDLOCK,ROWLOCK)
+			INNER JOIN #AgentGroupPT C WITH (NOLOCK) ON CSA.AgentID = C.AgentID
+		WHERE CSA.SportType = @tSportType AND CSA.BetType = @tBetType
 
 		--Adjust m4 = s4 if m4 > s4; a4 = m4 if a4 > m4; a4 = s4 if a4 > s4
 		UPDATE csa
@@ -246,10 +283,12 @@ BEGIN
 	DROP TABLE #DestinationSportBetType
 	DROP TABLE #SMAList_PT
 	DROP TABLE #MemberList_PT
+	DROP TABLE #AgentGroupPT
 	DROP TABLE #SMAList_WL
 	DROP TABLE #MemberList_WL
 	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
+	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
