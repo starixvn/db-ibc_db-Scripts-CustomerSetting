@@ -65,7 +65,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.Site<>'CN88'
 		AND ci.custid <= @max_custid	
-		AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20, 72) --Supported currencies
+		AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47) --Supported currencies
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -118,7 +118,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.Site<>'CN88'
 		AND ci.custid <= @max_custid	
-		AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47, 20, 72) --Supported currencies
+		AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47) --Supported currencies
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
