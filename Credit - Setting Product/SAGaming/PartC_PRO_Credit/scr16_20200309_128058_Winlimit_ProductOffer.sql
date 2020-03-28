@@ -8,12 +8,15 @@
 USE [bodb02]
 GO
 
-DELETE W
-FROM Winlimit_ProductOffer W WITH (ROWLOCK)
-WHERE W.ProductID = 39
+IF EXISTS (SELECT 1 FROM Winlimit_ProductOffer W WITH (NOLOCK) WHERE W.ProductID = 39 AND W.BetType = 3001)
+	UPDATE W
+	SET W.IsActive_SMA = 1
+	FROM Winlimit_ProductOffer W WITH (ROWLOCK, UPDLOCK)
+ELSE
+	INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[Bettype],[isActive_SMA],[isActive_Company])
+	VALUES (39,3001,1,0)
 
-INSERT INTO [dbo].[Winlimit_ProductOffer]([ProductID],[Bettype],[isActive_SMA],[isActive_Company])
-VALUES (39,3001,1,1)
+
 
 
 
