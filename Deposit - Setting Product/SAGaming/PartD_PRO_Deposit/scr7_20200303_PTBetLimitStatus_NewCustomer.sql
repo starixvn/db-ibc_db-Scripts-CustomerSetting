@@ -153,6 +153,7 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
+		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
