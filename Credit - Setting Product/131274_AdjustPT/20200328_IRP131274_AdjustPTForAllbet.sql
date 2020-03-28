@@ -1,10 +1,9 @@
 /*
 	created: 20200328@Johnson
-	Task: adjust PT FW for some line [redmine:#131274]
+	Task: adjust PT Allbet for some line [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #tblCust (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
-CREATE TABLE #tblCustSport (custid INT, sporttype INT, bettype INT, isLive BIT)
 
 INSERT INTO #tblCust(custid,srecommend)
 SELECT custid, srecommend
@@ -15,15 +14,11 @@ WHERE srecommend IN (4664545,--	HD
 					26369026--	DH
 					)
 	AND roleid = 3					
-
-INSERT INTO #tblCustSport(custid,sporttype,bettype,isLive)	
-SELECT 
-FROM 
-
+	
 DELETE t
 FROM #tblCust t
 	INNER JOIN CustPTSetting3rd_Agent cs (NOLOCK) ON t.custid = cs.custid
-WHERE cs.sporttype = 245
+WHERE cs.sporttype = 211
 	AND NOT (cs.IsAutoSuperPT = 1 AND cs.AutoSuperPT = 80) 
 
 DECLARE @AutoPT		VARCHAR(MAX),
@@ -31,7 +26,7 @@ DECLARE @AutoPT		VARCHAR(MAX),
 		@srecommend INT,
 		@custid 	INT
 
-SELECT @PT='<ROOT><PT SportType="245" BetType="4601" IsLive="0"/></ROOT>'
+SELECT @PT='<ROOT><PT SportType="211" BetType="2401" IsLive="0"/></ROOT>'
 		
 WHILE (1=1)	
 BEGIN
@@ -55,17 +50,17 @@ BEGIN
 				,0 AS '@UpdAllMems_Value'
 			FROM CustPTSetting3rd_Agent cs WITH(NOLOCK)				
 			WHERE custid = @custid 
-				AND sporttype = 245
+				AND sporttype = 211
 			FOR XML PATH('PT'), ROOT('ROOT')
 		 )	
 	
 	UPDATE cs
 	SET SuperPT = 0,
 		isAutoSuperPT = 1,
-		AutoSuperPT = 90
+		AutoSuperPT = 93
 	FROM CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 	WHERE custid = @custid
-		AND sporttype = 245
+		AND sporttype = 211
 		
 	EXEC dbo.Acc_DynamicCustSetting3rd_05
             @SuperID = @srecommend,
