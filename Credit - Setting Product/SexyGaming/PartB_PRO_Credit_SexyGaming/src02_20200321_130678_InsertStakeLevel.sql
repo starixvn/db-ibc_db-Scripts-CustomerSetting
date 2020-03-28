@@ -88,6 +88,11 @@ SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #temp t
 WHERE MaxStake > 999
 
+UPDATE t
+SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
+FROM #temp t
+WHERE MinStake > 999
+
 
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
