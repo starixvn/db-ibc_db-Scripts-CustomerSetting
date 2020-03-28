@@ -109,7 +109,7 @@ BEGIN
 
 	SELECT DISTINCT cg.CustID
 	INTO #CustWinLossLimit_Member
-	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)		
+	FROM dbo.CustWinLossLimit_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
