@@ -2,6 +2,8 @@
 	Created: 20200328@Helen
 	Task: Update StakeLevel of Allbet for defined currency
 	DB: DBCUST/CUSTDB
+	
+	Notes: No need UM. Thanks
 */
 -- resouce 3
 UPDATE S
