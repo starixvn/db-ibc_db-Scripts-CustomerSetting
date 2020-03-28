@@ -195,7 +195,7 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
-	AND ci.currency NOT IN (45,13,75,76,77,41) --Won (KRW), RMB, PTU, PS, PTH, CHF
+	AND ci.currency NOT IN (45,13,75,76,77,41,72) --Won (KRW), RMB, PTU, PS, PTH, CHF, YNG
 
 WHILE (1 = 1)
 BEGIN
@@ -243,7 +243,7 @@ WHERE ci.custid IN (
 		,18479460
 		,18289591
 	)
-AND ci.currency NOT IN (45,13,75,76,77,41) --Won (KRW), RMB, PTU, PS, PTH, CHF
+AND ci.currency NOT IN (45,13,75,76,77,41,72) --Won (KRW), RMB, PTU, PS, PTH, CHF, YNG
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers

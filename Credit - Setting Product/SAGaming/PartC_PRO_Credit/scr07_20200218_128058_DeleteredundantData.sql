@@ -30,7 +30,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
 	AND ci.Site<>'CN88'
-	AND ci.currency NOT IN (45,13,75,76,77,41) --Won (KRW), RMB, PTU, PS, PTH, CHF
+	AND ci.currency NOT IN (45,13,75,76,77,41,72) --Won (KRW), RMB, PTU, PS, PTH, CHF, YNG
 
 DELETE cg
 FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)	
