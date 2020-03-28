@@ -130,9 +130,26 @@ BEGIN
 				OR C.IsAutoMasterPT <> csm.IsAutoMasterPT
 				OR C.AutoMasterPT  <> csm.AutoMasterPT
 				OR C.IsAutoSuperPT <> csm.IsAutoSuperPT
-				OR C.AutoSuperPT <> csm.AutoSuperPT
-		
+				OR C.AutoSuperPT <> csm.AutoSuperPT	
 				)
+
+		--Group PT
+	SELECT f.AgentID, f.IsLive, f.SuperPT, f.MasterPT, f.AgentPT, f.IsAutoMasterPT, f.AutoMasterPT, f.IsAutoSuperPT, f.AutoSuperPT	
+	INTO #CustPTGroupSetting3rd_Member
+	FROM CustPTGroupSetting3rd_Member f WITH (NOLOCK)
+		INNER JOIN CustPTGroupSetting3rd_Member t  WITH (NOLOCK)
+			ON f.AgentID = t.AgentID 
+			AND f.IsLive = t.IsLive
+			AND t.SportType = @tSportType 
+			AND t.BetType = @tBetType
+	WHERE f.SportType = @fSportType AND f.BetType = @fBetType
+	AND(   f.SuperPT		<> t.SuperPT				
+		OR f.MasterPT		<> t.MasterPT	
+		OR f.AgentPT		<> t.AgentPT
+		OR f.IsAutoMasterPT	<> t.IsAutoMasterPT
+		OR f.AutoMasterPT	<> t.AutoMasterPT
+		OR f.IsAutoSuperPT	<> t.IsAutoSuperPT
+		OR f.AutoSuperPT	<> t.AutoSuperPT)
 	
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
 	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
@@ -144,7 +161,7 @@ BEGIN
 				OR csa.AgentPT > csa.MasterPT
 				OR csa.AgentPT > csa.SuperPT
 				)
-
+	
 	--Adjust data
 	WHILE (1 = 1)
 	BEGIN				
@@ -183,6 +200,18 @@ BEGIN
 		FROM dbo.CustPTSetting3rd_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_PT C WITH (NOLOCK) ON C.custid = csm.custid
 		WHERE csm.bettype = @tBetType AND csm.sporttype = @tSportType
+
+		UPDATE a
+		SET a.SuperPT		= t.SuperPT		
+			,a.MasterPT		= t.MasterPT	
+			,a.AgentPT			= t.AgentPT
+			,a.IsAutoMasterPT	= t.IsAutoMasterPT
+			,a.AutoMasterPT	= t.AutoMasterPT
+			,a.IsAutoSuperPT	= t.IsAutoSuperPT
+		 ,	a.AutoSuperPT		= t.AutoSuperPT
+		FROM CustPTGroupSetting3rd_Member a WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN #CustPTGroupSetting3rd_Member t ON a.AgentID = t.AgentID
+		WHERE a.SportType = @tSportType AND a.BetType = @tBetType
 
 		--Adjust m4 = s4 if m4 > s4; a4 = m4 if a4 > m4; a4 = s4 if a4 > s4
 		UPDATE csa
@@ -319,6 +348,8 @@ BEGIN
 	DROP TABLE #MemberList_WL
 	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
+	DROP TABLE #CustPTGroupSetting3rd_Member
+	DROP TABLE #TmpProductSettingDetail
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
