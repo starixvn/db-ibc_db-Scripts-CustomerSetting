@@ -79,7 +79,7 @@ BEGIN
 			FROM StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=@Currency
 			FOR XML PATH ('') ) AS A(STL)
-	WHERE ST.GameTypeID BETWEEN 3001 AND 3007
+	WHERE ST.GameTypeID = 3001 
 	ORDER BY ST.GameTypeID
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 

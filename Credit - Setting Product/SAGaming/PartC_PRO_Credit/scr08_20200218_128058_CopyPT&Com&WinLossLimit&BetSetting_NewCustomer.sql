@@ -103,7 +103,7 @@ CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=SMA.currency
 			FOR XML PATH ('') ) AS A(STL)
-WHERE ST.GameTypeID BETWEEN 3001 AND 3007
+WHERE ST.GameTypeID = 3001
 ORDER BY ST.GameTypeID
 --------------------------------------PT Setting-------------------------------------------------
 
