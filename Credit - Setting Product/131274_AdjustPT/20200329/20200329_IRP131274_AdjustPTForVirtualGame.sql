@@ -1,5 +1,5 @@
 /*
-	created: 20200328@Johnson
+	created: 20200329@Johnson
 	Task: adjust PT Virtual Game for some lines [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
@@ -19,7 +19,7 @@ DELETE t
 FROM #tblCust t
 	INNER JOIN CustPTSetting3rd_Agent cs (NOLOCK) ON t.custid = cs.custid
 WHERE cs.sporttype = 245
-	AND NOT (cs.IsAutoSuperPT = 1 AND cs.AutoSuperPT = 80) 
+	AND cs.AutoSuperPT >= 90
 
 DECLARE @AutoPT		VARCHAR(MAX),
 		@PT			VARCHAR(MAX),

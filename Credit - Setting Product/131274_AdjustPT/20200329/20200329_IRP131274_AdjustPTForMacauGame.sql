@@ -1,6 +1,6 @@
 /*
-	created: 20200328@Johnson
-	Task: adjust PT Allbet for some line [redmine:#131274]
+	created: 20200329@Johnson
+	Task: adjust PT Macau Game for some lines [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #tblCust (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
@@ -19,7 +19,7 @@ DELETE t
 FROM #tblCust t
 	INNER JOIN CustPTSetting3rd_Agent cs (NOLOCK) ON t.custid = cs.custid
 WHERE cs.sporttype = 212
-	AND NOT (cs.IsAutoSuperPT = 1 AND cs.AutoSuperPT = 80) 
+	AND cs.AutoSuperPT >= 85
 
 DECLARE @AutoPT		VARCHAR(MAX),
 		@PT			VARCHAR(MAX),

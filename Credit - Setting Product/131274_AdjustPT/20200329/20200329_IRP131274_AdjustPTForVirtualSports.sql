@@ -1,5 +1,5 @@
 /*
-	created: 20200328@Johnson
+	created: 20200329@Johnson
 	Task: adjust PT Virtual sports for some line [redmine:#131274]
 	DB: DBCUST/CUSTDB
 */
@@ -34,7 +34,7 @@ FROM #tblCust t
 		INNER JOIN CustPTSetting3rd_Agent cs (NOLOCK) ON t.custid = cs.custid 
 														AND cs.SportType = s.sporttype 
 														AND cs.BetType = s.bettype
-WHERE cs.IsAutoSuperPT = 1 AND cs.AutoSuperPT = 80
+WHERE cs.AutoSuperPT < 85
 
 DELETE t
 FROM #tblCust t	
