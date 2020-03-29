@@ -208,7 +208,7 @@
 	ORDER BY ST.GameTypeID
 
 	INSERT INTO #tmpSTListMember(BettypeID, StakelevelList, SiteID)
-	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, SMA.SiteID
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, M.SiteID
 	FROM #MemberTemp M CROSS JOIN Dep_StakeLevel ST
 	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM Dep_StakeLevel S WITH (NOLOCK)
