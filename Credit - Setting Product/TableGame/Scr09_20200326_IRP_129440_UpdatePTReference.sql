@@ -2,7 +2,7 @@
 	Created: Elodie 
 	Task: Update Sport_Bettype_Reference_Setting table
 	DB: DBTXN/bodb02
-	Date: 20200321
+	Date: 20200327
 */ 
 USE bodb02
 GO
@@ -10,6 +10,6 @@ GO
 UPDATE ps
 SET ps.isActive = 1
 FROM dbo.Sport_Bettype_Reference_Setting ps WITH (ROWLOCK)
-WHERE SportType = 200
+WHERE SportType = 222
 
 

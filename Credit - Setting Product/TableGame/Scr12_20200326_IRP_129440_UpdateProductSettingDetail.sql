@@ -1,6 +1,6 @@
 /*
-	Created: 20200321@Elodie
-	Task: Update product profile for Saba.club
+	Created: 20200327@Elodie
+	Task: Update product profile for Table Games
 	DB: DBCUST/CustDB
 */
 
@@ -10,4 +10,4 @@ GO
 UPDATE ps
 SET ps.SettingStatus = 0
 FROM dbo.ProductSettingDetail ps WITH(ROWLOCK)
-WHERE ProductID = 42
+WHERE ProductID = 28

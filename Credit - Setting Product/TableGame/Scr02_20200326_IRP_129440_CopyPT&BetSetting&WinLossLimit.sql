@@ -124,6 +124,33 @@ BEGIN
 	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 		AND dest.SettingType = 1
 
+	INSERT INTO dbo.CustPTGroupSetting3rd_Member
+		(	[AgentID]
+			,	[sporttype]
+			,	[bettype]
+			,	[islive]
+			,	[superPT]
+			,	[masterPT]
+			,	[agentPT]
+			,	[IsAutoMasterPT]
+			,	[AutoMasterPT]
+			,	[IsAutoSuperPT]
+			,	[AutoSuperPT])
+	SELECT 
+		cs.AgentID, dest.tSportType, dest.tBetType, dest.IsLive
+		,cs.SuperPT
+		,cs.MasterPT
+		,cs.AgentPT
+		,cs.IsAutoMasterPT
+		,cs.AutoMasterPT
+		,cs.IsAutoSuperPT
+		,cs.AutoSuperPT
+	FROM dbo.CustPTGroupSetting3rd_Member cs WITH(NOLOCK)
+		INNER JOIN #SMATemp a ON a.CustID = cs.AgentID
+		CROSS APPLY #DestinationSportBetType dest
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 1
+
 	--------------------------------------Bet Setting-------------------------------------------------		
 	--Agent Level
 	INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      

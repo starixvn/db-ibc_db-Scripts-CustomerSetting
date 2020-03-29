@@ -24,7 +24,7 @@
 		AND ci.Enabled = 1
 		AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
 				'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
-				'CLP','KRW','COP','VES','VND','PYG','UUS') OR e.exchangeid = 20)
+				'CLP','KRW','COP','VES','VND','PYG') OR e.exchangeid = 20)
 		AND s.site IN (	'12B','18Luck','24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','9Wsports',
 						'A1game','Abcasino','AEUG','afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88',
 						'B24VN','BBIN2','BBIN3','BBIN4','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BOG22','BoinGroup',
@@ -86,7 +86,8 @@
 		INNER JOIN dbo.CustSettingGame cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 		INNER JOIN dbo.Site s WITH (NOLOCK) ON c.site = s.site
 	WHERE ci.srecommend IN (SELECT custid FROM #APIsupers) AND ci.roleid = 1  AND Enabled = 1 AND ci.custid > @max_custid	
-	AND ci.mrecommend NOT IN (SELECT custid FROM #APIDummy)
+		AND ci.mrecommend NOT IN (SELECT custid FROM #APIDummy)
+		AND cs.Sporttype = 202 AND cs.Bettype = 1501
 
 	--DELETE existing data
 	------------------------------------PT Setting-------------------------------------------------	
@@ -310,10 +311,10 @@
 	SELECT 220, 1021, 'NOK', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'SEK', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'ZAR', 20, 35000, 175000 UNION ALL
-	SELECT 220, 1021, 'IDR *', 15, 40000, 200000 UNION ALL
+	SELECT 220, 1021, 'IDR', 15, 40000, 200000 UNION ALL
 	SELECT 220, 1021, 'MXN', 20, 50000, 250000 UNION ALL
 	SELECT 220, 1021, 'CZK', 20, 65000, 325000 UNION ALL
-	SELECT 220, 1021, 'INH *', 20, 65000, 325000 UNION ALL
+	SELECT 220, 1021, 'INH', 20, 65000, 325000 UNION ALL
 	SELECT 220, 1021, 'THB', 50, 100000, 500000 UNION ALL
 	SELECT 220, 1021, 'TWD', 50, 100000, 500000 UNION ALL
 	SELECT 220, 1021, 'UYU', 50, 100000, 500000 UNION ALL
