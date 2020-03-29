@@ -376,7 +376,7 @@ BEGIN
 	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
 	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
 	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
-		CROSS JOIN  #tmpCustInsert t
+		CROSS JOIN  #tmpCust t
 	WHERE ExchangeId=@currency AND S.SiteID = @siteId
 	GROUP BY t.custid, TB.BettypeID
 
