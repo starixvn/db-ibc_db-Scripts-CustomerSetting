@@ -285,8 +285,13 @@ BEGIN
 	END
 
 	--------------------------------------------Enable Status--------------------------------------------------
+	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
 	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
 	CREATE TABLE #TempProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
+	INSERT INTO #AllUsers (CustID)
+	SELECT DISTINCT SMA.CustID FROM #tmpSMA SMA WITH (NOLOCK)
+	UNION 
+	SELECT DISTINCT M.CustID FROM #tmpCust M WITH (NOLOCK)
 
 	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
 	SELECT c.CustID
@@ -321,15 +326,15 @@ BEGIN
 		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
 
-		INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
-		SELECT	t.custid
-				, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
-				, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
-		FROM #TempProductStatus t
-		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
-
 		WAITFOR DELAY '00:00:00.100'
 	END
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	A.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+	FROM #AllUsers A WITH (NOLOCK)
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=42)
 	BEGIN
@@ -344,6 +349,7 @@ BEGIN
 	DROP TABLE #tmpSTListSMA
 	DROP TABLE #Dep_CustProductStatus
 	DROP TABLE #TempProductStatus
+	DROP TABLE #AllUsers
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
