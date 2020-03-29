@@ -20,7 +20,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
+ AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MMK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
 				'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
 				'CLP','KRW','COP','VES','PYG') OR e.exchangeid IN (51, 20))
  AND (s.site IN ('24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','A1game','Abcasino','AEUG',

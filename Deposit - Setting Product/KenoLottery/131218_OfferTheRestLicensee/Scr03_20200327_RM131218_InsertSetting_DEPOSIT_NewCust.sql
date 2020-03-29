@@ -22,28 +22,28 @@
 	WHERE c.roleid = 4  
 		AND s.islicensee = 1
 		AND ci.Enabled = 1
-		AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MKK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
-				'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','INH','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
-				'CLP','KRW','COP','VES','VND','PYG') OR e.exchangeid = 20)
-		AND s.site IN (	'12B','18Luck','24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','9Wsports',
-						'A1game','Abcasino','AEUG','afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88',
-						'B24VN','BBIN2','BBIN3','BBIN4','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BOG22','BoinGroup',
-						'Boma365','Bonanza88','BOSSB','Boying','BPLE','BWGaming','Cali','Calibet','Callmeboss','CGame','CGame4','Champion',
-						'dabo88','Dachen','Dade','Datang','Datang001','Dawoo','DBP','DEWA','DF88','DingTai','DTGW','e8casino','ECLBET',
-						'ENT22','ENTAPLAY','erhaozhan','FB88','Five88','FLC','G2Win','Gameroom','GamingSoft','Gampag','Gaobet','gbkj',
-						'GESAB','GGBOOK','GGBOOKES','GMASTER','GPgaming88','GPIGAME','haifa','Happy1668','Happy8','HBO999','HCVIP',
-						'Heaven','Hecbet','Heji888','HeleThai','Hengcai88','hjccasino','HJTK','HL8','HONBET','HonorW','HOT88','HuangMa',
-						'IBG','IBO','ID88','ig128','IGPTech','INSERTGAME','ISC888','IvoryBet','JGQP8','JIBET','JIDU','Jinyazhou',
-						'JZFortune','K8VN','KeenOcean','KhmerG','Kraton','Kudatogel','KUTECH','Leng4D','Liga','LLGAME','Man1878',
-						'mansion88','MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Monaco','Mopgaming','MRCATSB','MTech',
-						'mtegames','Mybet88','N88','N8B','N8G','Nbbet','Newbet','NewFuture','NextBet','Nova88','OCMS','Okada','OLE777',
-						'Onegaming','OneSports','Opadmin','Opal88','OPEBET','PanguGame','Pinbo','PKbet','PKKing','Raisetech','Royal',
-						'Salon365','sbt88','shengboyun','Siamgame','skykey','Soon88','Spark','SSSGaming','Starnet','Sun988','Sunbet138',
-						'Sunrise','Sunriseb2b','Sunwin','Swin','TangChao','TaoCai','TCbet','TGO','TitanCraft','TitanOne','TLC','TopGame',
+		AND (e.Code IN ('GBP','EUR','CHF','USD','AUD','BND','CAD','MMK','NZD','SGD','PEN','MYR','PLN','RON','BRL','KHR','TRY','GHS','CNY',
+						'DKK','HKD','NOK','SEK','ZAR','IDR','MXN','CZK','THB','TWD','UYU','ARS','PHP','INR','RUB','KES','JPY',
+						'CLP','KRW','COP','VES','PYG') OR e.exchangeid IN (51, 20))
+		 AND (s.site IN ('24TECH','365online','368Cash','3star88','568Win','633esports','818Bet','88Macao','9Club','A1game','Abcasino','AEUG',
+						'afb99','AG','alog','ALPHA88','AMG','AnvoFH','Aplus','Apollo','asiabet88','Asian88','B24VN','BetDeal','BETSUN',
+						'BigGaming','Bobbet','Bobo88','Bodog','BoinGroup','Boma365','Bonanza88','BOSSB','Boying','BPLE','BWGaming','Cali',
+						'Calibet','Callmeboss','CGame','CGame4','Champion','Dachen','Datang001','Dawoo','DEWA','DF88','DingTai','DTGW',
+						'e8casino','ECLBET','ENT22','ENTAPLAY','erhaozhan','FB88','Five88','FLC','G2Win','Gameroom','Gampag','Gaobet',
+						'gbkj','GESAB','GGBOOK','GMASTER','GPgaming88','GPIGAME','Happy1668','Happy8','HCVIP','Heaven','Hecbet','HeleThai',
+						'Hengcai88','hjccasino','HJTK','HL8','HONBET','HonorW','HOT88','HuangMa','IBG','IBO','ID88','IGPTech','INSERTGAME',
+						'JIBET','JIDU','Jinyazhou','JZFortune','KeenOcean','KhmerG','Kraton','Kudatogel','KUTECH','Leng4D','Liga','Man1878',
+						'MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Mopgaming','MRCATSB','MTech','Mybet88','N88','N8B','N8G',
+						'Nbbet','Newbet','NewFuture','OCMS','Okada','OLE777','Onegaming','Opadmin','OPEBET','PanguGame','Pinbo','PKbet',
+						'Raisetech','Royal','Salon365','sbt88','shengboyun','Siamgame','skykey','Soon88','Spark','SSSGaming','Starnet',
+						'Sun988','Sunbet138','Sunwin','Swin','TangChao','TaoCai','TCbet','TGO','TitanCraft','TitanOne','TLC','TopGame',
 						'Tripleone','TXG','txwl002','TYCgame','UN168','UwinY','VCBA','VN88','VWIN66','W88','Wanbo','Wanfang','WB101',
 						'WBG88','WBS','webet88','weicai','Weiwei','Win68Club','Win88','WINCLUB88','WKCUR','WKIBPH','WKPHIL','WUYICP',
-						'Xinbo','XinYo','XTD3','XTDGT','Xtu168','YAYOU','YBTech','Yibo','YongBao','YTX','Yunji','ZhiFeng032',
-						'ZhiFeng035','Zowin','zt828')
+						'Xinbo','XinYo','XTDGT','YAYOU','Yibo','YongBao','YTX','Yunji','Zowin','zt828')
+					OR (s.site = 'Dade' AND e.exchangeid NOT IN (46))
+					OR (s.site = 'Datang' AND e.exchangeid NOT IN (13))
+					OR (s.site = 'GamingSoft' AND e.exchangeid NOT IN (46))
+					OR (s.site = 'mansion88' AND e.exchangeid NOT IN (1,45)))
 
 	CREATE TABLE #MemberTemp
 	(
@@ -294,9 +294,9 @@
 	SELECT 220, 1021, 'AUD', 1, 4000, 20000 UNION ALL
 	SELECT 220, 1021, 'BND', 1, 4000, 20000 UNION ALL
 	SELECT 220, 1021, 'CAD', 1, 4000, 20000 UNION ALL
-	SELECT 220, 1021, 'MKK', 1, 4000, 20000 UNION ALL
+	SELECT 220, 1021, 'MMK', 1, 4000, 20000 UNION ALL
 	SELECT 220, 1021, 'NZD', 2, 4000, 20000 UNION ALL
-	SELECT 220, 1021, 'SGD', 2, 4000, 20000 UNION ALL
+	--SELECT 220, 1021, 'SGD', 2, 4000, 20000 UNION ALL
 	SELECT 220, 1021, 'PEN', 5, 9000, 45000 UNION ALL
 	SELECT 220, 1021, 'MYR', 5, 10000, 50000 UNION ALL
 	SELECT 220, 1021, 'PLN', 5, 10000, 50000 UNION ALL
@@ -307,7 +307,7 @@
 	SELECT 220, 1021, 'GHS', 10, 16000, 80000 UNION ALL
 	SELECT 220, 1021, 'CNY', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'DKK', 10, 20000, 100000 UNION ALL
-	SELECT 220, 1021, 'HKD', 10, 20000, 100000 UNION ALL
+	--SELECT 220, 1021, 'HKD', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'NOK', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'SEK', 10, 20000, 100000 UNION ALL
 	SELECT 220, 1021, 'ZAR', 20, 35000, 175000 UNION ALL
@@ -328,7 +328,7 @@
 	SELECT 220, 1021, 'KRW', 1000, 3000000, 15000000 UNION ALL
 	SELECT 220, 1021, 'COP', 1000, 9000000, 45000000 UNION ALL
 	SELECT 220, 1021, 'VES', 1000, 10000000, 50000000 UNION ALL
-	SELECT 220, 1021, 'VND', 20000, 65000000, 325000000 UNION ALL
+	--SELECT 220, 1021, 'VND', 20000, 65000000, 325000000 UNION ALL
 	SELECT 220, 1021, 'PYG', 1000, 15000000, 75000000
 
 	INSERT INTO Dep_CustBetSetting_Agent(
@@ -342,7 +342,8 @@
 	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
 	FROM #SMATemp t
 		CROSS APPLY @SportBettype_BetSetting b 
-		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' ELSE e.Code END
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' 
+																WHEN e.exchangeid = 51 THEN 'INH' ELSE e.Code END
 	WHERE e.exchangeid = t.currency
 
 	INSERT INTO Dep_CustBetSetting_Member(
@@ -356,7 +357,8 @@
 	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
 	FROM #MemberTemp t
 		CROSS APPLY @SportBettype_BetSetting b
-		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' ELSE e.Code END
+		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' 
+																WHEN e.exchangeid = 51 THEN 'INH' ELSE e.Code END
 	WHERE e.exchangeid = t.currency
 
 	DROP TABLE #SMATemp
