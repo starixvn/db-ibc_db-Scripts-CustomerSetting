@@ -373,22 +373,13 @@ BEGIN
 	CROSS JOIN  #tmpSMA t
 	WHERE ExchangeId=@currency AND S.SiteID = @siteId
 	--Member Level
-	WHILE EXISTS(SELECT 1 FROM #tmpCust)
-	BEGIN
-		DELETE TOP (3000) #tmpCust OUTPUT DELETED.* INTO #tmpCustInsert
+	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
+	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+		CROSS JOIN  #tmpCustInsert t
+	WHERE ExchangeId=@currency AND S.SiteID = @siteId
+	GROUP BY t.custid, TB.BettypeID
 
-		IF @@ROWCOUNT=0
-			BREAK	
-			--Bet limit
-			INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
-			SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-			FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
-			CROSS JOIN  #tmpCustInsert t
-			WHERE ExchangeId=@currency AND S.SiteID = @siteId
-			GROUP BY t.custid, TB.BettypeID
-
-			TRUNCATE TABLE #tmpCustInsert
-	END
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=44)
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -475,7 +466,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF, UUS
+		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -529,7 +520,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF, UUS 
+		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF 
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
