@@ -212,9 +212,9 @@
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
 	CROSS JOIN  #SMATemp t
-	WHERE S.ExchangeId=t.Currency 
+	WHERE S.ExchangeId=t.Currency AND S.SiteID = T.SiteID
 
 	--Member Level
 
@@ -222,7 +222,7 @@
 	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
 	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
 			CROSS JOIN  #MemberTemp t
-	WHERE S.ExchangeID = t.Currency
+	WHERE S.ExchangeID = t.Currency AND S.SiteID = T.SiteID
 	GROUP BY t.custid, TB.BettypeID
 
 
@@ -236,20 +236,33 @@
 	DECLARE @BitOrder INT
 	SELECT @BitOrder= bitmapOrder from Dep_ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
 
-	UPDATE cs
-	SET								
-			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
-			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #SMATemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 
-	UPDATE cs
-	SET								
-			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
-			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #MemberTemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+	FROM #SMATemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #MemberTemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,42

@@ -18,7 +18,7 @@
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF, UUS
+		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF
 	ORDER BY CI.custid 
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
@@ -179,6 +179,7 @@
 	)
 
 	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
+	CREATE TABLE #tmpSTListMember (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
 		
 	INSERT INTO #SMATemp (CustID,Currency, SiteID)
 	SELECT CI.custid, CI.currency, S.siteid 
@@ -206,19 +207,29 @@
 	WHERE ST.GameTypeID = 3001
 	ORDER BY ST.GameTypeID
 
+	INSERT INTO #tmpSTListMember(BettypeID, StakelevelList, SiteID)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, SMA.SiteID
+	FROM #MemberTemp M CROSS JOIN Dep_StakeLevel ST
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM Dep_StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = M.Currency AND S.SiteID = M.SiteID
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE ST.GameTypeID = 3001
+	ORDER BY ST.GameTypeID
+
 	--Agent Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 		CROSS JOIN  #SMATemp t
-	WHERE S.ExchangeID = t.Currency
+	WHERE S.ExchangeID = t.Currency  AND S.SiteID = T.SiteID
 
 	--Member Level
 	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
 	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.SiteID = TB.SiteID
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
 		CROSS JOIN  #MemberTemp t
-	WHERE S.ExchangeId = t.Currency
+	WHERE S.ExchangeId = t.Currency AND S.SiteID = T.SiteID
 	GROUP BY t.custid, TB.BettypeID
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -231,20 +242,33 @@
 	DECLARE @BitOrder INT
 	SELECT @BitOrder= bitmapOrder from Dep_ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
 
-	UPDATE cs
-	SET								
-			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
-			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #SMATemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 
-	UPDATE cs
-	SET								
-			bitmapIsHidden =  dbo.f_GenerateProductStatus (cs.bitmapIsHidden,@BitOrder,0),
-			bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,0)
-	FROM [dbo].Dep_CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #MemberTemp CI WITH (NOLOCK) ON cs.CustID = ci.CustID
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+	FROM #SMATemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #MemberTemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,42
@@ -257,3 +281,5 @@
 	DROP TABLE #supers
 	DROP TABLE #Dummy
 	DROP TABLE #tmpSTListSMA
+	DROP TABLE #tmpSTListMember
+
