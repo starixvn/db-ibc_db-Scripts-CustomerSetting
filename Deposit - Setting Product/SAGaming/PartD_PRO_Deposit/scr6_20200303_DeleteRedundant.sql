@@ -7,7 +7,7 @@
 
 USE CustDB
 GO
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 (@maxcustID INT)
 AS
 BEGIN			
@@ -73,4 +73,4 @@ GO
 DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @MaxCustID=@MaxCustID
+EXEC dbo.Acc_Dep_DynamicCustSetting_09 @MaxCustID=@MaxCustID
