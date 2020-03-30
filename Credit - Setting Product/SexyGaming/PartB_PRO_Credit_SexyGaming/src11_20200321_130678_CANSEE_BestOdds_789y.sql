@@ -10,7 +10,9 @@ GO
 DECLARE @Sporttype SMALLINT, @Bettype INT
 SELECT @Sporttype = 243, @Bettype = 3101
 
-DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
+DELETE P 
+FROM ProductLaunchedSiteCurrency P WITH (ROWLOCK) 
+WHERE SportType = @Sporttype
 ----Offer site BEST-ODDS, 789y - YNG
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
 SELECT @Sporttype AS SportType, 72 AS Currency, S.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, @Bettype AS Bettype
