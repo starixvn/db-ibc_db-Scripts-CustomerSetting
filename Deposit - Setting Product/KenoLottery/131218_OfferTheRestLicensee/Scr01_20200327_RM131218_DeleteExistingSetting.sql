@@ -14,11 +14,15 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
