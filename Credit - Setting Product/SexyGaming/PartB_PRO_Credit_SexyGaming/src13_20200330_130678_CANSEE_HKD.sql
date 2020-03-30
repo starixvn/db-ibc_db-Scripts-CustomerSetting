@@ -10,11 +10,12 @@ GO
 DECLARE @Sporttype SMALLINT, @Bettype INT
 SELECT @Sporttype = 243, @Bettype = 3101
 
---Import all active sites
+--Import all supported sites
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('Best-odds','222223','611111','722222','733333','222227')
 
 --Offer all sites for HKD
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
