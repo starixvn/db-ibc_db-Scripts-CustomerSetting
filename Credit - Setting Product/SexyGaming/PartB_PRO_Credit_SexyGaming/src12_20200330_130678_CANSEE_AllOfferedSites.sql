@@ -14,7 +14,7 @@ CREATE TABLE #Exchange (ExchangeID INT PRIMARY KEY)
 INSERT INTO #Exchange (ExchangeID)
 SELECT DISTINCT E.exchangeid
 FROM exchange E WITH (NOLOCK)
-WHERE E.exchangeid IN (17,3,64,16,40,2,47,33,34,15,22,4,43)
+WHERE E.exchangeid IN (3,35,64,16,2,47,33,34,15,22,4,43)
 ----Offer supported site and supported currencies
 CREATE TABLE #ProductLaunchedSiteCurrency (SportType SMALLINT, Currency INT, SiteID INT, IsLaunched BIT, IsTest INT, BetType SMALLINT)
 INSERT INTO #ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
@@ -24,7 +24,7 @@ WHERE S.siteid IN (11) AND E.ExchangeID = 3 -- Indo
 UNION ALL
 SELECT @Sporttype AS SportType, E.ExchangeID AS Currency, S.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, @Bettype AS Bettype
 FROM Site S WITH (NOLOCK) CROSS JOIN #Exchange E WITH (NOLOCK)
-WHERE S.siteid IN (1,3) AND E.ExchangeID IN (17,3,64,16,40)--  Best-odds, 789y
+WHERE S.siteid IN (1,3) AND E.ExchangeID IN (3,35,64,16)--  Best-odds, 789y
 UNION ALL
 SELECT @Sporttype AS SportType, E.ExchangeID AS Currency, S.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, @Bettype AS Bettype
 FROM Site S WITH (NOLOCK) CROSS JOIN #Exchange E WITH (NOLOCK)
