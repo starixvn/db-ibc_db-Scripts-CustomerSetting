@@ -274,7 +274,7 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet, b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #SMATemp t
 		CROSS APPLY @SportBettype_BetSetting b 
 		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' 
@@ -289,7 +289,7 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet, b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #MemberTemp t
 		CROSS APPLY @SportBettype_BetSetting b
 		INNER JOIN dbo.exchange e WITH (NOLOCK) ON b.Code = CASE WHEN e.exchangeid = 20 THEN 'UUS' 

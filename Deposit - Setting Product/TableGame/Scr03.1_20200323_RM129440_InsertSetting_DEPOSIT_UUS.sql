@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20200323
-	Task: Insert setting for Indo 4D DEPOSIT - UUS [RM:#130838]
+	Created: Elodie
+	Date: 20200330
+	Task: Insert setting for Table Games DEPOSIT - UUS [RM:#129440]
 	DB: DBCust/CustDB
 */
 
@@ -9,7 +9,6 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	 @srecommend INT		
 	,@target VARCHAR(20)
 	,@max_custid INT
-	,@PT smallmoney
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -46,7 +45,8 @@ BEGIN
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend=@srecommend AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 		AND custid<=@max_custid 
 
 	INSERT INTO #MemberTemp (CustID)
@@ -54,7 +54,6 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @max_custid
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
-
 	
 	INSERT INTO #SMATemp (CustID,roleid)
 	SELECT custid,roleid
@@ -64,10 +63,12 @@ BEGIN
 
 	DECLARE @SportBetType TABLE
 	(
-		SportType SMALLINT, 
-		BetType   SMALLINT
+		SportType	SMALLINT, 
+		BetType		SMALLINT,
+		fSportType	SMALLINT,
+		fBettype	SMALLINT
 	)
-	INSERT INTO @SportBetType(SportType, BetType) VALUES (223, 5001)
+	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1024)
 
 	--------------------------------------------Product Status------------------------------------------------
 	DECLARE @bitmapOrder INT
@@ -116,7 +117,19 @@ BEGIN
 
 		WAITFOR DELAY '00:00:00.100'
 	END
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #SMATemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #MemberTemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -125,7 +138,7 @@ BEGIN
 	FROM #SMATemp temp 
 		 CROSS APPLY (	SELECT ProductSettingID 
 						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 43
+						WHERE dp.ProductID = 40
 							AND dp.SettingType IN (4,1,2) -- Product Status, PT, BetSetting
 						) st
 	WHERE temp.roleid = 4
@@ -145,12 +158,13 @@ BEGIN
 			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = CASE WHEN d.roleid = 4 THEN @PT ELSE 0 END
-			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN @PT ELSE 0 END
-			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN @PT ELSE 0 END
+			,cs.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
 	FROM #SMATemp d
-		CROSS APPLY @SportBetType t
+		INNER JOIN Dep_CustPTSetting_Agent cs ON cs.CustID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 
 	----MEMBER LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Member
@@ -166,12 +180,13 @@ BEGIN
 			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = 0
-			,[MasterPT] = 0
-			,[AgentPT] = @PT
+			,cs.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
 	FROM #MemberTemp d
-		CROSS APPLY @SportBetType t
+		INNER JOIN Dep_CustPTSetting_Member cs ON cs.CustID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
 	WHERE m.IsGroupedPT = 0
 
@@ -187,12 +202,13 @@ BEGIN
 	SELECT d.[CustID]
 		,t.[SportType]
 		,t.[BetType]
-		,[IsLive] = 0
-		,[SuperPT] = 0
-		,[MasterPT] = 0
-		,[AgentPT] = @PT
+		,cs.IsLive
+		,cs.SuperPT
+		,cs.MasterPT
+		,cs.AgentPT
 	FROM #SMATemp d
-		CROSS APPLY @SportBetType t	
+		INNER JOIN Dep_CustPTGroupSetting_Member cs ON cs.AgentID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 	WHERE roleid = 2
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
@@ -200,7 +216,6 @@ BEGIN
 	FROM #MemberTemp t WITH(NOLOCK)
 		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
 	WHERE d.CustID IS NULL
-
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY)

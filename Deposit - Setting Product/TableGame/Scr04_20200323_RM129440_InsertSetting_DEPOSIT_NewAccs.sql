@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20191029
-	Task: Create setting for Indo 4D Deposit (N88, N8B, N8G)( New accounts)
+	Created: Elodie
+	Date: 20200330
+	Task: Create setting for Table Games Deposit (N88, N8B, N8G)( New accounts)
 	DB: DBCust/CustDB
 */
 

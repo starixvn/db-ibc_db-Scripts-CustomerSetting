@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20200323
-	Task: DELETE existed setting for Indo 4D DEPOSIT - Real Currency [RM:#130838] 
+	Created: Elodie
+	Date: 20200330
+	Task: DELETE existed setting for Table Games DEPOSIT [RM:#129440]
 	DB: DBCust/CustDB
 */
 
@@ -13,7 +13,6 @@ SELECT a.CustID,a.SportType,a.BetType
 INTO #Dep_CustPTSetting_Agent
 FROM Dep_CustPTSetting_Agent a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 
 DELETE a
 FROM Dep_CustPTSetting_Agent a WITH(ROWLOCK,UPDLOCK)
@@ -23,7 +22,6 @@ SELECT a.CustID,a.SportType,a.BetType
 INTO #Dep_CustPTSetting_Member
 FROM Dep_CustPTSetting_Member a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 
 DELETE a
 FROM Dep_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK)
@@ -33,7 +31,6 @@ SELECT a.AgentID,a.SportType,a.BetType
 INTO #Dep_CustPTGroupSetting_Member
 FROM Dep_CustPTGroupSetting_Member a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-INNER JOIN CustInfo ci WITH(NOLOCK) ON a.AgentID = ci.custid AND ci.currency <> 20
 
 DELETE a
 FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK,UPDLOCK)
@@ -44,7 +41,6 @@ SELECT a.CustID,a.SportType,a.BetType
 INTO #Dep_CustBetSetting_Agent
 FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 
 DELETE a
 FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
@@ -54,7 +50,6 @@ SELECT a.CustID,a.SportType,a.BetType
 INTO #Dep_CustBetSetting_Member
 FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 
 DELETE a
 FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
@@ -65,7 +60,6 @@ SELECT dl.CustID,dl.ProductSettingID
 INTO #Dep_LicenseeProductSetting
 FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 		INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
-		INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid AND ci.currency <> 20
 WHERE dp.ProductID = 40
 
 DELETE a

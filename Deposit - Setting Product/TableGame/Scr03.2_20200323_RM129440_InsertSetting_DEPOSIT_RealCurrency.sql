@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200323
-	Task: Insert setting for Indo 4D DEPOSIT - Real Currency [RM:#130838] 
+	Task: Insert setting for Indo 4D DEPOSIT - Real Currency [RM:#129440] 
 	DB: DBCust/CustDB
 */
 

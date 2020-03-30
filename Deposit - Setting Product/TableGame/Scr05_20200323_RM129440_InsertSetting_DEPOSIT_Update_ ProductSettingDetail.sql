@@ -1,7 +1,7 @@
 /*
-	Created: Eden
-	Date: 20200324
-	Task: UPDATE global setting for Indo 4D DEPOSIT
+	Created: Elodie
+	Date: 20200330
+	Task: UPDATE global setting for Table Games DEPOSIT
 	DB: DBCust/CustDB
 */
 
@@ -11,4 +11,4 @@ GO
 UPDATE ps
 SET ps.SettingStatus = 0
 FROM dbo.Dep_ProductSettingDetail ps WITH(ROWLOCK,UPDLOCK)
-WHERE SportType = 223
+WHERE SportType = 222
