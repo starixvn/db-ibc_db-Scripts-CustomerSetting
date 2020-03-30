@@ -11,7 +11,7 @@ DECLARE @Sporttype SMALLINT, @Bettype INT
 SELECT @Sporttype = 243, @Bettype = 3101
 
 --Import all supported sites
-SELECT siteid, site
+SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
