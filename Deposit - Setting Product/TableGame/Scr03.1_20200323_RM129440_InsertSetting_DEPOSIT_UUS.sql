@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Date: 20200330
-	Task: Insert setting for Table Games DEPOSIT - UUS [RM:#129440]
+	Task: Insert setting for Table Games DEPOSIT - UUSTable Games [RM:#129440]
 	DB: DBCust/CustDB
 */
 
@@ -68,7 +68,7 @@ BEGIN
 		fSportType	SMALLINT,
 		fBettype	SMALLINT
 	)
-	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1024)
+	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1021)
 
 	--------------------------------------------Product Status------------------------------------------------
 	DECLARE @bitmapOrder INT
@@ -218,15 +218,9 @@ BEGIN
 	WHERE d.CustID IS NULL
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
-	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY)
-	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet)
-	SELECT 223, 5001 , 20, 1 , 100 UNION ALL
-	SELECT 223, 5002 , 20, 1 , 250 UNION ALL
-	SELECT 223, 5003 , 20, 1 , 833 UNION ALL
-	SELECT 223, 5004 , 20, 1 , 833 UNION ALL
-	SELECT 223, 5005 , 20, 1 , 714 UNION ALL
-	SELECT 223, 5006 , 20, 1 , 6451 UNION ALL
-	SELECT 223, 5007 , 20, 1 , 1250 
+	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY,MaxPerMatch MONEY)
+	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet, MaxPerMatch)
+	SELECT 222, 4901 , 20, 1 , 10, 100
 
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
@@ -236,7 +230,7 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #SMATemp t
 		CROSS APPLY @SportBettype_BetSetting b
 
@@ -248,7 +242,7 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #MemberTemp t
 		CROSS APPLY @SportBettype_BetSetting b
 
@@ -265,7 +259,6 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 88.00
 
 SELECT @max_custid = xxx
 
@@ -311,7 +304,6 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'REPLICATED'
 			,@max_custid = @max_custid
-			,@PT = @PT
 						
 	waitfor delay '00:00:0.100'
 END
@@ -327,7 +319,6 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
-DECLARE @PT smallmoney = 88.00 
 
 SELECT @max_custid = xxx
 
@@ -372,7 +363,6 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @srecommend
 			,@target = 'DBCUST'
 			,@max_custid = @max_custid
-			,@PT = @PT
 						
 	waitfor delay '00:00:0.100'
 END

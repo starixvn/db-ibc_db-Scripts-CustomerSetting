@@ -7,15 +7,9 @@
 
 	DECLARE @max_custid INT = xxx
 
-	DECLARE @Indo4DSportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5001)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5002)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5003)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5004)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5005)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5006)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5007)
-
+	DECLARE @Indo4DSportBettype TABLE (SportType SMALLINT, BetType SMALLINT,fSportType SMALLINT, fBettype SMALLINT)
+	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5001, 220, 1021)
+	
 	--DELETE existing data
 	------------------------------------PT Setting-------------------------------------------------	
 	SELECT a.CustID,a.SportType,a.BetType
@@ -80,7 +74,7 @@
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 	INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid AND ci.currency <> 20
-	WHERE dp.ProductID = 43
+	WHERE dp.ProductID = 40
 		AND dl.CustID >@max_custid
 
 	DELETE a
@@ -101,7 +95,6 @@
 		CustID INT PRIMARY KEY CLUSTERED
 	   ,Currency INT
 	   ,mrecommend INT
-	   ,PT SMALLMONEY
 	)
 
 	CREATE TABLE #SMATemp
@@ -110,7 +103,6 @@
 	   ,Currency INT
 	   ,RoleID TINYINT
 	   ,mrecommend INT
-	   ,PT SMALLMONEY
 	)
 
 	--> Athena Licensee
@@ -136,26 +128,29 @@
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 	
-	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT)
-	SELECT custid, roleid, currency,mrecommend,88.00
+	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend)
+	SELECT custid, roleid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT)
-	SELECT custid, currency,mrecommend,88.00
+	INSERT INTO #MemberTemp(CustID,Currency,mrecommend)
+	SELECT custid, currency,mrecommend
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
-	DECLARE @SportBettype TABLE
+	DECLARE @SportBetType TABLE
 	(
-		SportType SMALLINT, 
-		BetType   SMALLINT
+		SportType	SMALLINT, 
+		BetType		SMALLINT,
+		fSportType	SMALLINT,
+		fBettype	SMALLINT
 	)
-	INSERT INTO @SportBettype(SportType, BetType) VALUES (223, 5001)
+	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1021)
 
 	DECLARE @bitmapOrder INT
 	 
@@ -201,7 +196,7 @@
 	FROM #SMATemp temp 
 		 CROSS APPLY (	SELECT ProductSettingID 
 						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 43
+						WHERE dp.ProductID = 40
 							AND dp.SettingType IN (4,1,2) -- Product Status, PT, Bet Setting
 						) st
 	WHERE temp.RoleID = 4
@@ -221,12 +216,13 @@
 			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = CASE WHEN d.roleid = 4 THEN d.PT ELSE 0 END
-			,[MasterPT] = CASE WHEN d.roleid IN (4,3) THEN d.PT ELSE 0 END
-			,[AgentPT] = CASE WHEN d.roleid IN (4,2) THEN d.PT ELSE 0 END
+			,cs.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
 	FROM #SMATemp d
-		CROSS APPLY @SportBetType t
+		INNER JOIN Dep_CustPTSetting_Agent cs ON cs.CustID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 
 	----MEMBER LEVEL
 	INSERT INTO dbo.Dep_CustPTSetting_Member
@@ -242,12 +238,13 @@
 			 d.[CustID]
 			,t.[SportType]
 			,t.[BetType]
-			,[IsLive] = 0
-			,[SuperPT] = 0
-			,[MasterPT] = 0
-			,[AgentPT] = d.PT
+			,cs.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
 	FROM #MemberTemp d
-		CROSS APPLY @SportBetType t
+		INNER JOIN Dep_CustPTSetting_Member cs ON cs.CustID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
 	WHERE m.IsGroupedPT = 0
 
@@ -263,12 +260,13 @@
 	SELECT d.[CustID]
 		,t.[SportType]
 		,t.[BetType]
-		,[IsLive] = 0
-		,[SuperPT] = 0
-		,[MasterPT] = 0
-		,[AgentPT] = d.PT
+		,cs.IsLive
+		,cs.SuperPT
+		,cs.MasterPT
+		,cs.AgentPT
 	FROM #SMATemp d
-		CROSS APPLY @SportBetType t	
+		INNER JOIN Dep_CustPTGroupSetting_Member cs ON cs.AgentID = d.CustID
+		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 	WHERE roleid = 2
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
@@ -278,8 +276,8 @@
 	WHERE d.CustID IS NULL
 
 	-------------------------------------------------Bet Setting----------------------------------------------------------------
-	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY)
-	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet)
+	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY,MaxPerMatch MONEY)
+	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet, MaxPerMatch)
 	SELECT 223, 5001, 4, 10.00, 700.00 UNION ALL --THB, TB
 	SELECT 223, 5002, 4, 10.00, 1750.00 UNION ALL --THB, TB
 	SELECT 223, 5003, 4, 10.00, 5831.00 UNION ALL --THB, TB
@@ -295,8 +293,6 @@
 	SELECT 223, 5006, 15, 1.00, 23603.00 UNION ALL --IDR, IN
 	SELECT 223, 5007, 15, 1.00, 4574.00  --IDR, IN
 	
-	
-
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
 		,SportType
@@ -305,7 +301,7 @@
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #SMATemp t
 		CROSS APPLY @SportBettype_BetSetting b 
 	WHERE b.CurrencyID = t.Currency
@@ -318,7 +314,7 @@
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxBet
+	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 	FROM #MemberTemp t
 		CROSS APPLY @SportBettype_BetSetting b
 	WHERE b.CurrencyID = t.Currency

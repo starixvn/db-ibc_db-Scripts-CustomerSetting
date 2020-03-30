@@ -71,7 +71,7 @@
 		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,cs.spositiontaking ,s.siteid
+	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,cs.spositiontaking * 100 ,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN dbo.CustSettingGame cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.custid
@@ -81,7 +81,7 @@
 		AND cs.Sporttype = 202 AND cs.Bettype = 1501
 
 	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.currency,ci.mrecommend,cs.spositiontaking,s.siteid
+	SELECT ci.custid, ci.currency,ci.mrecommend,cs.spositiontaking * 100,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.recommend
 		INNER JOIN dbo.CustSettingGame cs WITH (NOLOCK) ON ci.srecommend = cs.custid

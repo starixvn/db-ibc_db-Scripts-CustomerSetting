@@ -346,7 +346,7 @@ WHERE c.roleid = 4
 				OR (s.site = 'mansion88' AND e.exchangeid NOT IN (1,45)))
 
 UPDATE s 
-SET s.PT = cs.spositiontaking
+SET s.PT = cs.spositiontaking * 100
 FROM #supers s 
 	INNER JOIN dbo.custSettingGame cs WITH (NOLOCK) ON cs.CustID = s.custid
 WHERE cs.Sporttype = 202 AND cs.Bettype = 1501
@@ -429,7 +429,7 @@ WHERE c.roleid = 4
 				OR (s.site = 'mansion88' AND e.exchangeid NOT IN (1,45)))
 
 UPDATE s 
-SET s.PT = cs.spositiontaking
+SET s.PT = cs.spositiontaking * 100
 FROM #supers s 
 	INNER JOIN dbo.custSettingGame cs WITH (NOLOCK) ON cs.CustID = s.custid
 WHERE cs.Sporttype = 202 AND cs.Bettype = 1501
