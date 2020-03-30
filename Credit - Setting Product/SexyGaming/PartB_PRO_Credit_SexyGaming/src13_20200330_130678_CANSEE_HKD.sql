@@ -20,7 +20,7 @@ WHERE s.isActive = 1 AND s.isLicensee = 0
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
 SELECT @Sporttype AS SportType, E.exchangeid AS Currency, s.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
 FROM #OfferedSites S WITH(NOLOCK) CROSS JOIN exchange E WITH (NOLOCK)
-WHERE E.currency IN (5,67) --HKD
+WHERE E.exchangeid IN (5,67) --HKD
 
 DROP TABLE #OfferedSites
 
