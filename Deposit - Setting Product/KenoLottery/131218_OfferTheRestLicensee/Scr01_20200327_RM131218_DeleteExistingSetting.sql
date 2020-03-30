@@ -149,7 +149,7 @@ DECLARE @max_custid INT
 
 SELECT @max_custid = xxx
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED', @maxcustID = @max_custid
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED', @max_custid = @max_custid
 
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -160,6 +160,6 @@ DECLARE @max_custid INT
 
 SELECT @max_custid = xxx
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST', @maxcustID = @max_custid
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST', @max_custid = @max_custid
 
 PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
