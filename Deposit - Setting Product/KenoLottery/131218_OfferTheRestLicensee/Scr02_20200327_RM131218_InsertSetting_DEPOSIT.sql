@@ -49,7 +49,8 @@ BEGIN
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend=@srecommend AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 		AND custid<=@max_custid 
 
 	INSERT INTO #MemberTemp (CustID)

@@ -67,7 +67,8 @@
 	CREATE TABLE #APIDummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #APIDummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT,SiteId)
 	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,cs.spositiontaking ,s.siteid
