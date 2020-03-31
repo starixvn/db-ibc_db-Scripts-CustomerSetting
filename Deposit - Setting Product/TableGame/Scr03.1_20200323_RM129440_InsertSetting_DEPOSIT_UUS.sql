@@ -217,7 +217,7 @@ BEGIN
 		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
 	WHERE d.CustID IS NULL
 
-	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	-------------------------------------------------BetSetting----------------------------------------------------------------
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
 		,SportType
