@@ -10,5 +10,5 @@ GO
 
 UPDATE ps
 SET ps.SettingStatus = 0
-FROM dbo.Dep_ProductSettingDetail ps WITH(ROWLOCK,UPDLOCK)
+FROM dbo.Dep_ProductSettingDetail ps WITH(ROWLOCK)
 WHERE SportType = 222

@@ -219,24 +219,6 @@ BEGIN
 	WHERE d.CustID IS NULL
 
 	-------------------------------------------------BetSetting----------------------------------------------------------------
-	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY,MaxPerMatch MONEY)
-	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet, MaxPerMatch)
-	SELECT 223, 5001, 4, 10.00, 700.00 UNION ALL --THB, TB
-	SELECT 223, 5002, 4, 10.00, 1750.00 UNION ALL --THB, TB
-	SELECT 223, 5003, 4, 10.00, 5831.00 UNION ALL --THB, TB
-	SELECT 223, 5004, 4, 10.00, 5831.00 UNION ALL --THB, TB
-	SELECT 223, 5005, 4, 10.00, 4998.00 UNION ALL --THB, TB
-	SELECT 223, 5006, 4, 10.00, 45157.00 UNION ALL --THB, TB
-	SELECT 223, 5007, 4, 10.00, 8750.00 UNION ALL --THB, TB
-	SELECT 223, 5001, 15, 1.00, 366.00 UNION ALL --IDR, IN
-	SELECT 223, 5002, 15, 1.00, 915.00 UNION ALL --IDR, IN
-	SELECT 223, 5003, 15, 1.00, 3048.00 UNION ALL --IDR, IN
-	SELECT 223, 5004, 15, 1.00, 3048.00 UNION ALL --IDR, IN
-	SELECT 223, 5005, 15, 1.00, 2612.00 UNION ALL --IDR, IN
-	SELECT 223, 5006, 15, 1.00, 23603.00 UNION ALL --IDR, IN
-	SELECT 223, 5007, 15, 1.00, 4574.00  --IDR, IN
-	
-
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
 		,SportType
@@ -245,10 +227,10 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
 	FROM #SMATemp t
-		CROSS APPLY @SportBettype_BetSetting b 
-	WHERE b.CurrencyID = @currency
+		INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID
+		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
 
 	INSERT INTO Dep_CustBetSetting_Member(
 		 CustID
@@ -258,10 +240,10 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
 	FROM #MemberTemp t
-		CROSS APPLY @SportBettype_BetSetting b
-	WHERE b.CurrencyID = @currency
+		INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID
+		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

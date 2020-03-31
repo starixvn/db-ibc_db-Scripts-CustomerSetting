@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Date: 20200330
-	Task: Insert setting for Table Games DEPOSIT - UUSTable Games [RM:#129440]
+	Task: Insert setting for Table Games DEPOSIT - UUS [RM:#129440]
 	DB: DBCust/CustDB
 */
 
@@ -218,10 +218,6 @@ BEGIN
 	WHERE d.CustID IS NULL
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
-	DECLARE @SportBettype_BetSetting TABLE (SportType SMALLINT, BetType SMALLINT,CurrencyID INT, MinBet MONEY,MaxBet MONEY,MaxPerMatch MONEY)
-	INSERT INTO @SportBettype_BetSetting(SportType, BetType, CurrencyID, MinBet, MaxBet, MaxPerMatch)
-	SELECT 222, 4901 , 20, 1 , 10, 100
-
 	INSERT INTO Dep_CustBetSetting_Agent(
 		 CustID
 		,SportType
@@ -230,9 +226,10 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
 	FROM #SMATemp t
-		CROSS APPLY @SportBettype_BetSetting b
+		INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID
+		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
 
 	INSERT INTO Dep_CustBetSetting_Member(
 		 CustID
@@ -242,9 +239,10 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
+	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
 	FROM #MemberTemp t
-		CROSS APPLY @SportBettype_BetSetting b
+		INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID
+		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
 
 
 	DROP TABLE #SMATemp
