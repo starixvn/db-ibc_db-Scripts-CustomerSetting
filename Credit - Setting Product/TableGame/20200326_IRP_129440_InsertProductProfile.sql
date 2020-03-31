@@ -76,17 +76,16 @@ VALUES	(222, 4901, @BitmapOrder)
 --	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
 --WHERE ProductId = 22 AND (e.Code = 'USD' OR e.exchangeid = 20)
 
---SELECT * FROM ProductSettingDetail WHERE ProductID = 42
---SELECT * FROM ProductStatusProfile 
+--SELECT * FROM ProductSettingDetail WHERE sporttype = 222
+--SELECT * FROM ProductStatusProfile  WHERE sporttype = 222
 --SELECT * FROM dbo.SettingSystem
---SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 42
---SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 200
+--SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 28
+--SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 222
 
---DELETE FROM ProductSettingDetail WHERE ProductID = 42
---DELETE FROM ProductStatusProfile WHERE Sporttype = 200
---DELETE FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 42
---DELETE FROM ProductStatusSiteCurrency WHERE Sporttype = 200
---DELETE FROM LossLimit_GlobalSetting WHERE ProductId = 42
+--DELETE FROM ProductSettingDetail WHERE sporttype = 222
+--DELETE FROM ProductStatusProfile WHERE Sporttype = 222
+
+
 
 
 
