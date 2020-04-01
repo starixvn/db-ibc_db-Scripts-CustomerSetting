@@ -163,7 +163,7 @@ BEGIN
 			,cs.MasterPT
 			,cs.AgentPT
 	FROM #SMATemp d
-		INNER JOIN Dep_CustPTSetting_Agent cs ON cs.CustID = d.CustID
+		INNER JOIN Dep_CustPTSetting_Agent cs WITH (NOLOCK) ON cs.CustID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 
 	----MEMBER LEVEL
@@ -185,7 +185,7 @@ BEGIN
 			,cs.MasterPT
 			,cs.AgentPT
 	FROM #MemberTemp d
-		INNER JOIN Dep_CustPTSetting_Member cs ON cs.CustID = d.CustID
+		INNER JOIN Dep_CustPTSetting_Member cs WITH (NOLOCK) ON cs.CustID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
 	WHERE m.IsGroupedPT = 0
@@ -207,7 +207,7 @@ BEGIN
 		,cs.MasterPT
 		,cs.AgentPT
 	FROM #SMATemp d
-		INNER JOIN Dep_CustPTGroupSetting_Member cs ON cs.AgentID = d.CustID
+		INNER JOIN Dep_CustPTGroupSetting_Member cs WITH (NOLOCK) ON cs.AgentID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 	WHERE roleid = 2
 

@@ -20,7 +20,7 @@
 	WHERE a.CustID >@max_custid
 
 	DELETE a
-	FROM Dep_CustPTSetting_Agent a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_CustPTSetting_Agent a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustPTSetting_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	SELECT a.CustID,a.SportType,a.BetType
@@ -31,7 +31,7 @@
 	WHERE a.CustID >@max_custid
 
 	DELETE a
-	FROM Dep_CustPTSetting_Member a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_CustPTSetting_Member a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustPTSetting_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	SELECT a.AgentID,a.SportType,a.BetType
@@ -42,7 +42,7 @@
 	WHERE a.AgentID >@max_custid
 
 	DELETE a
-	FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustPTGroupSetting_Member t ON a.AgentID = t.AgentID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	-------------------------------------------------BetSetting----------------------------------------------------------------
@@ -54,7 +54,7 @@
 	WHERE a.CustID >@max_custid
 
 	DELETE a
-	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustBetSetting_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	SELECT a.CustID,a.SportType,a.BetType
@@ -65,7 +65,7 @@
 	WHERE a.CustID >@max_custid
 
 	DELETE a
-	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK)
 	INNER JOIN #Dep_CustBetSetting_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	-------------
@@ -78,7 +78,7 @@
 		AND dl.CustID >@max_custid
 
 	DELETE a
-	FROM Dep_LicenseeProductSetting a WITH(ROWLOCK,UPDLOCK)
+	FROM Dep_LicenseeProductSetting a WITH(ROWLOCK)
 	INNER JOIN #Dep_LicenseeProductSetting t ON a.CustID = t.CustID AND a.ProductSettingID = t.ProductSettingID
 
 	DROP TABLE #Dep_CustPTGroupSetting_Member
@@ -221,7 +221,7 @@
 			,cs.MasterPT
 			,cs.AgentPT
 	FROM #SMATemp d
-		INNER JOIN Dep_CustPTSetting_Agent cs ON cs.CustID = d.CustID
+		INNER JOIN Dep_CustPTSetting_Agent cs WITH (NOLOCK) ON cs.CustID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 
 	----MEMBER LEVEL
@@ -243,7 +243,7 @@
 			,cs.MasterPT
 			,cs.AgentPT
 	FROM #MemberTemp d
-		INNER JOIN Dep_CustPTSetting_Member cs ON cs.CustID = d.CustID
+		INNER JOIN Dep_CustPTSetting_Member cs WITH (NOLOCK) ON cs.CustID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON d.CustID = m.CustID
 	WHERE m.IsGroupedPT = 0
@@ -265,7 +265,7 @@
 		,cs.MasterPT
 		,cs.AgentPT
 	FROM #SMATemp d
-		INNER JOIN Dep_CustPTGroupSetting_Member cs ON cs.AgentID = d.CustID
+		INNER JOIN Dep_CustPTGroupSetting_Member cs WITH (NOLOCK) ON cs.AgentID = d.CustID
 		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
 	WHERE roleid = 2
 
