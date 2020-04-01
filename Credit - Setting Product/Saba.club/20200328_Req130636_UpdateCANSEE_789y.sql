@@ -8,7 +8,7 @@ USE CustDB
 GO
 
 DECLARE @Sporttype SMALLINT, @Bettype SMALLINT, @LaunchedLevel TINYINT, @IsTest BIT
-SELECT @Sporttype = 200, @Bettype = 1611, @LaunchedLevel = 0, @IsTest = 0
+SELECT @Sporttype = 200, @Bettype = 1611, @LaunchedLevel = 0, @IsTest = 1
 
 --Import sites which offered this game
 SELECT siteid
