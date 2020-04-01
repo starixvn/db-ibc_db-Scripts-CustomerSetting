@@ -8,7 +8,7 @@ USE CustDB
 GO
 
 DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxPT TINYINT, @MaxDiscount DECIMAL(9,8), @IsSync BIT, @IsHidden BIT, @IsDisabled BIT, @BitmapOrder TINYINT, @IntervalValue DECIMAL(19,8)
-SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
+SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 44
 SELECT @IsSync = 1
 SELECT @IsHidden = 0
