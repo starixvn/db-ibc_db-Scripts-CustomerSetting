@@ -22,6 +22,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
+	AND ci.site <> 'CN88'
 
 DECLARE @ProductID TINYINT = 44, @Sporttype SMALLINT = 222
 CREATE TABLE #ProductSettingDetail(ProductID TINYINT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, SettingType INT, MaxPT SMALLMONEY)
