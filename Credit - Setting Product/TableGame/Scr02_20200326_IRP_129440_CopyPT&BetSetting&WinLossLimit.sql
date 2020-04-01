@@ -26,11 +26,19 @@ BEGIN
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 
-	DECLARE @ProductID TINYINT = 28, @Sporttype SMALLINT = 222
+	DECLARE @ProductID TINYINT = 44, @Sporttype SMALLINT = 222
+	CREATE TABLE #ProductSettingDetail(ProductID TINYINT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, SettingType INT, MaxPT SMALLMONEY)
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
+	
+	INSERT INTO #ProductSettingDetail (ProductID, SportType, BetType, IsLive , SettingType, MaxPT)
+	SELECT @ProductID, @Sporttype, 4901, 0, 1, 85 UNION ALL
+	SELECT @ProductID, @Sporttype, 4901, 0, 2, NULL UNION ALL
+	SELECT @ProductID, @Sporttype, 4901, 0, 6, NULL UNION ALL
+	SELECT @ProductID, @Sporttype, 4901, 0, 13, NULL 
+
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	220, 1024, SportType, BetType, 0, SettingType, 0
-	FROM dbo.ProductSettingDetail WITH (NOLOCK)
+	FROM #ProductSettingDetail WITH (NOLOCK)
 	WHERE ProductID = @ProductID AND SettingType IN (1,2,6) AND SportType = @Sporttype
 
 	CREATE TABLE #MemberTemp
@@ -56,7 +64,7 @@ BEGIN
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
 	DECLARE @MaxPT TINYINT, @Currency INT
-	SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
+	SELECT TOP 1 @MaxPT = MaxPT FROM #ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
 	
 	--------------------------------------PT Setting-------------------------------------------------	

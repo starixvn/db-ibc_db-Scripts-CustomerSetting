@@ -8,8 +8,9 @@ USE bodb02
 GO
 
 INSERT INTO	dbo.WinLimit_ProductOffer (ProductID, BetType, IsActive_SMA, IsActive_Company)       
-VALUES	(28, 4901, 1, 0)
+VALUES	(40, 4901, 1, 0)
 
+--DELETE WinLimit_ProductOffer WHERE BetType = 4901
 
 
 

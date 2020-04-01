@@ -19,6 +19,8 @@ SELECT @MaxPT = 85
 --SELECT @IntervalValue = 0.0005
 
 UPDATE dbo.ProductSettingDetail SET ProductID = 44 WHERE ProductID = 28
+UPDATE dbo.ProductSettingSystemDisplay SET ProductID = 44 WHERE ProductID = 28
+UPDATE dbo.LossLimit_GlobalSetting SET ProductID = 44 WHERE ProductID = 28
 
 --PT Setting
 INSERT INTO	dbo.ProductSettingDetail

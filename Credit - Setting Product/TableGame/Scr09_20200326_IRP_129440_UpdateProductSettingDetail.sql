@@ -10,4 +10,4 @@ GO
 UPDATE ps
 SET ps.SettingStatus = 0
 FROM dbo.ProductSettingDetail ps WITH(ROWLOCK)
-WHERE ProductID = 28
+WHERE ProductID = 44
