@@ -7,15 +7,21 @@
 
 	DECLARE @max_custid INT = xxx
 
-	DECLARE @Indo4DSportBettype TABLE (SportType SMALLINT, BetType SMALLINT,fSportType SMALLINT, fBettype SMALLINT)
-	INSERT INTO @Indo4DSportBettype(SportType, BetType) VALUES (223, 5001, 220, 1021)
+	DECLARE @SportBetType TABLE
+	(
+		SportType	SMALLINT, 
+		BetType		SMALLINT,
+		fSportType	SMALLINT,
+		fBettype	SMALLINT
+	)
+	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1021)
 	
 	--DELETE existing data
 	------------------------------------PT Setting-------------------------------------------------	
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustPTSetting_Agent
 	FROM Dep_CustPTSetting_Agent a WITH(NOLOCK)
-	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
@@ -26,7 +32,7 @@
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustPTSetting_Member
 	FROM Dep_CustPTSetting_Member a WITH(NOLOCK)
-	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
@@ -37,7 +43,7 @@
 	SELECT a.AgentID,a.SportType,a.BetType
 	INTO #Dep_CustPTGroupSetting_Member
 	FROM Dep_CustPTGroupSetting_Member a WITH(NOLOCK)
-	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.AgentID = ci.custid AND ci.currency <> 20
 	WHERE a.AgentID >@max_custid
 
@@ -49,7 +55,7 @@
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
-	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
@@ -60,7 +66,7 @@
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
-	INNER JOIN @Indo4DSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
 	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
 	WHERE a.CustID >@max_custid
 
@@ -142,15 +148,6 @@
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
-
-	DECLARE @SportBetType TABLE
-	(
-		SportType	SMALLINT, 
-		BetType		SMALLINT,
-		fSportType	SMALLINT,
-		fBettype	SMALLINT
-	)
-	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (222, 4901, 220, 1021)
 
 	DECLARE @bitmapOrder INT
 	 
