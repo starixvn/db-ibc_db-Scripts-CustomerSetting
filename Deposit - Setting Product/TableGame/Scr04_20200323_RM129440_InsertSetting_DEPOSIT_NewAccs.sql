@@ -22,7 +22,7 @@
 	INTO #Dep_CustPTSetting_Agent
 	FROM Dep_CustPTSetting_Agent a WITH(NOLOCK)
 	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -33,7 +33,7 @@
 	INTO #Dep_CustPTSetting_Member
 	FROM Dep_CustPTSetting_Member a WITH(NOLOCK)
 	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -44,7 +44,7 @@
 	INTO #Dep_CustPTGroupSetting_Member
 	FROM Dep_CustPTGroupSetting_Member a WITH(NOLOCK)
 	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.AgentID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.AgentID = ci.custid
 	WHERE a.AgentID >@max_custid
 
 	DELETE a
@@ -56,7 +56,7 @@
 	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent a WITH(NOLOCK)
 	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -67,7 +67,7 @@
 	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member a WITH(NOLOCK)
 	INNER JOIN @SportBetType t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
 	WHERE a.CustID >@max_custid
 
 	DELETE a
@@ -79,7 +79,7 @@
 	INTO #Dep_LicenseeProductSetting
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
 	INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid AND ci.currency <> 20
+	INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 	WHERE dp.ProductID = 40
 		AND dl.CustID >@max_custid
 
