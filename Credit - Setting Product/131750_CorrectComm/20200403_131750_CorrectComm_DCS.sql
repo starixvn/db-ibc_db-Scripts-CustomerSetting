@@ -8,9 +8,13 @@ USE CustDB
 GO
 
 ALTER PROCEDURE Acc_DynamicCustSetting3rd_09
+	@target VARCHAR(20)
 AS
 BEGIN
 	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+
 	SET NOCOUNT ON
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
@@ -58,6 +62,7 @@ BEGIN
 	SELECT custid, ci.srecommend, ci.mrecommend, ci.recommend
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE ci.recommend = D.CustID)
+		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE ci.mrecommend = D.CustID)
 		AND ci.roleid = 1
 
 	WHILE (1 = 1)
@@ -94,6 +99,10 @@ BEGIN
 END
 GO
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST SERVERS -----
+--------------------------------------------------------------------------------------
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
