@@ -80,7 +80,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
 PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
-EXEC dbo.Acc_DynamicCustSetting3rd_08 @target = 'REPLICATED'
+EXEC dbo.Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
 
 PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
@@ -88,7 +88,7 @@ PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 --------------------------------------------------------------------------------------
 PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
-EXEC dbo.Acc_DynamicCustSetting3rd_08 @target = 'DBCUST'
+EXEC dbo.Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'
 
 PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
  
