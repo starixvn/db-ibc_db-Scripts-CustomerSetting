@@ -58,7 +58,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE ci.recommend = D.CustID)
 
-	WHILE 1 = 1 
+	WHILE (1 = 1)
 	BEGIN
 		TRUNCATE TABLE #MemberBatch
 
