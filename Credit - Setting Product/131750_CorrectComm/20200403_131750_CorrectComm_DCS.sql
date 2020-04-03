@@ -52,11 +52,13 @@ BEGIN
 	SELECT ci.custid, ci.srecommend, ci.mrecommend, ci.recommend
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE ci.mrecommend = D.CustID)
+		AND ci.roleid = 1
 
 	INSERT INTO #MemberTemp (CustID, srecommend, mrecommend, recommend)
 	SELECT custid, ci.srecommend, ci.mrecommend, ci.recommend
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE ci.recommend = D.CustID)
+		AND ci.roleid = 1
 
 	WHILE (1 = 1)
 	BEGIN
