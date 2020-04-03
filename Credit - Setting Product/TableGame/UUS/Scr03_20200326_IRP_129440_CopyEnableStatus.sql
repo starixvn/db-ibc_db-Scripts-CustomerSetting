@@ -25,7 +25,7 @@ BEGIN
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
 	DECLARE @BitmapOrder TINYINT = 23
 	
-	SELECT custid, ci.roleid
+	SELECT custid
 	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid AND ci.custid <= @maxcustid

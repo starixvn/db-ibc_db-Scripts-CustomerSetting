@@ -119,7 +119,7 @@ BEGIN
 		INNER JOIN #CustPTGroupSetting3rd_Member t ON a.AgentID = t.AgentID
 	WHERE a.SportType = @tSportType AND a.BetType = @tBetType
 
-	----------------------------------------WinLoss Limit Setting-------------------------------------------------	
+	----------------------------------------Bet Setting-------------------------------------------------	
 	SELECT f.CustID, f.MinBet, f.MaxBet, f.MaxPerMatch
 	INTO #CustBetSetting_Agent
 	FROM dbo.CustBetSetting3rd_Agent f WITH (NOLOCK)
@@ -160,7 +160,12 @@ BEGIN
 		INNER JOIN #CustBetSetting_Member t ON a.CustId = t.CustId
 	WHERE a.SportType = @tSportType AND a.BetType = @tBetType
 
-	----------------------------------------WinLoss Limit Setting-------------------------------------------------	
+	----------------------------------------WinLoss Limit Setting-------------------------------------------------
+	SELECT	  @fSportType = 220
+			, @fBetType = 1021
+			, @tSportType = 222
+			, @tBetType = 4901
+				
 	SELECT f.CustID, f.MaxWinLimit, f.MaxLossLimit, f.IsAutoReset	
 	INTO #CustWinLossLimit_Agent
 	FROM CustWinLossLimit_Agent f WITH (NOLOCK)
