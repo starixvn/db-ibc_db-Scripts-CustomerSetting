@@ -36,4 +36,9 @@ SET RealProductId = 40
 FROM ProductSettingDetail p WITH (ROWLOCK)
 WHERE p.SportType = 222
 
+UPDATE p 
+SET RealProductId = 47
+FROM ProductSettingDetail p WITH (ROWLOCK)
+WHERE p.SportType = 241
+
 SELECT * FROM ProductSettingDetail WITH (NOLOCK)
