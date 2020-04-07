@@ -118,26 +118,10 @@ SELECT 3300, 51, '30', '15,000', 30, 15000 UNION ALL -- INH
 SELECT 3300, 51, '30', '30,000', 30, 30000 UNION ALL -- INH
 SELECT 3300, 51, '30', '50,000', 30, 50000 -- INH
 
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
-FROM #temp t
-WHERE MaxStake > 999
-
-UPDATE t
-SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
-FROM #temp t
-WHERE MinStake > 999
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
-FROM #temp t
-WHERE MaxStake > 999999
-
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
 WHERE S.GameTypeID = 3300
-	AND S.ExchangeId IN (20)
-
+	AND S.ExchangeId NOT IN (20,72)
 
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId

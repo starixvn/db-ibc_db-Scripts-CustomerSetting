@@ -29,7 +29,7 @@ SELECT 3300, 72, '30', '50,000', 30, 50000  -- YNG
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
 WHERE S.GameTypeID = 3300
-	AND S.ExchangeId IN (20)
+	AND S.ExchangeId IN (20,72)
 
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId

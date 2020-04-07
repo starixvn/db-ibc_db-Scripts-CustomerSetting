@@ -47,7 +47,32 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
 		AND ci.Site<>'CN88'
-		AND ci.currency NOT IN (20,72) -- UUS, YNG
+		AND ci.currency IN (12,
+							13,
+							15,
+							16,
+							2,
+							22,
+							3,
+							33,
+							34,
+							35,
+							4,
+							43,
+							45,
+							47,
+							5,
+							51,
+							55,
+							6,
+							61,
+							64,
+							66,
+							67,
+							74,
+							78,
+							81
+						) --supported currencies
 
 
 	SELECT DISTINCT cg.custid 
