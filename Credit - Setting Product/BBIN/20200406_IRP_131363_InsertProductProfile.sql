@@ -62,6 +62,9 @@ FROM #NonOfferedCurency WITH (NOLOCK)
 
 DROP TABLE #NonOfferedCurency
 
+INSERT INTO [dbo].[ProductSettingSystemDisplay] ([SystemID],[ProductID],[SettingType],[DisplayMode]) VALUES (5,41,12,3)
+INSERT INTO [dbo].[ProductSettingSystemDisplay] ([SystemID],[ProductID],[SettingType],[DisplayMode]) VALUES (9,41,12,3)
+
 --SELECT * FROM ProductSettingDetail WHERE sporttype = 241
 --SELECT * FROM ProductStatusProfile  WHERE sporttype = 241
 --SELECT * FROM dbo.SettingSystem
