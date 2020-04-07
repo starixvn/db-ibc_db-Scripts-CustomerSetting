@@ -10,37 +10,26 @@ CREATE TABLE #temp(
 	GameTypeID		INT,
 	[MinLabel]		VARCHAR(30),
 	[MaxLabel]		VARCHAR(30),
-	[MinStake]			[decimal](19, 8) NULL,
-	[MaxStake]			[decimal](19, 8) NULL,
+	[MinStake]		[decimal](19, 8) NULL,
+	[MaxStake]		[decimal](19, 8) NULL,
 	[ExchangeId]	[int] 
 ) ON [PRIMARY]
 
 GO
-INSERT #temp (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
-SELECT 3300,'5000','500000',5000,500000,20 UNION ALL
-SELECT 3300,'10000','1000000',10000,1000000,20 
-
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
-FROM #temp t
-WHERE MaxStake > 999
-
-UPDATE t
-SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
-FROM #temp t
-WHERE MinStake > 999
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
-FROM #temp t
-WHERE MaxStake > 999999
+INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
+SELECT 3300, 20, '2', '250', 2, 250 UNION ALL -- UUS
+SELECT 3300, 20, '2', '500', 2, 500 UNION ALL -- UUS
+SELECT 3300, 20, '2', '1,000', 2, 1000 UNION ALL -- UUS
+SELECT 3300, 20, '2', '2,000', 2, 2000 UNION ALL -- UUS
+SELECT 3300, 72, '30', '3,000', 30, 3000 UNION ALL -- YNG
+SELECT 3300, 72, '30', '15,000', 30, 15000 UNION ALL -- YNG
+SELECT 3300, 72, '30', '30,000', 30, 30000 UNION ALL -- YNG
+SELECT 3300, 72, '30', '50,000', 30, 50000  -- YNG
 
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
 WHERE S.GameTypeID = 3300
 	AND S.ExchangeId IN (20)
-
 
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId

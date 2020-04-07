@@ -6,9 +6,15 @@
 
 USE CustDB
 GO
+/*
+DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE Sporttype = 241 
+DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE Sporttype = 241 
+DELETE FROM ProductStatusSiteCurrency WITH(ROWLOCK) WHERE Sporttype = 241
+*/
+
 
 DECLARE @SettingStatus TINYINT, @ProductID INT, @MaxPT TINYINT, @MaxDiscount DECIMAL(9,8), @IsSync BIT, @IsHidden BIT, @IsDisabled BIT, @BitmapOrder TINYINT, @IntervalValue DECIMAL(19,8)
-SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
+SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 41
 SELECT @IsSync = 1
 SELECT @IsHidden = 0
@@ -33,9 +39,9 @@ VALUES
 --WinLossLimit Setting																																				
 	,	(	12		   , 241		, 3300		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 5           , @SettingStatus, NULL)
 
-UPDATE dbo.ProductSettingDetail WITH (ROWLOCK)
-SET DisplayOrder = 6
-WHERE SettingType = 7 AND ProductID = 41
+--UPDATE dbo.ProductSettingDetail WITH (ROWLOCK)
+--SET DisplayOrder = 6
+--WHERE SettingType = 7 AND ProductID = 41
 
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(241, 3300, @BitmapOrder)

@@ -35,21 +35,6 @@ CREATE UNIQUE CLUSTERED INDEX [IX_Site_BlockNewCust] ON [dbo].[Site_BlockNewCust
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 100) ON [DATA]
 GO
 
-GRANT SELECT ON [dbo].[Site_BlockNewCust] TO [bodbAdminNet] AS [dbo]
-GO
-
-GRANT SELECT ON [dbo].[Site_BlockNewCust] TO [bodbDownlineNet] AS [dbo]
-GO
-
-GRANT SELECT ON [dbo].[Site_BlockNewCust] TO [bodbDownlineNetView] AS [dbo]
-GO
-
-GRANT SELECT ON [dbo].[Site_BlockNewCust] TO [bodbExtAccNet] AS [dbo]
-GO
-
-GRANT SELECT ON [dbo].[Site_BlockNewCust] TO [bodbLicenseeNet] AS [dbo]
-GO
-
 SET ANSI_PADDING OFF
 GO
 
