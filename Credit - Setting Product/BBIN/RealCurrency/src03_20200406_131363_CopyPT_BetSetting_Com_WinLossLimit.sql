@@ -32,8 +32,7 @@ BEGIN
 
 	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 241 ,@Bettype INT  = 3300
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
-	DECLARE @MaxPT TINYINT, @Currency INT
-	SELECT TOP 1 @MaxPT = MaxPT FROM ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1 AND SportType = @Sporttype
+	DECLARE @Currency INT
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
