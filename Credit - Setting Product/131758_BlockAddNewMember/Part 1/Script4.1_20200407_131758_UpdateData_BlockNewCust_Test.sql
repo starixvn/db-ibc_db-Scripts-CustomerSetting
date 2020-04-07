@@ -9,4 +9,4 @@ GO
 UPDATE Site_BlockNewCust WITH(ROWLOCK)
 SET BlockNewCust = 1	
 	,UnblockTime = '03:30 PM (GMT+8)'
-WHERE siteid = 1 --BestOdds
+WHERE siteid = 3 
