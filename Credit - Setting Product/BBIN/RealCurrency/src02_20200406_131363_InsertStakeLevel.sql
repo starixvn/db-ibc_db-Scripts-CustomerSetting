@@ -126,5 +126,6 @@ WHERE S.GameTypeID = 3300
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
 FROM #temp T WITH(NOLOCK)
+ORDER BY GameTypeID,ExchangeId,MaxStake
 
 DROP TABLE #temp

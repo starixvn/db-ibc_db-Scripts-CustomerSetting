@@ -1,7 +1,6 @@
 /*
-	Created: 20200321@Tiara
-	Date: 20200321
-	Task: Copy Setting for newly created customer for Sexy Gaming [Redmine: #130678]
+	Created: 20200406@Eden
+	Task: Copy Setting for newly created customer for BBIN [Redmine: #131363]
 	DB: DBCUST/CustDB
 */ 
 PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

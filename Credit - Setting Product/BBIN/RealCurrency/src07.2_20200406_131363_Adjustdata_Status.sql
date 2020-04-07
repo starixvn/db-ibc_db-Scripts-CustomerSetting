@@ -1,7 +1,6 @@
 /*
-	Created: 20200321@Tiara
-	Date: 20200326
-	Task: Adjust Status for Sexy Gaming [Redmine: #130678]
+	Created: 20200406@Eden
+	Task: Adjust Status for BBIN [Redmine: #131363]
 	DB: DBCUST/CustDB
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
@@ -29,43 +28,46 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.Site<>'CN88'
 		AND s.islicensee = 0
-		AND ci.currency IN (16, 64, 35, 3, 74, 12, 2, 67, 5, 4, 43, 15, 22, 33, 34, 47) --Supported currencies
+		AND ci.currency IN (12,
+							13,
+							15,
+							16,
+							2,
+							22,
+							3,
+							33,
+							34,
+							35,
+							4,
+							43,
+							45,
+							47,
+							5,
+							51,
+							55,
+							6,
+							61,
+							64,
+							66,
+							67,
+							74,
+							78,
+							81
+						) --supported currencies
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
-	DECLARE @ProductID TINYINT = 41, @SportType INT = 243
+	DECLARE @ProductID TINYINT = 41, @SportType INT = 241
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
 	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledSG BIT, bitmapIsDisabledAB BIT, isHiddenSG BIT)
 
-	CREATE TABLE #TmpProductSettingDetail
-	(
-		SettingType SMALLINT,
-		SportType SMALLINT,
-		BetType SMALLINT,
-		IsLive BIT,
-		ProductID TINYINT,
-		MaxPT TINYINT,
-		MaxDiscount DECIMAL (9, 8),
-		IsSync BIT,
-		IsHidden BIT,
-		IsDisabled BIT,
-		SettingLevel TINYINT,
-		DisplayOrder TINYINT,
-		SettingStatus TINYINT,
-		IntervalValue DECIMAL (19, 8) 
-	)
-	
-	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,211,2401,0,41,NULL,NULL,1,0,0,2,1,0,NULL)
-
-	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,243,3101,0,41,NULL,NULL,1,0,0,2,1,0,NULL)
-
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
-	FROM #TmpProductSettingDetail WITH (NOLOCK)
+	FROM ProductSettingDetail WITH (NOLOCK)
 	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (13) -- Status
 --------------------------------------Status Setting-------------------------------------------------		
-	DECLARE @BitmapOrder TINYINT = 22
+	DECLARE @BitmapOrder TINYINT = 24
 
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
