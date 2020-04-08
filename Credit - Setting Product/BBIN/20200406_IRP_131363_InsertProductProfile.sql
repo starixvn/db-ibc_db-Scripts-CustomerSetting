@@ -49,12 +49,36 @@ VALUES	(241, 3300, @BitmapOrder)
 CREATE TABLE #NonOfferedCurency (Currency INT) --KHR(KHR); PLN(PLN);MMK(MMK, MKK); JPY (JPY); SGD (SD$)
 
 INSERT INTO #NonOfferedCurency (Currency)
-SELECT 1 UNION ALL --SD$
-SELECT 32 UNION ALL --JPY
-SELECT 56 UNION ALL --PLN
-SELECT 69 UNION ALL --MMK
-SELECT 70 UNION ALL --MKK
-SELECT 71 --KHR
+SELECT exchangeid 
+FROM exchange WITH(NOLOCK) 
+WHERE exchangeid NOT IN (12,
+						13,
+						15,
+						16,
+						2,
+						22,
+						3,
+						33,
+						34,
+						35,
+						4,
+						43,
+						45,
+						47,
+						5,
+						51,
+						55,
+						6,
+						61,
+						64,
+						66,
+						67,
+						74,
+						78,
+						81,
+						20,72 --test
+					) --supported currencies
+
 
 INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
 SELECT DISTINCT 241, 3300, 0, Currency, 1, 1, 1  
