@@ -31,7 +31,7 @@ VALUES
 --PT	
 		(	1          , 241		, 3300		, 0     , @ProductID	, @MaxPT, NULL			, NULL		, NULL		, NULL			, 2           , 3           , @SettingStatus, NULL)
 --Comm	
-	--,	(	3          , 241		, 3300		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue)
+	,	(	3          , 241		, 3300		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue)
 --Status Setting																																				
 	,	(	13         , 241		, 3300		, 0     , @ProductID	, NULL	, NULL			, @IsSync	, @IsHidden	, @IsDisabled	, 2           , 1           , @SettingStatus, NULL)
 --BetSetting																																				
@@ -39,9 +39,9 @@ VALUES
 --WinLossLimit Setting																																				
 	,	(	12		   , 241		, 3300		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 5           , @SettingStatus, NULL)
 
---UPDATE dbo.ProductSettingDetail WITH (ROWLOCK)
---SET DisplayOrder = 6
---WHERE SettingType = 7 AND ProductID = 41
+UPDATE dbo.ProductSettingDetail WITH (ROWLOCK)
+SET DisplayOrder = 6
+WHERE SettingType = 7 AND ProductID = 41
 
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(241, 3300, @BitmapOrder)
