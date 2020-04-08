@@ -104,7 +104,6 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 	AND ci.Enabled=1
 	AND ci.roleid IN (2,3)
-	AND ci.custid > @MaxCustID
 
 INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList,Currency)
 SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList,sma.currency
