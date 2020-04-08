@@ -13,7 +13,7 @@ SELECT @Sporttype = 241, @Bettype = 3300
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
-WHERE s.isActive = 1 AND s.isLicensee = 0e
+WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site NOT IN ('CN88')
 
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
