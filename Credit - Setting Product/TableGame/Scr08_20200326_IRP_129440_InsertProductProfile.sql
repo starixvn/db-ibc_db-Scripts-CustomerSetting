@@ -38,6 +38,31 @@ VALUES
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(222, 4901, @BitmapOrder)
 
+INSERT INTO dbo.ProductBetSetting
+        ( Sporttype ,
+          Bettype ,
+          Currency ,
+          MinBet ,
+          IsDep ,
+          MaxBet ,
+          MaxPerMatch ,
+          DefaultMinBet ,
+          DefaultMaxBet ,
+          DefaultMaxPerMatch
+        )
+SELECT 222 ,
+	   4901 ,
+	   Currency ,
+	   MinBet ,
+	   IsDep ,
+	   MaxBet ,
+	   MaxPerMatch ,
+	   DefaultMinBet ,
+	   DefaultMaxBet ,
+	   DefaultMaxPerMatch
+FROM ProductBetSetting WITH (NOLOCK)
+WHERE Sporttype = 220 AND Bettype = 1024
+	
 --INSERT INTO dbo.ProductSettingSystemDisplay
 --        ( SystemID ,
 --          ProductID ,
@@ -85,6 +110,7 @@ VALUES	(222, 4901, @BitmapOrder)
 --SELECT * FROM dbo.SettingSystem
 --SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 28
 --SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 222
+--SELECT * FROM dbo.ProductBetSetting WHERE Sporttype = 222
 
 --DELETE FROM ProductSettingDetail WHERE sporttype = 222
 --DELETE FROM ProductStatusProfile WHERE Sporttype = 222
