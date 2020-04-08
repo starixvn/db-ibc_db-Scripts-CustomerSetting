@@ -201,6 +201,7 @@ BEGIN
 		AND dest.SettingType = 1
 
 --------------------------------------Commission Setting-------------------------------------------------
+/*
 	--Super level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
 	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
@@ -268,7 +269,7 @@ BEGIN
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
 		AND  dest.SettingType = 3
-
+*/
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
