@@ -59,7 +59,7 @@ BEGIN
 	DECLARE @ProductID TINYINT = 41, @SportType INT = 241
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
-	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledSG BIT, bitmapIsDisabledAB BIT, isHiddenSG BIT)
+	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledBB BIT, bitmapIsDisabledAB BIT, isHiddenBB BIT)
 
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
@@ -74,15 +74,15 @@ BEGIN
 	WHERE SettingType = 13
 
 
-	INSERT INTO #CustList_ST (custid, bitmapIsDisabledSG, bitmapIsDisabledAB, isHiddenSG)
-	SELECT CS.CustID, isDisabledSG.value, isDisabledAB.value, isHiddenSG.value
-	FROM dbo.CustProductStatus cs WITH(NOLOCK)
+	INSERT INTO #CustList_ST (custid, bitmapIsDisabledBB, bitmapIsDisabledAB, isHiddenBB)
+	SELECT CS.CustID, isDisabledBB.value, isDisabledAB.value, isHiddenBB.value
+	FROM DBOTI.CustDB_BackupSetting.dbo.CustProductStatus cs WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabledAB
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, @BitmapOrder) as isDisabledSG
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsHidden, @BitmapOrder) as isHiddenSG
-	WHERE (isDisabledSG.value <> isDisabledAB.value	OR isHiddenSG.value != 0)
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, @BitmapOrder) as isDisabledBB
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsHidden, @BitmapOrder) as isHiddenBB
+	WHERE (isDisabledBB.value <> isDisabledAB.value	OR isHiddenBB.value != 0)
 		AND ci.Enabled = 1
 
 	WHILE (1 = 1)
