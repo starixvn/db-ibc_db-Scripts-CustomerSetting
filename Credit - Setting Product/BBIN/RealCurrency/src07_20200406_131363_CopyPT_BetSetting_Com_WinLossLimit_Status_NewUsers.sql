@@ -7,7 +7,7 @@ PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 DECLARE @ProductID TINYINT = 41, @Sporttype INT = 241, @Bettype INT  = 3300
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 
-SELECT @MaxCustID = 41060849
+SELECT @MaxCustID = xxx
 
 CREATE TABLE #supers (custid int)
 
