@@ -42,8 +42,8 @@ SELECT 3, 72  --789y, YNG
 
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 
-INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest, LaunchedLevel)
-SELECT @Sporttype AS SportType, @Bettype AS BetType, t.Currency AS Currency, t.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, 1 AS LaunchedLevel
+INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
+SELECT @Sporttype AS SportType, @Bettype AS BetType, t.Currency AS Currency, t.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest
 FROM #OfferedSitesCurrency t
 
 DROP TABLE #OfferedSitesCurrency
