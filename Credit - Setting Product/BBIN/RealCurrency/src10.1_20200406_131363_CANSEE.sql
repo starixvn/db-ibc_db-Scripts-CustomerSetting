@@ -48,7 +48,7 @@ FROM #OfferedSitesCurrency t
 
 DROP TABLE #OfferedSitesCurrency
 
-SELECT * FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
+--SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 241
 
 
 

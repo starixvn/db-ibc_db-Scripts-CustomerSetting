@@ -49,4 +49,4 @@ WHERE SportType = @Sporttype AND BetType = @Bettype
 
 DROP TABLE #OfferedSitesCurrency
 
-SELECT * FROM ProductLaunchedSiteCurrency WHERE SportType = 241
+--SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 241
