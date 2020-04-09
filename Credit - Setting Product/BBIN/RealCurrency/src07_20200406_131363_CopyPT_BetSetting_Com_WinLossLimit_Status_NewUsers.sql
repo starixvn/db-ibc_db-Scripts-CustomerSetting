@@ -232,6 +232,7 @@ FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE  dest.SettingType = 3
 	AND CI.roleid IN (2,3)
+	AND c.CustID > @MaxCustID
 	
 --Master, Agent level
 INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
@@ -254,6 +255,7 @@ WHERE EXISTS (SELECT 1
 					INNER JOIN custinfo ci WITH (NOLOCK) ON ci.custid = D.CustID
 				WHERE d.roleid = 2 AND ci.mrecommend = c.CustID)
 	AND  dest.SettingType = 3
+	AND c.CustID > @MaxCustID
 
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
@@ -271,6 +273,7 @@ FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 	INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
 	AND  dest.SettingType = 3
+	AND c.CustID > @MaxCustID
 
 --Update Discount info for members of direct agent accounts
 UPDATE C
@@ -280,6 +283,7 @@ FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 	INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
 	AND  dest.SettingType = 3
+	AND c.CustID > @MaxCustID
 
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
