@@ -122,13 +122,28 @@
 	WHERE c.roleid = 4  
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
-	 AND c.currency IN ( 4--THB
-						,15--IDR
-					)
-	 AND s.site IN (
-					 'N88'
-					,'N8G'
-					,'N8B'
+	AND s.site IN ('11bet','12Bet','24TECH','365online','368Cash','396Club','3star88','568Win','633esports','7Konline','818Bet',
+					'88Goals','88Macao','9bet','9Club','9wickets','A1game','Abcasino','Ae88','AEUG','afb99','AG','allwincity',
+					'alog','ALPHA88','AMG','ANGbet','AnvoFH','Aoncash','Aplus','Apollo','asiabet88','Asian88','Athena000',
+					'Axiawin','B24VN','BE7','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BoinGroup','Bolanation',
+					'Boma365','Bonanza88','BOSSB','Boying','BPLE','Brown888','BWGaming','Cali','Calibet','Callmeboss','CGame',
+					'CGame4','Champion','Dachen','Dade','Datang','Datang001','Dawoo','Debet','DEWA','DF88','DingTai','DTGW',
+					'e8casino','ECLBET','ENT22','ENTAPLAY','erhaozhan','Fabet','FB88','Five88','FLC','G2Win','Gameroom',
+					'GamingSoft','Gampag','Gaobet','gbkj','GESAB','GGBOOK','GMASTER','GPgaming88','GPIGAME','Happy1668',
+					'Happy8','HCVIP','Heaven','Hecbet','HeleThai','Hengcai88','hjccasino','HJTK','HL8','HONBET','Hong88',
+					'HonorW','HOT88','HuangMa','iBET','IBG','IBO','ID88','IGPTech','INSERTGAME','IONclub','ITCbet','Jarvis',
+					'JIBET','JIDU','Jinyazhou','Jumbo88','JZFortune','KeenOcean','KhmerG','KingBet','Kraton','Kudatogel',
+					'KUTECH','Lagadewa','Leng4D','Liga','Lode88','Lucky88','Luckywin88','M8bola','Macaubet','Man1878',
+					'mansion88','MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Monstergol','Mopgaming',
+					'MRCATSB','MTech','Mybet88','N88','N8B','N8G','Nbbet','NBCbet','Newbet','NewFuture','Newhonbet',
+					'OCMS','Okada','OLE777','One88','Onegaming','Opadmin','OPEBET','PanguGame','Pinbo','PKbet','Q8bola',
+					'QASite','Raisetech','Ratugg','Red88','Royal','Salon365','sbt88','Senibet','shengboyun','Siamgame',
+					'Sin88','skykey','Soon88','Spark','spondemo','SSSGaming','Starnet','starsoccer','Sun988','Sunbet138',
+					'SunGame','Sunwin','Swin','Taipanbet','TangChao','TaoCai','TCbet','TGO','Tianbo','TitanCraft','TitanOne',
+					'TLC','TopGame','Tripleone','TXG','txwl002','TYCgame','UN168','Unobet','UwinY','Uwoniwin','VCBA','VN88',
+					'VWIN66','W88','Wanbo','Wanfang','WB101','WBG88','WBS','webet88','weicai','Weiwei','Win68Club','Win88',
+					'WINCLUB88','Winn69','WKCUR','WKIBPH','WKPHIL','WUYICP','Xinbo','XinYo','XTDGT','Yabo3','YAYOU','Yibo',
+					'YongBao','YTX','Yunji','Zbet','Zowin','zt828'
 					)
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
