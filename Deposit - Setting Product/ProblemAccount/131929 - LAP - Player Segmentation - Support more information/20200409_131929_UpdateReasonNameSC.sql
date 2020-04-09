@@ -1,12 +1,12 @@
 ﻿/*
 	Created: 20200409@Eden
-	Task: update values for ReasonNameSC column [redmine:#131929]
+	Task: update values for ReasonNameCS column [redmine:#131929]
 	DB: DBCUST/CUSTDB
 */
 USE CustDB
 
-DECLARE @Translate TABLE (ReasonName VARCHAR(100),ReasonNameSC NVARCHAR(50))
-INSERT INTO @Translate(ReasonName, ReasonNameSC)
+DECLARE @Translate TABLE (ReasonName VARCHAR(100),ReasonNameCS NVARCHAR(100))
+INSERT INTO @Translate(ReasonName, ReasonNameCS)
 SELECT 'Abnormal', N'非正常' 
 UNION ALL SELECT 'Group Betting', N'群组投注' 
 UNION ALL SELECT 'Hedging', N'出货群组' 
@@ -17,7 +17,7 @@ UNION ALL SELECT 'Irrigation Bet', N'灌水投注'
 UNION ALL SELECT 'System Formula Bet', N'系统计算投注' 
 
 UPDATE pr
-SET ReasonNameSC = REPLACE(pr.ReasonName,tmp.ReasonName,tmp.ReasonNameSC)
+SET ReasonNameCS = REPLACE(pr.ReasonName,tmp.ReasonName,tmp.ReasonNameCS)
 FROM ProblemAccountReason pr WITH(ROWLOCK)
 	INNER JOIN @Translate tmp ON pr.ReasonName LIKE tmp.ReasonName + '%'
 
