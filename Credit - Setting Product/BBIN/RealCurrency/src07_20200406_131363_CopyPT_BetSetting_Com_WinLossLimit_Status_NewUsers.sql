@@ -330,9 +330,9 @@ BEGIN
 										,[StakeLevelList]
 										,LastUpdated) 
 	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-	FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
-	CROSS JOIN  #MemberTempBatch t
-	WHERE ExchangeId= tb.Currency
+	FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+									CROSS JOIN  #MemberTempBatch t
+	WHERE S.ExchangeId=t.currency
 	GROUP BY t.custid, TB.BettypeID
 
 	TRUNCATE TABLE #MemberTempBatch
