@@ -286,37 +286,19 @@ DECLARE @srecommend INT , @max_custid INT
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
-SELECT c.custid
-FROM customer c WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
-	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-WHERE c.roleid = 4  
- AND s.islicensee = 1
- AND ci.Enabled = 1
- AND c.custid <= @max_custid
- AND s.site IN ('11bet','12Bet','24TECH','365online','368Cash','396Club','3star88','568Win','633esports','7Konline','818Bet',
-				'88Goals','88Macao','9bet','9Club','9wickets','A1game','Abcasino','Ae88','AEUG','afb99','AG','allwincity',
-				'alog','ALPHA88','AMG','ANGbet','AnvoFH','Aoncash','Aplus','Apollo','asiabet88','Asian88','Athena000',
-				'Axiawin','B24VN','BE7','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BoinGroup','Bolanation',
-				'Boma365','Bonanza88','BOSSB','Boying','BPLE','Brown888','BWGaming','Cali','Calibet','Callmeboss','CGame',
-				'CGame4','Champion','Dachen','Dade','Datang','Datang001','Dawoo','Debet','DEWA','DF88','DingTai','DTGW',
-				'e8casino','ECLBET','ENT22','ENTAPLAY','erhaozhan','Fabet','FB88','Five88','FLC','G2Win','Gameroom',
-				'GamingSoft','Gampag','Gaobet','gbkj','GESAB','GGBOOK','GMASTER','GPgaming88','GPIGAME','Happy1668',
-				'Happy8','HCVIP','Heaven','Hecbet','HeleThai','Hengcai88','hjccasino','HJTK','HL8','HONBET','Hong88',
-				'HonorW','HOT88','HuangMa','iBET','IBG','IBO','ID88','IGPTech','INSERTGAME','IONclub','ITCbet','Jarvis',
-				'JIBET','JIDU','Jinyazhou','Jumbo88','JZFortune','KeenOcean','KhmerG','KingBet','Kraton','Kudatogel',
-				'KUTECH','Lagadewa','Leng4D','Liga','Lode88','Lucky88','Luckywin88','M8bola','Macaubet','Man1878',
-				'mansion88','MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Monstergol','Mopgaming',
-				'MRCATSB','MTech','Mybet88','N88','N8B','N8G','Nbbet','NBCbet','Newbet','NewFuture','Newhonbet',
-				'OCMS','Okada','OLE777','One88','Onegaming','Opadmin','OPEBET','PanguGame','Pinbo','PKbet','Q8bola',
-				'QASite','Raisetech','Ratugg','Red88','Royal','Salon365','sbt88','Senibet','shengboyun','Siamgame',
-				'Sin88','skykey','Soon88','Spark','spondemo','SSSGaming','Starnet','starsoccer','Sun988','Sunbet138',
-				'SunGame','Sunwin','Swin','Taipanbet','TangChao','TaoCai','TCbet','TGO','Tianbo','TitanCraft','TitanOne',
-				'TLC','TopGame','Tripleone','TXG','txwl002','TYCgame','UN168','Unobet','UwinY','Uwoniwin','VCBA','VN88',
-				'VWIN66','W88','Wanbo','Wanfang','WB101','WBG88','WBS','webet88','weicai','Weiwei','Win68Club','Win88',
-				'WINCLUB88','Winn69','WKCUR','WKIBPH','WKPHIL','WUYICP','Xinbo','XinYo','XTDGT','Yabo3','YAYOU','Yibo',
-				'YongBao','YTX','Yunji','Zbet','Zowin','zt828'
-				)
+SELECT ds.custid
+FROM Dep_CustProductStatus cps (nolock) --Dep_CustProductStatus	
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsHidden, 6) AS hidden	
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsDisabled, 6) AS disabled	
+	INNER JOIN  Dep_custsuper ds with (nolock) 	on cps.CustID = ds.custid
+	INNER JOIN bodb_Licensee.dbo.Licensees s with (nolock) on s.LicenseeName = ds.site 	
+WHERE s.Isactive <> 0	
+	AND disabled.value = 0	
+	AND ds.custid < @max_custid
+	AND ds.site not in ('12B','18Luck','24AVIA','9Wsports','BBIN2','BBIN3','BBIN4','BOG22','ChrisTestR','dabo88','DBP','GGBOOKES','haifa',
+						'HBO999','Heji888','HongChow','Hongtubet','ig128','ISC888','IvoryBet','JGQP8','K8VN','LLGAME','Monaco','mtegames','NextBet','Nova88',
+						'OneSports','Opal88','PKKing','SampleSite','SampleTest','Storm88','Sunrise','Sunriseb2b','tcycyl','TGame','XTD3','Xtu168','YBTech',
+						'ZhiFeng032','ZhiFeng035','Zzun88')	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -357,41 +339,22 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @srecommend INT , @max_custid INT
 
-
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
-SELECT c.custid
-FROM customer c WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
-	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-WHERE c.roleid = 4  
- AND s.islicensee = 1
- AND ci.Enabled = 1
- AND c.custid <= @max_custid
- AND s.site IN ('11bet','12Bet','24TECH','365online','368Cash','396Club','3star88','568Win','633esports','7Konline','818Bet',
-				'88Goals','88Macao','9bet','9Club','9wickets','A1game','Abcasino','Ae88','AEUG','afb99','AG','allwincity',
-				'alog','ALPHA88','AMG','ANGbet','AnvoFH','Aoncash','Aplus','Apollo','asiabet88','Asian88','Athena000',
-				'Axiawin','B24VN','BE7','BetDeal','BETSUN','BigGaming','Bobbet','Bobo88','Bodog','BoinGroup','Bolanation',
-				'Boma365','Bonanza88','BOSSB','Boying','BPLE','Brown888','BWGaming','Cali','Calibet','Callmeboss','CGame',
-				'CGame4','Champion','Dachen','Dade','Datang','Datang001','Dawoo','Debet','DEWA','DF88','DingTai','DTGW',
-				'e8casino','ECLBET','ENT22','ENTAPLAY','erhaozhan','Fabet','FB88','Five88','FLC','G2Win','Gameroom',
-				'GamingSoft','Gampag','Gaobet','gbkj','GESAB','GGBOOK','GMASTER','GPgaming88','GPIGAME','Happy1668',
-				'Happy8','HCVIP','Heaven','Hecbet','HeleThai','Hengcai88','hjccasino','HJTK','HL8','HONBET','Hong88',
-				'HonorW','HOT88','HuangMa','iBET','IBG','IBO','ID88','IGPTech','INSERTGAME','IONclub','ITCbet','Jarvis',
-				'JIBET','JIDU','Jinyazhou','Jumbo88','JZFortune','KeenOcean','KhmerG','KingBet','Kraton','Kudatogel',
-				'KUTECH','Lagadewa','Leng4D','Liga','Lode88','Lucky88','Luckywin88','M8bola','Macaubet','Man1878',
-				'mansion88','MARS','MAX88','Mayayule','Mayfair','Mbet','MFgame','MICL','Monstergol','Mopgaming',
-				'MRCATSB','MTech','Mybet88','N88','N8B','N8G','Nbbet','NBCbet','Newbet','NewFuture','Newhonbet',
-				'OCMS','Okada','OLE777','One88','Onegaming','Opadmin','OPEBET','PanguGame','Pinbo','PKbet','Q8bola',
-				'QASite','Raisetech','Ratugg','Red88','Royal','Salon365','sbt88','Senibet','shengboyun','Siamgame',
-				'Sin88','skykey','Soon88','Spark','spondemo','SSSGaming','Starnet','starsoccer','Sun988','Sunbet138',
-				'SunGame','Sunwin','Swin','Taipanbet','TangChao','TaoCai','TCbet','TGO','Tianbo','TitanCraft','TitanOne',
-				'TLC','TopGame','Tripleone','TXG','txwl002','TYCgame','UN168','Unobet','UwinY','Uwoniwin','VCBA','VN88',
-				'VWIN66','W88','Wanbo','Wanfang','WB101','WBG88','WBS','webet88','weicai','Weiwei','Win68Club','Win88',
-				'WINCLUB88','Winn69','WKCUR','WKIBPH','WKPHIL','WUYICP','Xinbo','XinYo','XTDGT','Yabo3','YAYOU','Yibo',
-				'YongBao','YTX','Yunji','Zbet','Zowin','zt828'
-				)
+SELECT ds.custid
+FROM Dep_CustProductStatus cps (nolock) --Dep_CustProductStatus	
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsHidden, 6) AS hidden	
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsDisabled, 6) AS disabled	
+	INNER JOIN  Dep_custsuper ds with (nolock) 	on cps.CustID = ds.custid
+	INNER JOIN bodb_Licensee.dbo.Licensees s with (nolock) on s.LicenseeName = ds.site 	
+WHERE s.Isactive <> 0	
+	AND disabled.value = 0	
+	AND ds.custid < @max_custid
+	AND ds.site not in ('12B','18Luck','24AVIA','9Wsports','BBIN2','BBIN3','BBIN4','BOG22','ChrisTestR','dabo88','DBP','GGBOOKES','haifa',
+						'HBO999','Heji888','HongChow','Hongtubet','ig128','ISC888','IvoryBet','JGQP8','K8VN','LLGAME','Monaco','mtegames','NextBet','Nova88',
+						'OneSports','Opal88','PKKing','SampleSite','SampleTest','Storm88','Sunrise','Sunriseb2b','tcycyl','TGame','XTD3','Xtu168','YBTech',
+						'ZhiFeng032','ZhiFeng035','Zzun88')	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
