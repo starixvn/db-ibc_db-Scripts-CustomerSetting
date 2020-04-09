@@ -7,7 +7,7 @@ PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 DECLARE @ProductID TINYINT = 41, @Sporttype INT = 241, @Bettype INT  = 3300
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 
-SELECT @MaxCustID = xxx
+SELECT @MaxCustID = 41060849
 
 CREATE TABLE #supers (custid int)
 
@@ -305,15 +305,15 @@ FROM dbo.CustWinLossLimit_Member C WITH (NOLOCK) INNER JOIN #MemberTemp ci WITH(
 WHERE dest.SettingType = 12 AND C.bettype = @fBetType AND C.SportType = @fSportType
 
 --------------------------------------BetSetting-------------------------------------------------
---Agent Level
+-->Agent level
 INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
-										,[SportType]
-										,[BetType]
-										,[StakeLevelList]) 
+									,[SportType]
+									,[BetType]
+									,[StakeLevelList]) 
 SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
-FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
 CROSS JOIN  #SMATemp t
-WHERE ExchangeId=tb.Currency
+WHERE ExchangeId=t.currency
 
 --Member Level
 
