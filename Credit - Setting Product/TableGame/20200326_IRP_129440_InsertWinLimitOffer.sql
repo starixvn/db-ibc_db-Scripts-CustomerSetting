@@ -1,16 +1,21 @@
 /*
 	Created: 20200318@Elodie
-	Task: Insert product profile for Saba.club
+	Task: Insert product profile for TableGames
 	DB: DBTXN/bodb02
 */
-
 USE bodb02
 GO
 
-INSERT INTO	dbo.WinLimit_ProductOffer (ProductID, BetType, IsActive_SMA, IsActive_Company)       
-VALUES	(40, 4901, 1, 0)
+DECLARE @ProductID TINYINT = 40 , @Bettype SMALLINT = 4901
+IF EXISTS (SELECT 1 FROM Winlimit_ProductOffer W WITH (NOLOCK) WHERE W.ProductID = @ProductID AND W.BetType = @Bettype)
+	UPDATE W
+	SET W.IsActive_SMA = 1
+	FROM Winlimit_ProductOffer W WITH (ROWLOCK, UPDLOCK)
+	WHERE W.ProductID = @ProductID AND W.BetType = @Bettype
+ELSE
+	INSERT INTO	dbo.WinLimit_ProductOffer (ProductID, BetType, IsActive_SMA, IsActive_Company)       
+	VALUES	(@ProductID, @Bettype, 1, 0)
 
---DELETE WinLimit_ProductOffer WHERE BetType = 4901
 
 
 
