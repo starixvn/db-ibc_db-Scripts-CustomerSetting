@@ -54,25 +54,10 @@ BEGIN
 							78,
 							81
 						) --supported currencies
-
-	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
-	DECLARE @ProductID TINYINT = 41, @SportType INT = 241
-	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
-	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledBB BIT, bitmapIsDisabledAB BIT, isHiddenBB BIT)
-
-	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
-	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
-	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (13) -- Status
+	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledBB BIT, bitmapIsDisabledAB BIT, isHiddenBB BIT, IsFinished BIT default 0)
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 24
-
-	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
-	FROM #DestinationSportBetType		
-	WHERE SettingType = 13
-
 
 	INSERT INTO #CustList_ST (custid, bitmapIsDisabledBB, bitmapIsDisabledAB, isHiddenBB)
 	SELECT CS.CustID, isDisabledBB.value, isDisabledAB.value, isHiddenBB.value
@@ -85,27 +70,13 @@ BEGIN
 	WHERE (isDisabledBB.value <> isDisabledAB.value	OR isHiddenBB.value != 0)
 		AND ci.Enabled = 1
 
-	WHILE (1 = 1)
-	BEGIN	
-		UPDATE TOP (1) #DestinationSportBetType
-		SET IsFinished = 1
-			,@fBetType = fBetType	
-			,@fSportType = fSportType
-			,@tBetType = tBetType
-			,@tSportType = tSportType
-			,@IsLive = IsLive
-		WHERE IsFinished = 0
-			AND SettingType = 13
-		IF @@ROWCOUNT = 0 BREAK
+	UPDATE cs
+	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #CustList_ST CI WITH(NOLOCK) ON cs.CustID = ci.CustID
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(Ci.bitmapIsDisabledAB, 6) as isDisabled
 
-		UPDATE cs
-		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #CustList_ST CI WITH(NOLOCK) ON cs.CustID = ci.CustID
-			CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabled
-	END
-	DROP TABLE #DestinationSportBetType
 	DROP TABLE #CustList_ST
 	DROP TABLE #supers
 END
