@@ -13,4 +13,4 @@ UPDATE Site_BlockNewCust WITH(ROWLOCK)
 SET BlockNewCust = 1,
 	UnblockTime = @UnblockTime
 
---> Step 2 : Restore DB to DBOTI.CustDB_BackupSetting
+--> Step 2 : Restore DB to DBNOTI.CustDB_AdjustCS
