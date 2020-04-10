@@ -10,7 +10,5 @@ GO
 DELETE ProductLaunchedSiteCurrency WITH(ROWLOCK) WHERE SportType=219
 
 INSERT INTO ProductLaunchedSiteCurrency (SiteID,Currency,SportType,IsLaunched,IsTest, BetType, LaunchedLevel)
-SELECT SiteID,20,219,1,1, 1011, 0
-FROM Site s WITH (NOLOCK)
-WHERE s.isDeposit = 0
+SELECT 0,20,219,1,1, 1011, 0
 
