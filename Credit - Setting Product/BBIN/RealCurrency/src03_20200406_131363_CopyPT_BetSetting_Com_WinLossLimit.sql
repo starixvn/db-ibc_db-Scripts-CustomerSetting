@@ -254,18 +254,18 @@ BEGIN
 	--Update Discount info for members of direct master accounts
 	UPDATE C
 	SET  C.MasterDiscount = 0.005
-	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK)
+	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-		INNER JOIN (SELECT CustID,dest.tSportType,dest.tBetType FROM #DirectTemp CROSS APPLY #DestinationSportBetType dest WHERE dest.SettingType = 3) tmp
-			ON c.SportType = tmp.tSportType AND c.BetType = tmp.tBetType AND ci.mrecommend = tmp.CustID
+		INNER JOIN #DirectTemp tmp ON  ci.mrecommend = tmp.CustID
+	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
 	SET  C.AgentDiscount = 0.005, C.MasterDiscount = 0.005
-	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK)
+	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-		INNER JOIN (SELECT CustID,dest.tSportType,dest.tBetType FROM #DirectTemp CROSS APPLY #DestinationSportBetType dest WHERE dest.SettingType = 3) tmp
-			ON c.SportType = tmp.tSportType AND c.BetType = tmp.tBetType AND ci.recommend = tmp.CustID
+		INNER JOIN #DirectTemp tmp ON  ci.recommend = tmp.CustID
+	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
 
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
