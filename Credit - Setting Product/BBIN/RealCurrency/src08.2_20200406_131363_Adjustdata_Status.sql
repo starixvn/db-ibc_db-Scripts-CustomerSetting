@@ -55,13 +55,13 @@ BEGIN
 							81
 						) --supported currencies
 	
-	CREATE TABLE #CustList_ST (custid INT, IsDisabledBB BIT, IsDisabledAB BIT, isHiddenBB BIT)
+	CREATE TABLE #CustList_ST (custid INT, IsDisabledAB BIT)
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 24
 
-	INSERT INTO #CustList_ST (custid, IsDisabledBB, IsDisabledAB, isHiddenBB)
-	SELECT CS.CustID, isDisabledBB.value, isDisabledAB.value, isHiddenBB.value
-	FROM dbo.CustProductStatus cs WITH(NOLOCK)
+	INSERT INTO #CustList_ST (custid, IsDisabledAB)
+	SELECT CS.CustID, isDisabledAB.value
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustProductStatus cs WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabledAB
