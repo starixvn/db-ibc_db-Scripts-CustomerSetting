@@ -53,6 +53,9 @@ BEGIN
 	IF @isExistDirectAccount = 0
 	BEGIN
 		
+		SET @custid = @srecommend
+		SET @roleid = 4
+		
 		SET @IsUpd_255 = ISNULL((SELECT TOP (1) 1
 							FROM dbo.CustSettingGame WITH (NOLOCK) 
 							WHERE custid = @custid AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01),0)
@@ -67,9 +70,6 @@ BEGIN
 																	
 		IF @IsUpd_255 = 0 AND @IsUpd_211 = 0 AND @IsUpd_244 = 0
 			RETURN
-		
-		SET @custid = @srecommend
-		SET @roleid = 4
 		
 		------ For GD
 		IF @IsUpd_255 = 1
