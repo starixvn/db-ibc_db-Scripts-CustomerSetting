@@ -1,6 +1,6 @@
 /*
 	Created: 20200406@Eden
-	Task: Insert CanSee for BBIN [Redmine: #131363] 
+	Task: Insert CanSee for BBIN - NovaCash Credit Site [Redmine: #131363] 
 	DB: DBCUST/CustDB
 */ 
 USE CustDB
@@ -45,6 +45,11 @@ DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
 SELECT @Sporttype AS SportType, @Bettype AS BetType, t.Currency AS Currency, t.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest
 FROM #OfferedSitesCurrency t
+
+UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
+SET IsLaunched = 0 
+WHERE SportType = @Sporttype and bettype = @Bettype
+	AND SiteID = 3 --789y
 
 DROP TABLE #OfferedSitesCurrency
 
