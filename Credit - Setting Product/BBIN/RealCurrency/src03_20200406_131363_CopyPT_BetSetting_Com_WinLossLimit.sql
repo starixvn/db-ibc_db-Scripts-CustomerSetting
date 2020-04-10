@@ -257,7 +257,7 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
-	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
+	WHERE CI.mrecommend IN (SELECT CustID FROM #DirectTemp)
 		AND  dest.SettingType = 3
 
 	--Update Discount info for members of direct agent accounts
@@ -266,7 +266,7 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
-	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
+	WHERE CI.recommend IN (SELECT CustID FROM #DirectTemp)
 		AND  dest.SettingType = 3
 
 --------------------------------------Win Loss Limit-------------------------------------------------
