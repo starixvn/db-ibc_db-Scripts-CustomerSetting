@@ -135,13 +135,25 @@ BEGIN
 		
 		IF EXISTS (SELECT TOP (1) 1 FROM #DirectMaster_updateComm)
 		BEGIN
-			-- update upline dummy setting
+			-- update upline dummy super setting
 			IF EXISTS (SELECT TOP (1) 1 FROM #DirectMaster_updateComm WHERE isUpd_255 = 1)
 			BEGIN
-				UPDATE dbo.CustSettingGame WITH(UPDLOCK, ROWLOCK)
-				  SET sdiscount = @NewDiscount
-				WHERE custid = @srecommend AND bettype = 1701
-					AND sporttype = 255 AND sdiscount = 0.01
+				
+				IF EXISTS (SELECT TOP (1) 1
+							FROM dbo.CustSettingGame WITH (NOLOCK) 
+							WHERE custid = @srecommend AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01)
+				BEGIN
+					SET @custid = @srecommend
+					SET @roleid = 4
+					
+					EXEC Acc_CustSetting3rd_06
+							@CustId				= @custid,
+							@RoleId				= @roleid,
+							@Discount			= @NewDiscount,
+							@mode				= 'GoldDeluxe',
+							@Sporttype			= 255,
+							@Bettype			= 1701	
+				END	
             END
             
             IF EXISTS (SELECT TOP (1) 1 FROM #DirectMaster_updateComm WHERE isUpd_211 = 1)
@@ -175,17 +187,8 @@ BEGIN
 				
 				IF @@ROWCOUNT = 0 BREAK
 				
-				------ For GD
-				IF @IsUpd_255 = 1
-				BEGIN
-					EXEC Acc_CustSetting3rd_06
-							@CustId				= @custid,
-							@RoleId				= @roleid,
-							@Discount			= @NewDiscount,
-							@mode				= 'GoldDeluxe',
-							@Sporttype			= 255,
-							@Bettype			= 1701	
-				END 
+				------ For GD: already update by dummy super
+				
 				------ For AllBet & SA Gaming
 				IF @IsUpd_211 = 1 AND @IsUpd_244 = 1
 					SET @Discount_XML = @Discount_XML_211_244
@@ -229,13 +232,24 @@ BEGIN
 			
 		IF EXISTS (SELECT TOP (1) 1 FROM #DirectAgent_updateComm)
 		BEGIN
-			-- update upline dummy super setting
+			-- update upline dummy super and downline for GD
 			IF EXISTS (SELECT TOP (1) 1 FROM #DirectAgent_updateComm WHERE isUpd_255 = 1)
 			BEGIN
-				UPDATE dbo.CustSettingGame WITH(UPDLOCK, ROWLOCK)
-				  SET sdiscount = @NewDiscount
-				WHERE custid = @srecommend 
-					AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01
+				IF EXISTS (SELECT TOP (1) 1
+							FROM dbo.CustSettingGame WITH (NOLOCK) 
+							WHERE custid = @srecommend AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01)
+				BEGIN
+					SET @custid = @srecommend
+					SET @roleid = 4
+					
+					EXEC Acc_CustSetting3rd_06
+							@CustId				= @custid,
+							@RoleId				= @roleid,
+							@Discount			= @NewDiscount,
+							@mode				= 'GoldDeluxe',
+							@Sporttype			= 255,
+							@Bettype			= 1701	
+				END	
             END
             
             IF EXISTS (SELECT TOP (1) 1 FROM #DirectAgent_updateComm WHERE isUpd_211 = 1)
@@ -271,24 +285,8 @@ BEGIN
 				IF @@ROWCOUNT = 0 BREAK
 				
 				-------- Update direct agent and downline ------------
-				------ For GD -------------
-				IF @IsUpd_255 = 1
-				BEGIN
-					-- update dummy master setting
-					UPDATE dbo.CustSettingGame WITH(UPDLOCK, ROWLOCK)
-					  SET adiscount = @NewDiscount
-					WHERE custid = @uplinedummy AND bettype = 1701
-						AND sporttype = 255 AND adiscount = 0.01
-					
-					-- update direct agent and downline	
-					EXEC Acc_CustSetting3rd_06
-							@CustId				= @custid,
-							@RoleId				= @roleid,
-							@Discount			= @NewDiscount,
-							@mode				= 'GoldDeluxe',
-							@Sporttype			= 255,
-							@Bettype			= 1701	
-				END 
+				------ For GD: already update by dummy super
+				
 				------ For AllBet & SA Gaming
 				IF @IsUpd_211 = 1 AND @IsUpd_244 = 1
 					SET @Discount_XML = @Discount_XML_211_244
