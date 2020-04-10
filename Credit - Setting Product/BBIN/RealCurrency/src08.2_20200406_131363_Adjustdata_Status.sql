@@ -55,13 +55,13 @@ BEGIN
 							81
 						) --supported currencies
 	
-	CREATE TABLE #CustList_ST (custid INT, bitmapIsDisabledBB BIT, bitmapIsDisabledAB BIT, isHiddenBB BIT, IsFinished BIT default 0)
+	CREATE TABLE #CustList_ST (custid INT, IsDisabledBB BIT, IsDisabledAB BIT, isHiddenBB BIT)
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 24
 
-	INSERT INTO #CustList_ST (custid, bitmapIsDisabledBB, bitmapIsDisabledAB, isHiddenBB)
+	INSERT INTO #CustList_ST (custid, IsDisabledBB, IsDisabledAB, isHiddenBB)
 	SELECT CS.CustID, isDisabledBB.value, isDisabledAB.value, isHiddenBB.value
-	FROM DBNOTI.CustDB_AdjustCS.dbo.CustProductStatus cs WITH(NOLOCK)
+	FROM dbo.CustProductStatus cs WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabledAB
@@ -72,10 +72,9 @@ BEGIN
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.IsDisabledAB)) 	
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #CustList_ST CI WITH(NOLOCK) ON cs.CustID = ci.CustID
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(Ci.bitmapIsDisabledAB, 6) as isDisabled
 
 	DROP TABLE #CustList_ST
 	DROP TABLE #supers
