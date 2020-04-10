@@ -4,4 +4,6 @@
 	DB: DBCUST/CUSTDB and CustDB_CustSetting Publication
 */
 USE CustDB
+GO
 ALTER TABLE ProblemAccountReason ADD ReasonNameCS NVARCHAR(100)
+ALTER TABLE ProblemAccountReason ADD ReasonGroupID TINYINT
