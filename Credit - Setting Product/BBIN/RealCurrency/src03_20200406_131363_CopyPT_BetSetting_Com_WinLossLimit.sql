@@ -61,7 +61,7 @@ BEGIN
 		roleid TINYINT
 	)
 
-		DECLARE @DirectTemp TABLE
+	CREATE TABLE #DirectTemp 
 	(
 		CustID INT PRIMARY KEY,
 		roleid TINYINT
@@ -83,7 +83,7 @@ BEGIN
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
 	
-	INSERT INTO @DirectTemp (CustID,roleid) --Direct Master, Agent
+	INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
 	SELECT ci.custid, ci.roleid
 	FROM Custinfo ci WITH (NOLOCK)
 	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
@@ -216,7 +216,7 @@ BEGIN
 	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
 			0.005
 	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
-		INNER JOIN @DirectTemp ci  ON C.CustID = ci.custid
+		INNER JOIN #DirectTemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE  dest.SettingType = 3
 		AND CI.roleid IN (2,3)
@@ -230,7 +230,7 @@ BEGIN
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE dest.SettingType = 3
 		AND ci.roleid IN (2,3)
-		AND NOT EXISTS (SELECT 1 FROM @DirectTemp D WHERE D.CustID = CI.CustID)
+		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WHERE D.CustID = CI.CustID)
 
 	--Update Discount info for dummy master
 	UPDATE C
@@ -238,7 +238,7 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 	WHERE EXISTS (SELECT 1 
-					FROM @DirectTemp D 
+					FROM #DirectTemp D 
 						INNER JOIN custinfo ci WITH (NOLOCK) ON ci.custid = D.CustID
 					WHERE d.roleid = 2 AND ci.mrecommend = c.CustID)
 		AND  dest.SettingType = 3
@@ -257,8 +257,8 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
-	WHERE CI.mrecommend IN (SELECT CustID FROM @DirectTemp)
-		AND  dest.SettingType = 3
+		INNER JOIN #DirectTemp t ON t.CustID = ci.mrecommend
+	WHERE dest.SettingType = 3
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
@@ -266,8 +266,8 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
-	WHERE CI.recommend IN (SELECT CustID FROM @DirectTemp)
-		AND  dest.SettingType = 3
+		INNER JOIN #DirectTemp t ON t.CustID = ci.recommend
+	WHERE dest.SettingType = 3
 
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
