@@ -3,17 +3,7 @@
 	Task: Adjust Status for BBIN [Redmine: #131363]
 	DB: DBCUST/CustDB
 */ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
-AS
-BEGIN
-	SET NOCOUNT ON
-	
-	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
-	   AND dbo.f_CheckRepTable('CustProductStatus') = 1
-	   AND dbo.f_CheckRepTable('ProductSettingDetail') = 1
-	   AND dbo.f_CheckRepTable('ProductStatusProfile') = 1
-	   )
-		RETURN
+
 	
 	CREATE TABLE #supers (custid int)
 
@@ -79,16 +69,3 @@ BEGIN
 
 	DROP TABLE #CustList_ST
 	DROP TABLE #supers
-END
-GO
-
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
-
--- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
---------------------------------------------------------------------------------------
-PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
-
-EXEC dbo.Acc_DynamicCustomerInfo_09 
-
-PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
