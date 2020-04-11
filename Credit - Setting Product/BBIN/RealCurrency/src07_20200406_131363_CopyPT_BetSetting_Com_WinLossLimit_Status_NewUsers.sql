@@ -255,7 +255,6 @@ WHERE dest.SettingType = 3
 --Update Discount info for dummy master
 UPDATE C
 SET  C.Discount = 0.005
-OUTPUT inserted.CustID
 FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
 	INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 WHERE EXISTS (SELECT 1 
