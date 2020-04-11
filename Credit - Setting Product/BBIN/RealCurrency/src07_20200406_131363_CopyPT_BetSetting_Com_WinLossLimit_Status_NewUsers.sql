@@ -245,9 +245,12 @@ WHERE dest.SettingType = 3
 	AND ci.roleid IN (2,3)
 	AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = CI.CustID)
 
+DECLARE @MasterDummy TABLE (custid int)
+
 --Update Discount info for dummy master
 UPDATE C
 SET  C.Discount = 0.005
+OUTPUT inserted.CustID INTO @MasterDummy(custid)
 FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
 	INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 WHERE EXISTS (SELECT 1 
@@ -285,6 +288,14 @@ WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.C
 	AND  dest.SettingType = 3
 	AND c.CustID > @MaxCustID
 
+--Update MasterDiscount of Member is downline of dummy master
+	UPDATE C
+	SET  C.MasterDiscount = 0.005
+	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
+		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
+		INNER JOIN @MasterDummy tmp ON  ci.mrecommend = tmp.CustID
+	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
+		AND c.CustID > @MaxCustID
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		
