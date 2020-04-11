@@ -107,7 +107,7 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.roleid IN (2,3)
 
 INSERT INTO @MasterDummy (custid)
-SELECT ci.mrecommend
+SELECT DISTINCT ci.mrecommend
 FROM #DirectTemp da
 	INNER JOIN dbo.custInfo ci ON ci.custid = da.CustID
 WHERE da.roleid = 2
