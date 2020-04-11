@@ -13,6 +13,7 @@ UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
 SET IsLaunched = 0
 WHERE SportType = @Sporttype and bettype = @Bettype
 	AND SiteID = 3 --789y
+	AND Currency <> 72
 
 --SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 241
 
