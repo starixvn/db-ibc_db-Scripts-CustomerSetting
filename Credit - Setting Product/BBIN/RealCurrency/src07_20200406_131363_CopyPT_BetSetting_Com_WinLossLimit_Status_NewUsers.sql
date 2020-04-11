@@ -86,6 +86,7 @@ CREATE TABLE #DirectTemp
 	CustID INT PRIMARY KEY CLUSTERED,
 	roleid TINYINT
 )
+DECLARE @MasterDummy TABLE (custid int) 
 
 INSERT INTO #MemberTemp (CustID, currency)
 SELECT custid, currency
@@ -104,6 +105,12 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 	AND ci.Enabled=1
 	AND ci.roleid IN (2,3)
+
+INSERT INTO @MasterDummy (custid)
+SELECT ci.mrecommend
+FROM #DirectTemp da
+	INNER JOIN dbo.custInfo ci ON ci.custid = da.CustID
+WHERE da.roleid = 2
 
 INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList,Currency)
 SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList,sma.currency
@@ -245,12 +252,10 @@ WHERE dest.SettingType = 3
 	AND ci.roleid IN (2,3)
 	AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = CI.CustID)
 
-DECLARE @MasterDummy TABLE (custid int)
-
 --Update Discount info for dummy master
 UPDATE C
 SET  C.Discount = 0.005
-OUTPUT inserted.CustID INTO @MasterDummy(custid)
+OUTPUT inserted.CustID
 FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
 	INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
 WHERE EXISTS (SELECT 1 
