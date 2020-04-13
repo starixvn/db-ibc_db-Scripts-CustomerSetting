@@ -47,13 +47,14 @@ BEGIN
 	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.Enabled=1
 		AND ci.roleid IN (2,3)
+
 	
 	INSERT INTO #DirectSMA (CustID,roleid, Currency) --Dummy Master
-	SELECT DISTINCT ci.custid, ci.roleid, ci.currency
-	FROM Custinfo ci WITH (NOLOCK) INNER JOIN #DirectSMA D WITH (NOLOCK) ON ci.mrecommend = D.custid
+	SELECT DISTINCT ci.mrecommend, 3 AS roleid, ci.currency
+	FROM Custinfo ci WITH (NOLOCK) INNER JOIN #DirectSMA D WITH (NOLOCK) ON ci.custid = D.custid
 	WHERE  ci.Enabled=1
-		AND ci.roleid IN (3)
-		AND CI.custid != D.CustID
+		AND CI.roleid = 2
+		
 
 	--Create Stakelevelid that need to be updated for each sport
 	CREATE TABLE #StakeLevelID_Update
