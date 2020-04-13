@@ -22,6 +22,7 @@ BEGIN
 
 	SELECT ci.custid, ci.currency
 	FROM customer ci WITH (NOLOCK) 
+		INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = CI.custid
 		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 		LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.roleid = 4  
@@ -31,6 +32,7 @@ BEGIN
 		AND s.islicensee = 0
 		AND ci.Site NOT IN ('CN88', '789y')
 		AND ci.currency IN (15,22,33,34,47) --( 'IDD', 'IDR', 'IN', 'IND','DDD')
+		AND C.Enabled=1
 
 	CREATE TABLE #DirectSMA
 	(
