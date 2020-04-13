@@ -35,8 +35,8 @@ VALUES
 --WinLossLimit Setting																																				
 	,	(	6		   , 222		, 4901		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 4           , @SettingStatus, NULL)
 
-INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
-VALUES	(222, 4901, @BitmapOrder)
+--INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
+--VALUES	(222, 4901, @BitmapOrder)
 
 INSERT INTO dbo.ProductBetSetting
         ( Sporttype ,
