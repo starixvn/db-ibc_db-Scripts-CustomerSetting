@@ -48,8 +48,8 @@ WHERE MinStake > 999
 
 SET IDENTITY_INSERT StakeLevel ON
 
-INSERT INTO StakeLevel (StakeLevelID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
-SELECT T.StakeLevelID, T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
+INSERT INTO StakeLevel (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
+SELECT T.StakeLevelID, T.GameTypeID, T.MinLabel, T.MaxLabel, T.MinStake , T.MaxStake, T.ExchangeId
 FROM #temp T WITH(NOLOCK)
 WHERE T.GameTypeID IN (2401,3001,3101)
 
