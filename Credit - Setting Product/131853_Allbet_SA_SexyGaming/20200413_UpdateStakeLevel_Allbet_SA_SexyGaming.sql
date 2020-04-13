@@ -40,12 +40,18 @@ BEGIN
 	)
 		
 	INSERT INTO #DirectSMA (CustID,roleid, Currency) --Master, Agent
-	SELECT ci.custid, ci.roleid, ci.currency
+	SELECT DISTINCT ci.custid, ci.roleid, ci.currency
 	FROM Custinfo ci WITH (NOLOCK) INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
-		AND ci.srecommend = ci.srecommend 
 		AND ci.Enabled=1
 		AND ci.roleid IN (2,3)
+	
+	INSERT INTO #DirectSMA (CustID,roleid, Currency) --Dummy Master
+	SELECT DISTINCT ci.custid, ci.roleid, ci.currency
+	FROM Custinfo ci WITH (NOLOCK) INNER JOIN #DirectSMA D WITH (NOLOCK) ON ci.mrecommend = D.custid
+	WHERE  ci.Enabled=1
+		AND ci.roleid IN (3)
+		AND CI.custid != D.CustID
 
 	--Create Stakelevelid that need to be updated for each sport
 	CREATE TABLE #StakeLevelID_Update
