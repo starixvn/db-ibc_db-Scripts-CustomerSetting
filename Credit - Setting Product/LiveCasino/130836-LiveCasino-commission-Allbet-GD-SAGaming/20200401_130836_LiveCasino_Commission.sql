@@ -8,6 +8,7 @@
 ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
 	@srecommend INT
 	,@isExistDirectAccount BIT = 0
+	,@IsExcludeAllbet_GD BIT = 0
 	,@target VARCHAR(20) = NULL
 	
 AS
@@ -47,20 +48,22 @@ BEGIN
 	
 	SET @NewDiscount = 0.008
 	
-		
 	-------- UPDATE commission customer setting -------------
 	---- for Real Super---------
 
 	SET @custid = @srecommend
 	SET @roleid = 4
 	
-	SET @IsUpd_255 = ISNULL((SELECT TOP (1) 1
-						FROM dbo.CustSettingGame WITH (NOLOCK) 
-						WHERE custid = @custid AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01),0)
+	IF @IsExcludeAllbet_GD = 0
+	BEGIN
 	
-	SET @IsUpd_211 = ISNULL((SELECT TOP (1) 1
-						FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
-						WHERE custid = @custid AND sporttype = 211 AND bettype = 2401 AND Discount = 0.01),0)	
+		SET @IsUpd_255 = ISNULL((SELECT TOP (1) 1
+							FROM dbo.CustSettingGame WITH (NOLOCK) 
+							WHERE custid = @custid AND sporttype = 255 AND bettype = 1701 AND sdiscount = 0.01),0)
+		SET @IsUpd_211 = ISNULL((SELECT TOP (1) 1
+							FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
+							WHERE custid = @custid AND sporttype = 211 AND bettype = 2401 AND Discount = 0.01),0)	
+	END
 	
 	SET @IsUpd_244 = ISNULL((SELECT TOP (1) 1
 						FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
@@ -70,7 +73,7 @@ BEGIN
 		RETURN
 	
 	------ For GD
-	IF @IsUpd_255 = 1
+	IF @IsUpd_255 = 1 
 	BEGIN
 		EXEC Acc_CustSetting3rd_06
 			@CustId				= @custid,
@@ -81,7 +84,6 @@ BEGIN
 			@Bettype			= 1701	
 	END		 
 	------ For AllBet & SA Gaming
-	
 	IF @IsUpd_211 = 1 AND @IsUpd_244 = 1
 		SET @Discount_XML = @Discount_XML_211_244
 	ELSE IF @IsUpd_211 = 1
@@ -105,10 +107,10 @@ GO
 ------------------------------------------------------	
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid int,isfinished BIT DEFAULT(0), isExistDirectAccount BIT)
+CREATE TABLE #supers (custid int,isfinished BIT DEFAULT(0), isExistDirectAccount BIT, IsExcludeAllbet_GD BIT)
 CREATE TABLE #supers_ExistingDirectAccount (custid INT, site VARCHAR(10) )
 
-DECLARE @srecommend INT, @isExistDirectAccount BIT
+DECLARE @srecommend INT, @isExistDirectAccount BIT, @IsExcludeAllbet_GD BIT = 0
 
 INSERT INTO #supers_ExistingDirectAccount (custid,site)
 -- Get direct Master
@@ -123,8 +125,9 @@ WHERE custid IN (select custid FROM dbo.CustDirectAccount WITH(NOLOCK))
 
 -- list of supers
 -- real super
-INSERT INTO #supers(custid,isExistDirectAccount)
+INSERT INTO #supers(custid,isExistDirectAccount, IsExcludeAllbet_GD)
 SELECT ci.custid,0
+	, CASE WHEN c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo') THEN 1 ELSE 0 END
 FROM dbo.customer c WITH (NOLOCK) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
@@ -140,7 +143,7 @@ WHERE ci.roleid = 4
 		
 UNION ALL
 -- dummy super
-SELECT s.custid, 1
+SELECT s.custid, 1,0
 FROM #supers_ExistingDirectAccount s
 	INNER JOIN dbo.Custinfo ci WITH (NOLOCK) ON s.custid = ci.custid
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON s.custid = c.custid
@@ -166,6 +169,7 @@ BEGIN
 	SET isfinished = 1
 		,@srecommend = custid	
 		,@isExistDirectAccount = isExistDirectAccount
+		,@IsExcludeAllbet_GD = IsExcludeAllbet_GD 
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -176,6 +180,7 @@ BEGIN
 			
 	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend
 			, @isExistDirectAccount = @isExistDirectAccount
+			, @IsExcludeAllbet_GD = @IsExcludeAllbet_GD
 			, @target = 'REPLICATED'
 			
 	WAITFOR DELAY '00:00:0.100'
@@ -185,10 +190,10 @@ END
 GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid int,isfinished BIT DEFAULT(0), isExistDirectAccount BIT)
+CREATE TABLE #supers (custid int,isfinished BIT DEFAULT(0), isExistDirectAccount BIT, IsExcludeAllbet_GD BIT)
 CREATE TABLE #supers_ExistingDirectAccount (custid INT, site VARCHAR(10) )
 
-DECLARE @srecommend INT, @isExistDirectAccount BIT
+DECLARE @srecommend INT, @isExistDirectAccount BIT, @IsExcludeAllbet_GD BIT = 0
 
 INSERT INTO #supers_ExistingDirectAccount (custid,site)
 -- Get direct Master
@@ -203,14 +208,15 @@ WHERE custid IN (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK))
 
 -- list of supers
 -- real super
-INSERT INTO #supers(custid,isExistDirectAccount)
+INSERT INTO #supers(custid,isExistDirectAccount, IsExcludeAllbet_GD)
 SELECT ci.custid,0
+	, CASE WHEN c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo') THEN 1 ELSE 0 END
 FROM dbo.customer c WITH (NOLOCK) 
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
-	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4
-	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
 	AND ci.custid NOT IN (SELECT custid FROM #supers_ExistingDirectAccount)
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
@@ -220,7 +226,7 @@ WHERE ci.roleid = 4
 		
 UNION ALL
 -- dummy super
-SELECT s.custid, 1
+SELECT s.custid, 1, 0
 FROM #supers_ExistingDirectAccount s
 	INNER JOIN dbo.Custinfo ci WITH (NOLOCK) ON s.custid = ci.custid
 	INNER JOIN dbo.customer c WITH (NOLOCK) ON s.custid = c.custid
@@ -246,6 +252,7 @@ BEGIN
 	SET isfinished = 1
 		,@srecommend = custid	
 		,@isExistDirectAccount = isExistDirectAccount
+		,@IsExcludeAllbet_GD = IsExcludeAllbet_GD 
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -256,6 +263,7 @@ BEGIN
 
 	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend
 			, @isExistDirectAccount = @isExistDirectAccount
+			, @IsExcludeAllbet_GD = @IsExcludeAllbet_GD
 			, @target = 'DBCUST'
 						
 	WAITFOR DELAY '00:00:0.100'
