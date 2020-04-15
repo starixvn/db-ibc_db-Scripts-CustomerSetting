@@ -31,8 +31,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	--IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
+	--IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 
 	DECLARE @Discount_XML_211_244_243_241 VARCHAR(MAX) = ''
 			, @custid INT
@@ -47,26 +47,11 @@ BEGIN
 								,isfinished_255 bit default(0)
 								,isfinished_211_244_243_241 bit default(0)
 								)
-	
-	CREATE TABLE #StakeLevel_List_255 (custid INT,GameTypeID INT, StakeLevelList VARCHAR(100))
-	
-	CREATE TABLE #StakeLevel_List_211_244_243_241 (custid INT,sporttype SMALLINT,bettype INT, StakeLevelList VARCHAR(200))
-	
 	----- DATA preparation ---------
 	INSERT INTO #MasterList (CustID)
 	SELECT custid
 	FROM dbo.Customer c WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 3
-	
-	INSERT INTO #StakeLevel_List_255 (custid, GameTypeID,StakeLevelList)
-	SELECT custid,GameTypeID, StakeLevelList
-	FROM dbo.CustGameType WITH (NOLOCK)
-	WHERE CustID = @srecommend AND GameTypeID IN (1701,1702)
-	
-	INSERT INTO #StakeLevel_List_211_244_243_241 (custid, sporttype, bettype, StakeLevelList)
-	SELECT custid, sporttype, bettype, StakeLevelList
-	FROM dbo.CustStakeLevel_Agent WITH (NOLOCK)
-	WHERE CustID = @srecommend AND SportType IN (211, 244, 243, 241)
 	
 	-------- UPDATE commission customer setting -------------
 	SET @Discount_255 = ISNULL((SELECT TOP (1) sdiscount
@@ -111,13 +96,6 @@ BEGIN
 			@Bettype			= 1701	
 	END
 	
-	-- Stake Level List
-	UPDATE cgt
-		SET StakeLevelList = sl.StakeLevelList
-	FROM dbo.CustGameType cgt WITH (ROWLOCK)
-		INNER JOIN #MasterList m ON cgt.CustID = m.CustID
-		INNER JOIN #StakeLevel_List_255 sl ON cgt.GameTypeID = sl.GameTypeID	
-	
 	------ For AllBet & SA Gaming
 	WHILE (1=1)
 	BEGIN
@@ -134,12 +112,39 @@ BEGIN
 				, @SettingType  = 3
 				, @Discount_XML = @Discount_XML_211_244_243_241
 	END
+	
+	/*
+	CREATE TABLE #StakeLevel_List_255 (custid INT,GameTypeID INT, StakeLevelList VARCHAR(100))
+	
+	CREATE TABLE #StakeLevel_List_211_244_243_241 (custid INT,sporttype SMALLINT,bettype INT, StakeLevelList VARCHAR(200))
+	
+	INSERT INTO #StakeLevel_List_255 (custid, GameTypeID,StakeLevelList)
+	SELECT custid,GameTypeID, StakeLevelList
+	FROM dbo.CustGameType WITH (NOLOCK)
+	WHERE CustID = @srecommend AND GameTypeID IN (1701,1702)
+	
+	INSERT INTO #StakeLevel_List_211_244_243_241 (custid, sporttype, bettype, StakeLevelList)
+	SELECT custid, sporttype, bettype, StakeLevelList
+	FROM dbo.CustStakeLevel_Agent WITH (NOLOCK)
+	WHERE CustID = @srecommend AND SportType IN (211, 244, 243, 241)
+	
+	-- Stake Level List
+	UPDATE cgt
+		SET StakeLevelList = sl.StakeLevelList
+	FROM dbo.CustGameType cgt WITH (ROWLOCK)
+		INNER JOIN #MasterList m ON cgt.CustID = m.CustID
+		INNER JOIN #StakeLevel_List_255 sl ON cgt.GameTypeID = sl.GameTypeID
+	
 	-- update stakelevel
 	UPDATE cgt
 		SET StakeLevelList = sl.StakeLevelList
 	FROM dbo.CustStakeLevel_Agent cgt WITH (ROWLOCK)
 		INNER JOIN #MasterList m ON cgt.CustID = m.CustID
 		INNER JOIN #StakeLevel_List_211_244_243_241 sl ON cgt.SportType = sl.sporttype AND cgt.BetType = sl.bettype 	
+			
+	*/
+	
+	DROP TABLE #MasterList	
 	
 END
 GO
