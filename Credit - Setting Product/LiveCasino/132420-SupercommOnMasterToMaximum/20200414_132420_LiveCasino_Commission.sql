@@ -16,8 +16,6 @@
 */ 
 ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
 	@srecommend INT
-	,@isExistDirectAccount BIT = 0
-	,@IsExcludeAllbet_GD BIT = 0
 	,@target VARCHAR(20) = NULL
 	
 AS
@@ -33,13 +31,11 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 
 	DECLARE @Discount_XML_211_244_243_241 VARCHAR(MAX) = ''
-			, @NewDiscount DECIMAL(9,8) 
 			, @custid INT
-			, @uplinedummy INT
-			, @roleid TINYINT
-			
 			, @Discount_255 DECIMAL(9,8) 
 			, @Discount_211 DECIMAL(9,8) 
 			, @Discount_244 DECIMAL(9,8) 
@@ -52,16 +48,30 @@ BEGIN
 								,isfinished_211_244_243_241 bit default(0)
 								)
 	
+	CREATE TABLE #StakeLevel_List_255 (custid INT,GameTypeID INT, StakeLevelList VARCHAR(100))
+	
+	CREATE TABLE #StakeLevel_List_211_244_243_241 (custid INT,sporttype SMALLINT,bettype INT, StakeLevelList VARCHAR(200))
+	
+	----- DATA preparation ---------
 	INSERT INTO #MasterList (CustID)
 	SELECT custid
 	FROM dbo.Customer c WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 3
 	
+	INSERT INTO #StakeLevel_List_255 (custid, GameTypeID,StakeLevelList)
+	SELECT custid,GameTypeID, StakeLevelList
+	FROM dbo.CustGameType WITH (NOLOCK)
+	WHERE CustID = @srecommend AND GameTypeID IN (1701,1702)
+	
+	INSERT INTO #StakeLevel_List_211_244_243_241 (custid, sporttype, bettype, StakeLevelList)
+	SELECT custid, sporttype, bettype, StakeLevelList
+	FROM dbo.CustStakeLevel_Agent WITH (NOLOCK)
+	WHERE CustID = @srecommend AND SportType IN (211, 244, 243, 241)
+	
 	-------- UPDATE commission customer setting -------------
 	SET @Discount_255 = ISNULL((SELECT TOP (1) sdiscount
 						FROM dbo.CustSettingGame WITH (NOLOCK) 
-						WHERE custid = @srecommend AND sporttype = 255 AND bettype = 1701
-						),0)
+						WHERE custid = @srecommend AND sporttype = 255 AND bettype = 1701),0)
 							
 	SET @Discount_211 =	ISNULL((SELECT TOP (1) Discount
 						FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
@@ -79,7 +89,8 @@ BEGIN
 						FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
 						WHERE custid = @srecommend AND sporttype = 244 AND bettype = 3001 ),0)
 
-	SET @Discount_XML_211_244_243_241 = '<ROOT><Discount SportType="211" BetType="2401" Discount="'+CONVERT(VARCHAR(20),@Discount_211)+'"/><Discount SportType="241" BetType="3300" Discount="'+CONVERT(VARCHAR(20),@Discount_241)+'"/><Discount SportType="243" BetType="3101" Discount="'+CONVERT(VARCHAR(20),@Discount_243)+'"/><Discount SportType="244" BetType="3001" Discount="'+CONVERT(VARCHAR(20),@Discount_244)+'"/>	</ROOT>'
+	SET @Discount_XML_211_244_243_241 = ''
+	SET @Discount_XML_211_244_243_241 = @Discount_XML_211_244_243_241 + '<ROOT><Discount SportType="211" BetType="2401" Discount="'+CONVERT(VARCHAR(20),@Discount_211)+'"/><Discount SportType="241" BetType="3300" Discount="'+CONVERT(VARCHAR(20),@Discount_241)+'"/><Discount SportType="243" BetType="3101" Discount="'+CONVERT(VARCHAR(20),@Discount_243)+'"/><Discount SportType="244" BetType="3001" Discount="'+CONVERT(VARCHAR(20),@Discount_244)+'"/>	</ROOT>'
 						
 	------ For GD
 	WHILE (1=1)
@@ -99,8 +110,14 @@ BEGIN
 			@Sporttype			= 255,
 			@Bettype			= 1701	
 	END
-			
-			 
+	
+	-- Stake Level List
+	UPDATE cgt
+		SET StakeLevelList = sl.StakeLevelList
+	FROM dbo.CustGameType cgt WITH (ROWLOCK)
+		INNER JOIN #MasterList m ON cgt.CustID = m.CustID
+		INNER JOIN #StakeLevel_List_255 sl ON cgt.GameTypeID = sl.GameTypeID	
+	
 	------ For AllBet & SA Gaming
 	WHILE (1=1)
 	BEGIN
@@ -113,10 +130,17 @@ BEGIN
 
 		EXEC dbo.Acc_DynamicCustSetting3rd_06
 				@CustId			= @custid
-				, @RoleId		= @roleid
+				, @RoleId		= 3
 				, @SettingType  = 3
 				, @Discount_XML = @Discount_XML_211_244_243_241
 	END
+	-- update stakelevel
+	UPDATE cgt
+		SET StakeLevelList = sl.StakeLevelList
+	FROM dbo.CustStakeLevel_Agent cgt WITH (ROWLOCK)
+		INNER JOIN #MasterList m ON cgt.CustID = m.CustID
+		INNER JOIN #StakeLevel_List_211_244_243_241 sl ON cgt.SportType = sl.sporttype AND cgt.BetType = sl.bettype 	
+	
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -164,7 +188,6 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 			
 	EXEC dbo.Acc_Custsetting3rd_19 @srecommend = @srecommend
-			
 			, @target = 'REPLICATED'
 			
 	WAITFOR DELAY '00:00:0.100'
