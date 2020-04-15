@@ -163,7 +163,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo','Mod','dh','hd')
+	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo','Mod','hd')
 
 -- For deployer info
 
@@ -213,7 +213,7 @@ WHERE ci.roleid = 4
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
-	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo','Mod','dh','hd')
+	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo','Mod','hd')
 
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
