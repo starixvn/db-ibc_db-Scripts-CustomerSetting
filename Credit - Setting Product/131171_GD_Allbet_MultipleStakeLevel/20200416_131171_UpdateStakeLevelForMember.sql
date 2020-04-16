@@ -27,25 +27,28 @@ BEGIN
 	--Get list of member whose StakeLevelList need to get all checked stakelevel from agent
 	CREATE TABLE #CustStakeLevelMember_All (
 			CustID INT 
-			,AgentID INT		
-			,Bettype INT
+			,AgentID INT
+			,Sporttype SMALLINT
+			,Bettype SMALLINT
 			,StakeLevelList VARCHAR(100)
 			,StakeLevelList_new VARCHAR(100)							
-			, PRIMARY KEY CLUSTERED (CustID,Bettype)
+			, PRIMARY KEY CLUSTERED (CustID,Sporttype,Bettype)
 		)
 
-	INSERT INTO #CustStakeLevelMember_All (CustID,AgentID,Bettype,StakeLevelList,StakeLevelList_new)
+	INSERT INTO #CustStakeLevelMember_All (CustID,AgentID,Sporttype,Bettype,StakeLevelList,StakeLevelList_new)
 	SELECT CI.custid,
-		  CI.recommend AS AgentID,		
-		 cs.Bettype,
-		 cs.StakeLevelList,
-		 CA.StakeLevelList
+		  CI.recommend AS AgentID,	
+		  cs.SportType,
+		  cs.Bettype,
+		  cs.StakeLevelList,
+		  CA.StakeLevelList
 	FROM dbo.custinfo CI WITH(NOLOCK)
 		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid	
-		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.BetType = CA.BetType
+		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.SportType = CA.SportType AND CS.BetType = CA.BetType
 	WHERE CI.srecommend = @srecommend 
 		AND roleid = 1
 		AND CI.Enabled = 1
+		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
@@ -53,25 +56,28 @@ BEGIN
 	--Get list of member whose stakelevel are empty or null
 	CREATE TABLE #CustStakeLevelMember_Lowest (
 			CustID INT 
-			,AgentID INT		
-			,Bettype INT
+			,AgentID INT
+			,Sporttype SMALLINT
+			,Bettype SMALLINT
 			,StakeLevelList VARCHAR(100)
 			,StakeLevelList_new VARCHAR(100)							
-			, PRIMARY KEY CLUSTERED (CustID,Bettype)
+			, PRIMARY KEY CLUSTERED (CustID,Sporttype,Bettype)
 		)
 
-	INSERT INTO #CustStakeLevelMember_Lowest (CustID,AgentID,Bettype,StakeLevelList,StakeLevelList_new)
+	INSERT INTO #CustStakeLevelMember_Lowest (CustID,AgentID,Sporttype,Bettype,StakeLevelList,StakeLevelList_new)
 	SELECT CI.custid,
-		  CI.recommend AS AgentID,		
-		 cs.Bettype,
-		 cs.StakeLevelList,
-		 CA.StakeLevelList
+		  CI.recommend AS AgentID,
+		  cs.SportType,
+		  cs.Bettype,
+		  cs.StakeLevelList,
+		  CA.StakeLevelList
 	FROM dbo.custinfo CI WITH(NOLOCK)
 		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid
-		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.BetType = CA.BetType
+		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.SportType = CA.SportType AND CS.BetType = CA.BetType 
 	WHERE  CI.srecommend = @srecommend
 		AND roleid = 1
 		AND CI.Enabled = 1
+		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 		AND CS.StakeLevelList = '' 
 		AND CS.StakeLevelList IS NULL
@@ -94,8 +100,10 @@ BEGIN
 	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #CustStakeLevelMember_All DL ON CS.CustID = DL.CustID 
+												AND CS.SportType = DL.Sporttype
 												AND CS.bettype = DL.bettype
-	WHERE CS.StakeLevelList <> DL.StakeLevelList_new	
+	WHERE CS.StakeLevelList <> DL.StakeLevelList_new
+		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 
 	--Apply lowest stakelevel from agent to member whose stakelevel is null
@@ -104,8 +112,10 @@ BEGIN
 	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #CustStakeLevelMember_Lowest DL ON CS.CustID = DL.CustID 
+												AND CS.SportType = DL.Sporttype
 												AND CS.bettype = DL.bettype
-	WHERE CS.StakeLevelList <> DL.StakeLevelList_new	
+	WHERE CS.StakeLevelList <> DL.StakeLevelList_new
+		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 
 	---------------Gold Deluxe-------------------------------------------
