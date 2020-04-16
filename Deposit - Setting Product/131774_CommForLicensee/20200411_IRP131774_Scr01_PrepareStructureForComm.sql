@@ -33,37 +33,3 @@ ALTER TABLE LicenseeGroupComm ADD  CONSTRAINT [DF_LicenseeGroupComm_PPComm]  DEF
 ALTER TABLE LicenseeGroupComm ADD  CONSTRAINT [DF_LicenseeGroupComm_GDComm]  DEFAULT ((0)) FOR [GDComm]
 ALTER TABLE LicenseeGroupComm ADD  CONSTRAINT [DF_LicenseeGroupComm_AGComm]  DEFAULT ((0)) FOR [AGComm]
 GO
-
---Add new table LicenseeCustComm_History
-ALTER DATABASE bodb_Licensee  
-ADD FILEGROUP LicenseeCustComm_History_table  
-GO  
-
-ALTER DATABASE bodb_Licensee   
-ADD FILE   
-(  
-    NAME = LicenseeCustComm_History_table_01,  
-    FILENAME = 'D:\DB233\IBC_DB\bodb_Licensee\LicenseeCustComm_History_table_01.ndf',  
-    SIZE = 10MB,    
-    FILEGROWTH = 10MB  
-) TO FILEGROUP LicenseeCustComm_History_table
-GO
-
-
-CREATE TABLE [dbo].[LicenseeCustComm_History](	
-	CustID INT NOT NULL,
-	UpdatedTime DATETIME NOT NULL,
-	ProductID INT NOT NULL,
-	Comm DECIMAL(9,8) NULL
-) ON [LicenseeCustComm_History_table]
-GO
- 
-CREATE CLUSTERED INDEX [CIX_LicenseeCustComm_History] ON [dbo].[LicenseeCustComm_History] 
-(
-	[UpdatedTime] DESC,
-	[CustId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [LicenseeCustComm_History_table]
-GO
-
-ALTER TABLE [dbo].[LicenseeCustComm_History] ADD  CONSTRAINT [DF_LicenseeCustComm_History_UpdatedTime]  DEFAULT (getdate()) FOR [UpdatedTime]
-GO

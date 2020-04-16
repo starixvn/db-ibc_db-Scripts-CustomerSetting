@@ -3,7 +3,23 @@
 	Task: https://nexdev.net/issues/131774
 	DB: DBCUST/bodb_Licensee AND all replicated of pub: Cusdb_bodb_Licensee
 */
+
 USE [bodb_Licensee]
+GO
+
+--Add new table LicenseeCustComm_History
+ALTER DATABASE bodb_Licensee  
+ADD FILEGROUP LicenseeCustComm_History_table  
+GO  
+
+ALTER DATABASE bodb_Licensee   
+ADD FILE   
+(  
+    NAME = LicenseeCustComm_History_table_01,  
+    FILENAME = 'D:\DB233\IBC_DB\bodb_Licensee\LicenseeCustComm_History_table_01.ndf',  
+    SIZE = 10MB,    
+    FILEGROWTH = 10MB  
+) TO FILEGROUP LicenseeCustComm_History_table
 GO
 CREATE TABLE [dbo].[LicenseeCustComm_History](
 	[Id] [bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
@@ -18,3 +34,11 @@ CREATE TABLE [dbo].[LicenseeCustComm_History](
 ) ON [LicenseeCustComm_History_table]
 
 GO
+-- create index for arhive process
+CREATE NONCLUSTERED INDEX IX_LicenseeCustComm_History_UpdatedTime ON LicenseeCustComm_History
+(
+	[UpdatedTime]
+) 
+GO
+
+
