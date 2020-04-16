@@ -2,7 +2,7 @@
 	Created by: Elodie
 	Date: 20200416
 	Task: Update ActionId
-	DB: DBCUST/CustDB
+	DB: DBLOG/bodb_CustomerLog
 */
 DECLARE @OldAction TABLE (ID INT IDENTITY(1,1), ActionId INT)
 DECLARE @NewAction TABLE (ID INT IDENTITY(1,1), ActionId INT)
