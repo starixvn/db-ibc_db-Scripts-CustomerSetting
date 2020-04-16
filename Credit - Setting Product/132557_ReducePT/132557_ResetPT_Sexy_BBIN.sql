@@ -81,45 +81,45 @@ BEGIN
 	WHERE cs.SportType IN (241, 243)
 		AND roleid = 2
 
-	UPDATE cs 
-	SET cs.SuperPT = 0,
-		cs.MasterPT = 0,
-		cs.AgentPT = 0,
-		cs.AutoMasterPT = 0,
-		cs.IsAutoMasterPT = 0,
-		cs.AutoSuperPT = 0,
-		cs.IsAutoSuperPT = 0
-	FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
-		INNER JOIN #MemberTemp a ON a.CustID = cs.CustID
-	WHERE cs.SportType IN (241, 243)
+	--UPDATE cs 
+	--SET cs.SuperPT = 0,
+	--	cs.MasterPT = 0,
+	--	cs.AgentPT = 0,
+	--	cs.AutoMasterPT = 0,
+	--	cs.IsAutoMasterPT = 0,
+	--	cs.AutoSuperPT = 0,
+	--	cs.IsAutoSuperPT = 0
+	--FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
+	--	INNER JOIN #MemberTemp a ON a.CustID = cs.CustID
+	--WHERE cs.SportType IN (241, 243)
 
-	--CREATE TABLE #BatchMember(CustID INT)
+	CREATE TABLE #BatchMember(CustID INT)
 
-	--WHILE 1 = 1 
-	--BEGIN
-	--	TRUNCATE TABLE #BatchMember
+	WHILE 1 = 1 
+	BEGIN
+		TRUNCATE TABLE #BatchMember
 
-	--	DELETE TOP (@batch) a
-	--	OUTPUT deleted.CustID INTO #BatchMember(CustID)
-	--	FROM #MemberTemp a 
+		DELETE TOP (@batch) a
+		OUTPUT deleted.CustID INTO #BatchMember(CustID)
+		FROM #MemberTemp a 
 
-	--	IF @@ROWCOUNT = 0 
-	--		BREAK
+		IF @@ROWCOUNT = 0 
+			BREAK
 
-	--	UPDATE cs 
-	--	SET cs.SuperPT = 0,
-	--		cs.MasterPT = 0,
-	--		cs.AgentPT = 0,
-	--		cs.AutoMasterPT = 0,
-	--		cs.IsAutoMasterPT = 0,
-	--		cs.AutoSuperPT = 0,
-	--		cs.IsAutoSuperPT = 0
-	--	FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
-	--		INNER JOIN #BatchMember a ON a.CustID = cs.CustID
-	--	WHERE cs.SportType IN (241, 243)
+		UPDATE cs 
+		SET cs.SuperPT = 0,
+			cs.MasterPT = 0,
+			cs.AgentPT = 0,
+			cs.AutoMasterPT = 0,
+			cs.IsAutoMasterPT = 0,
+			cs.AutoSuperPT = 0,
+			cs.IsAutoSuperPT = 0
+		FROM dbo.CustPTSetting3rd_Member cs WITH (ROWLOCK)
+			INNER JOIN #BatchMember a ON a.CustID = cs.CustID
+		WHERE cs.SportType IN (241, 243)
 
-	--	WAITFOR DELAY '00:00:00.100'
-	--END
+		WAITFOR DELAY '00:00:00.100'
+	END
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -131,7 +131,7 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @maxcustid INT, @srecommend INT
 
-SELECT @maxcustid = xxx
+--SELECT @maxcustid = xxx
 --1104 supers
 INSERT INTO #supers(custid)
 SELECT custid
@@ -239,7 +239,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
-			,@maxcustid = @maxcustid
+			--,@maxcustid = @maxcustid
 			,@target = 'REPLICATED'
 			
 	waitfor delay '00:00:0.100'
@@ -255,7 +255,7 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @maxcustid INT, @srecommend INT
 
-SELECT @maxcustid = xxx
+--SELECT @maxcustid = xxx
 
 --1104 supers
 INSERT INTO #supers(custid)
@@ -364,7 +364,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
-			,@maxcustid = @maxcustid
+			--,@maxcustid = @maxcustid
 			,@target = 'DBCUST'
 						
 	waitfor delay '00:00:0.100'
