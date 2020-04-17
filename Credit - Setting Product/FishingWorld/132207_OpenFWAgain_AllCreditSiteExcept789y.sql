@@ -14,3 +14,7 @@ SELECT SiteID,Currency,219,IsLaunched,IsTest, 1101, LaunchedLevel
 FROM ProductLaunchedSiteCurrency WITH (NOLOCK)
 WHERE SportType = 220
 
+UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
+SET IsLaunched = 0
+WHERE sporttype = 219
+	AND siteid = 3
