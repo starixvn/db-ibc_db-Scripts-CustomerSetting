@@ -187,7 +187,7 @@ BEGIN
 	UPDATE CT
 	SET CT.StakeLevelList = ISNULL (M.StakeLevelList_new,'')
 	FROM CustGameType CT WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #CustStakeLevelMember_Lowest M WITH (NOLOCK) ON M.CustID = CT.CustID AND M.Bettype = CT.GameTypeID
+		INNER JOIN #MemberTemp_Lowest M WITH (NOLOCK) ON M.CustID = CT.CustID AND M.Bettype = CT.GameTypeID
 	WHERE CT.StakeLevelList <> M.StakeLevelList_new
 		AND CT.GameTypeID IN (1701,1702)
 
