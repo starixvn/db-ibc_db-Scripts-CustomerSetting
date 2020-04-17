@@ -21,9 +21,11 @@ BEGIN
 	DECLARE @BatchCust TABLE (CustID INT)
 	
 	INSERT INTO #Super(custid)
-	SELECT custid
-	FROM dbo.Dep_CustSuper WITH(NOLOCK)
-	
+	SELECT cs.custid
+	FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
+		INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site		
+	WHERE  l.IsActive = 1
+			
 	INSERT INTO #tblCust(Custid)
 	SELECT ci.custid
 	FROM dbo.CustInfo ci WITH(NOLOCK)
@@ -32,7 +34,7 @@ BEGIN
 		AND mrecommend NOT IN (SELECT custid 
 								FROM dbo.custinfo WITH(NOLOCK)
 								WHERE srecommend IN (SELECT custid FROM #super)
-									AND username like '%Acc%' 
+									AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 									AND roleid=3
 							)
 		AND ci.custid > @max_custid
@@ -49,7 +51,7 @@ BEGIN
 			BREAK;
 		
 		UPDATE cs
-		SET isGroupedComm = 1
+			SET isGroupedComm = 1
 		FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
 		WHERE custid IN (SELECT custid FROM @BatchCust)
 		

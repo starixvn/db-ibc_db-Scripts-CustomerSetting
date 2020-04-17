@@ -30,7 +30,7 @@ BEGIN
 		AND mrecommend NOT IN (SELECT custid 
 								FROM dbo.custinfo WITH(NOLOCK)
 								WHERE srecommend=@srecommend 
-									AND username like '%Acc%' 
+									AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 									AND roleid=3
 							)
 		AND custid <= @max_custid
@@ -90,8 +90,10 @@ CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
-SELECT custid
-FROM dbo.Dep_CustSuper WITH(NOLOCK)
+SELECT cs.custid
+FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
+	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site		
+WHERE  l.IsActive = 1
 
 WHILE (1 = 1)
 BEGIN
@@ -127,8 +129,10 @@ CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 SELECT @max_custid = xxx
 
 INSERT INTO #Super(custid)
-SELECT custid
-FROM dbo.Dep_CustSuper WITH(NOLOCK)
+SELECT cs.custid
+FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
+	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site		
+WHERE  l.IsActive = 1
 
 WHILE (1 = 1)
 BEGIN
