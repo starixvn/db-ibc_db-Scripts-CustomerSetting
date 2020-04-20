@@ -10,5 +10,5 @@ GO
 
 UPDATE P
 SET P.MaxChoice = 5
-FROM ProductSettingDetail P WITH (NOLOCK)
+FROM ProductSettingDetail P WITH (ROWLOCK, UPDLOCK)
 WHERE P.SportType IN (211,243,244) AND P.SettingType = 17
