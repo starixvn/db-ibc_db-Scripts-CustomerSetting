@@ -234,7 +234,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND c.currency IN (51)
+ AND c.currency IN (51,20)
  AND s.site IN ('12Bet'
 				,'asiabet88'
 				,'mansion88'
@@ -392,7 +392,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND c.currency IN (51)
+ AND c.currency IN (51,20)
  AND s.site IN ('12Bet'
 				,'asiabet88'
 				,'mansion88'
