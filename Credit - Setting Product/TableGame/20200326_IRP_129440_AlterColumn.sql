@@ -7,7 +7,7 @@
 USE CustDB
 GO
 
-ALTER TABLE dbo.ProductSettingDetail ADD RealProductId TINYINT NOT NULL
+ALTER TABLE dbo.ProductSettingDetail ALTER COLUMN RealProductId TINYINT NOT NULL
 GO
 
 
