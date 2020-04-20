@@ -8,7 +8,7 @@
 -- SELECT * FROM DEP_StakeLevel WITH(NOLOCK) WHERE GameTypeID = 1611
 -- SELECT * FROM Dep_StakeLevelGroupDetail WITH(NOLOCK) WHERE GameTypeID = 1611
 DECLARE @Sporttype INT = 200, @Bettype INT = 1611
-DECLARE  @list varchar (max) = 'UUS,YNG'
+DECLARE  @list varchar (max) = 'UUS'
 DECLARE @MaxStakeLevelID INT
 SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
@@ -32,8 +32,7 @@ WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@li
 
 CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
 INSERT INTO #tmpStake (GameTypeID ,ExchangeID ,MinLabel,MaxLabel ,MinStake ,MaxStake)
-SELECT @Bettype, 20, '1', '10,000', 1, 10000 UNION ALL -- UUS
-SELECT @Bettype, 72, '1', '10,000', 1, 10000 -- YNG
+SELECT @Bettype, 20, '1', '10,000', 1, 10000 -- UUS
 
 ;WITH T AS(
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 

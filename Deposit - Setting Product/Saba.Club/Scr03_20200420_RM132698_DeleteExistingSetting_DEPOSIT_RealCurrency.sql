@@ -19,7 +19,7 @@ WHERE c.roleid = 4
  AND s.islicensee = 1
  AND ci.Enabled = 1
  AND c.custid <= @max_custid
- AND c.currency IN (72,20,51)
+ AND c.currency IN (20,51)
  AND s.site IN ('12Bet'
 				,'asiabet88'
 				,'mansion88'
