@@ -38,7 +38,7 @@ BEGIN
 		DELETE TOP (5000) t
 		OUTPUT DELETED.custid
 		INTO @tmpCust
-		FROM #tblCust
+		FROM #tblCust t
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
