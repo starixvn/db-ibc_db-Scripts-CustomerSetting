@@ -11,8 +11,8 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 AS
 BEGIN	
 	SET NOCOUNT ON;
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at DBCUST only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN -- run at dbcust only
 	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
 		OR dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0		 		 

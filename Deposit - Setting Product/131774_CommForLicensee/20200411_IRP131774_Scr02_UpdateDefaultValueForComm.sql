@@ -11,8 +11,8 @@ ALTER PROCEDURE [dbo].[Lrf_ExecRep_09]
 AS
 BEGIN	
 	SET NOCOUNT ON;
-	IF (@target = 'REPLICATED' AND @@SERVERNAME = 'DBCUST') RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME <> 'DBCUST') RETURN -- run at DBCUST only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN -- run at dbcust only
 	
 	IF (dbo.f_CheckRepTable('LicenseeGroupComm') = 0
 		OR dbo.f_CheckRepTable('LicenseeCustComm') = 0		 		 
@@ -35,6 +35,8 @@ BEGIN
 	
 	WHILE(1=1)
 	BEGIN
+		DELETE @tmpCust 
+		
 		DELETE TOP (5000) t
 		OUTPUT DELETED.custid
 		INTO @tmpCust
