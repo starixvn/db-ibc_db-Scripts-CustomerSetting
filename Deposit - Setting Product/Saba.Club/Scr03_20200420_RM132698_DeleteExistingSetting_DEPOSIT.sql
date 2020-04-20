@@ -8,7 +8,7 @@
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @max_custid INT
-SELECT @max_custid = 10000000
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT c.custid
