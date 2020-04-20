@@ -9,6 +9,18 @@ GO
 
 
 UPDATE P
+SET P.MaxChoice = 3
+FROM ProductSettingDetail P WITH (ROWLOCK, UPDLOCK)
+WHERE P.SportType = 211 AND P.SettingType = 17
+
+
+UPDATE P
 SET P.MaxChoice = 5
 FROM ProductSettingDetail P WITH (ROWLOCK, UPDLOCK)
-WHERE P.SportType IN (211,243,244) AND P.SettingType = 17
+WHERE P.SportType = 244 AND P.SettingType = 17
+
+
+UPDATE P
+SET P.MaxChoice = 6
+FROM ProductSettingDetail P WITH (ROWLOCK, UPDLOCK)
+WHERE P.SportType = 243 AND P.SettingType = 17
