@@ -53,6 +53,17 @@ BEGIN
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
 
+	UPDATE csla
+	SET StakeLevelList_new = ISNULL(CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)),'') 
+	FROM #CustStakeLevelMember_All csla WITH (ROWLOCK, UPDLOCK) 		
+		CROSS APPLY
+		(SELECT DISTINCT TOP (SELECT  P.MaxChoice
+									FROM ProductSettingDetail P WITH (NOLOCK)
+									WHERE P.SettingType = 17 AND P.BetType = CSLA.BetType) ',' + ISNULL(CAST(csla.StakeLevelList_new AS VARCHAR(10)),'')
+		FROM StakeLevel S WITH (NOLOCK)
+				INNER JOIN ProductSettingDetail P WITH (NOLOCK) ON S.GameTypeID = P.BetType
+		WHERE  S.GameTypeID =csla.BetType 
+		FOR XML PATH ('') ) AS A(STL)  -- Get maximum stakelevel as per MaxChoice from agent
 	--Get list of member whose stakelevel are empty or null
 	CREATE TABLE #CustStakeLevelMember_Lowest (
 			CustID INT 
@@ -95,7 +106,7 @@ BEGIN
 						ORDER BY MaxStake DESC
 					) T1 -- Get lowest stakelevel from agent
 
-	--Apply all checked stakelevel from agent to member whose stake level is not null
+	--Apply maximum checked stakelevel from agent to member whose stake level is not null
 	UPDATE CS
 	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
@@ -119,7 +130,8 @@ BEGIN
 		AND CS.BetType IN (2401, 3001, 3101)
 
 	---------------Gold Deluxe-------------------------------------------
-	
+	DECLARE @MaxChoiceGD TINYINT
+	SELECT @MaxChoiceGD = 5
 	CREATE TABLE #MemberTemp_All (
 			CustID INT 
 			,AgentID INT		
@@ -140,6 +152,18 @@ BEGIN
 		AND CS.GameTypeID IN (1701,1702) --GoldDeluxe
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
+
+	UPDATE M
+	SET M.StakeLevelList_new = T1.DownlineStakeLevelList_new
+	FROM #MemberTemp_All M WITH (ROWLOCK, UPDLOCK)
+		CROSS APPLY(SELECT DISTINCT TOP (@MaxChoiceGD) ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
+					FROM (SELECT CAST(val AS INT) AS val
+						  FROM dbo.strSplit(M.StakeLevelList_new,','))  CD
+							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
+						 WHERE MinStake <> 0 AND MaxStake <> 0
+						ORDER BY MaxStake DESC
+					) T1 -- Get maximum 5 lowest stakelevel from agent
+
 
 	CREATE TABLE #MemberTemp_Lowest (
 			CustID INT 

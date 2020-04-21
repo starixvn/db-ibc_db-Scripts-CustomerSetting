@@ -5,7 +5,7 @@
 	DB: DBCUST/CustDB
 */ 
 PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
-DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243
+DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243, @Bettype INT = 3101
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 DECLARE @MaxPT TINYINT
 
@@ -268,6 +268,8 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
 		AND C.CustID > @maxcustid
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
 
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
@@ -276,6 +278,8 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
 		AND C.CustID > @maxcustid
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		

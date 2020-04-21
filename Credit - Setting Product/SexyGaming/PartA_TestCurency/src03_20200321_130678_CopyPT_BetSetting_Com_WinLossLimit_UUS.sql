@@ -60,7 +60,7 @@ BEGIN
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(7,243,3101,0,41,NULL,NULL,NULL,NULL,NULL,2,5,0,NULL)
 	INSERT INTO #TmpProductSettingDetail ([SettingType] ,[SportType],[BetType],[IsLive],[ProductID],[MaxPT],[MaxDiscount],[IsSync],[IsHidden],[IsDisabled],[SettingLevel],[DisplayOrder],[SettingStatus],[IntervalValue]) VALUES(13,243,3101,0,41,NULL,NULL,1,0,0,2,1,0,NULL)
 
-	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243
+	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243, @Bettype INT = 3101
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	DECLARE @MaxPT TINYINT, @Currency INT
 	SELECT TOP 1 @MaxPT = MaxPT FROM #TmpProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
@@ -273,14 +273,16 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
-
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
 	SET  C.AgentDiscount = 0.005, C.MasterDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
-
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		

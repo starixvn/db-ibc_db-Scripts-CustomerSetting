@@ -31,7 +31,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN	
 
-	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243
+	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 243, @Bettype INT = 3101
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	DECLARE @MaxPT TINYINT, @Currency INT
 
@@ -275,13 +275,17 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
-
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
 	--Update Discount info for members of direct agent accounts
 	UPDATE C
 	SET  C.AgentDiscount = 0.005, C.MasterDiscount = 0.005
 	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
 	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
+		AND C.SportType = @Sporttype 
+		AND C.BetType = @Bettype
+
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
