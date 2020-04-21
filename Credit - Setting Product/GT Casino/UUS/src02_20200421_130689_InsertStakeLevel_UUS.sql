@@ -1,6 +1,6 @@
 /*
 	Created: 20200421@Elodie
-	Task: Insert StakeLevel for BBIN_UUS [Redmine: #130689]
+	Task: Insert StakeLevel for GTCasino [Redmine: #130689]
 	DB: DBCUST/CustDB
 */
 USE CustDB
