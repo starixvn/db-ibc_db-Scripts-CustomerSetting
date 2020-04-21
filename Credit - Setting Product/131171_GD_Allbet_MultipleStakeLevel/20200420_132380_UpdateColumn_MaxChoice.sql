@@ -1,7 +1,7 @@
 /*
 	Created: 20200417@Tiara
 	Date: 20200417
-	Task: Update column MaxChoice for Allbet, SA, Sexy Gaming [Redmine: #131853]
+	Task: Update column MaxChoice for Allbet, SA, Sexy Gaming [Redmine: #131171]
 	DB: DBCUST/CustDB
 */ 
 USE CustDB
