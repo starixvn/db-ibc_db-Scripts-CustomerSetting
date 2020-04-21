@@ -17,7 +17,7 @@ SELECT 4213, 72, '0.1', '5', 0.1, 5 UNION ALL -- YNG
 SELECT 4214, 72, '0.2', '6', 0.2, 6 UNION ALL -- YNG
 SELECT 4215, 72, '0.2', '4', 0.2, 4 UNION ALL -- YNG
 SELECT 4216, 72, '0.4', '12', 0.4, 12 UNION ALL -- YNG
-SELECT 4217, 72, '0.1', '4', 0.1, 4  -- YNG
+SELECT 4217, 72, '0.1', '4', 0.1, 4 -- YNG
 
 ;WITH T AS(
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
