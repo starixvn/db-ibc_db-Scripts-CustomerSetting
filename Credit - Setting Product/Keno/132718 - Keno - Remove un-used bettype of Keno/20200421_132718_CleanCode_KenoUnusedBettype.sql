@@ -69,6 +69,18 @@ GO
 BEGIN
 	DECLARE @srecommend INT
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
+	CREATE TABLE #Keno_srecommend(CustID INT PRIMARY KEY)
+
+	INSERT INTO #Keno_srecommend(CustID)
+	SELECT srecommend 
+	FROM custinfo ci WITH(NOLOCK) 
+		INNER JOIN CustSettingGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
+	WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
+	UNION 		
+	SELECT srecommend 
+	FROM custinfo ci WITH(NOLOCK) 
+		INNER JOIN CustOverrideGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
+	WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
 
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid
@@ -76,16 +88,7 @@ BEGIN
 		INNER JOIN site s WITH(NOLOCK) ON s.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-		AND ci.custid IN ( SELECT srecommend 
-						   FROM custinfo ci WITH(NOLOCK) 
-								INNER JOIN CustSettingGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
-						   WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
-						   UNION ALL		
-						   SELECT srecommend 
-						   FROM custinfo ci WITH(NOLOCK) 
-								INNER JOIN CustOverrideGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
-						   WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
-						)
+		AND ci.custid IN ( SELECT CustID FROM #Keno_srecommend )
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -116,10 +119,9 @@ BEGIN
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 	DROP TABLE #Supers
+	DROP TABLE #Keno_srecommend
 END
 GO
-
-								
 
 -- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS  -----
 -----------------------------------------------------------------------------------	
@@ -132,6 +134,18 @@ GO
 BEGIN
 	DECLARE @srecommend INT
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
+	CREATE TABLE #Keno_srecommend(CustID INT PRIMARY KEY)
+
+	INSERT INTO #Keno_srecommend(CustID)
+	SELECT srecommend 
+	FROM custinfo ci WITH(NOLOCK) 
+		INNER JOIN CustSettingGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
+	WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
+	UNION 		
+	SELECT srecommend 
+	FROM custinfo ci WITH(NOLOCK) 
+		INNER JOIN CustOverrideGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
+	WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
 
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid
@@ -139,16 +153,7 @@ BEGIN
 		INNER JOIN site s WITH(NOLOCK) ON s.site = ci.site
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-		AND ci.custid IN ( SELECT srecommend 
-						   FROM custinfo ci WITH(NOLOCK) 
-								INNER JOIN CustSettingGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
-						   WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
-						   UNION ALL		
-						   SELECT srecommend 
-						   FROM custinfo ci WITH(NOLOCK) 
-								INNER JOIN CustOverrideGame ac WITH(NOLOCK) ON ci.CustID = ac.CustId
-						   WHERE ac.Sporttype = 202 AND ac.Bettype In(1507,1509)
-						)
+		AND ci.custid IN ( SELECT CustID FROM #Keno_srecommend )
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -179,6 +184,7 @@ BEGIN
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 	DROP TABLE #Supers
+	DROP TABLE #Keno_srecommend
 END
 GO	
 ----------------------------------------------------------------
