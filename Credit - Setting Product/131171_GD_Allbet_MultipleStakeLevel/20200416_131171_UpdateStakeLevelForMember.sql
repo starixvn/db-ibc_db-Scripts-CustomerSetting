@@ -135,7 +135,7 @@ BEGIN
 	FROM (SELECT TOP 3 CAST(val AS INT) AS val
 			FROM dbo.strSplit(C.StakeLevelList_new,',')
 			INNER JOIN StakeLevel S WITH (NOLOCK) ON S.StakeLevelID = val
-			ORDER BY S.MaxStake DESC ) CD
+			ORDER BY S.MaxStake DESC ) CD --Get top 3 highest stakelevel
 			INNER JOIN StakeLevel S WITH (NOLOCK) ON CD.val=S.StakeLevelID AND S.GameTypeID = C.Bettype AND CI.currency = S.ExchangeId 
 			FOR XML PATH ('') ) AS A(STL)
 	WHERE C.Sporttype = 211 AND C.Bettype = 2401 
@@ -228,6 +228,7 @@ BEGIN
 	DROP TABLE #CustStakeLevelMember_Lowest
 	DROP TABLE #MemberTemp_All
 	DROP TABLE #MemberTemp_Lowest
+	DROP TABLE #AdjustList
 
 
 END
