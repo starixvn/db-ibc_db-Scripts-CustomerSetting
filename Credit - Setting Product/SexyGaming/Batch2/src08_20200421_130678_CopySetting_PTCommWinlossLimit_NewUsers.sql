@@ -67,6 +67,8 @@ CREATE TABLE #DirectTemp
 	roleid TINYINT
 )
 
+DECLARE @MasterDummy TABLE (custid int) 
+
 INSERT INTO #MemberTemp (CustID, currency)
 SELECT custid, currency
 FROM Custinfo WITH (NOLOCK)
@@ -84,6 +86,13 @@ INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
 		AND EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.Enabled=1
 		AND ci.roleid IN (2,3)
+
+INSERT INTO @MasterDummy (custid)
+SELECT DISTINCT ci.mrecommend
+FROM #DirectTemp da
+	INNER JOIN dbo.custInfo ci ON ci.custid = da.CustID
+WHERE da.roleid = 2
+
 
 INSERT INTO #tmpSTListSMA(BettypeID, Currency, StakeLevelList)
 SELECT DISTINCT ST.GameTypeID,currency, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
@@ -225,6 +234,19 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND ci.roleid IN (2,3)
 		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = CI.CustID)
 		AND CI.CustID > @maxcustid
+
+	--Update Discount info for dummy master
+	UPDATE C
+	SET  C.Discount = 0.005
+	FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
+		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
+	WHERE EXISTS (SELECT 1 
+				FROM #DirectTemp D WITH (NOLOCK) 
+					INNER JOIN custinfo ci WITH (NOLOCK) ON ci.custid = D.CustID
+				WHERE d.roleid = 2 AND ci.mrecommend = c.CustID)
+					AND  dest.SettingType = 3
+					AND c.CustID > @MaxCustID
+
 	--Member Level
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
 	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 0, 0 , 0, 0.005
@@ -252,6 +274,16 @@ WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND C.CustID > @maxcustid
 		AND C.SportType = @Sporttype
 		AND C.BetType = @Bettype
+	--Update MasterDiscount of Member is downline of dummy master
+	UPDATE C
+	SET  C.MasterDiscount = 0.005
+	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
+		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
+		INNER JOIN @MasterDummy tmp ON  ci.mrecommend = tmp.CustID
+	WHERE c.SportType = @Sporttype 
+		AND c.BetType = @Bettype
+		AND c.CustID > @MaxCustID
+
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		

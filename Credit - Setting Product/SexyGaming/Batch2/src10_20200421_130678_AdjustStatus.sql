@@ -52,7 +52,7 @@ BEGIN
 
 	INSERT INTO #CustList_ST (custid, bitmapIsDisabledSG, bitmapIsDisabledAB, isHiddenSG)
 	SELECT CS.CustID, isDisabledSG.value, isDisabledAB.value, isHiddenSG.value
-	FROM dbo.CustProductStatus cs WITH(NOLOCK)
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustProductStatus cs WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 6) as isDisabledAB

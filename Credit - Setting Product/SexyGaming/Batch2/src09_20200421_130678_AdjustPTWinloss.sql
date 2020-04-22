@@ -65,7 +65,7 @@ BEGIN
 	--AGENT LEVEL
 	INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking, MaxPositionTaking)
 	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT, C.MinPT, C.MaxPT
-	FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
 		INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH (NOLOCK) ON C.custid = csa.custid
@@ -87,7 +87,7 @@ BEGIN
 	--MEMBER LEVEL
 	INSERT INTO #MemberList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking)
 	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
-	FROM dbo.CustPTSetting3rd_Member C WITH(NOLOCK)
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Member C WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = c.custid 
@@ -106,7 +106,7 @@ BEGIN
 	--Group PT
 	INSERT INTO #AgentGroupPT (AgentID, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
 	SELECT C.AgentID, C.IsLive, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
-	FROM CustPTGroupSetting3rd_Member C WITH (NOLOCK)
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTGroupSetting3rd_Member C WITH (NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.AgentID
 		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
 		INNER JOIN dbo.CustPTGroupSetting3rd_Member csa WITH (NOLOCK) ON C.AgentID = csa.AgentID
@@ -125,7 +125,7 @@ BEGIN
 	--Wrong PT
 	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
 	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
-	FROM dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK)
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK)
 		INNER JOIN #supers s WITH (NOLOCK) ON s.custid = csa.custid
 	WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 			AND (
@@ -203,7 +203,7 @@ BEGIN
 	--Agent Level
 	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
-	FROM dbo.CustWinLossLimit_Agent C WITH(NOLOCK) 
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Agent C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		INNER JOIN dbo.CustWinLossLimit_Agent CSM WITH(NOLOCK) ON CSM.custid = C.custid
@@ -215,7 +215,7 @@ BEGIN
 	--Member Level
 	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
-	FROM dbo.CustWinLossLimit_Member C WITH(NOLOCK) 
+	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Member C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		INNER JOIN dbo.CustWinLossLimit_Member CSM WITH(NOLOCK) ON csm.custid = C.custid
