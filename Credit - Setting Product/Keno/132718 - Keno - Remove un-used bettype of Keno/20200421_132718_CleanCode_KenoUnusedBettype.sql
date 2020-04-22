@@ -15,9 +15,8 @@ BEGIN
 				
 	IF dbo.f_CheckRepTable('CustSettingGame') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustOverrideGame') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
-
-	DECLARE @SportbettypeRowcount INT
 
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	INSERT INTO #SportTypeBetType(Sporttype, BetType)
@@ -103,6 +102,7 @@ BEGIN
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid IN ( SELECT CustID FROM #Keno_srecommend )
+		AND s.isLicensee = 0
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -175,6 +175,7 @@ BEGIN
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.custid IN ( SELECT CustID FROM #Keno_srecommend )
+		AND s.isLicensee = 0
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
