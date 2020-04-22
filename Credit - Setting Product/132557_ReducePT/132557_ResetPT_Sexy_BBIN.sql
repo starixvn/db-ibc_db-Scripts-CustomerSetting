@@ -19,7 +19,20 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN	
 
-	DECLARE @PT TINYINT = 65, @batch INT = 4000
+	DECLARE @PT TINYINT = 65, @batch INT = 4000, @CurrentMinPT_241 TINYINT, @NewMinPT_241 TINYINT, @CurrentMinPT_243 TINYINT, @NewMinPT_243 TINYINT
+
+	SELECT @CurrentMinPT_241 = MinPT FROM dbo.CustPTSetting3rd_Agent WITH (NOLOCK) WHERE CustID = @srecommend AND SportType = 241 AND BetType = 3300
+	SELECT @CurrentMinPT_243 = MinPT FROM dbo.CustPTSetting3rd_Agent WITH (NOLOCK) WHERE CustID = @srecommend AND SportType = 243 AND BetType = 3101
+
+	IF @CurrentMinPT_241 > 65 
+		SELECT @NewMinPT_241 = 65
+	ELSE 
+		SELECT @NewMinPT_241 = @CurrentMinPT_241
+
+	IF @CurrentMinPT_243 > 65 
+		SELECT @NewMinPT_243 = 65
+	ELSE 
+		SELECT @NewMinPT_243 = @CurrentMinPT_243
 
 	CREATE TABLE #MemberTemp
 	(
@@ -34,12 +47,12 @@ BEGIN
 	
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
+	FROM dbo.Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1
 	
 	INSERT INTO #SMATemp (CustID, roleid)
 	SELECT custid, roleid
-	FROM Custinfo WITH (NOLOCK)
+	FROM dbo.Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3) AND Enabled = 1
 
 	UPDATE cs 
@@ -50,8 +63,8 @@ BEGIN
 		cs.IsAutoMasterPT = 0,
 		cs.AutoSuperPT = 0,
 		cs.IsAutoSuperPT = 0,
-		cs.MinPT = 0
-	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+		cs.MinPT = CASE WHEN SportType = 241 THEN @NewMinPT_241 WHEN SportType = 243 THEN @NewMinPT_243 ELSE MinPT END
+	FROM dbo.CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 	WHERE cs.SportType IN (241, 243)
 		AND cs.CustID = @srecommend
 
@@ -64,12 +77,12 @@ BEGIN
 		cs.AutoSuperPT = 0,
 		cs.IsAutoSuperPT = 0,
 		cs.MinPT = 0
-	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	FROM dbo.CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp a ON a.CustID = cs.CustID
 	WHERE cs.SportType IN (241, 243)
 
 	UPDATE cs 
-	SET cs.SuperPT = 0,
+	SET cs.SuperPT = CASE WHEN cs.SportType = 241 THEN @NewMinPT_241 WHEN cs.SportType = 243 THEN @NewMinPT_243 ELSE cs.SuperPT END,
 		cs.MasterPT = 0,
 		cs.AgentPT = 0,
 		cs.AutoMasterPT = 0,
@@ -79,7 +92,7 @@ BEGIN
 	FROM dbo.CustPTGroupSetting3rd_Member cs WITH (ROWLOCK)
 		INNER JOIN #SMATemp a ON a.CustID = cs.AgentID
 	WHERE cs.SportType IN (241, 243)
-		AND roleid = 2
+		AND a.roleid = 2
 
 	--UPDATE cs 
 	--SET cs.SuperPT = 0,
@@ -107,7 +120,7 @@ BEGIN
 			BREAK
 
 		UPDATE cs 
-		SET cs.SuperPT = 0,
+		SET cs.SuperPT = CASE WHEN cs.SportType = 241 THEN @NewMinPT_241 WHEN cs.SportType = 243 THEN @NewMinPT_243 ELSE cs.SuperPT END,
 			cs.MasterPT = 0,
 			cs.AgentPT = 0,
 			cs.AutoMasterPT = 0,
