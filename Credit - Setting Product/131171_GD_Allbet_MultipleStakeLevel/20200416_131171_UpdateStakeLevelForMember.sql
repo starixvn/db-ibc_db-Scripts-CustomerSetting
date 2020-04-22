@@ -52,18 +52,8 @@ BEGIN
 		AND CS.BetType IN (2401, 3001, 3101)
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
+	
 
-	UPDATE csla
-	SET StakeLevelList_new = ISNULL(CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)),'') 
-	FROM #CustStakeLevelMember_All csla WITH (ROWLOCK, UPDLOCK) 		
-		CROSS APPLY
-		(SELECT DISTINCT TOP (SELECT  P.MaxChoice
-									FROM ProductSettingDetail P WITH (NOLOCK)
-									WHERE P.SettingType = 17 AND P.BetType = CSLA.BetType) ',' + ISNULL(CAST(csla.StakeLevelList_new AS VARCHAR(10)),'')
-		FROM StakeLevel S WITH (NOLOCK)
-				INNER JOIN ProductSettingDetail P WITH (NOLOCK) ON S.GameTypeID = P.BetType
-		WHERE  S.GameTypeID =csla.BetType 
-		FOR XML PATH ('') ) AS A(STL)  -- Get maximum stakelevel as per MaxChoice from agent
 	--Get list of member whose stakelevel are empty or null
 	CREATE TABLE #CustStakeLevelMember_Lowest (
 			CustID INT 
@@ -90,8 +80,7 @@ BEGIN
 		AND CI.Enabled = 1
 		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
-		AND CS.StakeLevelList = '' 
-		AND CS.StakeLevelList IS NULL
+		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
 		AND CA.StakeLevelList != '' 
 		AND CA.StakeLevelList IS NOT NULL
 
@@ -106,7 +95,7 @@ BEGIN
 						ORDER BY MaxStake DESC
 					) T1 -- Get lowest stakelevel from agent
 
-	--Apply maximum checked stakelevel from agent to member whose stake level is not null
+	--Apply all checked stakelevel from agent to member whose stake level is not null
 	UPDATE CS
 	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
@@ -129,9 +118,39 @@ BEGIN
 		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 
+	--Adjust StakelevelList if exceed MaxChoice
+	SELECT T.CustID, T.AgentID,T.Sporttype,T.Bettype,T.StakeLevelList_new,3 AS MaxChoice INTO #AdjustList
+	FROM #CustStakeLevelMember_All T WITH (NOLOCK)
+		CROSS APPLY dbo.strSplit(T.StakeLevelList_new,',') 
+		WHERE T.Sporttype = 211 AND T.Bettype = 2401
+		GROUP BY T.CustID, T.AgentID,T.Sporttype,T.Bettype, T.StakeLevelList_new
+		HAVING COUNT(VAL) > 3 --Allbet MaxChoice
+	
+	UPDATE C
+	SET C.StakeLevelList_new = ISNULL(CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)),'')
+	FROM #AdjustList C WITH (ROWLOCK)
+	INNER JOIN CUSTINFO CI WITH (NOLOCK) ON CI.custid = C.CustID
+	CROSS APPLY
+	(SELECT ',' + ISNULL(CAST(StakeLevelID AS VARCHAR(10)),'')
+	FROM (SELECT TOP 3 CAST(val AS INT) AS val
+			FROM dbo.strSplit(C.StakeLevelList_new,',')
+			ORDER BY VAL DESC ) CD
+			INNER JOIN StakeLevel S WITH (NOLOCK) ON CD.val=S.StakeLevelID AND S.GameTypeID = C.Bettype AND CI.currency = S.ExchangeId 
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE C.BETTYPE = 2401
+
+	UPDATE CS
+	SET CS.StakeLevelList = ISNULL(A.StakeLevelList_new,'')
+	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #AdjustList A ON CS.CustID = A.CustID 
+												AND CS.SportType = A.Sporttype
+												AND CS.bettype = A.bettype
+	WHERE CS.StakeLevelList <> A.StakeLevelList_new
+		AND CS.SportType = 211
+		AND CS.BetType = 2401
+
 	---------------Gold Deluxe-------------------------------------------
-	DECLARE @MaxChoiceGD TINYINT
-	SELECT @MaxChoiceGD = 5
+
 	CREATE TABLE #MemberTemp_All (
 			CustID INT 
 			,AgentID INT		
@@ -153,17 +172,6 @@ BEGIN
 		AND CS.StakeLevelList <> '' 
 		AND CS.StakeLevelList IS NOT NULL
 
-	UPDATE M
-	SET M.StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #MemberTemp_All M WITH (ROWLOCK, UPDLOCK)
-		CROSS APPLY(SELECT DISTINCT TOP (@MaxChoiceGD) ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
-					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(M.StakeLevelList_new,','))  CD
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY MaxStake DESC
-					) T1 -- Get maximum 5 lowest stakelevel from agent
-
 
 	CREATE TABLE #MemberTemp_Lowest (
 			CustID INT 
@@ -183,8 +191,7 @@ BEGIN
 		AND ci.roleid = 1  
 		AND ci.Enabled = 1 
 		AND CS.GameTypeID IN (1701,1702) --GoldDeluxe
-		AND CS.StakeLevelList = '' 
-		AND CS.StakeLevelList IS NULL
+		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
 		AND CA.StakeLevelList != '' 
 		AND CA.StakeLevelList IS NOT NULL
 
