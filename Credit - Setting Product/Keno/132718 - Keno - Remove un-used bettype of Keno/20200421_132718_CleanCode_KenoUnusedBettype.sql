@@ -20,7 +20,6 @@ BEGIN
 
 	CREATE TABLE #SportTypeBetType (Sporttype SMALLINT ,BetType SMALLINT)
 	INSERT INTO #SportTypeBetType(Sporttype, BetType)
-	SELECT 202,1502 UNION ALL
 	SELECT 202,1507 UNION ALL
 	SELECT 202,1509
 
@@ -58,8 +57,7 @@ BEGIN
 		DELETE a
 		FROM CustGameType a WITH(ROWLOCK) 
 			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
-			INNER JOIN DBPRO.bodb02.dbo.GAMETYPE  g WITH(NOLOCK) ON a.GameTypeID = g.GameTypeID
-			INNER JOIN #SportTypeBetType s ON g.IBCBettypeID = s.BetType
+		WHERE a.GameTypeID IN(2,7,9)
 	END
 	DROP TABLE #SportTypeBetType
 	DROP TABLE #Tempcustsetting
@@ -91,9 +89,7 @@ BEGIN
 	SELECT ci.srecommend 
 	FROM custinfo ci WITH(NOLOCK) 
 		INNER JOIN CustGameType c WITH(NOLOCK) ON ci.CustID = c.CustId
-		INNER JOIN DBPRO.bodb02.dbo.GAMETYPE  g WITH(NOLOCK) ON c.GameTypeID = g.GameTypeID
-	WHERE g.IBCBettypeID IN (1507,1509,1502)
-
+	WHERE c.GameTypeID IN(2,7,9)
 
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid
@@ -164,9 +160,7 @@ BEGIN
 	SELECT ci.srecommend 
 	FROM custinfo ci WITH(NOLOCK) 
 		INNER JOIN CustGameType c WITH(NOLOCK) ON ci.CustID = c.CustId
-		INNER JOIN DBPRO.bodb02.dbo.GAMETYPE  g WITH(NOLOCK) ON c.GameTypeID = g.GameTypeID
-	WHERE g.IBCBettypeID IN (1507,1509,1502)
-
+	WHERE c.GameTypeID IN(2,7,9)
 
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid
