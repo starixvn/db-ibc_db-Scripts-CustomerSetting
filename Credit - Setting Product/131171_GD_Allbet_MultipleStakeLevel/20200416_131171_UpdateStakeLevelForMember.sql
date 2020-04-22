@@ -118,7 +118,7 @@ BEGIN
 		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 
-	--Adjust StakelevelList if exceed MaxChoice
+	--Adjust StakelevelList for Allbet if exceed MaxChoice
 	SELECT T.CustID, T.AgentID,T.Sporttype,T.Bettype,T.StakeLevelList_new,3 AS MaxChoice INTO #AdjustList
 	FROM #CustStakeLevelMember_All T WITH (NOLOCK)
 		CROSS APPLY dbo.strSplit(T.StakeLevelList_new,',') 
@@ -134,10 +134,11 @@ BEGIN
 	(SELECT ',' + ISNULL(CAST(StakeLevelID AS VARCHAR(10)),'')
 	FROM (SELECT TOP 3 CAST(val AS INT) AS val
 			FROM dbo.strSplit(C.StakeLevelList_new,',')
-			ORDER BY VAL DESC ) CD
+			INNER JOIN StakeLevel S WITH (NOLOCK) ON S.StakeLevelID = val
+			ORDER BY S.MaxStake DESC ) CD
 			INNER JOIN StakeLevel S WITH (NOLOCK) ON CD.val=S.StakeLevelID AND S.GameTypeID = C.Bettype AND CI.currency = S.ExchangeId 
 			FOR XML PATH ('') ) AS A(STL)
-	WHERE C.BETTYPE = 2401
+	WHERE C.Sporttype = 211 AND C.Bettype = 2401 
 
 	UPDATE CS
 	SET CS.StakeLevelList = ISNULL(A.StakeLevelList_new,'')
