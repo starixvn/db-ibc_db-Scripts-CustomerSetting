@@ -17,7 +17,7 @@ DELETE P
 FROM ProductStatusSiteCurrency P WITH (ROWLOCK)
 WHERE SportType=@Sporttype 
 	AND BetType = @Bettype 
-	AND P.Currency IN (6,78,69,70,13,66,81,45) --Euro, EUR; MMK, MKK, RMB, CY, YUN, WON 
+	AND P.Currency IN (6,78,69,13,66,81,45) --Euro, EUR; MMK, RMB, CY, YUN, WON 
 
 
 

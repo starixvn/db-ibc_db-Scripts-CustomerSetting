@@ -48,7 +48,7 @@ BEGIN
 		AND ci.Site<>'CN88'
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
-		AND ci.currency IN (6,78,69,70,13,66,81,45) --Euro, EUR; MMK, MKK,RMB, CY, YUN,WON) 
+		AND ci.currency IN (6,78,69,13,66,81,45) --Euro, EUR; MMK,RMB, CY, YUN,WON) 
 
 
 	SELECT DISTINCT cg.custid 

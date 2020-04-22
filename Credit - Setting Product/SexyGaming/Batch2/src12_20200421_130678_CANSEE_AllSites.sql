@@ -14,7 +14,7 @@ SELECT @Sporttype = 243, @Bettype = 3101
 UPDATE ps
 SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
-WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency IN (6,78,69,70,13,66,81,45) --Euro, EUR; MMK, MKK, RMB, CY, YUN, WON
+WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency IN (6,78,69,13,66,81,45) --Euro, EUR; MMK, RMB, CY, YUN, WON
 
 
 
