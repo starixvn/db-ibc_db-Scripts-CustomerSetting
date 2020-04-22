@@ -163,6 +163,28 @@ DELETE a
 FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK,UPDLOCK)
 INNER JOIN #Dep_CustPTGroupSetting_Member t ON a.AgentID = t.AgentID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
+-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+SELECT a.CustID,a.SportType,a.BetType
+INTO #Dep_CustStakeLevel_Agent
+FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
+INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
+INNER JOIN #supers s ON ci.srecommend = s.custid
+
+DELETE a
+FROM Dep_CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
+INNER JOIN #Dep_CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+SELECT a.CustID,a.SportType,a.BetType
+INTO #Dep_CustStakeLevel_Member
+FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
+INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid
+INNER JOIN #supers s ON ci.srecommend = s.custid
+
+DELETE a
+FROM Dep_CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
+INNER JOIN #Dep_CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 -------------
 SELECT dl.CustID,dl.ProductSettingID
 INTO #Dep_LicenseeProductSetting
@@ -180,3 +202,5 @@ DROP TABLE #Dep_CustPTGroupSetting_Member
 DROP TABLE #Dep_CustPTSetting_Agent
 DROP TABLE #Dep_CustPTSetting_Member
 DROP TABLE #Dep_LicenseeProductSetting
+DROP TABLE #Dep_CustStakeLevel_Agent
+DROP TABLE #Dep_CustStakeLevel_Member

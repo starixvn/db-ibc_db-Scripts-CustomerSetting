@@ -47,7 +47,8 @@ BEGIN
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend=@srecommend AND roleid=3 
+		AND(username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 		AND custid<=@max_custid 
 
 	INSERT INTO #MemberTemp (CustID)
@@ -124,6 +125,20 @@ BEGIN
 
 		WAITFOR DELAY '00:00:00.100'
 	END
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #SMATemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @bitmapOrder,0)  AS bitmapIsHidden
+	FROM #MemberTemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
 	-----------------------------------------Dep_LicenseeProductSetting-------------------------------------------------------
 
@@ -208,6 +223,34 @@ BEGIN
 	FROM #MemberTemp t WITH(NOLOCK)
 		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
 	WHERE d.CustID IS NULL
+
+	---------------------STAKE LEVEL-----------------
+	DECLARE @StakeLevelID INT
+	--Initial stakelevel for SMA dummy
+	SELECT @StakeLevelID = StakeLevelID
+	FROM dbo.Dep_StakeLevel WITH(NOLOCK)
+		CROSS APPLY @SportBetType sp
+	WHERE ExchangeID = @currency
+		AND GameTypeID = sp.BetType
+	
+	INSERT INTO [dbo].[Dep_CustStakeLevel_Agent]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[StakeLevelList])
+	SELECT custID, sp.sporttype, sp.BetType, @StakeLevelID
+	FROM #SMATemp
+	CROSS APPLY @SportBetType sp
+		
+	INSERT INTO [dbo].[Dep_CustStakeLevel_Member]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[StakeLevelList]
+           ,[LastUpdated])
+	SELECT custID, sp.sporttype, sp.BetType, @StakeLevelID, GetDate()
+	FROM #MemberTemp
+	CROSS APPLY @SportBetType sp
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

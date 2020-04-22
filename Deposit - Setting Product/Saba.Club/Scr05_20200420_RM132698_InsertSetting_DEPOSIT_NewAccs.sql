@@ -149,7 +149,8 @@
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 AND username LIKE '%Acc%'
+	WHERE srecommend IN (SELECT custid FROM #APIsupers) AND roleid=3 
+		AND(username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT,SiteId)
 	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,90.00,s.siteid
@@ -198,6 +199,28 @@
 	DELETE a
 	FROM Dep_CustPTGroupSetting_Member a WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN #Dep_CustPTGroupSetting_Member t ON a.AgentID = t.AgentID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #Dep_CustStakeLevel_Agent
+	FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
+	INNER JOIN @SabaSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+
+	DELETE a
+	FROM Dep_CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #Dep_CustStakeLevel_Member
+	FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
+	INNER JOIN @SabaSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+
+	DELETE a
+	FROM Dep_CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
 	-------------
 	SELECT dl.CustID,dl.ProductSettingID
 	INTO #Dep_LicenseeProductSetting
@@ -214,6 +237,8 @@
 	DROP TABLE #Dep_CustPTSetting_Agent
 	DROP TABLE #Dep_CustPTSetting_Member
 	DROP TABLE #Dep_LicenseeProductSetting
+	DROP TABLE #Dep_CustStakeLevel_Agent
+	DROP TABLE #Dep_CustStakeLevel_Member
 
 	---------------------CREATE setting for NEW ACCs-----------------------------------
 
@@ -343,6 +368,28 @@
 	FROM #MemberTemp t WITH(NOLOCK)
 		LEFT JOIN Dep_CustSettingMode d WITH(NOLOCK) ON  d.CustID = t.CustID
 	WHERE d.CustID IS NULL
+
+	---------------------STAKE LEVEL-----------------
+	INSERT INTO [dbo].[Dep_CustStakeLevel_Agent]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[StakeLevelList])
+	SELECT custID, sp.sporttype, sp.BetType, d.StakeLevelID
+	FROM #SMATemp t
+	CROSS APPLY @SportBetType sp
+	INNER JOIN dbo.Dep_StakeLevel d WITH(NOLOCK) ON d.ExchangeID = t.Currency AND d.GameTypeID = sp.BetType
+		
+	INSERT INTO [dbo].[Dep_CustStakeLevel_Member]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[StakeLevelList]
+           ,[LastUpdated])
+	SELECT custID, sp.sporttype, sp.BetType, d.StakeLevelID, GetDate()
+	FROM #MemberTemp t
+	CROSS APPLY @SportBetType sp
+	INNER JOIN dbo.Dep_StakeLevel d WITH(NOLOCK) ON d.ExchangeID = t.Currency AND d.GameTypeID = sp.BetType
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
