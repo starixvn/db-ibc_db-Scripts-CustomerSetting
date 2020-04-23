@@ -24,7 +24,11 @@ CREATE TABLE [dbo].[LicenseeCustComm_History_bk](
 	[CustID] [int] NOT NULL,
 	[UpdatedTime] [datetime] NOT NULL,
 	[ProductID] [int] NOT NULL,
-	[Comm] [decimal](9, 8) NULL
+	[Comm] [decimal](9, 8) NULL,
+	CONSTRAINT [PK_LicenseeCustComm_History_bk_Id] PRIMARY KEY NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [LicenseeCustComm_History_bk_table]
 ) ON LicenseeCustComm_History_bk_table
 
 GO
