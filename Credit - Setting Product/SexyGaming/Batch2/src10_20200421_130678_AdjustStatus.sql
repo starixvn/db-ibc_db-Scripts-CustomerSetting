@@ -40,22 +40,22 @@
 	DECLARE @tmp_AdjustStatus TABLE (custid INT, IsDisabledAB BIT) 
 	WHILE (1 = 1)
 	BEGIN	
-	DELETE TOP (5000) t 	
-	OUTPUT Deleted.custid, Deleted.IsDisabledAB
-	INTO @tmp_AdjustStatus
-	FROM #CustList_ST t
+		DELETE TOP (5000) t 	
+		OUTPUT Deleted.custid, Deleted.IsDisabledAB
+		INTO @tmp_AdjustStatus
+		FROM #CustList_ST t
 
-	IF @@ROWCOUNT = 0 BREAK
+		IF @@ROWCOUNT = 0 BREAK
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.IsDisabledAB)) 	
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN @tmp_AdjustStatus CI  ON cs.CustID = ci.CustID
+		UPDATE cs
+		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.IsDisabledAB)) 	
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN @tmp_AdjustStatus CI  ON cs.CustID = ci.CustID
 	
-	DELETE @tmp_AdjustStatus
+		DELETE @tmp_AdjustStatus
 
-	WAITFOR DELAY '00:00:0.500'
+		WAITFOR DELAY '00:00:0.500'
 	END
 
 	DROP TABLE #CustList_ST
