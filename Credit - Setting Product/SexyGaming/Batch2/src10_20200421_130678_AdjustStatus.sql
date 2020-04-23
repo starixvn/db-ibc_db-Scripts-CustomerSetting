@@ -20,21 +20,11 @@
 		AND ci.Site<>'CN88'
 		AND s.islicensee = 0
 		AND ci.currency IN (6,78,69,13,66,81,45) --Euro, EUR; MMK, RMB, CY, YUN, WON
-	
-	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
-	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
-	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = 41 AND SportType = 241 AND SettingType = 13
 
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 22
-	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
-	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
-	FROM #DestinationSportBetType		
-	WHERE SettingType = 13
 
-	CREATE TABLE #CustList_ST (custid INT, IsDisabledAB BIT, IsFinished BIT default (0))
+	CREATE TABLE #CustList_ST (custid INT, IsDisabledAB BIT)
 	INSERT INTO #CustList_ST (custid, IsDisabledAB)
 	SELECT CS.CustID, isDisabledAB.value
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustProductStatus cs WITH(NOLOCK)
@@ -47,27 +37,26 @@
 	WHERE (isDisabledSG.value <> isDisabledAB.value	OR isHiddenSG.value != 0)
 		AND ci.Enabled = 1
 
-
+	DECLARE @tmp_AdjustStatus TABLE (custid INT, IsDisabledAB BIT) 
 	WHILE (1 = 1)
 	BEGIN	
-		UPDATE TOP (1) #DestinationSportBetType
-		SET IsFinished = 1
-			,@fBetType = fBetType	
-			,@fSportType = fSportType
-			,@tBetType = tBetType
-			,@tSportType = tSportType
-			,@IsLive = IsLive
-		WHERE IsFinished = 0
-			AND SettingType = 13
-		IF @@ROWCOUNT = 0 BREAK
+	DELETE TOP (5000) t 	
+	OUTPUT Deleted.custid, Deleted.IsDisabledAB
+	INTO @tmp_AdjustStatus
+	FROM #CustList_ST t
+
+	IF @@ROWCOUNT = 0 BREAK
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
 		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.IsDisabledAB)) 	
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #CustList_ST CI WITH(NOLOCK) ON cs.CustID = ci.CustID
+		INNER JOIN @tmp_AdjustStatus CI  ON cs.CustID = ci.CustID
 	
+	DELETE @tmp_AdjustStatus
+
+	WAITFOR DELAY '00:00:0.500'
 	END
-	DROP TABLE #DestinationSportBetType
+
 	DROP TABLE #CustList_ST
 	DROP TABLE #supers
