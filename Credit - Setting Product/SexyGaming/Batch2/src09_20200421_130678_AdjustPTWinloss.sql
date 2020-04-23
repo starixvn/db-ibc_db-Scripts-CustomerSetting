@@ -27,8 +27,8 @@
 	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
 	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
-	CREATE TABLE #SMAList_WL (custid INT, MaxLossLimit MONEY, IsAutoReset BIT)
-	CREATE TABLE #MemberList_WL(custid INT, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY,MaxLossLimit MONEY, IsAutoReset BIT)
 
 	DECLARE @ProductID TINYINT = 41, @SportType INT = 243
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
@@ -187,8 +187,8 @@
 	FROM #DestinationSportBetType		
 	WHERE SettingType = 12
 	--Agent Level
-	INSERT INTO #SMAList_WL (CustId, MaxLossLimit, IsAutoReset)
-	SELECT ci.custid, C.MaxLossLimit, C.IsAutoReset
+	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Agent C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -196,10 +196,11 @@
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND CSM.SportType = @tSportType AND CSM.BetType = @tBetType
 		AND ci.roleid IN (2,3,4) AND Enabled = 1
 		AND (C.MaxLossLimit <> CSM.MaxLossLimit
+			OR C.MaxWinLimit <> CSM.MaxWinLimit
 			OR C.IsAutoReset <> CSM.IsAutoReset)
 	--Member Level
-	INSERT INTO #MemberList_WL (CustId, MaxLossLimit, IsAutoReset)
-	SELECT ci.custid, C.MaxLossLimit, C.IsAutoReset
+	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Member C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -207,6 +208,7 @@
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (C.MaxLossLimit <> CSM.MaxLossLimit
+			OR C.MaxWinLimit <> CSM.MaxWinLimit
 			OR C.IsAutoReset <> CSM.IsAutoReset)
 		
 	WHILE (1 = 1)
@@ -223,13 +225,13 @@
 		IF @@ROWCOUNT = 0 BREAK
 
 		UPDATE csa
-		SET csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
+		SET csa.MaxWinLimit = cs.MaxWinLimiT,csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
 		FROM dbo.CustWinLossLimit_Agent csa WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #SMAList_WL cs WITH(NOLOCK) ON cs.custid = csa.CustID
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 		UPDATE csm
-		SET csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
+		SET csm.MaxWinLimit = cs.MaxWinLimit,csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
 		FROM dbo.CustWinLossLimit_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_WL cs WITH(NOLOCK) ON cs.custid = csm.CustID
 		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
