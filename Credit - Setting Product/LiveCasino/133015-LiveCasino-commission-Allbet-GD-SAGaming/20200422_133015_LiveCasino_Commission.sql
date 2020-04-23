@@ -7,8 +7,6 @@
 */ 
 ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
 	@srecommend INT
-	,@isExistDirectAccount BIT = 0
-	,@IsExcludeAllbet_GD BIT = 0
 	,@target VARCHAR(20) = NULL
 	
 AS
