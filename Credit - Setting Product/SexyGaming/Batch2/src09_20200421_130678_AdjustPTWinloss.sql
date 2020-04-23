@@ -37,7 +37,7 @@
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0 --Copy from Allbet
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (12) --WinLossLimit
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (6) --WinLossLimit
 	
 	UNION ALL 
 	SELECT	212, 4001, SportType, BetType, 0, SettingType, 0 --Copy from Macau game
@@ -185,7 +185,7 @@
 		--------------------------------------Winloss Setting-------------------------------------------------		
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
-	WHERE SettingType = 12
+	WHERE SettingType = 6
 	--Agent Level
 	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
 	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
