@@ -221,7 +221,7 @@
 			,@tSportType = tSportType
 			,@IsLive = IsLive
 		WHERE IsFinished = 0
-			AND SettingType = 12
+			AND SettingType = 6
 		IF @@ROWCOUNT = 0 BREAK
 
 		UPDATE csa
