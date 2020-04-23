@@ -185,7 +185,7 @@ FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 3
-		AND c.CustID > @MaxCustID
+		
 	
 --Member Level
 INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
@@ -195,7 +195,7 @@ FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK)
 	CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 	AND dest.SettingType = 3
-	AND c.CustID > @MaxCustID
+
 	
 --------------------------------------Win Loss Limit-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
@@ -208,7 +208,7 @@ FROM CustWinLossLimit_Agent C WITH (NOLOCK) INNER JOIN #SMATemp ci WITH (NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 WHERE dest.SettingType = 6 
 AND C.bettype = @fBetType AND C.SportType = @fSportType
-AND c.CustID > @MaxCustID
+
 
 --Member Level
 INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
@@ -217,7 +217,7 @@ FROM dbo.CustWinLossLimit_Member C WITH (NOLOCK) INNER JOIN #MemberTemp ci WITH(
 		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
 WHERE dest.SettingType = 6 AND C.bettype = @fBetType 
 AND C.SportType = @fSportType
-AND c.CustID > @MaxCustID
+
 --------------------------------------BetSetting-------------------------------------------------
 --Agent Level
 INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
@@ -228,7 +228,6 @@ SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
 FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
 CROSS JOIN  #SMATemp t
 WHERE ExchangeId=t.currency
-AND T.CustID > @MaxCustID
 
 --Member Level
 
@@ -247,7 +246,7 @@ BEGIN
 		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
 		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
 										CROSS JOIN  #MemberTempBatch t
-		WHERE S.ExchangeId=t.currency AND T.CustID > @MaxCustID
+		WHERE S.ExchangeId=t.currency
 		GROUP BY t.custid, TB.BettypeID
 
 	TRUNCATE TABLE #MemberTempBatch
