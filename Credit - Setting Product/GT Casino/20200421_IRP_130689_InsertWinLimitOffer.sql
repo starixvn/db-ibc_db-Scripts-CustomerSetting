@@ -1,6 +1,6 @@
 /*
 	Created: 20200406@Elodie
-	Task: Insert product profile for BBIN
+	Task: Insert product profile for GT Casino [Redmine: 130689)
 	DB: DBTXN/bodb02
 */
 
