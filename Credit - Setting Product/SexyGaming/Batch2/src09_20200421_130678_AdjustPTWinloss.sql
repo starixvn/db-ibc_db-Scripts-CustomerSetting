@@ -3,21 +3,7 @@
 	Date: 20200421
 	Task: Adjust Setting for Sexy Gaming - Batch 2 [Redmine: #130678]
 	DB: DBCUST/CustDB
-*/ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09] 
-AS
-
-BEGIN
-	
-	SET NOCOUNT ON
-
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN	
+*/
 
 	CREATE TABLE #supers (custid int)
 
@@ -41,18 +27,18 @@ BEGIN
 	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
 	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
-	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
-	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #SMAList_WL (custid INT, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #MemberList_WL(custid INT, MaxLossLimit MONEY, IsAutoReset BIT)
 
 	DECLARE @ProductID TINYINT = 41, @SportType INT = 243
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
 	
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0
+	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0 --Copy from Allbet
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @SportType AND SettingType IN (6) -- WinLossLimit
-
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (12) --WinLossLimit
+	
 	UNION ALL 
 	SELECT	212, 4001, SportType, BetType, 0, SettingType, 0 --Copy from Macau game
 	FROM ProductSettingDetail WITH (NOLOCK)
@@ -199,10 +185,10 @@ BEGIN
 		--------------------------------------Winloss Setting-------------------------------------------------		
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
-	WHERE SettingType = 6
+	WHERE SettingType = 12
 	--Agent Level
-	INSERT INTO #SMAList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
-	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
+	INSERT INTO #SMAList_WL (CustId, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxLossLimit, C.IsAutoReset
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Agent C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -210,11 +196,10 @@ BEGIN
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND CSM.SportType = @tSportType AND CSM.BetType = @tBetType
 		AND ci.roleid IN (2,3,4) AND Enabled = 1
 		AND (C.MaxLossLimit <> CSM.MaxLossLimit
-			OR C.MaxWinLimit <> CSM.MaxWinLimit
 			OR C.IsAutoReset <> CSM.IsAutoReset)
 	--Member Level
-	INSERT INTO #MemberList_WL (CustId, MaxWinLimit, MaxLossLimit, IsAutoReset)
-	SELECT ci.custid, C.MaxWinLimit, C.MaxLossLimit, C.IsAutoReset
+	INSERT INTO #MemberList_WL (CustId, MaxLossLimit, IsAutoReset)
+	SELECT ci.custid, C.MaxLossLimit, C.IsAutoReset
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustWinLossLimit_Member C WITH(NOLOCK) 
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -222,7 +207,6 @@ BEGIN
 	WHERE C.sporttype = @fSportType AND C.bettype = @fBetType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (C.MaxLossLimit <> CSM.MaxLossLimit
-			OR C.MaxWinLimit <> CSM.MaxWinLimit
 			OR C.IsAutoReset <> CSM.IsAutoReset)
 		
 	WHILE (1 = 1)
@@ -235,17 +219,17 @@ BEGIN
 			,@tSportType = tSportType
 			,@IsLive = IsLive
 		WHERE IsFinished = 0
-			AND SettingType = 6
+			AND SettingType = 12
 		IF @@ROWCOUNT = 0 BREAK
 
 		UPDATE csa
-		SET csa.MaxWinLimit = cs.MaxWinLimit, csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
+		SET csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
 		FROM dbo.CustWinLossLimit_Agent csa WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #SMAList_WL cs WITH(NOLOCK) ON cs.custid = csa.CustID
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 		UPDATE csm
-		SET csm.MaxWinLimit = cs.MaxWinLimit, csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
+		SET csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
 		FROM dbo.CustWinLossLimit_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_WL cs WITH(NOLOCK) ON cs.custid = csm.CustID
 		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
@@ -260,15 +244,4 @@ BEGIN
 	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
 	
-END
-GO
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
---------------------------------------------------------------------------------------
-PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
-
-EXEC dbo.Acc_DynamicCustSetting3rd_09 
-
-PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
