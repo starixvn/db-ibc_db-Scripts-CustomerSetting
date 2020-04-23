@@ -17,17 +17,12 @@ CREATE TABLE #temp(
 
 GO
 INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
-SELECT 3201, 20, '6', '50,000', 6, 50000  UNION ALL -- UUS
-SELECT 3201, 15, '6', '50,000', 6, 50000  UNION ALL -- IDR
-SELECT 3201, 22, '6', '50,000', 6, 50000  UNION ALL -- IDR
-SELECT 3201, 33, '6', '50,000', 6, 50000  UNION ALL -- IDR
-SELECT 3201, 34, '6', '50,000', 6, 50000  UNION ALL -- IDR
-SELECT 3201, 47, '6', '50,000', 6, 50000 -- IDR
+SELECT 3201, 20, '6', '50,000', 6, 50000  -- UUS
 
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
 WHERE S.GameTypeID = 3201
-	AND S.ExchangeId IN (20,15,22,33,34,47)
+	AND S.ExchangeId IN (20)
 
 INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
 SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
