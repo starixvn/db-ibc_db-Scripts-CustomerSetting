@@ -25,6 +25,9 @@ SELECT @MaxPT = 90
 SELECT @MaxDiscount = 0.005
 SELECT @IntervalValue = 0.0005
 
+DELETE P
+FROM ProductSettingDetail P WITH (ROWLOCK)
+WHERE P.SportType = 242
 --PT Setting
 INSERT INTO	dbo.ProductSettingDetail
 		(	SettingType, SportType	, BetType	, IsLive, ProductID		, MaxPT	, MaxDiscount	, IsSync	, IsHidden	, IsDisabled	, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId)
@@ -40,57 +43,13 @@ VALUES
 --WinLossLimit Setting																																				
 	,	(	6		   , 242		, 3201		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 5           , @SettingStatus, NULL, @RealProductId)
 
+DELETE P
+FROM ProductStatusProfile P WITH (ROWLOCK)
+WHERE P.Sporttype = 242
+
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(242, 3201, @BitmapOrder)
 
---CREATE TABLE #NonOfferedCurency (Currency INT) --KHR(KHR); PLN(PLN);MMK(MMK, MKK); JPY (JPY); SGD (SD$)
-
---INSERT INTO #NonOfferedCurency (Currency)
---SELECT exchangeid 
---FROM exchange WITH(NOLOCK) 
---WHERE exchangeid NOT IN (12,
---						13,
---						15,
---						16,
---						2,
---						22,
---						3,
---						33,
---						34,
---						35,
---						4,
---						43,
---						45,
---						47,
---						5,
---						51,
---						55,
---						6,
---						61,
---						64,
---						66,
---						67,
---						74,
---						78,
---						81,
---						20,72 --test
---					) --supported currencies
-
-
---INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
---SELECT DISTINCT 241, 3300, 0, Currency, 1, 1, 1  
---FROM #NonOfferedCurency WITH (NOLOCK)
-
---DROP TABLE #NonOfferedCurency
-
---SELECT * FROM ProductSettingDetail WHERE sporttype = 241
---SELECT * FROM ProductStatusProfile  WHERE sporttype = 241
---SELECT * FROM dbo.SettingSystem
---SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 41
---SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 241
-
---DELETE FROM ProductSettingDetail WHERE sporttype = 241
---DELETE FROM ProductStatusProfile WHERE Sporttype = 241
 
 
 
