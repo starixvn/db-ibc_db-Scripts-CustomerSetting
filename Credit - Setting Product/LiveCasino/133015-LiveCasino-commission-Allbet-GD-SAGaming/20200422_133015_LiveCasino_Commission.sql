@@ -29,16 +29,11 @@ BEGIN
 			, @Discount_XML_211_244 VARCHAR(MAX) = ''
 			, @NewDiscount DECIMAL(9,8) 
 			, @custid INT
-			, @uplinedummy INT
 			, @roleid TINYINT
 			
 			, @IsUpd_255 BIT = 0
 			, @IsUpd_211 BIT = 0
 			, @IsUpd_244 BIT = 0
-	
-	CREATE TABLE #DirectMaster_updateComm (CustID INT PRIMARY KEY,isUpd_255 BIT, isUpd_211 BIT, isUpd_244 BIT, isfinished bit default(0))
-	CREATE TABLE #DirectAgent_updateComm (CustID INT PRIMARY KEY,mrecommend INT, isUpd_255 BIT, isUpd_211 BIT, isUpd_244 BIT, isfinished bit default(0))
-	CREATE TABLE #Cust_tmp_isExistDirectAccount (CustID INT PRIMARY KEY,roleID INT)
 	
 	SET @Discount_XML_211_244 = '<ROOT><Discount SportType="211" BetType="2401" Discount="0.00800000"/><Discount SportType="244" BetType="3001" Discount="0.00800000"/></ROOT>'
 	SET @Discount_XML_211 = '<ROOT><Discount SportType="211" BetType="2401" Discount="0.00800000"/></ROOT>'

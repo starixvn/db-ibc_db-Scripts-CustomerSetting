@@ -34,11 +34,14 @@ CREATE TABLE [dbo].[LicenseeCustComm_History](
 ) ON [LicenseeCustComm_History_table]
 
 GO
--- create index for arhive process
-CREATE NONCLUSTERED INDEX IX_LicenseeCustComm_History_UpdatedTime ON LicenseeCustComm_History
+-- create index for arhive and reports
+USE [bodb_Licensee]
+GO
+CREATE NONCLUSTERED INDEX IX_LicenseeCustComm_History_CustID_UpdatedTime ON LicenseeCustComm_History
 (
-	[UpdatedTime]
-) 
+	[CustID]
+	,[UpdatedTime]
+) INCLUDE ([ProductID],[Comm])
 GO
 
 
