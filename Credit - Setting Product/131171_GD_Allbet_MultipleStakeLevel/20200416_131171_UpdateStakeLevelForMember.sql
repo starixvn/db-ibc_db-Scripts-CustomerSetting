@@ -258,7 +258,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.currency IN (15,22,33,34,47) --( 'IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15,22,33,34,47, 20) --( 'IDD', 'IDR', 'IN', 'IND','DDD','UUS')
 	AND C.Enabled=1
 
 -- For deployer info
@@ -311,7 +311,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.currency IN (15,22,33,34,47) --( 'IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15,22,33,34,47,20) --( 'IDD', 'IDR', 'IN', 'IND','DDD','UUS')
 	AND C.Enabled=1
 
 -- For deployer info
