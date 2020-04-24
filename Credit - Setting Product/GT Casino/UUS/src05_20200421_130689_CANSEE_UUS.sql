@@ -14,7 +14,7 @@ DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 
 --20
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, @Bettype AS BetType, 20 AS Currency, 0 AS SiteID, 1 AS IsLaunched, 0 AS IsTest  
+SELECT @Sporttype AS SportType, @Bettype AS BetType, 20 AS Currency, 0 AS SiteID, 1 AS IsLaunched, 1 AS IsTest  
 
 --SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 242
 
