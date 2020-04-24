@@ -1,22 +1,9 @@
 /*
 	Created: 20200423@Tiara
-	Task:  Adjust data for GT Casino [Redmine: #130689]
+	Date: 20200423
+	Task: Adjust Setting for GT Casino  [Redmine: #130689]
 	DB: DBCUST/CustDB
-*/ 
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09] 
-AS
-
-BEGIN
-	
-	SET NOCOUNT ON
-
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN	
+*/
 
 	CREATE TABLE #supers (custid int)
 
@@ -31,7 +18,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.Site<>'CN88'
 		AND s.islicensee = 0
-		AND ci.currency IN (16,64,35,3,74,12,6,78, 69,2,67,5,13,81,66,4,43,45,72) --Yen, UT, $US, US$, TH, GBP, Euro, EUR, MMK, RM, HKK, HK$, RMB, CY, YUN, TB, THB, Won,YNG
+		AND ci.currency IN (16,64,35,3,12,6,69,2,67,5,13,81,43,45,72) --Yen, UT, $US, US$, GBP, Euro, MMK, RM, HKK, HK$, RMB, CY, THB, Won,YNG
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 
@@ -41,7 +28,7 @@ BEGIN
 	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
 	CREATE TABLE #SMAList_WL (custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
-	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
+	CREATE TABLE #MemberList_WL(custid INT, MaxWinLimit MONEY,MaxLossLimit MONEY, IsAutoReset BIT)
 
 	DECLARE @ProductID TINYINT = 41, @SportType INT = 242
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @tSportType SMALLINT, @tBetType SMALLINT, @IsLive BIT
@@ -50,8 +37,7 @@ BEGIN
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6,7) --  PT,Comm,WinLossLimit, Betsetting
-
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,6) --  PT,WinLossLimit
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
@@ -234,13 +220,13 @@ BEGIN
 		IF @@ROWCOUNT = 0 BREAK
 
 		UPDATE csa
-		SET csa.MaxWinLimit = cs.MaxWinLimit, csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
+		SET csa.MaxWinLimit = cs.MaxWinLimiT,csa.MaxLossLimit = cs.MaxLossLimit, csa.IsAutoReset = cs.IsAutoReset     
 		FROM dbo.CustWinLossLimit_Agent csa WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #SMAList_WL cs WITH(NOLOCK) ON cs.custid = csa.CustID
 		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 		UPDATE csm
-		SET csm.MaxWinLimit = cs.MaxWinLimit, csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
+		SET csm.MaxWinLimit = cs.MaxWinLimit,csm.MaxLossLimit = cs.MaxLossLimit, csm.IsAutoReset = cs.IsAutoReset
 		FROM dbo.CustWinLossLimit_Member csm WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberList_WL cs WITH(NOLOCK) ON cs.custid = csm.CustID
 		WHERE csm.SportType = @tSportType AND csm.BetType = @tBetType
@@ -255,15 +241,4 @@ BEGIN
 	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
 	
-END
-GO
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
---------------------------------------------------------------------------------------
-PRINT N'Step 10: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
-
-EXEC dbo.Acc_DynamicCustSetting3rd_09 
-
-PRINT N'Step 10: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
