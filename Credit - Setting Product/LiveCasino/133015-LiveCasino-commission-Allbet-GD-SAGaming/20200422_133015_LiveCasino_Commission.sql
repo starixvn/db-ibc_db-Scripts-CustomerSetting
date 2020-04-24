@@ -113,19 +113,19 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
 	AND c.site = '789y'
-UNION ALL
-SELECT ci.custid
-FROM dbo.customer c WITH (NOLOCK) 
-	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
-	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
-	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4
-	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
-	AND cs.isinternal = 0 	
-	AND ci.Enabled = 1
-	AND s.islicensee = 0
-	AND c.username NOT LIKE '3rdSuper%'
-	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo')
+--UNION ALL
+--SELECT ci.custid
+--FROM dbo.customer c WITH (NOLOCK) 
+--	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+--	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
+--	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+--WHERE ci.roleid = 4
+--	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+--	AND cs.isinternal = 0 	
+--	AND ci.Enabled = 1
+--	AND s.islicensee = 0
+--	AND c.username NOT LIKE '3rdSuper%'
+--	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo')
 			
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
@@ -173,19 +173,19 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
 	AND c.site = '789y'
-UNION ALL
-SELECT ci.custid
-FROM dbo.customer c WITH (NOLOCK) 
-	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
-	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
-	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4
-	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
-	AND cs.isinternal = 0 	
-	AND ci.Enabled = 1
-	AND s.islicensee = 0
-	AND c.username NOT LIKE '3rdSuper%'
-	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo')
+--UNION ALL
+--SELECT ci.custid
+--FROM dbo.customer c WITH (NOLOCK) 
+--	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+--	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
+--	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+--WHERE ci.roleid = 4
+--	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+--	AND cs.isinternal = 0 	
+--	AND ci.Enabled = 1
+--	AND s.islicensee = 0
+--	AND c.username NOT LIKE '3rdSuper%'
+--	AND c.username IN ('Ace','AG','An','Ap','As','Av','Aw','Dh','Fat','Kc','No','Wg','Winb','Winc','Wing','Winz','Wj','Wo')
 			
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
