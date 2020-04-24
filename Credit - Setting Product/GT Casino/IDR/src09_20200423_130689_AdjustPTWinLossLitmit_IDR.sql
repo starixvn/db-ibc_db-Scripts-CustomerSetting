@@ -24,7 +24,6 @@
 
 	CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 	CREATE TABLE #MemberList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY)	
-	CREATE TABLE #Super_WrongPT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY)
 	CREATE TABLE #AgentGroupPT ( AgentID INT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 
 	CREATE TABLE #SMAList_CommSetting (custid INT, Discount DECIMAL(9,8))
@@ -107,17 +106,6 @@
 				OR C.IsAutoSuperPT	<> csa.IsAutoSuperPT
 				OR C.AutoSuperPT	<> csa.AutoSuperPT)
 
-	--Wrong PT
-	INSERT INTO #Super_WrongPT (custid, SPositionTaking, MPositionTaking, APositionTaking)
-	SELECT csa.custid, csa.SuperPT, csa.MasterPT, csa.AgentPT
-	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Agent csa WITH(NOLOCK)
-		INNER JOIN #supers s WITH (NOLOCK) ON s.custid = csa.custid
-	WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
-			AND (
-				csa.MasterPT > csa.SuperPT
-				OR csa.AgentPT > csa.MasterPT
-				OR csa.AgentPT > csa.SuperPT
-				)
 
 	--Adjust data
 	WHILE (1 = 1)
@@ -169,16 +157,6 @@
 		FROM CustPTGroupSetting3rd_Member CSA WITH (UPDLOCK,ROWLOCK)
 			INNER JOIN #AgentGroupPT C WITH (NOLOCK) ON CSA.AgentID = C.AgentID
 		WHERE CSA.SportType = @tSportType AND CSA.BetType = @tBetType
-
-		--Adjust m4 = s4 if m4 > s4; a4 = m4 if a4 > m4; a4 = s4 if a4 > s4
-		UPDATE csa
-		SET	csa.MasterPT = CASE WHEN csa.MasterPT > csa.SuperPT THEN csa.SuperPT ELSE csa.MasterPT END,
-			csa.AgentPT = CASE	WHEN csa.AgentPT > csa.SuperPT THEN csa.SuperPT 
-								WHEN csa.AgentPT > csa.MasterPT THEN csa.MasterPT
-								ELSE csa.AgentPT END
-		FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #Super_WrongPT cs WITH(NOLOCK) ON csa.custid = cs.custid
-		WHERE csa.SportType = @tSportType AND csa.BetType = @tBetType
 
 	END	
 		--------------------------------------Commission Setting-------------------------------------------------		
@@ -305,7 +283,6 @@
 	DROP TABLE #MemberList_CommSetting
 	DROP TABLE #SMAList_WL
 	DROP TABLE #MemberList_WL
-	DROP TABLE #Super_WrongPT
 	DROP TABLE #supers
 	
 	
