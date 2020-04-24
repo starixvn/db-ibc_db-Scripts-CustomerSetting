@@ -1,0 +1,286 @@
+/*
+	Created: 20200424@Tiara
+	Date: 20200424
+	Task: Initial setting data for Sexy Gaming Deposit new users [Redmine: 132551]
+	DB: DBCUST/CustDB
+*/
+
+	DECLARE @maxcustid INT
+	DECLARE @AgentID	INT,@CustID	INT,@SuperPT SMALLINT = 85
+	
+	SELECT @maxcustid = xxx
+	CREATE TABLE #supers (custid int)
+
+	INSERT INTO #supers(custid)
+	SELECT ci.custid
+	FROM custInfo ci WITH (NOLOCK) 	
+		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.username NOT LIKE '3rdSuper%'
+		AND ci.Enabled=1
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
+		AND ci.currency IN (16,64,35,3,74,12,6,78,69,2,67,5,13,66,81,4,43,15,22,33,34,47,45,61,55,51,32,46,56,2,92,49,79,80,82,83,85,86,72)  /*Yen, UT, $US,US$,TH, GBP, Euro, EUR, MMK,RM,HKK, HK$,RMB, CY, YUN,TB,THB, IN,IND,IDD,
+ IDR,DDD, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,MXN, KES, GHS, BRL, CLP, PEN, ARS,YNG */
+	ORDER BY CI.custid 
+
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+
+	DECLARE @SportType INT = 243, @BetType INT=3101
+
+	--------------------------------------PT Setting-------------------------------------------------	
+		INSERT INTO dbo.Dep_CustPTSetting_Agent
+		(	[CustID]
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			[CustID]
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,@SuperPT
+		   ,@SuperPT
+		   ,@SuperPT
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=4
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO dbo.Dep_CustPTSetting_Agent
+		(	[CustID]
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			[CustID]
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,@SuperPT
+		   ,0	
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=3
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO dbo.Dep_CustPTSetting_Agent
+		(	[CustID]
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			[CustID]
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,0
+		   ,@SuperPT
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
+		(	AgentID
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			[CustID]
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,0
+		   ,@SuperPT
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO dbo.Dep_CustPTSetting_Member
+		(	CustID
+		   ,[SportType]
+		   ,[BetType]
+		   ,[IsLive]
+		   ,[SuperPT]
+		   ,[MasterPT]
+		   ,[AgentPT]
+		 )
+	SELECT 
+			ci.CustID
+		   ,@Sporttype
+		   ,@BetType
+		   ,0
+		   ,0
+		   ,0
+		   ,@SuperPT
+	FROM custInfo ci WITH(NOLOCK)
+		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=1
+		AND m.IsGroupedPT=0
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+		SELECT ci.CustID,1
+	FROM custInfo ci WITH(NOLOCK)
+	WHERE ci.srecommend IN(SELECT custid FROM #supers)
+		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		AND RoleID=1
+		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
+		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT t.custid,52
+	FROM #supers t
+	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=52)
+
+	--------------------------------------Bet Setting-------------------------------------------------
+		CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		Currency INT,
+		SiteID INT
+	)
+
+	CREATE TABLE #MemberTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		Currency INT,
+		SiteID INT
+
+	)
+
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
+	CREATE TABLE #tmpSTListMember (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
+		
+	INSERT INTO #SMATemp (CustID,Currency, SiteID)
+	SELECT CI.custid, CI.currency, S.siteid 
+	FROM Custinfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
+			AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO #MemberTemp (CustID,Currency, SiteID)
+	SELECT CI.custid, CI.currency, S.siteid 
+	FROM custInfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.recommend
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE CI.srecommend IN(SELECT CustID FROM #supers) AND CI.roleid = 1  AND Enabled = 1 AND CI.custid > @maxcustid	
+		AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList, SiteID)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, SMA.SiteID
+	FROM #SMATemp SMA CROSS JOIN Dep_StakeLevel ST
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM Dep_StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = SMA.Currency AND S.SiteID = SMA.SiteID
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE ST.GameTypeID = 3101
+	ORDER BY ST.GameTypeID
+
+	INSERT INTO #tmpSTListMember(BettypeID, StakelevelList, SiteID)
+	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, M.SiteID
+	FROM #MemberTemp M CROSS JOIN Dep_StakeLevel ST
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM Dep_StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID = ST.GameTypeID AND S.ExchangeId = M.Currency AND S.SiteID = M.SiteID
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE ST.GameTypeID = 3101
+	ORDER BY ST.GameTypeID
+
+	--Agent Level
+	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
+	SELECT DISTINCT t.custid,@Sporttype, TB.BettypeID, TB.StakeLevelList
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
+		CROSS JOIN  #SMATemp t
+	WHERE S.ExchangeID = t.Currency  AND S.SiteID = T.SiteID
+
+	--Member Level
+	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
+	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+	FROM Dep_StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
+		CROSS JOIN  #MemberTemp t
+	WHERE S.ExchangeId = t.Currency AND S.SiteID = T.SiteID
+	GROUP BY t.custid, TB.BettypeID
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT t.custid,53
+	FROM #supers t
+	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=53)
+
+	--------------------------------------Status-------------------------------------------------
+	DECLARE @BitOrder INT
+	SELECT @BitOrder= bitmapOrder from Dep_ProductStatusProfile WITH(NOLOCK) where SportType=@Sporttype
+
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
+
+	UPDATE c 
+	SET  c.bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
+		,c.bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+	FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = @BetType AND PSP.Sporttype = @SportType
+		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+	FROM #SMATemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
+
+	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
+	SELECT	t.custid
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+	FROM #MemberTemp t
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
+
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT t.custid,51
+	FROM #supers t
+	WHERE t.custid>@maxcustid	
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=51)
+
+	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
+	DROP TABLE #supers
+	DROP TABLE #Dummy
+	DROP TABLE #tmpSTListSMA
+	DROP TABLE #tmpSTListMember
+
