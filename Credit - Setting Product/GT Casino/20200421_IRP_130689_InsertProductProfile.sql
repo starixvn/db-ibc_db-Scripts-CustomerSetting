@@ -41,7 +41,7 @@ VALUES
 --BetSetting																																				
 	,	(	7          , 242		, 3201		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 6           , @SettingStatus, NULL, @RealProductId)
 --WinLossLimit Setting																																				
-	,	(	6		   , 242		, 3201		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 5           , @SettingStatus, NULL, @RealProductId)
+	,	(	6		   , 242		, 3201		, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 4           , @SettingStatus, NULL, @RealProductId)
 
 DELETE P
 FROM ProductStatusProfile P WITH (ROWLOCK)
