@@ -97,7 +97,7 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
 	INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
 WHERE  l.IsActive = 1
-	AND p.SettingType = 9
+	AND p.SettingType = 4
 	AND P.ProductID IN (21,22,32)
 
 WHILE (1 = 1)
@@ -147,7 +147,7 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
 	INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
 WHERE  l.IsActive = 1
-	AND p.SettingType = 9
+	AND p.SettingType = 4
 	AND P.ProductID IN (21,22,32)
 
 WHILE (1 = 1)
