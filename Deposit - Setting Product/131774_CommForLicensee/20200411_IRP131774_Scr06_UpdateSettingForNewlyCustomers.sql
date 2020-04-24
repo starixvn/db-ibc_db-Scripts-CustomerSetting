@@ -21,10 +21,15 @@ BEGIN
 	DECLARE @BatchCust TABLE (CustID INT)
 	
 	INSERT INTO #Super(custid)
-	SELECT cs.custid
+	SELECT DISTINCT cs.custid
 	FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
-		INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site		
+		INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
+		INNER JOIN dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) ON lp.CustID = cs.custid
+		INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
+		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
 	WHERE  l.IsActive = 1
+		AND p.SettingType = 4
+		AND P.ProductID IN (21,22,32)
 			
 	INSERT INTO #tblCust(Custid)
 	SELECT ci.custid
