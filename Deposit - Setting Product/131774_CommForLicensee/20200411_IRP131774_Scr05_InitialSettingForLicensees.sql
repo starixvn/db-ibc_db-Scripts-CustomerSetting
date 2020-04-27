@@ -6,8 +6,6 @@
 */
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend	INT
-	, @SportType	INT
-	, @BetType		INT
 	, @max_custid INT
 	, @target VARCHAR(20)	
 AS
@@ -24,7 +22,15 @@ BEGIN
 	
 	CREATE TABLE #tblCust(CustID INT PRIMARY KEY, roleid TINYINT)
 	DECLARE @BatchCust TABLE (CustID INT)
-	
+
+	CREATE TABLE #SporttypeBettype (Sporttype INT, Bettype INT)
+	INSERT INTO #SporttypeBettype (Sporttype, Bettype)
+	SELECT pd.SportType, pd.BetType
+	FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
+		INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
+		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID 
+	WHERE lp.CustID = @srecommend
+
 	INSERT INTO #tblCust(Custid,roleid)
 	SELECT custid, roleid
 	FROM dbo.CustInfo WITH(NOLOCK)
@@ -47,8 +53,12 @@ BEGIN
 		,MasterDiscount
 		,SuperDiscount		
 		)
-	SELECT t.custid, @SportType, @BetType, 0, 0, 0, 0
-	FROM #tblCust t
+	SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0
+	FROM #tblCust t	
+		CROSS APPLY (
+					SELECT Sporttype, Bettype
+					FROM #SporttypeBettype
+			)sb
 	WHERE roleid = 2
 	
 	WHILE (1=1)
@@ -70,6 +80,7 @@ BEGIN
 	END
 	
 	DROP TABLE #tblCust
+	DROP TABLE #SporttypeBettype
 END
 GO
 
@@ -81,39 +92,35 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
 DECLARE @srecommend INT, 
-		@max_custid INT,
-		@SportType INT,
-		@BetType INT
+		@max_custid INT
 
-CREATE TABLE #Super(CustID INT, Sporttype INT, Bettype INT, isfinished BIT DEFAULT(0))
+
+CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 
 SELECT @max_custid = xxx
 
-INSERT INTO #Super(custid, Sporttype, Bettype)
-SELECT cs.custid, pd.SportType, pd.Bettype
+INSERT INTO #Super(custid)
+SELECT cs.custid
 FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
-	INNER JOIN dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) ON lp.CustID = cs.custid
-	INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
-	INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
+	CROSS APPLY (SELECT TOP (1) 1 
+				FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
+						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32)
+				WHERE  lp.CustID = cs.custid							
+				)
+				AS tmp (_sb)
 WHERE  l.IsActive = 1
-	AND p.SettingType = 4
-	AND P.ProductID IN (21,22,32)
 
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Super
 	SET isfinished = 1
 		,@srecommend = custid
-		,@SportType = SportType
-		,@BetType = Bettype
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
 	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend
-			,@SportType = @SportType
-			,@BetType = @BetType
 			,@max_custid = @max_custid
 			,@target = 'REPLICATED'
 	
@@ -131,39 +138,42 @@ GO
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
 DECLARE @srecommend INT, 
-		@max_custid INT,
-		@SportType INT,
-		@BetType INT
+		@max_custid INT
 
-CREATE TABLE #Super(CustID INT, Sporttype INT, Bettype INT, isfinished BIT DEFAULT(0))
+DECLARE @XML_211 VARCHAR(MAX)
+	,@XML_212 VARCHAR(MAX)
+	,@XML_248 VARCHAR(MAX)
+	
+SET @XML_211= 'Discount SportType="211" BetType="2401"'
+SET @XML_212 = 'Discount SportType="212" BetType="4001"'
+SET @XML_248 = 'Discount SportType="248" BetType="4101"'
+
+CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 
 SELECT @max_custid = xxx
 
-INSERT INTO #Super(custid, Sporttype, Bettype)
-SELECT cs.custid, pd.SportType, pd.BetType
+INSERT INTO #Super(custid)
+SELECT cs.custid
 FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
-	INNER JOIN dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) ON lp.CustID = cs.custid
-	INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
-	INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
+	CROSS APPLY (SELECT TOP (1) 1
+				FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
+						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32)
+				WHERE  lp.CustID = cs.custid							
+				)
+				AS tmp (_sb)
 WHERE  l.IsActive = 1
-	AND p.SettingType = 4
-	AND P.ProductID IN (21,22,32)
 
 WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Super
 	SET isfinished = 1
 		,@srecommend = custid
-		,@SportType = SportType
-		,@BetType = Bettype
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
 	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend
-			,@SportType = @SportType
-			,@BetType = @BetType
 			,@max_custid = @max_custid
 			,@target = 'DBCUST'
 	
