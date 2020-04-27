@@ -64,7 +64,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid
 		AND ci.Site<>'CN88'
-		AND ci.currency IN (16,64,35,3,12,6,69,2,67,5,13,81,43,45,72) --Yen, UT, $US, US$, GBP, Euro, MMK, RM, HKK, HK$, RMB, CY, THB, Won,YNG
+		AND ci.currency IN (16,64,35,3,12,6,69,2,5,13,81,43,45,72) --Yen, UT, $US, US$, GBP, Euro, MMK, RM, HK$, RMB, CY, THB, Won,YNG
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -117,7 +117,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid
 		AND ci.Site<>'CN88'
-		AND ci.currency IN (16,64,35,3,12,6,69,2,67,5,13,81,43,45,72) --Yen, UT, $US, US$, GBP, Euro, MMK, RM, HKK, HK$, RMB, CY, THB, Won,YNG
+		AND ci.currency IN (16,64,35,3,12,6,69,2,5,13,81,43,45,72) --Yen, UT, $US, US$, GBP, Euro, MMK, RM, HK$, RMB, CY, THB, Won,YNG
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
