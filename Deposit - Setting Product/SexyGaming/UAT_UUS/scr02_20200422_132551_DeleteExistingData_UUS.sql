@@ -1,7 +1,7 @@
 /*
 	Created: 20200422@Tiara
 	Date: 20200422
-	Task: Delete existing data of SA Gaming Deposit - UUS [Redmine: 132551]
+	Task: Delete existing data of Sexy Gaming Deposit - UUS [Redmine: 132551]
 	DB: DBCUST/CustDB
 */
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
