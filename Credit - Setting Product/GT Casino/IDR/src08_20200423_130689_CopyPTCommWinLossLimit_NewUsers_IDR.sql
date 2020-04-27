@@ -36,6 +36,7 @@ SELECT TOP 1 @MaxPT = MaxPT FROM ProductSettingDetail WITH (NOLOCK) WHERE Produc
 	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6,7) --  PT,Comm,WinLossLimit, Betsetting
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
+CREATE TABLE #tmpSTListMember(BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 
 CREATE TABLE #MemberTemp
 (
@@ -72,6 +73,16 @@ FROM #SMATemp SMA CROSS JOIN StakeLevel ST
 CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 			FROM StakeLevel S WITH (NOLOCK)
 			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=SMA.currency
+			FOR XML PATH ('') ) AS A(STL)
+WHERE ST.GameTypeID = @Bettype 
+ORDER BY ST.GameTypeID
+
+INSERT INTO #tmpSTListMember(BettypeID, Currency, StakeLevelList)
+SELECT DISTINCT ST.GameTypeID,currency, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
+FROM #MemberTemp M CROSS JOIN StakeLevel ST 
+CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+			FROM StakeLevel S WITH (NOLOCK)
+			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=M.currency
 			FOR XML PATH ('') ) AS A(STL)
 WHERE ST.GameTypeID = @Bettype 
 ORDER BY ST.GameTypeID
@@ -244,7 +255,7 @@ BEGIN
 										   ,[StakeLevelList]
 										   ,LastUpdated) 
 		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
 										CROSS JOIN  #MemberTempBatch t
 		WHERE S.ExchangeId=t.currency
 		GROUP BY t.custid, TB.BettypeID
@@ -271,6 +282,7 @@ DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
 DROP TABLE #DestinationSportBetType	
 DROP TABLE #tmpSTListSMA
+DROP TABLE #tmpSTListMember
 DROP TABLE #supers
 DROP TABLE #CustList
 
