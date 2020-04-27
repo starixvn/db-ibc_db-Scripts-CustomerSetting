@@ -25,11 +25,12 @@ BEGIN
 
 	CREATE TABLE #SporttypeBettype (Sporttype INT, Bettype INT)
 	INSERT INTO #SporttypeBettype (Sporttype, Bettype)
-	SELECT pd.SportType, pd.BetType
+	SELECT DISTINCT pd.SportType, pd.BetType
 	FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
 		INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID
 		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID 
 	WHERE lp.CustID = @srecommend
+		AND p.SettingType = 4
 
 	INSERT INTO #tblCust(Custid,roleid)
 	SELECT custid, roleid
