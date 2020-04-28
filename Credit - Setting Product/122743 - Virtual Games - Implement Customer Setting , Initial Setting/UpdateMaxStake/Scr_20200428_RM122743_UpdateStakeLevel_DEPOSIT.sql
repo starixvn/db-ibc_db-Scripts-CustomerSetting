@@ -11,8 +11,7 @@ DECLARE @Dep_Stake TABLE (
 	[MinStake] [money] NULL,
 	[MaxStake] [money] NULL,
 	[NewMaxStake] [money] NULL,
-	[NewMaxLabel] [varchar](20) NULL,
-	[Level] TINYINT
+	[NewMaxLabel] [varchar](20) NULL
 ) 
 INSERT INTO @Dep_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake], [NewMaxStake],[NewMaxLabel]) VALUES (4601, N'RM', 20.00, 2090.00, 10450.00, '10,450') -- MYR
 INSERT INTO @Dep_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake], [NewMaxStake],[NewMaxLabel]) VALUES (4601, N'RM', 20.00, 4150.00, 20750.00, '20,750') -- MYR
