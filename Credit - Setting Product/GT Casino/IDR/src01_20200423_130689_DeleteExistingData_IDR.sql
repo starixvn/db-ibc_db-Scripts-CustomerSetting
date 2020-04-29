@@ -46,8 +46,7 @@ BEGIN
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
-		AND ci.Site<>'CN88'
-		AND ci.currency IN (15,22,33,34,47) -- IDR
+		AND ci.Site = 'IBCIndo'
 
 
 	SELECT DISTINCT cg.custid 

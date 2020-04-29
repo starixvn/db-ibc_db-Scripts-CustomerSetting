@@ -17,9 +17,8 @@
 		AND ci.username NOT LIKE '3rdSuper%'
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-		AND ci.Site<>'CN88'
+		AND ci.Site = 'IBCIndo'
 		AND s.islicensee = 0
-		AND ci.currency IN (15,22,33,34,47) -- IDR
 
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 25
