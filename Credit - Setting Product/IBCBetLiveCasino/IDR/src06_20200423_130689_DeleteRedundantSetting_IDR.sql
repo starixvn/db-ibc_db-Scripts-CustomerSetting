@@ -29,6 +29,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
 	AND ci.Site = 'IBCIndo'
+	AND ci.currency != 20 --UUS
 
 DELETE cg
 FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)	

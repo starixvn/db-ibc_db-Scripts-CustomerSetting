@@ -24,6 +24,7 @@ WHERE ci.roleid = 4
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND ci.Site = 'IBCIndo'
 			AND s.islicensee = 0
+			AND ci.currency != 20 --UUS
 
 
 SELECT TOP 1 @MaxPT = MaxPT FROM ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1

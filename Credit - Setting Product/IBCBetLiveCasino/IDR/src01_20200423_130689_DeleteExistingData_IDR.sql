@@ -47,6 +47,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
 		AND ci.Site = 'IBCIndo'
+		AND CI.currency != 20 --UUS
 
 
 	SELECT DISTINCT cg.custid 

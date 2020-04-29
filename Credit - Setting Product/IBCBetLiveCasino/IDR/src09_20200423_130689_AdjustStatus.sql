@@ -19,6 +19,7 @@
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.Site = 'IBCIndo'
 		AND s.islicensee = 0
+		AND ci.currency != 20 --UUS
 
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 25
