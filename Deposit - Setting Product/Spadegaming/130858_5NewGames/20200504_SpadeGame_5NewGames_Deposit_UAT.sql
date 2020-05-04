@@ -34,7 +34,7 @@ WHERE Max > 999
 ;WITH T AS(
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.Min,t.Max
 FROM Dep_StakeLevel s WITH(NOLOCK)
-CROSS APPLY (SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.Min,t.Max FROM #temp t WHERE s.ExchangeId = t.ExchangeID AND s.GameGroupID = 12) t
+CROSS APPLY (SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.Min,t.Max FROM #temp t WHERE s.ExchangeId = t.ExchangeID AND s.GameGroupID = 11) t
 WHERE s.GameTypeID = 4301
 )
 MERGE Dep_StakeLevelGroupDetail as g 
