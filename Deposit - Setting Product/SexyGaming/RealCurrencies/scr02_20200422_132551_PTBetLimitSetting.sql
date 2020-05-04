@@ -43,7 +43,7 @@ BEGIN
 	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
 
-	DECLARE @SuperPT SMALLINT = 85
+	DECLARE @SuperPT SMALLINT = 92
 	DECLARE @currency INT, @siteId INT
 	DECLARE @SportType SMALLINT = 243, @BetType SMALLINT = 3101
 
@@ -60,7 +60,7 @@ BEGIN
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
 	INSERT INTO #tmpCust(CustID)
 	SELECT CustID
@@ -203,28 +203,18 @@ BEGIN
 		[ExhangeId] [INT] NULL
 	) 
 	INSERT INTO @DEP_Stake ([GameTypeID], [MinStake], [MaxStake],[MinLabel],[MaxLabel],[ExhangeId])
-	SELECT 3101,'1','2000',1,2000,16 UNION ALL
-	SELECT 3101,'1','2000',1,2000,64 UNION ALL
-	SELECT 3101,'1','2000',1,2000,35 UNION ALL
 	SELECT 3101,'1','2000',1,2000,3 UNION ALL
 	SELECT 3101,'1','2000',1,2000,74 UNION ALL
 	SELECT 3101,'1','2000',1,2000,12 UNION ALL
 	SELECT 3101,'1','2000',1,2000,6 UNION ALL
-	SELECT 3101,'1','2000',1,2000,78 UNION ALL
 	SELECT 3101,'1','2000',1,2000,69 UNION ALL
 	SELECT 3101,'2','5000',2,5000,2 UNION ALL
-	SELECT 3101,'2','5000',2,5000,67 UNION ALL
 	SELECT 3101,'2','5000',2,5000,5 UNION ALL
 	SELECT 3101,'2','5000',2,5000,13 UNION ALL
-	SELECT 3101,'2','5000',2,5000,66 UNION ALL
 	SELECT 3101,'2','5000',2,5000,81 UNION ALL
 	SELECT 3101,'20','50000',20,50000,4 UNION ALL
 	SELECT 3101,'20','50000',20,50000,43 UNION ALL
 	SELECT 3101,'6','15000',6,15000,15 UNION ALL
-	SELECT 3101,'6','15000',6,15000,22 UNION ALL
-	SELECT 3101,'6','15000',6,15000,33 UNION ALL
-	SELECT 3101,'6','15000',6,15000,34 UNION ALL
-	SELECT 3101,'6','15000',6,15000,47 UNION ALL
 	SELECT 3101,'1000','2000000',1000,2000000,45 UNION ALL
 	SELECT 3101,'75','75000',75,75000,61 UNION ALL
 	SELECT 3101,'75','75000',75,75000,55 UNION ALL
@@ -234,8 +224,7 @@ BEGIN
 	SELECT 3101,'2','2500',2,2500,56 UNION ALL
 	SELECT 3101,'2','2500',2,2500,2 UNION ALL
 	SELECT 3101,'2','5000',2,5000,92 UNION ALL
-	SELECT 3101,'5000','500000',5000,500000,72 UNION ALL
-	SELECT 3101,'5000','500000',5000,500000,20
+	SELECT 3101,'5000','500000',5000,500000,20 
 	
 	UPDATE t
 	SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
@@ -399,9 +388,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency IN (16,64,35,3,74,12,6,78,69,2,67,5,13,66,81,4,43,15,22,33,34,47,45,61,55,51,32,46,56,2,92,49,79,80,82,83,85,86,72,20)  /*Yen, UT, $US,US$,TH, GBP, Euro, EUR, MMK,RM,HKK, HK$,RMB, CY, YUN,TB,THB, IN,IND,IDD,
- IDR,DDD, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,MXN, KES, GHS, BRL, CLP, PEN, ARS,YNG, UUS */
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol', 'N88', 'N8B', 'N8G', 'GGBook')
+		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -454,9 +442,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency IN (16,64,35,3,74,12,6,78,69,2,67,5,13,66,81,4,43,15,22,33,34,47,45,61,55,51,32,46,56,2,92,49,79,80,82,83,85,86,72)  /*Yen, UT, $US,US$,TH, GBP, Euro, EUR, MMK,RM,HKK, HK$,RMB, CY, YUN,TB,THB, IN,IND,IDD,
- IDR,DDD, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,MXN, KES, GHS, BRL, CLP, PEN, ARS,YNG */
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol', 'N88', 'N8B', 'N8G', 'GGBook')
+		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0

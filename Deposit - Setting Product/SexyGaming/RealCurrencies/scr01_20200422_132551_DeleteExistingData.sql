@@ -30,8 +30,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency IN (16,64,35,3,74,12,6,78,69,2,67,5,13,66,81,4,43,15,22,33,34,47,45,61,55,51,32,46,56,2,92,49,79,80,82,83,85,86,72, 20)  /*Yen, UT, $US,US$,TH, GBP, Euro, EUR, MMK,RM,HKK, HK$,RMB, CY, YUN,TB,THB, IN,IND,IDD,
- IDR,DDD, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,MXN, KES, GHS, BRL, CLP, PEN, ARS,YNG, UUS */
+		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 
 
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
