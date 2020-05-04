@@ -142,14 +142,6 @@ GO
 DECLARE @srecommend INT, 
 		@max_custid INT
 
-DECLARE @XML_211 VARCHAR(MAX)
-	,@XML_212 VARCHAR(MAX)
-	,@XML_248 VARCHAR(MAX)
-	
-SET @XML_211= 'Discount SportType="211" BetType="2401"'
-SET @XML_212 = 'Discount SportType="212" BetType="4001"'
-SET @XML_248 = 'Discount SportType="248" BetType="4101"'
-
 CREATE TABLE #Super(CustID INT, isfinished BIT DEFAULT(0))
 
 SELECT @max_custid = xxx
