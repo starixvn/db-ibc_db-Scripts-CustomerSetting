@@ -82,13 +82,13 @@ Thank you.')
 Please be informed that some of your agents were disabled because their members have had no activity in the last 4 months. Their credit has been cleared and your given credit has been decreased by the total cleared amounts. You cannot recover a disabled account.
 Thank you.')
 
------------------------Stage 1 --------------------------
+-----------------------Stage 3 --------------------------
 -- M1, M2
 ,(3, 'M1'
 		,N'Dear valued agents,
 Please be informed that some of your disabled agents have had no activity in the last 7 months, Their balances have been transferred to yours. You cannot recover a disabled account.
 Thank you.')
-,(3, 'M3'
+,(3, 'M2'
 		,N'Dear valued agents,
 Please be informed that some of your disabled agents have had no activity in the last 7 months, Their balances have been transferred to yours. You cannot recover a disabled account.
 Thank you.')
