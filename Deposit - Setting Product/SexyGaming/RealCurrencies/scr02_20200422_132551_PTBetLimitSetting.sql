@@ -10,6 +10,7 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend INT	
 	, @max_custid INT
 	, @target VARCHAR(20)
+	, @SuperPT SMALLINT
 	
 AS
 BEGIN	
@@ -43,7 +44,7 @@ BEGIN
 	CREATE TABLE #tmpCustInsert		(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500))
 
-	DECLARE @SuperPT SMALLINT = 92
+	
 	DECLARE @currency INT, @siteId INT
 	DECLARE @SportType SMALLINT = 243, @BetType SMALLINT = 3101
 
@@ -375,20 +376,20 @@ GO
 ------------------------------------------------------	
 -- BEGIN STEP 2: Run this SP at replicated DB: DB06, DBTP -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, SuperPT SMALLINT, isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @srecommend INT, @SuperPT SMALLINT
 
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
+SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol', 'N88', 'N8B', 'N8G', 'GGBook')
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
 		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
@@ -408,7 +409,9 @@ BEGIN
 	
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@srecommend = custid			
+		,@srecommend = custid
+		,@SuperPT = SuperPT
+	
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -417,7 +420,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = 'REPLICATED' 	
+	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = 'REPLICATED', @SuperPT= @SuperPT	
 				
 	WAITFOR DELAY '00:00:00.280'			
 END	
@@ -429,20 +432,20 @@ GO
 -----------------------------------------------------------------------------------
 -- BEGIN STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, SuperPT SMALLINT, isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+DECLARE @max_custid INT, @srecommend INT, @SuperPT SMALLINT
 
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
+SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol', 'N88', 'N8B', 'N8G', 'GGBook')
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
 		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
@@ -462,6 +465,7 @@ BEGIN
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
 		,@srecommend = custid
+		,@SuperPT = SuperPT
 			
 	WHERE isfinished = 0
 	
@@ -471,7 +475,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend,@max_custid=@max_custid,@target = 'DBCUST'
+	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend,@max_custid=@max_custid,@target = 'DBCUST', @SuperPT = @SuperPT
 		
 	WAITFOR DELAY '00:00:00.280'			
 END	

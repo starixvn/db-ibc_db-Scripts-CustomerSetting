@@ -6,25 +6,25 @@
 */
 
 	DECLARE @maxcustid INT
-	DECLARE @AgentID	INT,@CustID	INT,@SuperPT SMALLINT = 85
+	DECLARE @AgentID	INT,@CustID	INT
 	
 	SELECT @maxcustid = xxx
-	CREATE TABLE #supers (custid int)
+	CREATE TABLE #supers (custid int,SuperPT SMALLINT )
 
 	INSERT INTO #supers(custid)
-	SELECT ci.custid
+	SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
+		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
 		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 	ORDER BY CI.custid 
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
 	DECLARE @SportType INT = 243, @BetType INT=3101
 
@@ -39,16 +39,16 @@
 		   ,[AgentPT]
 		 )
 	SELECT 
-			[CustID]
+			CI.custid
 		   ,@Sporttype
 		   ,@BetType
 		   ,0
-		   ,@SuperPT
-		   ,@SuperPT
-		   ,@SuperPT
+		   ,S.SuperPT
+		   ,S.SuperPT
+		   ,S.SuperPT
 	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		INNER JOIN #supers S ON CI.srecommend = S.custid
+	WHERE  ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=4
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -62,16 +62,16 @@
 		   ,[AgentPT]
 		 )
 	SELECT 
-			[CustID]
+			CI.custid
 		   ,@Sporttype
 		   ,@BetType
 		   ,0
 		   ,0
-		   ,@SuperPT
+		   ,S.SuperPT
 		   ,0	
 	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		INNER JOIN #supers S ON CI.srecommend = S.custid
+	WHERE  ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=3
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -85,16 +85,16 @@
 		   ,[AgentPT]
 		 )
 	SELECT 
-			[CustID]
+			CI.custid
 		   ,@Sporttype
 		   ,@BetType
 		   ,0
 		   ,0
 		   ,0
-		   ,@SuperPT
+		   ,S.SuperPT
 	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		INNER JOIN #supers S ON CI.srecommend = S.custid
+	WHERE ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -108,16 +108,16 @@
 		   ,[AgentPT]
 		 )
 	SELECT 
-			[CustID]
+			CI.custid
 		   ,@Sporttype
 		   ,@BetType
 		   ,0
 		   ,0
 		   ,0
-		   ,@SuperPT
+		   ,S.SuperPT
 	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
+		INNER JOIN #supers S ON CI.srecommend = S.custid
+	WHERE ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -137,11 +137,11 @@
 		   ,0
 		   ,0
 		   ,0
-		   ,@SuperPT
+		   ,S.SuperPT
 	FROM custInfo ci WITH(NOLOCK)
+		INNER JOIN #supers S ON CI.srecommend = S.custid
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
+	WHERE ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND m.IsGroupedPT=0
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
