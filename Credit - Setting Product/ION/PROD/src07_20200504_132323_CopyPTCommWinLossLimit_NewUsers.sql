@@ -7,7 +7,6 @@
 PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 DECLARE @ProductID TINYINT = 41, @Sporttype INT = 225, @Bettype INT = 5601
 DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
-DECLARE @MaxPT TINYINT
 
 SELECT @MaxCustID = xxx
 
@@ -45,14 +44,11 @@ WHERE ci.roleid = 4
 								,69 --MMK
 							)
 
-
-SELECT TOP 1 @MaxPT = MaxPT FROM ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
-
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
 FROM ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6,7) --  PT,Comm,WinLossLimit, Betsetting
+WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6) --  PT,Comm,WinLossLimit
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 CREATE TABLE #tmpSTListMember(BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
