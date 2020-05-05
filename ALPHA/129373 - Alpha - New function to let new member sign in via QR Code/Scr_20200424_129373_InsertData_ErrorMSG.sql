@@ -30,10 +30,10 @@ INSERT INTO @MsgError(MsgID
 SELECT 40051
 ,5
 ,N'You can only create up to 200 new members every day by this function.'
-,N''
-,N''
-,N''
-,N''
+,N'使用此功能時，每日最多只能新建200個會員。'
+,N'使用此功能时，每天最多只能创建200个新成员。'
+,N'คุณสามารถสร้างสมาชิกใหม่ได้สูงสุด 200 บัญชีต่อวันด้วยฟังก์ชันนี้'
+,N'Bạn chỉ có thể tạo tối đa 200 Member mới mỗi ngày bằng tính năng này.'
 
 INSERT INTO MsgError(
 	 MsgID
