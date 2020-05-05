@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Copy PT & Comm & WinLossLimit for ION [Redmine: 132323]
+	Task: Copy PT & Comm & WinLossLimit for ION - Exclude PT For HKK [Redmine: 132323]
 	DB: DBCUST/CustDB
 */ 
 
@@ -82,98 +82,101 @@ BEGIN
 	FROM #DestinationSportBetType		
 	WHERE SettingType = 1
 
-	--Agent Level
-	INSERT INTO dbo.CustPTSetting3rd_Agent
-		(	[CustID]
-			,[SportType]
-			,[BetType]
-			,[IsLive]
-			,[SuperPT]
-			,[MasterPT]
-			,[AgentPT]
-			,[IsAutoMasterPT]
-			,[AutoMasterPT]
-			,[IsAutoSuperPT]
-			,[AutoSuperPT]
-			,[MinPT]
-			,[MaxPT])
-	SELECT 
-		C.custid, dest.tSportType, dest.tBetType
-		,C.IsLive
-		,C.SuperPT
-		,C.MasterPT
-		,C.AgentPT
-		,C.IsAutoMasterPT
-		,C.AutoMasterPT
-		,C.IsAutoSuperPT
-		,C.AutoSuperPT
-		,C.MinPT
-		,C.MaxPT
-	FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK) 
-		INNER JOIN #SMATemp ci ON ci.custid = C.custid
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-		AND dest.SettingType = 1
+	IF @Currency <> 67 --HKK
+	BEGIN
+		--Agent Level
+		INSERT INTO dbo.CustPTSetting3rd_Agent
+			(	[CustID]
+				,[SportType]
+				,[BetType]
+				,[IsLive]
+				,[SuperPT]
+				,[MasterPT]
+				,[AgentPT]
+				,[IsAutoMasterPT]
+				,[AutoMasterPT]
+				,[IsAutoSuperPT]
+				,[AutoSuperPT]
+				,[MinPT]
+				,[MaxPT])
+		SELECT 
+			C.custid, dest.tSportType, dest.tBetType
+			,C.IsLive
+			,C.SuperPT
+			,C.MasterPT
+			,C.AgentPT
+			,C.IsAutoMasterPT
+			,C.AutoMasterPT
+			,C.IsAutoSuperPT
+			,C.AutoSuperPT
+			,C.MinPT
+			,C.MaxPT
+		FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK) 
+			INNER JOIN #SMATemp ci ON ci.custid = C.custid
+			CROSS APPLY #DestinationSportBetType dest
+		WHERE C.bettype = @fBetType AND C.SportType = @fSportType
+			AND dest.SettingType = 1
 
-	--Member Level
-	INSERT INTO dbo.CustPTSetting3rd_Member
-		(	[custid]
-			,	[sporttype]
-			,	[bettype]
-			,	[islive]
-			,	[superPT]
-			,	[masterPT]
-			,	[agentPT]
-			,	[IsAutoMasterPT]
-			,	[AutoMasterPT]
-			,	[IsAutoSuperPT]
-			,	[AutoSuperPT])
-	SELECT 
-		C.custid, dest.tSportType, dest.tBetType
-		,C.IsLive
-		,C.SuperPT
-		,C.MasterPT
-		,C.AgentPT
-		,C.IsAutoMasterPT
-		,C.AutoMasterPT
-		,C.IsAutoSuperPT
-		,C.AutoSuperPT
-	FROM CustPTSetting3rd_Member C WITH(NOLOCK) 
-		INNER JOIN #MemberTemp ci ON C.CustID = ci.custid
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
-		AND dest.SettingType = 1
+		--Member Level
+		INSERT INTO dbo.CustPTSetting3rd_Member
+			(	[custid]
+				,	[sporttype]
+				,	[bettype]
+				,	[islive]
+				,	[superPT]
+				,	[masterPT]
+				,	[agentPT]
+				,	[IsAutoMasterPT]
+				,	[AutoMasterPT]
+				,	[IsAutoSuperPT]
+				,	[AutoSuperPT])
+		SELECT 
+			C.custid, dest.tSportType, dest.tBetType
+			,C.IsLive
+			,C.SuperPT
+			,C.MasterPT
+			,C.AgentPT
+			,C.IsAutoMasterPT
+			,C.AutoMasterPT
+			,C.IsAutoSuperPT
+			,C.AutoSuperPT
+		FROM CustPTSetting3rd_Member C WITH(NOLOCK) 
+			INNER JOIN #MemberTemp ci ON C.CustID = ci.custid
+			CROSS APPLY #DestinationSportBetType dest
+		WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
+			AND dest.SettingType = 1
 
-	--Group PT 
-	INSERT INTO dbo.CustPTGroupSetting3rd_Member
-		(	[AgentID]
-			,[SportType]
-			,[BetType]
-			,[IsLive]
-			,[SuperPT]
-			,[MasterPT]
-			,[AgentPT]
-			,[IsAutoMasterPT]
-			,[AutoMasterPT]
-			,[IsAutoSuperPT]
-			,[AutoSuperPT]
-		)
-	SELECT 
-		C.AgentID, dest.tSportType, dest.tBetType
-		,C.IsLive
-		,C.SuperPT
-		,C.MasterPT
-		,C.AgentPT
-		,C.IsAutoMasterPT
-		,C.AutoMasterPT
-		,C.IsAutoSuperPT
-		,C.AutoSuperPT
-	FROM dbo.CustPTGroupSetting3rd_Member C WITH(NOLOCK) 
-		INNER JOIN #SMATemp ci ON ci.custid = C.AgentID
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-		AND dest.SettingType = 1
+		--Group PT 
+		INSERT INTO dbo.CustPTGroupSetting3rd_Member
+			(	[AgentID]
+				,[SportType]
+				,[BetType]
+				,[IsLive]
+				,[SuperPT]
+				,[MasterPT]
+				,[AgentPT]
+				,[IsAutoMasterPT]
+				,[AutoMasterPT]
+				,[IsAutoSuperPT]
+				,[AutoSuperPT]
+			)
+		SELECT 
+			C.AgentID, dest.tSportType, dest.tBetType
+			,C.IsLive
+			,C.SuperPT
+			,C.MasterPT
+			,C.AgentPT
+			,C.IsAutoMasterPT
+			,C.AutoMasterPT
+			,C.IsAutoSuperPT
+			,C.AutoSuperPT
+		FROM dbo.CustPTGroupSetting3rd_Member C WITH(NOLOCK) 
+			INNER JOIN #SMATemp ci ON ci.custid = C.AgentID
+			CROSS APPLY #DestinationSportBetType dest
+		WHERE C.bettype = @fBetType AND C.SportType = @fSportType
+			AND dest.SettingType = 1
 
+	END
 --------------------------------------Commission Setting-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		

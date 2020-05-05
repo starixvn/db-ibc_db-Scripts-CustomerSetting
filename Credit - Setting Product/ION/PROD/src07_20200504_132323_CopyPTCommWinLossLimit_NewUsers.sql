@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Copy Setting for new created users of ION [Redmine: 132323]
+	Task: Copy Setting for new created users of ION - Exclude PT For HKK [Redmine: 132323]
 	DB: DBCUST/CustDB
 */
 
@@ -48,11 +48,11 @@ WHERE ci.roleid = 4
 
 SELECT TOP 1 @MaxPT = MaxPT FROM ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 
-	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
-	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
-	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6,7) --  PT,Comm,WinLossLimit, Betsetting
+CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
+INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
+SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
+FROM ProductSettingDetail WITH (NOLOCK)
+WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6,7) --  PT,Comm,WinLossLimit, Betsetting
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 CREATE TABLE #tmpSTListMember(BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
@@ -143,6 +143,7 @@ FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 1
+		AND ci.currency <> 67 --HKK
 
 --Member Level
 INSERT INTO dbo.CustPTSetting3rd_Member
@@ -172,6 +173,7 @@ FROM CustPTSetting3rd_Member C WITH(NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
 		AND dest.SettingType = 1
+		AND ci.currency <> 67 --HKK
 
 --Group PT 
 INSERT INTO dbo.CustPTGroupSetting3rd_Member
@@ -201,7 +203,8 @@ FROM dbo.CustPTGroupSetting3rd_Member C WITH(NOLOCK)
 		INNER JOIN #SMATemp ci ON ci.custid = C.AgentID
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-		AND dest.SettingType = 1	
+		AND dest.SettingType = 1
+		AND ci.currency <> 67 --HKK	
 --------------------------------------Commission Setting-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		

@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Adjust Setting for ION [Redmine: 132323]
+	Task: Adjust Setting for ION - Exclude PT For HKK [Redmine: 132323]
 	DB: DBCUST/CustDB
 */
 
@@ -68,7 +68,7 @@
 	INSERT INTO #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking, MaxPositionTaking)
 	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT, C.MinPT, C.MaxPT
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid AND ci.currency <> 67 --HKK
 		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
 		INNER JOIN dbo.CustPTSetting3rd_Agent csa WITH (NOLOCK) ON C.custid = csa.custid
 		WHERE C.bettype = @fBetType	AND C.SportType = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
@@ -90,7 +90,7 @@
 	INSERT INTO #MemberList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking)
 	SELECT C.custid, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTSetting3rd_Member C WITH(NOLOCK)
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid AND ci.currency <> 67 --HKK
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = c.custid 
 	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
@@ -109,7 +109,7 @@
 	INSERT INTO #AgentGroupPT (AgentID, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT)
 	SELECT C.AgentID, C.IsLive, C.SuperPT, C.MasterPT, C.AgentPT, C.IsAutoMasterPT, C.AutoMasterPT, C.IsAutoSuperPT, C.AutoSuperPT
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustPTGroupSetting3rd_Member C WITH (NOLOCK)
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.AgentID
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.AgentID AND ci.currency <> 67 --HKK
 		INNER JOIN #supers s WITH (NOLOCK) ON CI.srecommend = S.custid
 		INNER JOIN dbo.CustPTGroupSetting3rd_Member csa WITH (NOLOCK) ON C.AgentID = csa.AgentID
 	WHERE C.SportType = @fSportType AND C.BetType = @fBetType 
