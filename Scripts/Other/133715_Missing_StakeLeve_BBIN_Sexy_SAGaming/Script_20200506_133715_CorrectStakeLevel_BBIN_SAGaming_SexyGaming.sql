@@ -4,9 +4,7 @@
 	Task: Correct missing data of StakeLevel of SA Gaming ,Sexy Gaming, BBIN [Redmine: 132323]
 	DB: DBCUST/CustDB
 */
-CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED,currency INT)
-CREATE TABLE #MemberTempBatch(CustID	INT PRIMARY KEY CLUSTERED,currency INT)
-CREATE TABLE #tmpSTListMember (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
+CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED,currency INT,recommend INT)
 CREATE TABLE #SportBettype (SportType INT , Bettype INT)
 
 INSERT INTO #SportBettype (SportType,Bettype)
@@ -15,8 +13,8 @@ UNION ALL SELECT 243,3101 --Sexy Gaming
 UNION ALL SELECT 241,3300 --BBIN
 
 --List member wrong StakeLevel
-INSERT INTO #MemberTemp (CustID, currency)
-SELECT custid, currency
+INSERT INTO #MemberTemp (CustID,recommend)
+SELECT custid,recommend
 FROM Custinfo WITH (NOLOCK)
 WHERE roleid = 1  
 	AND Enabled = 1 
@@ -61,47 +59,18 @@ WHERE roleid = 1
 					,42490534
 					)
 
-INSERT INTO #tmpSTListMember(BettypeID, Currency, StakeLevelList)
-SELECT DISTINCT ST.GameTypeID,currency, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
-FROM #MemberTemp M CROSS JOIN StakeLevel ST 
-CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
-			FROM StakeLevel S WITH (NOLOCK)
-			WHERE S.GameTypeID =ST.GameTypeID AND S.ExchangeId=M.currency
-			FOR XML PATH ('') ) AS A(STL)
-WHERE ST.GameTypeID IN (SELECT Bettype from #SportBettype) 
-ORDER BY ST.GameTypeID
+DELETE c
+FROM CustStakeLevel_Member c WITH(ROWLOCK)
+	INNER JOIN #MemberTemp m ON c.CustID = m.CustID
+	INNER JOIN #SportBettype tmp On tmp.SportType = c.SportType AND tmp.Bettype = c.BetType
 
-
-WHILE EXISTS(SELECT 1 FROM #MemberTemp)
-BEGIN
-	DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
-
-	IF @@ROWCOUNT=0
-	BREAK		
-
-	DELETE c
-	FROM CustStakeLevel_Member c WITH(ROWLOCK)
-		INNER JOIN #MemberTempBatch m ON c.CustID = m.CustID
-		INNER JOIN #SportBettype tmp On tmp.SportType = c.SportType AND tmp.Bettype = c.BetType
-
-
-	INSERT INTO dbo.CustStakeLevel_Member([CustID]
-										,[SportType]
-										,[BetType]
-										,[StakeLevelList]
-										,LastUpdated) 
-	SELECT DISTINCT t.custid,MAX(sb.SportType),TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-	FROM StakeLevel S WITH(NOLOCK) 
-		INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
-		INNER JOIN  #SportBettype sb ON tb.BettypeID =sb.Bettype
-		CROSS JOIN  #MemberTempBatch t
-	WHERE S.ExchangeId=t.currency
-	GROUP BY t.custid, TB.BettypeID
-
-	TRUNCATE TABLE #MemberTempBatch
-END
+INSERT INTO dbo.CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
+SELECT t.custid,s.SportType,s.BetType,MIN(CONVERT(INT,val)) as [StakeLevelList],GETDATE()
+FROM #MemberTemp t 
+	INNER JOIN CustStakeLevel_Agent s WITH(NOLOCK) on t.recommend = s.CustID
+	CROSS APPLY dbo.f_StringSplit(s.StakeLevelList,',') st
+WHERE S.BetType IN (SELECT Bettype from #SportBettype) 
+GROUP BY t.custid,s.SportType,s.BetType
 
 DROP TABLE #MemberTemp
 DROP TABLE #SportBettype
-DROP TABLE #MemberTempBatch
-DROP TABLE #tmpSTListMember
