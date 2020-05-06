@@ -69,7 +69,7 @@ SELECT t.custid,s.SportType,s.BetType,MIN(CONVERT(INT,val)) as [StakeLevelList],
 FROM #MemberTemp t 
 	INNER JOIN CustStakeLevel_Agent s WITH(NOLOCK) on t.recommend = s.CustID
 	CROSS APPLY dbo.f_StringSplit(s.StakeLevelList,',') st
-WHERE S.BetType IN (SELECT Bettype from #SportBettype) 
+	INNER JOIN #SportBettype sb ON s.SportType = sb.SportType AND s.BetType = sb.Bettype
 GROUP BY t.custid,s.SportType,s.BetType
 
 DROP TABLE #MemberTemp
