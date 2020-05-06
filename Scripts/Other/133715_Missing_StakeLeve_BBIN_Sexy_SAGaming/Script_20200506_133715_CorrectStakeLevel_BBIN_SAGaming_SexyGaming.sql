@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20200506@Eden
 	Task: Correct missing data of StakeLevel of SA Gaming ,Sexy Gaming, BBIN [Redmine: 132323]
