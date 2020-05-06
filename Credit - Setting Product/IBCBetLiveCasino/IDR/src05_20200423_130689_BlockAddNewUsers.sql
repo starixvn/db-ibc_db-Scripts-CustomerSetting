@@ -9,7 +9,7 @@ GO
 --> Step 1 add config to block add new cust
 DECLARE @UnblockTime VARCHAR(50) = '01:30 PM (GMT+8)' -- time unblock add new cust
 
-UPDATE Site_BlockNewCust WITH(ROWLOCK)
+UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 1,
 	UnblockTime = @UnblockTime
 

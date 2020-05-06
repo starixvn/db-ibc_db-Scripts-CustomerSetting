@@ -5,6 +5,6 @@
 */ 
 USE CustDB
 GO
-UPDATE Site_BlockNewCust WITH(ROWLOCK)
+UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 0,
 	UnblockTime = NULL
