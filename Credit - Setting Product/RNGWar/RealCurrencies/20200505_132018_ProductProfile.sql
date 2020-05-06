@@ -13,8 +13,8 @@ SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
 SELECT @ProductID = 44
 SELECT @RealProductID = 50
 SELECT @IsSync = 1
-SELECT @IsHidden = 1
-SELECT @IsDisabled = 1
+SELECT @IsHidden = 0
+SELECT @IsDisabled = 0
 SELECT @BitmapOrder = 26
 SELECT @MaxPT = 85
 
