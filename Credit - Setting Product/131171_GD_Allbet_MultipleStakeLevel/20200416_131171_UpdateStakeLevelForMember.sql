@@ -173,7 +173,7 @@ BEGIN
 	INNER JOIN CUSTINFO CI WITH (NOLOCK) ON CI.custid = C.CustID
 	CROSS APPLY
 	(SELECT ',' + ISNULL(CAST(StakeLevelID AS VARCHAR(10)),'')
-	FROM (SELECT CAST(val AS INT) AS val
+	FROM (SELECT TOP 3 CAST(val AS INT) AS val
 			FROM dbo.strSplit(C.StakeLevelList_new,',')
 			INNER JOIN StakeLevel S WITH (NOLOCK) ON S.StakeLevelID = val
 			ORDER BY S.MaxStake ) CD --Sort stakelevel
