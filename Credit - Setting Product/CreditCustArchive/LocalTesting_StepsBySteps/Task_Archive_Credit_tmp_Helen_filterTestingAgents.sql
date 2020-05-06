@@ -27,7 +27,7 @@ BEGIN
 	FROM @xml.nodes('/r') AS x(v)
 	
 	INSERT INTO dbo.tmpCustArchived (Super, Master, Agent, MemCnt, recommend)
-	SELECT * FROM #tempCustArchived 
+	SELECT Super, Master, Agent, MemCnt, recommend FROM #tempCustArchived 
 	WHERE recommend IN (XXX)
 	
 	SET NOCOUNT OFF 
