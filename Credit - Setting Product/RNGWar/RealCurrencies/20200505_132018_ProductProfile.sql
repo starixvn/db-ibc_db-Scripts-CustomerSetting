@@ -42,6 +42,25 @@ WHERE P.Sporttype = 224
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(224, 5500, @BitmapOrder)
 
+INSERT INTO [dbo].[ProductStatusSiteCurrency]
+           ([SportType]
+           ,[BetType]
+           ,[Currency]
+           ,[SiteID]
+           ,[IsHidden]
+           ,[IsDisabled]
+		   ,[HasSynced])
+
+SELECT 224,5500, 0 AS exchangeid, s.siteid, 0 AS IsHidden, 0 AS IsDisabled, 1 AS HasSynced
+FROM dbo.Site s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('789y')
+
+INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
+SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit
+FROM LossLimit_GlobalSetting lg WITH (NOLOCK)
+	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
+WHERE ProductId = 50 AND (e.Code = 'USD' OR e.exchangeid = 20)
 
 
 
