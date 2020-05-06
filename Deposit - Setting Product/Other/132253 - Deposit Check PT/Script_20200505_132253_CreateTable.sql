@@ -1,9 +1,9 @@
  /*
 	Created: 20200505@Eden
 	Task: Create table Dep_PTConfig [Redmine:#132253]	
-	DB: DBCHECK/CheckCustDB
+	DB: DBCHECK/CheckResultDB
 */
-USE [CheckCustDB]
+USE CheckResultDB
 GO
 --DROP TABLE [dbo].[Dep_PTConfig]
 --GO
@@ -25,8 +25,8 @@ CREATE TABLE [dbo].[Dep_PTConfig](
 		[SportType] ASC,
 		[RuleID] ASC,
 		[IsAthena] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CS_CustPTSetting_Member_table]
-) ON [CS_CustPTSetting_Member_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CheckResultData]
+) ON [CheckResultData]
 GO
 
 INSERT INTO [Dep_PTConfig] (RuleID,SportType,IsAthena,PTValue,IsActive)
