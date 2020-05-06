@@ -50,9 +50,9 @@
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 22) as isDisabledSG
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS2.bitmapIsDisabled, @BitmapOrder) as isDisabledGT
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS2.bitmapIsHidden, @BitmapOrder) as isHiddenGT
-	WHERE (isDisabledGT.value <> isDisabledSG.value	OR isHiddenGT.value != 0)
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS2.bitmapIsDisabled, @BitmapOrder) as isDisabledION
+		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS2.bitmapIsHidden, @BitmapOrder) as isHiddenION
+	WHERE (isDisabledION.value <> isDisabledSG.value	OR isHiddenION.value != 0)
 		AND ci.Enabled = 1
 
 	DECLARE @tmp_AdjustStatus TABLE (custid INT, IsDisabledSG BIT) 
