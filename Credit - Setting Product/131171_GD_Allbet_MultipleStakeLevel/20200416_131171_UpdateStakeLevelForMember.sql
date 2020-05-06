@@ -50,52 +50,10 @@ BEGIN
 		AND CI.Enabled = 1
 		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
-		AND CS.StakeLevelList <> '' 
-		AND CS.StakeLevelList IS NOT NULL
-	
 
-	--Get list of member whose stakelevel are empty or null
-	CREATE TABLE #CustStakeLevelMember_Lowest (
-			CustID INT 
-			,AgentID INT
-			,Sporttype SMALLINT
-			,Bettype SMALLINT
-			,StakeLevelList VARCHAR(100)
-			,StakeLevelList_new VARCHAR(100)							
-			, PRIMARY KEY CLUSTERED (CustID,Sporttype,Bettype)
-		)
 
-	INSERT INTO #CustStakeLevelMember_Lowest (CustID,AgentID,Sporttype,Bettype,StakeLevelList,StakeLevelList_new)
-	SELECT CI.custid,
-		  CI.recommend AS AgentID,
-		  cs.SportType,
-		  cs.Bettype,
-		  cs.StakeLevelList,
-		  CA.StakeLevelList
-	FROM dbo.custinfo CI WITH(NOLOCK)
-		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid
-		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.SportType = CA.SportType AND CS.BetType = CA.BetType 
-	WHERE  CI.srecommend = @srecommend
-		AND roleid = 1
-		AND CI.Enabled = 1
-		AND CS.SportType IN (211,243,244)
-		AND CS.BetType IN (2401, 3001, 3101)
-		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
-		AND CA.StakeLevelList != '' 
-		AND CA.StakeLevelList IS NOT NULL
 
-	UPDATE T
-	SET StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #CustStakeLevelMember_Lowest T		 		
-		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
-					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(T.StakeLevelList_new,','))  CD
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY MaxStake DESC
-					) T1 -- Get lowest stakelevel from agent
-
-	--Apply all checked stakelevel from agent to member whose stake level is not null
+	--Apply all checked stakelevel from agent to member
 	UPDATE CS
 	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
@@ -106,17 +64,6 @@ BEGIN
 		AND CS.SportType IN (211,243,244)
 		AND CS.BetType IN (2401, 3001, 3101)
 
-	--Apply lowest stakelevel from agent to member whose stakelevel is null
-
-	UPDATE CS
-	SET CS.StakeLevelList = ISNULL(DL.StakeLevelList_new,'')
-	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #CustStakeLevelMember_Lowest DL ON CS.CustID = DL.CustID 
-												AND CS.SportType = DL.Sporttype
-												AND CS.bettype = DL.bettype
-	WHERE CS.StakeLevelList <> DL.StakeLevelList_new
-		AND CS.SportType IN (211,243,244)
-		AND CS.BetType IN (2401, 3001, 3101)
 
 	--Adjust StakelevelList for Allbet if exceed MaxChoice
 	SELECT T.CustID, T.AgentID,T.Sporttype,T.Bettype,T.StakeLevelList_new,3 AS MaxChoice INTO #AdjustList
@@ -170,44 +117,9 @@ BEGIN
 		AND ci.roleid = 1  
 		AND ci.Enabled = 1 
 		AND CS.GameTypeID IN (1701,1702) --GoldDeluxe
-		AND CS.StakeLevelList <> '' 
-		AND CS.StakeLevelList IS NOT NULL
 
 
-	CREATE TABLE #MemberTemp_Lowest (
-			CustID INT 
-			,AgentID INT		
-			,Bettype INT
-			,StakeLevelList VARCHAR(100)
-			,StakeLevelList_new VARCHAR(100)							
-			, PRIMARY KEY CLUSTERED (CustID,Bettype)
-		)
-
-	INSERT INTO #MemberTemp_Lowest (CustID,AgentID,Bettype,StakeLevelList,StakeLevelList_new)
-	SELECT DISTINCT ci.custid, ci.recommend,CS.GameTypeID, CS.StakeLevelList, CA.StakeLevelList
-	FROM Custinfo ci WITH (NOLOCK)
-		INNER JOIN CustGameType CS WITH (NOLOCK) ON CI.custid = CS.CustID
-		INNER JOIN CustGameType CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.GameTypeID = CA.GameTypeID
-	WHERE srecommend = @srecommend 
-		AND ci.roleid = 1  
-		AND ci.Enabled = 1 
-		AND CS.GameTypeID IN (1701,1702) --GoldDeluxe
-		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
-		AND CA.StakeLevelList != '' 
-		AND CA.StakeLevelList IS NOT NULL
-
-	UPDATE M
-	SET M.StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #MemberTemp_Lowest M WITH (ROWLOCK, UPDLOCK)
-		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
-					FROM (SELECT CAST(val AS INT) AS val
-						  FROM dbo.strSplit(M.StakeLevelList_new,','))  CD
-							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON CD.val = SL.StakeLevelID
-						 WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY MaxStake DESC
-					) T1 -- Get lowest stakelevel from agent
-
-	--Apply all checked stakelevel from agent to member whose stake level is not null
+	--Apply all checked stakelevel from agent to member 
 	UPDATE CT
 	SET CT.StakeLevelList = ISNULL (M.StakeLevelList_new,'')
 	FROM CustGameType CT WITH (ROWLOCK, UPDLOCK)
@@ -215,19 +127,10 @@ BEGIN
 	WHERE CT.StakeLevelList <> M.StakeLevelList_new
 		AND CT.GameTypeID IN (1701,1702)
 
-	--Apply lowest stakelevel from agent to member whose stakelevel is null
-	UPDATE CT
-	SET CT.StakeLevelList = ISNULL (M.StakeLevelList_new,'')
-	FROM CustGameType CT WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #MemberTemp_Lowest M WITH (NOLOCK) ON M.CustID = CT.CustID AND M.Bettype = CT.GameTypeID
-	WHERE CT.StakeLevelList <> M.StakeLevelList_new
-		AND CT.GameTypeID IN (1701,1702)
 
 	--Drop all temp tables
 	DROP TABLE #CustStakeLevelMember_All
-	DROP TABLE #CustStakeLevelMember_Lowest
 	DROP TABLE #MemberTemp_All
-	DROP TABLE #MemberTemp_Lowest
 	DROP TABLE #AdjustList
 
 
