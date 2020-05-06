@@ -59,18 +59,21 @@ WHERE roleid = 1
 					,42490534
 					)
 
-DELETE c
-FROM CustStakeLevel_Member c WITH(ROWLOCK)
-	INNER JOIN #MemberTemp m ON c.CustID = m.CustID
-	INNER JOIN #SportBettype tmp On tmp.SportType = c.SportType AND tmp.Bettype = c.BetType
-
-INSERT INTO dbo.CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
-SELECT t.custid,s.SportType,s.BetType,MIN(CONVERT(INT,val)) as [StakeLevelList],GETDATE()
+SELECT t.custid,s.SportType,s.BetType,ISNULL(CONVERT(VARCHAR,NULLIF(MIN(CONVERT(INT,st.val)),0)),'') as [StakeLevelList]
+INTO #TmpStakelevel
 FROM #MemberTemp t 
 	INNER JOIN CustStakeLevel_Agent s WITH(NOLOCK) on t.recommend = s.CustID
 	CROSS APPLY dbo.f_StringSplit(s.StakeLevelList,',') st
 	INNER JOIN #SportBettype sb ON s.SportType = sb.SportType AND s.BetType = sb.Bettype
 GROUP BY t.custid,s.SportType,s.BetType
 
+INSERT INTO dbo.CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
+SELECT t.[CustID],t.[SportType],t.[BetType],t.[StakeLevelList],GETDATE() AS LastUpdated
+FROM #TmpStakelevel t
+	LEFT JOIN CustStakeLevel_Member c WITH(NOLOCK) ON  t.SportType = c.SportType AND t.BetType = c.BetType AND c.CustID = t.CustID
+WHERE c.CustID IS NULL
+
 DROP TABLE #MemberTemp
 DROP TABLE #SportBettype
+DROP TABLE #TmpStakelevel
+
