@@ -212,7 +212,7 @@ BEGIN
 	SELECT 3101,'2','5000',2,5000,2 UNION ALL
 	SELECT 3101,'2','5000',2,5000,5 UNION ALL
 	SELECT 3101,'2','5000',2,5000,13 UNION ALL
-	SELECT 3101,'2','5000',2,5000,81 UNION ALL
+	SELECT 3101,'2','5000',2,5000,66 UNION ALL
 	SELECT 3101,'20','50000',20,50000,4 UNION ALL
 	SELECT 3101,'20','50000',20,50000,43 UNION ALL
 	SELECT 3101,'6','15000',6,15000,15 UNION ALL
@@ -223,7 +223,6 @@ BEGIN
 	SELECT 3101,'100','100000',100,100000,32 UNION ALL
 	SELECT 3101,'1','2000',1,2000,46 UNION ALL
 	SELECT 3101,'2','2500',2,2500,56 UNION ALL
-	SELECT 3101,'2','2500',2,2500,2 UNION ALL
 	SELECT 3101,'2','5000',2,5000,92 UNION ALL
 	SELECT 3101,'5000','500000',5000,500000,20 
 	
@@ -382,7 +381,7 @@ DECLARE @max_custid INT, @srecommend INT, @SuperPT SMALLINT
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
+INSERT INTO #supers(custid, SuperPT)
 SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
@@ -390,7 +389,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
-		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
+		AND ci.currency IN (3,74,12,6,69,2,5,13,66,4,15,45,61,55,51,32,46,56,71,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -438,7 +437,7 @@ DECLARE @max_custid INT, @srecommend INT, @SuperPT SMALLINT
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
+INSERT INTO #supers(custid, SuperPT)
 SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
@@ -446,7 +445,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
-		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
+		AND ci.currency IN (3,74,12,6,69,2,5,13,66,4,15,45,61,55,51,32,46,56,71,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0

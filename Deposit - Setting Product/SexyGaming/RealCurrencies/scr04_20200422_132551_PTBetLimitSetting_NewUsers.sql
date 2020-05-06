@@ -11,14 +11,14 @@
 	SELECT @maxcustid = xxx
 	CREATE TABLE #supers (custid int,SuperPT SMALLINT )
 
-	INSERT INTO #supers(custid)
+	INSERT INTO #supers(custid, SuperPT)
 	SELECT ci.custid, CASE WHEN CS.site IN ('N88', 'N8B', 'N8G', 'GGBook') THEN 92 ELSE 85 END AS SuperPT
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','N88', 'N8B', 'N8G', 'GGBook')
-		AND ci.currency IN (3,74,12,6,69,2,5,13,81,4,15,45,61,55,51,32,46,56,2,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
+		AND ci.currency IN (3,74,12,6,69,2,5,13,66,4,15,45,61,55,51,32,46,56,71,92,20)	--US$,TH, GBP, Euro, MMK,RM,HK$,RMB, YUN,TB, IN, WON,INR, RUB,INH,JPY,BND,PLN,KHR,HID,UUS
 	ORDER BY CI.custid 
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
