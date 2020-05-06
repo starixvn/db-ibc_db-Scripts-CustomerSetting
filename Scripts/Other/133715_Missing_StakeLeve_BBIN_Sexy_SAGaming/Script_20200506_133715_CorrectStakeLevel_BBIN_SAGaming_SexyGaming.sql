@@ -71,25 +71,37 @@ CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
 WHERE ST.GameTypeID IN (SELECT Bettype from #SportBettype) 
 ORDER BY ST.GameTypeID
 
+
 WHILE EXISTS(SELECT 1 FROM #MemberTemp)
 BEGIN
 	DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
 
 	IF @@ROWCOUNT=0
-		BREAK		
+	BREAK		
 
-		INSERT INTO dbo.CustStakeLevel_Member([CustID]
-										   ,[SportType]
-										   ,[BetType]
-										   ,[StakeLevelList]
-										   ,LastUpdated) 
-		SELECT DISTINCT t.custid,MAX(sb.SportType),TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
-		FROM StakeLevel S WITH(NOLOCK) 
-			INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
-			INNER JOIN  #SportBettype sb ON tb.BettypeID =sb.Bettype
-			CROSS JOIN  #MemberTempBatch t
-		WHERE S.ExchangeId=t.currency
-		GROUP BY t.custid, TB.BettypeID
+	DELETE c
+	FROM CustStakeLevel_Member c WITH(ROWLOCK)
+		INNER JOIN #MemberTempBatch m ON c.CustID = m.CustID
+		INNER JOIN #SportBettype tmp On tmp.SportType = c.SportType AND tmp.Bettype = c.BetType
+
+
+	INSERT INTO dbo.CustStakeLevel_Member([CustID]
+										,[SportType]
+										,[BetType]
+										,[StakeLevelList]
+										,LastUpdated) 
+	SELECT DISTINCT t.custid,MAX(sb.SportType),TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+	FROM StakeLevel S WITH(NOLOCK) 
+		INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID AND S.ExchangeId = TB.Currency
+		INNER JOIN  #SportBettype sb ON tb.BettypeID =sb.Bettype
+		CROSS JOIN  #MemberTempBatch t
+	WHERE S.ExchangeId=t.currency
+	GROUP BY t.custid, TB.BettypeID
 
 	TRUNCATE TABLE #MemberTempBatch
 END
+
+DROP TABLE #MemberTemp
+DROP TABLE #SportBettype
+DROP TABLE #MemberTempBatch
+DROP TABLE #tmpSTListMember
