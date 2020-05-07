@@ -171,7 +171,7 @@
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustBetSetting3rd_Agent f WITH (NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON f.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-		INNER JOIN DBNOTI.CustDB_AdjustCS.dbo.CustBetSetting3rd_Agent t  WITH (NOLOCK)
+		INNER JOIN dbo.CustBetSetting3rd_Agent t  WITH (NOLOCK)
 			ON f.CustID = t.CustID 
 			AND t.SportType = @tSportType 
 			AND t.BetType = @tBetType
@@ -185,7 +185,7 @@
 	FROM DBNOTI.CustDB_AdjustCS.dbo.CustBetSetting3rd_Member f WITH (NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON f.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-		INNER JOIN DBNOTI.CustDB_AdjustCS.dbo.CustBetSetting3rd_Member t  WITH (NOLOCK)
+		INNER JOIN dbo.CustBetSetting3rd_Member t  WITH (NOLOCK)
 			ON f.CustID = t.CustID 
 			AND t.SportType = @tSportType 
 			AND t.BetType = @tBetType
