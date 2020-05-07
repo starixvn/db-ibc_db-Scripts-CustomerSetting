@@ -29,6 +29,7 @@ BEGIN
 	INSERT INTO dbo.tmpCustArchived (Super, Master, Agent, MemCnt, recommend)
 	SELECT Super, Master, Agent, MemCnt, recommend FROM #tempCustArchived 
 	WHERE recommend IN (XXX)
+		--recommend IN  (42780012,42780013,42780014,42780015,42780016,42780017,42780018,42780020)
 	
 	SET NOCOUNT OFF 
 END			
