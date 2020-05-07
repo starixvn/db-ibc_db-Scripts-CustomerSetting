@@ -107,7 +107,7 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
 	CROSS APPLY (SELECT TOP (1) 1 
 				FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
-						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32)
+						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32,24)
 				WHERE  lp.CustID = cs.custid							
 				)
 				AS tmp (_sb)
