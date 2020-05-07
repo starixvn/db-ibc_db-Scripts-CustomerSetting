@@ -35,9 +35,14 @@
 	
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
+	SELECT	220, 1024, SportType, BetType, 0, SettingType, 0
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,2,6) --  PT,BetSetting, WinLossLimit
+	WHERE ProductID = @ProductID AND SettingType IN (1,2) AND SportType = @Sporttype
+
+	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
+	SELECT	220, 1021, SportType, BetType, 0, SettingType, 0
+	FROM ProductSettingDetail WITH (NOLOCK)
+	WHERE ProductID = @ProductID AND SettingType IN (6) AND SportType = @Sporttype
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType, @tSportType = tSportType, @tBetType = tBetType
 	FROM #DestinationSportBetType		
