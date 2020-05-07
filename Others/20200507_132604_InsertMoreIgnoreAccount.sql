@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCHECK-CheckResultDB"></info>*/
 /*
 	Created: 20200507@Elodie
 	DB: DBCHECK/CheckResultDB
