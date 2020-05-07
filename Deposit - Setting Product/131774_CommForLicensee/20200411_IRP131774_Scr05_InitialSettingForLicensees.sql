@@ -31,7 +31,7 @@ BEGIN
 		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID 
 	WHERE lp.CustID = @srecommend
 		AND p.SettingType = 4
-		AND p.ProductID IN (21,22,32)
+		AND p.ProductID IN (21,22,32,24)
 
 	INSERT INTO #tblCust(Custid,roleid)
 	SELECT custid, roleid
