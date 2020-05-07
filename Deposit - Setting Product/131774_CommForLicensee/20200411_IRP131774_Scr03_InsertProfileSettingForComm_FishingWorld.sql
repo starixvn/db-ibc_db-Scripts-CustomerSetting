@@ -13,7 +13,7 @@ INSERT INTO dbo.Dep_ProductSetting(
 							,DisplayOrder
 							,SettingLevel
 							)
-SELECT 	53,	24,	9, 0, 4, 1	--FishingWorld
+SELECT 	59,	24,	9, 0, 4, 1	--FishingWorld
 
 INSERT INTO [CustDB].[dbo].[Dep_ProductSettingDetail]
            ([ProductSettingID]
@@ -23,12 +23,13 @@ INSERT INTO [CustDB].[dbo].[Dep_ProductSettingDetail]
            ,[MaxDefaultValue]
            ,[SettingStatus]           
            ,[IsApplyBA])   
-SELECT 53,219,1011,0,0,0,0
+SELECT 59,219,1011,0,0,0,0
+
 ------------ correct comm setting for licensee
 -- Delete comm setting AB,Macau,PP 
 DELETE t
 FROM Dep_LicenseeProductSetting t WITH (ROWLOCK)
-WHERE t.ProductSettingID IN (18,51,52,53)
+WHERE t.ProductSettingID IN (18,51,52)
 
 --Insert comm setting for licensees offered Allbet,Macau,PP, Fishing 
 INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -37,7 +38,7 @@ FROM dbo.Dep_CustSuper s WITH(NOLOCK)
 	CROSS APPLY(SELECT 21 AS ProductID, 18 ProductSettingID--AB 
 			UNION SELECT 22, 51
 			UNION SELECT 32, 52
-			UNION SELECT 24, 53) t
+			UNION SELECT 24, 59) t
 	CROSS APPLY (SELECT TOP 1 lp.CustID 
 				FROM Dep_LicenseeProductSetting lp WITH (NOLOCK) 
 					INNER JOIN Dep_ProductSetting pd WITH (NOLOCK) ON pd.ProductSettingID = lp.ProductSettingID
@@ -48,4 +49,4 @@ FROM dbo.Dep_CustSuper s WITH(NOLOCK)
 	LEFT JOIN Dep_LicenseeProductSetting p WITH(NOLOCK) ON p.custid = s.custid
 														AND p.ProductSettingID = t.ProductSettingID
 WHERE p.custid IS NULL		
-									
+						
