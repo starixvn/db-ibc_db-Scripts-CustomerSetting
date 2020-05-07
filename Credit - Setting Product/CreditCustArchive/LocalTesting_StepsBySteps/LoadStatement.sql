@@ -63,61 +63,61 @@ BEGIN
 
 	select @_from = @from, @_to = dateadd(dd, @batch_days + 1, @_from)
 
-	while (1=1)
-	begin
-		SELECT @Msg = ''
+	--while (1=1)
+	--begin
+	--	SELECT @Msg = ''
 
-		if (@_from > @to) SET @_from = @to
-		if (@_to > @to) SET @_to = dateadd(dd, 1, @to)
+	--	if (@_from > @to) SET @_from = @to
+	--	if (@_to > @to) SET @_to = dateadd(dd, 1, @to)
 
-		--insert into tempCustID
-		--SELECT distinct s.custid
-		--FROM dbo.STATEMENT s WITH (NOLOCK)
-		--	LEFT JOIN tempCustID c WITH (NOLOCK) On c.CustID = s.custid
-		--WHERE TransType <> 'bal' 
-		--	AND transdesc NOT LIKE 'For Delete Account%' --exclude clear balance trans inserted by Archive process
-		--	AND accDate >= @_from and accdate < @_to
-		--	AND c.custid IS NULL
+	--	--insert into tempCustID
+	--	--SELECT distinct s.custid
+	--	--FROM dbo.STATEMENT s WITH (NOLOCK)
+	--	--	LEFT JOIN tempCustID c WITH (NOLOCK) On c.CustID = s.custid
+	--	--WHERE TransType <> 'bal' 
+	--	--	AND transdesc NOT LIKE 'For Delete Account%' --exclude clear balance trans inserted by Archive process
+	--	--	AND accDate >= @_from and accdate < @_to
+	--	--	AND c.custid IS NULL
 
-		SET @msg = 'Statement loaded from ' + CONVERT(varchar(10), @_from, 120) + ' to ' + CONVERT(VARCHAR(10), dateadd(dd, -1, @_to), 120)
-		RAISERROR(@msg, 0, 0) WITH NOWAIT
+	--	SET @msg = 'Statement loaded from ' + CONVERT(varchar(10), @_from, 120) + ' to ' + CONVERT(VARCHAR(10), dateadd(dd, -1, @_to), 120)
+	--	RAISERROR(@msg, 0, 0) WITH NOWAIT
 
-		if (@_to >= @to) break
+	--	if (@_to >= @to) break
 
-		set @_from = dateadd(dd, @batch_days + 1, @_from)
-		set @_to = dateadd(dd, @batch_days + 1, @_to)
-	end
+	--	set @_from = dateadd(dd, @batch_days + 1, @_from)
+	--	set @_to = dateadd(dd, @batch_days + 1, @_to)
+	--end
 
 	--load 2nd for s3 (7 month)
 	if (@status = 'Stage 3 - Running')
 	begin
 		select @_from = @fromEx, @_to = dateadd(dd, @batch_days + 1, @_from)
 
-		while (1=1)
-		begin
-			SELECT @Msg = ''
+		--while (1=1)
+		--begin
+		--	SELECT @Msg = ''
 
-			if (@_from > @ToEx) SET @_from = @ToEx
-			if (@_to > @ToEx) SET @_to = dateadd(dd, 1, @ToEx)
+		--	if (@_from > @ToEx) SET @_from = @ToEx
+		--	if (@_to > @ToEx) SET @_to = dateadd(dd, 1, @ToEx)
 
-			--insert into tempCustID
-			--SELECT distinct s.custid
-			--FROM dbo.STATEMENT s WITH (NOLOCK)
-			--	LEFT JOIN tempCustID c WITH (NOLOCK) ON c.CustID = s.custid
-			--WHERE TransType <> 'bal' 
-			--	AND transdesc NOT LIKE 'For Delete Account%' --exclude clear balance trans inserted by Archive process
-			--	AND accDate >= @_from and accdate < @_to
-			--	AND c.custid IS NULL
+		--	--insert into tempCustID
+		--	--SELECT distinct s.custid
+		--	--FROM dbo.STATEMENT s WITH (NOLOCK)
+		--	--	LEFT JOIN tempCustID c WITH (NOLOCK) ON c.CustID = s.custid
+		--	--WHERE TransType <> 'bal' 
+		--	--	AND transdesc NOT LIKE 'For Delete Account%' --exclude clear balance trans inserted by Archive process
+		--	--	AND accDate >= @_from and accdate < @_to
+		--	--	AND c.custid IS NULL
 
-			SET @msg = 'Statement loaded from ' + CONVERT(varchar(10), @_from, 120) + ' to ' + CONVERT(VARCHAR(10), dateadd(dd, -1, @_to), 120)
-			RAISERROR(@msg, 0, 0) WITH NOWAIT
+		--	SET @msg = 'Statement loaded from ' + CONVERT(varchar(10), @_from, 120) + ' to ' + CONVERT(VARCHAR(10), dateadd(dd, -1, @_to), 120)
+		--	RAISERROR(@msg, 0, 0) WITH NOWAIT
 
-			if (@_to >= @ToEx) break
+		--	if (@_to >= @ToEx) break
 
-			set @_from = dateadd(dd, @batch_days + 1, @_from)
-			set @_to = dateadd(dd, @batch_days + 1, @_to)
+		--	set @_from = dateadd(dd, @batch_days + 1, @_from)
+		--	set @_to = dateadd(dd, @batch_days + 1, @_to)
 
-		end
+		--end
 	end
 
 
