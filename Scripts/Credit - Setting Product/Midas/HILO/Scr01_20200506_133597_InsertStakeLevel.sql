@@ -16,7 +16,7 @@ FROM dbo.StakeLevel s WITH(NOLOCK)
 	INNER JOIN dbo.StakeLevelGroupDetail sd WITH (NOLOCK) ON sd.StakeLevelID = s.StakeLevelID
 WHERE s.GameTypeID = 1901 AND s.GameGroupID = 9
 	AND e.Code = 'USD'
-	AND sd.GameTypeID = 1901
+	AND sd.GameTypeID = 1902
 
 SELECT TOP 1000 s.*, sd.* 
 FROM StakeLevelGroupDetail sd WITH (NOLOCK) 
