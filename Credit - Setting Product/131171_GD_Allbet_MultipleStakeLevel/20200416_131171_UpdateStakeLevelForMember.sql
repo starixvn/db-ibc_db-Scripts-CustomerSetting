@@ -66,60 +66,6 @@ BEGIN
 
 
 	---------------Allbet---------------------------------------------------------------------------
-	--Get list of member whose stakelevel are empty or null
-	CREATE TABLE #CustStakeLevelMemberAB_Null (
-			CustID INT 
-			,AgentID INT
-			,Sporttype SMALLINT
-			,Bettype SMALLINT
-			,StakeLevelList VARCHAR(100)
-			,StakeLevelList_new VARCHAR(100)							
-			, PRIMARY KEY CLUSTERED (CustID,Sporttype,Bettype)
-		)
- 
-	INSERT INTO #CustStakeLevelMemberAB_Null (CustID,AgentID,Sporttype,Bettype,StakeLevelList,StakeLevelList_new)
-	SELECT CI.custid,
-		  CI.recommend AS AgentID,
-		  cs.SportType,
-		  cs.Bettype,
-		  cs.StakeLevelList,
-		  CA.StakeLevelList
-	FROM dbo.custinfo CI WITH(NOLOCK)
-		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid
-		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.SportType = CA.SportType AND CS.BetType = CA.BetType 
-	WHERE  CI.srecommend = @srecommend
-		AND roleid = 1
-		AND CI.Enabled = 1
-		AND CS.SportType = 211
-		AND CS.BetType = 2401
-		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
-		AND CA.StakeLevelList != '' 
-		AND CA.StakeLevelList IS NOT NULL
-	--Assign top 3 highest selected stake level of agent to members whose stakelevel list are null or empty
-	
-	UPDATE C
-	SET C.StakeLevelList_new = ISNULL(CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)),'')
-	FROM #CustStakeLevelMemberAB_Null C WITH (ROWLOCK)
-	INNER JOIN CUSTINFO CI WITH (NOLOCK) ON CI.custid = C.CustID
-	CROSS APPLY
-	(SELECT ',' + ISNULL(CAST(StakeLevelID AS VARCHAR(10)),'')
-	FROM (SELECT TOP 3 CAST(val AS INT) AS val
-			FROM dbo.strSplit(C.StakeLevelList_new,',')
-			INNER JOIN StakeLevel S WITH (NOLOCK) ON S.StakeLevelID = val
-			ORDER BY S.MaxStake DESC ) CD --Get top 3 highest stakelevel
-			INNER JOIN StakeLevel S WITH (NOLOCK) ON CD.val=S.StakeLevelID AND S.GameTypeID = C.Bettype AND CI.currency = S.ExchangeId 
-			FOR XML PATH ('') ) AS A(STL)
-	WHERE C.Sporttype = 211 AND C.Bettype = 2401 
-
-	UPDATE CS
-	SET CS.StakeLevelList = ISNULL(A.StakeLevelList_new,'')
-	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #CustStakeLevelMemberAB_Null A ON CS.CustID = A.CustID 
-												AND CS.SportType = A.Sporttype
-												AND CS.bettype = A.bettype
-	WHERE CS.StakeLevelList <> A.StakeLevelList_new
-		AND CS.SportType = 211
-		AND CS.BetType = 2401
 
 	--Get list of member of Allbet whose stakelevel is not null 
 
@@ -185,6 +131,61 @@ BEGIN
 	SET CS.StakeLevelList = ISNULL(A.StakeLevelList_new,'')
 	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #CustStakeLevelMember_AB A ON CS.CustID = A.CustID 
+												AND CS.SportType = A.Sporttype
+												AND CS.bettype = A.bettype
+	WHERE CS.StakeLevelList <> A.StakeLevelList_new
+		AND CS.SportType = 211
+		AND CS.BetType = 2401
+
+	--Get list of member whose stakelevel are empty or null
+	CREATE TABLE #CustStakeLevelMemberAB_Null (
+			CustID INT 
+			,AgentID INT
+			,Sporttype SMALLINT
+			,Bettype SMALLINT
+			,StakeLevelList VARCHAR(100)
+			,StakeLevelList_new VARCHAR(100)							
+			, PRIMARY KEY CLUSTERED (CustID,Sporttype,Bettype)
+		)
+ 
+	INSERT INTO #CustStakeLevelMemberAB_Null (CustID,AgentID,Sporttype,Bettype,StakeLevelList,StakeLevelList_new)
+	SELECT CI.custid,
+		  CI.recommend AS AgentID,
+		  cs.SportType,
+		  cs.Bettype,
+		  cs.StakeLevelList,
+		  CA.StakeLevelList
+	FROM dbo.custinfo CI WITH(NOLOCK)
+		INNER JOIN dbo.CustStakeLevel_Member CS WITH(NOLOCK) ON CI.custid = CS.custid
+		INNER JOIN DBO.CustStakeLevel_Agent CA WITH (NOLOCK) ON CI.recommend = CA.CustID AND CS.SportType = CA.SportType AND CS.BetType = CA.BetType 
+	WHERE  CI.srecommend = @srecommend
+		AND roleid = 1
+		AND CI.Enabled = 1
+		AND CS.SportType = 211
+		AND CS.BetType = 2401
+		AND (CS.StakeLevelList = '' OR CS.StakeLevelList IS NULL)
+		AND CA.StakeLevelList != '' 
+		AND CA.StakeLevelList IS NOT NULL
+	--Assign top 3 highest selected stake level of agent to members whose stakelevel list are null or empty
+	
+	UPDATE C
+	SET C.StakeLevelList_new = ISNULL(CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)),'')
+	FROM #CustStakeLevelMemberAB_Null C WITH (ROWLOCK)
+	INNER JOIN CUSTINFO CI WITH (NOLOCK) ON CI.custid = C.CustID
+	CROSS APPLY
+	(SELECT ',' + ISNULL(CAST(StakeLevelID AS VARCHAR(10)),'')
+	FROM (SELECT TOP 3 CAST(val AS INT) AS val
+			FROM dbo.strSplit(C.StakeLevelList_new,',')
+			INNER JOIN StakeLevel S WITH (NOLOCK) ON S.StakeLevelID = val
+			ORDER BY S.MaxStake DESC ) CD --Get top 3 highest stakelevel
+			INNER JOIN StakeLevel S WITH (NOLOCK) ON CD.val=S.StakeLevelID AND S.GameTypeID = C.Bettype AND CI.currency = S.ExchangeId 
+			FOR XML PATH ('') ) AS A(STL)
+	WHERE C.Sporttype = 211 AND C.Bettype = 2401 
+
+	UPDATE CS
+	SET CS.StakeLevelList = ISNULL(A.StakeLevelList_new,'')
+	FROM dbo.CustStakeLevel_Member CS WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #CustStakeLevelMemberAB_Null A ON CS.CustID = A.CustID 
 												AND CS.SportType = A.Sporttype
 												AND CS.bettype = A.bettype
 	WHERE CS.StakeLevelList <> A.StakeLevelList_new
