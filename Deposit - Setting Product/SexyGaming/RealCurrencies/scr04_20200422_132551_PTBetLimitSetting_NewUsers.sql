@@ -157,10 +157,10 @@
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT t.custid,52
+	SELECT t.custid,57
 	FROM #supers t
 	WHERE t.custid>@maxcustid	
-		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=52)
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=57)
 
 	--------------------------------------Bet Setting-------------------------------------------------
 		CREATE TABLE #SMATemp
@@ -233,10 +233,10 @@
 	GROUP BY t.custid, TB.BettypeID
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT t.custid,53
+	SELECT t.custid,58
 	FROM #supers t
 	WHERE t.custid>@maxcustid	
-		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=53)
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=58)
 
 	--------------------------------------Status-------------------------------------------------
 	DECLARE @BitOrder INT
@@ -271,10 +271,10 @@
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = t.CustID)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT t.custid,51
+	SELECT t.custid,56
 	FROM #supers t
 	WHERE t.custid>@maxcustid	
-		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=51)
+		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=56)
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp

@@ -189,10 +189,10 @@ BEGIN
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 	
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=52)
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=57)
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,52
+		SELECT @srecommend,57
 	END
 	-------------------------------------Prepare Stake Level----------------------------------------------------
 	DECLARE @DEP_Stake TABLE (
@@ -297,10 +297,10 @@ BEGIN
 	WHERE ExchangeId=@currency AND S.SiteID = @siteId
 	GROUP BY t.custid, TB.BettypeID
 
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=53)
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=58)
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,53
+		SELECT @srecommend,58
 	END
 	--------------------------------------------Enable Status--------------------------------------------------
 	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
@@ -354,10 +354,10 @@ BEGIN
 	FROM #AllUsers A
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=51)
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=56)
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,51
+		SELECT @srecommend,56
 	END
 
 	DROP TABLE #Dummy
