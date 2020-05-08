@@ -24,16 +24,53 @@ BEGIN
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
 	DECLARE @BitmapOrder TINYINT = 21
 	
-	SELECT custid, ci.roleid
-	INTO #CustList
-	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE ci.srecommend = @Custid
+	CREATE TABLE #MemberTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+	)
+
+	CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		roleid TINYINT
+	)
+	
+	INSERT INTO #MemberTemp (CustID)
+	SELECT custid
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @Custid AND roleid = 1  AND Enabled = 1
+	
+	
+	INSERT INTO #SMATemp (CustID, roleid)
+	SELECT custid, roleid
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @Custid AND roleid IN (2,3) AND Enabled = 1
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
 		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-		INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	WHERE cs.CustID = @Custid
+
+	UPDATE cs
+	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	WHERE ci.roleid = 3
+
+	UPDATE cs
+	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	WHERE ci.roleid = 2
+
+	UPDATE cs
+	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
