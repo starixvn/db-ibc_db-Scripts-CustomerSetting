@@ -6,7 +6,6 @@
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
-	,@maxcustid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -28,7 +27,7 @@ BEGIN
 	SELECT custid, ci.roleid
 	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE ci.srecommend = @Custid AND ci.custid <= @maxcustid
+	WHERE ci.srecommend = @Custid
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
@@ -58,7 +57,6 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'IbcIndo')
 
 
@@ -83,7 +81,6 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
-			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 			
 			
@@ -111,7 +108,6 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'IbcIndo')	
 							
 -- For deployer info
@@ -135,7 +131,6 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
-			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
 	waitfor delay '00:00:0.280'

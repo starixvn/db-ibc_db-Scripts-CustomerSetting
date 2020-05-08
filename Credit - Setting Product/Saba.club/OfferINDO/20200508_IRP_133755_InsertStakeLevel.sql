@@ -1,5 +1,5 @@
 /*
-	Created: 202005088@Elodie
+	Created: 20200508@Elodie
 	Task: Insert stake level for Saba.club
 	DB: DBCUST/CustDB
 */

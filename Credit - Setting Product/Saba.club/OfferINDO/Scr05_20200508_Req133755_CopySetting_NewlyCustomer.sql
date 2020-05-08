@@ -167,20 +167,6 @@ FROM #MemberTemp ci WITH(NOLOCK)
 WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 	AND dest.SettingType = 6
 
-/*******************************CUST PRODUCTSTATUS TABLE*******************************/	
-DECLARE @BitmapOrder TINYINT = 21
-
-SELECT custid, ci.roleid, ci.srecommend
-INTO #CustList
-FROM dbo.custInfo ci WITH (NOLOCK)
-WHERE ci.srecommend IN (SELECT custid FROM #supers) AND custid > @MaxCustID	
-
-UPDATE cs
-SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-	cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))	
-FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
 DROP TABLE #DestinationSportBetType		
