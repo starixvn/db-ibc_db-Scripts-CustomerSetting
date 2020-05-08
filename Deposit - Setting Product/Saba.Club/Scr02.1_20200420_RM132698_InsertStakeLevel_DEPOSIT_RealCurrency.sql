@@ -32,7 +32,7 @@ WHERE e.currency IN ( SELECT LTRIM(val) as Currency FROM  dbo.f_StringSplit (@li
 
 CREATE TABLE #tmpStake(GameTypeID INT,ExchangeID INT,MinLabel VARCHAR(200),MaxLabel VARCHAR(200),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8))
 INSERT INTO #tmpStake (GameTypeID ,ExchangeID ,MinLabel,MaxLabel ,MinStake ,MaxStake)
-SELECT @Bettype, 51, '1', '10,000', 1, 10000 -- INH
+SELECT @Bettype, 51, '0.1', '10,000', 0.1, 10000 -- INH
 
 ;WITH T AS(
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
