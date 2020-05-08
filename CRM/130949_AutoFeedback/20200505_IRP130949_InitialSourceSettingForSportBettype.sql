@@ -116,7 +116,7 @@ UNION ALL SELECT 	'Bettype',	'Map X ML',	'Map X Round Y Moneyline'
 UNION ALL SELECT 	'Bettype',	'Q X OE',	'Quarter X Odd/Even'
 UNION ALL SELECT 	'Bettype',	'Q x ML',	'Quarter X Moneyline'
 
-INSERT INTO crmSettingMapping(SettingID, SourceMapping)
+INSERT INTO crmSettingMapping(SettingID, SettingSource)
 SELECT SettingID, sourceMapping
 FROM #tmpsetting t
 INNER JOIN crmSetting s (NOLOCK) ON t.settingvalue = s.settingvalue 
@@ -124,7 +124,7 @@ INNER JOIN crmSetting s (NOLOCK) ON t.settingvalue = s.settingvalue
 WHERE s.SettingName = 'product'
 	AND siteoffer = 2
 	
-INSERT INTO crmSettingMapping(SettingID, SourceMapping)
+INSERT INTO crmSettingMapping(SettingID, SettingSource)
 SELECT SettingID, sourceMapping
 FROM #tmpsetting t
 INNER JOIN crmSetting s (NOLOCK) ON t.settingvalue = s.settingvalue 
@@ -132,7 +132,7 @@ INNER JOIN crmSetting s (NOLOCK) ON t.settingvalue = s.settingvalue
 WHERE s.SettingName = 'subproduct'
 	AND siteoffer = 2	
 
-INSERT INTO crmSettingMapping(SettingID, SourceMapping)
+INSERT INTO crmSettingMapping(SettingID, SettingSource)
 SELECT SettingID, sourceMapping
 FROM #tmpsetting t
 INNER JOIN crmSetting s (NOLOCK) ON t.settingvalue = s.settingvalue 
