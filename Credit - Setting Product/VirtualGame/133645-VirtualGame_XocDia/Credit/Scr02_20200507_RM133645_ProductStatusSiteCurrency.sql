@@ -6,10 +6,14 @@
 USE CustDB
 GO
 
-DECLARE @Sporttype INT, @Bettype INT
-SELECT @Sporttype = 245, @Bettype = 4602
+DECLARE @SportBettype TABLE( Sporttype INT, Bettype INT )
+INSERT INTO @SportBettype(Sporttype,Bettype)
+SELECT 245,4601 
+UNION ALL SELECT 245,4602
 
-DELETE FROM ProductStatusSiteCurrency WHERE SportType=@Sporttype AND BetType = @Bettype
+DELETE a
+FROM ProductStatusSiteCurrency a WITH(ROWLOCK)
+	INNER JOIN @SportBettype s ON s.SportType = a.Sporttype AND s.BetType = a.BetType
 
 CREATE TABLE #NonOfferedCurency (Currency INT) 
 
@@ -49,8 +53,13 @@ WHERE exchangeid  NOT IN ( 	2	--RM
 					) --Offered Currencies
 
 INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
-SELECT DISTINCT @Sporttype, @Bettype, 0, Currency, 1, 1, 1  
-FROM #NonOfferedCurency WITH (NOLOCK)
+SELECT DISTINCT s.Sporttype, s.Bettype, 0, a.Currency, 1, 1, 1  
+FROM #NonOfferedCurency a WITH (NOLOCK)
+	CROSS APPLY @SportBettype s
+
+SELECT a.* 
+FROM ProductStatusSiteCurrency a WITH(NOLOCK) 
+	INNER JOIN @SportBettype s ON s.SportType = a.Sporttype AND s.BetType = a.BetType
 
 DROP TABLE #NonOfferedCurency
 
