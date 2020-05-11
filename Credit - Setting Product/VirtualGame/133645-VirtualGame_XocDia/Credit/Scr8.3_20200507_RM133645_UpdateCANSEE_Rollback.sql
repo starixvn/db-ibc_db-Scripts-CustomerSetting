@@ -93,6 +93,12 @@ FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK)
 	INNER JOIN #OfferList o ON p.Currency = o.exchangeid AND p.SiteID = o.siteid
 WHERE p.SportType = @Sporttype AND p.BetType = @Bettype
 
+UPDATE p
+SET p.Istest = 1
+FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK)
+WHERE SportType = @Sporttype AND BetType = @Bettype
+	AND ( Currency = 20 AND SiteID = 1)
+
 DROP TABLE #OfferList
 DROP TABLE #OfferedSitesCurrencies
 

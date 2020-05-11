@@ -92,6 +92,12 @@ FROM #OfferedSitesCurrencies tmp
 	INNER JOIN Site s WITH(NOLOCK) ON tmp.Site = s.site
 	INNER JOIN exchange e WITH(NOLOCK) ON e.currency = tmp.Currency
 
+UPDATE p
+SET p.Istest = 0
+FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK)
+WHERE SportType = @Sporttype AND BetType = @Bettype
+	AND ( Currency = 20 AND SiteID = 1)
+
 DROP TABLE #OfferedSitesCurrencies
 
 --SELECT * FROM ProductLaunchedSiteCurrency WHERE SportType = 245 AND BetType = 4602
