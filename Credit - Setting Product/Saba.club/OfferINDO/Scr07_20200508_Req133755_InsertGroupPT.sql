@@ -39,7 +39,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci ON ci.custid = cs.AgentID
 		INNER JOIN dbo.customer c ON ci.custid = c.custid
 	WHERE ci.Enabled = 1 AND c.site IN ('Indo', 'IbcIndo')
-		AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+		AND ci.currency IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 

@@ -95,7 +95,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.site IN ('Indo', 'IbcIndo')
-	AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -146,7 +146,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.site IN ('Indo', 'IbcIndo')	
-	AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 							
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

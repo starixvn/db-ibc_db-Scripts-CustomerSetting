@@ -198,7 +198,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'IbcIndo')
-	AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -251,7 +251,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('Indo', 'IbcIndo')
-	AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+	AND ci.currency IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

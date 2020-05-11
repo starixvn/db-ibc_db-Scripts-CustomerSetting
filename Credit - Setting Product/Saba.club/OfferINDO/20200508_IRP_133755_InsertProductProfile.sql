@@ -23,7 +23,7 @@ FROM dbo.Site s WITH(NOLOCK)
 	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('Indo', 'IbcIndo')
-	AND  e.exchangeid IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+	AND e.exchangeid IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit

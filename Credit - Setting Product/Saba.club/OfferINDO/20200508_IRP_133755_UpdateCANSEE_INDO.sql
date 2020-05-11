@@ -26,7 +26,7 @@ INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, I
 SELECT @Sporttype AS SportType, @Bettype AS BetType, e.exchangeid AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, @IsTest, @LaunchedLevel
 FROM dbo.#OfferedSites s
 	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
-WHERE  e.ExchangeId IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
+WHERE  e.ExchangeId IN (15, 22, 33, 34, 47, 20) -- ('IDD', 'IDR', 'IN', 'IND','DDD', 'UUS')
 
 
 
