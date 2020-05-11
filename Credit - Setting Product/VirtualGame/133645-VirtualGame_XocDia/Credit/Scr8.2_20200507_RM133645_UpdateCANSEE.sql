@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200507
-	Task: Insert CanSee for Virtual games - KORIBC - XocDia
+	Task: Insert CanSee for Virtual games - XocDia
 	DB: DBCust/CustDB
 */
 USE CustDB

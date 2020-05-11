@@ -1,7 +1,7 @@
 /*
 	Created: Eden
 	Date: 20200507
-	Task: Create setting for Virtual game follow by Macau games ( New accounts)
+	Task: Create setting for Virtual game - XocDia ( New accounts)
 	DB: DBCust/CustDB
 */
 
