@@ -18,10 +18,12 @@ INSERT INTO [dbo].[ProductStatusSiteCurrency]
            ,[IsHidden]
            ,[IsDisabled]
 		   ,[HasSynced])
-SELECT 200,1611, 0 AS exchangeid, s.siteid, 0 AS IsHidden, 0 AS IsDisabled, 1 AS HasSynced
+SELECT 200,1611, e.exchangeid AS exchangeid, s.siteid, 0 AS IsHidden, 0 AS IsDisabled, 1 AS HasSynced
 FROM dbo.Site s WITH(NOLOCK)
+	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('Indo', 'IbcIndo')
+	AND  e.exchangeid IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
 
 INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit
@@ -34,6 +36,8 @@ WHERE ProductId = 38 AND  e.exchangeid IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR',
 --SELECT * FROM dbo.SettingSystem
 --SELECT *  FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 42
 --SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 200
+
+--DELETE FROM dbo.ProductStatusSiteCurrency WHERE SportType = 200 AND SiteID IN (487,11)
 
 
 

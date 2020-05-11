@@ -17,11 +17,16 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('Indo', 'IbcIndo')
 
-UPDATE ps
-SET ps.IsLaunched = 1
-FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
+DELETE ps
+FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
 WHERE SportType = @Sporttype AND BetType = @Bettype
+
+INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest, LaunchedLevel)
+SELECT @Sporttype AS SportType, @Bettype AS BetType, e.exchangeid AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, @IsTest, @LaunchedLevel
+FROM dbo.#OfferedSites s
+	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
+WHERE  e.ExchangeId IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
 
 
 

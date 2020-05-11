@@ -38,6 +38,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.site IN ('Indo', 'IbcIndo')
+		AND ci.currency IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Agent
