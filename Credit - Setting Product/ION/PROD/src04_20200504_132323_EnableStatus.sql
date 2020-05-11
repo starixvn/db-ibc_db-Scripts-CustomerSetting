@@ -82,7 +82,7 @@ WHERE ci.roleid = 4
 							,16 --Yen
 							,35 --$US
 							,64 --UT
-							,69 --MMK
+							--,69 --MMK
 						)
 
 -- For deployer info
@@ -154,7 +154,7 @@ WHERE ci.roleid = 4
 							,16 --Yen
 							,35 --$US
 							,64 --UT
-							,69 --MMK
+							--,69 --MMK
 						)
 
 -- For deployer info

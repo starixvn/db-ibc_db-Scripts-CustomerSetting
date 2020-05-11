@@ -35,7 +35,7 @@
 							,16 --Yen
 							,35 --$US
 							,64 --UT
-							,69 --MMK
+							--,69 --MMK
 						)
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'

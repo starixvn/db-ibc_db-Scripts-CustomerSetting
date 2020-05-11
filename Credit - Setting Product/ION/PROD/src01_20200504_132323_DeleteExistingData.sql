@@ -65,8 +65,8 @@ BEGIN
 							,16 --Yen
 							,35 --$US
 							,64 --UT
-							,69 --MMK
-						)
+							--,69 --MMK
+							)
 
 
 	SELECT DISTINCT cg.custid 

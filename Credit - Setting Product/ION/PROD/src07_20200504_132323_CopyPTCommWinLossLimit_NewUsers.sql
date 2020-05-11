@@ -41,7 +41,7 @@ WHERE ci.roleid = 4
 								,16 --Yen
 								,35 --$US
 								,64 --UT
-								,69 --MMK
+								--,69 --MMK
 							)
 
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
