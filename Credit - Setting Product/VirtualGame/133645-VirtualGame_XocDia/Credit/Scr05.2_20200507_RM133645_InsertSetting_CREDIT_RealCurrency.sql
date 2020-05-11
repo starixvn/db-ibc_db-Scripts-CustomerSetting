@@ -117,7 +117,7 @@ WHERE c.roleid = 4
 					, 	3	--US$
 					, 	69	--MMK
 					, 	70	--MKK
-					, 	72	--YNG
+					--, 	72	--YNG
 					, 	13	--RMB
 					, 	81	--CY
 					, 	66	--YUN
@@ -204,7 +204,7 @@ WHERE c.roleid = 4
 					, 	3	--US$
 					, 	69	--MMK
 					, 	70	--MKK
-					, 	72	--YNG
+					--, 	72	--YNG
 					, 	13	--RMB
 					, 	81	--CY
 					, 	66	--YUN

@@ -99,9 +99,9 @@ BEGIN
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'MKK', 5.00, 2500.00, '5', '2,500') -- MMK
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'MKK', 5.00, 5000.00, '5', '5,000') -- MMK
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'MKK', 5.00, 10000.00, '5', '10,000') -- MMK
-	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 2500.00, '5', '2,500') -- YNG
-	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 5000.00, '5', '5,000') -- YNG
-	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 10000.00, '5', '10,000') -- YNG
+	--INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 2500.00, '5', '2,500') -- YNG
+	--INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 5000.00, '5', '5,000') -- YNG
+	--INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'YNG', 5.00, 10000.00, '5', '10,000') -- YNG
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'RMB', 30.00, 17500.00, '30', '17,500') -- CNY
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'RMB', 30.00, 35000.00, '30', '35,000') -- CNY
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'RMB', 30.00, 70000.00, '30', '70,000') -- CNY
@@ -257,7 +257,7 @@ WHERE c.roleid = 4
 					, 	3	--US$
 					, 	69	--MMK
 					, 	70	--MKK
-					, 	72	--YNG
+					--, 	72	--YNG
 					, 	13	--RMB
 					, 	81	--CY
 					, 	66	--YUN
@@ -574,7 +574,7 @@ WHERE c.roleid = 4
 					, 	3	--US$
 					, 	69	--MMK
 					, 	70	--MKK
-					, 	72	--YNG
+					--, 	72	--YNG
 					, 	13	--RMB
 					, 	81	--CY
 					, 	66	--YUN
