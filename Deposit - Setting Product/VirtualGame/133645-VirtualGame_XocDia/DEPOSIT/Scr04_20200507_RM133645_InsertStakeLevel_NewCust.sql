@@ -7,55 +7,6 @@
 
 	DECLARE @max_custid INT = xxx
 
-	DECLARE @VGSportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
-	INSERT INTO @VGSportBettype(SportType, BetType) VALUES (245, 4602)
-
-	--DELETE existing data
-	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
-	SELECT a.CustID,a.SportType,a.BetType
-	INTO #Dep_CustStakeLevel_Agent
-	FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
-	WHERE a.CustID >@max_custid
-
-	DELETE a
-	FROM Dep_CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #Dep_CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
-
-	SELECT a.CustID,a.SportType,a.BetType
-	INTO #Dep_CustStakeLevel_Member
-	FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
-	INNER JOIN @VGSportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
-	INNER JOIN CustInfo ci WITH(NOLOCK) ON a.CustID = ci.custid AND ci.currency <> 20
-	WHERE a.CustID >@max_custid
-
-	DELETE a
-	FROM Dep_CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN #Dep_CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
-	
-	DROP TABLE #Dep_CustStakeLevel_Agent
-	DROP TABLE #Dep_CustStakeLevel_Member
-
-	---------------------CREATE setting for NEW ACCs-----------------------------------
-
-	CREATE TABLE #MemberTemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED
-	   ,Currency INT
-	   ,mrecommend INT
-	   ,SiteId INT
-	)
-
-	CREATE TABLE #SMATemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED
-	   ,Currency INT
-	   ,RoleID TINYINT
-	   ,mrecommend INT
-	   ,SiteId INT
-	)
-
 	--> Athena Licensee
 	CREATE TABLE #supers (custid int)
 
@@ -330,6 +281,25 @@
 				,N'Bsdbet'
 				 )
 
+	---------------------CREATE setting for NEW ACCs-----------------------------------
+
+	CREATE TABLE #MemberTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED
+	   ,Currency INT
+	   ,mrecommend INT
+	   ,SiteId INT
+	)
+
+	CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED
+	   ,Currency INT
+	   ,RoleID TINYINT
+	   ,mrecommend INT
+	   ,SiteId INT
+	)
+
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -357,6 +327,28 @@
 		BetType   SMALLINT
 	)
 	INSERT INTO @SportBettype(SportType, BetType) VALUES (245, 4602)
+
+		--DELETE existing data
+	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #Dep_CustStakeLevel_Agent
+	FROM Dep_CustStakeLevel_Agent a WITH(NOLOCK)
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+
+	DELETE a
+	FROM Dep_CustStakeLevel_Agent a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustStakeLevel_Agent t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
+
+	SELECT a.CustID,a.SportType,a.BetType
+	INTO #Dep_CustStakeLevel_Member
+	FROM Dep_CustStakeLevel_Member a WITH(NOLOCK)
+	INNER JOIN @SportBettype t ON a.SportType = t.SportType and a.BetType = t.BetType
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+
+	DELETE a
+	FROM Dep_CustStakeLevel_Member a WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustStakeLevel_Member t ON a.CustID = t.CustID AND a.SportType = t.SportType and a.BetType = t.BetType 
 
 	-------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 	--> Bet Limit: Apply bet limit group level for all S/M/A/Member levels
