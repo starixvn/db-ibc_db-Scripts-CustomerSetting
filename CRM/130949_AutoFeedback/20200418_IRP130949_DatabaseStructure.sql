@@ -18,7 +18,7 @@ GO
 
 CREATE TABLE [dbo].[crmSettingMapping](	
 	[SettingID] [int] NOT NULL,
-	[SettingSource] [varchar](50) NULL,
+	[SettingSource] [varchar](200) NULL,
 ) ON [DATA]
 GO
 
