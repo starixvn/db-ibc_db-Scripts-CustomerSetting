@@ -1,7 +1,7 @@
 /*
 	Created: 20200512@Tiara
 	Date: 20200512
-	Task: Update ProductStatusSiteCurrency for Sexy Gaming [Redmine: #130678]
+	Task: Update ProductStatusSiteCurrency for Sexy Gaming [Redmine: #134023]
 	DB: DBCUST/CustDB
 */
 
