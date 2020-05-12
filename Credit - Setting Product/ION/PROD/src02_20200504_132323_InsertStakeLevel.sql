@@ -16,7 +16,7 @@ CREATE TABLE #temp(
 ) ON [PRIMARY]
 
 GO
-INSERT #temp (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
+INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
 SELECT 5601, 5, '5', '50,000', 5, 50000 UNION ALL -- HK$
 SELECT 5601, 67, '5', '50,000', 5, 50000 UNION ALL -- HKK
 SELECT 5601, 13, '5', '50,000', 5, 50000 UNION ALL -- RMB
