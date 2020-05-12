@@ -34,7 +34,7 @@ WHERE exchangeid NOT IN (15 --IN
 						,16 --Yen
 						,35 --$US
 						,64 --UT
-						,69 --MMK
+						--,69 --MMK
 						,20,72 --test
 				) --supported currencies
 
