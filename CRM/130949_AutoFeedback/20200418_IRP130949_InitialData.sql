@@ -5,8 +5,8 @@
 */
 
 INSERT INTO SystemSetting(SettingName, Value)
-SELECT 'JobStatus','Running'
+SELECT 'JobStatus','Completed'
 UNION SELECT 'BatchSize','10'
-UNION SELECT 'LastMsgID','0'
-UNION SELECT 'ConfigUAT','0'
+UNION SELECT 'LastMsgID','942192'
+UNION SELECT 'ConfigUAT','1'
 UNION SELECT 'ConfigPRO','0'
