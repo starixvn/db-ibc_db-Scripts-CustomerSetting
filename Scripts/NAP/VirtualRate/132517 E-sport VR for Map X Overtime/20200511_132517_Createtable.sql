@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20200511@Eden
 	Task: Create table VRSettingReference [RM#132517]
