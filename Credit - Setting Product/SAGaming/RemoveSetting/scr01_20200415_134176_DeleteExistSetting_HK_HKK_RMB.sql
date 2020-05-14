@@ -32,6 +32,10 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 
+	DECLARE @maxcustid INT
+
+	SELECT @maxcustid = xxx
+
 	DECLARE @Sporttype SMALLINT 
 	CREATE TABLE #supers (custid INT)
 
@@ -57,6 +61,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Member
@@ -64,6 +69,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype	
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPTSetting3rd_Agent
@@ -71,6 +77,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPTSetting3rd_Member
@@ -78,6 +85,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.AgentID
 	INTO #CustPTGroupSetting3rd_Member
@@ -85,6 +93,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.AgentID <= @maxcustid
 
 	SELECT DISTINCT cg.CustID
 	INTO #CustDiscount3rd_Member
@@ -92,6 +101,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.CustID
 	INTO #CustDiscount3rd_Agent
@@ -99,6 +109,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.CustID
 	INTO #CustWinLossLimit_Agent
@@ -106,6 +117,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	SELECT DISTINCT cg.CustID
 	INTO #CustWinLossLimit_Member
@@ -113,6 +125,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
+		AND cg.CustID <= @maxcustid
 
 	DELETE cg
 	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
