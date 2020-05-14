@@ -35,7 +35,7 @@ FROM phonebettingCustomerList p WITH(NOLOCK)
 	INNER JOIN custinfo ag WITH(NOLOCK) ON ag.custid = c.srecommend
 
 INSERT INTO bodb_report.dbo.tempCustID
-SELECT custid
+SELECT DISTINCT custid
 FROM bettrans with (NOLOCK)
 WHERE bettype <> 20000  
 	and recommend IN (xxx)
