@@ -6,12 +6,12 @@
 
 --Step 1:Config mode for UUS tickets
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = 1
+SET Value = 0
 WHERE SettingName = 'ConfigUAT'
 GO
 
 --Step 2:Config mode for real tickets
-UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = 1
-WHERE SettingName = 'ConfigPRO'
-GO
+--UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
+--SET Value = 1
+--WHERE SettingName = 'ConfigPRO'
+--GO
