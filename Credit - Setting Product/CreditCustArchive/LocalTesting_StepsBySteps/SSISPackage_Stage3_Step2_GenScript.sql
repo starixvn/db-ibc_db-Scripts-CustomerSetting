@@ -19,6 +19,21 @@ BEGIN
 
 END
 
+CREATE TABLE #SuperHeadLine (custId INT)
+CREATE TABLE #SuperPhoneBetting (custId INT)
+
+INSERT INTO #SuperHeadLine (custId)
+SELECT DISTINCT ci.srecommend		
+FROM CustGroupHeadline gl (nolock)		
+	INNER JOIN Customer ci (nolock) ON gl.CustID = ci.custid		
+WHERE GroupID > 0 and ci.roleid in (1,2,3,4)
+
+INSERT INTO #SuperPhoneBetting (custId)
+SELECT DISTINCT ag.custid
+FROM phonebettingCustomerList p WITH(NOLOCK)
+	INNER JOIN custinfo c WITH(NOLOCK) ON p.username = c.username
+	INNER JOIN custinfo ag WITH(NOLOCK) ON ag.custid = c.srecommend
+
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT distinct custid
 FROM bettrans with (NOLOCK)
@@ -79,7 +94,46 @@ WHERE ag.roleid = 2
 		WHERE --roleid = 1 AND
 			creatdate >= DATEADD(mm, -7, GETDATE())
 		)
-	AND agci.credit >= 0
+	AND agci.srecommend NOT IN (SELECT custid FROM #SuperHeadLine)
+	AND agci.srecommend NOT IN (SELECT custid FROM #SuperPhoneBetting)
+	AND agci.srecommend NOT IN (1584511--	SMON
+								,17131340	--	RG2
+								,20505414	--	HG81
+								,31381376	--	L1
+								,31890071	--	RG33
+								,32506252	--	RG37
+								,32546605	--	AMH5
+								,34176539	--	KW19
+								,39428597	--	RG81
+								,40906204	--	RG83
+								,859594	--	S99H
+								,2953285	--	HPV
+								,5044097	--	HPMM
+								,18119949	--	A3
+								,25256329	--	S99BE
+								,26979533	--	B60T
+								,28182257	--	JYZ
+								,28969062	--	B59T
+								,1687347	--	S222TH
+								,29680156	--	B62T
+								,39583203	--	B70T
+								,39583632	--	B65T
+								,1528414	--	B6T
+								,1538175	--	B14T
+								,20060537	--	SSD72
+								,16731414	--	CG34
+								,31556024	--	QZ9Q
+								,21127993	--	DT25
+								,2198456	--	TV71
+								,5362687	--	BC9
+								,25174645	--	TVA9C
+								,22765105	--	MBO
+								,5453438	--	K9
+								,9735627	--	S6KW
+								,24400636--	S68H
+								,14182461--	supertest3 
+								,1176070	--	SuperTest1
+							)
 		
 DECLARE @xmlData NVARCHAR(MAX) = ''
 
@@ -120,3 +174,5 @@ EXECUTE	sys.sp_executesql @ExecuteSQL, N'@query NVARCHAR(MAX), @xmlData NVARCHAR
 
 
 DROP TABLE #tmpAg
+DROP TABLE #SuperHeadLine
+DROP TABLE #SuperPhoneBetting
