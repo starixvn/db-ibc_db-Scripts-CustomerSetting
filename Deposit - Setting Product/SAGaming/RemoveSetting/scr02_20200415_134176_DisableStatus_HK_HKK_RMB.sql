@@ -58,6 +58,9 @@ BEGIN
 			 bitmapIsDisabled = dbo.f_GenerateProductStatus (cs.bitmapIsDisabled,@BitOrder,1)
 		FROM [dbo].Dep_CustProductStatus CS WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #tempUpdate CI WITH (NOLOCK) ON CS.CustID = CI.CustID
+			CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 20) as isDisabled
+			CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsHidden, 20) as IsHidden
+		WHERE isDisabled.value = 0 OR IsHidden.value = 0
 
 		TRUNCATE TABLE #tempUpdate
 	END
