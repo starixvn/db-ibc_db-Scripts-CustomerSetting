@@ -11,5 +11,7 @@ GO
 UPDATE S
 SET S.isActive = 1
 FROM Sport_Bettype_Reference_Setting S WITH (ROWLOCK, UPDLOCK)
-WHERE S.SportType = 43 AND S.BetType = 4 AND S.isActive = 0
+WHERE S.SportType = 43 
+	AND S.BetType IN (9087,9088) 
+	AND S.isActive = 0
 
