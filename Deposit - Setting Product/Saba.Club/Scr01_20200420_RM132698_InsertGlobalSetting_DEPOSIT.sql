@@ -6,12 +6,6 @@
 */
 
 -----------------------------------------------------------------
-/*
-SELECT * 
-FROM Dep_ProductSetting d (NOLOCK)
-INNER JOIN Dep_ProductSettingDetail dp (NOLOCK) ON d.ProductSettingID = dp.ProductSettingID
-WHERE d.ProductID = 42
-
 DELETE  
 FROM Dep_ProductStatusProfile WITH(ROWLOCK, UPDLOCK)
 WHERE Sporttype = 200
@@ -28,7 +22,6 @@ DELETE
 FROM GameGroup WITH(ROWLOCK, UPDLOCK)
 WHERE RefSportType = 200 AND IsDeposit = 1
 
-*/
 DECLARE @ProductID INT = 42, @Sporttype INT = 200, @Bettype INT = 1611
 
 --> Dep_ProductStatusProfile
@@ -69,4 +62,9 @@ UNION SELECT @MaxProductSettingID + 3 , @Sporttype, @Bettype, 0, 0, 1, NULL, 0
 INSERT INTO GameGroup(GameGroupID,RefSportType,RefBetType,GroupName,IsDeposit)
 SELECT 14, @Sporttype, @Bettype, 'Level 1', 1
 
+GO
+SELECT * 
+FROM Dep_ProductSetting d (NOLOCK)
+INNER JOIN Dep_ProductSettingDetail dp (NOLOCK) ON d.ProductSettingID = dp.ProductSettingID
+WHERE d.ProductID = 42
 GO
