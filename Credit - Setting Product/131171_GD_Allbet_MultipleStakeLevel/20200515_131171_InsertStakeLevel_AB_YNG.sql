@@ -13,16 +13,17 @@ CREATE TABLE #temp(
 	[MaxLabel]		VARCHAR(30),
 	[MinStake]			[decimal](19, 8) NULL,
 	[MaxStake]			[decimal](19, 8) NULL,
-	[ExchangeId]	[int] 
+	[ExchangeId]	[int] ,
+	[ResourceId]	[int] 
 ) ON [PRIMARY]
 
 GO
-INSERT #temp (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
-SELECT 2401,'2','200',2,200,72 UNION ALL
-SELECT 2401,'5','500',5,500,72
+INSERT #temp (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId,ResourceId)
+SELECT 2401,'2','200',2,200,72,25 UNION ALL
+SELECT 2401,'5','500',5,500,72,39
 
-INSERT INTO StakeLevel(GameTypeID, MinLabel, MaxLabel, MinStake,MaxStake, ExchangeID)
-SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
+INSERT INTO StakeLevel(GameTypeID, MinLabel, MaxLabel, MinStake,MaxStake, ExchangeID,ResourceId)
+SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId, T.ResourceId
 FROM #temp T WITH(NOLOCK) 
 WHERE T.GameTypeID = 2401 AND T.ExchangeId IN (72)
 
