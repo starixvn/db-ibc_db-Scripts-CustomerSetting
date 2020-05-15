@@ -35,8 +35,7 @@ DECLARE @ProductID INT = 42, @Sporttype INT = 200, @Bettype INT = 1611
 INSERT INTO Dep_ProductStatusProfile(Sporttype,Bettype,bitmapOrder)
 SELECT @Sporttype,@Bettype,17
 
-DECLARE @MaxProductSettingID INT
-SELECT @MaxProductSettingID = MAX(ProductSettingID) FROM Dep_ProductSetting WITH(NOLOCK)
+DECLARE @MaxProductSettingID INT = 52 
 
 -->Dep_ProductSetting
 INSERT INTO Dep_ProductSetting (
