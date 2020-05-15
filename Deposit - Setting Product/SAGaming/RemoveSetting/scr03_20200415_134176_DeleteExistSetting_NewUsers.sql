@@ -63,6 +63,11 @@ BEGIN
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid			
 	WHERE SportType =244 AND c.custid > @maxcustID
+	
+	DELETE cg
+	FROM Dep_LicenseeProductSetting cg WITH(ROWLOCK)
+		INNER JOIN #supers s ON CG.CustID = s.custid			
+	WHERE cg.ProductSettingID IN (42,43,44)
 
 END		
 GO

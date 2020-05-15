@@ -42,6 +42,7 @@ BEGIN
 	CREATE TABLE #CustPTGroupSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
 	CREATE TABLE #CustBetSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
 	CREATE TABLE #CustBetSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #Dep_LicenseeProductSetting (CustID INT, ProductSettingID INT)
 
 	INSERT INTO #CustPTSetting3rd_Agent(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.Custid,SportType,BetType,IsLive 
@@ -77,6 +78,13 @@ BEGIN
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
+
+	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT S.CustID,ProductSettingID
+	FROM Dep_LicenseeProductSetting S WITH(NOLOCK) 
+	WHERE S.CustID IN (SELECT CustID FROM #supers)
+		AND s.CustID <= @maxcustid
+		AND S.ProductSettingID IN (42,43,44)
 
 	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
@@ -117,6 +125,15 @@ BEGIN
 		FROM Dep_CustStakeLevel_Member cg	
 			INNER JOIN #CustBetSetting3rd_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
+		OPTION(MAXDOP 1)		
+	END	
+		
+	IF EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
+	BEGIN
+		DELETE cg
+		FROM Dep_LicenseeProductSetting cg	
+			INNER JOIN #Dep_LicenseeProductSetting t 
+				ON cg.CustID=t.CustID AND CG.ProductSettingID = T.ProductSettingID	
 		OPTION(MAXDOP 1)		
 	END	
 END	

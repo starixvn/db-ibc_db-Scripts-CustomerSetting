@@ -18,7 +18,7 @@
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		AND ci.currency NOT IN (45,75,76,77,41) --Won (KRW), PTU, PS, PTH, CHF
+		AND ci.currency IN (13,5,67)
 	ORDER BY CI.custid 
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
