@@ -156,6 +156,9 @@ BEGIN
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'JPY', 500.00, 270000.00, '500', '270,000') -- JPY
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'JPY', 500.00, 525000.00, '500', '525,000') -- JPY
 	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'JPY', 500.00, 1075000.00, '500', '1,075,000') -- JPY
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'UUS', 5.00, 2500.00, '5', '2,500') -- UUS
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'UUS', 5.00, 5000.00, '5', '5,000') -- UUS
+	INSERT INTO @DEP_Stake ([GameTypeID], [Currency], [MinStake], [MaxStake],[MinLabel],[MaxLabel]) VALUES (4602, N'UUS', 5.00, 10000.00, '5', '10,000') -- UUS
 
 	DECLARE @MaxStakeLevelID INT
 	SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
@@ -243,9 +246,11 @@ SELECT c.custid, s.siteid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	INNER JOIN Dep_LicenseeProductSetting cs WITH (NOLOCK) ON c.custid = cs.custid
 WHERE c.roleid = 4  
  AND s.islicensee = 1
  AND ci.Enabled = 1
+ AND cs.ProductSettingID = 34
  AND c.custid <= @max_custid
  AND c.currency IN ( 	2	--RM
 					, 	71	--KHR
@@ -560,9 +565,11 @@ SELECT c.custid, s.siteid
 FROM customer c WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	INNER JOIN Dep_LicenseeProductSetting cs WITH (NOLOCK) ON c.custid = cs.custid
 WHERE c.roleid = 4  
  AND s.islicensee = 1
  AND ci.Enabled = 1
+ AND cs.ProductSettingID = 34
  AND c.custid <= @max_custid
  AND c.currency IN ( 	2	--RM
 					, 	71	--KHR
