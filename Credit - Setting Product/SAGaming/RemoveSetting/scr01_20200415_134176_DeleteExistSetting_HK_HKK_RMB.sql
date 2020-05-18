@@ -24,7 +24,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN	
-		IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
@@ -55,7 +55,7 @@ BEGIN
 		AND ci.currency IN (5,13,67)--HK$, RMB, HKK
 
 
-	SELECT DISTINCT cg.custid 
+	SELECT DISTINCT cg.custid
 	INTO #CustStakeLevel_Agent
 	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
@@ -63,7 +63,7 @@ BEGIN
 	WHERE SportType = @Sporttype
 		AND cg.CustID <= @maxcustid
 
-	SELECT DISTINCT cg.custid 
+	SELECT DISTINCT cg.custid
 	INTO #CustStakeLevel_Member
 	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
@@ -127,50 +127,76 @@ BEGIN
 	WHERE SportType = @Sporttype
 		AND cg.CustID <= @maxcustid
 
-	DELETE cg
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
 		INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
-
-	DELETE cg
+	END
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
-
-	DELETE cg
+	END
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
-
-	DELETE cg
+	END
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
-
-	DELETE cg
+	END
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
 	WHERE SportType = @Sporttype
+	END
 
-	DELETE cg
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustDiscount3rd_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
 
-	DELETE cg
+	END
+
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
 		INNER JOIN #CustDiscount3rd_Agent ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
+	END
 
-	DELETE cg
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
 		INNER JOIN #CustWinLossLimit_Agent ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
+	END
 
-	DELETE cg
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+	DELETE TOP (3000) cg
 	FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
 	WHERE SportType = @Sporttype
+	END
+
+
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
