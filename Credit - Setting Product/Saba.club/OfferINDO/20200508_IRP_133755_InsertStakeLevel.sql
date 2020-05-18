@@ -13,7 +13,7 @@ FROM dbo.exchange WITH (NOLOCK)
 WHERE exchangeid IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
 
 INSERT INTO dbo.StakeLevelGroupDetail (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ParentTypeID)
-SELECT StakeLevelID, GameTypeID, '0.01', '10000', 0.01, 10000, NULL
+SELECT StakeLevelID, GameTypeID, '0.1', '20,000', 0.1, 20000, NULL
 FROM dbo.StakeLevel WITH (NOLOCK)
 WHERE GameTypeID = 1611 AND ExchangeId IN (15, 22, 33, 34, 47) -- ('IDD', 'IDR', 'IN', 'IND','DDD')
 
