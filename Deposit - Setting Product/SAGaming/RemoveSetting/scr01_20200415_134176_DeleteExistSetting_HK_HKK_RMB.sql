@@ -86,56 +86,55 @@ BEGIN
 		AND s.CustID <= @maxcustid
 		AND S.ProductSettingID IN (42,43,44)
 
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
-	BEGIN
-		DELETE cg
-		FROM Dep_CustPTSetting_Agent cg 	
-			INNER JOIN #CustPTSetting3rd_Agent t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
-	END	
 	
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
-	BEGIN					
-		DELETE cg
-		FROM Dep_CustPTSetting_Member cg
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_CustPTSetting_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_Agent t 
+				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+	END
+	
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_CustPTSetting_Member  cg WITH(ROWLOCK)		
 			INNER JOIN #CustPTSetting3rd_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
-		OPTION(MAXDOP 1)		
-	END  
+	END
 	
-	IF EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
-	BEGIN	
-		DELETE cg
-		FROM Dep_CustPTGroupSetting_Member cg 
-			INNER JOIN #CustPTGroupSetting3rd_Member t 
-				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
-	END 		
-			
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
-	BEGIN		
-		DELETE cg
-		FROM Dep_CustStakeLevel_Agent cg
-			INNER  JOIN #CustBetSetting3rd_Agent t
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 		
-	END 
-
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
+	WHILE (@@ROWCOUNT > 0)
 	BEGIN
-		DELETE cg
-		FROM Dep_CustStakeLevel_Member cg	
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_CustPTGroupSetting_Member  cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTGroupSetting3rd_Member t 
+				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+	END
+	
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_CustStakeLevel_Agent  cg WITH(ROWLOCK)		
+			INNER  JOIN #CustBetSetting3rd_Agent t
+				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 
+	END
+
+	WHILE (@@ROWCOUNT > 0)
+	BEGIN
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_CustStakeLevel_Member  cg WITH(ROWLOCK)		
 			INNER JOIN #CustBetSetting3rd_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
-		OPTION(MAXDOP 1)		
-	END	
-		
-	IF EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
+	END
+
+	WHILE (@@ROWCOUNT > 0)
 	BEGIN
-		DELETE cg
-		FROM Dep_LicenseeProductSetting cg	
+		DELETE TOP (3000) cg
+		FROM dbo.Dep_LicenseeProductSetting  cg WITH(ROWLOCK)		
 			INNER JOIN #Dep_LicenseeProductSetting t 
 				ON cg.CustID=t.CustID AND CG.ProductSettingID = T.ProductSettingID	
-		OPTION(MAXDOP 1)		
-	END	
+	END
+			
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
