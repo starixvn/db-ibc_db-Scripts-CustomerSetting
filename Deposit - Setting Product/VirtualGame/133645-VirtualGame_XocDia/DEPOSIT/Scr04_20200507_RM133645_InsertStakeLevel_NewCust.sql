@@ -15,9 +15,11 @@
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+		INNER JOIN Dep_LicenseeProductSetting cs WITH (NOLOCK) ON c.custid = cs.custid
 	WHERE c.roleid = 4  
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
+	 AND cs.ProductSettingID = 34
 	 AND c.currency IN ( 	2	--RM
 					, 	71	--KHR
 					, 	56	--PLN
