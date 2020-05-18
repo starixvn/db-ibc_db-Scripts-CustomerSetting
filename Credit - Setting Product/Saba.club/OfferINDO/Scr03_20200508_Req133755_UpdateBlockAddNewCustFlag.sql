@@ -9,5 +9,5 @@ GO
 
 UPDATE dbo.Site 
 SET BlockNewCust = 1,
-	UnblockTime = '01:30 PM (GMT+8)'
+	UnblockTime = '11:30 PM (GMT+8)'
 WHERE site IN ('Indo', 'IbcIndo')
