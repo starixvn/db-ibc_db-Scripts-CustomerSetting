@@ -286,7 +286,7 @@ WHERE c.roleid = 4
 ORDER BY custid
 
 DECLARE @SportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
-INSERT INTO @SportBettype(SportType, BetType) VALUES (245, 4601)
+INSERT INTO @SportBettype(SportType, BetType) VALUES (245, 4602)
 -------------------------------------------------STAKE LEVEL----------------------------------------------------------------
 SELECT a.CustID,a.SportType,a.BetType
 INTO #Dep_CustStakeLevel_Agent
