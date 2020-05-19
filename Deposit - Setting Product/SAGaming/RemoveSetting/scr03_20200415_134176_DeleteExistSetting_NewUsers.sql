@@ -50,43 +50,7 @@ BEGIN
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID > @maxcustid
-
-	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT s.CustID,Sporttype,Bettype,IsLive 
-	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
-		AND s.CustID > @maxcustid
-
-	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT AgentID,SportType,BetType,IsLive 
-	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
-		AND s.AgentID > @maxcustid
-
-	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
-		AND s.CustID > @maxcustid
-
-	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
-		AND s.CustID > @maxcustid
-
-	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT S.CustID,ProductSettingID
-	FROM Dep_LicenseeProductSetting S WITH(NOLOCK) 
-	WHERE S.CustID IN (SELECT CustID FROM #supers)
-		AND s.CustID > @maxcustid
-		AND S.ProductSettingID IN (42,43,44)
-
-	
+		
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
 		DELETE TOP (3000) cg
@@ -94,6 +58,13 @@ BEGIN
 			INNER JOIN #CustPTSetting3rd_Agent t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
 	END
+
+	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
+	SELECT s.CustID,Sporttype,Bettype,IsLive 
+	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+		AND s.CustID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
@@ -103,6 +74,13 @@ BEGIN
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
 	END
 	
+	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
+	SELECT AgentID,SportType,BetType,IsLive 
+	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
+	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+		AND s.AgentID > @maxcustid
+	
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
 		DELETE TOP (3000) cg
@@ -110,6 +88,13 @@ BEGIN
 			INNER JOIN #CustPTGroupSetting3rd_Member t 
 				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
 	END
+
+	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
+	SELECT S.CustID,SportType,BetType 
+	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+		AND s.CustID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
@@ -119,6 +104,14 @@ BEGIN
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 
 	END
 
+	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
+	SELECT S.CustID,SportType,BetType 
+	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+		AND s.CustID > @maxcustid
+
+	
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
 		DELETE TOP (3000) cg
@@ -127,14 +120,20 @@ BEGIN
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
 	END
 
+	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT S.CustID,ProductSettingID
+	FROM Dep_LicenseeProductSetting S WITH(NOLOCK) 
+	WHERE S.CustID IN (SELECT CustID FROM #supers)
+		AND s.CustID > @maxcustid
+		AND S.ProductSettingID IN (42,43,44)
+
 	WHILE (@@ROWCOUNT > 0)
 	BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.Dep_LicenseeProductSetting  cg WITH(ROWLOCK)		
 			INNER JOIN #Dep_LicenseeProductSetting t 
 				ON cg.CustID=t.CustID AND CG.ProductSettingID = T.ProductSettingID	
-	END
-			
+	END		
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
