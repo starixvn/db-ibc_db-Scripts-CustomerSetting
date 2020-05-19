@@ -59,7 +59,7 @@ BEGIN
 		AND s.CustID <= @maxcustid
 
 
-	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #CustPTSetting3rd_AgentBatch
 
@@ -80,7 +80,7 @@ BEGIN
 	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
 
-	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #CustPTSetting3rd_MemberBatch
 
@@ -100,7 +100,7 @@ BEGIN
 	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.AgentID <= @maxcustid
 	
-	WHILE EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #CustPTGroupSetting3rd_MemberBatch
 
@@ -122,7 +122,7 @@ BEGIN
 		AND s.CustID <= @maxcustid
 	
 	
-	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustBetSetting3rd_Agent OUTPUT DELETED.* INTO #CustBetSetting3rd_AgentBatch
 
@@ -144,7 +144,7 @@ BEGIN
 		AND s.CustID <= @maxcustid
 
 	
-	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustBetSetting3rd_Member OUTPUT DELETED.* INTO #CustBetSetting3rd_MemberBatch
 
@@ -165,7 +165,7 @@ BEGIN
 		AND s.CustID <= @maxcustid
 		AND S.ProductSettingID IN (42,43,44)
 
-	WHILE EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #Dep_LicenseeProductSetting OUTPUT DELETED.* INTO #Dep_LicenseeProductSettingBatch
 

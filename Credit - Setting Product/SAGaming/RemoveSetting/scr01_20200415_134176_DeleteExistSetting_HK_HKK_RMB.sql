@@ -68,7 +68,7 @@ BEGIN
 		CustID				INT PRIMARY KEY CLUSTERED	
 	)
 
-	WHILE EXISTS(SELECT 1 FROM #CustStakeLevel_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustStakeLevel_Agent OUTPUT DELETED.* INTO #TempBatch
 
@@ -92,7 +92,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype	
 		AND cg.CustID <= @maxcustid
 
-	WHILE EXISTS(SELECT 1 FROM #CustStakeLevel_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustStakeLevel_Member OUTPUT DELETED.* INTO #TempBatch
 
@@ -114,7 +114,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 	
-	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #TempBatch
 
@@ -136,7 +136,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 	
-	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #TempBatch
 
@@ -158,7 +158,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.AgentID <= @maxcustid
 	
-	WHILE EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #TempBatch
 
@@ -180,7 +180,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 
-	WHILE EXISTS(SELECT 1 FROM #CustDiscount3rd_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustDiscount3rd_Member OUTPUT DELETED.* INTO #TempBatch
 
@@ -202,7 +202,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 
-	WHILE EXISTS(SELECT 1 FROM #CustDiscount3rd_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustDiscount3rd_Agent OUTPUT DELETED.* INTO #TempBatch
 
@@ -224,7 +224,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 	
-	WHILE EXISTS(SELECT 1 FROM #CustWinLossLimit_Agent)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustWinLossLimit_Agent OUTPUT DELETED.* INTO #TempBatch
 
@@ -246,7 +246,7 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID <= @maxcustid
 
-	WHILE EXISTS(SELECT 1 FROM #CustWinLossLimit_Member)
+	WHILE (1=1)
 	BEGIN
 		DELETE TOP (3000) #CustWinLossLimit_Member OUTPUT DELETED.* INTO #TempBatch
 
