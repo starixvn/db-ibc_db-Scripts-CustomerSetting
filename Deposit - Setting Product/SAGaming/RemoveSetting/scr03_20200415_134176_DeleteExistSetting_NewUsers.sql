@@ -1,8 +1,8 @@
 /*
-	Created: 20200218@Tiara
-	Date: 20200218
-	Task: Delete existing data of SA Gaming for HK$, RMB, HKK -New users [Redmine: #134176]
-	DB: DBCust/CustDB
+	Created: 20200514@Tiara
+	Date: 20200514
+	Task:  Delete existing data of SA Gaming for HK$, RMB, HKK - New users [Redmine: #134176]
+	DB: DBCUST/CustDB
 */
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	@target VARCHAR(20)
@@ -44,80 +44,118 @@ BEGIN
 	CREATE TABLE #CustBetSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
 	CREATE TABLE #Dep_LicenseeProductSetting (CustID INT, ProductSettingID INT)
 
+	CREATE TABLE #CustPTSetting3rd_AgentBatch (CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustPTSetting3rd_MemberBatch (CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustPTGroupSetting3rd_MemberBatch (CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustBetSetting3rd_AgentBatch (CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #CustBetSetting3rd_MemberBatch (CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #Dep_LicenseeProductSettingBatch (CustID INT, ProductSettingID INT)
+
 	INSERT INTO #CustPTSetting3rd_Agent(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.Custid,SportType,BetType,IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID > @maxcustid
-		
-	WHILE (@@ROWCOUNT > 0)
+
+
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #CustPTSetting3rd_AgentBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.Dep_CustPTSetting_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTSetting3rd_Agent t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+			INNER JOIN #CustPTSetting3rd_AgentBatch t
+			ON cg.CustID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+		
+		TRUNCATE TABLE #CustPTSetting3rd_AgentBatch
 	END
 
 	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.CustID,Sporttype,Bettype,IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID > @maxcustid
-	
-	WHILE (@@ROWCOUNT > 0)
+
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #CustPTSetting3rd_MemberBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
-		FROM dbo.Dep_CustPTSetting_Member  cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTSetting3rd_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
+		FROM dbo.Dep_CustPTSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_MemberBatch t
+			ON cg.CustID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+		
+		TRUNCATE TABLE #CustPTSetting3rd_MemberBatch
 	END
-	
 	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT AgentID,SportType,BetType,IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.AgentID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #CustPTGroupSetting3rd_MemberBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
-		FROM dbo.Dep_CustPTGroupSetting_Member  cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTGroupSetting3rd_Member t 
-				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+		FROM dbo.Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTGroupSetting3rd_MemberBatch t
+			ON cg.AgentID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+		
+		TRUNCATE TABLE #CustPTGroupSetting3rd_MemberBatch
 	END
 
 	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	
+	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustBetSetting3rd_Agent OUTPUT DELETED.* INTO #CustBetSetting3rd_AgentBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
-		FROM dbo.Dep_CustStakeLevel_Agent  cg WITH(ROWLOCK)		
-			INNER  JOIN #CustBetSetting3rd_Agent t
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 
+		FROM dbo.Dep_CustStakeLevel_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustBetSetting3rd_AgentBatch t
+			ON cg.CustID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 
+		
+		TRUNCATE TABLE #CustBetSetting3rd_AgentBatch
 	END
 
 	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 3001 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID > @maxcustid
 
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustBetSetting3rd_Member OUTPUT DELETED.* INTO #CustBetSetting3rd_MemberBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
-		FROM dbo.Dep_CustStakeLevel_Member  cg WITH(ROWLOCK)		
-			INNER JOIN #CustBetSetting3rd_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
+		FROM dbo.Dep_CustStakeLevel_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustBetSetting3rd_MemberBatch t
+			ON cg.CustID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 
+		
+		TRUNCATE TABLE #CustBetSetting3rd_MemberBatch
 	END
 
 	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -127,13 +165,21 @@ BEGIN
 		AND s.CustID > @maxcustid
 		AND S.ProductSettingID IN (42,43,44)
 
-	WHILE (@@ROWCOUNT > 0)
+
+	WHILE EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
 	BEGIN
+		DELETE TOP (3000) #Dep_LicenseeProductSetting OUTPUT DELETED.* INTO #Dep_LicenseeProductSettingBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
-		FROM dbo.Dep_LicenseeProductSetting  cg WITH(ROWLOCK)		
-			INNER JOIN #Dep_LicenseeProductSetting t 
-				ON cg.CustID=t.CustID AND CG.ProductSettingID = T.ProductSettingID	
-	END		
+		FROM dbo.Dep_LicenseeProductSetting cg WITH(ROWLOCK)		
+			INNER JOIN #Dep_LicenseeProductSettingBatch t
+			ON cg.CustID=t.CustID AND CG.ProductSettingID = T.ProductSettingID	
+		
+		TRUNCATE TABLE #Dep_LicenseeProductSettingBatch
+	END
+		
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

@@ -39,7 +39,7 @@ BEGIN
 	DECLARE @Sporttype SMALLINT, @Bettype SMALLINT
 	CREATE TABLE #supers (custid INT)
 
-	SELECT @Sporttype = 244, @Bettype = 2401
+	SELECT @Sporttype = 244, @Bettype = 3001
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -62,13 +62,25 @@ BEGIN
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
+		
+	CREATE TABLE #TempBatch
+	(
+		CustID				INT PRIMARY KEY CLUSTERED	
+	)
 
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustStakeLevel_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustStakeLevel_Agent OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
+
 		DELETE TOP (3000) cg
 		FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 
@@ -80,12 +92,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype	
 		AND cg.CustID > @maxcustid
 
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustStakeLevel_Member)
 	BEGIN
+		DELETE TOP (3000) #CustStakeLevel_Member OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.custid 
@@ -96,12 +114,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.custid 
@@ -112,12 +136,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.AgentID
@@ -128,12 +158,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.AgentID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.AgentID
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -144,12 +180,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustDiscount3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustDiscount3rd_Member OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustDiscount3rd_Member ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -160,12 +202,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustDiscount3rd_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustDiscount3rd_Agent OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustDiscount3rd_Agent ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -176,12 +224,18 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustWinLossLimit_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustWinLossLimit_Agent OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustWinLossLimit_Agent ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -192,14 +246,19 @@ BEGIN
 	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
-	WHILE (@@ROWCOUNT > 0)
+	WHILE EXISTS(SELECT 1 FROM #CustWinLossLimit_Member)
 	BEGIN
+		DELETE TOP (3000) #CustWinLossLimit_Member OUTPUT DELETED.* INTO #TempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
 		DELETE TOP (3000) cg
 		FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
+			INNER JOIN #TempBatch ci ON ci.custid = cg.CustID	
 		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
+		
+		TRUNCATE TABLE #TempBatch 
 	END
-
 
 END	
 GO
