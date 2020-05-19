@@ -8,7 +8,7 @@ USE CustDB
 GO
 
 UPDATE st 
-SET st.MaxLabel = '20000',
+SET st.MaxLabel = '20,000',
 	st.MaxStake = 20000
 FROM dbo.StakeLevelGroupDetail st WITH (ROWLOCK)
 	INNER JOIN dbo.StakeLevel s WITH (NOLOCK) ON s.StakeLevelID = st.StakeLevelID
