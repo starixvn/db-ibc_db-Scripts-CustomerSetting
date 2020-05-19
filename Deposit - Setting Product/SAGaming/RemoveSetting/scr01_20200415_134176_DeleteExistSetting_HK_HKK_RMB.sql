@@ -48,7 +48,7 @@ BEGIN
 	SELECT s.Custid,SportType,BetType,IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -63,7 +63,7 @@ BEGIN
 	SELECT s.CustID,Sporttype,Bettype,IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -78,7 +78,7 @@ BEGIN
 	SELECT AgentID,SportType,BetType,IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.AgentID <= @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -93,7 +93,7 @@ BEGIN
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -108,7 +108,7 @@ BEGIN
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =244 AND BetType = 2401 AND c.srecommend IN(SELECT CustID FROM #supers)
 		AND s.CustID <= @maxcustid
 
 	
@@ -117,7 +117,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.Dep_CustStakeLevel_Member  cg WITH(ROWLOCK)		
 			INNER JOIN #CustBetSetting3rd_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
+				ON cg.CustID=t.CustID AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
 	END
 
 	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)

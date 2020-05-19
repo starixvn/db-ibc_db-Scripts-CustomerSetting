@@ -36,10 +36,10 @@ BEGIN
 
 	SELECT @maxcustid = xxx
 
-	DECLARE @Sporttype SMALLINT 
+	DECLARE @Sporttype SMALLINT, @Bettype SMALLINT
 	CREATE TABLE #supers (custid INT)
 
-	SELECT @Sporttype = 244
+	SELECT @Sporttype = 244, @Bettype = 2401
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -60,7 +60,7 @@ BEGIN
 	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -68,7 +68,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
 			INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 
@@ -77,7 +77,7 @@ BEGIN
 	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype	
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype	
 		AND cg.CustID > @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -85,7 +85,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
 			INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.custid 
@@ -93,7 +93,7 @@ BEGIN
 	FROM dbo.CustPTSetting3rd_Agent cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -101,7 +101,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
 			INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.custid 
@@ -109,7 +109,7 @@ BEGIN
 	FROM dbo.CustPTSetting3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -117,7 +117,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
 			INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.AgentID
@@ -125,7 +125,7 @@ BEGIN
 	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.AgentID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -133,7 +133,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
 			INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -141,7 +141,7 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -149,7 +149,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
 			INNER JOIN #CustDiscount3rd_Member ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -157,7 +157,7 @@ BEGIN
 	FROM dbo.CustDiscount3rd_Agent cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -165,7 +165,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
 			INNER JOIN #CustDiscount3rd_Agent ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -173,7 +173,7 @@ BEGIN
 	FROM dbo.CustWinLossLimit_Agent cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 	
 	WHILE (@@ROWCOUNT > 0)
@@ -181,7 +181,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
 			INNER JOIN #CustWinLossLimit_Agent ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 	SELECT DISTINCT cg.CustID
@@ -189,7 +189,7 @@ BEGIN
 	FROM dbo.CustWinLossLimit_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 		AND cg.CustID > @maxcustid
 
 	WHILE (@@ROWCOUNT > 0)
@@ -197,7 +197,7 @@ BEGIN
 		DELETE TOP (3000) cg
 		FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
 			INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
-		WHERE SportType = @Sporttype
+		WHERE cg.SportType = @Sporttype AND cg.BetType = @Bettype
 	END
 
 
