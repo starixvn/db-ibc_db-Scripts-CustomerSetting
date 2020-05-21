@@ -17,4 +17,4 @@ SELECT @Sporttype = 242, @Bettype = 3201
 DELETE FROM ProductStatusSiteCurrency WHERE SportType=@Sporttype
 
 INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
-SELECT DISTINCT @Sporttype, @Bettype, 487, 0, 0, 0, 1  
+SELECT DISTINCT @Sporttype, @Bettype, 487, 20, 0, 0, 1  
