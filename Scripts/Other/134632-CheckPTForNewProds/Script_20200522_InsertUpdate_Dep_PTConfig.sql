@@ -25,4 +25,5 @@ SET PTValue = CASE  WHEN SportType = 245 AND IsAthena = 0 THEN '94.00,90.00,95.0
 				ELSE PTValue END
 FROM  [Dep_PTConfig] p WITH(ROWLOCK)
 WHERE SportType IN (245,222)
+	  AND RuleID = 71
 GO
