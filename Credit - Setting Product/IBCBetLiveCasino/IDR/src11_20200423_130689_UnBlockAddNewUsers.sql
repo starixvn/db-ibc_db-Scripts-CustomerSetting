@@ -8,4 +8,3 @@ GO
 UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 0,
 	UnblockTime = NULL
-WHERE BlockNewCust = 1

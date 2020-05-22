@@ -12,6 +12,5 @@ DECLARE @UnblockTime VARCHAR(50) = '01:30 PM (GMT+8)' -- time unblock add new cu
 UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 1,
 	UnblockTime = @UnblockTime
-WHERE site = 'IBCIndo'
 
 --> Step 2 : Restore DB to DBNOTI.CustDB_AdjustCS
