@@ -11,5 +11,3 @@ DELETE cd
 FROM CustDirectAccount cd WITH(ROWLOCK)
 	INNER JOIN Acc_CustDirect ac WITH(NOLOCK)
 		ON ac.custid = cd.CustID
-	INNER JOIN custInfo c  WITH(NOLOCK) 
-		ON c.custid = ac.custid
