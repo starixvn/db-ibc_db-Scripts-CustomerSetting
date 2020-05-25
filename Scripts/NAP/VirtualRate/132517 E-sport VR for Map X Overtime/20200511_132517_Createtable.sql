@@ -2,7 +2,7 @@
 /*
 	Created: 20200511@Eden
 	Task: Create table VRSettingReference [RM#132517]
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB and CustDB_CustSetting Publication
 */
 USE [CustDB]
 GO
