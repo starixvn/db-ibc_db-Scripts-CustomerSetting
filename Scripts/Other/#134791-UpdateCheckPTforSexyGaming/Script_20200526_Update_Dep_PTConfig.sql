@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCHECK-CheckResultDB"></info>*/
  /*
 	Created: 20200526@Eden
-	Task: Update for Sexy Gaming [Redmine:#132517]	
+	Task: Update for Sexy Gaming [Redmine:#134787]	
 	DB: DBCHECK/CheckResultDB
 */
 USE CheckResultDB
