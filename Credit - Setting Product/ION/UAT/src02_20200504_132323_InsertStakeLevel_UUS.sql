@@ -25,8 +25,8 @@ FROM StakeLevel S WITH(ROWLOCK)
 WHERE S.GameTypeID = 5601
 	AND S.ExchangeId IN (SELECT ExchangeId FROM #temp) -- IDR
 
-INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId)
-SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId
+INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId,ResourceId)
+SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId, 2
 FROM #temp T WITH(NOLOCK)
 ORDER BY GameTypeID,ExchangeId,MaxStake,MinStake
 
