@@ -1,6 +1,6 @@
 /*
 	Created: 20200406@Eden
-	Task: Insert CanSee for BBIN - NovaCash Credit Site [Redmine: #131363] 
+	Task: Insert CanSee Batch 1 THB, CNY, HKD, MYR, YNG [Redmine: #131363] 
 	DB: DBCUST/CustDB
 */ 
 USE CustDB
@@ -11,6 +11,13 @@ SELECT @Sporttype = 241, @Bettype = 3300
 
 CREATE TABLE #OfferedSitesCurrency (SiteID INT, Currency INT)
 INSERT INTO #OfferedSitesCurrency(SiteID,Currency)
+SELECT 1, 81 UNION ALL --BEST-ODDS, CY
+SELECT 23, 13 UNION ALL --222223, RMB
+SELECT 16, 13 UNION ALL --611111, RMB
+SELECT 20, 13 UNION ALL --722222, RMB
+SELECT 21, 13 UNION ALL --733333, RMB
+SELECT 1, 13 UNION ALL --BEST-ODDS, RMB
+SELECT 13, 13 UNION ALL --XYZBET, RMB
 SELECT 23, 5 UNION ALL --222223, HK$
 SELECT 25, 5 UNION ALL --222227, HK$
 SELECT 16, 5 UNION ALL --611111, HK$
@@ -53,24 +60,17 @@ SELECT 3, 72  --789y, YNG
 DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, @Bettype AS BetType, t.Currency AS Currency, t.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest
+SELECT @Sporttype AS SportType, @Bettype AS BetType, t.Currency AS Currency, t.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest
 FROM #OfferedSitesCurrency t
 
 UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
-SET IsLaunched = 0 
+SET IsLaunched = 1 
 WHERE SportType = @Sporttype and bettype = @Bettype
-	AND SiteID = 3 --789y
-	AND Currency <> 72
-
---Dissable HKK
-UPDATE ProductLaunchedSiteCurrency WITH(ROWLOCK)
-SET IsLaunched = 0 
-WHERE SportType = @Sporttype and bettype = @Bettype
-	AND Currency =  67 --HKK
+	AND Currency IN( 2,4,43,5,67,13,72,81)
 
 DROP TABLE #OfferedSitesCurrency
 
---SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 241
+--SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 241 AND IsLaunched = 0
 
 
 
