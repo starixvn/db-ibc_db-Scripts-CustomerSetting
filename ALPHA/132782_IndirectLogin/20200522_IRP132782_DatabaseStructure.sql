@@ -3,7 +3,8 @@
 	Task : prepare structure for indirect login account [redmine:#132782]
 	DB: DBCUST/CustDB
 */
---step 1: create table CustInDirectLogin
+--create table CustInDirectLogin on DBCUST/CustDB & Replicate server under pub CustDB_DR_sync
+--then add this table into pub CustDB_DR_sync
 CREATE TABLE [dbo].[CustInDirectLogin](	
 	CustID	 INT,
 	SubAccID INT,
