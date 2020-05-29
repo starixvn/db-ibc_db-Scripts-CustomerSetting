@@ -5,6 +5,14 @@
 */
 USE CustDB
 GO
+
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	IF dbo.f_CheckRepTable('Custwinlimit') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 --Role 4: Update manual G99MK, SA-EUR, SA-TH
 
 --Role 3: 
@@ -87164,3 +87172,8 @@ WHERE cs.SportType = 208 AND cs.BetType = 2101
 ,12355177
 ,2537
 ,6163816)	
+
+END
+
+--Run on DBCUST
+EXEC dbo.Acc_DynamicCustSetting3rd_09
