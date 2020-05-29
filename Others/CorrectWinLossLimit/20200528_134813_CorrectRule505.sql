@@ -9,7 +9,7 @@ GO
 
 --Role 3: 
 UPDATE cs 
-SET MaxWinLimit = ucs.MaxWinLimit
+SET MaxLossLimit = ucs.MaxLossLimit
 FROM Custwinlimit cs WITH (ROWLOCK)
 	INNER JOIN Custinfo ci WITH (NOLOCK) ON cs.CustId = ci.custid
 	INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.srecommend = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
@@ -12763,7 +12763,7 @@ WHERE cs.SportType = 208 AND cs.BetType = 2101
 
 --Role 2: 
 UPDATE cs 
-SET MaxWinLimit = ucs.MaxWinLimit
+SET MaxLossLimit = ucs.MaxLossLimit
 FROM Custwinlimit cs WITH (ROWLOCK)
 	INNER JOIN Custinfo ci WITH (NOLOCK) ON cs.CustId = ci.custid
 	INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.mrecommend = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
@@ -34648,7 +34648,7 @@ WHERE cs.SportType = 208 AND cs.BetType = 2101
 
 --Role 1: 
 UPDATE cs 
-SET MaxWinLimit = ucs.MaxWinLimit
+SET MaxLossLimit = ucs.MaxLossLimit
 FROM Custwinlimit cs WITH (ROWLOCK)
 	INNER JOIN Custinfo ci WITH (NOLOCK) ON cs.CustId = ci.custid
 	INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.recommend = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType

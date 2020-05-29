@@ -7,7 +7,7 @@ USE CustDB
 GO
 
 UPDATE cs 
-SET MaxWinLimit = ucs.MaxWinLimit
+SET MaxLossLimit = ucs.MaxLossLimit
 FROM CustWinLossLimit_Agent cs WITH (ROWLOCK)
 	INNER JOIN Custinfo ci WITH (NOLOCK) ON cs.CustId = ci.custid
 	INNER JOIN CustWinLossLimit_Agent ucs WITH (NOLOCK) ON ci.srecommend = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
@@ -16,7 +16,7 @@ WHERE cs.custid IN (26985540)
 		OR (cs.SportType = 244 AND cs.BetType = 3001) OR (cs.SportType = 243 AND cs.BetType = 3101))
 
 UPDATE cs 
-SET MaxWinLimit = ucs.MaxWinLimit
+SET MaxLossLimit = ucs.MaxLossLimit
 FROM Custwinlimit cs WITH (ROWLOCK)
 	INNER JOIN Custinfo ci WITH (NOLOCK) ON cs.CustId = ci.custid
 	INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.srecommend = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
