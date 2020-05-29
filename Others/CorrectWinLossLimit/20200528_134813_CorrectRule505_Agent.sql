@@ -15,13 +15,13 @@ BEGIN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 
 	CREATE TABLE #CustList (CustId INT, UplineID INT)
-	DECLARE @Batch TABLE (CustId INT)
+	DECLARE @Batch TABLE (CustId INT, UplineID INT)
 
 	INSERT INTO #CustList (CustId, UplineID)
 	SELECT custid, mrecommend
-	FROM custInfo WITH (NOLOCK)
+	FROM custInfo ci WITH (NOLOCK)
 	WHERE ci.roleid = 2
-		AND cs.custid IN (3607
+		AND ci.custid IN (3607
 ,39087
 ,387214
 ,10511
@@ -21897,11 +21897,11 @@ BEGIN
 ,9429459
 ,10752844
 )	
+	
 	--Role 2: 
 	WHILE (1=1)
 	BEGIN
-		DELETE TOP (4000) CustId INTO @Batch (CustID)
-		FROM #CustList WITH (NOLOCK)
+		DELETE TOP (4000) FROM #CustList  OUTPUT deleted.CustId, deleted.UplineID INTO @Batch (CustID, UplineId)
 
 		IF @@ROWCOUNT = 0
 			BREAK
@@ -21909,9 +21909,11 @@ BEGIN
 		UPDATE cs 
 		SET MaxLossLimit = ucs.MaxLossLimit
 		FROM Custwinlimit cs WITH (ROWLOCK)
-			INNER JOIN @Batch ci WITH (NOLOCK) ON cs.CustId = ci.custid
+			INNER JOIN @Batch ci ON cs.CustId = ci.custid
 			INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.UplineId = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
 		WHERE cs.SportType = 208 AND cs.BetType = 2101
+
+		DELETE FROM @Batch
 	END 
 END
 

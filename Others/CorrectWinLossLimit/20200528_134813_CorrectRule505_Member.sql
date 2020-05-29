@@ -18,10 +18,10 @@ BEGIN
 	DECLARE @Batch TABLE (CustId INT, UplineID INT)
 
 	INSERT INTO #CustList (CustId, UplineID)
-	SELECT custid, srecommend
-	FROM custInfo WITH (NOLOCK)
+	SELECT custid, recommend
+	FROM custInfo ci WITH (NOLOCK)
 	WHERE ci.roleid = 1
-		AND cs.custid IN (5161809
+		AND ci.custid IN (5161809
 ,5161813
 ,35281
 ,32839
@@ -52534,8 +52534,7 @@ BEGIN
 
 	WHILE (1=1)
 	BEGIN
-		DELETE TOP (4000) CustId, UplineId INTO @Batch (CustID, UplineId)
-		FROM #CustList 
+		DELETE TOP (4000) FROM #CustList  OUTPUT deleted.CustId, deleted.UplineID INTO @Batch (CustID, UplineId)
 
 		IF @@ROWCOUNT = 0
 			BREAK
@@ -52546,6 +52545,8 @@ BEGIN
 			INNER JOIN @Batch ci ON cs.CustId = ci.custid
 			INNER JOIN CustWinLimit ucs WITH (NOLOCK) ON ci.UplineId = ucs.CustId AND cs.SportType = ucs.SportType AND cs.BetType = ucs.BetType
 		WHERE cs.SportType = 208 AND cs.BetType = 2101
+
+		DELETE FROM @Batch
 	END 
 END
 
