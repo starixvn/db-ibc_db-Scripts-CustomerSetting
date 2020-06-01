@@ -29412,8 +29412,13 @@ BEGIN
 ,1904828
 ,3142395
 ,1904832
-,9547292
-,2220208
+,9547292)
+
+INSERT INTO #CustList (CustId, UplineID)
+	SELECT custid, recommend
+	FROM custInfo ci WITH (NOLOCK)
+	WHERE ci.roleid = 1
+		AND ci.custid IN (2220208
 ,1904834
 ,1904838
 ,1904844
