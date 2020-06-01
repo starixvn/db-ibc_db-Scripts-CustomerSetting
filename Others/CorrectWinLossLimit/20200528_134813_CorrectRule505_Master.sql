@@ -12783,6 +12783,8 @@ BEGIN
 		WHERE cs.SportType = 208 AND cs.BetType = 2101
 
 		DELETE FROM @Batch
+
+		WAITFOR DELAY '00:00:00.100'
 	END 
 END
 
