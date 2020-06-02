@@ -77,6 +77,7 @@ UNION SELECT 95021,4,'Age_CustomerIndirectLoginAccountPwdCheck','Verify password
 UNION SELECT 95022,4,'Age_CustomerIndirectLoginAccountUpd','Verify password','Verify password','Verify password','Verify password','Verify password','Verify password','Verify password',0,'Verify password','Verify password'
 UNION SELECT 1335,NULL,'Age_CustomerIndirectLoginAccountIns','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site',0,'Indirect Login via Agent''s Site','Indirect Login via Agent''s Site'
 UNION SELECT 1336,NULL,'Age_CustomerIndirectLoginAccountPwdCheck','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site',0,'Indirect Login via Agent''s Site','Indirect Login via Agent''s Site'
+UNION SELECT 1337,NULL,'Age_IndirectLoginClaimDownline','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site','Indirect Login via Agent''s Site',0,'Indirect Login via Agent''s Site','Indirect Login via Agent''s Site'
 
 
 
