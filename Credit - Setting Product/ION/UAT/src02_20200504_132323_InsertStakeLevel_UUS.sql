@@ -20,14 +20,26 @@ INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
 SELECT 5601, 20, '10', '100,000', 10, 100000 UNION ALL -- UUS
 SELECT 5601, 72, '10', '100,000', 10, 100000 -- YNG
 
-DELETE S
-FROM StakeLevel S WITH(ROWLOCK) 
-WHERE S.GameTypeID = 5601
-	AND S.ExchangeId IN (SELECT ExchangeId FROM #temp) -- IDR
+--DELETE S
+--FROM StakeLevel S WITH(ROWLOCK) 
+--WHERE S.GameTypeID = 5601
+--	AND S.ExchangeId IN (SELECT ExchangeId FROM #temp) -- IDR
 
-INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId,ResourceId)
-SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId, 2
-FROM #temp T WITH(NOLOCK)
-ORDER BY GameTypeID,ExchangeId,MaxStake,MinStake
+--INSERT INTO StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId,ResourceId)
+--SELECT T.GameTypeID, T.MinLabel,T.MaxLabel,	T.MinStake , T.MaxStake, T.ExchangeId, 2
+--FROM #temp T WITH(NOLOCK)
+--ORDER BY GameTypeID,ExchangeId,MaxStake,MinStake
+
+MERGE StakeLevel s
+USING #temp t
+	ON s.GameTypeID = t.GameTypeID 
+	AND s.ExchangeId = t.ExchangeId
+WHEN NOT MATCHED THEN INSERT (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake,ExchangeId,ResourceId)
+					VALUES( T.GameTypeID, T.MinLabel,T.MaxLabel, T.MinStake , T.MaxStake, T.ExchangeId, 2)
+WHEN MATCHED THEN UPDATE SET s.MinLabel = t.MinLabel,
+							s.MaxLabel = t.MaxLabel,
+							s.MinStake = t.MinStake,
+							s.MaxStake = t.MaxStake, 
+							s.ResourceId = 2;
 
 DROP TABLE #temp
