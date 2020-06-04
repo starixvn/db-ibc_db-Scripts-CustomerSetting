@@ -16,25 +16,25 @@ CREATE TABLE #NonOfferedCurency (Currency INT)
 INSERT INTO #NonOfferedCurency (Currency)
 SELECT exchangeid 
 FROM exchange WITH(NOLOCK) 
-WHERE exchangeid NOT IN (15 --IN
+WHERE exchangeid NOT IN (12 --GBP
+						,13 --RMB
+						,15 --IN
+						,16 --Yen
+						,2 --RM
 						,22 --IND
+						,3 --US$
 						,33 --IDD
 						,34 --IDR
-						,47 --DDD
-						,45 --Won
-						,2 --RM
-						,5 --HK$
-						,13 --RMB
-						,67 --HKK
-						,81 --CY
-						,43 --THB
-						,3 --US$
-						,6 --EURO
-						,12 --GBP
-						,16 --Yen
 						,35 --$US
+						,43 --THB
+						,45 --Won
+						,47 --DDD
+						,5 --HK$
+						,6 --EURO
 						,64 --UT
-						--,69 --MMK
+						,67 --HKK
+						,78 --EUR
+						,81 --CY
 						,20,72 --test
 				) --supported currencies
 

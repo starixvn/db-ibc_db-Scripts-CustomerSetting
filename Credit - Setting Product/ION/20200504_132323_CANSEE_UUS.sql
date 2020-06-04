@@ -16,7 +16,7 @@ UNION ALL SELECT 72 --YNG
 
 DELETE p
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
-	INNER JOIN #OfferCurrency t ON p.Currency = t.ExchangeID
+	--INNER JOIN #OfferCurrency t ON p.Currency = t.ExchangeID
 WHERE p.SportType = @Sporttype AND p.BetType = @Bettype
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
