@@ -32,18 +32,8 @@ BEGIN
 	SET @Discount_XML = N'<ROOT><Discount SportType="212" BetType="4001" Discount="0.00000000"/></ROOT>'
 	
 	-------- UPDATE commission customer setting -------------
-	---- for Real Super---------
-
 	SET @custid = @srecommend
 	SET @roleid = 4
-		
-	SET @IsUpd_212 = ISNULL((SELECT TOP (1) 1
-						FROM dbo.CustDiscount3rd_Agent WITH (NOLOCK) 
-						WHERE custid = @custid AND sporttype = 212 AND bettype = 4001 AND Discount <> 0),0)	
-																
-	IF @IsUpd_212 = 0 
-		RETURN
-		
 	------ For Macau Games
 	EXEC dbo.Acc_DynamicCustSetting3rd_06
 			@CustId			= @custid
@@ -68,12 +58,14 @@ FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
 	INNER JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN dbo.CustDiscount3rd_Agent cdis WITH (NOLOCK) ON cdis.CustID = c.custid AND cdis.sporttype = 212 AND cdis.bettype = 4001
 WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
+	AND cdis.Discount <> 0
 
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
@@ -102,7 +94,6 @@ BEGIN
 	
 END
 
-
 GO 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
@@ -115,12 +106,14 @@ FROM dbo.customer c WITH (NOLOCK)
 	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
 	INNER JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN dbo.CustDiscount3rd_Agent cdis WITH (NOLOCK) ON cdis.CustID = c.custid AND cdis.sporttype = 212 AND cdis.bettype = 4001
 WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
 	AND c.username NOT LIKE '3rdSuper%'
+	AND cdis.Discount <> 0
 
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
