@@ -28,7 +28,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
-	AND ci.Site <> 'CN88'
+	AND ci.Site NOT IN ('CN88','IBCIndo')
 	AND CI.currency IN (15 --IN
 						,22 --IND
 						,33 --IDD
