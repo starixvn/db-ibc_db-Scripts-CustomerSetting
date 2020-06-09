@@ -43,6 +43,9 @@ INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsH
 SELECT DISTINCT @Sporttype, @Bettype, 0, Currency, 1, 1, 1  
 FROM #NonOfferedCurency WITH (NOLOCK)
 
+INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
+SELECT  @Sporttype, @Bettype, 487, 0, 1, 1, 1  --IBCIndo 
+
 DROP TABLE #NonOfferedCurency
 
 
