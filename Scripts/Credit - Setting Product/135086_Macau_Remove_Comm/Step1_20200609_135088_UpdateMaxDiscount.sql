@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Helen@20200609
 	Task: Macau Games - Remove commission - https://nexdev.net/issues/135086
