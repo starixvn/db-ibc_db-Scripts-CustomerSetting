@@ -279,7 +279,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.Site<>'CN88'
+	AND ci.Site NOT IN ('CN88','IBCIndo')
 	AND ci.currency IN (20,72) -- UUS
 
 -- For deployer info
@@ -333,7 +333,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
-	AND ci.Site<>'CN88'
+	AND ci.Site NOT IN ('CN88','IBCIndo')
 	AND ci.currency IN (20,72) -- UUS
 
 -- For deployer info
