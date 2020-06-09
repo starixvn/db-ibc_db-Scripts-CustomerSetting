@@ -434,6 +434,9 @@ DECLARE @MemberPTTbl TABLE (
 --um1: 0
 INSERT INTO @MemberPTTbl (
 	CustID
+	, srecommend
+	, mrecommend
+	, recommend
 	, SportType
 	, BetType
 	, Islive
