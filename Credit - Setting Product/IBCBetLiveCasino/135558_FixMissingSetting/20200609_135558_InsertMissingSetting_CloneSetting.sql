@@ -49,6 +49,14 @@ SELECT CustIDTo, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoM
 FROM CustPTSetting3rd_Agent cs WITH (NOLOCK)
 	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
 WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo = 43314765
+
+INSERT INTO CustPTSetting3rd_Agent (CustID, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT, MinPT, MaxPT)
+SELECT CustIDTo, SportType, BetType, IsLive, SuperPT, MasterPT, AgentPT, IsAutoMasterPT, AutoMasterPT, IsAutoSuperPT, AutoSuperPT, MinPT, MaxPT
+FROM CustPTSetting3rd_Agent cs WITH (NOLOCK)
+	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
+WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo <> 43314765
 
 --Comm
 INSERT INTO CustDiscount3rd_Agent (CustID, SportType, BetType, Discount)
@@ -56,6 +64,14 @@ SELECT CustIDTo, SportType, BetType, Discount
 FROM CustDiscount3rd_Agent cs WITH (NOLOCK)
 	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
 WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo = 43314765
+
+INSERT INTO CustDiscount3rd_Agent (CustID, SportType, BetType, Discount)
+SELECT CustIDTo, SportType, BetType, Discount
+FROM CustDiscount3rd_Agent cs WITH (NOLOCK)
+	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
+WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo <> 43314765
 
 --BetSetting	
 INSERT INTO CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
@@ -63,6 +79,14 @@ SELECT CustIDTo, SportType, BetType, StakeLevelList
 FROM CustStakeLevel_Agent cs WITH (NOLOCK)
 	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
 WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo = 43314765
+
+INSERT INTO CustStakeLevel_Agent(CustID, SportType, BetType, StakeLevelList)
+SELECT CustIDTo, SportType, BetType, StakeLevelList
+FROM CustStakeLevel_Agent cs WITH (NOLOCK)
+	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
+WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo <> 43314765
 
 --WinLossLimit Setting
 INSERT INTO CustWinLossLimit_Agent(CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
@@ -70,6 +94,14 @@ SELECT CustIDTo, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset
 FROM CustWinLossLimit_Agent cs WITH (NOLOCK)
 	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
 WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo = 43314765
+
+INSERT INTO CustWinLossLimit_Agent(CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+SELECT CustIDTo, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset
+FROM CustWinLossLimit_Agent cs WITH (NOLOCK)
+	INNER JOIN @MasterList c ON cs.CustID = c.CustIDFrom
+WHERE cs.SportType = @SportType AND BetType = @Bettype
+	AND c.CustIDTo <> 43314765
 
 --Insert Agent
 --PT
