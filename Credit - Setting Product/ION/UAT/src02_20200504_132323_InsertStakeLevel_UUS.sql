@@ -17,8 +17,8 @@ CREATE TABLE #temp(
 
 GO
 INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
-SELECT 5601, 20, '10', '100,000', 10, 100000 UNION ALL -- UUS
-SELECT 5601, 72, '10', '100,000', 10, 100000 -- YNG
+SELECT 5601, 20, '2', '100,000', 2, 100000 UNION ALL -- UUS
+SELECT 5601, 72, '2', '100,000', 2, 100000 -- YNG
 
 --DELETE S
 --FROM StakeLevel S WITH(ROWLOCK) 
