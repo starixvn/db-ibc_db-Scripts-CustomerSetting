@@ -22,7 +22,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
-	AND CI.currency != 20
+	AND ci.currency NOT IN (72, 20) --UUS
 	AND ci.site <> 'CN88'
 
 DECLARE @ProductID TINYINT = 44, @Sporttype SMALLINT = 224

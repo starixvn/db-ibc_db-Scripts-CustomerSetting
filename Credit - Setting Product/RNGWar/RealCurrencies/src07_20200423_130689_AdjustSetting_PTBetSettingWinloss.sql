@@ -18,7 +18,7 @@
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND ci.Site <> 'CN88'
 		AND s.islicensee = 0
-		AND ci.currency != 20 --UUS
+		AND ci.currency NOT IN (72, 20) --UUS
 
 	DECLARE @msgDone NVARCHAR(200) = 'Done for sporttype %d, bettype %d.'
 

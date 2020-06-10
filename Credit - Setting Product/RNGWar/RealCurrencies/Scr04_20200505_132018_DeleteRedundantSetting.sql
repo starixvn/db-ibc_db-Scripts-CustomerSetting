@@ -29,7 +29,7 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0	
 	AND ci.site <> 'CN88'
-	AND ci.currency != 20 --UUS
+	AND ci.currency NOT IN (72, 20) --UUS
 
 DELETE cg
 FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)	
