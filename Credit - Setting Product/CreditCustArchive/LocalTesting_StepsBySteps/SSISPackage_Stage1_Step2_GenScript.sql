@@ -1,11 +1,11 @@
 /*
 	Created: 20200505@Helen
 	Task: https://nexdev.net/issues/130032
-	DB: DBACC.bodb02
+	DB: DBSPARE.bodb02
 */
 USE bodb02
 GO
-IF @@SERVERNAME NOT IN ('DB234','DB232')
+IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
 	
 --EXEC DBA_ArchiveAccount1_CloseAgentLine_GenScript
