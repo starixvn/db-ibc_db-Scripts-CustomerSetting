@@ -14,16 +14,22 @@ INSERT INTO #OfferCurrency(ExchangeID)
 			SELECT 20 --UUS
 UNION ALL SELECT 72 --YNG
 
+SELECT c.ExchangeID,s.siteid
+INTO #OfferedSiteCurrency
+FROM #OfferCurrency c
+	CROSS APPLY Site s WITH(NOLOCK)
+WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('IBCIndo')
+
 DELETE p
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
-	INNER JOIN #OfferCurrency t ON p.Currency = t.ExchangeID
 WHERE p.SportType = @Sporttype AND p.BetType = @Bettype
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, @Bettype AS BetType, t.ExchangeID AS Currency, 0 AS SiteID, 1 AS IsLaunched, 0 AS IsTest 
-FROM #OfferCurrency t
+SELECT @Sporttype AS SportType, @Bettype AS BetType, t.ExchangeID AS Currency, siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest 
+FROM #OfferedSiteCurrency t
 
 DROP TABLE #OfferCurrency
+DROP TABLE #OfferedSiteCurrency
 
 --SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 225
 

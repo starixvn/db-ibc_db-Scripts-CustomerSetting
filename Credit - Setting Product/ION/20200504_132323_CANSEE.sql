@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Insert CanSee for ION - Exclude HKK [Redmine: 132323]
+	Task: Insert CanSee for ION - Exclude 789y [Redmine: 132323]
 	DB: DBCUST/CustDB
 */ 
 USE CustDB
@@ -20,7 +20,7 @@ UNION ALL SELECT 45 --Won
 UNION ALL SELECT 2	--RM
 UNION ALL SELECT 5	--HK$
 UNION ALL SELECT 13 --RMB
---UNION ALL SELECT 67 --HKK
+UNION ALL SELECT 67 --HKK
 UNION ALL SELECT 81 --CY
 UNION ALL SELECT 43 --THB
 UNION ALL SELECT 3	--US$
@@ -29,18 +29,24 @@ UNION ALL SELECT 12 --GBP
 UNION ALL SELECT 16 --Yen
 UNION ALL SELECT 35 --$US
 UNION ALL SELECT 64 --UT
---UNION ALL SELECT 69 --MMK
+
+SELECT c.ExchangeID,s.siteid
+INTO #OfferedSiteCurrency
+FROM #OfferCurrency c
+	CROSS APPLY Site s WITH(NOLOCK)
+WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('IBCIndo','789y')
 
 DELETE p
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
-	INNER JOIN #OfferCurrency t ON p.Currency = t.ExchangeID
+	INNER JOIN #OfferedSiteCurrency t ON p.Currency = t.ExchangeID AND p.SiteID = t.siteid
 WHERE p.SportType = @Sporttype AND p.BetType = @Bettype
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, BetType, Currency, SiteID, IsLaunched, IsTest)
-SELECT @Sporttype AS SportType, @Bettype AS BetType, t.ExchangeID AS Currency, 0 AS SiteID, 1 AS IsLaunched, 0 AS IsTest 
-FROM #OfferCurrency t
+SELECT @Sporttype AS SportType, @Bettype AS BetType, t.ExchangeID AS Currency, siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest 
+FROM #OfferedSiteCurrency t
 
 DROP TABLE #OfferCurrency
+DROP TABLE #OfferedSiteCurrency
 
 --SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 225
 
