@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Copy Setting for new created users of ION - Exclude PT For HKK [Redmine: 132323]
+	Task: Copy Setting for new created users of ION [Redmine: 132323]
 	DB: DBCUST/CustDB
 */
 
@@ -139,7 +139,6 @@ FROM dbo.CustPTSetting3rd_Agent C WITH(NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 1
-		AND ci.currency <> 67 --HKK
 
 --Member Level
 INSERT INTO dbo.CustPTSetting3rd_Member
@@ -169,7 +168,6 @@ FROM CustPTSetting3rd_Member C WITH(NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
 		AND dest.SettingType = 1
-		AND ci.currency <> 67 --HKK
 
 --Group PT 
 INSERT INTO dbo.CustPTGroupSetting3rd_Member
@@ -200,7 +198,6 @@ FROM dbo.CustPTGroupSetting3rd_Member C WITH(NOLOCK)
 		CROSS APPLY #DestinationSportBetType dest
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 1
-		AND ci.currency <> 67 --HKK	
 --------------------------------------Commission Setting-------------------------------------------------
 SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 FROM #DestinationSportBetType		

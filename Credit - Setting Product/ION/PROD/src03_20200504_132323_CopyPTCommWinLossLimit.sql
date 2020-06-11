@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Copy PT & Comm & WinLossLimit for ION - Exclude PT For HKK [Redmine: 132323]
+	Task: Copy PT & Comm & WinLossLimit for ION [Redmine: 132323]
 	DB: DBCUST/CustDB
 */ 
 
@@ -81,7 +81,6 @@ BEGIN
 	FROM #DestinationSportBetType		
 	WHERE SettingType = 1
 
-	IF @Currency <> 67 --HKK
 	BEGIN
 		--Agent Level
 		INSERT INTO dbo.CustPTSetting3rd_Agent
