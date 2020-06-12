@@ -1,11 +1,11 @@
 /*
-	Created: 20200505@Helen
+	Created: 20200611@Max
 	Task: https://nexdev.net/issues/130032
-	DB: DBCUST.CUSTDB
+	DB: DBSPARE.CUSTDB
 */
 USE CustDB
 GO
-IF @@SERVERNAME NOT IN ('DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
 	
 TRUNCATE TABLE dbo.tmpCustArchived

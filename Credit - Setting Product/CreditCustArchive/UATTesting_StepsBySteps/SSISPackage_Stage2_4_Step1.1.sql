@@ -1,18 +1,18 @@
 /*
-	Created: 20200505@Helen
+	Created: 20200611@Max
 	Task: https://nexdev.net/issues/130032
-	DB: DBACC.bodb_Report
+	DB: DBSPARE.bodb_Report
 */
 USE bodb_Report
 GO
-IF @@SERVERNAME NOT IN ('DB232','DB234')
+IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
 	
 TRUNCATE TABLE dbo.tmpCustArchived
 
 INSERT INTO tmpCustArchived (Super, Master, Agent, MemCnt, recommend, IsFinished, ErrMsg)
 SELECT Super, Master, Agent, MemCnt, recommend, IsFinished, ErrMsg
-FROM dbcust.custdb.dbo.tmpCustArchived WITH (NOLOCK)
+FROM CustDB.dbo.tmpCustArchived WITH (NOLOCK)
 
 
 

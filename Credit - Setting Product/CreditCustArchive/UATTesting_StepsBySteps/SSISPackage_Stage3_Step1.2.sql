@@ -1,11 +1,11 @@
 /*
 	Created: 20200505@Helen
 	Task: https://nexdev.net/issues/130032
-	DB: DBTRANS.bodb02
+	DB: DBSPARE.CustDB_DBTRANS
 */
-USE bodb02
+USE CustDB_DBTRANS
 GO
-IF @@SERVERNAME NOT IN ('db230','db206')
+IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
 	
 TRUNCATE TABLE dbo.tmpCustArchived
