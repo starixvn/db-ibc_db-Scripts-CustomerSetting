@@ -34,7 +34,7 @@ SELECT c.ExchangeID,s.siteid
 INTO #OfferedSiteCurrency
 FROM #OfferCurrency c
 	CROSS APPLY Site s WITH(NOLOCK)
-WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('IBCIndo','789y')
+WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo','IBCIndo','789y')
 
 DELETE p
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
