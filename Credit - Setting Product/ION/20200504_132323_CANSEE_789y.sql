@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Insert CanSee for ION - 789y [Redmine: 132323]
+	Task: Insert CanSee for ION - 789y [Redmine: 132323] - Batch 3
 	DB: DBCUST/CustDB
 */ 
 USE CustDB

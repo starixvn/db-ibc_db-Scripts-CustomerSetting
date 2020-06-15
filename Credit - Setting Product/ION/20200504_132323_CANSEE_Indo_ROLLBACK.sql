@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Insert CanSee for ION - INDO Site - ROLLBACK [Redmine: 132323]
+	Task: Insert CanSee for ION - INDO Site - ROLLBACK [Redmine: 132323] - Batch 1
 	DB: DBCUST/CustDB
 */ 
 USE CustDB

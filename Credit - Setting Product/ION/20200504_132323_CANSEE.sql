@@ -1,6 +1,6 @@
 /*
 	Created: 20200504@Eden
-	Task: Insert CanSee for ION - Exclude 789y [Redmine: 132323]
+	Task: Insert CanSee for ION - Exclude 789y [Redmine: 132323] - Batch 2
 	DB: DBCUST/CustDB
 */ 
 USE CustDB
@@ -34,7 +34,7 @@ SELECT c.ExchangeID,s.siteid
 INTO #OfferedSiteCurrency
 FROM #OfferCurrency c
 	CROSS APPLY Site s WITH(NOLOCK)
-WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo','IBCIndo','789y')
+WHERE s.isLicensee = 0 AND s.isActive = 1 AND site NOT IN ('Indo','IBCIndo','789y','CN88')
 
 DELETE p
 FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
