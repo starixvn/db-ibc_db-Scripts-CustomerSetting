@@ -14,9 +14,12 @@ SELECT @Sporttype = 224, @Bettype = 5500
 SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
-WHERE s.isActive = 1 AND s.isLicensee = 0 AND S.site <> '789y'
+WHERE s.isActive = 1 AND s.isLicensee = 0 AND S.site NOT IN ('Indo','IBCIndo','789y','CN88')
 
-DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
+DELETE p
+FROM ProductLaunchedSiteCurrency p WITH(ROWLOCK) 
+	INNER JOIN #OfferedSites t ON p.SiteID = t.siteid
+WHERE p.SportType = @Sporttype AND p.BetType = @Bettype
 
 --Offer all sites
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
@@ -31,3 +34,4 @@ FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 WHERE SportType = @Sporttype AND BetType = @Bettype 
 
 DROP TABLE #OfferedSites
+--SELECT * FROM ProductLaunchedSiteCurrency WITH(NOLOCK) WHERE SportType = 224
