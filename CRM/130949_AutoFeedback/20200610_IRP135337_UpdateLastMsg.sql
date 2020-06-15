@@ -5,6 +5,6 @@
 */
 --update lastMsgID
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = '948941'
+SET Value = '949353'
 WHERE SettingName = 'LastMsgID'
 GO
