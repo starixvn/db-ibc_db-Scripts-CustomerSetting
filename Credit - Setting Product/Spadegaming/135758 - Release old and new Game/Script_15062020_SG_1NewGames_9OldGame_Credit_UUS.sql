@@ -14,8 +14,6 @@ SELECT 4340 ,'0.2' ,'100',0.2,100,20		UNION ALL
 -- YNG
 SELECT 4340 ,'1' ,'2,000',1,2000,72			
 
-
-
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
 FROM StakeLevel s WITH(NOLOCK)
