@@ -5,7 +5,7 @@
 */
 USE bodb02
 GO
-CREATE NONCLUSTERED INDEX IX_VodingHistory_CreatedDate
+CREATE NONCLUSTERED INDEX IX_VoidingHistory_CreatedDate
 ON [dbo].[TicketVoiding_VoidingHistory] ([CreatedDate])
 INCLUDE ([MessageId],[StatusId])
-GO
+WITH (ONLINE = ON)
