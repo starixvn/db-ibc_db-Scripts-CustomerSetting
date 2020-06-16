@@ -10,18 +10,18 @@ CREATE TABLE #StakeLevel_Temp (StakeLevelID int, GameTypeID INT,MinLabel NVARCHA
 
 INSERT INTO #StakeLevel_Temp(StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
 SELECT s.StakeLevelID, 4187 as GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake
-FROM Dep_StakeLevelGroupDetail s
-inner join Dep_StakeLevel t on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
+FROM Dep_StakeLevelGroupDetail s WITH(NOLOCK) 
+inner join Dep_StakeLevel t WITH(NOLOCK)  on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4107 and t.ExchangeID in (20,72)
 union All
 SELECT s.StakeLevelID, 4188 as GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake
-FROM Dep_StakeLevelGroupDetail s
-inner join Dep_StakeLevel t on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
+FROM Dep_StakeLevelGroupDetail s WITH(NOLOCK) 
+inner join Dep_StakeLevel t WITH(NOLOCK)  on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4116 and t.ExchangeID in (20,72)
 union All
 SELECT s.StakeLevelID, 4189 as GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake
-FROM Dep_StakeLevelGroupDetail s
-inner join Dep_StakeLevel t on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
+FROM Dep_StakeLevelGroupDetail s WITH(NOLOCK) 
+inner join Dep_StakeLevel t WITH(NOLOCK)  on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4139 and t.ExchangeID in (20,72)
 
 MERGE Dep_StakeLevelGroupDetail as g 
