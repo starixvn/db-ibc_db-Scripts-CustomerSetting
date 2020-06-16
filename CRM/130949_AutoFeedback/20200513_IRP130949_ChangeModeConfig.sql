@@ -6,7 +6,7 @@
 
 --Step 1:Config mode for UUS tickets
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = 1
+SET Value = 0
 WHERE SettingName = 'ConfigUAT'
 GO
 
