@@ -29,7 +29,7 @@ SELECT 4340 ,'0.2' ,'100',0.2,100,74		UNION ALL
 --SGD (SD$) 
 SELECT 4340 ,'0.2' ,'100',0.2,100,1			UNION ALL	
 --AUD (AUD) 
-SELECT 4340 ,'0.2' ,'100',0.2,100,20		UNION ALL	
+SELECT 4340 ,'0.2' ,'100',0.2,100,9			UNION ALL	
 --MMK (MMK, MKK)
 SELECT 4340 ,'0.2' ,'100',0.2,100,69		UNION ALL	
 SELECT 4340 ,'0.2' ,'100',0.2,100,70		UNION ALL	
@@ -70,26 +70,26 @@ SELECT 4340 ,'20' ,'5,000',20,5000,32		UNION ALL
 -- YNG
 SELECT 4340 ,'1' ,'2,000',1,2000,72			
 
+select * from #StakeLevel_Temp
 
+--;WITH STAKE_TEMP AS (
+--SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
+--FROM StakeLevel s WITH(NOLOCK)
+--CROSS APPLY ( SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
+--			  FROM #StakeLevel_Temp t 
+--			  where t.ExchangeId = s.ExchangeId and t.GameGroupID = s.GameGroupID) t
+--WHERE s.GameTypeID = 4301)
 
-;WITH STAKE_TEMP AS (
-SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
-FROM StakeLevel s WITH(NOLOCK)
-CROSS APPLY ( SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
-			  FROM #StakeLevel_Temp t 
-			  where t.ExchangeId = s.ExchangeId and t.GameGroupID = s.GameGroupID) t
-WHERE s.GameTypeID = 4301)
-
-MERGE StakeLevelGroupDetail as g 
-USING STAKE_TEMP s on g.StakeLevelID = s.StakeLevelID AND g.GameTypeID = s.GameTypeID
-WHEN MATCHED THEN UPDATE SET 
-					g.MinLabel = s.MinLabel,
-					g.MaxLabel = s.MaxLabel,
-					g.MinStake =  s.MinStake,
-					g.MaxStake =  s.MaxStake
-WHEN NOT MATCHED THEN 
-					INSERT (StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
-					VALUES (s.StakeLevelID,s.GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake)					
-					 ;
+--MERGE StakeLevelGroupDetail as g 
+--USING STAKE_TEMP s on g.StakeLevelID = s.StakeLevelID AND g.GameTypeID = s.GameTypeID
+--WHEN MATCHED THEN UPDATE SET 
+--					g.MinLabel = s.MinLabel,
+--					g.MaxLabel = s.MaxLabel,
+--					g.MinStake =  s.MinStake,
+--					g.MaxStake =  s.MaxStake
+--WHEN NOT MATCHED THEN 
+--					INSERT (StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
+--					VALUES (s.StakeLevelID,s.GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake)					
+--					 ;
 
 DROP TABLE #StakeLevel_Temp
