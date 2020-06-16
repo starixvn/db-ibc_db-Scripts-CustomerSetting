@@ -24,7 +24,7 @@ FROM Dep_StakeLevelGroupDetail s
 inner join Dep_StakeLevel t on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4139
 
-MERGE StakeLevelGroupDetail as g 
+MERGE Dep_StakeLevelGroupDetail as g 
 USING #StakeLevel_Temp s on g.StakeLevelID = s.StakeLevelID AND g.GameTypeID = s.GameTypeID
 WHEN MATCHED THEN UPDATE SET 
 					g.MinLabel = s.MinLabel,
