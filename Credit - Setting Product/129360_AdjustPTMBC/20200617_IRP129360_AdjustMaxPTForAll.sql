@@ -5,7 +5,7 @@
 */
 
 DECLARE @tmpSite TABLE (site VARCHAR(30), currencyName VARCHAR(10), currency TINYINT)
-CREATE TABLE #tblSMA(CustID INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #tblSMA(CustID INT, roleid TINYINT)
 
 INSERT INTO @tmpSite(site,currencyName)
 SELECT 'BEST-ODDS','EURO'
@@ -23,6 +23,11 @@ UNION SELECT 'XYZBet','EURO'
 UNION SELECT 'XYZBet','HK$'
 UNION SELECT 'XYZBet','GBP'
 UNION SELECT 'XYZBet','RMB'
+UNION SELECT 'BEST-ODDS','RM'
+UNION SELECT '733333','RM'
+UNION SELECT '222223','RM'
+UNION SELECT '722222','RM'
+UNION SELECT 'XYZBet','RM'
 
 UPDATE t
 SET t.currency = e.exchangeid
@@ -87,14 +92,13 @@ FROM dbo.PhoneBettingCustomerList p WITH(NOLOCK)
 	INNER JOIN vw_Customer c WITH(NOLOCK) ON p.username = c.username
 	
 --Get supers normal/direct masters/direct agents
-INSERT INTO #tblSMA(custid)
-SELECT DISTINCT ci.custid
+INSERT INTO #tblSMA(custid, roleid)
+SELECT DISTINCT ci.custid, ci.roleid
 FROM vw_customer ci WITH (NOLOCK) 
 	INNER JOIN custinfo cu with (nolock) on cu.custid=ci.custid
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN @tmpSite t ON ci.site = t.site AND ci.currency = t.currency
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid	
-	INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
 	INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid	
 WHERE ci.roleid = 4  	
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
@@ -112,11 +116,10 @@ WHERE ci.roleid = 4
 	AND co2.sporttype IN (43,44) AND co2.MaxPT < 90
 --Direct masters exclude who has  phone betting	members
 UNION ALL
-	SELECT DISTINCT ci.custid
+	SELECT DISTINCT ci.custid, ci.roleid
 	FROM vw_customer ci with(nolock)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
 		INNER JOIN @tmpSite t ON ci.site = t.site AND ci.currency = t.currency
-		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
 		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid=3 		
@@ -128,11 +131,10 @@ UNION ALL
 		AND co2.sporttype IN (43,44) AND co2.MaxPT < 90
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
-	SELECT DISTINCT ci.custid
+	SELECT DISTINCT ci.custid, ci.roleid
 	FROM vw_Customer ci WITH(NOLOCK)
 		INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid		
 		INNER JOIN @tmpSite t ON ci.site = t.site AND ci.currency = t.currency
-		INNER JOIN custsetting co WITH(NOLOCK) ON ci.custid = co.custid
 		INNER JOIN CustPTSetting3rd_Agent co2 WITH(NOLOCK) ON ci.custid = co2.custid
 	WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
 		AND ci.roleid = 2 		
@@ -148,6 +150,28 @@ DELETE #tblSMA WHERE custid IN (726582,13469206)--KAM,JARWRONG
 UPDATE cs
 SET MaxPT = 90
 FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-	INNER JOIN #tblSMA c ON cs.custid = c.custid
+	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN #tblSMA c ON ci.srecommend = c.custid
 WHERE sporttype IN (43,44)
+	AND MaxPT < 90
+	AND c.roleid = 4
+	AND ci.roleid IN (2,3,4)
 		
+UPDATE cs
+SET MaxPT = 90
+FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN #tblSMA c ON ci.mrecommend = c.custid
+WHERE sporttype IN (43,44)
+	AND MaxPT < 90
+	AND c.roleid = 3
+	AND ci.roleid IN (2,3)
+
+UPDATE cs
+SET MaxPT = 90
+FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN #tblSMA c ON ci.mrecommend = c.custid
+WHERE sporttype IN (43,44)
+	AND MaxPT < 90
+	AND c.roleid = 2
