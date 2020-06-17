@@ -114,7 +114,7 @@ WHERE ci.roleid = 4
     AND ci.username not like '%ACCSuper%'
 	AND cu.closed=0 
 	AND co2.sporttype IN (43,44) 
-	AND co2.SuperPT = 88 AND co2.MasterPT = 88 AND co2.AgentPT = 88
+	AND co2.SuperPT = 88
 --Direct masters exclude who has  phone betting	members
 UNION ALL
 	SELECT DISTINCT ci.custid, ci.roleid
