@@ -158,8 +158,28 @@ FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
 WHERE sporttype IN (43,44)
 	AND MaxPT < 90
 	AND c.roleid = 4
-	AND ci.roleid IN (2,3,4)
+	AND ci.roleid IN (4)
 		
+UPDATE cs
+SET MaxPT = 90
+FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN #tblSMA c ON ci.srecommend = c.custid
+WHERE sporttype IN (43,44)
+	AND MaxPT < 90
+	AND c.roleid = 4
+	AND ci.roleid IN (3)
+
+UPDATE cs
+SET MaxPT = 90
+FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+	INNER JOIN #tblSMA c ON ci.srecommend = c.custid
+WHERE sporttype IN (43,44)
+	AND MaxPT < 90
+	AND c.roleid = 4
+	AND ci.roleid IN (2)
+
 UPDATE cs
 SET MaxPT = 90
 FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
