@@ -113,7 +113,8 @@ WHERE ci.roleid = 4
     AND ci.username not like 'SIBC%'
     AND ci.username not like '%ACCSuper%'
 	AND cu.closed=0 
-	AND co2.sporttype IN (43,44) AND co2.MaxPT < 90
+	AND co2.sporttype IN (43,44) 
+	AND co2.SuperPT = 88 AND co2.MasterPT = 88 AND co2.AgentPT = 88
 --Direct masters exclude who has  phone betting	members
 UNION ALL
 	SELECT DISTINCT ci.custid, ci.roleid
@@ -128,7 +129,8 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid from #WrongDirectMaster)
 		AND c.custid NOT IN (SELECT mrecommend FROM #PhoneBetting)
-		AND co2.sporttype IN (43,44) AND co2.MaxPT < 90
+		AND co2.sporttype IN (43,44) 
+		AND co2.MasterPT = 88
 UNION ALL	
 --Direct agents exclude who has  phone betting	members
 	SELECT DISTINCT ci.custid, ci.roleid
@@ -143,7 +145,8 @@ UNION ALL
 		AND c.closed=0 
 		AND c.custid NOT IN (SELECT custid FROM #WrongDirectAgent)
 		AND c.custid NOT IN (SELECT recommend FROM #PhoneBetting)
-		AND co2.sporttype IN (43,44) AND co2.MaxPT < 90
+		AND co2.sporttype IN (43,44) 
+		AND co2.AgentPT = 88
 
 DELETE #tblSMA WHERE custid IN (726582,13469206)--KAM,JARWRONG
 
@@ -167,11 +170,11 @@ WHERE sporttype IN (43,44)
 	AND c.roleid = 3
 	AND ci.roleid IN (2,3)
 
-UPDATE cs
-SET MaxPT = 90
-FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
-	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
-	INNER JOIN #tblSMA c ON ci.mrecommend = c.custid
-WHERE sporttype IN (43,44)
-	AND MaxPT < 90
-	AND c.roleid = 2
+--UPDATE cs
+--SET MaxPT = 90
+--FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)
+--	INNER JOIN custinfo ci WITH (NOLOCK) ON cs.custid = ci.custid
+--	INNER JOIN #tblSMA c ON ci.recommend = c.custid
+--WHERE sporttype IN (43,44)
+--	AND MaxPT < 90
+--	AND c.roleid = 2
