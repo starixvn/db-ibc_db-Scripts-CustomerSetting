@@ -1,16 +1,16 @@
 /*
 	Created: 20200611@Max
 	Task: https://nexdev.net/issues/130032
-	DB: DBSPARE.bodb02
+	DB: DBSPARE.CustDB
 */
-USE bodb02
+USE CustDB
 GO
 IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
 
 SET NOCOUNT ON
 
-if NOT EXISTS(SELECT 1 FROM dbo.SystemSettings WITH(NOLOCK) WHERE VValue = 'Stage 2 - Done' AND VName = 'aa_Stmt_Status')
+if NOT EXISTS(SELECT 1 FROM bodb02.dbo.SystemSettings WITH(NOLOCK) WHERE VValue = 'Stage 2 - Done' AND VName = 'aa_Stmt_Status')
 BEGIN
 	raisError ('Statement data for this stage not loaded yet!', 16, 1)
 	RETURN
@@ -87,7 +87,7 @@ FROM bodb02.dbo.bettransLC with (NOLOCK) WHERE custid NOT IN(select custid from 
 
 
 --update exception list
-EXEC dbo.DBA_ArchiveAccount_UpdateException
+EXEC CustDB.dbo.DBA_ArchiveAccount_UpdateException
 
 --Get cust from s1
 SELECT ag.recommend custid, isnull(MemCount, 0) [Member Count]
