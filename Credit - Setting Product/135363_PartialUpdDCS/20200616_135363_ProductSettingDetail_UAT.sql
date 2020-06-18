@@ -6,6 +6,8 @@
 USE CustDB
 GO
 
+--DROP TABLE ProductSettingDetail_UAT
+
 SELECT *
 INTO ProductSettingDetail_UAT 
 FROM ProductSettingDetail WITH (NOLOCK)
