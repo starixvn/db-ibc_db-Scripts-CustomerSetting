@@ -3,7 +3,7 @@
 	Task: https://nexdev.net/issues/130032
 	DB: DBSPARE.CustDB
 */
-USE bodb02
+USE CustDB
 GO
 IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
