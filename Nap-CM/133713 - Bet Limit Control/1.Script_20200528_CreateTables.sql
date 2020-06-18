@@ -7,14 +7,14 @@
 
 USE [CustDB]
 GO
-DROP TABLE [dbo].[BetLimitControlType]
-GO
-DROP TABLE [dbo].[BetLimitControlTypeDetail]
-GO
-DROP TABLE [dbo].[BetLimitControlCustSetting]
-GO
-DROP TABLE [dbo].[BetLimitControlProduct]
-GO
+--DROP TABLE [dbo].[BetLimitControlType]
+--GO
+--DROP TABLE [dbo].[BetLimitControlTypeDetail]
+--GO
+--DROP TABLE [dbo].[BetLimitControlCustSetting]
+--GO
+--DROP TABLE [dbo].[BetLimitControlProduct]
+--GO
 SET ANSI_NULLS ON
 GO
 
