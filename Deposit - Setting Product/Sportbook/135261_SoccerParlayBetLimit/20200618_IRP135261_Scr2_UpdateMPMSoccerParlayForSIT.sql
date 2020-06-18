@@ -116,7 +116,8 @@ GO
 
 ---
 -- BEGIN STEP 3: Run this SP at DBCust -----
--------------------------------------------------DECLARE @max_custid INT, @srecommend INT
+-------------------------------------------------
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #Supers (custid INT, isFinished BIT DEFAULT(0))

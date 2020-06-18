@@ -55,8 +55,8 @@ BEGIN
 			cs.MaxBet = cs2.MaxBet
 		FROM Dep_CustSetting cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN Dep_CustSetting cs2 WITH(NOLOCK) ON cs.custid = cs2.custid 
-															AND cs.sporttype = 1 AND cs.bettype = 9
-															AND cs2.sporttype = 1 AND cs2.bettype = 1
+															AND cs.sporttype = 1 AND cs.bettype = 9 AND cs.islive = 0
+															AND cs2.sporttype = 1 AND cs2.bettype = 1 AND cs2.islive = 0
 		WHERE cs.custid IN (SELECT custid FROM @tmpCust)													
 		
 		IF @rowcount < 5000 
@@ -121,7 +121,8 @@ GO
 
 ---
 -- BEGIN STEP 3: Run this SP at DBCust -----
--------------------------------------------------DECLARE @max_custid INT, @srecommend INT
+-------------------------------------------------
+DECLARE @max_custid INT, @srecommend INT
 SELECT  @max_custid= xxx ---input maxcustid
 	
 CREATE TABLE #Supers (custid INT, isFinished BIT DEFAULT(0))
