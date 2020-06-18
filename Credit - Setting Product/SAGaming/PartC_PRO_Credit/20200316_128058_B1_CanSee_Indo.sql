@@ -17,8 +17,6 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('Indo')
 
-DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
-
 --Offer Indo site
 INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
 SELECT @Sporttype AS SportType, E.exchangeid AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, @Bettype AS BetType
@@ -32,12 +30,5 @@ SET ps.IsLaunched = 1
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
 WHERE SportType = @Sporttype AND BetType = @Bettype AND PS.Currency NOT IN (13,45,5,67)
-
---Offer site BEST-ODDS, UUS
-
-INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType)
-SELECT @Sporttype AS SportType, 20 AS Currency, S.siteid AS SiteID, 1 AS IsLaunched, 0 AS IsTest, @Bettype AS Bettype
-FROM Site S WITH (NOLOCK)
-WHERE S.siteid = 1
 
 DROP TABLE #OfferedSites
