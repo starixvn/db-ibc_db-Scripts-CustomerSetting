@@ -22,3 +22,4 @@ FROM [BasketBallVR_Temp] main WITH(NOLOCK)
 	INNER JOIN VRValueMapping MNLive ON MNLive.ValueID = main.VRValue_MNLive
 	INNER JOIN VRValueMapping MNNonLive ON MnNonLive.ValueID = main.VRValue_MNNonLive
 WHERE main.IsManuallyUpdate = 1
+ORDER BY main.srecommend, main.mrecommend, main.recommend,main.CustID
