@@ -16,7 +16,13 @@ WHERE Currency = @CurrencyFrom
 INSERT INTO StakeLevel(GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ExchangeId, ResourceId, GameGroupID)
 SELECT GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, @CurrencyTo, NULL, GameGroupID
 FROM StakeLevel WITH (NOLOCK)
-WHERE ExchangeId = @CurrencyFrom
+WHERE ExchangeId = 3 AND GameTypeID <> 200
+
+INSERT INTO StakeLevelGroupDetail(StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ParentTypeID)
+SELECT sd.StakeLevelID, sd.GameTypeID, sd.MinLabel, sd.MaxLabel, sd.MinStake, sd.MaxStake, ParentTypeID
+FROM StakeLevelGroupDetail sd WITH (NOLOCK)
+	INNER JOIN StakeLevel s WITH (NOLOCK) ON s.StakeLevelID = sd.StakeLevelID
+WHERE s.ExchangeId = 3
 
 INSERT INTO LossLimit_GlobalSetting(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT ProductId, @CurrencyTo, MinLossLimit, DefaultLossLimit
