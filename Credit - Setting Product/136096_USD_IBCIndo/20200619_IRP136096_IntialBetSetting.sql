@@ -19,10 +19,12 @@ FROM StakeLevel WITH (NOLOCK)
 WHERE ExchangeId = 3 AND GameTypeID <> 200
 
 INSERT INTO StakeLevelGroupDetail(StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ParentTypeID)
-SELECT sd.StakeLevelID, sd.GameTypeID, sd.MinLabel, sd.MaxLabel, sd.MinStake, sd.MaxStake, ParentTypeID
+SELECT st.StakeLevelID, sd.GameTypeID, sd.MinLabel, sd.MaxLabel, sd.MinStake, sd.MaxStake, ParentTypeID
 FROM StakeLevelGroupDetail sd WITH (NOLOCK)
-	INNER JOIN StakeLevel s WITH (NOLOCK) ON s.StakeLevelID = sd.StakeLevelID
-WHERE s.ExchangeId = 3
+	INNER JOIN StakeLevel sf WITH (NOLOCK) ON sf.StakeLevelID = sd.StakeLevelID
+	INNER JOIN StakeLevel st WITH (NOLOCK) ON sf.GameTypeID = st.GameTypeID
+WHERE sf.ExchangeId = 3 AND st.exchangeid = @CurrencyTo
+	AND sf.GameTypeID <> 200
 
 INSERT INTO LossLimit_GlobalSetting(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT ProductId, @CurrencyTo, MinLossLimit, DefaultLossLimit
