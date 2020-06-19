@@ -29,7 +29,7 @@ WHERE sf.ExchangeId = 3 AND st.exchangeid = @CurrencyTo
 INSERT INTO LossLimit_GlobalSetting(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT ProductId, @CurrencyTo, MinLossLimit, DefaultLossLimit
 FROM LossLimit_GlobalSetting WITH (NOLOCK)
-WHERE ExchangeId = @CurrencyFrom
+WHERE ExchangeId = 3
 
 INSERT INTO WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
 SELECT ProductID, GroupID, @CurrencyTo, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
