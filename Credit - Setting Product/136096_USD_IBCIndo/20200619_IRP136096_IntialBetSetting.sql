@@ -31,10 +31,10 @@ SELECT ProductId, @CurrencyTo, MinLossLimit, DefaultLossLimit
 FROM LossLimit_GlobalSetting WITH (NOLOCK)
 WHERE ExchangeId = 3
 
-INSERT INTO WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
-SELECT ProductID, GroupID, @CurrencyTo, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
-FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
-WHERE ExchangeId = @CurrencyFrom
+--INSERT INTO WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
+--SELECT ProductID, GroupID, @CurrencyTo, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
+--FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
+--WHERE ExchangeId = @CurrencyFrom
 
 INSERT INTO GameLaunchPerCurrency(SportType, BetType, Currency, IsLaunched, IsTest)
 SELECT SportType, BetType, @CurrencyTo, IsLaunched, IsTest
@@ -42,7 +42,7 @@ FROM GameLaunchPerCurrency WITH (NOLOCK)
 WHERE Currency = @CurrencyFrom
 
 INSERT INTO ProductLaunchedSiteCurrency(SiteID, Currency, SportType, IsLaunched, IsTest, BetType, LaunchedLevel)
-SELECT SiteID, Currency, SportType, IsLaunched, IsTest, BetType, LaunchedLevel 
+SELECT SiteID, @CurrencyTo, SportType, IsLaunched, IsTest, BetType, LaunchedLevel 
 FROM ProductLaunchedSiteCurrency p WITH (NOLOCK)
 WHERE siteid = 487
 	AND currency IN (22)
