@@ -48,13 +48,6 @@ WHERE siteid = 487
 	AND currency IN (22)
 	AND sporttype <> 200
 
-INSERT INTO ProductStatusSiteCurrency(SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
-SELECT 220, 1021, 95, 0, 1, 1, 1
-UNION ALL
-SELECT 222, 4901, 95, 0, 1, 1, 1
-UNION ALL
-SELECT 224, 5500, 95, 0, 1, 1, 1
-
 
 --INSERT INTO PlayCurrencySetting(SiteId, SiteName, SportType, MemberCurrency, PlayCurrency, FromDate, ToDate)
 --SELECT 487, 'IBCIndo', 211, @CurrencyTo, 5, GETDATE(), '2050-01-01'

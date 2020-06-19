@@ -11,7 +11,7 @@ SELECT @SiteID = 487
 
 
 UPDATE p
-SET IsLaunched = 0
+SET IsLaunched = 1
 FROM ProductLaunchedSiteCurrency p
 WHERE SportType IN (243) AND siteid = @SiteID
 
