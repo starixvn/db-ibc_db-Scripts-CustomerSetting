@@ -25,6 +25,7 @@ FROM StakeLevelGroupDetail sd WITH (NOLOCK)
 	INNER JOIN StakeLevel st WITH (NOLOCK) ON sf.GameTypeID = st.GameTypeID
 WHERE sf.ExchangeId = 3 AND st.exchangeid = @CurrencyTo
 	AND sf.GameTypeID <> 1611
+	AND sd.ParentTypeID <> 2401
 
 INSERT INTO LossLimit_GlobalSetting(ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 SELECT ProductId, @CurrencyTo, MinLossLimit, DefaultLossLimit
