@@ -1,3 +1,4 @@
+--Scan all accounts whose VR is different than upline, if any of the VR >= -50 then mark the account as Manually Updated
 SELECT main.CustID
 	, ci.username
 	, main.RoleID
