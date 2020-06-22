@@ -1,4 +1,12 @@
---Scan all accounts whose VR is different than upline, if any of the VR >= -50 then mark the account as Manually Updated
+/*
+	Creator: 20200622@Eden
+	Task: Scan all accounts whose VR is different than upline, if any of the VR >= -50 then mark the account as Manually Updated
+		Export the list of account with their VR setting, provide to Jonathan.
+	Run at: CustDB@DBCUST 
+*/
+USE CustDB
+GO
+
 SELECT main.CustID
 	, ci.username
 	, main.RoleID

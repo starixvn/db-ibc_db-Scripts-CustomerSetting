@@ -1,4 +1,11 @@
---if some bet type groups = -50, then keep all setting of the member unchanged. Export the list of these members to provide to user.
+/*
+	Creator: 20200622@Eden
+	Task: For IBO licensee: if some bet type groups = -50, then keep all setting of the member unchanged. Export the list of these members to provide to user.
+	Run at: CustDB@DBCUST 
+*/
+USE CustDB
+GO
+
 ;WITH TMP AS(
 SELECT main.CustID
 	, ci.Username
