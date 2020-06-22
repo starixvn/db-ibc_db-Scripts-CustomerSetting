@@ -57,7 +57,7 @@ BEGIN
 	BEGIN		
 		DELETE TOP (5000) t
 		OUTPUT DELETED.custid INTO @tmpCust
-		FROM #tblCustAdjust t
+		FROM #tblAdjustCust t
 		
 		SELECT @rowcount = @@rowcount
 		

@@ -25,7 +25,7 @@ WHERE srecommend IN (SELECT custid FROM #Supers)
 DELETE #tblCust 
 WHERE mrecommend IN (SELECT custid 
 					FROM dbo.custinfo WITH(NOLOCK)
-					WHERE srecommend=@srecommend 
+					WHERE srecommend IN (SELECT custid FROM #Supers)
 					AND(username like '%Acc%'  OR username like '%AFF%' OR username like '%LocalBank%')
 					AND roleid=3)
 
