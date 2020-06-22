@@ -112,19 +112,6 @@ GO
 		AND  main.VRValue_MNNonLive = g.VRValue_MNNonLive
 	WHERE main.RoleID=4
 
-	--Step 5: Delete Global setting
+	--Step 6: Delete Global setting
 	DELETE FROM BasketBallVR_Temp WITH(ROWLOCK) WHERE custid = 0
-
-	--Step 6 : Mark IsManuallyUpdate = 1 for any of the VR >= -50
-	UPDATE BasketBallVR_Temp WITH(ROWLOCK)
-	SET IsManuallyUpdate = 1
-	WHERE (VRValue_HDPLive >= 0.5 
-		OR VRValue_HDPNonLive > = 0.5 
-		OR VRValue_OULive > = 0.5 
-		OR VRValue_OUNonLive > = 0.5 
-		OR VRValue_OELive > = 0.5 
-		OR VRValue_OENonLive > = 0.5 
-		OR VRValue_MNLive > = 0.5 
-		OR VRValue_MNNonLive > = 0.5 
-	)
 	

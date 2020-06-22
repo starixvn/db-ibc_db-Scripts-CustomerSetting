@@ -1,13 +1,27 @@
 /*
 	Creator: 20200615@Eden
 	Task: Update valueID and HasSameVR - Redmine: #134978
-		Step 1: Update [HasSameVR]
-		Step 2: Update ValueID
+		Step 1: Update IsManuallyUpdate
+		Step 2: Update HasSameVR
+		Step 3: Update ValueID
 	Run at: CustDB@DBCUST 
 */
 USE CustDB
 GO
-	--Step 1: Update [HasSameVR]
+	--Step 1 : Mark IsManuallyUpdate = 1 for any of the VR >= -50
+	UPDATE BasketBallVR_Temp WITH(ROWLOCK)
+	SET IsManuallyUpdate = 1
+	WHERE (VRValue_HDPLive >= 0.5 
+		OR VRValue_HDPNonLive > = 0.5 
+		OR VRValue_OULive > = 0.5 
+		OR VRValue_OUNonLive > = 0.5 
+		OR VRValue_OELive > = 0.5 
+		OR VRValue_OENonLive > = 0.5 
+		OR VRValue_MNLive > = 0.5 
+		OR VRValue_MNNonLive > = 0.5 
+	)
+	
+	--Step 2: Update [HasSameVR]
 	UPDATE main
 	SET  main.HasSameVR = 0
 	FROM BasketBallVR_Temp main  WITH(ROWLOCK)
@@ -21,7 +35,7 @@ GO
 		AND  main.VRValue_HDPNonLive = main.VRValue_MNNonLive
 	)
 
-	--Step 2: Update ValueID
+	--Step 3: Update ValueID
 	UPDATE main
 	SET VRValue_HDPLive = HDPLive.ValueID
 		, VRValue_HDPNonLive = HDPNonLive.ValueID
