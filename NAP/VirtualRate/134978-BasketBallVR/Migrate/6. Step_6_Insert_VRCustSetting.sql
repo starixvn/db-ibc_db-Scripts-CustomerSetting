@@ -5,6 +5,7 @@
 		Step 2: Delete VRCustSetting
 		Step 3: Insert setting at sport level
 		Step 4: Insert setting at bettype group level
+		Step 5: Insert VRSettingManualUpdAcc
 	Run at: CustDB@DBCUST 
 */
 USE CustDB
@@ -90,7 +91,7 @@ GO
 		WAITFOR DELAY '00:00:03'
 	END
 
-	--> Insert into 
+	--> Step 5: Insert into VRSettingManualUpdAcc
 	WHILE (1=1)
 	BEGIN
 		INSERT INTO [dbo].VRSettingManualUpdAcc([CustID],SportType)
