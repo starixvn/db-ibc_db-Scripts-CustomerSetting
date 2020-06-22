@@ -1,6 +1,7 @@
 --if some bet type groups = -50, then keep all setting of the member unchanged. Export the list of these members to provide to user.
 ;WITH TMP AS(
 SELECT main.CustID
+	, ci.Username
 	, main.RoleID
 	, main.srecommend, main.mrecommend, main.recommend
 	, VRValue_HDPLive = HDPLive.Value
@@ -22,7 +23,7 @@ FROM [BasketBallVR_Temp] main WITH(NOLOCK)
 	INNER JOIN VRValueMapping OENonLive ON OENonLive.ValueID = main.VRValue_OENonLive
 	INNER JOIN VRValueMapping MNLive ON MNLive.ValueID = main.VRValue_MNLive
 	INNER JOIN VRValueMapping MNNonLive ON MnNonLive.ValueID = main.VRValue_MNNonLive
-WHERE s.site =  'IBO'
+WHERE s.site =  'IBO' AND main.RoleID = 1
 )
 SELECT t.*
 FROM TMP t
