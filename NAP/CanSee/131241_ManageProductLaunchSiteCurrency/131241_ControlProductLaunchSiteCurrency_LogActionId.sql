@@ -25,16 +25,16 @@ VALUES (
 	6060
 	,NULL
 	,'Acc_ManageCansee_Ins'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
-	,'Add product, sport type and bettype to site'
+	,'Insert Cansee'
+	,'Insert Cansee'
+	,'Insert Cansee'
+	,'Insert Cansee'
+	,'Insert Cansee'
+	,'Insert Cansee'
+	,'Insert Cansee'
 	,NULL
 	,1
-	,'Add product, sport type and bettype to site')
+	,'Insert Cansee')
 	
 INSERT INTO [dbo].[LogAction]
 	([ActionID]
@@ -54,16 +54,16 @@ VALUES (
 	6061
 	,NULL
 	,'Acc_ManageCansee_Upd'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
-	,'Update product, sport type and bettype to site'
+	,'Update Cansee'
+	,'Update Cansee'
+	,'Update Cansee'
+	,'Update Cansee'
+	,'Update Cansee'
+	,'Update Cansee'
+	,'Update Cansee'
 	,NULL
 	,1
-	,'Update product, sport type and bettype to site')	
+	,'Update Cansee')	
 
 INSERT INTO [dbo].[LogAction]
 	([ActionID]
@@ -83,13 +83,13 @@ VALUES (
 	6062
 	,NULL
 	,'Acc_ManageCansee_Del'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
-	,'Delete product, sport type and bettype to site'
+	,'Delete Cansee'
+	,'Delete Cansee'
+	,'Delete Cansee'
+	,'Delete Cansee'
+	,'Delete Cansee'
+	,'Delete Cansee'
+	,'Delete Cansee'
 	,NULL
 	,1
-	,'Delete product, sport type and bettype to site')	
+	,'Delete Cansee')	
