@@ -54,7 +54,7 @@ INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('USA 2')
 INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('USA 3')
 INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('USA OTHER')
 INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('VIRTUAL')
-INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('VIRTUAL Gamer')
+INSERT INTO @LeagueGroup_Tbl(GroupName) VALUES('VIRTUAL GAMER')
 
 DECLARE @MaxVRLeagueGroupID INT
 SELECT @MaxVRLeagueGroupID = MAX(GroupID) FROM VRLeagueGroup WITH(NOLOCK)
