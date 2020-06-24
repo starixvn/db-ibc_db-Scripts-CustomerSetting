@@ -1,7 +1,7 @@
 /*
 	Created: 20200610@Eden
 	Task: Insert RefResource for VR Bettype label [Redmine: #134978]
-	DB: DBTXN/bodb02
+	DB: DBPRO/bodb02
 */
 USE bodb02
 GO
