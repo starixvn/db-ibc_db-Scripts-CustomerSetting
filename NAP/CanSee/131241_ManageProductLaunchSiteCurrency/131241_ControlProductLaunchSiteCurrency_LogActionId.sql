@@ -1,4 +1,4 @@
-/*<info serverAlias=”DBLOG/bodb_CustomerLog” ></info>*/
+/*<info serverAlias=”DBLOG-bodb_CustomerLog” ></info>*/
 /*
     Created: Winfred
     Date: 20200623
