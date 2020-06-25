@@ -28,7 +28,25 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND cs.site IN('')
+		AND cs.site IN (
+						'Macaubet'
+						,'Aoncash'
+						,'ITCBet'
+						,'9bet'
+						,'M8bola'
+						,'Q8bola'
+						,'BE7'
+						,'NBCbet'
+						,'Unobet'
+						,'Bolanation'
+						,'Luckywin88'
+						,'Winn69'
+						,'Axiawin'
+						,'Jumbo88'
+						,'Lagadewa'
+						,'Ratugg'
+						,'Monstergol'
+						)
 		AND ci.currency IN (5,67)
 
 
