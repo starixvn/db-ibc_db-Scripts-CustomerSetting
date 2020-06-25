@@ -35,11 +35,11 @@ BEGIN
 		AND ci.Enabled = 1
 		 
 	DECLARE @Cust_Temp TABLE(CustID INT)
-	DECLARE @BatchSize SMALLINT = 1000
+	DECLARE @BatchSize SMALLINT = 5000
 	
 	WHILE(1 =1)
 	BEGIN
-		UPDATE TOP (@BatchSize) c WITH (ROWLOCK,UPDLOCK)
+		UPDATE TOP (@BatchSize) c WITH (ROWLOCK)
 		SET c.isfinished = 1
 		OUTPUT DELETED.CustID INTO @Cust_Temp(CustID)
 		FROM #CustList c 
@@ -49,13 +49,13 @@ BEGIN
 		BEGIN 
 			BREAK
 		END 	
-			
+			 
 		UPDATE cs
 		SET 
-			cs.bitmapHasSynced = dbo.f_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrderSapa,1),
-			cs.bitmapIsDisabled = dbo.f_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrderSapa,1),
-			cs.bitmapIsHidden = dbo.f_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrderSapa,0)
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			cs.bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrderSapa,1)),
+			cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrderSapa,1)),
+			cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrderSapa,0)) 
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 			INNER JOIN @Cust_Temp ci ON cs.CustID = ci.CustID	
 		
 		DELETE FROM @Cust_Temp

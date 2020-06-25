@@ -35,7 +35,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			20,-- Currency
 			487,-- SiteID
 			0,-- IsHidden
-			1,-- IsDisabled
+			0,-- IsDisabled
 			1-- HasSynced) 
 		 )
 		 INSERT INTO [CustDB].[dbo].[ProductStatusSiteCurrency]
@@ -54,7 +54,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			72,-- Currency
 			487,-- SiteID
 			0,-- IsHidden
-			1,-- IsDisabled
+			0,-- IsDisabled
 			1-- HasSynced) 
 		 )
 		 

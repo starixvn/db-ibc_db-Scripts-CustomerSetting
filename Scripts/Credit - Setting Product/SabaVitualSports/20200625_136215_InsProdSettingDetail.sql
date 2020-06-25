@@ -48,11 +48,11 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			NULL,-- MaxPT
 			NULL,-- MaxDiscount
 			1,--  IsSync
-			0,--  IsHidden
+			1,--  IsHidden
             1,--  IsDisabled
             1,--  SettingLevel
             1,--  DisplayOrder
-            0,--  SettingStatus
+            1,--  SettingStatus (only UAT)
             NULL,--  IntervalValue
             @productID,--  RealProductId
             NULL--  MaxChoice

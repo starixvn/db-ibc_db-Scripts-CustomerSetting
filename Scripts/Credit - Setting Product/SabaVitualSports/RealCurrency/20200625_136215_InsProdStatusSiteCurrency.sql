@@ -32,7 +32,7 @@ VALUES
 	0,-- Currency
 	487,-- SiteID
 	0,-- IsHidden
-	1,-- IsDisabled
+	0,-- IsDisabled
 	1-- HasSynced) 
  )
 		 	
