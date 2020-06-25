@@ -41,10 +41,8 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
-			,@target = 'REPLICATED'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
 	
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
-			,@target = 'DBCUST'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
