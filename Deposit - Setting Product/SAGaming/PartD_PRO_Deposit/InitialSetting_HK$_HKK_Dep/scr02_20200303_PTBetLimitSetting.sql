@@ -59,7 +59,8 @@ BEGIN
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend=@srecommend AND roleid=3 
+		AND(username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
 	INSERT INTO #tmpCust(CustID)
 	SELECT CustID
@@ -159,6 +160,7 @@ BEGIN
 		   ,@SuperPT
 	FROM #tmpSMA
 	WHERE RoleID=2
+
 	--Member Level
 	INSERT INTO dbo.Dep_CustPTSetting_Member
 		(	CustID
@@ -182,7 +184,7 @@ BEGIN
 	WHERE m.IsGroupedPT=0
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT t.CustID,1
+	SELECT t.CustID,1
 	FROM #tmpCust t WITH(NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
@@ -201,7 +203,7 @@ BEGIN
 		[MaxLabel] [varchar](20) NULL,
 		[ExhangeId] [INT] NULL
 	) 
-	INSERT INTO @DEP_Stake ([GameTypeID], [MinStake], [MaxStake],[MinLabel],[MaxLabel],[ExhangeId])
+	INSERT INTO @DEP_Stake ([GameTypeID],[MinLabel],[MaxLabel], [MinStake], [MaxStake],[ExhangeId])
 	SELECT 3001,'30','3000',30,3000,67 UNION ALL
 	SELECT 3001,'100','5000',100,5000,67 UNION ALL
 	SELECT 3001,'500','10000',500,10000,67 UNION ALL

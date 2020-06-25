@@ -6,6 +6,7 @@
 
 	DECLARE @maxcustid INT
 	DECLARE @AgentID	INT,@CustID	INT,@SuperPT SMALLINT = 85
+	DECLARE @SportType INT = 244, @BetType INT=3001
 	
 	SELECT @maxcustid = xxx
 	CREATE TABLE #supers (custid int)
@@ -16,51 +17,84 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-		AND cs.site IN('')
+		AND cs.site IN ('')
 		AND ci.currency IN (5,67)
 	ORDER BY CI.custid 
-
-	--------------delete Redurant setting -------------
-	DELETE cg
-	FROM Dep_CustPTSetting_Agent cg WITH(ROWLOCK)	
-		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType =244 AND cg.custid > @maxcustID
-						
-	DELETE cg
-	FROM Dep_CustPTSetting_Member cg WITH(ROWLOCK)	
-		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType =244 AND cg.custid > @maxcustID
-		
-	DELETE cg
-	FROM Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK)	
-		INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid		
-	WHERE SportType =244 AND c.custid > @maxcustID
-				
-	DELETE cg
-	FROM Dep_CustStakeLevel_Agent cg WITH(ROWLOCK)	
-		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid		
-	WHERE SportType =244 AND c.custid > @maxcustID
-
-	DELETE cg
-	FROM Dep_CustStakeLevel_Member cg WITH(ROWLOCK)
-		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
-		INNER JOIN #supers s ON c.srecommend = s.custid			
-	WHERE SportType =244 AND c.custid > @maxcustID
-	---------------------------------------------------
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 
+		AND(username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
-	DECLARE @SportType INT = 244, @BetType INT=3001
+	CREATE TABLE #SMATemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		Currency INT,
+		SiteID INT,
+		RoleID TINYINT
+	)
+
+	CREATE TABLE #MemberTemp
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+		Currency INT,
+		SiteID INT
+	)
+
+	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
+	CREATE TABLE #tmpSTListMember (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
+		
+	INSERT INTO #SMATemp (CustID,Currency, SiteID,RoleID)
+	SELECT CI.custid, CI.currency, S.siteid, ci.roleid
+	FROM Custinfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE ci.srecommend IN(SELECT CustID FROM #supers) 
+			AND ci.roleid IN (2,3,4) 
+			AND Enabled = 1 
+			AND ci.custid > @maxcustid 
+			AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	INSERT INTO #MemberTemp (CustID,Currency, SiteID)
+	SELECT CI.custid, CI.currency, S.siteid 
+	FROM custInfo CI WITH (NOLOCK)
+		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.recommend
+		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
+	WHERE CI.srecommend IN(SELECT CustID FROM #supers) 
+		AND CI.roleid = 1  
+		AND Enabled = 1 
+		AND CI.custid > @maxcustid	
+		AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
+	--------------delete Redurant setting -------------
+	DELETE cg
+	FROM Dep_CustPTSetting_Agent cg WITH(ROWLOCK)	
+		INNER JOIN #SMATemp s ON s.CustID = cg.custid	
+	WHERE SportType = @SportType AND cg.custid > @maxcustID
+						
+	DELETE cg
+	FROM Dep_CustPTSetting_Member cg WITH(ROWLOCK)	
+		INNER JOIN #MemberTemp s ON s.CustID = cg.custid
+	WHERE SportType = @SportType AND cg.custid > @maxcustID
+		
+	DELETE cg
+	FROM Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK)	
+		INNER JOIN #SMATemp s ON s.CustID = cg.AgentID AND s.RoleID = 2
+	WHERE SportType = @SportType AND cg.AgentID > @maxcustID
+				
+	DELETE cg
+	FROM Dep_CustStakeLevel_Agent cg WITH(ROWLOCK)	
+		INNER JOIN #SMATemp s ON s.CustID = cg.custid	
+	WHERE SportType = @SportType AND cg.custid > @maxcustID
+
+	DELETE cg
+	FROM Dep_CustStakeLevel_Member cg WITH(ROWLOCK)
+		INNER JOIN #MemberTemp s ON s.CustID = cg.custid
+	WHERE SportType = @SportType AND cg.custid > @maxcustID
 
 	--------------------------------------PT Setting-------------------------------------------------	
-		INSERT INTO dbo.Dep_CustPTSetting_Agent
+	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
 		   ,[SportType]
 		   ,[BetType]
@@ -77,11 +111,8 @@
 		   ,@SuperPT
 		   ,@SuperPT
 		   ,@SuperPT
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=4
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #SMATemp 
+	WHERE RoleID = 4
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -100,11 +131,8 @@
 		   ,0
 		   ,@SuperPT
 		   ,0	
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=3
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #SMATemp 
+	WHERE RoleID = 3
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -123,11 +151,8 @@
 		   ,0
 		   ,0
 		   ,@SuperPT
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=2
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #SMATemp 
+	WHERE RoleID = 2
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -146,11 +171,8 @@
 		   ,0
 		   ,0
 		   ,@SuperPT
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=2
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	FROM #SMATemp 
+	WHERE RoleID = 2
 
 	INSERT INTO dbo.Dep_CustPTSetting_Member
 		(	CustID
@@ -169,23 +191,15 @@
 		   ,0
 		   ,0
 		   ,@SuperPT
-	FROM custInfo ci WITH(NOLOCK)
+	FROM #MemberTemp ci
 		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=1
-		AND m.IsGroupedPT=0
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	WHERE m.IsGroupedPT=0
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT ci.CustID,1
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend IN(SELECT custid FROM #supers)
-		AND ci.custid>@maxcustid AND ci.Enabled=1 
-		AND RoleID=1
-		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
+	SELECT ci.CustID,1
+	FROM  #MemberTemp ci
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,43
@@ -194,39 +208,6 @@
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=43)
 
 	--------------------------------------Bet Setting-------------------------------------------------
-		CREATE TABLE #SMATemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		Currency INT,
-		SiteID INT
-	)
-
-	CREATE TABLE #MemberTemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		Currency INT,
-		SiteID INT
-
-	)
-
-	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
-	CREATE TABLE #tmpSTListMember (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
-		
-	INSERT INTO #SMATemp (CustID,Currency, SiteID)
-	SELECT CI.custid, CI.currency, S.siteid 
-	FROM Custinfo CI WITH (NOLOCK)
-		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
-		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
-	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
-			AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
-
-	INSERT INTO #MemberTemp (CustID,Currency, SiteID)
-	SELECT CI.custid, CI.currency, S.siteid 
-	FROM custInfo CI WITH (NOLOCK)
-		INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.recommend
-		INNER  JOIN SITE S WITH (NOLOCK) ON S.site = C.site
-	WHERE CI.srecommend IN(SELECT CustID FROM #supers) AND CI.roleid = 1  AND Enabled = 1 AND CI.custid > @maxcustid	
-		AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList, SiteID)
 	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) AS StakeLevelList, SMA.SiteID
