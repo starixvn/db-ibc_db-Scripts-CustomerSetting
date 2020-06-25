@@ -23,7 +23,7 @@ BEGIN
 	WHILE (1=1)
 	BEGIN
 		INSERT INTO #CustList (CustId, Sporttype, Bettype, IsLive)
-		SELECT TOP (@Batch) CustId
+		SELECT TOP (@Batch) CustId, Sporttype, Bettype, IsLive
 		FROM CustPTSetting3rd_Agent WITH (NOLOCK)
 		WHERE MaxPT <> 100
 	
