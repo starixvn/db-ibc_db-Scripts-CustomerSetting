@@ -23,7 +23,7 @@ GO
 
 CREATE TABLE [dbo].[BetLimitControlProduct](
 	[ProductID] [tinyint] NOT NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetLimitControlProduct] PRIMARY KEY CLUSTERED 
 (
 	[ProductID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
@@ -42,7 +42,7 @@ CREATE TABLE [dbo].[BetLimitControlCustSetting](
 	[BetLimitTypeID] [int] NOT NULL,
 	[MaxBet] [money] NULL,
 	[MaxPerMatch] [money] NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetLimitControlCustSetting] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
 	[BetLimitTypeID] ASC
@@ -64,7 +64,7 @@ CREATE TABLE [dbo].[BetLimitControlTypeDetail](
 	[Bettype] [smallint] NOT NULL,
 	[LeagueGroupID] [int] NOT NULL,
 	[LeagueID] [int] NOT NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetLimitControlTypeDetail] PRIMARY KEY CLUSTERED 
 (
 	[BetLimitTypeID] ASC,
 	[Sporttype] ASC,
@@ -93,7 +93,7 @@ CREATE TABLE [dbo].[BetLimitControlType](
 	[EndTime] [time](7) NULL,
 	[LiveIndicator] [tinyint] NOT NULL,
 	[RestrictVIP] [bit] NOT NULL,
-PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_BetLimitControlType] PRIMARY KEY CLUSTERED 
 (
 	[BetLimitTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
