@@ -3,7 +3,7 @@
 	Task: update site = 'IBCIndo' for INDOBS
 	DB: DBCUST/CustDB
 */
---9043 rows affected
+--92 rows affected
 SELECT custid, 0 isFinished
 INTO #Supers
 FROM Acc_CustGroup WITH(NOLOCK)
