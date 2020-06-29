@@ -9,9 +9,9 @@ INSERT INTO [dbo].[ProductStatusSiteCurrency]
            ,[BetType]
            ,[Currency]
            ,[SiteID]
-           ,[IsHidden]
+           ,[IsHidden]	
            ,[IsDisabled]
            ,[HasSynced])
-SELECT 241,	3300, 0, 487, 1, 1, 1
-UNION SELECT 244, 3001,	0, 487, 1, 1, 1		   
+SELECT 241,	3300, 0, 487, 0, 1, 1
+UNION SELECT 244, 3001,	0, 487, 0, 1, 1		   
 		   
