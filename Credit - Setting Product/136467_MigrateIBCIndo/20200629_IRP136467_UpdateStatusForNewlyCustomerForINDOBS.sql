@@ -45,7 +45,7 @@ SELECT ci.custid
 FROM Custinfo ci WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers)
 	AND Enabled = 1
-	AND custid > @maxcustid
+	AND custid > @max_custid
 
 DECLARE @MemberBatch table(CustId INT)
 
