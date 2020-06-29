@@ -5,7 +5,7 @@ ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 AS
 BEGIN
 	/*
-		Task : Update ProductStatusSiteCurrency [SapaGameSetting] RedmineID:#136210
+		Task : Update ProductStatusSiteCurrency [SabaGameSetting] RedmineID:#136210
 		DB: DBCUST/CustDB
 		Original: 
 		Revisions:
@@ -24,7 +24,7 @@ BEGIN
 	   )
 		RETURN
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrderSapa TINYINT = 28
+	DECLARE @BitmapOrderSaba TINYINT = 28
 	
 	CREATE TABLE #CustList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
 	
@@ -52,9 +52,9 @@ BEGIN
 			 
 		UPDATE cs
 		SET 
-			cs.bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrderSapa,1)),
-			cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrderSapa,1)),
-			cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrderSapa,0)) 
+			cs.bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrderSaba,1)),
+			cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrderSaba,1)),
+			cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrderSaba,0)) 
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 			INNER JOIN @Cust_Temp ci ON cs.CustID = ci.CustID	
 		
