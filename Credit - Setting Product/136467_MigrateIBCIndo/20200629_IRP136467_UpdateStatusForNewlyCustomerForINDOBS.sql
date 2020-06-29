@@ -43,7 +43,7 @@ where groupname = 'indobs'
 INSERT INTO #tblCust (CustID)
 SELECT ci.custid
 FROM Custinfo ci WITH (NOLOCK)
-WHERE srecommend IN (SELECT custid FROM )
+WHERE srecommend IN (SELECT custid FROM #supers)
 	AND Enabled = 1
 	AND custid > @maxcustid
 
