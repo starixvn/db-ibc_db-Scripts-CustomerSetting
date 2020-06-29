@@ -1,11 +1,12 @@
 /*<info serverAlias="DBCUST-CustDB" executers="bodbAdminNet" viewers="" isFunction="0"></info>*/
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
+	,@maxcustid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
 	/*
-		Task : Update ProductStatusSiteCurrency [SabaGameSetting] RedmineID:#136210
+		Task : Update ProductStatusSiteCurrency  - UUS [SabaGameSetting] RedmineID:#136210
 		DB: DBCUST/CustDB
 		Original: 
 		Revisions:
@@ -33,6 +34,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
+		AND ci.custid <= @maxcustid
 		 
 	DECLARE @Cust_Temp TABLE(CustID INT)
 	DECLARE @BatchSize SMALLINT = 5000
@@ -67,7 +69,8 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
-DECLARE @srecommend INT
+DECLARE @srecommend INT,@max_custid INT
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -80,6 +83,60 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
+	AND c.username NOT LIKE '3rdSuper%'
+	AND s.site = 'IBCIndo'
+	AND ci.currency IN (20,72) --UUS
+	
+DECLARE @totalCust_cnt INT, @index INT = 0
+SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
+RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
+
+DECLARE @RunRecord INT
+--SET @RunRecord = 1
+SET  @RunRecord = @totalCust_cnt
+		
+WHILE (@index <= @RunRecord)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid	
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend
+			, @maxcustid= @max_custid
+			, @target = 'REPLICATED'
+	WAITFOR DELAY '00:00:0.500'
+END
+GO
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
+--------------------------------------------------------------------------------------
+CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
+DECLARE @srecommend INT,@max_custid INT
+SELECT @max_custid = xxx
+--DROP TABLE #supers
+-- list of supers
+-- real super
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM dbo.customer c WITH (NOLOCK) 
+	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
+	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4
+	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+	AND cs.isinternal = 0 	
+	AND ci.Enabled = 1
+	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site = 'IBCIndo'
 	AND ci.currency IN (20,72) --UUS
@@ -108,58 +165,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend
-			, @target = 'REPLICATED'
-
-	WAITFOR DELAY '00:00:0.500'
-	
-END
-GO
--- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
---------------------------------------------------------------------------------------
-CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
-DECLARE @srecommend INT
---DROP TABLE #supers
--- list of supers
--- real super
-INSERT INTO #supers(custid)
-SELECT ci.custid
-FROM dbo.customer c WITH (NOLOCK) 
-	INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
-	INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
-	LEFT JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4
-	AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
-	AND cs.isinternal = 0 	
-	AND ci.Enabled = 1
-	AND s.islicensee = 0
-	AND c.username NOT LIKE '3rdSuper%'
-	AND s.site = 'IBCIndo'
-	AND ci.currency IN (20,72) --UUS
-	
-DECLARE @totalCust_cnt INT, @index INT = 0
-SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
-RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
-
-DECLARE @RunRecord INT
-SET @RunRecord = 1
---SET  @RunRecord = @totalCust_cnt
-		
-WHILE (@index <= @RunRecord)
-BEGIN
-	UPDATE TOP (1) #Supers
-	SET isfinished = 1
-		,@srecommend = custid	
-	WHERE isfinished = 0
-	
-	IF @@ROWCOUNT = 0 BREAK
-	
-	SET @index = @index + 1
-	
-	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
-
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend, @target = 'DBCUST'
+			, @maxcustid= @max_custid, @target = 'DBCUST'
 
 	WAITFOR DELAY '00:00:0.500'
 	

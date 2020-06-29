@@ -1,6 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB" executers="bodbAdminNet" viewers="" isFunction="0"></info>*/
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
+	,@maxcustid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -33,6 +34,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
+		AND ci.custid <= @maxcustid
 		 
 	DECLARE @Cust_Temp TABLE(CustID INT)
 	DECLARE @BatchSize SMALLINT = 5000
@@ -67,7 +69,8 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
-DECLARE @srecommend INT
+DECLARE @srecommend INT,@max_custid INT
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -80,6 +83,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site = 'IBCIndo'
 	
@@ -107,6 +111,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend
+			, @maxcustid= @max_custid
 			, @target = 'REPLICATED'
 
 	WAITFOR DELAY '00:00:0.500'
@@ -116,7 +121,8 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
-DECLARE @srecommend INT
+DECLARE @srecommend INT,@max_custid INT
+SELECT @max_custid = xxx
 --DROP TABLE #supers
 -- list of supers
 -- real super
@@ -131,6 +137,7 @@ WHERE ci.roleid = 4
 	AND cs.isinternal = 0 	
 	AND ci.Enabled = 1
 	AND s.islicensee = 0
+	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site = 'IBCIndo'
 	
@@ -157,7 +164,8 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend, @target = 'DBCUST'
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend
+			, @maxcustid= @max_custid, @target = 'DBCUST'
 
 	WAITFOR DELAY '00:00:0.500'
 	

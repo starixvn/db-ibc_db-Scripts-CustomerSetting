@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200222
-	Task:  Insert ProductStatusSiteCurrency [SabaGameSetting] - UUS RedmineID:#136210
+	Task:  Insert ProductStatusSiteCurrency - UUS [SabaGameSetting] RedmineID:#136210
 	DB: DBCust/CustDB
 */
 DECLARE @betType SMALLINT,@siteID SMALLINT,@sportType SMALLINT
