@@ -12,5 +12,5 @@ DECLARE @UnblockTime VARCHAR(50) = '01:00 PM (GMT+8)' -- time unblock add new cu
 UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 1,
 	UnblockTime = @UnblockTime
+WHERE siteid  = 487 -- IBCIndo
 
---> Step 2 : Restore DB to DBCUST

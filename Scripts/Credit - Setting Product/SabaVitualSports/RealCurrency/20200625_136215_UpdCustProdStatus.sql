@@ -114,7 +114,7 @@ BEGIN
 			, @maxcustid= @max_custid
 			, @target = 'REPLICATED'
 
-	WAITFOR DELAY '00:00:0.500'
+	WAITFOR DELAY '00:00:0.100'
 	
 END
 GO
@@ -167,7 +167,7 @@ BEGIN
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @Custid = @srecommend
 			, @maxcustid= @max_custid, @target = 'DBCUST'
 
-	WAITFOR DELAY '00:00:0.500'
+	WAITFOR DELAY '00:00:0.100'
 	
 END
 GO	
