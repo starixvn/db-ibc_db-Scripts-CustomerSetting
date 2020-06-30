@@ -3,7 +3,7 @@
 	Task: Update CustProductStatus New User (PROD) for Saba VS RedmineID:#136210
 	DB: DBCUST/CustDB
 */ 
-PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 DECLARE @ProductID TINYINT = 54,@max_custid INT,@BitmapOrderSapa TINYINT = 28
 
 SELECT @max_custid = xxx
