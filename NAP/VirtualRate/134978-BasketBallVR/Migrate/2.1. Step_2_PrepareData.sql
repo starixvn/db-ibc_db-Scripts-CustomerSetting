@@ -1,6 +1,6 @@
 /*
 	Creator: 20200615@Eden
-	Task: Prepare raw data before UM - Redmine: #134978
+	Task: Prepare raw data - Redmine: #134978
 		Step 1: Get terminated srecommend and IBO srecommend
 		Step 2: Insert raw data with custid in [1, MaxCustID1]
 	Run at: CustDB@DBCUST 

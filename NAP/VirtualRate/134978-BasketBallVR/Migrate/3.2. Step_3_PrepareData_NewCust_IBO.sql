@@ -1,8 +1,8 @@
 /*
 	Creator: 20200615@Eden
-	Task: Prepare raw data before UM - Redmine: #134978 - IBO Licensee
-		Step 1: get IBO srecommend
-		Step 2: Insert raw data with custid in [1, MaxCustID1]
+	Task: Prepare raw data - New Customers - Redmine: #134978 - IBO Licensee
+		Step 1: Get IBO srecommend
+		Step 2: Insert raw data with custid in [MaxCustID1 + 1 , MaxCustID2]
 	Run at: CustDB@DBCUST 
 */
 USE CustDB
@@ -20,16 +20,14 @@ GO
 
 
 	--Step 2: Insert raw data with custid in [1, MaxCustID1]
-	DECLARE @MaxCustID INT = MaxCustID1
-	DECLARE @CustID INT = 1			
+	DECLARE @MaxCustID INT = MaxCustID2
+	DECLARE @CustID INT = MaxCustID1 + 1			
 	DECLARE @ToCustID INT 
 	DECLARE @Batch INT = 1000000
 	DECLARE @sCustID VARCHAR(100)			
 	WHILE (@CustID <= @MaxCustID)			
 	BEGIN	
 		SET @ToCustID = @CustID + @Batch
-		IF @ToCustID >@MaxCustID
-			SET @ToCustID = @MaxCustID	
 				
 		INSERT INTO [BasketBallVR_Temp]	WITH(TABLOCK) (
 							 VRValue_HDPLive,VRValue_HDPNonLive

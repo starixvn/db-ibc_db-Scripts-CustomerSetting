@@ -1,6 +1,6 @@
 /*
 	Creator: 20200615@Eden
-	Task: Prepare raw data IN UM - Redmine: #134978
+	Task: Prepare raw data - New Customers - Redmine: #134978
 		Step 1: Get terminated srecommend and IBO srecommend
 		Step 2: Insert raw data with custid in [MaxCustID1 + 1 , MaxCustID2]
 		Step 3: Create indexes
@@ -30,8 +30,6 @@ GO
 	WHILE (@CustID <= @MaxCustID)			
 	BEGIN	
 		SET @ToCustID = @CustID + @Batch
-		IF @ToCustID >@MaxCustID
-			SET @ToCustID = @MaxCustID	
 				
 		INSERT INTO [BasketBallVR_Temp]	WITH(TABLOCK) (
 							 VRValue_HDPLive,VRValue_HDPNonLive
