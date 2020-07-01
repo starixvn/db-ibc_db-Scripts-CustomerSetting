@@ -18,6 +18,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[UMConfig](
+	[ProductID] [tinyint] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
 	[IsLive] [bit] NOT NULL,
@@ -26,12 +27,12 @@ CREATE TABLE [dbo].[UMConfig](
 	[SiteID] [int] NOT NULL,
 	[Currency] [int] NOT NULL,
 	[SuperID] [int] NOT NULL,
-	[ProductID] [tinyint] NOT NULL,
 	[BeginTime] [datetime] NULL,
 	[EndTime] [datetime] NULL,
 	[LastModifyDTS] [datetime] NULL,
 CONSTRAINT [PK_UMConfig] PRIMARY KEY CLUSTERED 
 (
+	[ProductID] ASC,
 	[SportType] ASC,
 	[SettingType] ASC,
 	[FunctionType] ASC,
