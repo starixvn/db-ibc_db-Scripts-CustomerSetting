@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
-	Date: 20200508
-	Task: Rollback CanSee for Saba.club - Indo site
+	Date: 20200702
+	Task: Rollback CanSee for Saba.club - 755555 site
 	DB: DBCUST/CustDB
 */
 USE CustDB
@@ -15,7 +15,7 @@ SELECT siteid
 INTO #OfferedSites
 FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
-	AND s.site IN ('Indo', 'IbcIndo')
+	AND s.site IN ('755555')
 
 UPDATE ps
 SET ps.IsLaunched = 0
