@@ -1,5 +1,5 @@
 /*
-	Created: 20200508@Elodie
+	Created: 20200702@Elodie
 	Task: Update BlockNewCusti7 flag [#RM:133755]
 	DB: DBCUST/CustDB
 */
