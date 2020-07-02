@@ -27,8 +27,8 @@ CREATE TABLE [dbo].[UMConfig](
 	[SiteID] [int] NOT NULL,
 	[Currency] [int] NOT NULL,
 	[SuperID] [int] NOT NULL,
-	[BeginTime] [datetime] NULL,
-	[EndTime] [datetime] NULL,
+	[BeginTime] [smalldatetime] NULL,
+	[EndTime] [smalldatetime] NULL,
 	[LastModifyDTS] [datetime] NULL,
 CONSTRAINT [PK_UMConfig] PRIMARY KEY CLUSTERED 
 (
