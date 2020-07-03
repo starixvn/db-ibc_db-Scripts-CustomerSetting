@@ -8,8 +8,8 @@ DECLARE @maxcustid INT = xxx
 
 CREATE TABLE #tblCust(custid INT PRIMARY KEY, roleid TINYINT, currency INT, isFinished BIT DEFAULT 0)	
 	
-INSERT INTO #tblCust(custid,roleid)
-SELECT custid, roleid
+INSERT INTO #tblCust(custid,roleid, currency)
+SELECT custid, roleid, currency
 FROM custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid 
 					FROM Acc_CustGroup g WITH(NOLOCK) 
