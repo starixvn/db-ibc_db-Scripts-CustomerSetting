@@ -140,7 +140,6 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'			
 	WAITFOR DELAY '00:00:0.100'
-	RETURN
 END
 
 DROP TABLE #supers
@@ -223,8 +222,7 @@ BEGIN
 			,@xmlstrBitmapDisabled=@xmlstrBitmapDisabled
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'			
-	WAITFOR DELAY '00:00:0.100'
-	RETURN
+	WAITFOR DELAY '00:00:0.100'	
 END
 
 DROP TABLE #supers
