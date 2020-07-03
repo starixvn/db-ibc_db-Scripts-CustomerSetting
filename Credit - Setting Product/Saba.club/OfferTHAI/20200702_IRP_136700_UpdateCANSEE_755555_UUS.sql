@@ -1,7 +1,7 @@
 /*
 	Created: Elodie
 	Date: 20200702
-	Task: Update CanSee for Saba.club - INDO site, UUS
+	Task: Update CanSee for Saba.club - 755555 site, UUS
 	DB: DBCUST/CustDB
 */
 USE CustDB
