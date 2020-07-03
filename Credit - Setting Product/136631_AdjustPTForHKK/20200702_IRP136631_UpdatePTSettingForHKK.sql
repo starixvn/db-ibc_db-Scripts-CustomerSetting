@@ -40,6 +40,36 @@ BEGIN
 	WHERE custid = @custid
 	
 	EXEC dbo.Acc_CustSetting_18 @srecommend = @custid, @roleid = 4, @Target = @Target						
+	
+	--> FOR Muay Thai, E-Sports
+	DECLARE @xml XML;
+	SET @xml = (
+				SELECT (
+						SELECT SportType AS '@SportType'
+							, BetType AS '@BetType'
+							, IsLive AS '@IsLive'
+						FROM dbo.ProductSettingDetail WITH(NOLOCK)
+						WHERE settingtype = 1 
+							  AND SportType IN (43,44)
+						FOR XML PATH('PT')
+							, TYPE
+						)
+				FOR XML PATH('ROOT')
+					, TYPE
+				);
+	DECLARE @SportBettypeXML NVARCHAR(MAX) = CONVERT(NVARCHAR(MAX),@xml);
+	
+	UPDATE cs 
+	SET cs.MaxPT = CASE WHEN cs.MaxPT < @PTSB * 100 THEN @PTSB*100 ELSE cs.MaxPT END,
+		cs.MinPT = CASE WHEN cs.MinPT < @PTSB * 100 THEN @PTSB*100 ELSE cs.MinPT END,
+		cs.SuperPT  =  @PTSB * 100 ,
+		cs.MasterPT =  cs.MasterPT + @PTSB * 100 - cs.SuperPT ,
+		cs.AgentPT  =  cs.AgentPT + @PTSB * 100 - cs.SuperPT
+	FROM CustPTSetting3rd_Agent cs WITH (ROWLOCK)		
+	WHERE cs.SportType IN (43,44) 
+		AND custid = @custid
+		
+		
 END
 GO
 
