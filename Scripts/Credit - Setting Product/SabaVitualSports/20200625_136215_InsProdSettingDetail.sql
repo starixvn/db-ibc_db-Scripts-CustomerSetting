@@ -6,7 +6,7 @@
 	DB: DBCust/CustDB
 */
 DECLARE @productID SMALLINT ,@settingType SMALLINT,@betType SMALLINT,@sportType SMALLINT
-SET @settingType =  13 -- New Product Status
+SET @settingType =  4 -- Product Status
 SET @productID = 54 -- Sapa Virtual Sport
 -- Saba Virtual Sports : 9854
 SET @sportType = 98
