@@ -1,6 +1,6 @@
 /*
 	Created: 20200702@Elodie
-	Task: Update BlockNewCusti7 flag [#RM:133755]
+	Task: Update BlockNewCusti7 flag [#RM:136700]
 	DB: DBCUST/CustDB
 */
 
@@ -8,6 +8,5 @@ USE CustDB
 GO
 
 UPDATE dbo.Site 
-SET BlockNewCust = 0,
-	UnblockTime = '01:30 PM (GMT+8)'
+SET BlockNewCust = 0
 WHERE site IN ('755555')
