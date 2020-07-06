@@ -31,7 +31,7 @@ BEGIN
 		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID 
 	WHERE lp.CustID = @srecommend
 		AND p.SettingType = 4
-		AND p.ProductID IN (21,22,32,24)
+		AND p.ProductID IN (22,32,24) -- remove allbet
 
 	INSERT INTO #tblCust(Custid,roleid)
 	SELECT custid, roleid
@@ -107,7 +107,8 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
 	CROSS APPLY (SELECT TOP (1) 1 
 				FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
-						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32,24)
+						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 
+						AND p.ProductID IN (22,32,24) -- remove allbet
 				WHERE  lp.CustID = cs.custid							
 				)
 				AS tmp (_sb)
@@ -152,7 +153,8 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = cs.site
 	CROSS APPLY (SELECT TOP (1) 1
 				FROM dbo.Dep_LicenseeProductSetting lp WITH (NOLOCK) 
-						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 AND p.ProductID IN (21,22,32,24)
+						INNER JOIN dbo.Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = lp.ProductSettingID AND p.SettingType = 4 
+						AND p.ProductID IN (22,32,24) -- remove allbet
 				WHERE  lp.CustID = cs.custid							
 				)
 				AS tmp (_sb)
