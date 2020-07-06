@@ -27,7 +27,6 @@ CREATE TABLE [dbo].[UMConfig](
 	[SiteID] [int] NOT NULL,
 	[Currency] [int] NOT NULL,
 	[SuperID] [int] NOT NULL,
-	[SystemID] [tinyint] NOT NULL,
 	[BeginTime] [smalldatetime] NULL,
 	[EndTime] [smalldatetime] NULL,
 	[LastModifyDTS] [datetime] NULL,
@@ -40,7 +39,6 @@ CONSTRAINT [PK_UMConfig] PRIMARY KEY CLUSTERED
 	[SiteID] ASC,
 	[Currency] ASC,
 	[SuperID] ASC,
-	[SystemID] ASC,
 	[BetType] ASC,
 	[IsLive] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [BetRestriction]
@@ -48,7 +46,6 @@ CONSTRAINT [PK_UMConfig] PRIMARY KEY CLUSTERED
 ) ON [Data]
 
 GO
-ALTER TABLE [dbo].[UMConfig] ADD  CONSTRAINT [DF_UMConfig_SystemID]  DEFAULT ((0)) FOR [SystemID]
 --ALTER TABLE [dbo].[UMConfig] ADD  CONSTRAINT [DF_UMConfig_IsLive]  DEFAULT ((0)) FOR [IsLive]
 --ALTER TABLE [dbo].[UMConfig] ADD  CONSTRAINT [DF_UMConfig_FunctionType]  DEFAULT ((1)) FOR [FunctionType]
 GO
