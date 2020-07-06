@@ -1,5 +1,5 @@
 /*
-	Created: 6@Johnson
+	Created: 20200706@Johnson
 	Task: update disable for IBCBet LC for INDOBS for newly customers
 	DB: DBCUST/CUSTDB	
 */

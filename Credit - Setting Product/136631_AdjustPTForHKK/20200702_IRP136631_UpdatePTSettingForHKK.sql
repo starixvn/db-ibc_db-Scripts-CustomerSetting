@@ -69,7 +69,10 @@ BEGIN
 	WHERE cs.SportType IN (43,44) 
 		AND custid = @custid
 		
-		
+	EXEC dbo.Acc_DynamicCustSetting3rd_08 				
+				,@SuperID = @srecommend				
+				,@SportBettypeXML = @SportBettypeXML
+				,@Target = @Target	
 END
 GO
 
