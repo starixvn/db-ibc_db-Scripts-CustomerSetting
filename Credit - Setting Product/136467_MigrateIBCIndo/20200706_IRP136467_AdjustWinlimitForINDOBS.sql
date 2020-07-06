@@ -22,7 +22,7 @@ BEGIN
 	RETURN
 		
 	CREATE TABLE #tblCust(custid INT PRIMARY KEY, roleid TINYINT, isFinished BIT DEFAULT 0)	
-	CREATE TABLE #tblCustWinLossLimit TABLE(custid INT PRIMARY KEY, MaxWinLimit SMALLMONEY, MaxLossLimit MONEY,IsAutoReset BIT)
+	CREATE TABLE #tblCustWinLossLimit (custid INT PRIMARY KEY, MaxWinLimit SMALLMONEY, MaxLossLimit MONEY,IsAutoReset BIT)
 	
 	INSERT INTO #tblCust(custid,roleid)
 	SELECT custid, roleid
