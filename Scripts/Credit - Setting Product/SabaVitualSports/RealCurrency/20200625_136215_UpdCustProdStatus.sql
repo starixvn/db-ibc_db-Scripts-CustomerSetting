@@ -95,8 +95,8 @@ DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
 RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
 
 DECLARE @RunRecord INT
-SET @RunRecord = 1
---SET  @RunRecord = @totalCust_cnt
+--SET @RunRecord = 1
+SET  @RunRecord = @totalCust_cnt
 		
 WHILE (@index <= @RunRecord)
 BEGIN
@@ -149,8 +149,8 @@ DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
 RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
 
 DECLARE @RunRecord INT
-SET @RunRecord = 1
---SET  @RunRecord = @totalCust_cnt
+--SET @RunRecord = 1
+SET  @RunRecord = @totalCust_cnt
 		
 WHILE (@index <= @RunRecord)
 BEGIN
