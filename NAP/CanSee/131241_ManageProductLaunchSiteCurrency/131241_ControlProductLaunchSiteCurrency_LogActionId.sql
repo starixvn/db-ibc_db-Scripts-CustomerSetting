@@ -21,7 +21,8 @@ INSERT INTO [dbo].[LogAction]
 	,[ActionNameKO]
 	,[XsltContent]
 	,[IsInternal]
-	,[ActionNameVI])
+	,[ActionNameVI]
+	,[ActionNameCN])
 VALUES (
 	6060
 	,NULL
@@ -35,6 +36,7 @@ VALUES (
 	,'Insert Cansee'
 	,NULL
 	,1
+	,'Insert Cansee'
 	,'Insert Cansee')
 	
 INSERT INTO [dbo].[LogAction]
@@ -50,7 +52,8 @@ INSERT INTO [dbo].[LogAction]
 	,[ActionNameKO]
 	,[XsltContent]
 	,[IsInternal]
-	,[ActionNameVI])
+	,[ActionNameVI]
+	,[ActionNameCN])
 VALUES (
 	6061
 	,NULL
@@ -64,6 +67,7 @@ VALUES (
 	,'Update Cansee'
 	,NULL
 	,1
+	,'Update Cansee'
 	,'Update Cansee')	
 
 INSERT INTO [dbo].[LogAction]
@@ -79,7 +83,8 @@ INSERT INTO [dbo].[LogAction]
 	,[ActionNameKO]
 	,[XsltContent]
 	,[IsInternal]
-	,[ActionNameVI])
+	,[ActionNameVI]
+	,[ActionNameCN])
 VALUES (
 	6062
 	,NULL
@@ -93,4 +98,5 @@ VALUES (
 	,'Delete Cansee'
 	,NULL
 	,1
+	,'Delete Cansee'
 	,'Delete Cansee')	
