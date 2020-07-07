@@ -86,6 +86,7 @@ WHERE ci.roleid = 4
 	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site = 'IBCIndo'
+	AND ci.currency  NOT IN (20,72)
 	
 DECLARE @totalCust_cnt INT, @index INT = 0
 SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
