@@ -22,6 +22,7 @@ CREATE TABLE #supers (custid INT)
 		AND s.islicensee = 0
 		AND c.username NOT LIKE '3rdSuper%'
 		AND s.site = 'IBCIndo'
+		AND ci.currency  NOT IN (20,72)
 		
 
 CREATE TABLE #CustList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
