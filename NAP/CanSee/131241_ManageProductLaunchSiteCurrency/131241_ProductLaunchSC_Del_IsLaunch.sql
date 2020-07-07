@@ -9,5 +9,5 @@ IF EXISTS(	SELECT TOP 1 1
 				FROM dbo.ProductLaunchedSiteCurrency plsc WITH(NOLOCK)
 				WHERE 	plsc.IsLaunched = 0 )
 BEGIN
-	DELETE FROM dbo.ProductLaunchedSiteCurrency WHERE IsLaunched = 0 
+	DELETE FROM dbo.ProductLaunchedSiteCurrency WITH(ROWLOCK) WHERE IsLaunched = 0 
 END 
