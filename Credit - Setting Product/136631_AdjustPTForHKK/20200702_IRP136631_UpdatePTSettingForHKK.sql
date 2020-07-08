@@ -91,6 +91,7 @@ BEGIN
 	
 	EXEC dbo.Acc_CustSetting3rd_18 @srecommend = @custid, 
 									@roleid = 4, 
+									@sporttype = 202,
 									@mode = 'Keno',
 									@Target = @Target
 	
@@ -105,6 +106,8 @@ BEGIN
 		
 	EXEC dbo.Acc_CustSetting3rd_18 @srecommend = @custid, 
 									@roleid = 4, 
+									@sporttype = 255,
+									@bettype = 1701
 									@mode = 'GoldDeluxe',
 									@Target = @Target
 									
