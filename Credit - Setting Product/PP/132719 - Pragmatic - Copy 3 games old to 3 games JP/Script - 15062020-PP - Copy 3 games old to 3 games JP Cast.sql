@@ -16,12 +16,12 @@ WHERE s.GameTypeID = 4107
 union All
 SELECT s.StakeLevelID, 4188 as GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake
 FROM Dep_StakeLevelGroupDetail s WITH(NOLOCK) 
-inner join Dep_StakeLevel t WITH(NOLOCK) on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
+INNER JOIN Dep_StakeLevel t WITH(NOLOCK) on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4116
-union All
+UNION ALL
 SELECT s.StakeLevelID, 4189 as GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake
 FROM Dep_StakeLevelGroupDetail s WITH(NOLOCK) 
-inner join Dep_StakeLevel t WITH(NOLOCK) on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
+INNER JOIN Dep_StakeLevel t WITH(NOLOCK) on s.StakeLevelID = t.StakeLevelID  and t.GameTypeID = 4101 and t.GameGroupID = 8
 WHERE s.GameTypeID = 4139
 
 MERGE Dep_StakeLevelGroupDetail as g 

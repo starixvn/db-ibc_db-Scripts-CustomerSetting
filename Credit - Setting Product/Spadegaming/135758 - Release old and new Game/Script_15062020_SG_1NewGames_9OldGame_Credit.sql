@@ -1,7 +1,7 @@
 /*
 	Date: 20200615
 	Created: Winfred 
-	Task: #135758 - Spadegaming - Release of old + new games June 2020
+	Task: #135758 - Spadegaming - Release of old + new games June 2020 - Credit
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
