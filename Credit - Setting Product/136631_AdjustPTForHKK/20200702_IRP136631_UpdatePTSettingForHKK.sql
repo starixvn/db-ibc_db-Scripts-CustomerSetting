@@ -106,8 +106,7 @@ BEGIN
 		
 	EXEC dbo.Acc_CustSetting3rd_18 @srecommend = @custid, 
 									@roleid = 4, 
-									@sporttype = 255,
-									@bettype = 1701
+									@sporttype = 255,									
 									@mode = 'GoldDeluxe',
 									@Target = @Target
 									

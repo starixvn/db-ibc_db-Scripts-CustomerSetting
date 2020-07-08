@@ -181,10 +181,7 @@ BEGIN
 														AND scs.sporttype = sco.sporttype
 														AND scs.bettype = sco.bettype
 			WHERE scs.custid = @srecommend
-				AND scs.sporttype=@sporttype 
-				AND 1 = CASE WHEN @mode = 'GoldDeluxe' AND scs.bettype = @bettype THEN 1 
-							WHEN @mode = 'Keno' AND scs.bettype IN (1501,1503,1504,1505,1508,1511,1513,1514) THEN 1 
-							ELSE 0 END
+				AND scs.sporttype=@sporttype 				
 				
             --u = (i3 or i1)?(u3 or u1)
             --s1 = min(s4-m1-a1, u)
@@ -207,10 +204,7 @@ BEGIN
 			CROSS APPLY (SELECT TOP 1 spositiontaking, mpositiontaking, apositiontaking, isautopositiontaking,autopositiontaking
 						FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
 						WHERE  cs.custid = scs.custid
-						   AND cs.sporttype = scs.sporttype
-						   AND 1 = CASE WHEN @mode = 'GoldDeluxe' AND cs.bettype = @bettype THEN 1 
-									WHEN @mode = 'Keno' AND cs.bettype IN (1501,1503,1504,1505,1508,1511,1513,1514) THEN 1 
-									ELSE 0 END
+						   AND cs.sporttype = scs.sporttype						   
 						   AND (cs.isautopositiontaking = 1
 								OR mcs.isautopositiontaking = 1)
 						)cs
