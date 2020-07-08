@@ -16,7 +16,7 @@ WHERE SportType =@sportType
 	AND BetType = @betType
 	AND SiteID = 487
 -- Insert new currency
-INSERT INTO [CustDB].[dbo].[ProductStatusSiteCurrency]
+INSERT INTO [ProductStatusSiteCurrency]
    ([SportType]
    ,[BetType]
    ,[Currency]

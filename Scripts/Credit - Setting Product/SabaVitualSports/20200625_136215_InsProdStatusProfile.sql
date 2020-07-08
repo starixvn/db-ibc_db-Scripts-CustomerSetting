@@ -16,7 +16,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 					AND BetType = @betType			
 			)
 	BEGIN
-		INSERT INTO [CustDB].[dbo].[ProductStatusProfile]
+		INSERT INTO [ProductStatusProfile]
            ([Sporttype]
            ,[Bettype]
            ,[bitmapOrder])

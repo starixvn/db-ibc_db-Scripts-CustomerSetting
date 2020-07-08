@@ -3,8 +3,6 @@
 	Task: Update ProductStatusSiteCurrency [SapaGameSetting] RedmineID:#136210
 	DB: DBCUST/CustDB
 */ 
-USE CustDB
-GO
 
 --> Step 1 add config to block add new cust
 DECLARE @UnblockTime VARCHAR(50) = '01:00 PM (GMT+8)' -- time unblock add new cust

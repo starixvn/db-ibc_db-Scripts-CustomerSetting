@@ -20,7 +20,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 					AND BetType = @betType			
 			)
 	BEGIN
-		INSERT INTO [CustDB].[dbo].[ProductSettingDetail]
+		INSERT INTO [ProductSettingDetail]
            ([SettingType]
            ,[SportType]
            ,[BetType]

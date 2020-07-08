@@ -19,7 +19,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 					AND Currency in (20,72)		
 			)
 	BEGIN
-		INSERT INTO [CustDB].[dbo].[ProductStatusSiteCurrency]
+		INSERT INTO [ProductStatusSiteCurrency]
            ([SportType]
            ,[BetType]
            ,[Currency]
@@ -38,7 +38,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			0,-- IsDisabled
 			1-- HasSynced) 
 		 )
-		 INSERT INTO [CustDB].[dbo].[ProductStatusSiteCurrency]
+		 INSERT INTO [ProductStatusSiteCurrency]
            ([SportType]
            ,[BetType]
            ,[Currency]
