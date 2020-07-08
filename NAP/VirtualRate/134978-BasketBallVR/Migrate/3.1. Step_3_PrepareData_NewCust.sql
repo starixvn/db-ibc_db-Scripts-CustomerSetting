@@ -102,7 +102,4 @@ GO
 DROP TABLE #ExcludeLicSuper
 GO
 --Step 3: Create a non clustered index
-CREATE CLUSTERED INDEX CIX_CustID ON BasketBallVR_Temp(CustID)
-GO
-
 CREATE NONCLUSTERED INDEX IX_RoleID ON BasketBallVR_Temp(RoleID)

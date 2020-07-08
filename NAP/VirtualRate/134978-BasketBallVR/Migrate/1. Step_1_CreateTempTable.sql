@@ -1,10 +1,11 @@
 /*
 	Creator: 20200615@Eden
 	Task: Create a temporaty table for data initialization - Redmine: #134978
-	Run at: CustDB@DBCUST 
+	Run at: CustDB@DBCUST
 */
 USE CustDB
 GO
+--DROP TABLE BasketBallVR_Temp
 
 CREATE TABLE [dbo].[BasketBallVR_Temp](
 	[VRValue_HDPLive] [money] NULL,
@@ -21,8 +22,12 @@ CREATE TABLE [dbo].[BasketBallVR_Temp](
 	[recommend] [int] NULL,
 	[RoleID] [tinyint] NULL,
 	[CustID] [int] NULL,
-	[IsManuallyUpdate] BIT NULL DEFAULT(0)
+	[IsManuallyUpdate] BIT NULL DEFAULT(0),
+	[IsFinish] BIT NULL DEFAULT(0)
 ) ON [PRIMARY]
 
 GO
 
+--Step 3: Create a non clustered index
+CREATE CLUSTERED INDEX CIX_CustID ON BasketBallVR_Temp(CustID)
+GO
