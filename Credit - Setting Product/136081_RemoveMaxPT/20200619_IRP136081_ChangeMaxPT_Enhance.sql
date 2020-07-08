@@ -24,7 +24,7 @@ BEGIN
 	INSERT INTO #CustList (CustId, Sporttype, Bettype, IsLive)
 	SELECT CustId, Sporttype, Bettype, IsLive
 	FROM CustPTSetting3rd_Agent WITH (NOLOCK)
-	WHERE MaxPT <> 100 AND sporttype = 200
+	WHERE MaxPT <> 100
 
 	WHILE (1=1)
 	BEGIN
