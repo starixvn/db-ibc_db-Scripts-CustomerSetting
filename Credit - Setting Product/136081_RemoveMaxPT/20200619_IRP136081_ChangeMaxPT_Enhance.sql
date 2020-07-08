@@ -28,9 +28,7 @@ BEGIN
 
 	WHILE (1=1)
 	BEGIN
-		INSERT INTO #CustListBatch (CustId, Sporttype, Bettype, IsLive)
-		SELECT TOP (@Batch) CustId, Sporttype, Bettype, IsLive
-		FROM #CustList
+		DELETE TOP (@Batch) FROM #CustList OUTPUT deleted.CustId, deleted.Sporttype, deleted.Bettype, deleted.IsLive INTO #CustListBatch (CustID, Sporttype, bettype, islive)		
 	
 		IF @@ROWCOUNT = 0 BREAK
 
