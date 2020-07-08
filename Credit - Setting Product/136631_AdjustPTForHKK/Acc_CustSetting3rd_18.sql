@@ -182,8 +182,8 @@ BEGIN
 														AND scs.bettype = sco.bettype
 			WHERE scs.custid = @srecommend
 				AND scs.sporttype=@sporttype 
-				AND 1 = CASE WHEN @mode = 'GoldDeluxe' AND cs.bettype = @bettype THEN 1 
-							WHEN @mode = 'Keno' AND cs.bettype IN (1501,1503,1504,1505,1508,1511,1513,1514) THEN 1 
+				AND 1 = CASE WHEN @mode = 'GoldDeluxe' AND scs.bettype = @bettype THEN 1 
+							WHEN @mode = 'Keno' AND scs.bettype IN (1501,1503,1504,1505,1508,1511,1513,1514) THEN 1 
 							ELSE 0 END
 				
             --u = (i3 or i1)?(u3 or u1)
