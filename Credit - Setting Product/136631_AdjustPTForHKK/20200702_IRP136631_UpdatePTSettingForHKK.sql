@@ -9,6 +9,7 @@
 
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid INT,		
+	@maxcustid INT,
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -96,7 +97,7 @@ BEGIN
 									@Target = @Target
 	
 	--GoldDeluxe
-	SELECT @PT = 0.85
+	SELECT @PT = 0.93
 	
 	UPDATE CustSettingGame WITH(UPDLOCK,ROWLOCK)
     SET spositiontaking = @PT
@@ -173,7 +174,76 @@ BEGIN
 				,@Roleid = 4		
 				,@SportBettypeXML = @SportBettypeXML
 				,@Target = @Target	
-				
+	
+	--update LossLimit & bet setting
+	/*CREATE TABLE #Downlines (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT 0)
+	
+	INSERT INTO #Downlines (custid,roleid)
+	SELECT custid, roleid
+	FROM custinfo WITH(NOLOCK)
+	WHERE srecommend = @custid
+		AND Enabled = 1
+		AND custid <= @maxcustid
+		
+	DECLARE @BatchMember TABLE(custid PRIMARY KEY, roleid TINYINT)
+	
+	WHILE(1=1)
+	BEGIN
+		UPDATE TOP (5000) t
+		SET isfinished = 1
+		OUTPUT DELETED.custid, DELTED.roleid INTO @BatchMember(custid,roleid)
+		FROM #Downlines
+		WHERE isfinished = 0
+		ORDER BY roleid DESC
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+			
+		UPDATE cs
+		SET MaxLossLimit = 500000
+		FROM CustWinLimit cs WITH (UPDLOCK,ROWLOCK)
+		WHERE custid IN (SELECT custid FROM @BatchMember)
+			AND sporttype IN (208) --casino
+			AND MaxLossLimit > 500000
+		
+		UPDATE cs 
+		SET MaxLossLimit = 500000
+		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
+		WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
+			AND sporttype IN (180	,--	Virtual Soccer							
+								211	,--	Allbet
+								212	,--	Macau Games
+								220	,--	Lottery
+								222	,--	Table Game
+								224	,--	RNG War
+								225	,--	ION								
+								243	,--	Sexy Gaming
+								244	,--	SA Gaming
+								245	,--	Virtual Games
+								219	,--	Fishing World
+								241	--	BBIN
+							)	
+			AND MaxLossLimit > 500000
+			
+		UPDATE cs 
+		SET MaxLossLimit = 500000
+		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
+		WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
+			AND sporttype IN (180	,--	Virtual Soccer							
+								211	,--	Allbet
+								212	,--	Macau Games
+								220	,--	Lottery
+								222	,--	Table Game
+								224	,--	RNG War
+								225	,--	ION								
+								243	,--	Sexy Gaming
+								244	,--	SA Gaming
+								245	,--	Virtual Games
+								219	,--	Fishing World
+								241	--	BBIN
+							)	
+			AND MaxLossLimit > 500000	
+	END*/
 END
 GO
 

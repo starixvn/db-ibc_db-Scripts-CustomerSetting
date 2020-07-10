@@ -204,7 +204,8 @@ BEGIN
 			CROSS APPLY (SELECT TOP 1 spositiontaking, mpositiontaking, apositiontaking, isautopositiontaking,autopositiontaking
 						FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
 						WHERE  cs.custid = scs.custid
-						   AND cs.sporttype = scs.sporttype						   
+						   AND cs.sporttype = scs.sporttype	
+						    AND cs.bettype = scs.bettype										
 						   AND (cs.isautopositiontaking = 1
 								OR mcs.isautopositiontaking = 1)
 						)cs
