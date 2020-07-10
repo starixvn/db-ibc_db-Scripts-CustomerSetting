@@ -95,7 +95,7 @@ BEGIN
 		,cs.IsAutoSuperPT
 		,cs.AutoSuperPT
 		,cs.MinPT
-		,@MaxPT
+		,100--@MaxPT
 	FROM dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) 
 		INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.custid = cs.custid
 		CROSS APPLY #DestinationSportBetType dest
