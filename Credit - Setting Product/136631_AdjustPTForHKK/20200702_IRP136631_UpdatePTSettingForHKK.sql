@@ -9,7 +9,7 @@
 
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid INT,		
-	@maxcustid INT,
+	--@maxcustid INT,
     @Target VARCHAR(20) = ''
 AS
 BEGIN
