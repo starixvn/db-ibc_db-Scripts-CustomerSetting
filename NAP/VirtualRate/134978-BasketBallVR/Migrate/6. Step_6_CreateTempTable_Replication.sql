@@ -18,6 +18,7 @@ CREATE TABLE [dbo].[BasketBallVR_Temp](
 	[VRValue_MNNonLive] [money] NULL,
 	[HasSameVR] [bit] NULL DEFAULT ((1)),
 	[CustID] [int] NULL,
+	[srecommend] [int] NULL,
 	[IsManuallyUpdate] BIT NULL DEFAULT(0),
 	[IsFinish] BIT NULL DEFAULT(0)
 ) ON [PRIMARY]
@@ -25,7 +26,9 @@ CREATE TABLE [dbo].[BasketBallVR_Temp](
 GO
 
 --Step 3: Create a non clustered index
-CREATE CLUSTERED INDEX CIX_CustID ON BasketBallVR_Temp(CustID)
+CREATE CLUSTERED INDEX CIX_BasketBallVR_CustID ON BasketBallVR_Temp(CustID)
+GO
+CREATE NONCLUSTERED INDEX IX_BasketBallVR_srecommend ON BasketBallVR_Temp(srecommend)
 GO
 
 INSERT INTO [dbo].[BasketBallVR_Temp](
@@ -41,6 +44,7 @@ INSERT INTO [dbo].[BasketBallVR_Temp](
 	,CustID
 	,IsManuallyUpdate
 	,IsFinish
+	,srecommend
 )
 SELECT  VRValue_HDPLive
 	,VRValue_HDPNonLive
@@ -54,4 +58,5 @@ SELECT  VRValue_HDPLive
 	,CustID
 	,IsManuallyUpdate
 	,IsFinish
+	,srecommend
 FROM DBCUST.CUSTDB.dbo.BasketBallVR_Temp WITH(NOLOCK)

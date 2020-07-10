@@ -28,6 +28,8 @@ CREATE TABLE [dbo].[BasketBallVR_Temp](
 
 GO
 
---Step 3: Create a non clustered index
-CREATE CLUSTERED INDEX CIX_CustID ON BasketBallVR_Temp(CustID)
+--Step 3: Create index
+CREATE CLUSTERED INDEX CIX_BasketBallVR_CustID ON BasketBallVR_Temp(CustID)
+GO
+CREATE NONCLUSTERED INDEX IX_BasketBallVR_srecommend ON BasketBallVR_Temp(srecommend)
 GO
