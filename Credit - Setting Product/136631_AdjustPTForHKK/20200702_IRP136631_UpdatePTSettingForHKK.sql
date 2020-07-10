@@ -9,7 +9,7 @@
 
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
     @custid INT,		
-	--@maxcustid INT,
+	@maxcustid INT,
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -176,7 +176,7 @@ BEGIN
 				,@Target = @Target	
 	
 	--update LossLimit & bet setting
-	/*CREATE TABLE #Downlines (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT 0)
+	CREATE TABLE #Downlines (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT 0)
 	
 	INSERT INTO #Downlines (custid,roleid)
 	SELECT custid, roleid
@@ -187,6 +187,29 @@ BEGIN
 		
 	DECLARE @BatchMember TABLE(custid PRIMARY KEY, roleid TINYINT)
 	
+	DECLARE @BetSetting TABLE(sporttype INT, MinBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
+	
+	INSERT INTO @BetSetting(sporttype,MinBet,MaxBet,MaxPerMatch)
+	SELECT 	180	, 5, 4200, 65000--	Virtual Soccer
+	UNION ALL SELECT 	181	, 5, 4200, 65000--	Virtual Horse Racing
+	UNION ALL SELECT 	182	, 5, 4200, 65000--	Virtual Greyhounds
+	UNION ALL SELECT 	183	, 5, 4200, 65000--	Virtual Speedway
+	UNION ALL SELECT 	184	, 5, 4200, 65000--	Virtual Motorsports
+	UNION ALL SELECT 	185	, 5, 4200, 65000--	Virtual Cycling
+	UNION ALL SELECT 	186	, 5, 4200, 65000--	Virtual Tennis
+	UNION ALL SELECT 	190	, 5, 4200, 65000--	Virtual Soccer League
+	UNION ALL SELECT 	191	, 5, 4200, 65000--	Virtual Soccer Nation
+	UNION ALL SELECT 	192	, 5, 4200, 65000--	Virtual Soccer World Cup
+	UNION ALL SELECT 	193	, 5, 4200, 65000--	Virtual Basketball
+	UNION ALL SELECT 	199	, 5, 4200, 65000--	Virtual Sports Parlay
+	UNION ALL SELECT 	161	, 10, 6000, 180000--	Number game
+	UNION ALL SELECT 	164	, 10, 12000, 120000--	Happy 5
+	UNION ALL SELECT 	202	, 5, 4200, 65000--	RnG Keno
+	UNION ALL SELECT 	220	, 5, 4200, 65000--	Lottery
+	UNION ALL SELECT 	224	, 5, 4200, 65000--	RnG War	
+	UNION ALL SELECT 	222	, 5, 4200, 65000--	Table Game
+	
+
 	WHILE(1=1)
 	BEGIN
 		UPDATE TOP (5000) t
@@ -242,8 +265,23 @@ BEGIN
 								219	,--	Fishing World
 								241	--	BBIN
 							)	
-			AND MaxLossLimit > 500000	
-	END*/
+			AND MaxLossLimit > 500000
+
+		--RnG Keno
+		UPDATE cs
+		SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
+			cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END,
+			cs.MaxPerGameType = CASE WHEN cs.MaxPerGameType > b.MaxPerMatch THEN b.MaxPerMatch ELSE cs.MaxPerGameType END
+		FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN @BetSetting b ON cs.sporttype = b.sporttype
+		WHERE custid IN (SELECT custid FROM @BatchMember)
+			AND b.GameTypeID BETWEEN 1 AND 26
+			AND (cs.MinBet > b.MinBet 
+				OR cs.MaxBet > b.MaxBet
+				OR cs.MaxPerGameType > b.MaxPerMatch
+				)
+			
+	END
 END
 GO
 
