@@ -26,7 +26,7 @@ BEGIN
 	    AND dbo.f_CheckRepTable('CustSetting3rd') = 1 
 	    AND dbo.f_CheckRepTable('CustOverride3rd') = 1 
 		AND dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 1 	    		
-		AND dbo.f_CheckRepTable('CustSetting3rd') = 1
+		AND dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 1
 		AND dbo.f_CheckRepTable('CustSettingGame') = 1
 		AND dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 1
 		AND dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 1	
@@ -192,7 +192,7 @@ BEGIN
 		AND Enabled = 1
 		AND custid <= @maxcustid
 		
-	DECLARE @BatchMember TABLE(custid PRIMARY KEY, roleid TINYINT)
+	DECLARE @BatchMember TABLE(custid INT PRIMARY KEY, roleid TINYINT)
 	
 	DECLARE @BetSetting TABLE(sporttype INT, MinBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
 	
@@ -223,10 +223,10 @@ BEGIN
 		
 		UPDATE TOP (500) t
 		SET isfinished = 1
-		OUTPUT DELETED.custid, DELTED.roleid INTO @BatchMember(custid,roleid)
+		OUTPUT DELETED.custid, DELETED.roleid INTO @BatchMember(custid,roleid)
 		FROM #Downlines t
-		WHERE isfinished = 0
-		ORDER BY roleid DESC
+		WHERE isfinished = 0		
+				
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
@@ -345,7 +345,7 @@ BEGIN
 		SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
 			cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END,
 			cs.MaxPerGameType = CASE WHEN cs.MaxPerGameType > b.MaxPerMatch THEN b.MaxPerMatch ELSE cs.MaxPerGameType END
-		FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
+		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			CROSS APPLY (SELECT * FROM @BetSetting WHERE sporttype = 202 )b 
 		WHERE custid IN (SELECT custid FROM @BatchMember)
 			AND cs.GameTypeID BETWEEN 1 AND 26			
@@ -368,8 +368,6 @@ BEGIN
 	END
 END
 GO
-
-
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
@@ -377,7 +375,8 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @custid INT
+DECLARE @custid INT,
+		@maxcustid INT = xxx
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
@@ -413,7 +412,8 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
 	
 	EXEC dbo.[Acc_CustSetting_19] 
-			@custid = @custid, 			
+			@custid = @custid, 
+			@maxcustid = @maxcustid,
 			@target = 'REPLICATED' 	
 				
 	WAITFOR DELAY '00:00:00.280'			
@@ -426,7 +426,8 @@ GO
 ---
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB -----
 --------------------------------------------------------------------------------------
-DECLARE @custid INT
+DECLARE @custid INT,
+		@maxcustid INT = xxx
 
 CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
 
@@ -462,7 +463,8 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
 	
 	EXEC dbo.[Acc_CustSetting_19] 
-			@custid = @custid, 			
+			@custid = @custid, 	
+			@maxcustid = @maxcustid,
 			@target = 'DBCUST' 	
 				
 	WAITFOR DELAY '00:00:00.280'			
