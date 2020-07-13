@@ -4,7 +4,7 @@
 	DB: DBCUST/CUSTDB
 */
 
-CREATE TABLE #tmpSetting (GameTypeID INT, MinStake MONEY, MaxStake MONEY, MinLabel MONEY, MaxLabel MONEY)
+CREATE TABLE #tmpSetting (GameTypeID INT, MinStake MONEY, MaxStake MONEY, MinLabel VARCHAR(10), MaxLabel VARCHAR(10))
 
 INSERT INTO #tmpSetting(GameTypeID,MinStake,MaxStake,MinLabel,MaxLabel)
 SELECT 	4138	,	1.5	,	450	,	'1.5'	,	'450'	--	3 Genie Wishes
@@ -109,8 +109,8 @@ WHERE GameTypeID = 4101
 UPDATE s
 SET s.MinStake = t.MinStake,
 	s.MaxStake = t.MaxStake,
-	s.MinLabel = t.MinStake,
-	s.MaxLabel = t.MaxStake
+	s.MinLabel = t.MinLabel,
+	s.MaxLabel = t.MaxLabel
 FROM StakeLevelGroupDetail s WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN #tmpSetting t ON s.GameTypeID = t.GameTypeID
 WHERE s.StakeLevelID = @StakeLevelID	
