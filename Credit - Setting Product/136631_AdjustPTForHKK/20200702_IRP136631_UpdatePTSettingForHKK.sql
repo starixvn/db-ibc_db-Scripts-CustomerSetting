@@ -18,7 +18,7 @@ BEGIN
 	IF (@target = 'REPLICATED' AND @@SERVERNAME  IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2') ) RETURN	-- run at all replicated servers
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
-		if NOT(dbo.f_CheckRepTable('custinfo') = 1 
+	IF NOT(dbo.f_CheckRepTable('custinfo') = 1 
 		AND dbo.f_CheckRepTable('CustSetting') = 1 
 	    AND dbo.f_CheckRepTable('CustOverride') = 1 
 	    AND dbo.f_CheckRepTable('CustSettingGame') = 1 
@@ -26,6 +26,13 @@ BEGIN
 	    AND dbo.f_CheckRepTable('CustSetting3rd') = 1 
 	    AND dbo.f_CheckRepTable('CustOverride3rd') = 1 
 		AND dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 1 	    		
+		AND dbo.f_CheckRepTable('CustSetting3rd') = 1
+		AND dbo.f_CheckRepTable('CustSettingGame') = 1
+		AND dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 1
+		AND dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 1	
+		AND dbo.f_CheckRepTable('CustWinLimit') = 1
+		AND dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 1		
+		AND dbo.f_CheckRepTable('CustWinLossLimit_Member') = 1
 	    )
 	   RETURN
 	   
@@ -190,18 +197,18 @@ BEGIN
 	DECLARE @BetSetting TABLE(sporttype INT, MinBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
 	
 	INSERT INTO @BetSetting(sporttype,MinBet,MaxBet,MaxPerMatch)
-	SELECT 	180	, 5, 4200, 65000--	Virtual Soccer
-	UNION ALL SELECT 	181	, 5, 4200, 65000--	Virtual Horse Racing
-	UNION ALL SELECT 	182	, 5, 4200, 65000--	Virtual Greyhounds
-	UNION ALL SELECT 	183	, 5, 4200, 65000--	Virtual Speedway
-	UNION ALL SELECT 	184	, 5, 4200, 65000--	Virtual Motorsports
-	UNION ALL SELECT 	185	, 5, 4200, 65000--	Virtual Cycling
-	UNION ALL SELECT 	186	, 5, 4200, 65000--	Virtual Tennis
-	UNION ALL SELECT 	190	, 5, 4200, 65000--	Virtual Soccer League
-	UNION ALL SELECT 	191	, 5, 4200, 65000--	Virtual Soccer Nation
-	UNION ALL SELECT 	192	, 5, 4200, 65000--	Virtual Soccer World Cup
-	UNION ALL SELECT 	193	, 5, 4200, 65000--	Virtual Basketball
-	UNION ALL SELECT 	199	, 5, 4200, 65000--	Virtual Sports Parlay
+	SELECT 	180	, 5, 2200, 50000--	Virtual Soccer
+	UNION ALL SELECT 	181	, 5, 2200, 50000--	Virtual Horse Racing
+	UNION ALL SELECT 	182	, 5, 2200, 50000--	Virtual Greyhounds
+	UNION ALL SELECT 	183	, 5, 2200, 50000--	Virtual Speedway
+	UNION ALL SELECT 	184	, 5, 2200, 50000--	Virtual Motorsports
+	UNION ALL SELECT 	185	, 5, 2200, 50000--	Virtual Cycling
+	UNION ALL SELECT 	186	, 5, 2200, 50000--	Virtual Tennis
+	UNION ALL SELECT 	190	, 5, 2200, 50000--	Virtual Soccer League
+	UNION ALL SELECT 	191	, 5, 2200, 50000--	Virtual Soccer Nation
+	UNION ALL SELECT 	192	, 5, 2200, 50000--	Virtual Soccer World Cup
+	UNION ALL SELECT 	193	, 5, 2200, 50000--	Virtual Basketball
+	UNION ALL SELECT 	199	, 5, 2200, 50000--	Virtual Sports Parlay
 	UNION ALL SELECT 	161	, 10, 6000, 180000--	Number game
 	UNION ALL SELECT 	164	, 10, 12000, 120000--	Happy 5
 	UNION ALL SELECT 	202	, 5, 4200, 65000--	RnG Keno
@@ -212,10 +219,12 @@ BEGIN
 
 	WHILE(1=1)
 	BEGIN
-		UPDATE TOP (5000) t
+		DELETE @BatchMember
+		
+		UPDATE TOP (500) t
 		SET isfinished = 1
 		OUTPUT DELETED.custid, DELTED.roleid INTO @BatchMember(custid,roleid)
-		FROM #Downlines
+		FROM #Downlines t
 		WHERE isfinished = 0
 		ORDER BY roleid DESC
 		
@@ -229,58 +238,133 @@ BEGIN
 			AND sporttype IN (208) --casino
 			AND MaxLossLimit > 500000
 		
-		UPDATE cs 
-		SET MaxLossLimit = 500000
-		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
-		WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
-			AND sporttype IN (180	,--	Virtual Soccer							
-								211	,--	Allbet
-								212	,--	Macau Games
-								220	,--	Lottery
-								222	,--	Table Game
-								224	,--	RNG War
-								225	,--	ION								
-								243	,--	Sexy Gaming
-								244	,--	SA Gaming
-								245	,--	Virtual Games
-								219	,--	Fishing World
-								241	--	BBIN
-							)	
-			AND MaxLossLimit > 500000
+		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid > 1)
+		BEGIN
+			UPDATE cs 
+			SET MaxLossLimit = 500000
+			FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
+			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
+				AND sporttype IN (180	,--	Virtual Soccer							
+									211	,--	Allbet
+									212	,--	Macau Games
+									220	,--	Lottery
+									222	,--	Table Game
+									224	,--	RNG War
+									225	,--	ION								
+									243	,--	Sexy Gaming
+									244	,--	SA Gaming
+									245	,--	Virtual Games
+									219	,--	Fishing World
+									241	--	BBIN
+								)	
+				AND MaxLossLimit > 500000
 			
-		UPDATE cs 
-		SET MaxLossLimit = 500000
-		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
-		WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
-			AND sporttype IN (180	,--	Virtual Soccer							
-								211	,--	Allbet
-								212	,--	Macau Games
-								220	,--	Lottery
-								222	,--	Table Game
-								224	,--	RNG War
-								225	,--	ION								
-								243	,--	Sexy Gaming
-								244	,--	SA Gaming
-								245	,--	Virtual Games
-								219	,--	Fishing World
-								241	--	BBIN
-							)	
-			AND MaxLossLimit > 500000
+			UPDATE cs
+			SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
+				cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END,
+				cs.MaxPerMatch = CASE WHEN cs.MaxPerMatch > b.MaxPerMatch THEN b.MaxPerMatch ELSE cs.MaxPerMatch END		
+			FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
+				INNER JOIN @BetSetting b ON cs.sporttype = b.sporttype
+			WHERE custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
+				AND b.sporttype IN (180,--Virtual soccer
+									181	,--	Virtual Horse Racing
+				                    182	,--	Virtual Greyhounds
+				                    183	,--	Virtual Speedway
+				                    184	,--	Virtual Motorsports
+				                    185	,--	Virtual Cycling
+				                    186	,--	Virtual Tennis
+				                    190	,--	Virtual Soccer League
+				                    191	,--	Virtual Soccer Nation
+				                    192	,--	Virtual Soccer World Cup
+				                    193	,--	Virtual Basketball
+				                    199	,--	Virtual Sports Parlay									
+									220	,--	Lottery
+									222	,--	Table Game
+									224	--	RNG War	
+								)
+				AND (cs.MinBet > b.MinBet 
+					OR cs.MaxBet > b.MaxBet				
+					OR cs.MaxPerMatch > b.MaxPerMatch
+					)
+		END
 
+		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid = 1)	
+		BEGIN
+			--Loss Limit
+			UPDATE cs 
+			SET MaxLossLimit = 500000
+			FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
+			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
+				AND sporttype IN (180	,--	Virtual Soccer							
+									211	,--	Allbet
+									212	,--	Macau Games
+									220	,--	Lottery
+									222	,--	Table Game
+									224	,--	RNG War
+									225	,--	ION								
+									243	,--	Sexy Gaming
+									244	,--	SA Gaming
+									245	,--	Virtual Games
+									219	,--	Fishing World
+									241	--	BBIN
+								)	
+				AND MaxLossLimit > 500000
+			
+			--Bet setting
+			UPDATE cs
+			SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
+				cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END,
+				cs.MaxPerMatch = CASE WHEN cs.MaxPerMatch > b.MaxPerMatch THEN b.MaxPerMatch ELSE cs.MaxPerMatch END		
+			FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
+				INNER JOIN @BetSetting b ON cs.sporttype = b.sporttype
+			WHERE custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
+				AND b.sporttype IN (180,--Virtual soccer
+									181	,--	Virtual Horse Racing
+				                    182	,--	Virtual Greyhounds
+				                    183	,--	Virtual Speedway
+				                    184	,--	Virtual Motorsports
+				                    185	,--	Virtual Cycling
+				                    186	,--	Virtual Tennis
+				                    190	,--	Virtual Soccer League
+				                    191	,--	Virtual Soccer Nation
+				                    192	,--	Virtual Soccer World Cup
+				                    193	,--	Virtual Basketball
+				                    199	,--	Virtual Sports Parlay									
+									220	,--	Lottery
+									222	,--	Table Game
+									224	--	RNG War	
+								)
+				AND (cs.MinBet > b.MinBet 
+					OR cs.MaxBet > b.MaxBet				
+					OR cs.MaxPerMatch > b.MaxPerMatch
+					)
+		END
+		
 		--RnG Keno
 		UPDATE cs
 		SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
 			cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END,
 			cs.MaxPerGameType = CASE WHEN cs.MaxPerGameType > b.MaxPerMatch THEN b.MaxPerMatch ELSE cs.MaxPerGameType END
 		FROM CustSettingGame cs WITH(UPDLOCK,ROWLOCK)
-			INNER JOIN @BetSetting b ON cs.sporttype = b.sporttype
+			CROSS APPLY (SELECT * FROM @BetSetting WHERE sporttype = 202 )b 
 		WHERE custid IN (SELECT custid FROM @BatchMember)
-			AND b.GameTypeID BETWEEN 1 AND 26
+			AND cs.GameTypeID BETWEEN 1 AND 26			
 			AND (cs.MinBet > b.MinBet 
 				OR cs.MaxBet > b.MaxBet
 				OR cs.MaxPerGameType > b.MaxPerMatch
 				)
-			
+		
+		--NG, Happy 5
+		UPDATE cs
+		SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
+			cs.MaxBet = CASE WHEN cs.MaxBet > b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END			
+		FROM CustSetting3rd cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN @BetSetting b ON cs.sporttype = b.sporttype
+		WHERE custid IN (SELECT custid FROM @BatchMember)
+			AND b.sporttype IN (161,164)
+			AND (cs.MinBet > b.MinBet 
+				OR cs.MaxBet > b.MaxBet				
+				)
 	END
 END
 GO

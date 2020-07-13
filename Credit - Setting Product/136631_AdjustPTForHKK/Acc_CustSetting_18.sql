@@ -94,7 +94,7 @@ BEGIN
 		BEGIN
 			DELETE @tmp
 			
-			UPDATE TOP (1000) t 			
+			UPDATE TOP (200) t 			
 			SET isFinished = 1
 			OUTPUT DELETED.custid INTO @tmp
 			FROM #tblCust t
@@ -288,6 +288,8 @@ BEGIN
 				c.custid IN (SELECT custid FROM @tmp)
 		END	
 		--*** END: update PT on member ***-----------------------						
+		
+		DROP TABLE #tblCust
 	END
 	ELSE --@roleid in (2,3)
 	BEGIN
