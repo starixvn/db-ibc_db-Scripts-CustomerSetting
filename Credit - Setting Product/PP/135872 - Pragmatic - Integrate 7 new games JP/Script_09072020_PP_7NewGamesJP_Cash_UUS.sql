@@ -1,7 +1,7 @@
 /*
 	Date: 20200709
 	Created: Winfred 
-	Task: #135367 - Pragmatic - Initialize setting for 7 New Jackpot Games for Cash [Redmine:135875]
+	Task: #137367 - Pragmatic - Initialize setting for 7 New Jackpot Games for Cash [Redmine:135875]
 	DB: DBCUST/CUSTDB
 */
 
