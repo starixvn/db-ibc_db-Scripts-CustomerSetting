@@ -52,10 +52,12 @@ UNION ALL SELECT 	4047	,	0.15	,	37.5	,	'0.15'	,	'37.5'	--	Twin Dragon
 
 DECLARE @StakeLevelID INT
 
-SELECT @StakeLevelID = StakeLevelID
-FROM StakeLevel WITH(NOLOCK)
-WHERE GameTypeID = 4001 
-	AND exchangeid = 67
+SELECT @StakeLevelID = sl.StakeLevelID
+FROM dbo.GameGroup AS gg WITH (NOLOCK)
+	INNER JOIN	dbo.StakeLevel AS sl WITH (NOLOCK) ON sl.GameGroupID = gg.GameGroupID
+WHERE	gg.RefSportType = 212
+	AND	sl.ExchangeId = 67
+	AND	gg.IsDeposit = 0
 
 UPDATE s
 SET s.MinStake = t.MinStake,
