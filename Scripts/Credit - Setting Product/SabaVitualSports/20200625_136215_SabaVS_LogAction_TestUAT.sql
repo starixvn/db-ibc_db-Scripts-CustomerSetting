@@ -1,0 +1,18 @@
+﻿/*<info serverAlias=DBLOG-bodb_CustomerLog ></info>*/
+/*
+    Created: Winfred
+    Date: 20200623
+    Task: Manage ProductLaunchSiteCurrency / Can See : #131241
+    DB: DBLOG/bodb_CustomerLog
+*/ 
+USE bodb_CustomerLog
+GO
+UPDATE l
+SET SPName = SPName + '_xpre'
+FROM LogAction l
+WHERE ActionID IN (60528,60529,65556,65557,65558,65559,70584,70585,70586,70587,70588,70589,75612,75613,75614,75615,75616,75617,75618,75619)
+
+SELECT *
+FROM LogAction l
+WHERE ActionID IN (60528,60529,65556,65557,65558,65559,70584,70585,70586,70587,70588,70589,75612,75613,75614,75615,75616,75617,75618,75619)
+					
