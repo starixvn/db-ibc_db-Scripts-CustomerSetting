@@ -10,6 +10,10 @@ IF @@SERVERNAME NOT IN ('DBSPARE')
 
 SET NOCOUNT ON
 
+-- simulate run date based on test data version
+declare @currentDate smalldatetime 
+select @currentDate = VValue from bodb02.dbo.Systemsettings with (nolock) where VName = 'aa_TestDate'
+
 if NOT EXISTS(SELECT 1 FROM bodb02.dbo.SystemSettings WITH(NOLOCK) WHERE VValue = 'Stage 2 - Done' AND VName = 'aa_Stmt_Status')
 BEGIN
 	raisError ('Statement data for this stage not loaded yet!', 16, 1)
@@ -69,12 +73,12 @@ UNION  SELECT 	14182461--	supertest3
 UNION  SELECT 	1176070	--	SuperTest1
 
 DECLARE @startdate smalldatetime
-SET @startdate = DATEADD(mm, - 4, GETDATE())
+SET @startdate = DATEADD(mm, - 4, @currentDate)
 
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT custid
-FROM bettrans with (NOLOCK)
-WHERE bodb02.dbo.bettype <> 20000 AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+FROM bodb02.dbo.bettrans with (NOLOCK)
+WHERE bettype <> 20000 AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 UNION
 SELECT custid
 FROM bodb02.dbo.translog with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)

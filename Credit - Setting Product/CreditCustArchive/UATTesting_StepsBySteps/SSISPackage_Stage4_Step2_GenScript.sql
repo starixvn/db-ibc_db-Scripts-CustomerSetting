@@ -7,6 +7,10 @@ USE CustDB
 GO
 IF @@SERVERNAME NOT IN ('DBSPARE')
 	RETURN
+
+-- simulate run date based on test data version
+declare @currentDate smalldatetime 
+select @currentDate = VValue from bodb02.dbo.Systemsettings with (nolock) where VName = 'aa_TestDate'
 	
 if NOT EXISTS(SELECT 1 FROM bodb02.dbo.SystemSettings WITH(NOLOCK) WHERE VValue = 'Stage 4 - Done' AND VName = 'aa_Stmt_Status')
 BEGIN
@@ -68,7 +72,7 @@ UNION  SELECT 	1176070	--	SuperTest1
 
 DECLARE @DDiff DATETIME
 
-SELECT @DDiff = DATEADD(mm, -7, GETDATE())
+SELECT @DDiff = DATEADD(mm, -7, @CurrentDate)
 
 SELECT @DDiff = DATEADD(week, -2, @DDiff)
 
