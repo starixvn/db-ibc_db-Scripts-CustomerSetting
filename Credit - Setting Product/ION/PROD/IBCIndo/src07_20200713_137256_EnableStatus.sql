@@ -5,7 +5,6 @@
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	@Custid INT
-	,@maxcustid INT
 	,@target VARCHAR(20)
 
 AS
@@ -31,7 +30,6 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
-		AND ci.custid <= @maxcustid
 		AND roleid IN (2,3)
 
 	SELECT custid, roleid
@@ -39,7 +37,6 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
-		AND ci.custid <= @maxcustid
 		AND roleid = 1
 
 	UPDATE cs
@@ -83,8 +80,6 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid = xxx
-
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
@@ -95,7 +90,6 @@ WHERE ci.roleid = 4
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
-		AND ci.custid <= @max_custid
 		AND ci.Site IN ('IBCIndo')		
 
 -- For deployer info
@@ -119,11 +113,10 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
-			,@maxcustid = @max_custid
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.200'
 END
 GO
 
@@ -135,8 +128,6 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid = xxx
-
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
@@ -147,7 +138,6 @@ WHERE ci.roleid = 4
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
-		AND ci.custid <= @max_custid
 		AND ci.Site IN ('IBCIndo')		
 
 -- For deployer info
@@ -171,10 +161,9 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
-			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
-	waitfor delay '00:00:0.280'
+	waitfor delay '00:00:0.200'
 END
 
 PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
