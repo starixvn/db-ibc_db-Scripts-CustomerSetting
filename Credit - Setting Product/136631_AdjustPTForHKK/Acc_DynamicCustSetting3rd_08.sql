@@ -76,7 +76,7 @@ BEGIN
 		INSERT INTO #tblCust (custid)
 		SELECT custid 
 		FROM custinfo WITH(NOLOCK)
-		WHERE srecommend = @srecommend
+		WHERE srecommend = @_SuperID
 			AND roleid = 1
 			AND enabled = 1
 		
