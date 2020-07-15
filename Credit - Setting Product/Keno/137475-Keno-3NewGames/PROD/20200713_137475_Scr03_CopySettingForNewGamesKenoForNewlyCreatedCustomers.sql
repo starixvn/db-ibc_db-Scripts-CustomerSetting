@@ -54,7 +54,7 @@ INSERT INTO [dbo].[CustGameType]
            ,[IsDisabled])
 SELECT cg.[CustID]
    ,s.[GameTypeID]
-   ,''[StakeLevelList]
+   ,'' [StakeLevelList]
    ,cg.[MaxPerGameType]
    ,cg.[MinBet]
    ,cg.[MaxBet]

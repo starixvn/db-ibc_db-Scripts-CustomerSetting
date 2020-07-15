@@ -54,7 +54,7 @@ BEGIN
            ,[IsDisabled])
 		SELECT cg.[CustID]
            ,s.[GameTypeID]
-           ,''[StakeLevelList]
+           ,'' [StakeLevelList]
            ,[MaxPerGameType]
            ,[MinBet]
            ,[MaxBet]
