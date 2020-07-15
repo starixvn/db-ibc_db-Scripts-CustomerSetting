@@ -195,6 +195,7 @@ BEGIN
 	DECLARE @BatchMember TABLE(custid INT PRIMARY KEY, roleid TINYINT)
 	
 	DECLARE @BetSetting TABLE(sporttype INT, MinBet MONEY, MaxBet MONEY, MaxPerMatch MONEY)
+	DECLARE @LossLimitSetting TABLE(sporttype INT, LossLimit MONEY)
 	
 	INSERT INTO @BetSetting(sporttype,MinBet,MaxBet,MaxPerMatch)
 	SELECT 	180	, 5, 2200, 50000--	Virtual Soccer
@@ -216,6 +217,17 @@ BEGIN
 	UNION ALL SELECT 	224	, 5, 4200, 65000--	RnG War	
 	UNION ALL SELECT 	222	, 5, 4200, 65000--	Table Game
 	
+	INSERT INTO @LossLimitSetting (sporttype, LossLimit)
+	SELECT 180	, 500000 --	Virtual sports							
+	UNION SELECT 	211	, 500000--	Allbet	
+	UNION SELECT 	220	, 100000--	Lottery
+	UNION SELECT 	222	, 100000--	Table Game
+	UNION SELECT 	224	, 100000--	RNG War
+	UNION SELECT 	225	, 500000--	ION								
+	UNION SELECT 	243	, 500000--	Sexy Gaming
+	UNION SELECT 	244	, 500000--	SA Gaming	
+	UNION SELECT 	219	, 100000--	Fishing World
+	UNION SELECT 	241	, 500000--	BBIN
 
 	WHILE(1=1)
 	BEGIN
@@ -226,38 +238,18 @@ BEGIN
 		OUTPUT DELETED.custid, DELETED.roleid INTO @BatchMember(custid,roleid)
 		FROM #Downlines t
 		WHERE isfinished = 0		
-				
-		
+						
 		IF @@ROWCOUNT = 0
 			BREAK;
-			
-		UPDATE cs
-		SET MaxLossLimit = 500000
-		FROM CustWinLimit cs WITH (UPDLOCK,ROWLOCK)
-		WHERE custid IN (SELECT custid FROM @BatchMember)
-			AND sporttype IN (208) --casino
-			AND MaxLossLimit > 500000
-		
+					
 		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid > 1)
 		BEGIN
 			UPDATE cs 
-			SET MaxLossLimit = 500000
+			SET cs.MaxLossLimit = l.LossLimit
 			FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
-			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
-				AND sporttype IN (180	,--	Virtual Soccer							
-									211	,--	Allbet
-									212	,--	Macau Games
-									220	,--	Lottery
-									222	,--	Table Game
-									224	,--	RNG War
-									225	,--	ION								
-									243	,--	Sexy Gaming
-									244	,--	SA Gaming
-									245	,--	Virtual Games
-									219	,--	Fishing World
-									241	--	BBIN
-								)	
-				AND MaxLossLimit > 500000
+				INNER JOIN @LossLimitSetting l ON cs.sporttype = l.sporttype
+			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)				
+				AND MaxLossLimit > l.LossLimit
 			
 			UPDATE cs
 			SET cs.MinBet = CASE WHEN cs.MinBet > b.MinBet THEN b.MinBet ELSE cs.MinBet END, 
@@ -292,23 +284,11 @@ BEGIN
 		BEGIN
 			--Loss Limit
 			UPDATE cs 
-			SET MaxLossLimit = 500000
+			SET cs.MaxLossLimit = l.LossLimit
 			FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
-			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
-				AND sporttype IN (180	,--	Virtual Soccer							
-									211	,--	Allbet
-									212	,--	Macau Games
-									220	,--	Lottery
-									222	,--	Table Game
-									224	,--	RNG War
-									225	,--	ION								
-									243	,--	Sexy Gaming
-									244	,--	SA Gaming
-									245	,--	Virtual Games
-									219	,--	Fishing World
-									241	--	BBIN
-								)	
-				AND MaxLossLimit > 500000
+				INNER JOIN @LossLimitSetting l ON cs.sporttype = l.sporttype
+			WHERE cs.custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)				
+				AND cs.MaxLossLimit > l.LossLimit
 			
 			--Bet setting
 			UPDATE cs
