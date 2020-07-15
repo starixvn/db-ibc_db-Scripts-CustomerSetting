@@ -6,7 +6,7 @@
 
 UPDATE cs
 SET cs.MinLossLimit = cs2.MinLossLimit,
-	cs.DefaultLossLimit = cs.DefaultLossLimit
+	cs.DefaultLossLimit = cs2.DefaultLossLimit
 FROM LossLimit_GlobalSetting cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN LossLimit_GlobalSetting cs2 WITH(NOLOCK) ON cs.productid = cs2.productid
 WHERE cs.productid IN (5,6,22,24,38,41,44)	

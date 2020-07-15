@@ -30,7 +30,7 @@ BEGIN
 		AND dbo.f_CheckRepTable('CustSettingGame') = 1
 		AND dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 1
 		AND dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 1	
-		AND dbo.f_CheckRepTable('CustWinLimit') = 1
+		AND dbo.f_CheckRepTable('CustGameType') = 1
 		AND dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 1		
 		AND dbo.f_CheckRepTable('CustWinLossLimit_Member') = 1
 	    )
