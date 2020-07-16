@@ -259,6 +259,5 @@ DROP TABLE #DestinationSportBetType
 DROP TABLE #tmpSTListSMA
 DROP TABLE #tmpSTListMember
 DROP TABLE #supers
-DROP TABLE #CustList
 
 PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
