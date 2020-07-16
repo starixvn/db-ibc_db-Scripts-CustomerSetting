@@ -22,23 +22,7 @@ WHERE g.Productid = 8
       AND g.BetTypeID = 1501
       AND g.GroupID = 4;
 
-UPDATE g
-  SET 
-      g.GroupName = 'PP - Jackpot Prize'
-FROM Winlimit_Group g
-WHERE g.GroupID = 33;
 
-DELETE FROM WinLimit_ProductGlobalSetting
-WHERE Productid = 32
-      AND GroupID = 33;
-
-DELETE FROM WinLimit_ProductSettingDetail
-WHERE Productid = 32
-      AND GroupID = 33;
-
-DELETE FROM dbo.Winlimit_GameGroupSetting
-WHERE ProductID = 32
-      AND GroupID = 33;
 
 EXEC NAP_CWL_Initialize_Settings 
      @ProductID = 32, 
