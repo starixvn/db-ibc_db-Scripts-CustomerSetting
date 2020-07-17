@@ -29,7 +29,7 @@ CREATE TABLE [dbo].[UMConfig](
 	[SuperID] [int] NOT NULL,
 	[BeginTime] [smalldatetime] NULL,
 	[EndTime] [smalldatetime] NULL,
-	[LastModifyDTS] [datetime] NULL,
+	[Time_Stamp] [TimeStamp] NULL,
 CONSTRAINT [PK_UMConfig] PRIMARY KEY CLUSTERED 
 (
 	[ProductID] ASC,
