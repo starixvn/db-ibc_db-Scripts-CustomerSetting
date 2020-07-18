@@ -15,7 +15,7 @@
 	SELECT @ProductSettingID = p.ProductSettingID
 	FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
 		INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
-	WHERE sporttype = 248 AND SettingType = 1
+	WHERE sporttype = 248 AND SettingType = 1 AND bettype = 4101
 
 	--> API Licensee
 	CREATE TABLE #APIsupers (custid int)
@@ -30,8 +30,7 @@
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
 	 AND c.custid <= @max_custid
-	 AND c.currency IN (20)
-	 AND s.site IN ('Athena000', 'Spondemo')
+	 AND s.site NOT IN ('Athena000', 'Spondemo')
 	 AND ls.ProductSettingID = @ProductSettingID
 
 	CREATE TABLE #MemberTemp

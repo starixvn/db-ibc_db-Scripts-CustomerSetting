@@ -153,7 +153,7 @@ DECLARE @ProductSettingID INT
 SELECT @ProductSettingID = p.ProductSettingID
 FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
 	INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
-WHERE sporttype = 248 AND SettingType = 1
+WHERE sporttype = 248 AND SettingType = 1 AND bettype = 4101
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
@@ -217,7 +217,7 @@ DECLARE @ProductSettingID INT
 SELECT @ProductSettingID = p.ProductSettingID
 FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
 	INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
-WHERE sporttype = 248 AND SettingType = 1
+WHERE sporttype = 248 AND SettingType = 1 AND bettype = 4101
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 

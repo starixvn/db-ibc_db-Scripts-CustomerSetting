@@ -12,7 +12,7 @@ DECLARE @ProductSettingID INT
 SELECT @ProductSettingID = p.ProductSettingID
 FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
 	INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
-WHERE sporttype = 248 AND SettingType = 1
+WHERE sporttype = 248 AND SettingType = 1 AND bettype = 4101
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
@@ -85,4 +85,4 @@ INNER JOIN #Dep_CustPTGroupSetting_Member t ON a.AgentID = t.AgentID AND a.Sport
 DROP TABLE #Dep_CustPTGroupSetting_Member
 DROP TABLE #Dep_CustPTSetting_Agent
 DROP TABLE #Dep_CustPTSetting_Member
-DROP TABLE #Dep_LicenseeProductSetting
+
