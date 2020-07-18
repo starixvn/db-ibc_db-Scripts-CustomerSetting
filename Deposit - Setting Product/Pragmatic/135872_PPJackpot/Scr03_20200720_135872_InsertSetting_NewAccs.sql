@@ -5,8 +5,6 @@
 	DB: DBCUST/CUSTDB
 */
 
-	DECLARE @max_custid INT = xxx
-
 	DECLARE @SportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
 	INSERT INTO @SportBettype(SportType, BetType) VALUES (248, 4297)
 
@@ -29,7 +27,6 @@
 	WHERE c.roleid = 4  
 	 AND s.islicensee = 1
 	 AND ci.Enabled = 1
-	 AND c.custid <= @max_custid
 	 AND s.site NOT IN ('Athena000', 'Spondemo')
 	 AND ls.ProductSettingID = @ProductSettingID
 
@@ -59,7 +56,7 @@
 		AND(username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 	
 	INSERT INTO #SMATemp(CustID,RoleID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,90.00,s.siteid
+	SELECT ci.custid, ci.roleid, ci.currency,ci.mrecommend,100,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.custid
 		INNER JOIN dbo.Site s WITH (NOLOCK) ON c.site = s.site
@@ -67,7 +64,7 @@
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO #MemberTemp(CustID,Currency,mrecommend,PT,SiteId)
-	SELECT ci.custid, ci.currency,ci.mrecommend,90.00,s.siteid
+	SELECT ci.custid, ci.currency,ci.mrecommend,100,s.siteid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN customer c WITH (NOLOCK) ON c.custid = ci.recommend
 		INNER JOIN dbo.Site s WITH (NOLOCK) ON c.site = s.site

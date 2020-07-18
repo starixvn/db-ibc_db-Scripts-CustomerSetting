@@ -14,7 +14,7 @@ DECLARE @Sporttype INT = 248, @Bettype INT = 4297
 UPDATE p
 SET p.SettingLevel = 3
 FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
-	INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
+	INNER JOIN Dep_ProductSetting p WITH (ROWLOCK) ON p.ProductSettingID = ps.ProductSettingID
 WHERE sporttype = 248 AND SettingType = 1
 
 -->Dep_ProductSettingDetail
