@@ -7,7 +7,9 @@
 
 	DECLARE @SportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
 	INSERT INTO @SportBettype(SportType, BetType) VALUES (248, 4297)
+	DECLARE @max_custid INT
 
+	SELECT @max_custid = xxx
 	DECLARE @ProductSettingID INT
 
 	SELECT @ProductSettingID = p.ProductSettingID
