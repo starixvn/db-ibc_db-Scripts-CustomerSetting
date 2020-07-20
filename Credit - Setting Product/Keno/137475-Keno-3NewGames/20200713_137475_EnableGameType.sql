@@ -1,7 +1,7 @@
 /*
 	Created: 20200713@Eden
 	Task: update Enable new gametypes [Redmine:#137475]	
-	DB: DBTXN/bodb02
+	DB: DBPRO/bodb02
 */ 
 USE bodb02 
 GO

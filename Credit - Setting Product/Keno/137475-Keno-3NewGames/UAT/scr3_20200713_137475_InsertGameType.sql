@@ -1,7 +1,7 @@
 /*
 	Created: 20200713@Eden
 	Task: insert data in GameType for new 3 games [Redmine:#137475]	
-	DB: DBTXN/bodb02
+	DB: DBPRO/bodb02
 */ 
 USE bodb02 
 GO
