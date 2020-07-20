@@ -28,9 +28,9 @@ SELECT main.CustID
 	, main.srecommend, main.mrecommend, main.recommend
 FROM [BasketBallVR_Temp] main WITH(NOLOCK) 
 	INNER JOIN custInfo ci WITH(NOLOCK) ON main.CustID = ci.custid
-	INNER JOIN Customer a WITH(NOLOCK) ON a.custid = ci.recommend
-	INNER JOIN Customer m WITH(NOLOCK) ON m.custid = ci.mrecommend
-	INNER JOIN Customer s WITH(NOLOCK) ON s.custid = ci.srecommend
+	LEFT JOIN Customer a WITH(NOLOCK) ON a.custid = ci.recommend
+	LEFT JOIN Customer m WITH(NOLOCK) ON m.custid = ci.mrecommend
+	LEFT JOIN Customer s WITH(NOLOCK) ON s.custid = ci.srecommend
 	INNER JOIN VRValueMapping HDPLive ON HDPLive.ValueID = main.VRValue_HDPLive
 	INNER JOIN VRValueMapping HDPNonLive ON HDPNonLive.ValueID = main.VRValue_HDPNonLive
 	INNER JOIN VRValueMapping OULive ON OULive.ValueID = main.VRValue_OULive
