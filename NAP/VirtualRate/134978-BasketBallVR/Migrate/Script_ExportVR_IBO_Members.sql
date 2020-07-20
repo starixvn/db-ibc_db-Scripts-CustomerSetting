@@ -9,9 +9,9 @@ GO
 ;WITH TMP AS(
 SELECT main.CustID
 	, ci.Username
-	, s.Username Super
-	, m.Username [Master]
-	, a.Username Agent
+	, ISNULL(s.Username,'') Super
+	, ISNULL(m.Username,'') [Master]
+	, ISNULL(a.Username,'') Agent
 	, VRValue_HDPLive = HDPLive.Value
 	, VRValue_HDPNonLive = HDPNonLive.Value
 	, VRValue_OULive = OULive.Value
@@ -20,9 +20,9 @@ SELECT main.CustID
 	, VRValue_OENonLive = OENonLive.Value
 	, VRValue_MNLive = MNLive.Value
 	, VRValue_MNNonLive = MNNonLive.Value 
-	, main.srecommend
-	, main.mrecommend
-	, main.recommend
+	, ISNULL(main.srecommend,0) srecommend
+	, ISNULL(main.mrecommend,0) mrecommend
+	, ISNULL(main.recommend,0) recommend
 FROM [BasketBallVR_Temp] main WITH(NOLOCK) 
 	INNER JOIN Custinfo ci WITH(NOLOCK) ON ci.custid = main.CustID
 	LEFT JOIN Customer a WITH(NOLOCK) ON a.custid = main.recommend

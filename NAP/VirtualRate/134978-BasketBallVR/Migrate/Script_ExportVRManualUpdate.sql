@@ -14,9 +14,9 @@ SELECT main.CustID
 			WHEN main.RoleID = 3 THEN 'Master'
 			WHEN main.RoleID = 4 THEN 'Super'
 		END AS [Level]
-	, s.Username Super
-	, m.Username [Master]
-	, a.Username Agent
+	, ISNULL(s.Username,'') Super
+	, ISNULL(m.Username,'') [Master]
+	, ISNULL(a.Username,'') Agent
 	, VRValue_HDPLive = HDPLive.Value
 	, VRValue_HDPNonLive = HDPNonLive.Value
 	, VRValue_OULive = OULive.Value
@@ -25,7 +25,9 @@ SELECT main.CustID
 	, VRValue_OENonLive = OENonLive.Value
 	, VRValue_MNLive = MNLive.Value
 	, VRValue_MNNonLive = MNNonLive.Value 
-	, main.srecommend, main.mrecommend, main.recommend
+	, ISNULL(main.srecommend,0) srecommend
+	, ISNULL(main.mrecommend,0) mrecommend
+	, ISNULL(main.recommend,0) recommend
 FROM [BasketBallVR_Temp] main WITH(NOLOCK) 
 	INNER JOIN custInfo ci WITH(NOLOCK) ON main.CustID = ci.custid
 	LEFT JOIN Customer a WITH(NOLOCK) ON a.custid = ci.recommend
