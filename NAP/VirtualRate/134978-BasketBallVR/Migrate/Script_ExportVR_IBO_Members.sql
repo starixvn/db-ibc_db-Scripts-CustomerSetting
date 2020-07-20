@@ -9,8 +9,9 @@ GO
 ;WITH TMP AS(
 SELECT main.CustID
 	, ci.Username
-	, main.RoleID
-	, main.srecommend, main.mrecommend, main.recommend
+	, s.Username Super
+	, m.Username [Master]
+	, a.Username Agent
 	, VRValue_HDPLive = HDPLive.Value
 	, VRValue_HDPNonLive = HDPNonLive.Value
 	, VRValue_OULive = OULive.Value
@@ -19,8 +20,13 @@ SELECT main.CustID
 	, VRValue_OENonLive = OENonLive.Value
 	, VRValue_MNLive = MNLive.Value
 	, VRValue_MNNonLive = MNNonLive.Value 
+	, main.srecommend
+	, main.mrecommend
+	, main.recommend
 FROM [BasketBallVR_Temp] main WITH(NOLOCK) 
-	INNER JOIN Customer ci WITH(NOLOCK) ON ci.custid = main.CustID
+	INNER JOIN Custinfo ci WITH(NOLOCK) ON ci.custid = main.CustID
+	INNER JOIN Customer a WITH(NOLOCK) ON a.custid = main.recommend
+	INNER JOIN Customer m WITH(NOLOCK) ON m.custid = main.mrecommend
 	INNER JOIN Customer s WITH(NOLOCK) ON s.custid = main.srecommend
 	INNER JOIN VRValueMapping HDPLive ON HDPLive.ValueID = main.VRValue_HDPLive
 	INNER JOIN VRValueMapping HDPNonLive ON HDPNonLive.ValueID = main.VRValue_HDPNonLive
@@ -31,6 +37,7 @@ FROM [BasketBallVR_Temp] main WITH(NOLOCK)
 	INNER JOIN VRValueMapping MNLive ON MNLive.ValueID = main.VRValue_MNLive
 	INNER JOIN VRValueMapping MNNonLive ON MnNonLive.ValueID = main.VRValue_MNNonLive
 WHERE s.site =  'IBO' AND main.RoleID = 1
+	AND ci.VirtualMultiplier = 1
 )
 SELECT t.*
 FROM TMP t
@@ -43,4 +50,7 @@ WHERE (VRValue_HDPLive =0.5
 		OR VRValue_MNLive =0.5 
 		OR VRValue_MNNonLive =0.5 
 )
-ORDER BY srecommend,mrecommend,recommend
+ORDER BY  srecommend
+		, mrecommend
+		, recommend
+		, CustID
