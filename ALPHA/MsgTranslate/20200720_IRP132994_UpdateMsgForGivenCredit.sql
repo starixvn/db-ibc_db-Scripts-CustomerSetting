@@ -12,5 +12,5 @@ SET MsgNameEN = 'The new bet credit is out of the available range.',
 	MsgNameJP = N'The new bet credit is out of the available range.',
 	MsgNameKO = N'The new bet credit is out of the available range.',
 	MsgNameES = N'The new bet credit is out of the available range.',
-	MsgNameVI = N'The new bet credit is out of the available range.'
+	MsgNameVI = N'Hạn mức khả dụng mới vượt quá mức cho phép.'
 WHERE MsgID = 70006
