@@ -389,7 +389,7 @@ WHERE currency = 67
 	AND roleid = 4
 	AND site IN ('733333','222223','722222')
 
-WITH T AS (
+;WITH T AS (
 SELECT groupid
 FROM CustGroupHeadline g WITH(NOLOCK)
 	INNER JOIN vw_customer c WITH(NOLOCK) on g.custid = c.custid
@@ -456,7 +456,7 @@ WHERE currency = 67
 	AND roleid = 4
 	AND site IN ('733333','222223','722222')
 
-WITH T AS (
+;WITH T AS (
 SELECT groupid
 FROM CustGroupHeadline g WITH(NOLOCK)
 	INNER JOIN vw_customer c WITH(NOLOCK) on g.custid = c.custid
