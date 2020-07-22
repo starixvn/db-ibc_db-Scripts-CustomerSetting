@@ -11,8 +11,7 @@ SELECT custid
 FROM bodb02.dbo.customer WITH(NOLOCK)
 WHERE currency = 67
 	AND roleid IN (2,3,4)
-	AND site IN ('733333','222223','722222')
-				
+					
 UPDATE	t
 SET t.On_UserID = o.On_UserID
 FROM #tblSMA t
