@@ -8,7 +8,9 @@
 ------------------------------------------------------	
 
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
-    @custid INT,		
+    @custid INT,	
+	@UpdateMinPTNonSport BIT,
+	@IsSpecial BIT,
 	@maxcustid INT,
     @Target VARCHAR(20) = ''
 AS
@@ -78,7 +80,18 @@ BEGIN
 	
 	UPDATE cs 
 	SET maxpositiontaking = CASE WHEN bettype IN (81,83,86,88) AND @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,							
-		maxlivepositiontaking = CASE WHEN bettype IN (85,86,87,89,90) AND @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END		
+		maxlivepositiontaking = CASE WHEN bettype IN (85,86,87,89,90) AND @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END,
+
+		minpositiontaking = CASE WHEN @UpdateMinPTNonSport = 1 AND bettype IN (81,83,86,88) 
+										AND (@isSpecial = 0 
+											OR (@isSpecial = 1 AND minpositiontaking > 0 )
+											) 
+										AND @PT > minpositiontaking THEN @PT ELSE minpositiontaking END,							
+		minlivepositiontaking = CASE WHEN @UpdateMinPTNonSport = 1 AND bettype IN (85,86,87,89,90) 
+										AND (@isSpecial = 0 
+											OR (@isSpecial = 1 AND minlivepositiontaking > 0 )
+											) 
+										AND @PT > minlivepositiontaking THEN @PT ELSE minlivepositiontaking END		
 	FROM custoverride3rd cs WITH(ROWLOCK, UPDLOCK)				
 	WHERE custid = @custid
 		AND sporttype = 161
@@ -97,6 +110,15 @@ BEGIN
 		AND sporttype = 202
 		AND bettype IN (1501,1503,1504,1505,1508,1511,1513,1514)
 	
+	IF @UpdateMinPTNonSport = 1
+	BEGIN
+		UPDATE CustOverrideGame WITH(UPDLOCK,ROWLOCK)
+		SET minpositiontaking = CASE WHEN @isSpecial = 0 OR (@isSpecial = 1 AND minpositiontaking > 0) 
+										THEN @PT ELSE minpositiontaking END
+		WHERE custid = @custid 
+			AND sporttype = 202
+	END
+	
 	EXEC dbo.Acc_CustSetting3rd_18 @srecommend = @custid, 
 									@roleid = 4, 
 									@sporttype = 202,
@@ -111,7 +133,16 @@ BEGIN
     WHERE custid = @custid 
 		AND sporttype = 255
 		AND bettype = 1701
-		
+	
+	IF @UpdateMinPTNonSport = 1
+	BEGIN
+		UPDATE CustOverrideGame WITH(UPDLOCK,ROWLOCK)
+		SET minpositiontaking = CASE WHEN @isSpecial = 0 OR (@isSpecial = 1 AND minpositiontaking > 0) 
+										THEN @PT ELSE minpositiontaking END
+		WHERE custid = @custid 
+			AND sporttype = 255
+	END
+	
 	EXEC dbo.Acc_CustSetting3rd_18 @srecommend = @custid, 
 									@roleid = 4, 
 									@sporttype = 255,									
@@ -167,6 +198,10 @@ BEGIN
 	UPDATE cs 
 	SET cs.MaxPT = CASE WHEN cs.MaxPT < t.PT THEN t.PT ELSE cs.MaxPT END,
 		cs.MinPT = CASE WHEN  cs.sporttype IN (43,44) 
+							OR (@UpdateMinPTNonSport = 1
+								AND (@isSpecial = 0
+									OR @isSpecial = 1 AND cs.MinPT > 0 
+									)
 						THEN CASE WHEN cs.MinPT < t.PT THEN t.PT ELSE cs.MinPT END 
 						ELSE cs.MinPT END,
 		cs.SuperPT  =  t.PT ,
@@ -238,10 +273,11 @@ BEGIN
 		OUTPUT DELETED.custid, DELETED.roleid INTO @BatchMember(custid,roleid)
 		FROM #Downlines t
 		WHERE isfinished = 0		
-						
+				
+		
 		IF @@ROWCOUNT = 0
 			BREAK;
-					
+		
 		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid > 1)
 		BEGIN
 			UPDATE cs 
@@ -356,9 +392,11 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
+		@UpdateMinPTNonSport BIT,
+		@isSpecial BIT,
 		@maxcustid INT = xxx
 
-CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #Supers(CustID INT, UpdateMinPTNonSport BIT DEFAULT 0, isSpecial BIT DEFAULT 0, isfinished BIT DEFAULT(0))
 
 INSERT INTO #Supers(custid)
 SELECT custid
@@ -366,7 +404,26 @@ FROM vw_customer WITH(NOLOCK)
 WHERE currency = 67
 	AND roleid = 4
 	AND site IN ('733333','222223','722222')
-			
+
+--update MinPT for all NonSports normal list	
+UPDATE s
+SET UpdateMinPTNonSport = 1 
+FROM #supers s 
+	INNER JOIN vw_customer c WITH(NOLOCK) ON s.custid = c.custid
+WHERE username IN (
+'S3H','S3HH','SSF5H','S3HK','S3HJ','S3HM','S3HA','S32RMB','S32H','S32BH','S32CH','S32DH','S32EH','S32HH','S32HKD','S32KH','S32LH','S32MH','S32NH','S32PH','S32QH','S32E','SBKHK','SBKH','SMBH','SMORMB','SMOL','SMON','SMOP','SMOQ','SMOT','SMOR','SMOS','SMOA','SMOB','SMOC','SMOE','SMOU','SMOF','SMORA','MOA','MOB','SMOKH','SMOV','SMOI','SMOX','SMODH','SMOEH','SMOFH','SMOGH','SMOJH','MOY','MOE','S188HL','SV','S188HJ','S553H','S668H','SBHK','S305CRMB','S31RMB','S31ARMB','SSFH','SSF2H','S3HP','SSF6H','SSF7H','S2R','S222H','S222HK','S222AH','S222BH','S222CH','S222DH','2EH','S222FH','S222GH','2KH','S222MH','S222NH','2AH','2BH','2CH','2DH','2LH','2MH','2NH','2PH','2YH','2FH','2GH','2WH','S222JH','2HH','S222X','2HK','2XX','2WW','2RH','2IH','2QH','2OH','2SH','2AA','2UH','2HB','2VH','YSL','ADD','1JS','1JZ','NSN','YS8','SAKH','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','MK12','MK17','MK19','MK21','MK16','TH25','TH26','MK23','JC1','JC7','JC2','JC6','JC9','MK27','TH28','TH29','JC10','TH89','MK31','JC82','GAX','MK32','JC83','AK1','MK33','MK35','MK36','TH3','82H','SRHKA','SRJ','SRKH','SRHH','SRHD','SRQ','SRHC','SMQARMB','S99H','S99ah','S99HK','S99HKK','S99HKD','S99MHK','S99HA','S99HD','SAK','S99HHK','SWH','SWAH','SWHH','SWSH','WN','WT','SWB','SWC','SWD','SWE','SWF','SWG','SWI','SWJ','SWN','SWP','SWQ','SWR','SWX','WTT','WTB','WTC','WTD','WTE','WTF','WTG','RRA','WTK','KJH','KJD','KJE','KJC','GEH','GFH','DJA','DJB','DJC','DJ27','D27','DJF','SNG','DAP','PPH','SYLHK','SYLH','SYLHZ','SYLG','SYCN','SSK','SSKA','SSKB','SSKC','SSKK','SBTM','SBTH','SBTK','LHH','LHH2','LHH3','LHH7','LHH8','LHH9','LHH10','LHH12','LHA','LHB','LHJ','LHH15','S359BH','S359CH','S359HH','SLO','SLL','SLE','SLV','ALH','ALB','ALC','ALD','ALK','ALF','ALG','ALL','ALJ','ALE','ALN','ALP','ALQ','ALT','ALS','ALU','ALV','ALW','ALX','AL4','ALZ','AL1','AL3','AL2','AL5','AL6','AL7','LGH1','AL9','ALH1','ALH2','ALH3','ALH4','ALH5','ALH6','ALH7','ALH8','ALH9','ALHA','ALHB','ALHC','ALHD','ALHE','ALHF','ALHG','AG1','AG9','L1','L2','L3','L4','L5','L6','L9','L10','L11','AL10','JS','JS1','JS3','JS5','JS6','JS7','JSA','JSC','JSD','SYSHK','JSF','JSK','JSL','JSM','JSZ','SHG','JSU','JSV','JSW','JSX','JSY','JSO','JSI','JHA','JHB','JHC','JHD','SOP','TH','TF','TC','TZ','TL','TLM','TLN','D71','C1','C5','C7','TLH','C8','C9','C10','C11','C13','C15','H9','H1','JK6','C6','H2','H3','HZ','H5','CV','9H','1C','EPL','MMS','H8','S1','S2','S3','S6','S7','S9','S11','SR','CM','ZS','A6','R8','A2','A3','A5','US','J1','ZJ','CQ','A7','A9','C17','WK','WQ','Y1','DS','SX','CZ','C18','VKH','VKB','KKH','KKY','KKG','KKK','KKR','KAB','KGK','KGL','KGM','KGN','SRS','KAD','KBA','KBB','KBC','KBD','KBE','KAG','KAH','KAJ','KAK','KBG','KBH','KBJ','KBK','KBU','KBV','KBW','KAI','KAL','KAN','KAQ','KAS','KAU','KGQ','KGR','KBX','KBY','KK1','S56','KGF','KBZ','KCC','BPH','EEH','EEK','EEB','EEC','EEE','HG9','HG8','HG7','HG6','HG88','HG101','HG102','HG71','HG81','HG29','HA8','H39','H7','HG3','HG5','YK','HJUN','P2','L7','J3','P3','L8','Y2','K3','K33','HGC','D77','D78','D79','D80','D81','D82','D83','D85','D99','D66','BB1','D96','BB9','BB19','BB3','BB2','BB5','D91','D19','BB82','BB8','D18','BB63','BB6','D55','D56','D98','AK9','KW19','DB1','D97','VVY','VCY','VBY','VDY','VEY','VFY','VGY','VHY','VHJ','VHK','VJY','NBY','VKY','VAA','VMY','RG1','RG2','RG3','RG5','RG7','RG9','RG11','RG12','RG13','RGG','RG17','RG18','RG19','RG20','RGC','RG21','RG22','RG23','RG25','RG26','RG27','RG30','RG31','RG32','MG5','MG6','RG33','RG36','RG37','RG38','RG39','RG50','RG51','RG52','RG55','RG56','RG57','RG58','RG59','RG60','RG61','RG62','RG63','RG65','RG66','RG67','RG68','RG69','RG70','RG71','RG72','RG75','RG76','RG77','RG78','RG79','RG81','RM2','RG82','RM11','RG83','RG85','RG88','RG89','RG90','RG91','RM12','TS2','TS6','TS12','Y77','T88','HANN','M996','BCH','S42CH','DS2','DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12','DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','DS22','DS23','DS25','DS26','DS30','DS31','DS32','DS33','DS35','DS28','DS36','DS38','DS37','DS39','CS01','DS50','DS51','DS53','CS06','S89','DS55','MEB','JBK','JBN','JBA','LWW','AIK','QWB','BAG','BAJ','BAP','801H','802H','802AH','801AH','801BH','801CH','801DH','801HK','801Z','803H','805H','806H','807H','808H','801SH','801W','SG33Z','801Q','SG33M','801F','801G','801J','801N','EE89','801TH','801L','GG69','802CH','WP11','WP12','WP15','WRX','TTH','PDK'
+)
+
+--special list
+UPDATE s
+SET UpdateMinPTNonSport = 1,
+	isSpecial = 1
+FROM #supers s 
+	INNER JOIN vw_customer c WITH(NOLOCK) ON s.custid = c.custid
+WHERE username IN (
+'S359HK','HG','HDQ','DAB','DAC','DAF','S359HL','DAH','DAQ','S42H','S42AH','YH','S42EH','PAA','SBH','MYM','SSF','SBHF','SBHG','SSG','S2H','S2HH','S2HY','JMC','S555','S666','S777','QQKR','QQKA','QQKU','QQBS','QQKT','QQKS','QQKV','QQQ1','QQQ3','QQMM','QQQ2','QQKL','QQQ5','Q622','QQ92','PPS','PPJ','PPN','PPQ','PPZ','PPP','PPA','PPT','PPU','PPV','PPD','PPE','PPX','PPK','PPC','PPF'
+)
+	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -382,7 +439,9 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
-		,@custid = custid		
+		,@custid = custid	
+		,@UpdateMinPTNonSport = UpdateMinPTNonSport
+		,@isSpecial = isSpecial
 	WHERE isfinished = 0
 			
 	IF @@ROWCOUNT = 0 BREAK
@@ -393,7 +452,9 @@ BEGIN
 	
 	EXEC dbo.[Acc_CustSetting_19] 
 			@custid = @custid, 
-			@maxcustid = @maxcustid,
+			@UpdateMinPTNonSport = @UpdateMinPTNonSport,
+			@isSpecial = @isSpecial,
+			@maxcustid = @maxcustid,			
 			@target = 'REPLICATED' 	
 				
 	WAITFOR DELAY '00:00:00.280'			
@@ -407,9 +468,11 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB -----
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
+		@UpdateMinPTNonSport BIT,
+		@isSpecial BIT,
 		@maxcustid INT = xxx
 
-CREATE TABLE #Supers(CustID INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #Supers(CustID INT, UpdateMinPTNonSport BIT DEFAULT 0, isSpecial BIT DEFAULT 0, isfinished BIT DEFAULT(0))
 
 INSERT INTO #Supers(custid)
 SELECT custid
@@ -417,7 +480,26 @@ FROM vw_customer WITH(NOLOCK)
 WHERE currency = 67
 	AND roleid = 4
 	AND site IN ('733333','222223','722222')
-			
+
+--update MinPT for all NonSports normal list	
+UPDATE s
+SET UpdateMinPTNonSport = 1 
+FROM #supers s 
+	INNER JOIN vw_customer c WITH(NOLOCK) ON s.custid = c.custid
+WHERE username IN (
+'S3H','S3HH','SSF5H','S3HK','S3HJ','S3HM','S3HA','S32RMB','S32H','S32BH','S32CH','S32DH','S32EH','S32HH','S32HKD','S32KH','S32LH','S32MH','S32NH','S32PH','S32QH','S32E','SBKHK','SBKH','SMBH','SMORMB','SMOL','SMON','SMOP','SMOQ','SMOT','SMOR','SMOS','SMOA','SMOB','SMOC','SMOE','SMOU','SMOF','SMORA','MOA','MOB','SMOKH','SMOV','SMOI','SMOX','SMODH','SMOEH','SMOFH','SMOGH','SMOJH','MOY','MOE','S188HL','SV','S188HJ','S553H','S668H','SBHK','S305CRMB','S31RMB','S31ARMB','SSFH','SSF2H','S3HP','SSF6H','SSF7H','S2R','S222H','S222HK','S222AH','S222BH','S222CH','S222DH','2EH','S222FH','S222GH','2KH','S222MH','S222NH','2AH','2BH','2CH','2DH','2LH','2MH','2NH','2PH','2YH','2FH','2GH','2WH','S222JH','2HH','S222X','2HK','2XX','2WW','2RH','2IH','2QH','2OH','2SH','2AA','2UH','2HB','2VH','YSL','ADD','1JS','1JZ','NSN','YS8','SAKH','MK1','MK2','MK3','MK5','MK6','MK4C','TH7','MK8','MK9','MK10','MK11C','MK12','MK17','MK19','MK21','MK16','TH25','TH26','MK23','JC1','JC7','JC2','JC6','JC9','MK27','TH28','TH29','JC10','TH89','MK31','JC82','GAX','MK32','JC83','AK1','MK33','MK35','MK36','TH3','82H','SRHKA','SRJ','SRKH','SRHH','SRHD','SRQ','SRHC','SMQARMB','S99H','S99ah','S99HK','S99HKK','S99HKD','S99MHK','S99HA','S99HD','SAK','S99HHK','SWH','SWAH','SWHH','SWSH','WN','WT','SWB','SWC','SWD','SWE','SWF','SWG','SWI','SWJ','SWN','SWP','SWQ','SWR','SWX','WTT','WTB','WTC','WTD','WTE','WTF','WTG','RRA','WTK','KJH','KJD','KJE','KJC','GEH','GFH','DJA','DJB','DJC','DJ27','D27','DJF','SNG','DAP','PPH','SYLHK','SYLH','SYLHZ','SYLG','SYCN','SSK','SSKA','SSKB','SSKC','SSKK','SBTM','SBTH','SBTK','LHH','LHH2','LHH3','LHH7','LHH8','LHH9','LHH10','LHH12','LHA','LHB','LHJ','LHH15','S359BH','S359CH','S359HH','SLO','SLL','SLE','SLV','ALH','ALB','ALC','ALD','ALK','ALF','ALG','ALL','ALJ','ALE','ALN','ALP','ALQ','ALT','ALS','ALU','ALV','ALW','ALX','AL4','ALZ','AL1','AL3','AL2','AL5','AL6','AL7','LGH1','AL9','ALH1','ALH2','ALH3','ALH4','ALH5','ALH6','ALH7','ALH8','ALH9','ALHA','ALHB','ALHC','ALHD','ALHE','ALHF','ALHG','AG1','AG9','L1','L2','L3','L4','L5','L6','L9','L10','L11','AL10','JS','JS1','JS3','JS5','JS6','JS7','JSA','JSC','JSD','SYSHK','JSF','JSK','JSL','JSM','JSZ','SHG','JSU','JSV','JSW','JSX','JSY','JSO','JSI','JHA','JHB','JHC','JHD','SOP','TH','TF','TC','TZ','TL','TLM','TLN','D71','C1','C5','C7','TLH','C8','C9','C10','C11','C13','C15','H9','H1','JK6','C6','H2','H3','HZ','H5','CV','9H','1C','EPL','MMS','H8','S1','S2','S3','S6','S7','S9','S11','SR','CM','ZS','A6','R8','A2','A3','A5','US','J1','ZJ','CQ','A7','A9','C17','WK','WQ','Y1','DS','SX','CZ','C18','VKH','VKB','KKH','KKY','KKG','KKK','KKR','KAB','KGK','KGL','KGM','KGN','SRS','KAD','KBA','KBB','KBC','KBD','KBE','KAG','KAH','KAJ','KAK','KBG','KBH','KBJ','KBK','KBU','KBV','KBW','KAI','KAL','KAN','KAQ','KAS','KAU','KGQ','KGR','KBX','KBY','KK1','S56','KGF','KBZ','KCC','BPH','EEH','EEK','EEB','EEC','EEE','HG9','HG8','HG7','HG6','HG88','HG101','HG102','HG71','HG81','HG29','HA8','H39','H7','HG3','HG5','YK','HJUN','P2','L7','J3','P3','L8','Y2','K3','K33','HGC','D77','D78','D79','D80','D81','D82','D83','D85','D99','D66','BB1','D96','BB9','BB19','BB3','BB2','BB5','D91','D19','BB82','BB8','D18','BB63','BB6','D55','D56','D98','AK9','KW19','DB1','D97','VVY','VCY','VBY','VDY','VEY','VFY','VGY','VHY','VHJ','VHK','VJY','NBY','VKY','VAA','VMY','RG1','RG2','RG3','RG5','RG7','RG9','RG11','RG12','RG13','RGG','RG17','RG18','RG19','RG20','RGC','RG21','RG22','RG23','RG25','RG26','RG27','RG30','RG31','RG32','MG5','MG6','RG33','RG36','RG37','RG38','RG39','RG50','RG51','RG52','RG55','RG56','RG57','RG58','RG59','RG60','RG61','RG62','RG63','RG65','RG66','RG67','RG68','RG69','RG70','RG71','RG72','RG75','RG76','RG77','RG78','RG79','RG81','RM2','RG82','RM11','RG83','RG85','RG88','RG89','RG90','RG91','RM12','TS2','TS6','TS12','Y77','T88','HANN','M996','BCH','S42CH','DS2','DS3','DS5','DS6','DS7','DS8','DS9','DS10','DS11','DS12','DS13','DS15','DS16','DS17','DS18','DS19','DS20','DS27','DS21','DS22','DS23','DS25','DS26','DS30','DS31','DS32','DS33','DS35','DS28','DS36','DS38','DS37','DS39','CS01','DS50','DS51','DS53','CS06','S89','DS55','MEB','JBK','JBN','JBA','LWW','AIK','QWB','BAG','BAJ','BAP','801H','802H','802AH','801AH','801BH','801CH','801DH','801HK','801Z','803H','805H','806H','807H','808H','801SH','801W','SG33Z','801Q','SG33M','801F','801G','801J','801N','EE89','801TH','801L','GG69','802CH','WP11','WP12','WP15','WRX','TTH','PDK'
+)
+
+--special list
+UPDATE s
+SET UpdateMinPTNonSport = 1,
+	isSpecial = 1
+FROM #supers s 
+	INNER JOIN vw_customer c WITH(NOLOCK) ON s.custid = c.custid
+WHERE username IN (
+'S359HK','HG','HDQ','DAB','DAC','DAF','S359HL','DAH','DAQ','S42H','S42AH','YH','S42EH','PAA','SBH','MYM','SSF','SBHF','SBHG','SSG','S2H','S2HH','S2HY','JMC','S555','S666','S777','QQKR','QQKA','QQKU','QQBS','QQKT','QQKS','QQKV','QQQ1','QQQ3','QQMM','QQQ2','QQKL','QQQ5','Q622','QQ92','PPS','PPJ','PPN','PPQ','PPZ','PPP','PPA','PPT','PPU','PPV','PPD','PPE','PPX','PPK','PPC','PPF'
+)
+	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -433,7 +515,9 @@ WHILE (1 = 1)
 BEGIN
 	UPDATE TOP (1) #Supers
 	SET isfinished = 1
-		,@custid = custid		
+		,@custid = custid	
+		,@UpdateMinPTNonSport = UpdateMinPTNonSport
+		,@isSpecial = isSpecial
 	WHERE isfinished = 0
 			
 	IF @@ROWCOUNT = 0 BREAK
@@ -443,8 +527,10 @@ BEGIN
 	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
 	
 	EXEC dbo.[Acc_CustSetting_19] 
-			@custid = @custid, 	
-			@maxcustid = @maxcustid,
+			@custid = @custid, 
+			@UpdateMinPTNonSport = @UpdateMinPTNonSport,
+			@isSpecial = @isSpecial,
+			@maxcustid = @maxcustid,			
 			@target = 'DBCUST' 	
 				
 	WAITFOR DELAY '00:00:00.280'			
