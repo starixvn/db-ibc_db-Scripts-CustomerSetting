@@ -4,7 +4,8 @@
 	DB: DBONUSER/ON_USER
 */
 
-CREATE TABLE #tblSMA(CustID INT, On_userid INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #tblSMA(CustID INT)
+CREATE TABLE #On_User (On_userid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #tblSMA(custid)
 SELECT custid
@@ -12,16 +13,13 @@ FROM bodb02.dbo.customer WITH(NOLOCK)
 WHERE currency = 67
 	AND roleid IN (2,3,4)
 					
-UPDATE	t
-SET t.On_UserID = o.On_UserID
-FROM #tblSMA t
-	CROSS APPLY (SELECT TOP 1 On_UserID 
-				FROM  on_user_agent o WITH(NOLOCK)
-				WHERE t.custid = o.custid 
-					AND ServerID > 0 
-					AND iskickedout = 0
-				ORDER BY o.on_userid DESC
-				)o
+INSERT INTO #On_User(On_Userid)					
+SELECT On_UserID 
+FROM  on_user_agent o WITH(NOLOCK)
+WHERE custid IN (SELECT custid FROM #tblSMA)
+	AND ServerID > 0 
+	AND iskickedout = 0
+
 
 
 DECLARE @tmp TABLE(On_userid INT)
@@ -31,7 +29,7 @@ BEGIN
 	UPDATE TOP(5000) t
 	SET isfinished = 1
 	OUTPUT DELETED.On_UserID INTO @tmp(On_UserID)
-	FROM #tblSMA t
+	FROM #On_User t
 	WHERE isfinished = 0
 		AND On_Userid > 0
 		
@@ -48,4 +46,5 @@ BEGIN
 END
 
 DROP TABLE #tblSMA
+DROP TABLE #On_User
 
