@@ -376,7 +376,7 @@ BEGIN
                AND c.roleid = 1
                AND c.Enabled = 1
                AND cs3.sporttype = 161
-               AND cs3.bettype IN (81, 83, 89, 88)
+               AND cs3.bettype IN (81, 83, 86, 88)
                AND (cs3.isautopositiontaking = 1
                     OR mcs.isautopositiontaking = 1
                    )
