@@ -202,6 +202,7 @@ BEGIN
 								AND (@isSpecial = 0
 									OR (@isSpecial = 1 AND cs.MinPT > 0)
 									)
+								)	
 						THEN CASE WHEN cs.MinPT < t.PT THEN t.PT ELSE cs.MinPT END 
 						ELSE cs.MinPT END,
 		cs.SuperPT  =  t.PT ,
