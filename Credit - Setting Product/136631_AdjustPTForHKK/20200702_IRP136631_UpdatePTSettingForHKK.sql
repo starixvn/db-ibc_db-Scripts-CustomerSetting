@@ -200,7 +200,7 @@ BEGIN
 		cs.MinPT = CASE WHEN  cs.sporttype IN (43,44) 
 							OR (@UpdateMinPTNonSport = 1
 								AND (@isSpecial = 0
-									OR @isSpecial = 1 AND cs.MinPT > 0 
+									OR (@isSpecial = 1 AND cs.MinPT > 0)
 									)
 						THEN CASE WHEN cs.MinPT < t.PT THEN t.PT ELSE cs.MinPT END 
 						ELSE cs.MinPT END,
