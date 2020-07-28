@@ -1,6 +1,6 @@
 /*
 	Created: 20200728@Eden
-	Task: Insert IgnoredCust
+	Task: add [IX_tstamp] column of [LicenseeBAHistory] table
 	DB: DBCUST/bodb_Licensee ( and replication )
 */
 USE [bodb_Licensee]
