@@ -1,7 +1,7 @@
 /*
 	Created: 20200728@Eden
 	Task: Add IX_tstamp index for [tstamp] column of [LicenseeBAHistory] table
-	DB: DB061/bodb_Licensee
+	DB: DB052.bodb_Licensee/DB053.bodb_Licensee
 */
 USE [bodb_Licensee]
 GO
