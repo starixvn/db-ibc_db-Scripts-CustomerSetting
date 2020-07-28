@@ -1,8 +1,10 @@
 /*
 	Created: 20200728@Elodie
 	Task: update ActionTypeId for Keno
-	DB: DBCUST/CUSTDB
+	DB: DBLOG/bodb_CustomerLog
 */
+USE bodb_CustomerLog
+GO
 
 UPDATE LogAction
 SET ActionTypeID = 1
