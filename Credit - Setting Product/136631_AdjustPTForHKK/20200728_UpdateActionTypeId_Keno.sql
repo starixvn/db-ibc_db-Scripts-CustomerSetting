@@ -11,6 +11,10 @@ SET ActionTypeID = 1
 WHERE ActionID between 442 AND 447
 
 UPDATE LogAction
+SET ActionTypeID = 1
+WHERE ActionID = 506
+
+UPDATE LogAction
 SET ActionTypeID = 3
 WHERE ActionID between 379 AND 382
 
