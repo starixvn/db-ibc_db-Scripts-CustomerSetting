@@ -55,28 +55,28 @@ BEGIN
 			BREAK;
 			
 		UPDATE cs
-		SET MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE MinBet END
+		SET MinBet = 10
 		FROM CustSetting cs WITH(UPDLOCK,ROWLOCK)
 		WHERE custid IN (SELECT custid FROM @BatchMember)
-			AND minbet <> 0
+			AND minbet > 10
 		
 		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid > 1)
 		BEGIN
 			UPDATE cs
-			SET cs.MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE cs.MinBet END				
+			SET cs.MinBet = 10
 			FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 			WHERE custid IN (SELECT custid FROM @BatchMember WHERE roleid > 1)
-				AND minbet <> 0
+				AND minbet > 10
 				AND sporttype IN (43,44) 
 		END
 		
 		IF EXISTS(SELECT 1 FROM @BatchMember WHERE roleid = 1)
 		BEGIN
 			UPDATE cs
-			SET cs.MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE cs.MinBet END				
+			SET cs.MinBet = 10
 			FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			WHERE custid IN (SELECT custid FROM @BatchMember WHERE roleid = 1)
-				AND minbet <> 0
+				AND minbet > 10
 				AND sporttype IN (43,44) 
 		END
 	END	

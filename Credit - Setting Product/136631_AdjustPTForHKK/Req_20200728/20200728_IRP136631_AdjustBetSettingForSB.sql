@@ -39,17 +39,16 @@ BEGIN
 	FROM CustSetting cs WITH(NOLOCK)
 		INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)
-		AND Enabled = 1
-		AND minbet NOT IN (0,10)	
-		AND MaxBet >= 10
+		AND Enabled = 1	
+		AND MinBet > 10
 	
 	UPDATE cs
-	SET MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE MinBet END
+	SET MinBet = 10
 	FROM CustSetting cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblAdjust t ON cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
 								AND cs.bettype = t.bettype
-	WHERE minbet NOT IN (0,10)
+	WHERE minbet > 10
 	
 	--update SB2
 	TRUNCATE TABLE #tblAdjust
@@ -61,17 +60,16 @@ BEGIN
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 		AND Enabled = 1
 		AND roleid IN (2,3,4)
-		AND cs.sporttype IN (43,44)
-		AND minbet NOT IN (0,10)	
-		AND MaxBet >= 10
+		AND cs.sporttype IN (43,44)			
+		AND MinBet > 10
 	
 	UPDATE cs
-	SET MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE MinBet END
+	SET MinBet = 10
 	FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblAdjust t ON cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
 								AND cs.bettype = t.bettype
-	WHERE minbet NOT IN (0,10)
+	WHERE minbet > 10
 	
 	--update member SB2
 	TRUNCATE TABLE #tblAdjust
@@ -84,16 +82,15 @@ BEGIN
 		AND Enabled = 1
 		AND roleid = 1
 		AND cs.sporttype IN (43,44)
-		AND minbet NOT IN (0,10)	
-		AND MaxBet >= 10
+		AND MinBet > 10
 	
 	UPDATE cs
-	SET MinBet = CASE WHEN MaxBet >= 10 THEN 10 ELSE MinBet END
+	SET MinBet = 10
 	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblAdjust t ON cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
 								AND cs.bettype = t.bettype
-	WHERE minbet NOT IN (0,10)
+	WHERE minbet > 10
 
 	DROP TABLE #supers
 	DROP TABLE #tblAdjust
