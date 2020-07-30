@@ -4,7 +4,7 @@
 	Task: Create UMConfig table [Redmine:#136507]	
 		SettingType : SettingType of ProductSettingDetail Table
 		FunctionType : 1.Edit , 2.Addnew, 3...
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB and CustDB_DBTrans_CustInfo publication
 */
 
 USE [CustDB]
