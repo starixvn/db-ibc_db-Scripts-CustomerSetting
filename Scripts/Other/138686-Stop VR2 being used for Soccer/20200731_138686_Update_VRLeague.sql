@@ -6,6 +6,5 @@
 */ 
 USE bodb02
 GO
-UPDATE dbo.VRLeague WITH(ROWLOCK)
-SET IsApplied = 0
+DELETE dbo.VRLeague WITH(ROWLOCK,UPDLOCK)
 WHERE LeagueId = 7031
