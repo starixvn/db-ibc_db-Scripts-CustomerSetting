@@ -3,7 +3,7 @@
 	Task: Remove IDENTITY property from Exchangeid column
 	DB: DBCUST/CustDB
 */
-USE bodb02
+USE CustDB
 GO
 
 -- 8.Add new Primary Key.
