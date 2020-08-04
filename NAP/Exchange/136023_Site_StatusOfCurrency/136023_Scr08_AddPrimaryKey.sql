@@ -8,5 +8,5 @@ GO
 
 -- 8.Add new Primary Key.
 ALTER TABLE dbo.Exchange 
-ADD CONSTRAINT PK_ExchangeId PRIMARY KEY NONCLUSTERED (ExchangeId)
+ADD CONSTRAINT PK_ExchangeId PRIMARY KEY CLUSTERED (ExchangeId)
 
