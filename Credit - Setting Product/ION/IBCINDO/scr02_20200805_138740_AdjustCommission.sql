@@ -1,6 +1,6 @@
 /*
-	Created: Elodie@20200609
-	Task: Update comm of IBCBet
+	Created: Elodie@20200805
+	Task: Update comm of ION
 	DB: DBCUST/CustDB	
 */ 
 ALTER PROCEDURE [dbo].[Acc_Custsetting3rd_19]
@@ -11,8 +11,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ( 'DB233','DB230\SQLSERVER2008R2','DBCUST')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ( 'DB233','DB230\SQLSERVER2008R2','DBCUST')) RETURN -- run at dbcust only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ( 'DB233','DB230\SQLSERVER2008R2','SITDBCUST','DBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ( 'DB233','DB230\SQLSERVER2008R2','SITDBCUST','DBCUST')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN
@@ -29,7 +29,7 @@ BEGIN
 	FROM dbo.Customer c WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 3
 
-	SET @Discount_XML = N'<ROOT><Discount SportType="242" BetType="3201" Discount="0.00700000"/></ROOT>'
+	SET @Discount_XML = N'<ROOT><Discount SportType="225" BetType="5601" Discount="0.00800000"/></ROOT>'
 	
 	-------- UPDATE commission customer setting -------------
 	EXEC dbo.Acc_DynamicCustSetting3rd_06
