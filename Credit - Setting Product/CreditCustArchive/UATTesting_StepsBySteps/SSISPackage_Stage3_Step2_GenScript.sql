@@ -104,7 +104,7 @@ FROM customer ag WITH (NOLOCK)
 	LEFT JOIN (
 		SELECT recommend
 			,COUNT(*) TransCount
-		FROM bettrans b WITH (NOLOCK)
+		FROM bodb02.dbo.bettrans b WITH (NOLOCK)
 		WHERE custid <> recommend
 		GROUP BY recommend
 		) b ON b.recommend = agci.custid
