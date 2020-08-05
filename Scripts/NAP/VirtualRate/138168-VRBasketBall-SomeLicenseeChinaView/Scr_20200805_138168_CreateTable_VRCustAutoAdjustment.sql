@@ -15,7 +15,8 @@ GO
 CREATE TABLE [dbo].[VRCustAutoAdjustment](
 	[SportType] [smallint] NOT NULL,
 	[CustID] [int] NOT NULL,
-	[FirstBetDate] [SMALLDATETIME] NULL
+	[FirstBetDate] [date] NULL,
+	[Status] [TINYINT] NULL
  CONSTRAINT [PK_VRCustAutoAdjustment] PRIMARY KEY CLUSTERED 
 (
 	[SportType] ASC,
