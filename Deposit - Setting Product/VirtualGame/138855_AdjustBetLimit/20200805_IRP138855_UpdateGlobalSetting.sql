@@ -3,9 +3,9 @@
 	Task: update global bet limit for virtual game
 	DB: DBCUST/CUSTDB
 */
-DECLARE @tmpSetting TABLE(currency VARCHAR(10), MinBet MONEY, MaxBet MONEY, MinLabel VARCHAR(10), MaxLabel VARCHAR(10))
+DECLARE @tmpSetting TABLE(currency VARCHAR(10), MinStake MONEY, MaxStake MONEY, MinLabel VARCHAR(10), MaxLabel VARCHAR(10))
 
-INSERT INTO @tmpSetting (currency,MinBet,MaxBet,MinLabel,MaxLabel)
+INSERT INTO @tmpSetting (currency,MinStake,MaxStake,MinLabel,MaxLabel)
 SELECT	'RM'	,	5	,	10450	,	'5'	,	'10,450'
 UNION ALL SELECT	'USDT'	,	1	,	2500	,	'1'	,	'2,500'
 UNION ALL SELECT	'US$'	,	1	,	2500	,	'1'	,	'2,500'
@@ -28,8 +28,8 @@ UNION ALL SELECT	'KHR'	,	5	,	10450	,	'5'	,	'10,450'
 	WHERE GameTypeID IN (4601,4602) 
 )
 UPDATE s
-SET s.MinBet = t.Minbet,
-	s.MaxBet = t.MaxBet,
+SET s.MinStake = t.MinStake,
+	s.MaxStake = t.MaxStake,
 	s.MinLabel = t.MinLabel,
 	s.MaxLabel = t.MaxLabel
 FROM Dep_StakeLevel s WITH(UPDLOCK,ROWLOCK)
