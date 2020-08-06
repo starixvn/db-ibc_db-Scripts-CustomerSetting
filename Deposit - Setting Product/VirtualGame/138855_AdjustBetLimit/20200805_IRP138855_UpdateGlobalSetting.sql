@@ -23,7 +23,7 @@ UNION ALL SELECT	'KHR'	,	5	,	10450	,	'5'	,	'10,450'
 
 ;WITH tmp AS 
 (
-	SELECT StakeLevelID, ROW_NUMBER() over (PARTITION by siteid,GameTypeID ORDER by MaxStake asc) rn
+	SELECT StakeLevelID, ROW_NUMBER() over (PARTITION by siteid,exchangid,GameTypeID ORDER by MaxStake asc) rn
 	FROM Dep_StakeLevel WITH(NOLOCK)
 	WHERE GameTypeID IN (4601,4602) 
 )
