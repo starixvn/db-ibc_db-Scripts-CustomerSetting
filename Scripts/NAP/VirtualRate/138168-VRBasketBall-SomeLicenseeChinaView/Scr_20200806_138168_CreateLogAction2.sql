@@ -1,3 +1,4 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20200806@Eden
 	Task: Insert LogAction for AdjustmentVR Basket Ball
