@@ -7,7 +7,7 @@
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
-								,ExchangeId int, GameGroupID int default(6))
+								,ExchangeId int, GameGroupID int default(15))
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
