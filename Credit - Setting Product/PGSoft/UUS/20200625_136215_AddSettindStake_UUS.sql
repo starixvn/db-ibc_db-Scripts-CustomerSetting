@@ -107,8 +107,7 @@ GO
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
-			AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-			AND ci.currency IN (72) --YNG
+			AND ci.currency IN (20,72) --UUS,YNG
 			
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -159,8 +158,7 @@ GO
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
-			AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-			AND ci.currency IN (72) --YNG
+			AND ci.currency IN (20,72) --UUS,YNG
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
