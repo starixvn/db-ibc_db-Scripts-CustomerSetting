@@ -6,15 +6,15 @@
 	DB: DBCust/CustDB
 */
 CREATE TABLE #StakeLevel_Temp ( GameTypeID INT,
-								ExchangeId int,
-								ResourceId varchar(10) default('13'), 
+								ExchangeId int, 
 								GameGroupID int default(15))
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,ExchangeId)
+SELECT 6001,20   UNION ALL     -- UUS
 SELECT 6001,72				   -- YNG
 
-INSERT INTO StakeLevel(GameTypeID,ExchangeId,ResourceId,GameGroupID)
-SELECT GameTypeID,ExchangeId,ResourceId,GameGroupID 
+INSERT INTO StakeLevel(GameTypeID,ExchangeId,GameGroupID)
+SELECT GameTypeID,ExchangeId,GameGroupID 
 FROM #StakeLevel_Temp
 
 DROP TABLE #StakeLevel_Temp

@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200805
-	Task:  Insert Game Group [PG Game] RedmineID:#137763
+	Task:  Insert Game Group [PG Game] - Credit RedmineID:#137763
 	DB: DBCust/CustDB
 */
 DECLARE @GameGroupID SMALLINT ,@betType SMALLINT,@sportType SMALLINT

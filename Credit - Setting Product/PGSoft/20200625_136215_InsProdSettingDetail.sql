@@ -45,14 +45,14 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			@productID,
 			NULL,-- MaxPT
 			NULL,-- MaxDiscount
-			1,--  IsSync
-			0,--  IsHidden
-            0,--  IsDisabled
+			NULL,--  IsSync
+			NULL,--  IsHidden
+            NULL,--  IsDisabled
             2,--  SettingLevel
             5,--  DisplayOrder
             1,--  SettingStatus (only UAT)
             NULL,--  IntervalValue
-            55,--  RealProductId
+            22,--  RealProductId
             NULL--  MaxChoice
 		)
 	END		

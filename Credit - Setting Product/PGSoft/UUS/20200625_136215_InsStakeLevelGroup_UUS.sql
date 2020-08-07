@@ -11,6 +11,27 @@ CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVA
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
+--UUS
+SELECT 6001 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6002 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6003 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6004 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6005 ,'5'      ,'5000'      ,5      ,5000      ,20   UNION ALL
+SELECT 6006 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6007 ,'2'      ,'500'       ,2      ,500       ,20   UNION ALL
+SELECT 6008 ,'2'      ,'1000'      ,2      ,1000      ,20   UNION ALL
+SELECT 6009 ,'2'      ,'2000'      ,2      ,2000      ,20   UNION ALL
+SELECT 6010 ,'2.5'    ,'750'       ,2.5    ,750       ,20   UNION ALL
+SELECT 6011 ,'2'      ,'500'       ,2      ,500       ,20   UNION ALL
+SELECT 6012 ,'2'      ,'500'       ,2      ,500       ,20   UNION ALL
+SELECT 6013 ,'5'      ,'1000'      ,5      ,1000      ,20   UNION ALL
+SELECT 6014 ,'3'      ,'300'       ,3      ,300       ,20   UNION ALL
+SELECT 6015 ,'2'      ,'500'       ,2      ,500       ,20   UNION ALL
+SELECT 6016 ,'2'      ,'200'       ,2      ,200       ,20   UNION ALL
+SELECT 6017 ,'3'      ,'600'       ,3      ,600       ,20   UNION ALL
+SELECT 6018 ,'2'      ,'1000'      ,2      ,1000      ,20   UNION ALL
+SELECT 6019 ,'5'      ,'10000'     ,5      ,10000     ,20   UNION ALL
+SELECT 6020 ,'2'      ,'2000'      ,2      ,2000      ,20   UNION ALL
 --YNG
 SELECT 6001 ,'2'      ,'200'       ,2      ,200       ,72   UNION ALL
 SELECT 6002 ,'2'      ,'200'       ,2      ,200       ,72   UNION ALL

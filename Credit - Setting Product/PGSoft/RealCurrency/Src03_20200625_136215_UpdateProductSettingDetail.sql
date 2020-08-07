@@ -6,7 +6,7 @@
 	DB: DBCUST/CustDB
 */ 
 
-DECLARE @BetType INT,@GameGroupID INT,@SportType SMALLINT,@StakeLevelID INT,@MaxCustID INT
+DECLARE @BetType INT,@SportType SMALLINT
 SELECT @BetType = 6001,@SportType = 232
 
 UPDATE S
