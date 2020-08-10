@@ -58,31 +58,31 @@ BEGIN
 	SELECT s.Custid,SportType,BetType,IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =232 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.CustID,Sporttype,Bettype,IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =232 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT AgentID,SportType,BetType,IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =232 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =232 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =244 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =232 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
