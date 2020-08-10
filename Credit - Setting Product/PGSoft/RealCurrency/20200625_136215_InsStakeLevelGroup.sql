@@ -183,6 +183,27 @@ SELECT 6018 ,'4'      ,'2000'      ,4      ,2000      ,43   UNION ALL
 SELECT 6019 ,'5'      ,'10000'     ,5      ,10000     ,43   UNION ALL
 SELECT 6020 ,'4'      ,'4000'      ,4      ,4000      ,43   UNION ALL
 --=============================================
+--EURO	--EUR
+SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,6    UNION ALL	
+SELECT 6002 ,'0.2'    ,'20'        ,0.2    ,20        ,6    UNION ALL	
+SELECT 6003 ,'0.2'    ,'20'        ,0.2    ,20        ,6    UNION ALL	
+SELECT 6004 ,'0.2'    ,'20'        ,0.2    ,20        ,6    UNION ALL	
+SELECT 6005 ,'0.25'   ,'250'       ,0.25   ,250       ,6    UNION ALL	
+SELECT 6006 ,'0.2'    ,'20'        ,0.2    ,20        ,6    UNION ALL	
+SELECT 6007 ,'0.2'    ,'50'        ,0.2    ,50        ,6    UNION ALL	
+SELECT 6008 ,'0.2'    ,'100'       ,0.2    ,100       ,6    UNION ALL	
+SELECT 6009 ,'0.2'    ,'200'       ,0.2    ,200       ,6    UNION ALL	
+SELECT 6010 ,'0.25'   ,'75'        ,0.25   ,75        ,6    UNION ALL	
+SELECT 6011 ,'0.2'    ,'50'        ,0.2    ,50        ,6    UNION ALL	
+SELECT 6012 ,'0.2'    ,'50'        ,0.2    ,50        ,6    UNION ALL	
+SELECT 6013 ,'0.25'   ,'50'        ,0.25   ,50        ,6    UNION ALL	
+SELECT 6014 ,'0.3'    ,'30'        ,0.3    ,30        ,6    UNION ALL	
+SELECT 6015 ,'0.2'    ,'50'        ,0.2    ,50        ,6    UNION ALL	
+SELECT 6017 ,'0.3'    ,'60'        ,0.3    ,60        ,6    UNION ALL	
+SELECT 6018 ,'0.2'    ,'100'       ,0.2    ,100       ,6    UNION ALL	
+SELECT 6019 ,'0.25'   ,'500'       ,0.25   ,500       ,6    UNION ALL	
+SELECT 6020 ,'0.2'    ,'200'       ,0.2    ,200       ,6    UNION ALL	
+--=============================================
 --USD code($US, US$, UT, Yen),MMK, Euro, EUR,UUS, YNG
 --US$
 SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,3    UNION ALL
