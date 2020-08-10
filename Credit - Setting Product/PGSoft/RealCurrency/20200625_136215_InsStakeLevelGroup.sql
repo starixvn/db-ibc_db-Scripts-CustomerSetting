@@ -205,6 +205,27 @@ SELECT 6017 ,'0.3'    ,'60'        ,0.3    ,60        ,3    UNION ALL
 SELECT 6018 ,'0.2'    ,'100'       ,0.2    ,100       ,3    UNION ALL
 SELECT 6019 ,'0.25'   ,'500'       ,0.25   ,500       ,3    UNION ALL
 SELECT 6020 ,'0.2'    ,'200'       ,0.2    ,200       ,3    UNION ALL
+--$US
+SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6002 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6003 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6004 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6005 ,'0.25'   ,'250'       ,0.25   ,250       ,35   UNION ALL
+SELECT 6006 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6007 ,'0.2'    ,'50'        ,0.2    ,50        ,35   UNION ALL
+SELECT 6008 ,'0.2'    ,'100'       ,0.2    ,100       ,35   UNION ALL
+SELECT 6009 ,'0.2'    ,'200'       ,0.2    ,200       ,35   UNION ALL
+SELECT 6010 ,'0.25'   ,'75'        ,0.25   ,75        ,35   UNION ALL
+SELECT 6011 ,'0.2'    ,'50'        ,0.2    ,50        ,35   UNION ALL
+SELECT 6012 ,'0.2'    ,'50'        ,0.2    ,50        ,35   UNION ALL
+SELECT 6013 ,'0.25'   ,'50'        ,0.25   ,50        ,35   UNION ALL
+SELECT 6014 ,'0.3'    ,'30'        ,0.3    ,30        ,35   UNION ALL
+SELECT 6015 ,'0.2'    ,'50'        ,0.2    ,50        ,35   UNION ALL
+SELECT 6016 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL
+SELECT 6017 ,'0.3'    ,'60'        ,0.3    ,60        ,35   UNION ALL
+SELECT 6018 ,'0.2'    ,'100'       ,0.2    ,100       ,35   UNION ALL
+SELECT 6019 ,'0.25'   ,'500'       ,0.25   ,500       ,35   UNION ALL
+SELECT 6020 ,'0.2'    ,'200'       ,0.2    ,200       ,35   UNION ALL
 --USD
 SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,95   UNION ALL
 SELECT 6002 ,'0.2'    ,'20'        ,0.2    ,20        ,95   UNION ALL
