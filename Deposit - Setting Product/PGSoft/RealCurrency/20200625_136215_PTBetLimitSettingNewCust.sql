@@ -31,6 +31,11 @@
 	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
 	WHERE SportType=@Sporttype
 
+	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend IN(SELECT CustID FROM #supers) 
+	AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 
 	-------------------------------------PT Setting-----------------------------------------------
 	--Agent Level
@@ -55,6 +60,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=4
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -78,6 +84,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=3
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
 		(	[CustID]
@@ -100,6 +107,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		(	AgentID
@@ -122,6 +130,7 @@
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=2
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	--Member Level
 	INSERT INTO dbo.Dep_CustPTSetting_Member
 		(	CustID
@@ -146,6 +155,7 @@
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
 		AND RoleID=1
 		AND m.IsGroupedPT=0
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	
 
@@ -157,7 +167,8 @@
 		AND RoleID=1
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
 		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
-	 
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+		
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,61
 	FROM #supers t
@@ -183,6 +194,7 @@
 								AND sl.GameGroupID = @GameGroupID
 								AND sl.ExchangeId = c.currency
 	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT   custid,@Sporttype, @BetType, StakeLevelID
@@ -195,7 +207,9 @@
 		INNER JOIN dbo.DEP_StakeLevel sl WITH (NOLOCK) ON sl.GameTypeID = @BetType
 								AND sl.GameGroupID = @GameGroupID
 								AND sl.ExchangeId = c.currency
-	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (1) AND Enabled = 1 AND ci.custid > @maxcustid 
+	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (1) 
+	AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 	DECLARE @Cust_Temp TABLE(CustID INT,StakeLevelID VARCHAR(100))
 	DECLARE @BatchSize SMALLINT = 5000
@@ -288,6 +302,7 @@
 	WHERE t.custid>@maxcustid	
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=60)
 
+	DROP TABLE #Dummy
 	DROP TABLE #MemberTemp
 	DROP TABLE #SMATemp
 	DROP TABLE #Dep_CustProductStatus

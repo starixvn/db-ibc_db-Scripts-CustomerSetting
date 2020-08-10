@@ -38,7 +38,8 @@ BEGIN
 		RETURN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
-
+	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
+	
 	DECLARE @SuperPT SMALLINT = 90
 	DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT
 	DECLARE @SportType SMALLINT = 232, @BetType SMALLINT = 6001	 ,@GameGroupID INT = 16 
@@ -47,6 +48,10 @@ BEGIN
 	FROM dbo.customer c WITH (NOLOCK) 
 		INNER JOIN site s ON s.site = c.site
 	WHERE c.custid = @srecommend
+
+	INSERT INTO #Dummy(CustID)
+	SELECT CustID FROM Customer WITH(NOLOCK) 
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
 
 	DECLARE @BitOrder INT
 
@@ -60,13 +65,15 @@ BEGIN
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid = 1 
 		AND ci.Enabled=1
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 	INSERT INTO #tmpSMA(CustID,RoleID)
 	SELECT CustID,RoleID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid IN(2,3,4)
-		AND ci.Enabled=1						   
+		AND ci.Enabled=1
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)						   
 	
 
 	-------------------------------------PT Setting-----------------------------------------------
@@ -286,7 +293,7 @@ BEGIN
 		SELECT @srecommend,60
 	END
 
-
+	DROP TABLE #Dummy
 	DROP TABLE #tmpCust
 	DROP TABLE #tmpSMA
 	DROP TABLE #Dep_CustProductStatus
