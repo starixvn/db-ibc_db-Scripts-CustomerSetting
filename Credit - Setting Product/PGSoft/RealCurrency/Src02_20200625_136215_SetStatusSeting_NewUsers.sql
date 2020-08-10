@@ -20,19 +20,7 @@
 		AND ci.roleid in (2,3,4)
 		AND ci.custid > @maxcustid
 		AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-		AND ci.currency IN (15 --IN
-							,22 --IND
-							,33 --IDD
-							,34 --IDR
-							,47 --DDD
-							,45 --Won
-							,4  --TB
-							,43 --THB
-							,95 --USD
-							,3 --US$
-							,16 --Yen
-							,64 --UT
-							)
+		AND ci.currency NOT IN (20,72) -- UUS,YNG
 
 	INSERT INTO #CustListMember(CustID,currency,StakeLevelID)
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
@@ -43,19 +31,7 @@
 		AND ci.roleid = 1	
 		AND ci.custid > @maxcustid
 		AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-		AND ci.currency IN (15 --IN
-							,22 --IND
-							,33 --IDD
-							,34 --IDR
-							,47 --DDD
-							,45 --Won
-							,4  --TB
-							,43 --THB
-							,95 --USD
-							,3 --US$
-							,16 --Yen
-							,64 --UT
-							) 
+		AND ci.currency NOT IN (20,72) -- UUS,YNG
 	--------------------------------- BetSetting ---------------------------------
 	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
 										   ,[SportType]
