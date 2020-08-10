@@ -194,7 +194,7 @@
 								AND sl.GameGroupID = @GameGroupID
 								AND sl.ExchangeId = c.currency
 	WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
 	SELECT   custid,@Sporttype, @BetType, StakeLevelID
