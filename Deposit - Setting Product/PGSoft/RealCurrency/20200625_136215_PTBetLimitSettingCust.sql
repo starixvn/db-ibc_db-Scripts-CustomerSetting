@@ -268,7 +268,8 @@ BEGIN
 		SET a.isfinished = 1
 		OUTPUT DELETED.CustID,DELETED.bitmapIsHidden,DELETED.bitmapIsDisabled INTO #TempProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
 		FROM #Dep_CustProductStatus a 
-
+		WHERE a.isfinished = 0
+		
 		IF @@ROWCOUNT = 0 
 			BREAK;
 
