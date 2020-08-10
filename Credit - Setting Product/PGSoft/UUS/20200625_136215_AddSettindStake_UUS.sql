@@ -107,6 +107,7 @@ GO
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
+			AND s.site not in ('CN88')
 			AND ci.currency IN (20,72) --UUS,YNG
 			
 	-- For deployer info
@@ -158,6 +159,7 @@ GO
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
+			AND s.site not in ('CN88')
 			AND ci.currency IN (20,72) --UUS,YNG
 
 	-- For deployer info
