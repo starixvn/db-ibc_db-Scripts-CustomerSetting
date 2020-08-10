@@ -18,7 +18,7 @@ WHERE D.ProductID = @productID AND D.ProductSettingID BETWEEN 60 AND 62
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES (60,@productID,4,0,1,1) -- ProductSatus
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
-VALUES (61,@productID,1,0,2,3) --PT
+VALUES (61,@productID,1,0,2,1) --PT
 INSERT INTO [dbo].[Dep_ProductSetting] (ProductSettingID,ProductID,SettingType,TemplateID,DisplayOrder,SettingLevel)
 VALUES (62,@productID,8,0,3,2) -- StakeLevel	
 
