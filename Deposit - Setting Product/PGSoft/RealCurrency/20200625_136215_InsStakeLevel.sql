@@ -78,8 +78,11 @@ SELECT 6001,9    UNION ALL     -- AUD
 SELECT 6001,86   UNION ALL     -- ARS
 SELECT 6001,90				   -- AED
 
-INSERT INTO Dep_StakeLevel(GameTypeID,ExchangeId,GameGroupID)
-SELECT a.GameTypeID,a.ExchangeId,a.GameGroupID 
+DECLARE @MaxStakeLevelID INT
+SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
+
+INSERT INTO Dep_StakeLevel(GameTypeID,ExchangeId,GameGroupID,StakeLevelID)
+SELECT a.GameTypeID,a.ExchangeId,a.GameGroupID,StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY e.exchangeid) 
 FROM #Dep_StakeLevel_Temp a
 
 DROP TABLE #Dep_StakeLevel_Temp
