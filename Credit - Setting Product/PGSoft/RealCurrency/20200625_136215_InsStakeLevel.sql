@@ -7,7 +7,6 @@
 */
 CREATE TABLE #StakeLevel_Temp ( GameTypeID INT,
 								ExchangeId int,
-								ResourceId varchar(10) default('13'), 
 								GameGroupID int default(15))
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,ExchangeId)
@@ -24,8 +23,8 @@ SELECT 6001,95   UNION ALL     -- USD
 SELECT 6001,64   UNION ALL     -- UT
 SELECT 6001,16			       -- Yen
 
-INSERT INTO StakeLevel(GameTypeID,ExchangeId,ResourceId,GameGroupID)
-SELECT GameTypeID,ExchangeId,ResourceId,GameGroupID 
+INSERT INTO StakeLevel(GameTypeID,ExchangeId,GameGroupID)
+SELECT GameTypeID,ExchangeId,GameGroupID 
 FROM #StakeLevel_Temp
 
 DROP TABLE #StakeLevel_Temp
