@@ -218,7 +218,7 @@ BEGIN
 			BREAK
 		END 	
 			
-		INSERT INTO dbo.CustStakeLevel_Member([CustID]
+		INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID]
 										   ,[SportType]
 										   ,[BetType]
 										   ,[StakeLevelList]

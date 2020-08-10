@@ -227,7 +227,7 @@
 			BREAK
 		END 	
 			
-		INSERT INTO dbo.CustStakeLevel_Member([CustID]
+		INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID]
 										   ,[SportType]
 										   ,[BetType]
 										   ,[StakeLevelList]
@@ -277,7 +277,7 @@
 		SET a.isfinished = 1
 		OUTPUT DELETED.CustID,DELETED.bitmapIsHidden,DELETED.bitmapIsDisabled INTO #TempProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
 		FROM #Dep_CustProductStatus a 
-		 WHERE a.isfinished = 0
+		WHERE a.isfinished = 0
 		 
 		IF @@ROWCOUNT = 0 
 			BREAK;
