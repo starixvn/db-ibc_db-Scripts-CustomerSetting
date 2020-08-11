@@ -25,8 +25,31 @@
 				AND s.islicensee = 0
 				AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
 				AND ci.currency NOT IN (20,72) -- UUS,YNG
+	--====================== Check Data
+	SELECT DISTINCT cg.custid 
+	INTO #CustStakeLevel_Agent
+	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustStakeLevel_Member
+	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype
 	
-		
+	DELETE cg
+	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+	--======================	
 	INSERT INTO #CustListAgent(CustID,currency,StakeLevelID)
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
 	FROM dbo.customer ci WITH (NOLOCK)
