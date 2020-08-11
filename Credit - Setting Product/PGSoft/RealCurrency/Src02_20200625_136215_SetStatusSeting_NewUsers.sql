@@ -31,14 +31,14 @@
 	FROM dbo.CustStakeLevel_Agent cg WITH(NOLOCK)	
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND ci.custid > @maxcustid
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Member
 	FROM dbo.CustStakeLevel_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND ci.custid > @maxcustid
 	
 	DELETE cg
 	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
