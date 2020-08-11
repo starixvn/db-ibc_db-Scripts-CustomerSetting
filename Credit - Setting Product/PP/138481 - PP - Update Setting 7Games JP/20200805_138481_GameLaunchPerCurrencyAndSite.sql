@@ -1,6 +1,6 @@
 /*
     Created: Elodie
-    Task: initial data for GameLaunchPerCurrency, GameLaunchPerSite [Redmine: #89952]
+    Task: initial data for GameLaunchPerCurrency, GameLaunchPerSite [Redmine: #138481]
     DB: DBCUST/CustDB
     Date: 20200805
 */
