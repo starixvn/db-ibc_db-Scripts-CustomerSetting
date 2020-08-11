@@ -297,7 +297,7 @@
 	FROM #AllUsers A
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 
-		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,62
 	FROM #supers t
 	WHERE t.custid>@maxcustid	

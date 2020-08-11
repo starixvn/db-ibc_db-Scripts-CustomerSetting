@@ -5,7 +5,7 @@
 	Task:  Initialize Stake PG [PG Game] - UUS RedmineID:#137763
 	DB: DBCust/CustDB
 */
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@Custid INT
 	,@maxcustid INT
 	,@target VARCHAR(20)
@@ -130,7 +130,7 @@ GO
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
+		EXEC dbo.Acc_DynamicCustSetting3rd_09 @custid = @srecommend
 				,@maxcustid = @max_custid
 				,@target = 'REPLICATED'
 				
@@ -182,7 +182,7 @@ GO
 		SET @index = @index + 1
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-		EXEC dbo.Acc_DynamicCustomerInfo_09 @custid = @srecommend
+		EXEC dbo.Acc_DynamicCustSetting3rd_09 @custid = @srecommend
 				,@maxcustid = @max_custid
 				,@target = 'DBCUST'
 							
