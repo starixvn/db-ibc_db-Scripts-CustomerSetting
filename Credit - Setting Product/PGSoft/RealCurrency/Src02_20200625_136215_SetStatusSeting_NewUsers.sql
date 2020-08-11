@@ -10,6 +10,22 @@
 		
 	DECLARE @GameTypeID	 INT,@GameGroupID INT,@SportType SMALLINT,@StakeLevelID INT,@MaxCustID INT
 	SELECT @GameTypeID = 6001,@SportType = 232,@GameGroupID = 15, @MaxCustID = xxx 
+	
+	CREATE TABLE #supers (custid int)
+
+	INSERT INTO #supers(custid)
+	SELECT ci.custid
+	FROM customer ci WITH (NOLOCK) 
+		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+		LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.roleid = 4  
+				AND ci.username NOT LIKE '3rdSuper%'
+				AND cs.isinternal = 0
+				AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+				AND s.islicensee = 0
+				AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
+				AND ci.currency NOT IN (20,72) -- UUS,YNG
+	
 		
 	INSERT INTO #CustListAgent(CustID,currency,StakeLevelID)
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
@@ -19,8 +35,7 @@
 		AND sl.GameGroupID = @GameGroupID 
 		AND ci.roleid in (2,3,4)
 		AND ci.custid > @maxcustid
-		AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-		AND ci.currency NOT IN (20,72) -- UUS,YNG
+		AND ci.srecommend IN (SELECT custid FROM #supers)
 
 	INSERT INTO #CustListMember(CustID,currency,StakeLevelID)
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
@@ -30,8 +45,7 @@
 		AND sl.GameGroupID = @GameGroupID  
 		AND ci.roleid = 1	
 		AND ci.custid > @maxcustid
-		AND ci.Site IN ('755555','IBCIndo','Indo','KORIBC','789y')
-		AND ci.currency NOT IN (20,72) -- UUS,YNG
+		AND ci.srecommend IN (SELECT custid FROM #supers)
 	--------------------------------- BetSetting ---------------------------------
 	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
 										   ,[SportType]
