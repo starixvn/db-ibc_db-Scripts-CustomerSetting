@@ -9,13 +9,13 @@
 	CREATE TABLE #CustListMember (CustID INT PRIMARY KEY CLUSTERED,currency INT,StakeLevelID INT,isfinished BIT DEFAULT(0))
 		
 	DECLARE @GameTypeID	 INT,@GameGroupID INT,@SportType SMALLINT,@StakeLevelID INT,@MaxCustID INT
-	SELECT @GameTypeID = 6001,@SportType = 232, @MaxCustID = xxx 
+	SELECT @GameTypeID = 6001,@SportType = 232,@GameGroupID = 15, @MaxCustID = xxx 
 		
 	INSERT INTO #CustListAgent(CustID,currency,StakeLevelID)
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
 	FROM dbo.customer ci WITH (NOLOCK)
 	INNER JOIN	dbo.StakeLevel sl WITH (NOLOCK) on ci.currency = sl.ExchangeId
-	WHERE sl.GameTypeID = GameTypeID
+	WHERE sl.GameTypeID = @GameTypeID
 		AND sl.GameGroupID = @GameGroupID 
 		AND ci.roleid in (2,3,4)
 		AND ci.custid > @maxcustid
@@ -26,7 +26,7 @@
 	SELECT ci.custid,ci.currency,sl.StakeLevelID
 	FROM dbo.customer ci WITH (NOLOCK)
 	INNER JOIN	dbo.StakeLevel sl WITH (NOLOCK) on ci.currency = sl.ExchangeId
-	WHERE sl.GameTypeID = GameTypeID
+	WHERE sl.GameTypeID = @GameTypeID
 		AND sl.GameGroupID = @GameGroupID  
 		AND ci.roleid = 1	
 		AND ci.custid > @maxcustid

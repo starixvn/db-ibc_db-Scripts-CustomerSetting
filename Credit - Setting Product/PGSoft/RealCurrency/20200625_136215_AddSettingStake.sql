@@ -29,12 +29,12 @@ BEGIN
 	CREATE TABLE #CustListMember (CustID INT PRIMARY KEY CLUSTERED,isfinished BIT DEFAULT(0))
 		
 	DECLARE @GameTypeID	 INT,@GameGroupID INT,@SportType SMALLINT,@Currency INT,@StakeLevelID INT
-	SELECT @GameTypeID = 6001,@SportType = 232 
+	SELECT @GameTypeID = 6001,@SportType = 232,@GameGroupID = 15  
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @Custid
 	
 	SELECT @StakeLevelID = sl.StakeLevelID 
 	FROM dbo.StakeLevel sl WITH (NOLOCK) 
-	WHERE sl.GameTypeID = GameTypeID
+	WHERE sl.GameTypeID = @GameTypeID
 		AND sl.GameGroupID = @GameGroupID
 		AND sl.ExchangeId = @Currency
 	
