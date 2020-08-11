@@ -69,6 +69,28 @@ SELECT 6017 ,'6'      ,'1200'      ,6      ,1200      ,89   UNION ALL	--UYU	--UY
 SELECT 6018 ,'4'      ,'2000'      ,4      ,2000      ,89   UNION ALL	--UYU	--UYU
 SELECT 6019 ,'5'      ,'10000'     ,5      ,10000     ,89   UNION ALL	--UYU	--UYU
 SELECT 6020 ,'4'      ,'4000'      ,4      ,4000      ,89   UNION ALL	--UYU	--UYU
+--=====================New================================================
+SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6002 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6003 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6004 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6005 ,'0.25'   ,'250'       ,0.25   ,250       ,96   UNION ALL	--USDT	--USD
+SELECT 6006 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6007 ,'0.2'    ,'50'        ,0.2    ,50        ,96   UNION ALL	--USDT	--USD
+SELECT 6008 ,'0.2'    ,'100'       ,0.2    ,100       ,96   UNION ALL	--USDT	--USD
+SELECT 6009 ,'0.2'    ,'200'       ,0.2    ,200       ,96   UNION ALL	--USDT	--USD
+SELECT 6010 ,'0.25'   ,'75'        ,0.25   ,75        ,96   UNION ALL	--USDT	--USD
+SELECT 6011 ,'0.2'    ,'50'        ,0.2    ,50        ,96   UNION ALL	--USDT	--USD
+SELECT 6012 ,'0.2'    ,'50'        ,0.2    ,50        ,96   UNION ALL	--USDT	--USD
+SELECT 6013 ,'0.25'   ,'50'        ,0.25   ,50        ,96   UNION ALL	--USDT	--USD
+SELECT 6014 ,'0.3'    ,'30'        ,0.3    ,30        ,96   UNION ALL	--USDT	--USD
+SELECT 6015 ,'0.2'    ,'50'        ,0.2    ,50        ,96   UNION ALL	--USDT	--USD
+SELECT 6016 ,'0.2'    ,'20'        ,0.2    ,20        ,96   UNION ALL	--USDT	--USD
+SELECT 6017 ,'0.3'    ,'60'        ,0.3    ,60        ,96   UNION ALL	--USDT	--USD
+SELECT 6018 ,'0.2'    ,'100'       ,0.2    ,100       ,96   UNION ALL	--USDT	--USD
+SELECT 6019 ,'0.25'   ,'500'       ,0.25   ,500       ,96   UNION ALL	--USDT	--USD
+SELECT 6020 ,'0.2'    ,'200'       ,0.2    ,200       ,96   UNION ALL	--USDT	--USD
+--========================================================================
 SELECT 6001 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL	--$US	--USD
 SELECT 6002 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL	--$US	--USD
 SELECT 6003 ,'0.2'    ,'20'        ,0.2    ,20        ,35   UNION ALL	--$US	--USD
@@ -1302,7 +1324,27 @@ SELECT 6015 ,'0.4'    ,'100'       ,0.4    ,100       ,90   UNION ALL	--AED	--AE
 SELECT 6017 ,'0.6'    ,'120'       ,0.6    ,120       ,90   UNION ALL	--AED	--AED
 SELECT 6018 ,'0.4'    ,'200'       ,0.4    ,200       ,90   UNION ALL	--AED	--AED
 SELECT 6019 ,'0.5'    ,'1000'      ,0.5    ,1000      ,90   UNION ALL	--AED	--AED
-SELECT 6020 ,'0.4'    ,'400'       ,0.4    ,400       ,90				--AED	--AED    
+SELECT 6020 ,'0.4'    ,'400'       ,0.4    ,400       ,90	UNION ALL	--AED	--AED
+--=====================New================================================ 
+SELECT 6001 ,'10'     ,'1000'      ,10     ,1000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6002 ,'10'     ,'1000'      ,10     ,1000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6003 ,'10'     ,'1000'      ,10     ,1000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6004 ,'10'     ,'1000'      ,10     ,1000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6005 ,'10'     ,'10000'     ,10     ,10000     ,97   UNION ALL	--BDT	--BDT
+SELECT 6006 ,'10'     ,'1000'      ,10     ,1000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6007 ,'10'     ,'2500'      ,10     ,2500      ,97   UNION ALL	--BDT	--BDT
+SELECT 6008 ,'10'     ,'5000'      ,10     ,5000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6009 ,'10'     ,'10000'     ,10     ,10000     ,97   UNION ALL	--BDT	--BDT
+SELECT 6010 ,'10'     ,'3000'      ,10     ,3000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6011 ,'10'     ,'2500'      ,10     ,2500      ,97   UNION ALL	--BDT	--BDT
+SELECT 6012 ,'10'     ,'2500'      ,10     ,2500      ,97   UNION ALL	--BDT	--BDT
+SELECT 6013 ,'10'     ,'2000'      ,10     ,2000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6014 ,'9'      ,'900'       ,9      ,900       ,97   UNION ALL	--BDT	--BDT
+SELECT 6015 ,'10'     ,'2500'      ,10     ,2500      ,97   UNION ALL	--BDT	--BDT
+SELECT 6017 ,'9'      ,'1800'      ,9      ,1800      ,97   UNION ALL	--BDT	--BDT
+SELECT 6018 ,'10'     ,'5000'      ,10     ,5000      ,97   UNION ALL	--BDT	--BDT
+SELECT 6019 ,'10'     ,'20000'     ,10     ,20000     ,97   UNION ALL	--BDT	--BDT
+SELECT 6020 ,'10'     ,'10000'     ,10     ,10000     ,97				--BDT	--BDT   
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
