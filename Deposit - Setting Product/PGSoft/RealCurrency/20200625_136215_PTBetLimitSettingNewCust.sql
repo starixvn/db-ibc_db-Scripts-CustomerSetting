@@ -176,13 +176,6 @@
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=61)
 
 	-------------------------------------Betlimit Setting-----------------------------------------------
-	SELECT @StakeLevelID = sl.StakeLevelID 
-	FROM dbo.DEP_StakeLevel sl WITH (NOLOCK) 
-	WHERE sl.GameTypeID = @BetType
-		AND sl.GameGroupID = @GameGroupID
-		AND sl.ExchangeId = @Currency
-		AND sl.SiteID = @siteId
-
 	CREATE TABLE #MemberTemp  (CustID INT PRIMARY KEY,StakeLevelID VARCHAR(100),isfinished BIT DEFAULT(0))	
 	CREATE TABLE #SMATemp  (CustID INT PRIMARY KEY,StakeLevelID VARCHAR(100))	
 	--Agent Level
