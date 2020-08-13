@@ -118,9 +118,16 @@ FROM VRCustAutoAdjustment v WITH(ROWLOCK)
 	INNER JOIN @Update_CustTbl t ON v.CustID = t.CustID
 WHERE v.SportType = @Sporttype
 
+DECLARE @Update_CustIDList VARCHAR(MAX) = ''
+
+SELECT @Update_CustIDList = @Update_CustIDList + ',' + CustID
+FROM @Update_CustTbl
+
+SELECT @Update_CustIDList = STUFF(@Update_CustIDList,1,1,'')
+
 DECLARE @NewLogData VARCHAR(MAX)
 SELECT @NewLogData = '<R '
-					+ 'CustIDList="'+ coalesce(cast(@CustIDList as varchar(MAX)),space(1)) + '" '
+					+ 'CustIDList="'+ coalesce(cast(@Update_CustIDList as varchar(MAX)),space(1)) + '" '
 					+ 'Sporttype="'+ coalesce(cast(@Sporttype as varchar(50)),space(1)) + '" ' 
 					+ ' />'
 

@@ -130,6 +130,13 @@ BEGIN
 		@TrackingValue		= @LogData
 END
 
+DECLARE @Update_CustIDList VARCHAR(MAX) = ''
+
+SELECT @Update_CustIDList = @Update_CustIDList + ',' + CustID
+FROM @Update_CustTbl
+
+SELECT @Update_CustIDList = STUFF(@Update_CustIDList,1,1,'')
+
 DECLARE @NewLogData VARCHAR(MAX)
 SELECT @NewLogData = '<R '
 					+ 'InputCustIDList="'+ coalesce(cast(@Update_CustIDList as varchar(MAX)),space(1)) + '" '
