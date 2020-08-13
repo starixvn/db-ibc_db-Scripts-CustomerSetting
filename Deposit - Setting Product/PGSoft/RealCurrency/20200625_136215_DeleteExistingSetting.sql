@@ -1,7 +1,7 @@
 /*
 	Created: Winfred
 	Date: 20200805
-	Task: Insert PT and Betlimit for Customer PG Game Deposit -- UUS [Redmine: 137763]
+	Task: Exits PT and Betlimit for Customer PG Game Deposit [Redmine: 137763]
 	DB: DBCUST/CustDB
 */
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
