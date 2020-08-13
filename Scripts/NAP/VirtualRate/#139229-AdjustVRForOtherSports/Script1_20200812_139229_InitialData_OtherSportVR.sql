@@ -2,6 +2,9 @@
 /*
 	Created: 20200811@Eden
 	Task: SET Other sports VR = 0 for customers who were adjusted BasketBall VR = 0
+		--step 1: Get custtomer list to update others sport VR = 0 (status = 2)
+		--step 2: Update VRCustAutoAdjustment change sporttype from 2 to 99 for old data (lock update VR downline on NAP)
+		--step 3: process update other sports VR = 0
 	DB: DBCUST/CUSTDB
 */
 USE CustDB
@@ -9,11 +12,19 @@ GO
 
 DECLARE @Update_CustTbl TABLE ( CustID INT PRIMARY KEY)
 
+--step 1: Get custtomer list to update others sport VR = 0 (status = 2)
 INSERT INTO @Update_CustTbl(CustID)
 SELECT CustID
 FROM VRCustAutoAdjustment WITH(NOLOCK) 
 WHERE SportType = 2 AND Status = 2
 
+--step 2: Update VRCustAutoAdjustment change sporttype from 2 to 99 for old data
+UPDATE t 
+SET t.SportType = 99
+FROM VRCustAutoAdjustment t WITH(ROWLOCK) 
+WHERE SportType = 2
+
+--step 3: process update other sports VR = 0
 DECLARE	@tblVirtualrate		TABLE (
 							SportType			INT
 						,	BetType				INT
