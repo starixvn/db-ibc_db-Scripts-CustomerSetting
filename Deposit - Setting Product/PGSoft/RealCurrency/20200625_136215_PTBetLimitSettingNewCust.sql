@@ -18,7 +18,8 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 			AND ci.Enabled=1
-			AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','spondemo','Athena000')
+			AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
+			OR ( cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20,72)))
 			ORDER BY ci.custid 
 	
 	DECLARE @SuperPT SMALLINT = 90
