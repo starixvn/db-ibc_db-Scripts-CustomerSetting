@@ -120,7 +120,7 @@ WHERE v.SportType = @Sporttype
 
 DECLARE @Update_CustIDList VARCHAR(MAX) = ''
 
-SELECT @Update_CustIDList = @Update_CustIDList + ',' + CustID
+SELECT @Update_CustIDList = @Update_CustIDList + ',' + convert(varchar,CustID)
 FROM @Update_CustTbl
 
 SELECT @Update_CustIDList = STUFF(@Update_CustIDList,1,1,'')
