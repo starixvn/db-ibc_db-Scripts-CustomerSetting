@@ -150,14 +150,15 @@ BEGIN
 	EXEC [Lrf_CustomerUpdMemberBAStatus]    
 		@LicenseeID = @LicenseeID,  
 		@CustID = @CustID,    
-		@ModifyBy = 2939, --standbyteam on PRO
-		--@ModifyBy = 1247, --standbyteam on local  
+		--@ModifyBy = 2939, --standbyteam on PRO
+		@ModifyBy = 1247, --standbyteam on local  
 		@IsBA = 1,    
 		@IP = '',    
 		@ErrCode = @ErrCode OUTPUT,    
 		@ErrMsg = @ErrMsg OUTPUT  
 			
-	SELECT @ErrCode, @ErrMsg
+	PRINT @ErrCode
+	PRINT  @ErrMsg
 	WAITFOR DELAY '00:00:0.100'
 END
 
