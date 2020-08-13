@@ -29,9 +29,9 @@ INSERT INTO @MsgError(MsgID
 SELECT 90014
 ,10
 ,N'<Product> is under maintennance for Customer Settings from <FromTime> (GMT+8) to <ToTime> (GMT+8): Update failed'
-,N'<Product> is under maintennance for Customer Settings from <FromTime> (GMT+8) to <ToTime> (GMT+8): Update failed'
-,N'<Product> is under maintennance for Customer Settings from <FromTime> (GMT+8) to <ToTime> (GMT+8): Update failed'
-,N'<Product> is under maintennance for Customer Settings from <FromTime> (GMT+8) to <ToTime> (GMT+8): Update failed'
+,N'<Product> 客戶設置正在維護 <FromTime> (GMT + 8) 至 <ToTime> (GMT + 8): 更新失敗'
+,N'<Product> 客户设置正在维护 <FromTime> (GMT + 8) 至 <ToTime> (GMT + 8): 更新失败'
+,N'<Product> อยู่ระหว่างการบำรุงรักษาสำหรับการตั้งค่าลูกค้าจาก <FromTime> (GMT + 8) ถึง <ToTime> (GMT + 8): การอัปเดตล้มเหลว'
 ,N'<Product> is under maintennance for Customer Settings from <FromTime> (GMT+8) to <ToTime> (GMT+8): Update failed'
 
 INSERT INTO MsgError(
