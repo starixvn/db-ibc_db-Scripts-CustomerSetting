@@ -25,8 +25,39 @@
 	DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT
 	DECLARE @SportType SMALLINT = 232, @BetType SMALLINT = 6001	 ,@GameGroupID INT = 16 
 
-	DECLARE @BitOrder INT
+	----------------Delete exits data
+	DELETE cg
+	FROM Dep_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)	
+		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid	
+	WHERE SportType =@SportType AND cg.custid > @maxcustID
+						
+	DELETE cg
+	FROM Dep_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)		
+		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid	
+	WHERE SportType =@SportType AND cg.custid > @maxcustID
+		
+	DELETE cg
+	FROM Dep_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
+		INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid		
+	WHERE SportType =@SportType AND c.custid > @maxcustID
+				
+	DELETE cg
+	FROM Dep_CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)	
+		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid		
+	WHERE SportType =@SportType AND c.custid > @maxcustID
 
+	DELETE cg
+	FROM Dep_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid			
+	WHERE SportType =@SportType AND c.custid > @maxcustID
+	-------------------------------
+	
+	DECLARE @BitOrder INT
 	SELECT @BitOrder= bitmapOrder 
 	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
 	WHERE SportType=@Sporttype
@@ -160,7 +191,7 @@
 	
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT ci.CustID,1
+	SELECT ci.CustID,1
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend IN(SELECT custid FROM #supers)
 		AND ci.custid>@maxcustid AND ci.Enabled=1 
