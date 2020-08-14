@@ -1,4 +1,5 @@
-﻿/*
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
     Created: Eden
     Date: 20200812
     Task: Add New MsgError for Minimize UM Time - 1st Deposit [#136741]
