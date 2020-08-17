@@ -150,7 +150,7 @@ BEGIN
 		SET cs.MinBet = @ValueBetSetting,
 			cs.MaxBet = @ValueBetSetting,
 			cs.MaxPerMatch = @ValueBetSetting
-		FROM Dep_CustBetSetting_Agent cs WITH (ROWLOCK)
+		FROM Dep_CustBetSetting_Member cs WITH (ROWLOCK)
 			INNER JOIN #CustListTmp c ON cs.custid = c.custid
 		WHERE sporttype = 43
 

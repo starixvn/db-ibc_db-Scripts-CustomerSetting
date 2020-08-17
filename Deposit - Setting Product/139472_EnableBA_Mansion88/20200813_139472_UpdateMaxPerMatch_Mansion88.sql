@@ -146,7 +146,7 @@ BEGIN
 			cs.MaxPerMatch8 = @ValueBetSetting,
 			cs.MaxPerMatch10 = @ValueBetSetting,
 			cs.MaxPerMatch11 = @ValueBetSetting,
-			cs.MaxPerMatch12 = @ValueBetSetting,
+			--cs.MaxPerMatch12 = @ValueBetSetting,
 			cs.MaxPerMatch99 = @ValueBetSetting,
 			cs.MaxPerMatch99MP = @ValueBetSetting,
 			cs.MaxPerMatch1MP = @ValueBetSetting
