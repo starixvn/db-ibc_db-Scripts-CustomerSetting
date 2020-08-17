@@ -12,7 +12,7 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Meber') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 
 	CREATE TABLE #CustList (custid int)
 	CREATE TABLE #CustListTmp (custid int)
