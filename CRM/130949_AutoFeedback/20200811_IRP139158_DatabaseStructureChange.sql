@@ -42,7 +42,7 @@ SELECT DISTINCT vh.MessageId, vh.RequestId,GETDATE(),0
 FROM dbacc.bodb02.dbo.TicketVoiding_VoidingHistory vh WITH(NOLOCK)
 	INNER JOIN dbacc.bodb02.dbo.TicketVoiding_Request r WITH (NOLOCK) ON vh.RequestId = r.RequestId 
 														AND r.IssueTypeId = 11 --abnormal bets
-WHERE vh.CreatedDate >= GETDATE() - 1
+WHERE vh.CreatedDate >= GETDATE() - 2
 	AND vh.StatusId = 2 --tickets void successfully
 ORDER BY MessageId ASC 
 
