@@ -25,12 +25,12 @@ INSERT INTO @MsgError(MsgID
 	)
 SELECT 90016
 ,10
-,N'Server maintenance notice
-Start Time: <FromTime> (GMT +8)
-Resolution Time: <ToTime> (GMT +8)
-
-例行維護通知
-开始时间：<FromTime> (GMT +8)
+,N'Server maintenance notice </br>
+Start Time: <FromTime> (GMT +8) </br>
+Resolution Time: <ToTime> (GMT +8) </br>
+</br>
+例行維護通知 </br>
+开始时间：<FromTime> (GMT +8) </br>
 预计结束时间：<ToTime> (GMT +8)'
 
 INSERT INTO MsgError(
