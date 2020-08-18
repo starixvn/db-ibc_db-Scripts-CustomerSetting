@@ -1,9 +1,9 @@
-/*<info serverAlias="DBPRO-bodb02"></info>*/
+/*<info serverAlias="DBTRANS-bodb02"></info>*/
 /*
 	Created: Winfred
 	Date: 20200805
 	Task:  add WinLimit_ProductOffer for PG Game RedmineID:#137763
-	DB: DBPRO/bodb02
+	DB: DBTRANS/bodb02
 */
 IF NOT EXISTS(	SELECT TOP 1 1 
 				FROM dbo.WinLimit_ProductOffer psd WITH(NOLOCK)
