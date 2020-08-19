@@ -16,7 +16,7 @@ FROM ProblemAccount WITH(NOLOCK)
 WHERE custid <= @maxcustid
 
 WHILE(1=1)
-BEGIN
+BEGIN	
 	UPDATE TOP (5000) t
 	SET isFinished = 1
 	OUTPUT DELETED.custid INTO @tmp(custid)
@@ -31,6 +31,8 @@ BEGIN
 		LimitAmount = 0
 	FROM ProblemAccount p WITH(UPDLOCK,ROWLOCK)
 	WHERE custid IN (SELECT custid FROM @tmp)
+	
+	DELETE @tmp
 	
 	WAITFOR DELAY '0:0:01'
 END
