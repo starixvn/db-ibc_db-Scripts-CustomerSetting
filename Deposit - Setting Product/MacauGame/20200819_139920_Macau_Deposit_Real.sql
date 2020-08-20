@@ -329,16 +329,16 @@ SELECT 4078 ,'100'  ,'4000'    ,100  ,4000    ,45   UNION ALL	--Won	--PT, Won, K
 SELECT 4079 ,'500'  ,'10000'   ,500  ,10000   ,45   UNION ALL	--Won	--PT, Won, KW
 SELECT 4080 ,'200'  ,'10000'   ,200  ,10000   ,45   UNION ALL	--Won	--PT, Won, KW
 --RUB
-SELECT 4057 ,'10'   ,'1500'    ,10   ,1500    ,55   UNION ALL	--RUB	--RUB
-SELECT 4058 ,'10'   ,'400'     ,10   ,400     ,55   UNION ALL	--RUB	--RUB
-SELECT 4059 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
-SELECT 4061 ,'20'   ,'1000'    ,20   ,1000    ,55   UNION ALL	--RUB	--RUB
-SELECT 4063 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
-SELECT 4073 ,'20'   ,'400'     ,20   ,400     ,55   UNION ALL	--RUB	--RUB
-SELECT 4077 ,'20'   ,'1000'    ,20   ,1000    ,55   UNION ALL	--RUB	--RUB
-SELECT 4078 ,'10'   ,'400'     ,10   ,400     ,55   UNION ALL	--RUB	--RUB
-SELECT 4079 ,'50'   ,'1000'    ,50   ,1000    ,55   UNION ALL	--RUB	--RUB
-SELECT 4080 ,'20'   ,'1000'    ,20   ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4057 ,'5'    ,'1000'    ,5    ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4058 ,'5'    ,'1000'    ,5    ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4059 ,'5'    ,'1000'    ,5    ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4061 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4063 ,'5'    ,'1000'    ,5    ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4073 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4077 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
+SELECT 4078 ,'5'    ,'200'     ,5    ,200     ,55   UNION ALL	--RUB	--RUB
+SELECT 4079 ,'25'   ,'500'     ,25   ,500     ,55   UNION ALL	--RUB	--RUB
+SELECT 4080 ,'10'   ,'1000'    ,10   ,1000    ,55   UNION ALL	--RUB	--RUB
 --TB
 SELECT 4057 ,'1'    ,'300'     ,1    ,300     ,4    UNION ALL	--TB	--THB, TB
 SELECT 4058 ,'1'    ,'80'      ,1    ,80      ,4    UNION ALL	--TB	--THB, TB
