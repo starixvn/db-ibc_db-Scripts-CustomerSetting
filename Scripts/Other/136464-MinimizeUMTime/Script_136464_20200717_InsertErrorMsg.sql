@@ -37,7 +37,7 @@ SELECT 90014
 UNION ALL
 SELECT 90017
 ,10
-,N'Do no thing'
+,N'Do nothing'
 ,NULL
 ,NULL
 ,NULL
