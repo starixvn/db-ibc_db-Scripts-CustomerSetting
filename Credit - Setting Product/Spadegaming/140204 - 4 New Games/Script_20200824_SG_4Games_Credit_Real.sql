@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200824
-	Task:  #140204 - Spadegaming - Add 4 New Games - Credit - UUS RedmineID:#139711
+	Task:  #140204 - Spadegaming - Add 4 New Games - Credit - Real RedmineID:#139711
 	DB: DBCust/CustDB
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
@@ -61,11 +61,6 @@ SELECT 4341 ,'0.9'  ,'1800'    ,0.9  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UU
 SELECT 4342 ,'0.9'  ,'1800'    ,0.9  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UUS
 SELECT 4343 ,'0.3'  ,'750'     ,0.3  ,750     ,51   UNION ALL	--INH	--INH,YNG,UUS
 SELECT 4344 ,'1'    ,'2000'    ,1    ,2000    ,51   UNION ALL	--INH	--INH,YNG,UUS
---UUS
-SELECT 4341 ,'0.9'  ,'1800'    ,0.9  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4342 ,'0.9'  ,'1800'    ,0.9  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4343 ,'0.3'  ,'750'     ,0.3  ,750     ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4344 ,'1'    ,'2000'    ,1    ,2000    ,20   UNION ALL	--UUS	--INH,YNG,UUS
 --=============================================
 --RM,HKK, HK$,PLN,KHR
 --HK$
