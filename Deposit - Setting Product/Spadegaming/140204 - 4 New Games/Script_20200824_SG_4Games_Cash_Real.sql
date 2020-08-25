@@ -57,15 +57,15 @@ SELECT 4344 ,'0.5'  ,'60'      ,0.5  ,60      ,12   UNION ALL	--GBP	--Euro, EUR,
 --=============================================
 --INH,YNG,UUS
 --INH
-SELECT 4341 ,'0.3'  ,'1800'    ,0.3  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UUS
-SELECT 4342 ,'0.3'  ,'1800'    ,0.3  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UUS
+SELECT 4341 ,'0.9'  ,'1800'    ,0.9  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UUS
+SELECT 4342 ,'0.9'  ,'1800'    ,0.9  ,1800    ,51   UNION ALL	--INH	--INH,YNG,UUS
 SELECT 4343 ,'0.3'  ,'750'     ,0.3  ,750     ,51   UNION ALL	--INH	--INH,YNG,UUS
-SELECT 4344 ,'0.5'  ,'1000'    ,0.5  ,1000    ,51   UNION ALL	--INH	--INH,YNG,UUS
+SELECT 4344 ,'1'    ,'2000'    ,1    ,2000    ,51   UNION ALL	--INH	--INH,YNG,UUS
 --UUS
-SELECT 4341 ,'0.3'  ,'1800'    ,0.3  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4342 ,'0.3'  ,'1800'    ,0.3  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
+SELECT 4341 ,'0.9'  ,'1800'    ,0.9  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
+SELECT 4342 ,'0.9'  ,'1800'    ,0.9  ,1800    ,20   UNION ALL	--UUS	--INH,YNG,UUS
 SELECT 4343 ,'0.3'  ,'750'     ,0.3  ,750     ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4344 ,'0.5'  ,'1000'    ,0.5  ,1000    ,20   UNION ALL	--UUS	--INH,YNG,UUS
+SELECT 4344 ,'1'    ,'2000'    ,1    ,2000    ,20   UNION ALL	--UUS	--INH,YNG,UUS
 --=============================================
 --RM,HKK, HK$,PLN,KHR
 --HK$
