@@ -5,6 +5,9 @@
 	Task:  Insert Data keno RedmineID:#137768
 	DB: DBCust/CustDB
 */
+USE CustDB
+GO 
+
 Declare @CustID Int = 23639489
 ,@srecommend INT,@mrecommend INT,@recommend Int, @roleid TINYINT  ,@currency INT
 
@@ -39,7 +42,12 @@ WHERE srecommend =  @srecommend  AND Enabled=1
 CREATE TABLE #CustGameType_Temp (CustID INT,GameTypeID	INT,StakeLevelList	VARCHAR DEFAULT('')
 								,MaxPerGameType	MONEY,MinBet	MONEY
 								,MaxBet	MONEY, IsDisabled	BIT DEFAULT(0))
-
+-- show data old
+SELECT a.*
+FROM   CustGameType  a 
+INNER JOIN #CustList b on a.CustID = b.CustID
+where a.GameTypeID in (select GameTypeID from  @GameType )
+-- delete data old
 Delete a
 FROM   CustGameType  a 
 INNER JOIN #CustList b on a.CustID = b.CustID
