@@ -44,11 +44,7 @@ CREATE TABLE #CustGameType_Temp (CustID INT,GameTypeID	INT,StakeLevelList	VARCHA
 								,MaxPerGameType	MONEY,MinBet	MONEY
 								,MaxBet	MONEY, IsDisabled	BIT DEFAULT(0))
 						
--- show data old
-SELECT a.*
-FROM   CustGameType  a with(nolock)
-INNER JOIN #CustList b on a.CustID = b.CustID
-where a.GameTypeID in (select GameTypeID from  @GameType )
+
 -- delete data old
 Delete a
 FROM   CustGameType  a 
@@ -79,12 +75,7 @@ CREATE TABLE #CustSettingGame_Temp (
 
 CREATE TABLE #BETTYPE(Bettype INT)
 INSERT INTO #BETTYPE VALUES (1511),(1503),(1504),(1505),(1513),(1507),(1508),(1509),(1514),(1501)
-							
--- show data old
-SELECT a.*
-FROM   CustSettingGame  a with(nolock)
-INNER JOIN #CustList b on a.CustID = b.CustID
-where a.Bettype in (select Bettype from  #BETTYPE ) AND Sporttype = 202
+
 -- delete data old
 Delete a
 FROM   CustSettingGame  a with(nolock)
