@@ -29,7 +29,7 @@ BEGIN
 		INNER JOIN dbo.Dep_ProductSettingDetail pd WITH (NOLOCK) ON pd.ProductSettingID = p.ProductSettingID
 	WHERE  l.IsActive = 1
 		AND p.SettingType = 4
-		AND P.ProductID IN (22,32,24) -- remove allbet
+		AND P.ProductID IN (28,8,45,36,40,5,27) 
 			
 	INSERT INTO #tblCust(Custid)
 	SELECT ci.custid
