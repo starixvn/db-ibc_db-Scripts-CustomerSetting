@@ -7,7 +7,7 @@
 	Notes: insert settingtype =9 for 7 Product below into Dep_ProductSetting
 		1.SEXY GAMING
 		2.SpadeGaming
-		3.Keno
+		3.Keno (non DCS)
 		4.Lottery
 		5.Virtual Sport
 		6.Virtual Sport 2
@@ -24,7 +24,7 @@ INSERT INTO dbo.Dep_ProductSetting(
 							,SettingLevel
 							)
 SELECT 63, 28, 9, 0, 4, 1 -- Lottery
-UNION ALL SELECT 64,8, 9, 0, 4, 1--RNG Keno
+--UNION ALL SELECT 64,8, 9, 0, 4, 1--RNG Keno
 UNION ALL SELECT 65,45, 9, 0, 4, 1--Sexy Gaming
 UNION ALL SELECT 66,36, 9, 0, 4, 1--SG
 UNION ALL SELECT 67,40, 9, 0, 4, 1--Table Game
@@ -41,7 +41,7 @@ INSERT INTO [CustDB].[dbo].[Dep_ProductSettingDetail]
            ,[IsApplyBA]) 
 
 SELECT 63, 220,	1021, 0,0,0,0 -- Lottery
-UNION ALL SELECT 64, 202,	1501, 0,0,0,0--RNG Keno
+--UNION ALL SELECT 64, 202,	1501, 0,0,0,0--RNG Keno
 UNION ALL SELECT 65, 243,	3101, 0,0,0,0--Sexy Gaming
 UNION ALL SELECT 66, 247,	4301, 0,0,0,0--SG
 UNION ALL SELECT 67, 222,	4901, 0,0,0,0--Table Game
@@ -53,7 +53,7 @@ INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT s.custid, t.ProductSettingID
 FROM dbo.Dep_CustSuper s WITH(NOLOCK)
 	CROSS APPLY(SELECT 28 ProductID,63 ProductSettingID--Lottery 
-				UNION SELECT 8,64 --RNG Keno
+				--UNION SELECT 8,64 --RNG Keno
 				UNION SELECT 45,65 --Sexy Gaming
 				UNION SELECT 36,66 --SG
 				UNION SELECT 40,67 --Table Game
