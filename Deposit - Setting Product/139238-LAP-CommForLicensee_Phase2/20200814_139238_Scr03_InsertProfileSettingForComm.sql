@@ -52,13 +52,13 @@ UNION ALL SELECT 69, 190,	2701, 0,0,0,0--VS 2
 INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT s.custid, t.ProductSettingID
 FROM dbo.Dep_CustSuper s WITH(NOLOCK)
-	CROSS APPLY(SELECT 63 ProductSettingID--Lottery 
-				UNION SELECT 64 --RNG Keno
-				UNION SELECT 65 --Sexy Gaming
-				UNION SELECT 66 --SG
-				UNION SELECT 67 --Table Game
-				UNION SELECT 68 --VS
-				UNION SELECT 69 --VS 2
+	CROSS APPLY(SELECT 28 ProductID,63 ProductSettingID--Lottery 
+				UNION SELECT 8,64 --RNG Keno
+				UNION SELECT 45,65 --Sexy Gaming
+				UNION SELECT 36,66 --SG
+				UNION SELECT 40,67 --Table Game
+				UNION SELECT 5,68 --VS
+				UNION SELECT 27,69 --VS 2
 				) t
 	CROSS APPLY (SELECT TOP 1 lp.CustID 
 				FROM Dep_LicenseeProductSetting lp WITH (NOLOCK) 
