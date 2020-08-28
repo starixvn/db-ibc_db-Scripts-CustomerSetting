@@ -87,9 +87,9 @@ BEGIN
 		FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN @BatchCust cb ON cb.CustID = cs.CustID
 			OUTER APPLY (SELECT TOP 1 dcs_m.CustID FROM Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
-						WHERE dcs_m.CustID = cs.CustID
+						 WHERE dcs_m.CustID = cs.CustID
 						) AS tmp
-		WHERE ISNULL(cs.IsGroupedComm,0) = 0 AND tmp.CustID IS NOT NULL
+		WHERE ISNULL(cs.IsGroupedComm,0) = 0 AND tmp.CustID IS NULL
 		
 		-- insert private setting if already offered comm before and not belong to comm group
 		INSERT INTO Dep_CustDiscountSetting_Member (CustID
