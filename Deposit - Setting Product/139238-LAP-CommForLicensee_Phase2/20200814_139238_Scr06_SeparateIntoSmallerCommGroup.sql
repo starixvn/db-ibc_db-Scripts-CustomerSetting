@@ -66,7 +66,7 @@ BEGIN
 			
 		UPDATE lc
 			SET GroupCommID = @GroupCommID_New
-		FROM dbo.LicenseeCustComm lc WITH (NOLOCK)
+		FROM dbo.LicenseeCustComm lc WITH (ROWLOCK)
 			INNER JOIN #custid_batch_tmp lc_tmp ON lc.CustID = lc_tmp.CustID
 		WHERE lc.GroupCommID = @GroupCommID AND lc.Licenseeid = @LicenseeID
 		
