@@ -1,7 +1,7 @@
 /*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20200829@Eden
-	Task: Insert LogAction for VRAgentProfile Sport
+	Task: Insert LogAction for VRAdjustmentByAgentProfile [RM#140421]
 	DB: DBLOG/bodb_CustomerLog
 */
 
