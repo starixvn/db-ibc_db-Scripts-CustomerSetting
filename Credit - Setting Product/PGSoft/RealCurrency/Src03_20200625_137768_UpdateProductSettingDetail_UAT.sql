@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200805
-	Task: Update SettingStatus = 0 (PROD) for PGSoft [Redmine: 137763]
+	Task: Update SettingStatus = 1 (UAT) for PGSoft [Redmine: 137763]
 	DB: DBCUST/CustDB
 */ 
 

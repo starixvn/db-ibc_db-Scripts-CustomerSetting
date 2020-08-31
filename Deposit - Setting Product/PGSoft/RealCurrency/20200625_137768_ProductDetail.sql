@@ -1,7 +1,7 @@
 /*
 	Created: Winfred
 	Date: 20200805
-	Task: Update Product Setting Detail Deposit [Redmine: 137763]
+	Task: Update Product Setting Detail (PROD) Deposit [Redmine: 137763]
 	DB: DBCUST/CustDB
 */
 
