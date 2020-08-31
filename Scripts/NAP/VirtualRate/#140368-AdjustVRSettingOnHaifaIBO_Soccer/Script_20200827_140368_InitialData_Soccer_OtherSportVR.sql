@@ -10,7 +10,7 @@
 USE CustDB
 GO		
 
-DECLARE @Update_CustTbl TABLE ( CustID INT PRIMARY KEY)
+DECLARE @Update_CustTbl TABLE ( CustID INT PRIMARY KEY, IsFinish BIT DEFAULT 0)
 
 --step 1: Get custtomer list to update soccer VR = 0 (status = 2)
 INSERT INTO @Update_CustTbl(CustID)
@@ -89,10 +89,29 @@ FROM (
 		), 2) AS Val
 	) p2;
 
-UPDATE cvs
-	SET cvs.bitmapVirtual = bm.bitmap
-FROM		CustVirtualSetting	AS cvs WITH(UPDLOCK, ROWLOCK)			
-	INNER JOIN	@virtualXML			AS tmp
-			ON	cvs.seqNo = tmp.seqNo
-	CROSS APPLY (SELECT TOP 1 bitmap FROM dbo.f_GenerateVirtualSetting_inline(cvs.bitmapVirtual, tmp.Val, tmp.Pos)) AS bm
-WHERE	cvs.custid IN ( SELECT custid FROM @Update_CustTbl)
+CREATE TABLE #tempUpdate_tbl (CustID INT)
+
+WHILE 1 = 1
+BEGIN
+	TRUNCATE TABLE #tempUpdate_tbl
+
+	UPDATE TOP(3000) t
+	SET t.IsFinish = 1
+	OUTPUT inserted.CustID INTO #tempUpdate_tbl(CustID)
+	FROM @Update_CustTbl t
+	WHERE t.IsFinish = 0
+
+	IF @@ROWCOUNT = 0 BREAK;
+		
+	UPDATE cvs
+		SET cvs.bitmapVirtual = bm.bitmap
+	FROM		CustVirtualSetting	AS cvs WITH(UPDLOCK, ROWLOCK)			
+		INNER JOIN	@virtualXML			AS tmp
+				ON	cvs.seqNo = tmp.seqNo
+		CROSS APPLY (SELECT TOP 1 bitmap FROM dbo.f_GenerateVirtualSetting_inline(cvs.bitmapVirtual, tmp.Val, tmp.Pos)) AS bm
+	WHERE	cvs.custid IN ( SELECT custid FROM #tempUpdate_tbl)
+
+	WAITFOR DELAY '00:00:00.010'
+END
+
+DROP TABLE #tempUpdate_tbl
