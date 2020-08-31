@@ -40,7 +40,7 @@ CREATE TABLE [dbo].[VRAgentProfile](
 	[AVGMemCredit] [MONEY] NULL,
 	[AVGMemMaxBet] [MONEY] NULL,
 	[AVGMemMaxPerMatch] [MONEY] NULL,
-	[ReleaseDate] [date] NOT NULL
+	[ReleaseDate] [datetime] NOT NULL
  CONSTRAINT [PK_VRAgentProfile] PRIMARY KEY CLUSTERED 
 (
 	[SiteID] ASC,
