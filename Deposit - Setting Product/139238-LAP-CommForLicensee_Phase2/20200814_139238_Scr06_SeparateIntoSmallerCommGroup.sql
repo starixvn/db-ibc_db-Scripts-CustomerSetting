@@ -12,6 +12,7 @@ GO
 DECLARE @GroupCommID INT, @LicenseeID INT, @GroupCommID_New INT
 	, @GroupBatch_size INT = 90000
 	, @CustBatch_size INT = 2000
+	, @Group_cnt INT = 0
 
 SELECT  @GroupCommID = xxx, @LicenseeID = XXX
 
@@ -40,11 +41,15 @@ BEGIN
 	IF @@ROWCOUNT < @GroupBatch_size BREAK
 	
 	-- Create new groupID
+	SET @Group_cnt = @Group_cnt + 1
+	
 	INSERT INTO dbo.LicenseeGroupComm (LicenseeID,GroupName,SBComm,NGComm,color,isDefault,RNGComm,ParlayComm
 										,MacauComm,PPComm,FWComm,SexyGamingComm,SpadeGamingComm
 										,KenoComm,LotteryComm,VSComm,VS2Comm,TableGameComm  
 									)
-	SELECT LicenseeID,GroupName,SBComm,NGComm,color,0,RNGComm,ParlayComm
+	SELECT LicenseeID
+			,GroupName + CONVERT(VARCHAR(10), @Group_cnt) AS GroupName
+			,SBComm,NGComm,color,0,RNGComm,ParlayComm
 			,MacauComm,PPComm,FWComm,SexyGamingComm,SpadeGamingComm
 			,KenoComm,LotteryComm,VSComm,VS2Comm,TableGameComm  
 	FROM dbo.LicenseeGroupComm WITH (NOLOCK)

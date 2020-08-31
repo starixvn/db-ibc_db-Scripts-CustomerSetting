@@ -31,4 +31,5 @@ UPDATE st
 	,StructureVerComm = tmp.StructureVerComm
 FROM Sport_Bettype_Reference_Setting st	WITH (ROWLOCK)
 	INNER JOIN #temp_sportRef tmp ON st.sporttype = tmp.sporttype
-WHERE st.sporttype IN (220,202,243,247,222,180,190)
+WHERE st.sporttype IN (220,202,243,247,222,180,190) AND st.isLicensee = 1
+

@@ -23,7 +23,8 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB230\SQLSERVER2008R2','DB233')) RETURN -- run at dbcust only
 	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
-		OR dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0		 		 
+		OR dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0	
+		OR dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0		
 		OR dbo.f_CheckRepTable('CustInfo') = 0
 		)
 	RETURN

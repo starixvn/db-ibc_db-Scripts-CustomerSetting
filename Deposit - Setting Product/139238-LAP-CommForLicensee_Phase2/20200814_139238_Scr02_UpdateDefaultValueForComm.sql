@@ -6,7 +6,7 @@
 */
 
 --Deploy this sp @DBCUST/bodb_Licensee	
-ALTER PROCEDURE [dbo].[Lrf_ExecRep_09] 	 
+ALTER PROCEDURE [dbo].[Lrf_ExecRep_08] 	 
 	@target VARCHAR(20)	
 AS
 BEGIN	
@@ -77,7 +77,7 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
-EXEC Lrf_ExecRep_09 'REPLICATED'
+EXEC Lrf_ExecRep_08 'REPLICATED'
 
 
 -- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (/06/DBTP) -----
@@ -89,7 +89,7 @@ EXEC Lrf_ExecRep_09 'REPLICATED'
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------
-EXEC Lrf_ExecRep_09 'DBCUST'
+EXEC Lrf_ExecRep_08 'DBCUST'
 
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST -----
 -----------------------------------------------------------------------------------
