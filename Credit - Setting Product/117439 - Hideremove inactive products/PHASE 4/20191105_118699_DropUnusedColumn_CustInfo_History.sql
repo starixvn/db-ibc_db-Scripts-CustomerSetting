@@ -7,49 +7,49 @@
 USE bodb_CustHistory
 GO
 -- DROP CONSTRAINT 
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF__CustInfo___SyncB__014935CB
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF__CustInfo___SyncB__014935CB
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch151_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_MaxPerMatch151_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch152_UK
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_MaxPerMatch152_UK
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch152_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_MaxPerMatch152_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_MaxPerMatch153_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_MaxPerMatch153_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable151_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_Disable151_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable152_UK
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_Disable152_UK
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable152_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_Disable152_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_Disable153_AU
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_Disable153_AU
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_Old_MaxtransferP2P
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_CustInfo_Old_MaxtransferP2P
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_Old_IsAutoResetP2P
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_CustInfo_Old_IsAutoResetP2P
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_Old_DisableP2P
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_CustInfo_Old_DisableP2P
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_CustInfo_Old_DisableFunP2P
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_CustInfo_Old_DisableFunP2P
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_history_DisableHRFixedOdds
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_history_DisableHRFixedOdds
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_history_maxpermatch154
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_history_maxpermatch154
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_history_maxpermatch183
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_history_maxpermatch183
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_history_maxpermatch185
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_history_maxpermatch185
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custInfo_History_DisableBinaryOptions
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custInfo_History_DisableBinaryOptions
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_history_MaxPerMatch44
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custinfo_history_MaxPerMatch44
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_history_DisableMicrogameLC
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custinfo_history_DisableMicrogameLC
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF_custinfo_history_DisableMicrogameRNG
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF_custinfo_history_DisableMicrogameRNG
 GO
-ALTER TABLE dbo.Custinfo DROP CONSTRAINT DF__CustInfo___Disab__7F60ED59
+ALTER TABLE dbo.CustInfo_History DROP CONSTRAINT DF__CustInfo___Disab__7F60ED59
 GO
 
 --DROP COLUMN
