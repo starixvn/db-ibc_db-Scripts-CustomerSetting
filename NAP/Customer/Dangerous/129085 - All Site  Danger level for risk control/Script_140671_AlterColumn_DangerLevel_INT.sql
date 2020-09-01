@@ -10,4 +10,4 @@ GO
 ALTER TABLE dbo.CustInfo_history DROP COLUMN DangerLevel
 GO
 
-ALTER TABLE dbo.CustInfo_history ADD DangerLevel BIGINT NULL
+ALTER TABLE dbo.CustInfo_history ADD DangerLevel INT NULL
