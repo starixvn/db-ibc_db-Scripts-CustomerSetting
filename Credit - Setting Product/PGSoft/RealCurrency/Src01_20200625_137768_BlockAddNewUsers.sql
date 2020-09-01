@@ -6,7 +6,7 @@
 	DB: DBCust/CustDB
 */
 --> Step 1 add config to block add new cust
-DECLARE @UnblockTime VARCHAR(50) = '3:15 PM (GMT+8)' -- time unblock add new cust
+DECLARE @UnblockTime VARCHAR(50) = '3:30 PM (GMT+8)' -- time unblock add new cust
 
 UPDATE Site WITH(ROWLOCK)
 SET BlockNewCust = 1,
