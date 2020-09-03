@@ -9,7 +9,7 @@ GO
 
 IF NOT EXISTS(	SELECT TOP 1 1 
 				FROM dbo.eaGroupConfiguration psd WITH(NOLOCK)
-				WHERE 	psd.ProductID = 34 
+				WHERE 	psd.ProductID = 32 
 					AND GroupId = 54 			
 			)
 BEGIN
