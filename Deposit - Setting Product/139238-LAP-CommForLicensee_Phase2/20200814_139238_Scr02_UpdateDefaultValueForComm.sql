@@ -42,7 +42,7 @@ BEGIN
 	BEGIN
 		DELETE @tmpCust 
 		
-		DELETE TOP (5000) t
+		DELETE TOP (4500) t
 		OUTPUT DELETED.custid
 		INTO @tmpCust
 		FROM #tblCust t
@@ -64,7 +64,7 @@ BEGIN
 		FROM dbo.LicenseeCustComm ls WITH(ROWLOCK)	
 			INNER JOIN @tmpCust tc ON ls.custid = tc.custid 
 		
-		WAITFOR DELAY '0:0:0.01'
+		WAITFOR DELAY '00:00:0.280'
 	END		
 END	
 GO
