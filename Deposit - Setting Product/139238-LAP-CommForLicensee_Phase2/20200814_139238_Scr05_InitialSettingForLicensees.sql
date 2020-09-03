@@ -150,7 +150,7 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 				WHERE  lp.CustID = cs.custid							
 				)
 				AS tmp (_sb)
-WHERE  l.IsActive = 1 
+WHERE  l.IsActive = 1 AND l.licenseeName NOT IN ('Athena000')
 
 WHILE (1 = 1)
 BEGIN
@@ -196,7 +196,7 @@ FROM dbo.Dep_CustSuper cs WITH(NOLOCK)
 				WHERE  lp.CustID = cs.custid							
 				)
 				AS tmp (_sb)
-WHERE  l.IsActive = 1 
+WHERE  l.IsActive = 1 AND l.licenseeName NOT IN ('Athena000')
 
 WHILE (1 = 1)
 BEGIN

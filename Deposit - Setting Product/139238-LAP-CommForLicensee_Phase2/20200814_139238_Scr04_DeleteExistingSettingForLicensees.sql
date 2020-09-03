@@ -21,13 +21,13 @@ BEGIN
 	FROM Dep_CustDiscountGroupSetting_Member dc WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN CustInfo ci WITH (NOLOCK) ON dc.agentID = ci.custid
 		INNER JOIN dbo.Dep_CustSuper cs WITH(NOLOCK) ON cs.custid = ci.srecommend
-	WHERE dc.sporttype IN (243,247,220,180,190,222)
+	WHERE dc.sporttype IN (243,247,220,180,190,222) AND cs.site NOT IN ('Athena000')
 	
 	DELETE dc
 	FROM Dep_CustDiscountSetting_Member dc WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN CustInfo ci WITH (NOLOCK) ON dc.custid = ci.custid
 		INNER JOIN dbo.Dep_CustSuper cs WITH(NOLOCK) ON cs.custid = ci.srecommend
-	WHERE dc.sporttype IN (243,247,220,180,190,222)	
+	WHERE dc.sporttype IN (243,247,220,180,190,222)	AND cs.site NOT IN ('Athena000')
 	
 	
 END
