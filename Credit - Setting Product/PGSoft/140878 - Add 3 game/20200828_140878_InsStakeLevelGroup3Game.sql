@@ -92,10 +92,13 @@ SELECT 6021 ,'1'      ,'180'       ,1      ,180       ,93   UNION ALL	--LAK	--LA
 SELECT 6022 ,'2'      ,'3600'      ,2      ,3600      ,93   UNION ALL	--LAK	--LAK
 SELECT 6021 ,'0.1'    ,'18'        ,0.1    ,18        ,62   UNION ALL	--KW	--KRW
 SELECT 6022 ,'0.2'    ,'450'       ,0.2    ,450       ,62   UNION ALL	--KW	--KRW
+SELECT 6023 ,'0.25'   ,'25'        ,0.25   ,25        ,62   UNION ALL	--KW	--KRW
 SELECT 6021 ,'0.1'    ,'18'        ,0.1    ,18        ,44   UNION ALL	--PT	--KRW
 SELECT 6022 ,'0.2'    ,'450'       ,0.2    ,450       ,44   UNION ALL	--PT	--KRW
+SELECT 6023 ,'0.25'   ,'25'        ,0.25   ,25        ,44   UNION ALL	--PT	--KRW
 SELECT 6021 ,'0.1'    ,'18'        ,0.1    ,18        ,45   UNION ALL	--Won	--KRW
 SELECT 6022 ,'0.2'    ,'450'       ,0.2    ,450       ,45   UNION ALL	--Won	--KRW
+SELECT 6023 ,'0.25'   ,'25'        ,0.25   ,25        ,45   UNION ALL	--Won	--KRW
 SELECT 6021 ,'0.25'   ,'45'        ,0.25   ,45        ,71   UNION ALL	--KHR	--KHR
 SELECT 6022 ,'0.2'    ,'1500'      ,0.2    ,1500      ,71   UNION ALL	--KHR	--KHR
 SELECT 6021 ,'10'     ,'1800'      ,10     ,1800      ,79   UNION ALL	--KES	--KES
