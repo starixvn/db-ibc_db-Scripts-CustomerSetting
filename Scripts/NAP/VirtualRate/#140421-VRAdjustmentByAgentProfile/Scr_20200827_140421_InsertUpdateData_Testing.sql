@@ -7,10 +7,10 @@
 USE [CustDB]
 GO
 
-DECLARE @ReleaseDate DATETIME = '09/02/2020 12:00 PM'
+DECLARE @ReleaseDate DATETIME = '09/02/2020'
 
 UPDATE t
-SET ReleaseDate = ReleaseDate
+SET ReleaseDate = @ReleaseDate
 FROM VRAgentProfile t WITH(ROWLOCK)
-WHERE t.SiteID IN (23,24,25,20,21,487,11,22,3)
+WHERE t.SiteID = 487 
 	AND t.Type = 1 
