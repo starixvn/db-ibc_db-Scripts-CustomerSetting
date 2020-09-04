@@ -9,7 +9,8 @@
 ------------------------------------------------------	
 
 ALTER PROCEDURE [dbo].[Acc_CustSetting_19]
-    @custid INT,		
+    @custid INT,
+	@roleid INT,
     @Target VARCHAR(20) = ''
 AS
 BEGIN
@@ -24,8 +25,15 @@ BEGIN
 	   AND dbo.f_CheckRepTable('CustNoComm') = 1 
 	   )
    
-     RETURN    
+    RETURN    
 	
+	DECLARE @groupa 	DECIMAL(9, 8) = 0
+		  , @groupb     DECIMAL(9, 8) = 0
+		  , @groupc     DECIMAL(9, 8) = 0
+		  , @groupd     DECIMAL(9, 8) = 0
+		  , @discountcs DECIMAL(9, 8) = 0
+		  , @discount1x2 DECIMAL(9, 8) = 0
+  
     DECLARE @tblCustList TABLE(custid INT, roleid INT)
 	
 	INSERT INTO @tblCustList(custid, roleid)
@@ -435,3 +443,151 @@ BEGIN
         
     END
 END	
+GO
+
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+
+---
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+--------------------------------------------------------------------------------------
+DECLARE @custid INT,
+		@roleid INT,
+		@maxcustid INT = xxx
+
+CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
+
+INSERT INTO #tblSMA(custid,roleid)
+SELECT custid, roleid
+FROM vw_customer WITH(NOLOCK)
+WHERE currency IN (2,	--	RM
+					5,	--	HK$
+					13	--	RMB
+				)
+	AND roleid = 4
+	AND site IN ('611111')
+	
+--direct master/agent	
+INSERT INTO #tblSMA(custid,roleid)
+SELECT custid, roleid
+FROM vw_customer c WITH(NOLOCK)
+	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
+	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
+										AND s.IsInternal = 0
+WHERE c.currency IN (2,	--	RM
+					5,	--	HK$
+					13	--	RMB
+					)
+	AND c.roleid < 4
+	AND c.site IN ('611111')	
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #tblSMA )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of SMA: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tblSMA
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid		
+	WHERE isfinished = 0
+			
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
+	
+	EXEC dbo.[Acc_CustSetting_19] 
+			@custid = @custid, 
+			@roleid = @roleid,		
+			@target = 'REPLICATED' 	
+				
+	WAITFOR DELAY '00:00:00.280'			
+END			
+GO	
+
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+-----------------------------------------------------------------------------------	
+	
+
+---
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CustDB -----
+--------------------------------------------------------------------------------------
+DECLARE @custid INT,
+		@roleid INT,
+		@maxcustid INT = xxx
+
+CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
+
+INSERT INTO #tblSMA(custid,roleid)
+SELECT custid, roleid
+FROM vw_customer WITH(NOLOCK)
+WHERE currency IN (2,	--	RM
+					5,	--	HK$
+					13	--	RMB
+				)
+	AND roleid = 4
+	AND site IN ('611111')
+	
+--direct master/agent	
+INSERT INTO #tblSMA(custid,roleid)
+SELECT custid, roleid
+FROM vw_customer c WITH(NOLOCK)
+	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
+	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
+										AND s.IsInternal = 0
+WHERE c.currency IN (2,	--	RM
+					5,	--	HK$
+					13	--	RMB
+					)
+	AND c.roleid < 4
+	AND c.site IN ('611111')	
+
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+
+SET @super_cnt = (SELECT COUNT(*) FROM #tblSMA )
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of SMA: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #tblSMA
+	SET isfinished = 1
+		,@custid = custid	
+		,@roleid = roleid		
+	WHERE isfinished = 0
+			
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
+	
+	EXEC dbo.[Acc_CustSetting_19] 
+			@custid = @custid, 
+			@roleid = @roleid,		
+			@target = 'DBCUST' 	
+				
+	WAITFOR DELAY '00:00:00.280'			
+END			
+GO	
+
+-- END STEP 3: RUN THIS SCRIPT AT DBCUST/CustDB -----
+-----------------------------------------------------------------------------------	
+	
+
