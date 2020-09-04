@@ -454,13 +454,13 @@ GO
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
 		@roleid INT,
-		@maxcustid INT = xxx
+		@maxcustid INT = 1
 
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #tblSMA(custid,roleid)
 SELECT custid, roleid
-FROM vw_customer WITH(NOLOCK)
+FROM customer WITH(NOLOCK)
 WHERE currency IN (2,	--	RM
 					5,	--	HK$
 					13	--	RMB
@@ -470,8 +470,8 @@ WHERE currency IN (2,	--	RM
 	
 --direct master/agent	
 INSERT INTO #tblSMA(custid,roleid)
-SELECT custid, roleid
-FROM vw_customer c WITH(NOLOCK)
+SELECT c.custid, c.roleid
+FROM customer c WITH(NOLOCK)
 	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
 	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
 										AND s.IsInternal = 0
@@ -525,13 +525,13 @@ GO
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
 		@roleid INT,
-		@maxcustid INT = xxx
+		@maxcustid INT = 1
 
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #tblSMA(custid,roleid)
 SELECT custid, roleid
-FROM vw_customer WITH(NOLOCK)
+FROM customer WITH(NOLOCK)
 WHERE currency IN (2,	--	RM
 					5,	--	HK$
 					13	--	RMB
@@ -541,8 +541,8 @@ WHERE currency IN (2,	--	RM
 	
 --direct master/agent	
 INSERT INTO #tblSMA(custid,roleid)
-SELECT custid, roleid
-FROM vw_customer c WITH(NOLOCK)
+SELECT c.custid, c.roleid
+FROM customer c WITH(NOLOCK)
 	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
 	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
 										AND s.IsInternal = 0
