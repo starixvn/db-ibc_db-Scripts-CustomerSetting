@@ -453,8 +453,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
-		@roleid INT,
-		@maxcustid INT = 1
+		@roleid INT
 
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
@@ -524,8 +523,7 @@ GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CustDB -----
 --------------------------------------------------------------------------------------
 DECLARE @custid INT,
-		@roleid INT,
-		@maxcustid INT = 1
+		@roleid INT
 
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
