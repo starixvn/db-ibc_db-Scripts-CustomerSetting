@@ -458,19 +458,22 @@ DECLARE @custid INT,
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #tblSMA(custid,roleid)
-SELECT custid, roleid
-FROM customer WITH(NOLOCK)
-WHERE currency IN (2,	--	RM
+SELECT c.custid, c.roleid
+FROM customer c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+WHERE c.currency IN (2,	--	RM
 					5,	--	HK$
 					13	--	RMB
 				)
-	AND roleid = 4
-	AND site IN ('611111')
+	AND c.roleid = 4
+	AND c.site IN ('611111')
+	AND ci.enabled = 1
 	
 --direct master/agent	
 INSERT INTO #tblSMA(custid,roleid)
 SELECT c.custid, c.roleid
 FROM customer c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
 	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
 										AND s.IsInternal = 0
@@ -480,6 +483,7 @@ WHERE c.currency IN (2,	--	RM
 					)
 	AND c.roleid < 4
 	AND c.site IN ('611111')	
+	AND ci.enabled = 1
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -498,8 +502,8 @@ BEGIN
 	SET isfinished = 1
 		,@custid = custid	
 		,@roleid = roleid		
-	WHERE isfinished = 0
-			
+	WHERE isfinished = 0						
+				
 	IF @@ROWCOUNT = 0 BREAK
 	
 	SET @index = @index + 1
@@ -528,19 +532,22 @@ DECLARE @custid INT,
 CREATE TABLE #tblSMA(CustID INT, roleid INT, isfinished BIT DEFAULT(0))
 
 INSERT INTO #tblSMA(custid,roleid)
-SELECT custid, roleid
-FROM customer WITH(NOLOCK)
-WHERE currency IN (2,	--	RM
+SELECT c.custid, c.roleid
+FROM customer c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+WHERE c.currency IN (2,	--	RM
 					5,	--	HK$
 					13	--	RMB
 				)
-	AND roleid = 4
-	AND site IN ('611111')
+	AND c.roleid = 4
+	AND c.site IN ('611111')
+	AND ci.enabled = 1
 	
 --direct master/agent	
 INSERT INTO #tblSMA(custid,roleid)
 SELECT c.custid, c.roleid
 FROM customer c WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	INNER JOIN CustDirectAccount d WITH(NOLOCK) ON c.custid = d.custid
 	INNER JOIN CustSuper s WITH(NOLOCK) ON s.custid = c.srecommend 
 										AND s.IsInternal = 0
@@ -550,6 +557,7 @@ WHERE c.currency IN (2,	--	RM
 					)
 	AND c.roleid < 4
 	AND c.site IN ('611111')	
+	AND ci.enabled = 1
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -568,8 +576,8 @@ BEGIN
 	SET isfinished = 1
 		,@custid = custid	
 		,@roleid = roleid		
-	WHERE isfinished = 0
-			
+	WHERE isfinished = 0						
+				
 	IF @@ROWCOUNT = 0 BREAK
 	
 	SET @index = @index + 1
