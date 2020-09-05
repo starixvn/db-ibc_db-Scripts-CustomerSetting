@@ -1,6 +1,6 @@
 /*
 	Created: 20200905@Long
-	Task: update data for customerClass (257 accounts)
+	Task: apply special customerClass for some cust (257 accounts)
 	DB: DBCUST/CustDB
 */
 
@@ -44,6 +44,8 @@ BEGIN
 		INNER JOIN #tmpCustCategoryByBatch AS b ON c.CustId = b.CustId;
 		
     TRUNCATE TABLE #tmpCustCategoryByBatch;
+    
+    waitfor delay '0:0:0.28'
 END;
 
 DROP TABLE #tmpCustClass;
