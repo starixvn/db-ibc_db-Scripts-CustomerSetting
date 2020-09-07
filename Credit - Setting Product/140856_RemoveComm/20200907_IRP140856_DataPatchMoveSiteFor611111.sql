@@ -163,7 +163,7 @@ BEGIN
 		FROM crmCustomer c WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN bodb02.dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 		WHERE ci.mrecommend = @custid
-		
+	END	
 	ELSE IF @roleid = 2
 	BEGIN
 		UPDATE c
