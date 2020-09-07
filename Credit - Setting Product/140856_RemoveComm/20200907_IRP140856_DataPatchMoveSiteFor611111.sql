@@ -163,14 +163,14 @@ BEGIN
 		FROM crmCustomer c WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN bodb02.dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 		WHERE ci.mrecommend = @custid
-			AND ci.roleid IN (2,3)
-	END	
+		
 	ELSE IF @roleid = 2
 	BEGIN
 		UPDATE c
 		SET siteID = @siteID
 		FROM crmCustomer c WITH(UPDLOCK,ROWLOCK)			
-		WHERE custid = @custid			
+			INNER JOIN bodb02.dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
+		WHERE ci.recommend = @custid			
 	END		
 END		
 
