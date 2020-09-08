@@ -23,7 +23,7 @@ WHERE t.SportType = 99
 	AND c.currency = 13 --RMB
 	AND ag.site IN ('haifa','IBO')
 
---step 2: Update VRCustAutoAdjustment change sporttype from 2 to 99 for old data
+--step 2: Update VRCustAutoAdjustment change sporttype from 99 to 100 for old data
 UPDATE t 
 SET t.SportType = 100
 FROM VRCustAutoAdjustment t WITH(ROWLOCK) 
