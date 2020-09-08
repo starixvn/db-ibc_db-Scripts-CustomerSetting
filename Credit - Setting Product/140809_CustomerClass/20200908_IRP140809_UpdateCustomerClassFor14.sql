@@ -4,6 +4,6 @@
 	DB: DBCUST/CustDB
 */
 
-UPDATE CustInfo WITH(UPLOCK,ROWLOCK)
+UPDATE CustInfo WITH(UPDLOCK,ROWLOCK)
 SET customerClass = NULL
 WHERE customerClass = 14
