@@ -30,7 +30,7 @@ FROM VRCustAutoAdjustment t WITH(ROWLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON t.CustID = c.custid
 	INNER JOIN Customer ag WITH(NOLOCK) ON c.recommend = ag.custid 
 WHERE t.SportType = 99 
-	--AND t.Status = 2
+	AND t.Status IN (1,2) -- keep 3,4
 	AND c.currency = 13 --RMB
 	AND ag.site IN ('haifa','IBO')
 
