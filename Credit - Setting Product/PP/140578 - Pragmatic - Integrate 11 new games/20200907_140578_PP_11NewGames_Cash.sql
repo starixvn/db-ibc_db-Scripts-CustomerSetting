@@ -179,29 +179,29 @@ SELECT 4240 ,'1.5'  ,'300'     ,1.5  ,300     ,4    UNION ALL	--TB	--TB
 SELECT 4241 ,'3'    ,'1200'    ,3    ,1200    ,4    UNION ALL	--TB	--TB
 SELECT 4242 ,'2'    ,'40'      ,2    ,40      ,4    UNION ALL	--TB	--TB
 --EUR
-SELECT 4232 ,'0.2'  ,'20'      ,0.2  ,20      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4234 ,'0.2'  ,'8'       ,0.2  ,8       ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4235 ,'0.25' ,'10'      ,0.25 ,10      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4236 ,'0.2'  ,'4'       ,0.2  ,4       ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4238 ,'0.2'  ,'20'      ,0.2  ,20      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4241 ,'0.1'  ,'40'      ,0.1  ,40      ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
-SELECT 4242 ,'0.2'  ,'2'       ,0.2  ,2       ,78   UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4232 ,'0.2'  ,'20'      ,0.2  ,20      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4234 ,'0.2'  ,'8'       ,0.2  ,8       ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4235 ,'0.25' ,'10'      ,0.25 ,10      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4236 ,'0.2'  ,'4'       ,0.2  ,4       ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4238 ,'0.2'  ,'20'      ,0.2  ,20      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4241 ,'0.1'  ,'40'      ,0.1  ,40      ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
+SELECT 4242 ,'0.2'  ,'2'       ,0.2  ,2       ,6    UNION ALL	--EUR	--USD,EUR, YNG,UUS
 --USD
-SELECT 4232 ,'0.2'  ,'20'      ,0.2  ,20      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4234 ,'0.2'  ,'8'       ,0.2  ,8       ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4235 ,'0.25' ,'10'      ,0.25 ,10      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4236 ,'0.2'  ,'4'       ,0.2  ,4       ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4238 ,'0.2'  ,'20'      ,0.2  ,20      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4241 ,'0.1'  ,'40'      ,0.1  ,40      ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
-SELECT 4242 ,'0.2'  ,'2'       ,0.2  ,2       ,95   UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4232 ,'0.2'  ,'20'      ,0.2  ,20      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4234 ,'0.2'  ,'8'       ,0.2  ,8       ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4235 ,'0.25' ,'10'      ,0.25 ,10      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4236 ,'0.2'  ,'4'       ,0.2  ,4       ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4238 ,'0.2'  ,'20'      ,0.2  ,20      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4241 ,'0.1'  ,'40'      ,0.1  ,40      ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
+SELECT 4242 ,'0.2'  ,'2'       ,0.2  ,2       ,3    UNION ALL	--USD	--USD,EUR, YNG,UUS
 --UUS
 SELECT 4232 ,'0.2'  ,'20'      ,0.2  ,20      ,20   UNION ALL	--UUS	--USD,EUR, YNG,UUS
 SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,20   UNION ALL	--UUS	--USD,EUR, YNG,UUS
