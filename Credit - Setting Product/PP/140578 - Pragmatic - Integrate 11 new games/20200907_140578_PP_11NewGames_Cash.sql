@@ -20,7 +20,7 @@ SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,12   UNION ALL	--GBP	--GBP
 SELECT 4238 ,'0.2'  ,'20'      ,0.2  ,20      ,12   UNION ALL	--GBP	--GBP
 SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,12   UNION ALL	--GBP	--GBP
 SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,12   UNION ALL	--GBP	--GBP
-SELECT 4241 ,'0.1'  ,'0'       ,0.1  ,0       ,12   UNION ALL	--GBP	--GBP
+SELECT 4241 ,'0.1'  ,'20'       ,0.1 ,20      ,12   UNION ALL	--GBP	--GBP
 SELECT 4242 ,'0.2'  ,'2'       ,0.2  ,2       ,12   UNION ALL	--GBP	--GBP
 --IDR
 SELECT 4232 ,'1.8'  ,'180'     ,1.8  ,180     ,34   UNION ALL	--IDR	--IDR, IN
