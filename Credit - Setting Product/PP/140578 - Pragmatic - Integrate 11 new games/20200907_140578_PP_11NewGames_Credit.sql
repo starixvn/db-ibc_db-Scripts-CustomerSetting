@@ -197,7 +197,7 @@ SELECT 4233 ,'0.25' ,'25'      ,0.25 ,25      ,12   UNION ALL	--GBP	--GBP
 SELECT 4234 ,'0.2'  ,'10'      ,0.2  ,10      ,12   UNION ALL	--GBP	--GBP
 SELECT 4235 ,'0.25' ,'10'      ,0.25 ,10      ,12   UNION ALL	--GBP	--GBP
 SELECT 4236 ,'0.2'  ,'4'       ,0.2  ,4       ,12   UNION ALL	--GBP	--GBP
-SELECT 4237 ,'0.09' ,'5'       ,0.09 ,5       ,12   UNION ALL	--GBP	--GBP
+SELECT 4237 ,'0.09' ,'4.5'     ,0.09 ,4.5     ,12   UNION ALL	--GBP	--GBP
 SELECT 4238 ,'0.2'  ,'12'      ,0.2  ,12      ,12   UNION ALL	--GBP	--GBP
 SELECT 4239 ,'0.1'  ,'2'       ,0.1  ,2       ,12   UNION ALL	--GBP	--GBP
 SELECT 4240 ,'0.05' ,'10'      ,0.05 ,10      ,12   UNION ALL	--GBP	--GBP
