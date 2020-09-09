@@ -87,6 +87,7 @@ GO
 ----------------------------------------------------------------
 --step 5: add new column into table SystemSetting
 ALTER TABLE  SystemSetting ADD ServiceName VARCHAR(100)
+GO
 
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET ServiceName = 'AutoFB'
