@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  add WinLimit_ProductOffer for Joker RedmineID:#140964
+	Task:  add WinLimit_ProductOffer for Joker RedmineID:#131603
 	DB: DBTRANS/bodb02
 */
 IF NOT EXISTS(	SELECT TOP 1 1 

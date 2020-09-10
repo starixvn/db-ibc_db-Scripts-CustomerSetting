@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Update Stake New User [Joker] - Credit RedmineID:#140964
+	Task:  Update Stake New User [Joker] - Credit RedmineID:#131603
 	DB: DBCust/CustDB
 */	
 PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Insert Setting StakeLevel [Joker] - UUS Credit RedmineID:#140964
+	Task:  Insert Setting StakeLevel [Joker] - UUS Credit RedmineID:#131603
 	DB: DBCust/CustDB
 */
 PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

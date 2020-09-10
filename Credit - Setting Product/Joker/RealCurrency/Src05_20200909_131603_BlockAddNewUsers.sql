@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Block add new cust [Joker] - Credit RedmineID:#140964
+	Task:  Block add new cust [Joker] - Credit RedmineID:#131603
 	DB: DBCust/CustDB
 */
 --> Step 1 add config to block add new cust

@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Initialize Stake [Joker] - UUS Credit RedmineID:#140964
+	Task:  Initialize Stake [Joker] - Credit RedmineID:#131603
 	DB: DBCust/CustDB
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
@@ -29,7 +29,7 @@ BEGIN
 	CREATE TABLE #CustListMember (CustID INT PRIMARY KEY CLUSTERED,isfinished BIT DEFAULT(0))
 		
 	DECLARE @GameTypeID	 INT,@GameGroupID INT,@SportType SMALLINT,@Currency INT,@StakeLevelID INT
-	SELECT @GameTypeID = 6401,@SportType = 234,@GameGroupID = 17 
+	SELECT @GameTypeID = 6401,@SportType = 234,@GameGroupID = 17  
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @Custid
 	
 	SELECT @StakeLevelID = sl.StakeLevelID 
@@ -91,7 +91,7 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-	PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 	DECLARE @max_custid INT, @srecommend INT
@@ -109,8 +109,9 @@ GO
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
 			AND ci.Site NOT IN ('789y','CN88')
-			AND ci.currency IN (20) --UUS
-			
+			AND ci.currency NOT IN (20) -- UUS
+							
+
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
 	DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
@@ -161,7 +162,7 @@ GO
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
 			AND ci.Site NOT IN ('789y','CN88')
-			AND ci.currency IN (20) --UUS
+			AND ci.currency NOT IN (20) -- UUS
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0

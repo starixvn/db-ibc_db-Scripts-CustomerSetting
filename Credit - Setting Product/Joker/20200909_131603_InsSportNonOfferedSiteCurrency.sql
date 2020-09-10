@@ -1,7 +1,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task: Insert value SportNonOfferedSiteCurrency real currency [Joker] - Credit RedmineID:#140964
+	Task: Insert value SportNonOfferedSiteCurrency real currency [Joker] - Credit RedmineID:#131603
 	DB: DBCUST/CustDB
 */
 DECLARE @SportType INT = 234,@BetType INT   = 6401

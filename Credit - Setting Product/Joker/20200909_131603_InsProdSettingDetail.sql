@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Insert new Product [Joker] RedmineID:#140964
+	Task:  Insert new Product [Joker] RedmineID:#131603
 	DB: DBCust/CustDB
 */
 DECLARE @productID SMALLINT ,@settingType SMALLINT,@betType SMALLINT,@sportType SMALLINT

@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task: Update SettingStatus = 1 (UAT) for [Joker] - Credit RedmineID:#140964
+	Task: Update SettingStatus = 1 (UAT) for [Joker] - Credit RedmineID:#131603
 	DB: DBCUST/CustDB
 */ 
 

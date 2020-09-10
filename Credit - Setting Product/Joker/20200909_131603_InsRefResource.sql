@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  add RefResource for Joker RedmineID:#140964
+	Task:  add RefResource for Joker RedmineID:#131603
 	DB: DBPRO/bodb02
 */
 DELETE FROM RefResource WHERE RefId = 'StakeLevel_GG' AND ResourceId = 17

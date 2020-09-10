@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20200909
-	Task:  Insert Game Group [Joker] RedmineID:#140964
+	Task:  Insert Game Group [Joker] RedmineID:#131603
 	DB: DBCust/CustDB
 */
 DECLARE @GameGroupID SMALLINT ,@betType SMALLINT,@sportType SMALLINT
