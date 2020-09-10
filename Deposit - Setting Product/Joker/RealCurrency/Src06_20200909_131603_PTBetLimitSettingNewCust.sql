@@ -6,7 +6,7 @@
 */
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
-	PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
+	PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 	DECLARE @maxcustid INT
@@ -335,4 +335,4 @@
 	DROP TABLE #Dep_CustProductStatus
 	DROP TABLE #TempProductStatus
 	DROP TABLE #AllUsers
-	PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+	PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
