@@ -31,14 +31,14 @@ FROM [UMConfig] c WITH(NOLOCK)
 )
 UPDATE c
 SET  c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE())
-	,c.EndTime = DATEADD(HOUR,tmp.rownum,GETDATE())
+	,c.EndTime = DATEADD(HOUR,tmp.rownum + 48 ,GETDATE())
 FROM [UMConfig] c WITH(ROWLOCK)
 	INNER JOIN tmp ON c.ProductID = tmp.ProductID
 	AND c.SportType = tmp.SportType
 	AND c.SiteID = tmp.SiteID
 	AND c.SuperID = tmp.SuperID
 
-SELECT c.* , s.site
+SELECT c.* , iSNULL(s.site,'all')
 FROM UMConfig c WITH(NOLOCK) 
 	LEFT JOIN Site s WITH(NOLOCK) on c.SiteID = s.siteid
 
