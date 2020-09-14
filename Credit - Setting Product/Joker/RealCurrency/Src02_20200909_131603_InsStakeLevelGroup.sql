@@ -204,7 +204,7 @@ SELECT 6412 ,'0.01' ,'2'       ,0.01 ,2       ,2    UNION ALL	--RM	--RM
 SELECT 6413 ,'0.01' ,'2'       ,0.01 ,2       ,2    UNION ALL	--RM	--RM
 SELECT 6414 ,'0.01' ,'1'       ,0.01 ,1       ,2    UNION ALL	--RM	--RM
 SELECT 6415 ,'0.01' ,'5'       ,0.01 ,5       ,2    UNION ALL	--RM	--RM
--RMB
+--RMB
 SELECT 6401 ,'1'    ,'200'     ,1    ,200     ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6402 ,'1'    ,'500'     ,1    ,500     ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6403 ,'1'    ,'500'     ,1    ,500     ,13   UNION ALL	--RMB	--RMB,YUN
