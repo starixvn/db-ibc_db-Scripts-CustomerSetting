@@ -13,21 +13,21 @@ CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel
 INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
 --UUS
-SELECT 6401 ,'0.2'  ,'3.5'     ,0.2  ,3.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6402 ,'0.5'  ,'8'       ,0.5  ,8       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6403 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6404 ,'0.18' ,'3'       ,0.18 ,3       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6405 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.2'  ,'3.5'     ,0.2  ,3.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6408 ,'0.18' ,'3'       ,0.18 ,3       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6409 ,'0.18' ,'3'       ,0.18 ,3       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6410 ,'0.2'  ,'3.5'     ,0.2  ,3.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6411 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6412 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6413 ,'0.45' ,'7.5'     ,0.45 ,7.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6414 ,'0.2'  ,'3.5'     ,0.2  ,3.5     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6415 ,'0.9'  ,'15'      ,0.9  ,15      ,20				--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6401 ,'0.01' ,'0.2'     ,0.01 ,0.2     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6402 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6403 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6404 ,'0.01' ,'0.1'     ,0.01 ,0.1     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6405 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6408 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6409 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6410 ,'0.01' ,'1'       ,0.01 ,1       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6411 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6412 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6413 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6414 ,'0.01' ,'0.2'     ,0.01 ,0.2     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6415 ,'0.01' ,'6'       ,0.01 ,6       ,20				--UUS	--IN,IND,IDD,IDR,DDD,UUS 
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
