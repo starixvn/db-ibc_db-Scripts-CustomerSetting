@@ -6,8 +6,9 @@
 
 --Step 1:Config mode for UUS tickets
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = 0
+SET Value = 1
 WHERE SettingName = 'ConfigUAT'
+	AND ServiceName = 'AutoFB'
 GO
 
 --Step 2:Config mode for real tickets
