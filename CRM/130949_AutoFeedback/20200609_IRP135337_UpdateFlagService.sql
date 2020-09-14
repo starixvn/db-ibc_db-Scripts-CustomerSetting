@@ -8,6 +8,7 @@
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET Value = '0'
 WHERE SettingName = 'ServiceFlag'
+	AND ServiceName = 'AutoFB'
 GO
 
 
@@ -16,5 +17,6 @@ GO
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET Value = '1'
 WHERE SettingName = 'ServiceFlag'
+	AND ServiceName = 'AutoFB'
 
 GO
