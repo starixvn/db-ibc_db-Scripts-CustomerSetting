@@ -30,8 +30,8 @@ SELECT ProductID,SportType,SiteID,SuperID,ROW_NUMBER () OVER (ORDER BY %%physloc
 FROM [UMConfig] c WITH(NOLOCK)
 )
 UPDATE c
-SET  c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE())
-	,c.EndTime = DATEADD(HOUR,tmp.rownum + 24*5 ,GETDATE())
+SET  --c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE()),
+	c.EndTime = DATEADD(MINUTE,tmp.rownum * 5,'2020-09-17 0:20:00')
 FROM [UMConfig] c WITH(ROWLOCK)
 	INNER JOIN tmp ON c.ProductID = tmp.ProductID
 	AND c.SportType = tmp.SportType
