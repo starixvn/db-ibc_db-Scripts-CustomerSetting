@@ -5,7 +5,7 @@
 */
 
 --3k5 custs
-SELECT c.custid, CASE WHEN s.custid IS NULL THEN 0 ELSE 1 END as isDep
+SELECT c.custid, c.username, CASE WHEN s.custid IS NULL THEN 0 ELSE 1 END as isDep
 INTO #tmpCust
 FROM custinfo c (NOLOCK)
 	LEFT JOIN Dep_CustSuper s WITH(NOLOCK)  ON c.srecommend = s.custid
@@ -16,7 +16,7 @@ DECLARE @custids VARCHAR(MAX),
 	@ErrMsg		NVARCHAR(MAX) = '' 
 
 SELECT @custids =stuff( (
-SELECT ',' + CAST(custid AS VARCHAR(10))
+SELECT ',' + username
 FROM #tmpCust
 WHERE isDep = 1
 FOR XML PATH  (''))	,1,1,'' )
@@ -35,7 +35,7 @@ SELECT @ErrCode, @ErrMsg
 
 
 SELECT @custids =stuff( (
-SELECT ',' + CAST(custid AS VARCHAR(10))
+SELECT ',' + username
 FROM #tmpCust
 WHERE isDep = 0
 FOR XML PATH  (''))	,1,1,'' )
