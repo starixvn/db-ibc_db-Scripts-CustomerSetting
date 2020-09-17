@@ -370,6 +370,11 @@ SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #Dep_StakeLevel_Temp t
 WHERE MaxStake > 999
 
+DELETE  a
+FROM Dep_StakeLevelGroupDetail a
+INNER JOIN Dep_StakeLevel b WITH(NOLOCK) ON a.StakeLevelID = b.StakeLevelID	
+WHERE b.GameTypeID = 6401 AND b.ExchangeId IN (SELECT DISTINCT ExchangeId FROM #Dep_StakeLevel_Temp)
+
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
 FROM Dep_StakeLevel s WITH(NOLOCK)

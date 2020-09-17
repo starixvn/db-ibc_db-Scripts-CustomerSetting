@@ -13,26 +13,28 @@ CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel
 INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
 --UUS
-SELECT 6401 ,'0.01' ,'0.2'     ,0.01 ,0.2     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6401 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6402 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6403 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6404 ,'0.01' ,'0.1'     ,0.01 ,0.1     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6404 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6406 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6407 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6408 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6408 ,'0.01' ,'1'       ,0.01 ,1       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6410 ,'0.01' ,'1'       ,0.01 ,1       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6410 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6411 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6412 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6413 ,'0.01' ,'6'       ,0.01 ,6       ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6414 ,'0.01' ,'0.2'     ,0.01 ,0.2     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6415 ,'0.01' ,'6'       ,0.01 ,6       ,20				--UUS	--IN,IND,IDD,IDR,DDD,UUS 
+SELECT 6412 ,'0.01' ,'6'       ,0.01 ,6       ,20				--UUS	--IN,IND,IDD,IDR,DDD,UUS
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #Dep_StakeLevel_Temp t
 WHERE MaxStake > 999
+
+DELETE  a
+FROM Dep_StakeLevelGroupDetail a
+INNER JOIN Dep_StakeLevel b WITH(NOLOCK) ON a.StakeLevelID = b.StakeLevelID	
+WHERE b.GameTypeID = 6401 AND b.ExchangeId IN (SELECT DISTINCT ExchangeId FROM #Dep_StakeLevel_Temp)
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
