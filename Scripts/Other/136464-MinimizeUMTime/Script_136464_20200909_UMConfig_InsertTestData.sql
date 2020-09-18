@@ -8,6 +8,7 @@ USE [CustDB]
 GO
 DELETE FROM [UMConfig] WITH(ROWLOCK)
 
+INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(41, 211, 0, 0, 0, 1, 21, 0, 0)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(42, 200, 0, 0, 0, 1, 0, 0, 0)
 
 ;WITH tmp AS(
@@ -17,8 +18,8 @@ FROM [UMConfig] c WITH(NOLOCK)
 UPDATE c
 SET  --c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE()),
 	--c.EndTime = DATEADD(MINUTE,tmp.rownum * 5,'2020-09-17 0:20:00')
-	c.BeginTime = DATEADD(MINUTE,10,GETDATE()),
-	c.EndTime = '2020-09-22'
+	c.BeginTime = DATEADD(MINUTE,tmp.rownum + 10,GETDATE()),
+	c.EndTime = DATEADD(MINUTE,tmp.rownum,'2020-09-22') 
 FROM [UMConfig] c WITH(ROWLOCK)
 	INNER JOIN tmp ON c.ProductID = tmp.ProductID
 	AND c.SportType = tmp.SportType
