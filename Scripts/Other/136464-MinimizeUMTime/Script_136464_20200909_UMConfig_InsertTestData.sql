@@ -20,7 +20,7 @@ INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,Func
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(22, 212, 0, 0, 0, 1, 21, 20, 0)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(22, 165, 0, 0, 0, 1, 21, 20, 14182461)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(23, 213, 0, 0, 0, 1, 3, 20, 0)
-INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(24, 219, 0, 0, 13, 1, 21, 20, 0)
+INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(24, 219, 0, 0, 13, 1, 22, 20, 0)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(38, 245, 0, 0, 1, 1, 21, 20, 0)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(41, 211, 0, 0, 0, 1, 21, 20, 0)
 INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(41, 225, 0, 0, 0, 1, 21, 20, 0)
