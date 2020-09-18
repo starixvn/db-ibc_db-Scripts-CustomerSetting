@@ -8,8 +8,7 @@ USE [CustDB]
 GO
 DELETE FROM [UMConfig] WITH(ROWLOCK)
 
-INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(41, 211, 0, 0, 0, 1, 21, 20, 0)
-
+INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(42, 200, 0, 0, 0, 1, 0, 0, 0)
 
 ;WITH tmp AS(
 SELECT ProductID,SportType,SiteID,SuperID,ROW_NUMBER () OVER (ORDER BY %%physloc%%) AS rownum
@@ -29,5 +28,4 @@ FROM [UMConfig] c WITH(ROWLOCK)
 SELECT c.* , iSNULL(s.site,'all')
 FROM UMConfig c WITH(NOLOCK) 
 	LEFT JOIN Site s WITH(NOLOCK) on c.SiteID = s.siteid
-
 
