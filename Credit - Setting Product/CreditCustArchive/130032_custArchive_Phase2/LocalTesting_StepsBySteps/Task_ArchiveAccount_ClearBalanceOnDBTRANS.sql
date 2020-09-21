@@ -1,8 +1,8 @@
 /*
-	Created: 20200505@Helen
+	Created: 20200921@Helen
 	Task: https://nexdev.net/issues/130032
-	DB: DBTRANS.BODB02
+	DB: DBTRANS.CUSTDB
 */
-USE BODB02
+USE CustDB
 GO
 EXEC dbo.Task_ArchiveAccount_ClearBal
