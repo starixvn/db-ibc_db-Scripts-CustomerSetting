@@ -33,7 +33,7 @@ SELECT 90014
 ,N'由于以下设定正在维护中，因此无法更新 (GMT+8)：<br/>- <Product>：客戶設定 (<FromTime> 至 <ToTime>)'
 ,N'由於以下設定正在維護中，因此無法更新 (GMT+8)：<br/>- <Product>：客户设定 (<FromTime> 至 <ToTime>)'
 ,N'เนื่องจากอยู่ในระหว่างการปรับปรุง ดังนั้นในช่วงเวลาดังกล่าวจึงไม่สามารถอัพเดทได้ (GMT+8):<br/>- <Product>: การตั้งค่าของลูกค้า (<FromTime> ถึง <ToTime>)'
-,N'Unable to Update because of the maintenance of the settings below (GMT +8):<br/>- <Product>: Customer Settings (<FromTime> to <ToTime>)'
+,N'Không thể cập nhật do hệ thống đang bảo trì các thiết lập sau (GMT +8):<br/>- <Product>: Thiết lập khách hàng (<FromTime> đến <ToTime>)'
 UNION ALL
 SELECT 90017
 ,10
