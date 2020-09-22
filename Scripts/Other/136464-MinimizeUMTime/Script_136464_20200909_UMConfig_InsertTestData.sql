@@ -34,22 +34,22 @@ INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,Func
 --INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(23, 213, 0, 0, 0, 1, 3, 20, 0)
 --INSERT INTO [dbo].[UMConfig](ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID) VALUES(23, 0, 0, 0, 0, 1, 3, 20, 27841113)
 
---;WITH tmp AS(
---SELECT ProductID,SportType,SiteID,SuperID,ROW_NUMBER () OVER (ORDER BY %%physloc%%) AS rownum
---FROM [UMConfig] c WITH(NOLOCK)
---)
---UPDATE c
---SET  --c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE()),
---	--c.EndTime = DATEADD(MINUTE,tmp.rownum * 5,'2020-09-17 0:20:00')
---	c.BeginTime = DATEADD(MINUTE,tmp.rownum + 10,GETDATE()),
---	c.EndTime = DATEADD(MINUTE,tmp.rownum,'2020-09-22') 
---FROM [UMConfig] c WITH(ROWLOCK)
---	INNER JOIN tmp ON c.ProductID = tmp.ProductID
---	AND c.SportType = tmp.SportType
---	AND c.SiteID = tmp.SiteID
---	AND c.SuperID = tmp.SuperID
+;WITH tmp AS(
+SELECT ProductID,SportType,SiteID,SuperID,ROW_NUMBER () OVER (ORDER BY %%physloc%%) AS rownum
+FROM [UMConfig] c WITH(NOLOCK)
+)
+UPDATE c
+SET  --c.BeginTime = DATEADD(HOUR,- tmp.rownum,GETDATE()),
+	--c.EndTime = DATEADD(MINUTE,tmp.rownum * 5,'2020-09-17 0:20:00')
+	c.BeginTime = DATEADD(MINUTE,tmp.rownum + 10,GETDATE()),
+	c.EndTime = DATEADD(MINUTE,tmp.rownum,'2020-09-22') 
+FROM [UMConfig] c WITH(ROWLOCK)
+	INNER JOIN tmp ON c.ProductID = tmp.ProductID
+	AND c.SportType = tmp.SportType
+	AND c.SiteID = tmp.SiteID
+	AND c.SuperID = tmp.SuperID
 
---SELECT c.* , iSNULL(s.site,'all')
---FROM UMConfig c WITH(NOLOCK) 
---	LEFT JOIN Site s WITH(NOLOCK) on c.SiteID = s.siteid
+SELECT c.* , iSNULL(s.site,'all')
+FROM UMConfig c WITH(NOLOCK) 
+	LEFT JOIN Site s WITH(NOLOCK) on c.SiteID = s.siteid
 
