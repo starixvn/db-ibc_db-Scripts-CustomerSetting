@@ -1,7 +1,7 @@
 /*
 	Created: 20200918@Winfred
 	Task : Create table CustCommRate
-	DB:  DBCUST/CustDB and DBTP/bodb02 
+	DB:  Add to CustDB_Custsetting publication
 */
 USE CustDB
 GO

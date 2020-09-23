@@ -29,26 +29,12 @@ BEGIN
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 	)
-	CREATE TABLE #MemberTempBatch
-	(
-		CustID	INT PRIMARY KEY CLUSTERED	
-	)
-
 	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		roleid TINYINT
 	)
 
-		CREATE TABLE #DirectTemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT
-	)
-
-
-	CREATE TABLE #tmpSTListSMA (BettypeID INT PRIMARY KEY, StakeLevelList VARCHAR(500))
-   
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
@@ -58,16 +44,7 @@ BEGIN
 	SELECT custid, roleid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
-		
-	INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
-	SELECT ci.custid, ci.roleid
-	FROM Custinfo ci WITH (NOLOCK)
-	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
-		AND ci.srecommend = @srecommend 
-		AND ci.Enabled=1
-		AND ci.roleid IN (2,3)
-		AND ci.custid <= @maxcustid 
-
+	
 --------------------------------------Commission Setting-------------------------------------------------
 	--Super level
 	INSERT INTO dbo.AgentCommRate(CustID, SportType, BetType, CommRate)
@@ -75,43 +52,19 @@ BEGIN
 	FROM #SMATemp ci  WITH(NOLOCK) 
 	WHERE ci.roleid = 4
 	
-	--Direct (Master, Agent)
-	INSERT INTO dbo.AgentCommRate(CustID, SportType, BetType, CommRate)
-	SELECT DISTINCT ci.custid, @Sporttype, @Bettype, @ComMaster
-	FROM #DirectTemp ci  WITH(NOLOCK)  
-	WHERE ci.roleid IN (2,3)
-	
 	--Master, Agent level
 	INSERT INTO dbo.AgentCommRate(CustID, SportType, BetType, CommRate)
 	SELECT DISTINCT ci.custid , @Sporttype, @Bettype, @ComMaster
 	FROM #SMATemp ci  WITH(NOLOCK)
 	WHERE ci.roleid IN (2,3)
-		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE D.CustID = ci.CustID)
+
 	--Member Level
 	INSERT INTO dbo.CustCommRate(CustID, SportType, BetType, sdiscount, adiscount, discount, playerdiscount)
 	SELECT DISTINCT ci.custid, @Sporttype, @Bettype, @CommSuper,  @ComMaster ,  @CommAgent, @CommMember
 	FROM #MemberTemp ci WITH(NOLOCK) 
-	--Update Discount info for members of direct master accounts
-	UPDATE C
-	SET  C.adiscount = @ComMaster
-	FROM dbo.CustCommRate C WITH(ROWLOCK, UPDLOCK)
-		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.mrecommend = D.CustID)
-		AND C.SportType = @Sporttype 
-		AND C.BetType = @Bettype
-	--Update Discount info for members of direct agent accounts
-	UPDATE C
-	SET  C.adiscount = @ComMaster, C.discount = @CommAgent
-	FROM dbo.CustCommRate C WITH(ROWLOCK, UPDLOCK)
-		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-	WHERE EXISTS (SELECT 1 FROM #DirectTemp D WITH (NOLOCK) WHERE CI.recommend = D.CustID)
-		AND C.SportType = @Sporttype 
-		AND C.BetType = @Bettype
-
-
+	
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
-	DROP TABLE #tmpSTListSMA
 
 END
 GO
