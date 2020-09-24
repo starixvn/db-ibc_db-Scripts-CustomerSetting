@@ -129,7 +129,7 @@ EXECUTE	sys.sp_executesql @ExecuteSQL, N'@query NVARCHAR(MAX), @xmlData NVARCHAR
 --DBTRANS
 SELECT  @query = N''		
 SELECT	@query = @query + N'EXEC Task_Archive_Credit_tmp_Helen @xmlData'
-SELECT	@ExecuteSQL = N'EXECUTE DBTXN.bodb02.dbo.sp_executesql @query, N''@xmlData NVARCHAR(MAX)'',@xmlData'
+SELECT	@ExecuteSQL = N'EXECUTE DBTXN.CUSTDB.dbo.sp_executesql @query, N''@xmlData NVARCHAR(MAX)'',@xmlData'
 
 EXECUTE	sys.sp_executesql @ExecuteSQL, N'@query NVARCHAR(MAX), @xmlData NVARCHAR(MAX)', @query, @xmlData
 

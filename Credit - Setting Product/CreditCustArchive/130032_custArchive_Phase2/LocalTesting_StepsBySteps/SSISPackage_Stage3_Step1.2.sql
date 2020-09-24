@@ -1,9 +1,9 @@
 /*
 	Created: 20200505@Helen
 	Task: https://nexdev.net/issues/130032
-	DB: DBTRANS.bodb02
+	DB: DBTRANS.CUSTDB
 */
-USE bodb02
+USE CUSTDB
 GO
 IF @@SERVERNAME NOT IN ('db230','db206')
 	RETURN

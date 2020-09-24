@@ -1,9 +1,9 @@
 /*
 	Created: 20200505@Helen
 	Task: https://nexdev.net/issues/130032
-	DB: DBTXN.bodb02
+	DB: DBTXN.CUSTDB
 */
-USE bodb02
+USE CUSTDB
 GO
 -- Please put your agents in the line 31	
 ALTER PROCEDURE dbo.Task_Archive_Credit_tmp_Helen 
