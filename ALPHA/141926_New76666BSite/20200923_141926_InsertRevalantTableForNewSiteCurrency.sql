@@ -33,3 +33,7 @@ INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, Si
 SELECT ProductID, GroupID, ExchangeID, @ToSite, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
 FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
 WHERE siteId = @FromSite AND ExchangeID = 69
+
+--------------PlayCurrencySetting(AllBet)-----------------
+INSERT INTO dbo.PlayCurrencySetting(SiteId, SiteName, SportType, MemberCurrency, PlayCurrency, FromDate, ToDate)
+SELECT @ToSite,'76666B',211,69,5,GETDATE(),'2050-01-01'
