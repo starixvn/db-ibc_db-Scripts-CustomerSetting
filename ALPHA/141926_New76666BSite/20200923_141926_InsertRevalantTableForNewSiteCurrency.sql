@@ -20,6 +20,7 @@ INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsH
 SELECT SportType, BetType, Currency, @ToSite, IsHidden, IsDisabled, HasSynced
 FROM ProductStatusSiteCurrency WITH (NOLOCK)
 WHERE SiteID = @FromSite
+	AND sporttype <> 200
 
 ---------------ProductLaunchedSiteCurrency-------------------------
 INSERT INTO ProductLaunchedSiteCurrency (SiteID, Currency, SportType, IsLaunched, IsTest, BetType, LaunchedLevel)
