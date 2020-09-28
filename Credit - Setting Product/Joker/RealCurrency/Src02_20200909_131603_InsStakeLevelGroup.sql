@@ -300,6 +300,11 @@ SELECT 6411 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
 SELECT 6412 ,'50'   ,'3000'    ,50   ,3000    ,45				--Won	--Won
 
 UPDATE t
+SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
+FROM #StakeLevel_Temp t
+WHERE MinStake > 999
+
+UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #StakeLevel_Temp t
 WHERE MaxStake > 999
