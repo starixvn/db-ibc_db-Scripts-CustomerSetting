@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*	
 	Created: 20200928@Eden
-	Task: Drop 40 columns on CustInfo table of DB Archive for Licensee [#125823]
+	Task: Drop 40 columns on CustInfo table of DB Archive for Licensee [#125823] - reference from https://nexdev.net/issues/123937
 	DB: DBARCCUST/Bodb_Archive_Customer_Licensee
 */
 USE Bodb_Archive_Customer_Licensee
