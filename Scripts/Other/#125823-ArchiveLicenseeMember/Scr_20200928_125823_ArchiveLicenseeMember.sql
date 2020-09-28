@@ -3,7 +3,8 @@
     Created: Eden@20200928
     Task: archive two member : AB88UUS013333, AB88UUS013334 [#125823]
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
-		Step 23 : Run job Archive Setting (DB06)
+		Step 2 : Run job Clear balance (DBTXXN)
+		Step 3 : Run job Archive Setting (DB05)
     DB: DBCUST/CustDB
 */ 
 
@@ -43,8 +44,8 @@ DROP TABLE #Member
 GO
 ---------------------------END Step 1 (DBCUST/CUSTDB) : Insert members to waiting list -------------------------------
 
----------------------------Step 2 : Clear balance (SQL job run at DB06) -------------------------------
+---------------------------Step 2 : Clear balance (SQL job run at DBTXN) -------------------------------
 --> Run Job : DBA_Dep_Customer_Archived_ClearBalance
 
----------------------------Step 3 : Archive Setting  (SQL job run at DB06) -------------------------------
+---------------------------Step 3 : Archive Setting  (SQL job run at DB05) -------------------------------
 --> Run Job : DBA_Dep_Customer_Archived_CopyDeleteCustSetting
