@@ -3,7 +3,7 @@
     Created: Eden@20200928
     Task: archive two member : AB88UUS013333, AB88UUS013334 [#125823]
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
-		Step 2 : Run job Clear balance (DBTXXN)
+		Step 2 : Run job Clear balance (DBTXN)
 		Step 3 : Run job Archive Setting (DB05)
     DB: DBCUST/CustDB
 */ 
