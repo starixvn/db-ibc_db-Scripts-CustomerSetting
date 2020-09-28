@@ -71,8 +71,8 @@ FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	LEFT JOIN #Super_Exception se ON se.srecommend = agci.srecommend
 WHERE ag.isFinished = 1
 	--AND isnull(MemCount, 0) > 0
-	AND agci.closed = 1
-	AND agci.enabled = 1
+	--AND agci.closed = 1
+	--AND agci.enabled = 1
 	AND ag.recommend NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND agci.custid NOT IN (
 		SELECT DISTINCT recommend
