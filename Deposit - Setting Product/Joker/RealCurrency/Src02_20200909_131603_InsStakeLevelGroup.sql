@@ -18,8 +18,8 @@ SELECT 6402 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--EURO
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--EURO
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,6    UNION ALL	--EURO	--EURO
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--EURO
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,6    UNION ALL	--EURO	--EURO
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,6    UNION ALL	--EURO	--EURO
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,6    UNION ALL	--EURO	--EURO
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,6    UNION ALL	--EURO	--EURO
 SELECT 6408 ,'0.2'  ,'40'      ,0.2  ,40      ,6    UNION ALL	--EURO	--EURO
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--EURO
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--EURO
@@ -31,8 +31,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,47   UNION ALL	--DDD	--IN,IND,IDD
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,47   UNION ALL	--DDD	--IN,IND,IDD,IDR,DDD,UUS
@@ -44,8 +44,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,33   UNION ALL	--IDD	--IN,IND,IDD
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,33   UNION ALL	--IDD	--IN,IND,IDD,IDR,DDD,UUS
@@ -57,8 +57,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,34   UNION ALL	--IDR	--IN,IND,IDD
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,34   UNION ALL	--IDR	--IN,IND,IDD,IDR,DDD,UUS
@@ -70,8 +70,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,15   UNION ALL	--IN	--IN,IND,IDD,
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,15   UNION ALL	--IN	--IN,IND,IDD,IDR,DDD,UUS
@@ -83,8 +83,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,22   UNION ALL	--IND	--IN,IND,IDD
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD,UUS
@@ -96,8 +96,8 @@ SELECT 6402 ,'0.1'  ,'60'      ,0.1  ,60      ,20   UNION ALL	--UUS	--IN,IND,IDD
 SELECT 6403 ,'0.1'  ,'60'      ,0.1  ,60      ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6404 ,'0.2'  ,'120'     ,0.2  ,120     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6405 ,'0.1'  ,'60'      ,0.1  ,60      ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6406 ,'0.5'  ,'300'     ,0.5  ,300     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
-SELECT 6407 ,'0.5'  ,'300'     ,0.5  ,300     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6406 ,'0.25' ,'150'     ,0.25 ,150     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
+SELECT 6407 ,'0.25' ,'150'     ,0.25 ,150     ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6409 ,'0.1'  ,'60'      ,0.1  ,60      ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
 SELECT 6410 ,'0.1'  ,'60'      ,0.1  ,60      ,20   UNION ALL	--UUS	--IN,IND,IDD,IDR,DDD,UUS
@@ -109,8 +109,8 @@ SELECT 6402 ,'1000' ,'20000'   ,1000 ,20000   ,61   UNION ALL	--INR	--INR
 SELECT 6403 ,'1000' ,'20000'   ,1000 ,20000   ,61   UNION ALL	--INR	--INR
 SELECT 6404 ,'2000' ,'40000'   ,2000 ,40000   ,61   UNION ALL	--INR	--INR
 SELECT 6405 ,'1000' ,'20000'   ,1000 ,20000   ,61   UNION ALL	--INR	--INR
-SELECT 6406 ,'5000' ,'100000'  ,5000 ,100000  ,61   UNION ALL	--INR	--INR
-SELECT 6407 ,'5000' ,'100000'  ,5000 ,100000  ,61   UNION ALL	--INR	--INR
+SELECT 6406 ,'2500' ,'50000'   ,2500 ,50000   ,61   UNION ALL	--INR	--INR
+SELECT 6407 ,'2500' ,'50000'   ,2500 ,50000   ,61   UNION ALL	--INR	--INR
 SELECT 6408 ,'2000' ,'40000'   ,2000 ,40000   ,61   UNION ALL	--INR	--INR
 SELECT 6409 ,'1000' ,'20000'   ,1000 ,20000   ,61   UNION ALL	--INR	--INR
 SELECT 6410 ,'1000' ,'20000'   ,1000 ,20000   ,61   UNION ALL	--INR	--INR
@@ -122,8 +122,8 @@ SELECT 6402 ,'100'  ,'6000'    ,100  ,6000    ,69   UNION ALL	--MMK	--MMK
 SELECT 6403 ,'100'  ,'6000'    ,100  ,6000    ,69   UNION ALL	--MMK	--MMK
 SELECT 6404 ,'200'  ,'12000'   ,200  ,12000   ,69   UNION ALL	--MMK	--MMK
 SELECT 6405 ,'100'  ,'6000'    ,100  ,6000    ,69   UNION ALL	--MMK	--MMK
-SELECT 6406 ,'500'  ,'30000'   ,500  ,30000   ,69   UNION ALL	--MMK	--MMK
-SELECT 6407 ,'500'  ,'30000'   ,500  ,30000   ,69   UNION ALL	--MMK	--MMK
+SELECT 6406 ,'250'  ,'15000'   ,250  ,15000   ,69   UNION ALL	--MMK	--MMK
+SELECT 6407 ,'250'  ,'15000'   ,250  ,15000   ,69   UNION ALL	--MMK	--MMK
 SELECT 6408 ,'200'  ,'12000'   ,200  ,12000   ,69   UNION ALL	--MMK	--MMK
 SELECT 6409 ,'100'  ,'6000'    ,100  ,6000    ,69   UNION ALL	--MMK	--MMK
 SELECT 6410 ,'100'  ,'6000'    ,100  ,6000    ,69   UNION ALL	--MMK	--MMK
@@ -135,8 +135,8 @@ SELECT 6402 ,'0.1'  ,'20'      ,0.1  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,5    UNION ALL	--HK$	--RM,HK$,HKK
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,5    UNION ALL	--HK$	--RM,HK$,HKK
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,5    UNION ALL	--HK$	--RM,HK$,HKK
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,5    UNION ALL	--HK$	--RM,HK$,HKK
@@ -148,8 +148,8 @@ SELECT 6402 ,'0.1'  ,'20'      ,0.1  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,67   UNION ALL	--HKK	--RM,HK$,HKK
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,67   UNION ALL	--HKK	--RM,HK$,HKK
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,67   UNION ALL	--HKK	--RM,HK$,HKK
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,67   UNION ALL	--HKK	--RM,HK$,HKK
@@ -161,8 +161,8 @@ SELECT 6402 ,'0.1'  ,'20'      ,0.1  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,2    UNION ALL	--RM	--RM,HK$,HKK
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,2    UNION ALL	--RM	--RM,HK$,HKK
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,2    UNION ALL	--RM	--RM,HK$,HKK
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,2    UNION ALL	--RM	--RM,HK$,HKK
@@ -174,8 +174,8 @@ SELECT 6402 ,'10'   ,'5000'    ,10   ,5000    ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6403 ,'10'   ,'5000'    ,10   ,5000    ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6404 ,'20'   ,'10000'   ,20   ,10000   ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6405 ,'10'   ,'5000'    ,10   ,5000    ,13   UNION ALL	--RMB	--RMB,YUN
-SELECT 6406 ,'50'   ,'25000'   ,50   ,25000   ,13   UNION ALL	--RMB	--RMB,YUN
-SELECT 6407 ,'50'   ,'25000'   ,50   ,25000   ,13   UNION ALL	--RMB	--RMB,YUN
+SELECT 6406 ,'25'   ,'12500'   ,25   ,12500   ,13   UNION ALL	--RMB	--RMB,YUN
+SELECT 6407 ,'25'   ,'12500'   ,25   ,12500   ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6408 ,'20'   ,'10000'   ,20   ,10000   ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6409 ,'10'   ,'5000'    ,10   ,5000    ,13   UNION ALL	--RMB	--RMB,YUN
 SELECT 6410 ,'10'   ,'5000'    ,10   ,5000    ,13   UNION ALL	--RMB	--RMB,YUN
@@ -187,8 +187,8 @@ SELECT 6402 ,'10'   ,'5000'    ,10   ,5000    ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6403 ,'10'   ,'5000'    ,10   ,5000    ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6404 ,'20'   ,'10000'   ,20   ,10000   ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6405 ,'10'   ,'5000'    ,10   ,5000    ,66   UNION ALL	--YUN	--RMB,YUN
-SELECT 6406 ,'50'   ,'25000'   ,50   ,25000   ,66   UNION ALL	--YUN	--RMB,YUN
-SELECT 6407 ,'50'   ,'25000'   ,50   ,25000   ,66   UNION ALL	--YUN	--RMB,YUN
+SELECT 6406 ,'25'   ,'12500'   ,25   ,12500   ,66   UNION ALL	--YUN	--RMB,YUN
+SELECT 6407 ,'25'   ,'12500'   ,25   ,12500   ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6408 ,'20'   ,'10000'   ,20   ,10000   ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6409 ,'10'   ,'5000'    ,10   ,5000    ,66   UNION ALL	--YUN	--RMB,YUN
 SELECT 6410 ,'10'   ,'5000'    ,10   ,5000    ,66   UNION ALL	--YUN	--RMB,YUN
@@ -226,8 +226,8 @@ SELECT 6402 ,'0.1'  ,'10'      ,0.1  ,10      ,35   UNION ALL	--$US	--US$,YEN,$U
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,35   UNION ALL	--$US	--US$,YEN,$US,UT,USD
@@ -239,8 +239,8 @@ SELECT 6402 ,'0.1'  ,'10'      ,0.1  ,10      ,3    UNION ALL	--US$	--US$,YEN,$U
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,3    UNION ALL	--US$	--US$,YEN,$US,UT,USD
@@ -252,8 +252,8 @@ SELECT 6402 ,'0.1'  ,'10'      ,0.1  ,10      ,95   UNION ALL	--USD	--US$,YEN,$U
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,95   UNION ALL	--USD	--US$,YEN,$US,UT,USD
@@ -265,8 +265,8 @@ SELECT 6402 ,'0.1'  ,'10'      ,0.1  ,10      ,64   UNION ALL	--UT	--US$,YEN,$US
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,64   UNION ALL	--UT	--US$,YEN,$US,UT,USD
@@ -278,8 +278,8 @@ SELECT 6402 ,'0.1'  ,'10'      ,0.1  ,10      ,16   UNION ALL	--Yen	--US$,YEN,$U
 SELECT 6403 ,'0.1'  ,'20'      ,0.1  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
 SELECT 6404 ,'0.2'  ,'20'      ,0.2  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
 SELECT 6405 ,'0.1'  ,'20'      ,0.1  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
-SELECT 6406 ,'0.5'  ,'50'      ,0.5  ,50      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
-SELECT 6407 ,'0.5'  ,'50'      ,0.5  ,50      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
+SELECT 6406 ,'0.25' ,'25'      ,0.25 ,25      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
+SELECT 6407 ,'0.25' ,'25'      ,0.25 ,25      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
 SELECT 6408 ,'0.2'  ,'20'      ,0.2  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
 SELECT 6409 ,'0.1'  ,'20'      ,0.1  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
 SELECT 6410 ,'0.1'  ,'20'      ,0.1  ,20      ,16   UNION ALL	--Yen	--US$,YEN,$US,UT,USD
@@ -291,13 +291,13 @@ SELECT 6402 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
 SELECT 6403 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
 SELECT 6404 ,'200'  ,'12000'   ,200  ,12000   ,45   UNION ALL	--Won	--Won
 SELECT 6405 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
-SELECT 6406 ,'500'  ,'30000'   ,500  ,30000   ,45   UNION ALL	--Won	--Won
-SELECT 6407 ,'500'  ,'30000'   ,500  ,30000   ,45   UNION ALL	--Won	--Won
+SELECT 6406 ,'250'  ,'15000'   ,250  ,15000   ,45   UNION ALL	--Won	--Won
+SELECT 6407 ,'250'  ,'15000'   ,250  ,15000   ,45   UNION ALL	--Won	--Won
 SELECT 6408 ,'200'  ,'12000'   ,200  ,12000   ,45   UNION ALL	--Won	--Won
 SELECT 6409 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
 SELECT 6410 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
 SELECT 6411 ,'100'  ,'6000'    ,100  ,6000    ,45   UNION ALL	--Won	--Won
-SELECT 6412 ,'50'   ,'3000'    ,50   ,3000    ,45				--Won	--Won 
+SELECT 6412 ,'50'   ,'3000'    ,50   ,3000    ,45				--Won	--Won
 
 UPDATE t
 SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
