@@ -5,13 +5,8 @@
 	DB: DBCUST/CustDB
 */
 USE [CustDB]
-GO
-WHILE 1 = 1
-BEGIN
-	DELETE TOP (1000) t 
-	FROM VRAgentProfile t WITH(ROWLOCK)
-	WHERE t.SiteID = 3 AND Type = 1
 
-	IF @@ROWCOUNT = 0
-	BREAK;
-END
+DELETE t 
+FROM VRAgentProfile t WITH(ROWLOCK)
+WHERE t.SiteID = 3 AND Type = 1
+

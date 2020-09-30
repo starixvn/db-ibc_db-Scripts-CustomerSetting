@@ -123,6 +123,14 @@ GO
 	END
 
 	--Step 2 : Remove Agents of 789y from VRAgentAutoAdjustment
-	DELETE 
-	FROM VRAgentAutoAdjustment WITH(ROWLOCK)
-	WHERE AgentID IN ( SELECT AgentID FROM @AgentTbl)
+	
+
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP(1000)
+		FROM VRAgentAutoAdjustment WITH(ROWLOCK)
+		WHERE AgentID IN ( SELECT AgentID FROM @AgentTbl)
+
+		IF @@ROWCOUNT = 0
+		BREAK;
+	END
