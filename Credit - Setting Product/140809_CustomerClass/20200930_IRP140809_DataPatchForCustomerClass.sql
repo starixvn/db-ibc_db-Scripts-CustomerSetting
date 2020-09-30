@@ -5,7 +5,12 @@
 */
 
 --3 rows affect
+SELECT custid 
+INTO #tmp
+FROM custinfo c WITH(NOLOCK)
+WHERE CustomerClass = -1
+
 UPDATE c 
 SET CustomerClass = NULL
 FROM custinfo c WITH(UPDLOCK,ROWLOCK)
-WHERE CustomerClass = -1
+WHERE custid IN (SELECT CustID FROM #tmp)
