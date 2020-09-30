@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
     Created: Eden@20200928
-    Task: archive two member : AB88UUS013333, AB88UUS013334 [#125823]
+    Task: archive two member : AB88UUS01065, TLCUUS01002 [#125823]
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
 		Step 2 : Archive Deposit Member - Step 2: Clear Balance and CustInfo (DBTXN)
 		Step 3 : Archive Deposit Member - Step 3:Archive CustSetting
@@ -23,7 +23,7 @@ FROM Customer c WITH(NOLOCK)
 	INNER JOIN Customer bal WITH(NOLOCK) 
 		ON bal.recommend = c.recommend
 		AND bal.username like '%ClearBal'
-WHERE c.username IN ('AB88UUS013333','AB88UUS013334')
+WHERE c.username IN ('AB88UUS01065','TLCUUS01002')
 
 --Update ClosingBalance
 UPDATE #Member 
