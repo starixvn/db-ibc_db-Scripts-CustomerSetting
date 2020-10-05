@@ -7,3 +7,4 @@
 USE CustDB
 ALTER TABLE UMConfig ADD ShowTime smalldatetime NULL
 ALTER TABLE UMConfig ADD LockAddingNew BIT NULL
+ALTER TABLE UMConfig ADD ConfigID INT IDENTITY(1,1) 
