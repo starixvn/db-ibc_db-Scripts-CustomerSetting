@@ -6,7 +6,7 @@
 	
 	1.SEXY GAMING
 	2.SpadeGaming
-	3.Keno (non DCS)
+	--3.Keno (non DCS)
 	4.Lottery
 	5.Virtual Sport
 	6.Virtual Sport 2
@@ -17,19 +17,34 @@ GO
 CREATE TABLE #temp_sportRef(sporttype SMALLINT, SportTypeRefComm SMALLINT,BetTypeRefComm INT, TableComm VARCHAR(50),StructureVerComm VARCHAR(10))
 INSERT INTO #temp_sportRef (sporttype,SportTypeRefComm, BetTypeRefComm, TableComm,StructureVerComm )
 VALUES (220,220,1021,'Dep_CustDiscountSetting_Member','DCS'),
-(202,202,1501,'CustSettingGame','default'),
+--(202,202,1501,'CustSettingGame','default'),
 (243,243,3101,'Dep_CustDiscountSetting_Member','DCS'),
 (247,247,4301,'Dep_CustDiscountSetting_Member','DCS'),
 (222,222,4901,'Dep_CustDiscountSetting_Member','DCS'),
+-- VS
 (180,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
-(190,190,2701,'Dep_CustDiscountSetting_Member','DCS')
+(181,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+(182,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+(183,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+(184,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+(185,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+(186,180,1201,'Dep_CustDiscountSetting_Member','DCS'),
+-- VS2
+(190,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(191,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(192,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(193,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(194,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(195,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(196,190,2701,'Dep_CustDiscountSetting_Member','DCS'),
+(197,190,2701,'Dep_CustDiscountSetting_Member','DCS')
 
 UPDATE st
 	SET SportTypeRefComm = tmp.SportTypeRefComm
-	,BetTypeRefComm = tmp.BetTypeRefComm
-	,TableComm = tmp.TableComm
-	,StructureVerComm = tmp.StructureVerComm
+		,BetTypeRefComm = tmp.BetTypeRefComm
+		,TableComm = tmp.TableComm
+		,StructureVerComm = tmp.StructureVerComm
 FROM Sport_Bettype_Reference_Setting st	WITH (ROWLOCK)
 	INNER JOIN #temp_sportRef tmp ON st.sporttype = tmp.sporttype
-WHERE st.sporttype IN (220,202,243,247,222,180,190) AND st.isLicensee = 1
+WHERE st.isLicensee = 1
 
