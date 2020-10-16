@@ -10,6 +10,6 @@ GO
 UPDATE ps
 SET ps.isActive = 1
 FROM dbo.Sport_Bettype_Reference_Setting ps WITH (ROWLOCK)
-WHERE SportType = 228
+WHERE SportType = 1 and bettype = 228
 
 
