@@ -8,6 +8,9 @@
 ALTER TABLE eaGroup ADD ParentID INT
 GO
 
+GRANT SELECT ON eaGroup TO bodbExtAccNet
+GO
+
 --step 2: run this script on DBLOG/bodb_CustomerLog for log action
 INSERT INTO [bodb_CustomerLog].[dbo].[LogAction]
            ([ActionID]
