@@ -7,18 +7,17 @@
 USE NAP_UserControl
 GO
 
-DECLARE @GroupID INT = 0
+SELECT GroupID INTO #temp_eaGroup FROM eaGroup WITH (NOLOCK)  WHERE GroupName  in ( 'ACCUUSMyanmar','ACCMMKMyanmar' )
 
-SELECT @GroupID = GroupID  FROM eaGroup WITH (NOLOCK)  WHERE GroupName  = 'ACCUUSMyanmar'
-
-DELETE FROM	 eaGroupConfiguration  WHERE GroupId = @GroupID			
+DELETE a FROM eaGroupConfiguration a INNER JOIN #temp_eaGroup b on a.GroupId = b.GroupId
 
 INSERT INTO eaGroupConfiguration (ProductId,GroupId,IsShow) 
 SELECT 
-	ProductId 
-	,@GroupID as GroupId
-	,IsShow 
-FROM eaGroupConfiguration a WITH(NOLOCK)
-INNER JOIN eaGroup c WITH (NOLOCK) ON a.GroupId = c.GroupId
-WHERE c.GroupName  = 'ACCMMK'
+	c.ProductId 
+	,a.GroupId
+	,c.IsShow 
+FROM #temp_eaGroup a
+INNER JOIN eaGroup b WITH (NOLOCK) ON b.GroupName  = 'ACCMMK'
+INNER JOIN eaGroupConfiguration c WITH(NOLOCK) ON b.GroupId = c.GroupId
 		
+DROP TABLE #temp_eaGroup
