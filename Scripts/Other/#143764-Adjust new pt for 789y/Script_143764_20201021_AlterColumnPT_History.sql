@@ -2,7 +2,6 @@
 /*
     Created: Eden@20201021
     Task: Change datatype PT tables [#143764]
-			ProductSettingDetail_history
 			CustPTSetting3rd_Agent_history
 			CustPTSetting3rd_Member_history
 			CustPTGroupSetting3rd_Member_history 
