@@ -140,17 +140,9 @@ GO
 	GO
 
 --Step 4 : REMOVE column
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  SuperPT_BK	
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  MasterPT_BK
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  AgentPT_BK	
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  AutoSuperPT_BK
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  AutoMasterPT_BK
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  MinPT_BK	
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP COLUMN  MaxPT_BK	
-
-	ALTER TABLE CustPTSetting3rd_Member_history DROP COLUMN SuperPT_BK	
-	ALTER TABLE CustPTSetting3rd_Member_history DROP COLUMN MasterPT_BK
-	ALTER TABLE CustPTSetting3rd_Member_history DROP COLUMN AgentPT_BK	
-	ALTER TABLE CustPTSetting3rd_Member_history DROP COLUMN AutoSuperPT_BK
-	ALTER TABLE CustPTSetting3rd_Member_history DROP COLUMN AutoMasterPT_BK
+	ALTER TABLE CustPTSetting3rd_Agent_history
+	DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK, MinPT_BK, MaxPT_BK
+	GO
+	ALTER TABLE CustPTSetting3rd_Member_history
+	DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK
 	GO
