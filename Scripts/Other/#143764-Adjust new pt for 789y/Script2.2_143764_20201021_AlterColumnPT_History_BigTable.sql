@@ -132,4 +132,9 @@ GO
 
 		--WAITFOR DELAY '00:00:00.010'
 	END
+
+	DROP TABLE #CustTbl_Agent
+	DROP TABLE #CustTbl_Member
+	DROP TABLE #CustTbl_tmp
+
 	GO
