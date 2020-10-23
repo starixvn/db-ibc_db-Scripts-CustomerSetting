@@ -89,7 +89,7 @@ GO
 	BEGIN
 		TRUNCATE TABLE #CustTbl_tmp
 
-		DELETE TOP (5000) t
+		DELETE TOP (@batch) t
 		OUTPUT deleted.CustID INTO #CustTbl_tmp(CustID)
 		FROM #CustTbl_Agent t
 
@@ -114,7 +114,7 @@ GO
 	BEGIN
 		TRUNCATE TABLE #CustTbl_tmp
 
-		DELETE TOP (5000) t
+		DELETE TOP (@batch) t
 		OUTPUT deleted.CustID INTO #CustTbl_tmp(CustID)
 		FROM #CustTbl_Member t
 
