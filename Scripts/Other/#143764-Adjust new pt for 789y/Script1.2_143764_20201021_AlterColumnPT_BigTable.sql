@@ -26,19 +26,19 @@ GO
 	ALTER TABLE CustPTSetting3rd_Member DROP CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]
 	GO	
 	--ALTER COLUMN
-	ALTER TABLE CustPTSetting3rd_Agent ADD  SuperPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT		DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  MasterPT_tmp		SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MasterPT		DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  AgentPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AgentPT		DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  AutoSuperPT_tmp		SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AutoSuperPT	DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  AutoMasterPT_tmp	SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AutoMasterPT	DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  MinPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MinPT			DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Agent ADD  MaxPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MaxPT			DEFAULT (90)
+	ALTER TABLE CustPTSetting3rd_Agent ADD  SuperPT_tmp			SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT		DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  MasterPT_tmp		SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MasterPT		DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  AgentPT_tmp			SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AgentPT		DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  AutoSuperPT_tmp		SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AutoSuperPT	DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  AutoMasterPT_tmp	SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_AutoMasterPT	DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  MinPT_tmp			SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MinPT			DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Agent ADD  MaxPT_tmp			SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_MaxPT			DEFAULT (90)
 	
-	ALTER TABLE CustPTSetting3rd_Member ADD SuperPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_SuperPT]			DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Member ADD MasterPT_tmp		SMALLMONEY NOT NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_MasterPT]		DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Member ADD AgentPT_tmp			SMALLMONEY NOT NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AgentPT]			DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Member ADD AutoSuperPT_tmp		SMALLMONEY NOT NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]		DEFAULT (0) 
-	ALTER TABLE CustPTSetting3rd_Member ADD AutoMasterPT_tmp	SMALLMONEY NOT NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AutoMasterPT]	DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Member ADD SuperPT_tmp			SMALLMONEY  NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_SuperPT]			DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Member ADD MasterPT_tmp		SMALLMONEY  NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_MasterPT]		DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Member ADD AgentPT_tmp			SMALLMONEY  NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AgentPT]			DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Member ADD AutoSuperPT_tmp		SMALLMONEY  NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]		DEFAULT (0) 
+	ALTER TABLE CustPTSetting3rd_Member ADD AutoMasterPT_tmp	SMALLMONEY  NULL		CONSTRAINT [DF_CustPTSetting3rd_Member_AutoMasterPT]	DEFAULT (0) 
 	GO
 GO
 ---------------------------------------------------------------------------------------------------------------------------
