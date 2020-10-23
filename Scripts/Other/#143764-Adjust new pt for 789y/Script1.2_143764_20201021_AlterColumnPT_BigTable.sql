@@ -129,7 +129,7 @@ GO
 				 INNER JOIN #CustTbl_tmp t
 				   ON c.CustID = t.CustID;
 
-			WAITFOR DELAY '00:00:00.010'
+			--WAITFOR DELAY '00:00:00.010'
 		END
 
 		WHILE 1 = 1
@@ -152,7 +152,7 @@ GO
 				 INNER JOIN #CustTbl_tmp t
 				   ON c.CustID = t.CustID;
 
-			WAITFOR DELAY '00:00:00.010'
+			--WAITFOR DELAY '00:00:00.010'
 		END
 	END
 	GO
@@ -201,7 +201,7 @@ GO
 				,@target = 'REPLICATED'
 			
 			
-		WAITFOR DELAY '00:00:00.010'
+		--WAITFOR DELAY '00:00:00.010'
 	END
 
 	DROP TABLE #supers
@@ -252,7 +252,7 @@ GO
 				,@target = 'DBCUST'
 			
 			
-		WAITFOR DELAY '00:00:00.010'
+		--WAITFOR DELAY '00:00:00.010'
 	END
 
 	DROP TABLE #supers
