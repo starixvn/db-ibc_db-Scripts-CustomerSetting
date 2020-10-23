@@ -25,10 +25,10 @@ ALTER TABLE CustPTGroupSetting3rd_Member_history ALTER COLUMN AutoMasterPT SMALL
 
 			
 GO
---Add default no need default for history tables
---ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_SuperPT]			DEFAULT (0) FOR SuperPT
---ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_MasterPT]		DEFAULT (0) FOR MasterPT
---ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AgentPT]			DEFAULT (0) FOR AgentPT
---ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoMasterPT]	DEFAULT (0) FOR AutoMasterPT
---ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoSuperPT]		DEFAULT (0) FOR AutoSuperPT
+--Add default 
+ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_SuperPT]			DEFAULT (0) FOR SuperPT
+ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_MasterPT]		DEFAULT (0) FOR MasterPT
+ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AgentPT]			DEFAULT (0) FOR AgentPT
+ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoMasterPT]	DEFAULT (0) FOR AutoMasterPT
+ALTER TABLE CustPTGroupSetting3rd_Member_history ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoSuperPT]		DEFAULT (0) FOR AutoSuperPT
 

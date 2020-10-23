@@ -57,7 +57,7 @@ ALTER TABLE CustPTGroupSetting3rd_Member_old ALTER COLUMN AutoMasterPT SMALLMONE
 
 			
 GO
---Add default --> no need default for archive tables
+--Add default
 --ALTER TABLE CustPTSetting3rd_Agent_old ADD CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT		DEFAULT (0) FOR SuperPT
 --ALTER TABLE CustPTSetting3rd_Agent_old ADD CONSTRAINT DF_CustPTSetting3rd_Agent_MasterPT		DEFAULT (0) FOR MasterPT
 --ALTER TABLE CustPTSetting3rd_Agent_old ADD CONSTRAINT DF_CustPTSetting3rd_Agent_AgentPT		DEFAULT (0) FOR AgentPT
@@ -66,15 +66,15 @@ GO
 --ALTER TABLE CustPTSetting3rd_Agent_old ADD CONSTRAINT DF_CustPTSetting3rd_Agent_MinPT			DEFAULT (0) FOR MinPT
 --ALTER TABLE CustPTSetting3rd_Agent_old ADD CONSTRAINT DF_CustPTSetting3rd_Agent_MaxPT			DEFAULT (90) FOR MaxPT
 
---ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_SuperPT]		DEFAULT (0) FOR SuperPT
---ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_MasterPT]		DEFAULT (0) FOR MasterPT
---ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AgentPT]		DEFAULT (0) FOR AgentPT
---ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AutoMasterPT]	DEFAULT (0) FOR AutoMasterPT
---ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]	DEFAULT (0) FOR AutoSuperPT
+ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_SuperPT]			DEFAULT (0) FOR SuperPT
+ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_MasterPT]		DEFAULT (0) FOR MasterPT
+ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AgentPT]			DEFAULT (0) FOR AgentPT
+ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AutoMasterPT]	DEFAULT (0) FOR AutoMasterPT
+ALTER TABLE CustPTSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]		DEFAULT (0) FOR AutoSuperPT
 
---ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_SuperPT]			DEFAULT (0) FOR SuperPT
---ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_MasterPT]		DEFAULT (0) FOR MasterPT
---ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AgentPT]			DEFAULT (0) FOR AgentPT
---ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoMasterPT]	DEFAULT (0) FOR AutoMasterPT
---ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoSuperPT]		DEFAULT (0) FOR AutoSuperPT
+ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_SuperPT]			DEFAULT (0) FOR SuperPT
+ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_MasterPT]			DEFAULT (0) FOR MasterPT
+ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AgentPT]			DEFAULT (0) FOR AgentPT
+ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoMasterPT]		DEFAULT (0) FOR AutoMasterPT
+ALTER TABLE CustPTGroupSetting3rd_Member_old ADD CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoSuperPT]		DEFAULT (0) FOR AutoSuperPT
 

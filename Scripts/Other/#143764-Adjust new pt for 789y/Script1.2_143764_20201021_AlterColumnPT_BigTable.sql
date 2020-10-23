@@ -162,17 +162,17 @@ GO
 	GO
 ---------------------------------------------------------------------------------------------------------------------------
 --Step 6 : REMOVE column --DO later
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  SuperPT_BK	
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  MasterPT_BK
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  AgentPT_BK	
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  AutoSuperPT_BK
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  AutoMasterPT_BK
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  MinPT_BK	
-	--ALTER TABLE CustPTSetting3rd_Agent ADD  MaxPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  SuperPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  MasterPT_BK
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  AgentPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  AutoSuperPT_BK
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  AutoMasterPT_BK
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  MinPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Agent DROP COLUMN  MaxPT_BK	
 
-	--ALTER TABLE CustPTSetting3rd_Member ADD SuperPT_BK	
-	--ALTER TABLE CustPTSetting3rd_Member ADD MasterPT_BK
-	--ALTER TABLE CustPTSetting3rd_Member ADD AgentPT_BK	
-	--ALTER TABLE CustPTSetting3rd_Member ADD AutoSuperPT_BK
-	--ALTER TABLE CustPTSetting3rd_Member ADD AutoMasterPT_BK
+	--ALTER TABLE CustPTSetting3rd_Member DROP COLUMN SuperPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Member DROP COLUMN MasterPT_BK
+	--ALTER TABLE CustPTSetting3rd_Member DROP COLUMN AgentPT_BK	
+	--ALTER TABLE CustPTSetting3rd_Member DROP COLUMN AutoSuperPT_BK
+	--ALTER TABLE CustPTSetting3rd_Member DROP COLUMN AutoMasterPT_BK
 	--GO
