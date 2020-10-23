@@ -99,7 +99,7 @@ GO
 		SET	  c.AgentPT = c.AgentPT_BK, 
 				c.MasterPT = c.MasterPT_BK, 
 				c.SuperPT = c.SuperPT_BK, 
-				c.IsAutoMasterPT = c.AutoMasterPT_BK, 
+				c.AutoMasterPT = c.AutoMasterPT_BK, 
 				c.AutoSuperPT = c.AutoSuperPT_BK, 
 				c.MinPT = c.MinPT_BK, 
 				c.MaxPT = c.MaxPT_BK
@@ -124,7 +124,7 @@ GO
 		SET	  c.AgentPT = c.AgentPT_BK, 
 				c.MasterPT = c.MasterPT_BK, 
 				c.SuperPT = c.SuperPT_BK, 
-				c.IsAutoMasterPT = c.AutoMasterPT_BK, 
+				c.AutoMasterPT = c.AutoMasterPT_BK, 
 				c.AutoSuperPT = c.AutoSuperPT_BK
 		FROM CustPTSetting3rd_Member_history c WITH (ROWLOCK, UPDLOCK)
 				INNER JOIN #CustTbl_tmp t
