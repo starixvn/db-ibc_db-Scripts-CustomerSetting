@@ -80,12 +80,13 @@ GO
 ---------------------------------------------------------------------------------------------------------------------------
 --Step 5.1 ; SP move data from old columns to new columns (run ON DBCUST/CUSTDB)
 	ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+		@srecommend INT	,
 		@target VARCHAR(20)
 	AS
 	BEGIN
 		SET NOCOUNT ON
 	
-		IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+		IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at all replicated servers
 		IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 
 		IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
@@ -96,12 +97,15 @@ GO
 		CREATE TABLE #CustTbl_Member(CustID INT PRIMARY KEY)
 		CREATE TABLE #CustTbl_tmp(CustID INT PRIMARY KEY)
 
-
-		INSERT INTO #CustTbl_Agent(CustID)
-		SELECT DISTINCT CustID FROM CustPTSetting3rd_Agent WITH (NOLOCK)
-
-		INSERT INTO #CustTbl_Member(CustID)
-		SELECT DISTINCT CustID FROM CustPTSetting3rd_Member WITH (NOLOCK)
+		INSERT INTO #CustTbl_Member (CustID)
+		SELECT custid
+		FROM Custinfo WITH (NOLOCK)
+		WHERE srecommend = @srecommend AND roleid = 1
+	
+		INSERT INTO #CustTbl_Agent (CustID)
+		SELECT custid
+		FROM Custinfo WITH (NOLOCK)
+		WHERE srecommend = @srecommend AND roleid IN (2,3,4)
 
 		WHILE 1 = 1
 		BEGIN
@@ -154,11 +158,104 @@ GO
 	GO
 ---------------------------------------------------------------------------------------------------------------------------
 --Step 5.2 : Update data for New column ( run on all replications of custdb_custsetting publications )
-	EXEC [Acc_DynamicCustSetting3rd_09] @target = 'REPLICATED'
+	--Disable trigger DBTP
+	DISABLE TRIGGER [dbo].[CustPTSetting3rd_Agent_update] ON [dbo].[CustPTSetting3rd_Agent] 
+	GO  
+	DISABLE TRIGGER [dbo].[CustPTSetting3rd_Member_update] ON [dbo].[CustPTSetting3rd_Member]
+	GO 
+
+	--Update data for New column
+	CREATE TABLE #supers (custid int,isfinished bit default(0))
+	DECLARE @srecommend INT
+
+	INSERT INTO #supers(custid)
+	SELECT ci.srecommend
+	FROM CustPTSetting3rd_Agent C WITH(NOLOCK)
+		INNER JOIN  Custinfo ci WITH (NOLOCK) ON ci.custid = c.custid
+	UNION
+	SELECT ci.srecommend
+	FROM CustPTSetting3rd_Member C WITH(NOLOCK)
+		INNER JOIN  Custinfo ci WITH (NOLOCK) ON ci.custid = c.custid
+
+	-- For deployer info
+	DECLARE @super_cnt INT, @index INT = 0
+	DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+	DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+	SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+	RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+	WHILE (1 = 1)
+	BEGIN
+		UPDATE TOP (1) #supers
+		SET isfinished = 1
+			,@srecommend = custid	
+		WHERE isfinished = 0
+	
+		IF @@ROWCOUNT = 0 BREAK
+	
+		SET @index = @index + 1
+		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+		EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+				,@target = 'REPLICATED'
+			
+			
+		WAITFOR DELAY '00:00:00.010'
+	END
+
+	DROP TABLE #supers
 	GO
+
+	--Enable trigger DBTP
+	ENABLE TRIGGER [dbo].[CustPTSetting3rd_Agent_update] ON [dbo].[CustPTSetting3rd_Agent] 
+	GO  
+	ENABLE TRIGGER [dbo].[CustPTSetting3rd_Member_update] ON [dbo].[CustPTSetting3rd_Member]
+	GO  
 ---------------------------------------------------------------------------------------------------------------------------
 --Step 5.3 : Update data for New column ( run on DBCUST/CUSTDB)
-	EXEC [Acc_DynamicCustSetting3rd_09] @target = 'DBCUST'
+	USE CUSTDB
+	GO
+	CREATE TABLE #supers (custid int,isfinished bit default(0))
+	DECLARE @srecommend INT
+
+	INSERT INTO #supers(custid)
+	SELECT ci.srecommend
+	FROM CustPTSetting3rd_Agent C WITH(NOLOCK)
+		INNER JOIN  Custinfo ci WITH (NOLOCK) ON ci.custid = c.custid
+	UNION
+	SELECT ci.srecommend
+	FROM CustPTSetting3rd_Member C WITH(NOLOCK)
+		INNER JOIN  Custinfo ci WITH (NOLOCK) ON ci.custid = c.custid
+
+	-- For deployer info
+	DECLARE @super_cnt INT, @index INT = 0
+	DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+	DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+	SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+	RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+	WHILE (1 = 1)
+	BEGIN
+		UPDATE TOP (1) #supers
+		SET isfinished = 1
+			,@srecommend = custid	
+		WHERE isfinished = 0
+	
+		IF @@ROWCOUNT = 0 BREAK
+	
+		SET @index = @index + 1
+		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+		EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+				,@target = 'DBCUST'
+			
+			
+		WAITFOR DELAY '00:00:00.010'
+	END
+
+	DROP TABLE #supers
 	GO
 ---------------------------------------------------------------------------------------------------------------------------
 --Step 6 : REMOVE column --DO later
