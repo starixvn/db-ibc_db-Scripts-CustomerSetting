@@ -10,19 +10,19 @@ USE bodb_CustHistory
 GO
 --Step 1 : Create new columns
 	--DROP CONSTRAINT
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT		
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MasterPT	
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AgentPT		
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AutoSuperPT	
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AutoMasterPT
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MinPT		
-	ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MaxPT		
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_SuperPT','DF_CustPTSetting3rd_Agent_SuperPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_MasterPT','DF_CustPTSetting3rd_Agent_MasterPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_AgentPT','DF_CustPTSetting3rd_Agent_AgentPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_AutoSuperPT','DF_CustPTSetting3rd_Agent_AutoSuperPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_AutoMasterPT','DF_CustPTSetting3rd_Agent_AutoMasterPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_MinPT','DF_CustPTSetting3rd_Agent_MinPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Agent_MaxPT','DF_CustPTSetting3rd_Agent_MaxPT_BK'
 
-	ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT [DF_CustPTSetting3rd_Member_SuperPT]		
-	ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT [DF_CustPTSetting3rd_Member_MasterPT]	
-	ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT [DF_CustPTSetting3rd_Member_AgentPT]		
-	ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT [DF_CustPTSetting3rd_Member_AutoMasterPT]	
-	ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT [DF_CustPTSetting3rd_Member_AutoSuperPT]
+	exec sp_rename 'DF_CustPTSetting3rd_Member_SuperPT','DF_CustPTSetting3rd_Member_SuperPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Member_MasterPT','DF_CustPTSetting3rd_Member_MasterPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Member_AgentPT','DF_CustPTSetting3rd_Member_AgentPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Member_AutoMasterPT','DF_CustPTSetting3rd_Member_AutoMasterPT_BK'
+	exec sp_rename 'DF_CustPTSetting3rd_Member_AutoSuperPT','DF_CustPTSetting3rd_Member_AutoSuperPT_BK'
 	GO
 	--ALTER COLUMN
 	ALTER TABLE CustPTSetting3rd_Agent_history ADD  SuperPT_tmp			SMALLMONEY  NULL		CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT		DEFAULT (0) 
@@ -140,9 +140,26 @@ GO
 	GO
 
 --Step 4 : REMOVE column
-	ALTER TABLE CustPTSetting3rd_Agent_history
-	DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK, MinPT_BK, MaxPT_BK
-	GO
-	ALTER TABLE CustPTSetting3rd_Member_history
-	DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK
-	GO
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_SuperPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MasterPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AgentPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AutoSuperPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_AutoMasterPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MinPT_BK
+		ALTER TABLE CustPTSetting3rd_Agent_history DROP CONSTRAINT DF_CustPTSetting3rd_Agent_MaxPT_BK
+
+		ALTER TABLE CustPTSetting3rd_Agent_history
+		DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK, MinPT_BK, MaxPT_BK
+		GO
+
+		ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT DF_CustPTSetting3rd_Member_SuperPT_BK
+		ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT DF_CustPTSetting3rd_Member_MasterPT_BK
+		ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT DF_CustPTSetting3rd_Member_AgentPT_BK
+		ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT DF_CustPTSetting3rd_Member_AutoMasterPT_BK
+		ALTER TABLE CustPTSetting3rd_Member_history DROP CONSTRAINT DF_CustPTSetting3rd_Member_AutoSuperPT_BK
+		GO
+
+		
+		ALTER TABLE CustPTSetting3rd_Member_history
+		DROP COLUMN SuperPT_BK, MasterPT_BK, AgentPT_BK, AutoSuperPT_BK, AutoMasterPT_BK
+		GO
