@@ -1,10 +1,9 @@
 /*
 	Created: 20201023@Johnson
-	Task: update L3 for list master
+	Task: update L3 for list masters of 789y
 	DB: DBCUST/CUSTDB
 */
-
-DECLARE @tmpMaster (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
+DECLARE @tmpMaster TABLE (custid INT, srecommend INT, isFinished BIT DEFAULT 0)
 DECLARE @PT SMALLMONEY = 0.805,
 		@custid INT,
 		@srecommend INT
@@ -20,9 +19,12 @@ BEGIN
 	SET isFinished = 1,
 		@custid = custid,
 		@srecommend = srecommend
-	FROM @tmpMaster
+	FROM @tmpMaster t
 	WHERE isFinished = 0
 	
+	IF @@ROWCOUNT = 0 
+		BREAK; 
+		
 	UPDATE cs 
 	SET maxpositiontaking = CASE WHEN @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,					
 		maxlivepositiontaking = CASE WHEN @PT > maxlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE maxlivepositiontaking END		
