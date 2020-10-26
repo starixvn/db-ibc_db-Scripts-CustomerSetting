@@ -214,8 +214,7 @@ SELECT custid
 FROM vw_customer WITH(NOLOCK)
 WHERE roleid = 4
 	AND site IN ('789y')
-	AND custid <> 17873298 --PT55
-
+	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
@@ -263,8 +262,7 @@ SELECT custid
 FROM vw_customer WITH(NOLOCK)
 WHERE roleid = 4
 	AND site IN ('789y')
-	AND custid <> 17873298 --PT55
-
+	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
