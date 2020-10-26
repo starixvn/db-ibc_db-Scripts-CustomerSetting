@@ -143,6 +143,7 @@ BEGIN
 	UNION SELECT 191 --	Virtual Soccer Nation
 	UNION SELECT 192 --	Virtual Soccer World Cup
 	UNION SELECT 193 --	Virtual Basketball
+	UNION SELECT 200 -- Saba.club
 	UNION SELECT 211 --Allbet
 	UNION SELECT 212 --	Macau Games
 	UNION SELECT 213 --	N
