@@ -117,8 +117,8 @@ SELECT * FROM #MasterList --WHERE srecommend = 35555477
 UPDATE cs
 SET cs.MinPT = minpt.binaryStr_new,
 	cs.MinPT2 = minpt.binaryStr_new,
-	cs.MasterPT = maxpt.binaryStr_new,
-	cs.MasterPT2 = maxpt.binaryStr_new
+	cs.MaxPT = maxpt.binaryStr_new,
+	cs.MaxPT2 = maxpt.binaryStr_new
 FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK)
 	INNER JOIN #SuperList s ON s.CustId = cs.CustId
 	CROSS APPLY dbo.f_SetBinaryValues(cs.MinPT, @MinPT_XML) minpt
