@@ -29,3 +29,9 @@ FROM #NonOfferedCurency WITH (NOLOCK)
 
 
 DROP TABLE #NonOfferedCurency
+
+---------------ProductLaunchedSiteCurrency-------------------------
+DELETE FROM ProductLaunchedSiteCurrency  WHERE SportType=@Sporttype AND BetType  = @Bettype AND SiteID = @SiteID AND Currency = @ExchangeId
+
+INSERT INTO ProductLaunchedSiteCurrency (SiteID, Currency, SportType, IsLaunched, IsTest, BetType, LaunchedLevel)
+SELECT @SiteID, @ExchangeId as Currency, @Sporttype, 1 as IsLaunched,0 as  IsTest, @Bettype,0 as LaunchedLevel
