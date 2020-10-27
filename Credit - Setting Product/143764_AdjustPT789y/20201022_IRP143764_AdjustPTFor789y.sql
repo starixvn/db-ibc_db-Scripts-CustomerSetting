@@ -215,6 +215,10 @@ SELECT custid
 FROM vw_customer WITH(NOLOCK)
 WHERE roleid = 4
 	AND site IN ('789y')
+	AND custid IN (SELECT custid
+					FROM Acc_CustGroup (NOLOCK)
+					WHERE GroupName in ('acc_UT','ACCYEN789','ACCYEN889')					
+					)
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -263,7 +267,11 @@ SELECT custid
 FROM vw_customer WITH(NOLOCK)
 WHERE roleid = 4
 	AND site IN ('789y')
-	
+	AND custid IN (SELECT custid
+					FROM Acc_CustGroup (NOLOCK)
+					WHERE GroupName in ('ACC_UT','ACCYEN789','ACCYEN889')					
+					)
+					
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
 
