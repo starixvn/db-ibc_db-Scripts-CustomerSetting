@@ -22,7 +22,9 @@ FROM Customer c WITH (NOLOCK)
 WHERE c.roleid = 4 AND c.site = 'CN88'
 	AND c.currency <> 20
 	AND s.IsInternal = 0
-	and c.custid in ( 39811468, 40004332, 45684368)
+	AND c.custid in ( 39811468, 40004332, 45684368)
+	AND spt.sporttype = 1 
+	AND spt.bettype = 1
 				
 SET @MaxPT_XML =(
 				SELECT (

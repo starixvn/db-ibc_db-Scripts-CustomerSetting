@@ -24,7 +24,9 @@ FROM Customer c WITH (NOLOCK)
 WHERE c.roleid = 4 AND c.site = 'CN88'
 	AND c.currency <> 20
 	AND s.IsInternal = 0
-	and c.custid in ( 
+	AND spt.sporttype = 1 
+	AND spt.bettype = 1
+	AND c.custid in ( 
 		35889027, 35889031, 35889032, 35889034, 37435487, 37435509, 37435511, 37435517, 37435519, 37435523, 37435530, 37435532, 37435535, 
 		37435540, 37465692, 37465701, 37465762, 37465766, 37465774, 37465781, 37465788, 37465792, 37465799, 37465807, 37477742, 37477743, 
 		37477749, 37477963, 37477969, 37477975, 37478659, 37479058, 37479065, 37479076, 37479082, 37479087, 37479094, 37480556, 37480558, 
@@ -57,6 +59,8 @@ FROM Customer c WITH (NOLOCK)
 	CROSS APPLY dbo.f_CS_GetPT_Agent(a.CustId) apt 
 WHERE c.roleid = 3 AND a.roleid = 2 AND c.site = 'CN88'
 	AND mpt.sporttype = apt.sporttype AND mpt.bettype = apt.bettype AND mpt.isLive = apt.isLive
+	AND mpt.sporttype = 1 
+	AND mpt.bettype = 1
 GROUP BY c.custid, c.srecommend, mpt.sporttype, mpt.bettype, mpt.isLive, mpt.SuperPT
 
 UPDATE ml 
@@ -133,14 +137,6 @@ FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK)
 	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) spt
 WHERE ml.sporttype = 1 AND ml.bettype = 1
 
-UPDATE cs
-SET cs.SuperPT = spt.binaryStr_new,
-	cs.SuperPT2 = spt.binaryStr_new
-FROM dbo.CS_CustPTSetting_Agent cs WITH (ROWLOCK) 
-	INNER JOIN #MasterList ml ON ml.CustId = cs.CustId
-	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) spt
-WHERE ml.sporttype = 9998 AND ml.bettype = 81
-
 --Update s3 of Member
 UPDATE cs
 SET cs.SuperPT = mpt.binaryStr_new,
@@ -151,16 +147,6 @@ FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK)
 	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) mpt
 WHERE ci.roleid = 2
 	AND ml.sporttype = 1 AND ml.bettype = 1
-
-UPDATE cs
-SET cs.SuperPT = mpt.binaryStr_new,
-	cs.SuperPT2 = mpt.binaryStr_new
-FROM dbo.CS_CustPTGroupSetting_Member cs WITH (ROWLOCK) 
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.AgentId
-	INNER JOIN #MasterList ml ON ml.CustId = ci.mrecommend
-	CROSS APPLY dbo.f_SetBinaryValues(cs.SuperPT, ml.SuperPT_XML) mpt
-WHERE ci.roleid = 2
-	AND ml.sporttype = 9998 AND ml.bettype = 81
 
 DROP TABLE #SuperList
 DROP TABLE #MasterList
