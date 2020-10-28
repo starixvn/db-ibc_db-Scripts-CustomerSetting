@@ -29,10 +29,10 @@ INSERT INTO @MsgError(MsgID
 SELECT 90016
 ,10
 ,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
-,NULL
-,NULL
-,NULL
-,NULL
+,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
+,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
+,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
+,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
 
 INSERT INTO MsgError(
 	 MsgID
