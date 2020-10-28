@@ -73,7 +73,7 @@ SET @MinPT_XML =(
 						SELECT	bs.ByteOrder	AS '@pos',
 								@MinPT_New		AS '@val'
 						FROM dbo.CS_ByteSeq bs WITH (NOLOCK)
-						WHERE bs.Type = 'PTSetting' 
+						WHERE bs.Type = 'PTSetting'  AND bs.sporttype = 1 AND bs.bettype = 1
 						FOR XML PATH('r')
 							, TYPE
 						)
@@ -86,7 +86,7 @@ SET @MaxPT_XML =(
 						SELECT	bs.ByteOrder	AS '@pos',
 								@MaxPT_New		AS '@val'
 						FROM dbo.CS_ByteSeq bs WITH (NOLOCK)
-						WHERE bs.Type = 'PTSetting' 
+						WHERE bs.Type = 'PTSetting'  AND bs.sporttype = 1 AND bs.bettype = 1
 						FOR XML PATH('r')
 							, TYPE
 						)
