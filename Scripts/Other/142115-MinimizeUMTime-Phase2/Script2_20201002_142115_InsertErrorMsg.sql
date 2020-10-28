@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
     Created: Eden@20201002
     Task: Add New MsgError for Minimize UM Time - Add new Customer Function [#142115]
@@ -29,10 +29,10 @@ INSERT INTO @MsgError(MsgID
 SELECT 90016
 ,10
 ,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
-,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
-,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
-,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
-,N'New Account function is under maintenance from <FromTime> (GMT +8) to <ToTime> (GMT +8): Creation failed'
+,N'新創建賬號功能正在維護中 從<FromTime> (GMT +8) 至 <ToTime> (GMT +8):創建失敗'
+,N'新创建账号功能正在维护中 从<FromTime> (GMT +8) 至 <ToTime> (GMT +8):创建失败'
+,N'ฟังก์ชันสร้างบัญชีใหม่อยู่ระหว่างการบำรุงรักษา ตั้งแต่ <FromTime> (GMT +8) ถึง <ToTime> (GMT +8): การสร้างล้มเหลว'
+,N'Không thể tạo tài khoản: Tính năng Tạo tài khoản hiện đang bảo trì từ ngày <FromTime> (GMT +8) đến ngày <ToTime> (GMT +8)'
 
 INSERT INTO MsgError(
 	 MsgID
