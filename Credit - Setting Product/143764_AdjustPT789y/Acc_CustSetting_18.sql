@@ -1,7 +1,7 @@
  /*
 	Created: Johnson
-	Date: 2020-03-06(remove hint UPDLOCK & batch update)
-	Task: correct pt when update minpt for super under RM currency
+	Date: 2020-10-28
+	Task: correct pt when update minpt for 789y's supers
 	DB: DBCUST/CUSTDB
  */
 ALTER PROCEDURE [dbo].[Acc_CustSetting_18] 

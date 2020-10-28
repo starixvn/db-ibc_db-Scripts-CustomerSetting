@@ -1,7 +1,7 @@
  /*
 	Created: Johnson
-	Date: 2020-03-04
-	Task: correct pt when update minpt for super under RM currency
+	Date: 2020-10-28
+	Task: correct pt when update minpt for 789y's super
 	DB: DBCUST/CUSTDB
  */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_08]

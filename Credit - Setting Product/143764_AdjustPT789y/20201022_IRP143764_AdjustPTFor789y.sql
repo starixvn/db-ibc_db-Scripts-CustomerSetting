@@ -217,7 +217,7 @@ WHERE roleid = 4
 	AND site IN ('789y')
 	AND custid IN (SELECT custid
 					FROM Acc_CustGroup (NOLOCK)
-					WHERE GroupName in ('acc_UT','ACCYEN789','ACCYEN889')					
+					WHERE GroupName in ('ACCUT','ACCYEN789','ACCYEN889')					
 					)
 	
 -- For deployer info
@@ -256,7 +256,7 @@ GO
 	
 
 ---
--- BEGIN STEP 3: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB SERVER -----
 --------------------------------------------------------------------------------------
 DECLARE @custid INT
 
@@ -269,7 +269,7 @@ WHERE roleid = 4
 	AND site IN ('789y')
 	AND custid IN (SELECT custid
 					FROM Acc_CustGroup (NOLOCK)
-					WHERE GroupName in ('ACC_UT','ACCYEN789','ACCYEN889')					
+					WHERE GroupName in ('ACCUT','ACCYEN789','ACCYEN889')					
 					)
 					
 -- For deployer info
@@ -303,6 +303,6 @@ BEGIN
 	WAITFOR DELAY '00:00:00.280'			
 END			
 GO	
--- END STEP 3: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+-- END STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB SERVER -----
 -----------------------------------------------------------------------------------	
 		
