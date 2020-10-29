@@ -11,3 +11,4 @@ SET s.MaxPT = 90
 FROM ProductSettingDetail s WITH(ROWLOCK, UPDLOCK)
 WHERE SettingType = 1
 	AND ProductID = 23
+	AND Sporttype BETWEEN 213 AND 218
