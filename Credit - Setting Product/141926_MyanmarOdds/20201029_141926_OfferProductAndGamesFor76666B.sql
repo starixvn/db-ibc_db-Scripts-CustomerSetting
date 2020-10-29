@@ -10,19 +10,16 @@ USE CustDB
 GO
 
 --============================================================================== 
-DECLARE @MaxPT SMALLMONEY
-SELECT @MaxPT =0.9
-
 --Update PT RNG Keno
 
 UPDATE ProductGlobalSetting  WITH(UPDLOCK,ROWLOCK)
-SET MaxPositiontaking = @MaxPT
+SET MaxPositiontaking = 0.9
 WHERE Sporttype = 202 --RNG Keno
 
 --Update PT Lottery, Table Game, RNG War
 
 UPDATE ProductSettingDetail  WITH(UPDLOCK,ROWLOCK)
-SET MaxPT = @MaxPT
+SET MaxPT = 90
 WHERE Sporttype in (220,222,224) AND SettingType = 18 AND ProductID = 44
 
 --==============================================================================
