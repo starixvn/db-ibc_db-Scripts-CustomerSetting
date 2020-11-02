@@ -38,7 +38,7 @@ BEGIN
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,3,6) --  PT,Comm,WinLossLimit
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (18,19,6) --  PT,Comm,WinLossLimit
 
 	CREATE TABLE #MemberTemp
 	(
@@ -79,7 +79,7 @@ BEGIN
 	--------------------------------------PT Setting-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
-	WHERE SettingType = 1
+	WHERE SettingType = 18
 
 	BEGIN
 		--Agent Level
@@ -113,7 +113,7 @@ BEGIN
 			INNER JOIN #SMATemp ci ON ci.custid = C.custid
 			CROSS APPLY #DestinationSportBetType dest
 		WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-			AND dest.SettingType = 1
+			AND dest.SettingType = 18
 
 		--Member Level
 		INSERT INTO dbo.CustPTSetting3rd_Member
@@ -142,7 +142,7 @@ BEGIN
 			INNER JOIN #MemberTemp ci ON C.CustID = ci.custid
 			CROSS APPLY #DestinationSportBetType dest
 		WHERE C.bettype = @fBetType AND C.sporttype = @fSportType
-			AND dest.SettingType = 1
+			AND dest.SettingType = 18
 
 		--Group PT 
 		INSERT INTO dbo.CustPTGroupSetting3rd_Member
@@ -172,13 +172,13 @@ BEGIN
 			INNER JOIN #SMATemp ci ON ci.custid = C.AgentID
 			CROSS APPLY #DestinationSportBetType dest
 		WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-			AND dest.SettingType = 1
+			AND dest.SettingType = 18
 
 	END
 --------------------------------------Commission Setting-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
-	WHERE SettingType = 3
+	WHERE SettingType = 19
 
 	--Super level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
@@ -187,7 +187,7 @@ BEGIN
 		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-		AND dest.SettingType = 3
+		AND dest.SettingType = 19
 	
 	--Member Level
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
@@ -196,7 +196,7 @@ BEGIN
 		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
 	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
-		AND dest.SettingType = 3
+		AND dest.SettingType = 19
 
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
