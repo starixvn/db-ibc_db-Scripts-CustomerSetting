@@ -248,7 +248,7 @@ BEGIN
 			@custid = @custid, 						
 			@target = 'REPLICATED' 	
 				
-	WAITFOR DELAY '00:00:00.280'			
+	WAITFOR DELAY '00:00:00.1'			
 END			
 GO	
 -- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
@@ -300,7 +300,7 @@ BEGIN
 			@custid = @custid, 						
 			@target = 'DBCUST' 	
 				
-	WAITFOR DELAY '00:00:00.280'			
+	WAITFOR DELAY '00:00:00.1'			
 END			
 GO	
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB SERVER -----
