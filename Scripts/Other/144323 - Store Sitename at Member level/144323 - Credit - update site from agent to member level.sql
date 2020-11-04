@@ -5,9 +5,9 @@
 	DB: DBCUST/CustDB
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
-	@custid INT,
-	@site varchar(10),
-	@target VARCHAR(20)
+	@srecommend INT
+	,@max_custid INT
+	,@target VARCHAR(20)
 AS
 BEGIN
 -- BEGIN STEP 1: DEPLOY THESE SP @ DBCUST.CustDB -----
@@ -18,45 +18,84 @@ BEGIN
 	
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN
 
-	UPDATE ci
-	SET	ci.[site] = @site
-	FROM Customer ci WITH(ROWLOCK,UPDLOCK)
-	WHERE ci.custid = @custid
+	CREATE TABLE #MemberTemp
+	(
+		[CustID] INT
+		,[Site] VARCHAR(10)
+	)
+
+	CREATE TABLE #MemberUpdated
+	(
+		[CustID] INT PRIMARY KEY CLUSTERED
+		,[Site] VARCHAR(10)
+	)
 	
+	DECLARE @index INT = 0
+	DECLARE @msg NVARCHAR(200) = 'Currently at order %d.'
+
+	INSERT INTO #MemberTemp (CustID, [Site])
+	SELECT ci.custid, ca.[site]
+	FROM Customer ci WITH (NOLOCK)
+		INNER JOIN Customer ca WITH (NOLOCK) ON ci.[recommend] = ca.custid
+	WHERE ci.srecommend = @srecommend AND ci.roleid = 1 AND ci.custid <= @max_custid
+
+	WHILE (1 = 1)
+	BEGIN
+
+		TRUNCATE TABLE #MemberUpdated
+
+		DELETE TOP (3000) 
+		#MemberTemp
+		OUTPUT deleted.CustID, deleted.[Site]
+		INTO #MemberUpdated(CustID, [Site])
 	
+		IF @@ROWCOUNT = 0 BREAK
+	
+		SET @index = @index + 1
+	
+		RAISERROR (@msg, 0, 1,@index) WITH NOWAIT
+			
+		UPDATE C SET C.[site] = mu.[site]
+		FROM #MemberUpdated mu
+			INNER JOIN Customer C WITH (ROWLOCK, UPDLOCK) ON mu.CustID = C.custid
+			
+		WAITFOR DELAY '00:00:0.020'
+	
+	END
+
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (06/DBTP) -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #Member (CustID INT, [site] VARCHAR(10), IsFinished BIT DEFAULT 0)
-DECLARE @custid INT, @site VARCHAR(10)
+CREATE TABLE #supers (srecommend int,isfinished bit default(0))
 
--- list of member
-INSERT INTO #Member(CustID, [site])
-SELECT ci.custid, ca.[site]
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN Customer ca WITH (NOLOCK) ON ci.recommend = ca.custid
-	LEFT JOIN [Site] S WITH (NOLOCK) ON ci.[site] = S.[site]
-WHERE ci.roleid = 1  
-			AND ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) -- Exclude deposit member 
-			AND S.isDeposit = 0 AND S.isLicensee = 0
-			AND (ci.[site] <> '' OR ci.[site] IS NULL) --only update for member who does not have site
+DECLARE @max_custid INT, @srecommend INT
+
+SELECT @max_custid = xxx
+
+-- list of supers
+INSERT INTO #supers(srecommend)
+SELECT cs.custid
+FROM customer cs WITH (NOLOCK) 
+	INNER JOIN [Site] s WITH (NOLOCK) ON cs.[site] = s.[site] 
+WHERE cs.roleid = 4 AND cs.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) -- Exclude deposit super 
+	AND S.isDeposit = 0 AND S.isLicensee = 0
+	AND cs.[site] <> 'CN88'
 
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
-SET @totalCust_cnt = (SELECT COUNT(1) FROM #Member )
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
+SET @totalCust_cnt = (SELECT COUNT(1) FROM #supers )
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, srecommend: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of affected srecommend: %d.'
 RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
 		
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Member
+	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@custid = custid	
-		,@site = [site]
+		,@srecommend = srecommend	
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -65,9 +104,9 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 			
-	EXEC [dbo].[Acc_DynamicCustomerInfo_09] @custid = @custid
-			, @site = @site
-			, @target = 'REPLICATED'
+	EXEC [dbo].[Acc_DynamicCustomerInfo_09] @srecommend = @srecommend
+			,@max_custid = @max_custid
+			,@target = 'REPLICATED'
 			
 	WAITFOR DELAY '00:00:0.100'
 	
@@ -76,33 +115,33 @@ END
 GO
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-CREATE TABLE #Member (CustID INT, [site] VARCHAR(10), IsFinished BIT DEFAULT 0)
-DECLARE @custid INT, @site VARCHAR(10)
+CREATE TABLE #supers (srecommend int,isfinished bit default(0))
 
--- list of member
-INSERT INTO #Member(CustID, [site])
-SELECT ci.custid, ca.[site]
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN Customer ca WITH (NOLOCK) ON ci.recommend = ca.custid
-	LEFT JOIN [Site] S WITH (NOLOCK) ON ci.[site] = S.[site]
-WHERE ci.roleid = 1  
-			AND ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) -- Exclude deposit member 
-			AND S.isDeposit = 0 AND S.isLicensee = 0
-			AND (ci.[site] <> '' OR ci.[site] IS NULL) --only update for member who does not have site
+DECLARE @max_custid INT, @srecommend INT
+
+SELECT @max_custid = xxx
+
+-- list of supers
+INSERT INTO #supers(srecommend)
+SELECT cs.custid
+FROM customer cs WITH (NOLOCK) 
+	INNER JOIN [Site] s WITH (NOLOCK) ON cs.[site] = s.[site] 
+WHERE cs.roleid = 4 AND cs.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) -- Exclude deposit super 
+	AND S.isDeposit = 0 AND S.isLicensee = 0
+	AND cs.[site] <> 'CN88'
 
 -- For deployer info
 DECLARE @totalCust_cnt INT, @index INT = 0
-SET @totalCust_cnt = (SELECT COUNT(1) FROM #Member )
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of affected custid: %d.'
+SET @totalCust_cnt = (SELECT COUNT(1) FROM #supers )
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, srecommend: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of affected srecommend: %d.'
 RAISERROR (@msg_total, 0, 1, @totalCust_cnt) WITH NOWAIT
-
+		
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Member
+	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@custid = custid	
-		,@site = [site]
+		,@srecommend = srecommend	
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -111,12 +150,11 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 			
-	EXEC [dbo].[Acc_DynamicCustomerInfo_09] @custid = @custid
-			, @site = @site
-			, @target = 'DBCUST'
+	EXEC [dbo].[Acc_DynamicCustomerInfo_09] @srecommend = @srecommend
+			,@max_custid = @max_custid
+			,@target = 'DBCUST'
 			
 	WAITFOR DELAY '00:00:0.100'
 	
 END
-
 GO
