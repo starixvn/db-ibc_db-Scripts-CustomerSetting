@@ -21,16 +21,16 @@ SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,20   UNION ALL	--UUS	--Yen, UT, $
 SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 --YNG
-SELECT 4310 ,'1'    ,'100'     ,1    ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4345 ,'0.5'  ,'100'     ,0.5  ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4346 ,'0.5'  ,'100'     ,0.5  ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4347 ,'0.5'  ,'75'      ,0.5  ,75      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4348 ,'0.5'  ,'75'      ,0.5  ,75      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4349 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4350 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,72				--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS			
+SELECT 4310 ,'1'    ,'2000'    ,1    ,2000    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4345 ,'1'    ,'2000'    ,1    ,2000    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4346 ,'1'    ,'1000'    ,1    ,1000    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4347 ,'0.5'  ,'1250'    ,0.5  ,1250    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4348 ,'0.5'  ,'1250'    ,0.5  ,1250    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4349 ,'0.3'  ,'750'     ,0.3  ,750     ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4350 ,'0.3'  ,'750'     ,0.3  ,750     ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4351 ,'0.3'  ,'750'     ,0.3  ,750     ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4352 ,'0.9'  ,'2250'    ,0.9  ,2250    ,72   UNION ALL	--YNG	--YNG,UUS,INH
+SELECT 4353 ,'1'    ,'2000'    ,1    ,2000    ,72				--YNG	--YNG,UUS,INH	
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID

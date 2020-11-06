@@ -1,7 +1,7 @@
 /*
 	Date: 20201029
 	Created: Winfred 
-	Task: #144173 - Spadegaming - 10 new games Oct 2020 - Credit UUS
+	Task: #144173 - Spadegaming - 10 new games Oct 2020 - Credit
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
@@ -387,17 +387,6 @@ SELECT 4350 ,'0.3'  ,'30'      ,0.3  ,30      ,64   UNION ALL	--UT	--Yen, UT, $U
 SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
---UUS
-SELECT 4310 ,'1'    ,'100'     ,1    ,100     ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4345 ,'0.5'  ,'100'     ,0.5  ,100     ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4346 ,'0.5'  ,'100'     ,0.5  ,100     ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4347 ,'0.5'  ,'75'      ,0.5  ,75      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4348 ,'0.5'  ,'75'      ,0.5  ,75      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4349 ,'0.3'  ,'30'      ,0.3  ,30      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4350 ,'0.3'  ,'30'      ,0.3  ,30      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,20   UNION ALL	--UUS	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 --Yen
 SELECT 4310 ,'1'    ,'100'     ,1    ,100     ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4345 ,'0.5'  ,'100'     ,0.5  ,100     ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
@@ -408,18 +397,8 @@ SELECT 4349 ,'0.3'  ,'30'      ,0.3  ,30      ,16   UNION ALL	--Yen	--Yen, UT, $
 SELECT 4350 ,'0.3'  ,'30'      ,0.3  ,30      ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
 SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
---YNG
-SELECT 4310 ,'1'    ,'100'     ,1    ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4345 ,'0.5'  ,'100'     ,0.5  ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4346 ,'0.5'  ,'100'     ,0.5  ,100     ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4347 ,'0.5'  ,'75'      ,0.5  ,75      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4348 ,'0.5'  ,'75'      ,0.5  ,75      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4349 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4350 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4351 ,'0.3'  ,'30'      ,0.3  ,30      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4352 ,'0.09' ,'90'      ,0.09 ,90      ,72   UNION ALL	--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
-SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,72				--YNG	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS		
+SELECT 4353 ,'0.5'  ,'100'     ,0.5  ,100     ,16				--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,YNG,UUS
+
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
