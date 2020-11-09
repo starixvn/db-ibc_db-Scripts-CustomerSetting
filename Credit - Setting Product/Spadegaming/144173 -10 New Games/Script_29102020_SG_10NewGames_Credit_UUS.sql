@@ -32,6 +32,12 @@ SELECT 4351 ,'0.3'  ,'750'     ,0.3  ,750     ,72   UNION ALL	--YNG	--YNG,UUS,IN
 SELECT 4352 ,'0.9'  ,'2250'    ,0.9  ,2250    ,72   UNION ALL	--YNG	--YNG,UUS,INH
 SELECT 4353 ,'1'    ,'2000'    ,1    ,2000    ,72				--YNG	--YNG,UUS,INH	
 
+
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #StakeLevel_Temp t
+WHERE MaxStake > 999
+
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
 FROM StakeLevel s WITH(NOLOCK)
