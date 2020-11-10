@@ -40,7 +40,7 @@ BEGIN
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0 --copy from AE Casino
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (18,19,6) --  PT, Comm, WinLoss 
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (@SettingType_PT,@SettingType_Comm,@SettingType_WinLoss) --  PT, Comm, WinLoss 
 
 	CREATE TABLE #MemberTemp
 	(
