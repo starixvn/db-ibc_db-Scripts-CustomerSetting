@@ -197,82 +197,27 @@ BEGIN
 
 --------------------------------------Commission Setting-------------------------------------------------
 
+	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+	FROM #DestinationSportBetType		
+	WHERE SettingType = @SettingType_Comm
+
 	--Super level
 	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
-			0.005
+	SELECT ci.custid, dest.tsporttype, dest.tbettype, C.Discount
 	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
 		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE dest.SettingType = @SettingType_Comm
-		AND ci.roleid = 4
+	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
+		AND dest.SettingType = @SettingType_Comm
 	
-	--Direct (Master, Agent)
-	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
-			0.005
-	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
-		INNER JOIN #DirectTemp ci  ON C.CustID = ci.custid
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE  dest.SettingType = @SettingType_Comm
-		AND CI.roleid IN (2,3)
-	
-	--Master, Agent level
-	INSERT INTO dbo.CustDiscount3rd_Agent(CustID, SportType, BetType, Discount)
-	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 
-			0
-	FROM dbo.CustDiscount3rd_Agent C WITH(NOLOCK)
-		INNER JOIN #SMATemp ci  ON C.CustID = ci.custid
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE dest.SettingType = @SettingType_Comm
-		AND ci.roleid IN (2,3)
-		AND NOT EXISTS (SELECT 1 FROM #DirectTemp D WHERE D.CustID = CI.CustID)
-	
-	DECLARE @MasterDummy TABLE (custid int) 
-
-	--Update Discount info for dummy master
-	UPDATE C
-	SET  C.Discount = 0.005
-	OUTPUT inserted.CustID INTO @MasterDummy(custid)
-	FROM dbo.CustDiscount3rd_Agent C WITH(ROWLOCK)
-		INNER JOIN #DestinationSportBetType dest ON c.SportType = dest.tSportType AND c.BetType = dest.tBetType
-	WHERE EXISTS (SELECT 1 
-					FROM #DirectTemp D 
-						INNER JOIN custinfo ci WITH (NOLOCK) ON ci.custid = D.CustID
-					WHERE d.roleid = 2 AND ci.mrecommend = c.CustID)
-		AND  dest.SettingType = @SettingType_Comm
-
 	--Member Level
 	INSERT INTO dbo.CustDiscount3rd_Member(CustID, SportType, BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount)
-	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, 0, 0 , 0, 0.005
+	SELECT DISTINCT ci.custid, dest.tsporttype, dest.tbettype, C.PlayerDiscount, C.AgentDiscount, C.MasterDiscount, C.SuperDiscount
 	FROM dbo.CustDiscount3rd_Member C WITH(NOLOCK) 
 		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON C.CustID = ci.custid
 		CROSS APPLY #DestinationSportBetType dest
-	WHERE  dest.SettingType = @SettingType_Comm
-
-	--Update Discount info for members of direct master accounts
-	UPDATE C
-	SET  C.MasterDiscount = 0.005
-	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
-		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-		INNER JOIN #DirectTemp tmp ON  ci.mrecommend = tmp.CustID
-	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
-
-	--Update Discount info for members of direct agent accounts
-	UPDATE C
-	SET  C.AgentDiscount = 0.005, C.MasterDiscount = 0.005
-	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
-		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-		INNER JOIN #DirectTemp tmp ON  ci.recommend = tmp.CustID
-	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
-
-	--Update MasterDiscount of Member is downline of dummy master
-	UPDATE C
-	SET  C.MasterDiscount = 0.005
-	FROM dbo.CustDiscount3rd_Member C WITH(ROWLOCK,FORCESEEK)
-		INNER JOIN custInfo CI WITH (NOLOCK) ON C.CustID = CI.custid
-		INNER JOIN @MasterDummy tmp ON  ci.mrecommend = tmp.CustID
-	WHERE c.SportType = @Sporttype AND c.BetType = @Bettype
+	WHERE C.bettype = @fBetType AND C.SportType = @fSportType
+		AND dest.SettingType = @SettingType_Comm
 
 --------------------------------------Win Loss Limit-------------------------------------------------
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
