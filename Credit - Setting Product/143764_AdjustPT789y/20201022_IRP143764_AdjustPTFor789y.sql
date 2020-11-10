@@ -160,6 +160,7 @@ BEGIN
 	UNION SELECT 243 --	AE Casino
 	UNION SELECT 244 --	SA Gaming
 	UNION SELECT 245 --	Virtual Games
+	UNION SELECT 233 -- WM 
 	
 	DECLARE @xml XML;
 	SET @xml = (
