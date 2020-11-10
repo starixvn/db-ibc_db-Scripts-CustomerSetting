@@ -57,12 +57,6 @@ BEGIN
 		roleid TINYINT
 	)
 
-	CREATE TABLE #DirectTemp 
-	(
-		CustID INT PRIMARY KEY,
-		roleid TINYINT
-	)
-
 
 	CREATE TABLE #tmpSTListSMA (BettypeID INT PRIMARY KEY, StakeLevelList VARCHAR(500))
 
@@ -79,16 +73,6 @@ BEGIN
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
 	
-	INSERT INTO #DirectTemp (CustID,roleid) --Direct Master, Agent
-	SELECT ci.custid, ci.roleid
-	FROM Custinfo ci WITH (NOLOCK)
-	WHERE  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
-		AND ci.srecommend = @srecommend 
-		AND ci.Enabled=1
-		AND ci.roleid IN (2,3)
-		AND ci.custid <= @maxcustid 
-
-
 	INSERT INTO #tmpSTListSMA(BettypeID, StakelevelList)
 	SELECT DISTINCT ST.GameTypeID, CAST (STUFF (STL, 1,1, '')AS VARCHAR(500)) as StakeLevelList
 	FROM #SMATemp SMA CROSS JOIN StakeLevel ST
