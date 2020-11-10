@@ -1,6 +1,6 @@
 /*
-	Created: 20200406@Elodie
-	Task: Delete existing data of BBIN_UUS [Redmine: #131363]
+	Created: 20201110@Tina
+	Task: Delete existing data of Big Gaming_UUS [Redmine: #131363]
 	DB: DBCUST/CustDB
 	
 */ 
