@@ -1,7 +1,7 @@
 /*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20201002@Eden
-	Task: Insert LogAction for UMTool [RM#140421]
+	Task: Insert LogAction for UMTool [RM#142142]
 	DB: DBLOG/bodb_CustomerLog
 */
 

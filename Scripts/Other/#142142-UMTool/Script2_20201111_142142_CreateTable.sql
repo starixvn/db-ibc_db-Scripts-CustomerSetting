@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20201002@Eden
-	Task: Create ProductSettingType table [Redmine:#142115]	
+	Task: Create ProductSettingType table [RM#142142]	
 	DB: DBCUST/CustDB
 */
 USE [CustDB]
