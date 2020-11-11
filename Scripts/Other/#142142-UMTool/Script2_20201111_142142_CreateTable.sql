@@ -31,7 +31,7 @@ INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (3, 'Commission', 'Discount')
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (19, 'Commission', 'Discount')
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (5, 'Commission', 'ChargeCommission')
-INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (10, 'Commission', 'GroupDiscount')
+--INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (10, 'Commission', 'GroupDiscount')
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (14, 'Commission', 'TicketCommission')
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (15, 'Commission', 'WinningShareCommission')
 INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail) VALUES (4, 'Product Status', 'ProductStatus')
