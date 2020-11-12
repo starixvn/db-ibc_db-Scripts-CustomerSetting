@@ -3,7 +3,7 @@
 	Task : database structure for auto feedback winlimit [redmine:#142194]
 */
 
---run on  DBCRM/bodb_CRM	
+--Step 1: run on  DBCRM/bodb_CRM	
 CREATE TABLE [dbo].[crmWinLimitFeedbackInfo](
 	[LogID] [int] NULL,
 	[CustID] [int] NULL,
@@ -42,13 +42,15 @@ GO
 
 --step 2: Run on CUSTDB/DBCUST
 --create index on WinLimit_CustGameMonitoring_History
+USE [CustDB]
+GO
+
 CREATE NONCLUSTERED INDEX [IX_WinlostDate_LogID] ON [dbo].[WinLimit_CustGameMonitoring_History] 
 (
 	[WinlostDate] ASC,
 	[LogID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [WinlimitSetting_Tables]
 GO
-
 
 
 
