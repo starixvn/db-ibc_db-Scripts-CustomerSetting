@@ -1,8 +1,10 @@
+/*<info serverAlias="DBCUST-CustDB,DBACC-bodb02"></info>*/
 /*
 	Created: 20201112@Eden
 	Task: Clean code for un-used bettype of Keno [#145247]
-	DB: DBCUST/CUSTDB
+	DB: DBCUST/CUSTDB and DBCUST_custsetting publication
 */	
+-----------------------------------------BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST.CUSTDB-----------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_18]
 	@srecommend INT, 
 	@target VARCHAR(20)
