@@ -8,7 +8,7 @@ INSERT INTO SystemSetting(SettingName, Value, ServiceName)
 SELECT 'JobStatus','Completed','WinLimitFB'
 UNION SELECT 'ServiceFlag','1','WinLimitFB'
 UNION SELECT 'BatchSize','10','WinLimitFB'
-UNION SELECT 'LastLogID','55138','WinLimitFB'
+UNION SELECT 'LastLogID','55324','WinLimitFB'
 UNION SELECT 'LastRuntime',CONVERT( VARCHAR(20),GETDATE(),20),'WinLimitFB'
 UNION SELECT 'ConfigUAT','1','WinLimitFB'
 UNION SELECT 'ConfigPRO','0','WinLimitFB'
