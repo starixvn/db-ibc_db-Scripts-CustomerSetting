@@ -12,8 +12,9 @@ DECLARE @UnblockTime VARCHAR(50) = '11:35 AM (GMT+8)' -- time unblock add new cu
 -- Setting UMConfig . GMT -4
 DECLARE  @SiteID INT,@FunctionType INT , @BeginTime SMALLDATETIME,  @EndTime SMALLDATETIME, @ShowTime SMALLDATETIME
 DECLARE @Currency TABLE(currency INT)
+DECLARE @ProductID INT = 41, @SportType INT = 243, @BetType INT = 3101 --AE Casino
 
-SELECT  @SiteID =  0, @FunctionType = 2, @BeginTime = '2020-xx-xx 22:50:00' , @ShowTime = '2020-xx-xx 22:15:00'
+SELECT  @SiteID =  0, @FunctionType = 1, @BeginTime = '2020-xx-xx 22:50:00' , @ShowTime = '2020-xx-xx 22:15:00'
 SELECT @EndTime = DATEADD(MINUTE,45,@BeginTime)
 
 INSERT INTO @Currency (currency)
@@ -36,12 +37,20 @@ UNION ALL SELECT 6-- EUR(EURO)
 UNION ALL SELECT 12-- GBP(GBP)
 
 INSERT INTO UMConfig(ProductID,SportType,BetType,IsLive,SettingType,FunctionType,SiteID,Currency,SuperID,BeginTime,EndTime,ShowTime,LockAddingNew)
-SELECT  0 AS ProductID , 0 AS SportType , 0 AS BetType , 0 AS  IsLive, 0 AS SettingType, @FunctionType AS FunctionType , @SiteID AS SiteID ,Currency , 0 AS SuperID, 
-@BeginTime AS BeginTime,
-@EndTime AS EndTime,
-@ShowTime AS ShowTime,
-1 AS LockAddingNew
-FROM @Currency
+SELECT  @ProductID AS ProductID , 
+		@SportType AS SportType , 
+		@BetType AS BetType , 
+		0 AS  IsLive, 
+		0 AS SettingType, 
+		@FunctionType AS FunctionType , 
+		@SiteID AS SiteID ,
+		C.Currency , 
+		0 AS SuperID, 
+		@BeginTime AS BeginTime,
+		@EndTime AS EndTime,
+		@ShowTime AS ShowTime,
+		1 AS LockAddingNew
+FROM @Currency C
 
 
 --> Step 2 : Restore DB to DBNOTI.CustDB_AdjustCS
