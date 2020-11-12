@@ -20,45 +20,81 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 
-	CREATE TABLE #Tempcustsetting (CustID INT)
-	CREATE TABLE #TempCust(CustID INT)
-
-	INSERT INTO  #TempCust(CustID)
-	SELECT c.custid
-	FROM Custinfo c WITH (NOLOCK)
-	WHERE c.srecommend = @srecommend
+	CREATE TABLE #TempCustSetting (CustID INT)
+	CREATE TABLE #SMAs(CustID INT)
+	CREATE TABLE #Members(CustID INT)
 
 	DECLARE @Batch INT  = 500
 
+	INSERT INTO  #SMAs(CustID)
+	SELECT c.custid
+	FROM Custinfo c WITH (NOLOCK)
+	WHERE c.srecommend = @srecommend AND c.roleid IN(2,3,4)
+
+	--> Delete SMA first
 	WHILE(1=1)
 	BEGIN
-		TRUNCATE TABLE #Tempcustsetting
+		TRUNCATE TABLE #TempCustSetting
 
 		DELETE TOP (@Batch) a
-		OUTPUT deleted.CustID INTO #Tempcustsetting(CustID)
-		FROM #TempCust a
+		OUTPUT deleted.CustID INTO #TempCustSetting(CustID)
+		FROM #SMAs a
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 		
 		DELETE a
 		FROM CustOverrideGame a WITH(ROWLOCK) 
-			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
 		WHERE  a.sporttype = 202 AND a.BetType BETWEEN 1502 AND 1514
 		
 		DELETE a
 		FROM CustSettingGame a WITH(ROWLOCK) 
-			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
 		WHERE  a.sporttype = 202 AND a.BetType BETWEEN 1502 AND 1514
 
 		DELETE a
 		FROM CustGameType a WITH(ROWLOCK) 
-			INNER JOIN #Tempcustsetting temp ON a.CustId = temp.CustID 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
 		WHERE a.GameTypeID BETWEEN 2 AND 14
 	END
 
-	DROP TABLE #Tempcustsetting
-	DROP TABLE #TempCust
+	INSERT INTO  #Members(CustID)
+	SELECT c.custid
+	FROM Custinfo c WITH (NOLOCK)
+	WHERE c.srecommend = @srecommend AND c.roleid = 1
+
+	--> Delete Members
+	WHILE(1=1)
+	BEGIN
+		TRUNCATE TABLE #TempCustSetting
+
+		DELETE TOP (@Batch) a
+		OUTPUT deleted.CustID INTO #TempCustSetting(CustID)
+		FROM #Members a
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+		
+		DELETE a
+		FROM CustOverrideGame a WITH(ROWLOCK) 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
+		WHERE  a.sporttype = 202 AND a.BetType BETWEEN 1502 AND 1514
+		
+		DELETE a
+		FROM CustSettingGame a WITH(ROWLOCK) 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
+		WHERE  a.sporttype = 202 AND a.BetType BETWEEN 1502 AND 1514
+
+		DELETE a
+		FROM CustGameType a WITH(ROWLOCK) 
+			INNER JOIN #TempCustSetting temp ON a.CustId = temp.CustID 
+		WHERE a.GameTypeID BETWEEN 2 AND 14
+	END
+
+	DROP TABLE #TempCustSetting
+	DROP TABLE #SMAs
+	DROP TABLE #Members
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
