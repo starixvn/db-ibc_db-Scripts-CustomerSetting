@@ -4,7 +4,7 @@
 	Task: Clean code for un-used bettype of Keno [#145247]
 	DB: DBCUST/CUSTDB and DBCUST_custsetting publication
 */	
------------------------------------------BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST.CUSTDB-----------------------------------------
+-----------------------------------------BEGIN STEP 1: RUN THIS SCRIPT AT DBCUST.CUSTDB-----------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_18]
 	@srecommend INT, 
 	@target VARCHAR(20)
