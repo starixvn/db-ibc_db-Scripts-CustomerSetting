@@ -51,3 +51,5 @@ SELECT  @ProductID AS ProductID ,
 		@ShowTime AS ShowTime,
 		1 AS LockAddingNew
 FROM @Currency C
+
+--select * from UMConfig with (NOLOCK)

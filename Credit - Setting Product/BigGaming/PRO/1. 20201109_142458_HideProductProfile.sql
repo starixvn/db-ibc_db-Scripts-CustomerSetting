@@ -14,7 +14,7 @@ WHERE Sporttype = 239
 
 
 
-
+--SELECT * FROM ProductSettingDetail S WITH (NOLOCK) where SportType = 239
 
 
 

@@ -56,7 +56,7 @@
 	
 	CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
-	SELECT	211, 2401, SportType, BetType, 0, SettingType, 0 --copy from AE Casino
+	SELECT	243, 3101, SportType, BetType, 0, SettingType, 0 --copy from AE Casino
 	FROM ProductSettingDetail WITH (NOLOCK)
 	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (@SettingType_PT,@SettingType_Comm,@SettingType_WinLoss) --  PT, Comm, WinLoss 
 

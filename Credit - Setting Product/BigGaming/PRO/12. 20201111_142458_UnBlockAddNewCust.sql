@@ -11,7 +11,7 @@ DECLARE  @SiteID INT,@FunctionType INT , @BeginTime SMALLDATETIME,  @EndTime SMA
 DECLARE @Currency TABLE(currency INT)
 DECLARE @ProductID INT = 41, @SportType INT = 243, @BetType INT = 0 --AE Casino
 
-SELECT  @SiteID =  0, @FunctionType = 1, @BeginTime = '2020-11-09 22:50:00' , @ShowTime = '2020-11-09 22:15:00'
+SELECT  @SiteID =  0, @FunctionType = 1
 SELECT @EndTime = DATEADD(MINUTE,45,@BeginTime) 
 SELECT @EndTime = DATEADD(MINUTE,10,@EndTime) 
 
@@ -46,3 +46,5 @@ FROM UMConfig UM
 			AND UM.SiteID = @SiteID
 			AND UM.currency = C.Currency
 			AND UM.SuperID = 0
+
+--select * from UMConfig with (nolock)

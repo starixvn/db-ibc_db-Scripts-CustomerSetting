@@ -93,3 +93,5 @@ DROP TABLE #temp
 --select ExchangeId, code + '('+ currency+')' NiceName
 --from exchange E WITH (NOLOCK)
 --WHERE E.code = 'GBP'
+
+--select * from StakeLevel with (nolock) where GameTypeID = 3501
