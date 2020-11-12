@@ -43,7 +43,7 @@
 
 	INSERT INTO #CustList_ST (custid, IsDisabledAB)
 	SELECT CS.CustID, isDisabledAB.value
-	FROM DBNOTI.CustDB_AdjustCS.dbo.CustProductStatus cs WITH(NOLOCK)
+	FROM dbo.CustProductStatus cs WITH(NOLOCK)
 		INNER JOIN dbo.CustProductStatus cs2 WITH(NOLOCK) ON cs.CustID= cs2.CustID
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
