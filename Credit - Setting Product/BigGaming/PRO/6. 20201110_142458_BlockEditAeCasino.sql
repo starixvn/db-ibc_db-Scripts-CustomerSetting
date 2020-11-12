@@ -6,13 +6,13 @@
 USE CustDB
 GO
 
---> Step 1 add config to block add new cust
+--> Add config to block edit and add new cust
 DECLARE @UnblockTime VARCHAR(50) = '11:35 AM (GMT+8)' -- time unblock add new cust
 
 -- Setting UMConfig . GMT -4
 DECLARE  @SiteID INT,@FunctionType INT , @BeginTime SMALLDATETIME,  @EndTime SMALLDATETIME, @ShowTime SMALLDATETIME
 DECLARE @Currency TABLE(currency INT)
-DECLARE @ProductID INT = 41, @SportType INT = 243, @BetType INT = 3101 --AE Casino
+DECLARE @ProductID INT = 41, @SportType INT = 243, @BetType INT = 0 --AE Casino
 
 SELECT  @SiteID =  0, @FunctionType = 1, @BeginTime = '2020-xx-xx 22:50:00' , @ShowTime = '2020-xx-xx 22:15:00'
 SELECT @EndTime = DATEADD(MINUTE,45,@BeginTime)
@@ -26,7 +26,7 @@ UNION ALL SELECT 34-- IDR(IDR)
 UNION ALL SELECT 47-- IDR(DDD)
 UNION ALL SELECT 51-- VND(INH)
 UNION ALL SELECT 2-- MYR(RM)
-UNION ALL SELECT 43-- THB(THB)
+UNION ALL SELECT 43-- THB(THB)L
 UNION ALL SELECT 69-- MMK(MMK)
 UNION ALL SELECT 3-- USD(US$)
 UNION ALL SELECT 16-- USD(Yen)
@@ -51,6 +51,3 @@ SELECT  @ProductID AS ProductID ,
 		@ShowTime AS ShowTime,
 		1 AS LockAddingNew
 FROM @Currency C
-
-
---> Step 2 : Restore DB to DBNOTI.CustDB_AdjustCS

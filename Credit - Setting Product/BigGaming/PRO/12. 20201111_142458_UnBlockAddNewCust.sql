@@ -9,8 +9,9 @@ GO
 ---- Setting UMConfig . GMT -4
 DECLARE  @SiteID INT,@FunctionType INT , @BeginTime SMALLDATETIME,  @EndTime SMALLDATETIME, @ShowTime SMALLDATETIME
 DECLARE @Currency TABLE(currency INT)
+DECLARE @ProductID INT = 41, @SportType INT = 243, @BetType INT = 0 --AE Casino
 
-SELECT  @SiteID =  0, @FunctionType = 2, @BeginTime = '2020-11-09 22:50:00' , @ShowTime = '2020-11-09 22:15:00'
+SELECT  @SiteID =  0, @FunctionType = 1, @BeginTime = '2020-11-09 22:50:00' , @ShowTime = '2020-11-09 22:15:00'
 SELECT @EndTime = DATEADD(MINUTE,45,@BeginTime) 
 SELECT @EndTime = DATEADD(MINUTE,10,@EndTime) 
 
@@ -33,11 +34,12 @@ UNION ALL SELECT 95-- USD(USD)
 UNION ALL SELECT 6-- EUR(EURO)
 UNION ALL SELECT 12-- GBP(GBP)
 
-DELETE UM FROM UMConfig UM
+DELETE UM 
+FROM UMConfig UM
 	INNER JOIN  @Currency C 
-			ON UM.ProductID = 0
-			AND UM.SportType = 0
-			AND UM.BetType = 0
+			ON UM.ProductID = @ProductID
+			AND UM.SportType = @SportType
+			AND UM.BetType = @BetType
 			AND UM.IsLive = 0
 			AND UM.SettingType = 0
 			AND UM.FunctionType = @FunctionType 
