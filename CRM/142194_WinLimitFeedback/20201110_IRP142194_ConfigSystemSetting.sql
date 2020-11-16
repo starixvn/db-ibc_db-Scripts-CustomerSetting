@@ -5,6 +5,6 @@
 */
 
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
-SET Value = '8652'
-WHERE SettingName = 'LastLogID'
+SET Value = '1'
+WHERE SettingName = 'ConfigPRO'
 	AND ServiceName = 'WinLimitFB'
