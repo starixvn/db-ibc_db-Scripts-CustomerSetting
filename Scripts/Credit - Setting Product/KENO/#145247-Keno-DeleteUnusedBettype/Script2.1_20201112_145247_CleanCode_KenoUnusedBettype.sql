@@ -1,5 +1,5 @@
 /*<info serverAlias="DBCUST-CustDB,DBACC-bodb02"></info>*/
-/* 
+/*
 	Created: 20201112@Eden
 	Task: Clean code for un-used bettype of Keno [#145247]
 	DB: DBCUST/CUSTDB and DBCUST_custsetting publication
@@ -7,7 +7,8 @@
 -----------------------------------------BEGIN STEP 1: RUN THIS SCRIPT AT DBCUST.CUSTDB-----------------------------------------
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_18]
 	@srecommend INT, 
-	@target VARCHAR(20)
+	@target VARCHAR(20),
+	@maxCustID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -30,6 +31,7 @@ BEGIN
 	SELECT c.custid
 	FROM Custinfo c WITH (NOLOCK)
 	WHERE c.srecommend = @srecommend AND c.roleid IN(2,3,4)
+		AND c.custid <= @maxCustID
 
 	--> Delete SMA first
 	WHILE(1=1)
@@ -63,6 +65,7 @@ BEGIN
 	SELECT c.custid
 	FROM Custinfo c WITH (NOLOCK)
 	WHERE c.srecommend = @srecommend AND c.roleid = 1
+		AND c.custid <= @maxCustID
 
 	--> Delete Members
 	WHILE(1=1)
@@ -104,6 +107,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 BEGIN
+	DECLARE @maxCustID INT = xxx
 	DECLARE @srecommend INT
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
 	CREATE TABLE #Keno_srecommend(CustID INT PRIMARY KEY)
@@ -156,6 +160,7 @@ BEGIN
 		EXEC dbo.Acc_CustSetting3rd_18 
 				 @srecommend = @srecommend
 				,@target = 'REPLICATED'
+				,@maxCustID = @maxCustID
 						
 		WAITFOR DELAY '00:00:0.020'
 	END
@@ -175,6 +180,7 @@ GO
 --------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------------	
 BEGIN
+	DECLARE @maxCustID INT = xxx
 	DECLARE @srecommend INT
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY,isfinished bit default(0))
 	CREATE TABLE #Keno_srecommend(CustID INT PRIMARY KEY)
@@ -227,8 +233,9 @@ BEGIN
 		EXEC dbo.Acc_CustSetting3rd_18 
 				 @srecommend = @srecommend
 				,@target = 'DBCUST'
+				,@maxCustID = @maxCustID
 						
-		WAITFOR DELAY '00:00:0.100'
+		WAITFOR DELAY '00:00:0.020'
 	END
 
 	PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
