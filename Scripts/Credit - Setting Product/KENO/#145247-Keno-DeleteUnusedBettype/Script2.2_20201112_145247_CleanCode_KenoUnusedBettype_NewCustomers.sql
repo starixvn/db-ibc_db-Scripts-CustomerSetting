@@ -12,11 +12,10 @@ CREATE TABLE #SMAMembers(CustID INT)
 
 DECLARE @Batch INT  = 500
 
-
 INSERT INTO #SMAMembers
 SELECT a.CustID
-FROM CustGameType a WITH(ROWLOCK) 
-WHERE a.GameTypeID = 14 
+FROM CustSettingGame a WITH(ROWLOCK) 
+WHERE a.sporttype = 202 AND a.BetType = 1514
 	AND a.CustID > @maxCustID
 
 WHILE(1=1)
