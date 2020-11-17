@@ -141,8 +141,6 @@ WHERE ci.roleid = 4
 							34,-- IDR(IDR)
 							47,-- IDR(DDD)
 							51,-- VND(INH)
-							20,-- UUS(UUS)
-							72,-- YNG(YNG)
 							2,-- MYR(RM)
 							43,-- THB(THB)
 							69,-- MMK(MMK)
