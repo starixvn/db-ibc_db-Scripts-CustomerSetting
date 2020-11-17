@@ -50,10 +50,25 @@ CREATE TABLE #NonOfferedCurency (Currency INT) --KHR(KHR); PLN(PLN);MMK(MMK, MKK
 INSERT INTO #NonOfferedCurency (Currency)
 SELECT exchangeid 
 FROM exchange WITH(NOLOCK) 
-WHERE exchangeid NOT IN (1
-						,9
-						,21
-						,50
+WHERE exchangeid NOT IN (13, -- CNY(RMB)
+						15,-- IDR(IN)
+						22,-- IDR(IND)
+						33,-- IDR(IDD)
+						34,-- IDR(IDR)
+						47,-- IDR(DDD)
+						51,-- VND(INH)
+						20,--UUS (UUS)
+						72,--YNG(YNG)
+						2,-- MYR(RM)
+						43,-- THB(THB)
+						69,-- MMK(MMK)
+						3,-- USD(US$)
+						16,-- USD(Yen)
+						35,-- USD($US)
+						64,-- USD(UT)
+						95,-- USD(USD)
+						6,-- EUR(EURO)
+						12-- GBP(GBP)
 					) 
 
 
