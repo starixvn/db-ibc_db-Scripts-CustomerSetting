@@ -15,12 +15,10 @@ WHERE C.roleid IN (3,2)
 	AND C.[site] IS NULL
 
 UPDATE sma SET sma.[site] = upd.[site]
---SELECT sma.custid, sma.[site], upd.[Site]
 FROM Customer sma WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #UpdateSMA upd WITH (NOLOCK) ON sma.custid = upd.custid
 
 UPDATE sma SET sma.[site] = upd.[site]
---SELECT sma.custid, sma.[site], upd.[Site]
 FROM CustAgent sma WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #UpdateSMA upd WITH (NOLOCK) ON sma.custid = upd.custid
 
