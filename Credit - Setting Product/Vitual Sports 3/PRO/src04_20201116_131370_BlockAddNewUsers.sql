@@ -14,7 +14,7 @@ PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 -- Setting UMConfig . GMT -4
 DECLARE  @SiteID INT,@FunctionType INT , @BeginTime SMALLDATETIME,  @EndTime SMALLDATETIME, @ShowTime SMALLDATETIME ,@Currency INT
 
-SELECT  @SiteID =  0,@Currency = 0, @FunctionType = 2, @BeginTime = '2020-11-09 22:50:00' , @ShowTime = '2020-11-09 22:15:00'
+SELECT  @SiteID =  0,@Currency = 0, @FunctionType = 1, @BeginTime = '2020-11-09 22:50:00' , @ShowTime = '2020-11-09 22:15:00'
 SELECT @EndTime = DATEADD(MINUTE,45,@BeginTime)
 
 
