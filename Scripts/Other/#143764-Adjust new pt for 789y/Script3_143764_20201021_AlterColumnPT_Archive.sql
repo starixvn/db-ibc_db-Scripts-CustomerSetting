@@ -11,14 +11,7 @@ USE bodb_Customer
 GO	
 --> For Small Table :----------------------------------------------------------------
 	--Remove Default
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN SuperPT SMALLMONEY NOT NULL			
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MasterPT SMALLMONEY NOT NULL		
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AgentPT SMALLMONEY NOT NULL			
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AutoSuperPT SMALLMONEY NOT NULL		
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AutoMasterPT SMALLMONEY NOT NULL	
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MinPT SMALLMONEY NOT NULL			
-	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MaxPT SMALLMONEY NOT NULL
-
+	
 	ALTER TABLE CustPTGroupSetting3rd_Member_old DROP CONSTRAINT [DF_CustPTGroupSetting3rd_Member_SuperPT]		
 	ALTER TABLE CustPTGroupSetting3rd_Member_old DROP CONSTRAINT [DF_CustPTGroupSetting3rd_Member_MasterPT]	
 	ALTER TABLE CustPTGroupSetting3rd_Member_old DROP CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AgentPT]		
@@ -26,6 +19,14 @@ GO
 	ALTER TABLE CustPTGroupSetting3rd_Member_old DROP CONSTRAINT [DF_CustPTGroupSetting3rd_Member_AutoSuperPT]
 	GO
 	--ALTER COLUMN
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN SuperPT			SMALLMONEY NOT NULL			
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MasterPT		SMALLMONEY NOT NULL		
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AgentPT			SMALLMONEY NOT NULL			
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AutoSuperPT		SMALLMONEY NOT NULL		
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN AutoMasterPT	SMALLMONEY NOT NULL	
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MinPT			SMALLMONEY NOT NULL			
+	ALTER TABLE CustPTSetting3rd_Agent_old ALTER COLUMN MaxPT			SMALLMONEY NOT NULL
+
 	ALTER TABLE CustPTGroupSetting3rd_Member_old ALTER COLUMN SuperPT		SMALLMONEY NOT NULL			
 	ALTER TABLE CustPTGroupSetting3rd_Member_old ALTER COLUMN MasterPT		SMALLMONEY NOT NULL		
 	ALTER TABLE CustPTGroupSetting3rd_Member_old ALTER COLUMN AgentPT		SMALLMONEY NOT NULL			
