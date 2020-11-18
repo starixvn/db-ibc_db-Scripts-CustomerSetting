@@ -5,6 +5,7 @@
 	DB: DBCUST/CustDB
 */ 
 
+--Correct table Customer
 CREATE TABLE #UpdateSMA (CustID INT PRIMARY KEY CLUSTERED, [Site] VARCHAR(10))
 
 INSERT INTO #UpdateSMA(CustID, [Site])
@@ -18,8 +19,11 @@ UPDATE sma SET sma.[site] = upd.[site]
 FROM Customer sma WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #UpdateSMA upd WITH (NOLOCK) ON sma.custid = upd.custid
 
-UPDATE sma SET sma.[site] = upd.[site]
-FROM CustAgent sma WITH (ROWLOCK,UPDLOCK)
-	INNER JOIN #UpdateSMA upd WITH (NOLOCK) ON sma.custid = upd.custid
-
 DROP TABLE #UpdateSMA
+GO
+
+--Correct table CustAgent
+UPDATE CA SET CA.[site] = C.[site]
+FROM CustAgent CA WITH (ROWLOCK,UPDLOCK)
+	INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CA.custid
+WHERE (CA.[site] <> C.[site] OR CA.[site] IS NULL)
