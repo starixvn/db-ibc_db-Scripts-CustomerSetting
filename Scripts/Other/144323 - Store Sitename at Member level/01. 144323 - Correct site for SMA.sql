@@ -4,7 +4,8 @@
 	Task: Correct Sitename at SMA level [RedmineID: 144323]
 	DB: DBCUST/CustDB
 */ 
-
+USE [CustDB]
+GO
 --Correct table Customer
 CREATE TABLE #UpdateSMA (CustID INT PRIMARY KEY CLUSTERED, [Site] VARCHAR(10))
 
