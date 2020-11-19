@@ -21,8 +21,8 @@ SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,6    UNION ALL	--EURO	--Euro, EUR
 SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,12   UNION ALL	--GBP	--Euro, EUR,GBP
 --INH,YNG,UUS
 SELECT 4326 ,'1'    ,'50'      ,1    ,50      ,51   UNION ALL	--INH	--INH,YNG,UUS
-SELECT 4326 ,'1'    ,'50'      ,1    ,50      ,20   UNION ALL	--UUS	--INH,YNG,UUS
-SELECT 4326 ,'1'    ,'50'      ,1    ,50      ,72   UNION ALL	--YNG	--INH,YNG,UUS
+SELECT 4326 ,'0.1'  ,'500'     ,0.1  ,500     ,20   UNION ALL	--UUS	--INH,YNG,UUS
+SELECT 4326 ,'0.1'  ,'500'     ,0.1  ,500     ,72   UNION ALL	--YNG	--INH,YNG,UUS
 --RM,HKK, HK$,PLN,KHR
 SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,5    UNION ALL	--HK$	--RM,HKK, HK$,PLN,KHR
 SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,67   UNION ALL	--HKK	--RM,HKK, HK$,PLN,KHR
