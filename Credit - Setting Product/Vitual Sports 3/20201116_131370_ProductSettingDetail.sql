@@ -19,7 +19,7 @@ GO
 DECLARE @productID SMALLINT ,@betType SMALLINT,
 		@sportType SMALLINT,@RealProductID SMALLINT,@SettingStatus TINYINT
 		,@IsSync BIT, @IsHidden BIT,@MaxPT TINYINT,@IsDisabled BIT
-		--,@MaxDiscount DECIMAL(9,8),@IntervalValue DECIMAL(19,8)
+		,@MaxDiscount DECIMAL(9,8),@IntervalValue DECIMAL(19,8)
 		
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide	
 	 , @productID = 5  -- Leap Gaming
@@ -30,7 +30,7 @@ SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
 	 , @IsHidden = 0
 	 , @IsDisabled = 0
 	 , @MaxPT = 90
-	 --, @MaxDiscount = 0.005
+	 , @MaxDiscount = 0.005
 	 --, @IntervalValue = 0.0005 
 	 
 IF NOT EXISTS(	SELECT TOP 1 1 
@@ -61,6 +61,6 @@ IF NOT EXISTS(	SELECT TOP 1 1
 		--PT	
 				(	1	         , @Sporttype		, @Bettype		, 0     , @ProductID	, @MaxPT, NULL			, NULL		, NULL		, NULL			, 2           , 3           , @SettingStatus, NULL, @RealProductId, NULL)
 		--Comm	
-		--	,	(	2	         , @Sporttype		, @Bettype		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue, @RealProductId, NULL)
+			,	(	20	         , @Sporttype		, @Bettype		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue, @RealProductId, NULL)
 
 	END		
