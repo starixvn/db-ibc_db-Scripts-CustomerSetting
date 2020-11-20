@@ -17,19 +17,84 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
-	   AND dbo.f_CheckRepTable('CustProductStatus') = 1
+		AND dbo.f_CheckRepTable('CustProductStatus') = 1
+		AND dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 1
+		AND dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 1
+		AND dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 1
+		AND dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 1
+		AND dbo.f_CheckRepTable('CustWinLossLimit_Member') = 1
+		AND dbo.f_CheckRepTable('ProductSettingDetail') = 1
+		AND dbo.f_CheckRepTable('ProductStatusProfile') = 1
 	   )
 		RETURN
+	/*******************************PT AND LossLimit	*******************************/	
+	DECLARE @Sporttype SMALLINT = 219
+	CREATE TABLE #CustList (custid INT)
 	
-
-	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
-	DECLARE @BitmapOrder TINYINT = 8 -- Fising world
+	INSERT INTO #CustList(custid)
 	SELECT custid
-	INTO #CustList
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
 		AND ci.custid <= @maxcustid
+	
+	SELECT DISTINCT cg.custid 
+	INTO #CustPT_Agent
+	FROM CustPTSetting3rd_Agent cg WITH(NOLOCK)	
+	INNER JOIN #CustList ci ON ci.custid = cg.CustID		
+	WHERE SportType = @Sporttype 
+						
+	SELECT DISTINCT cg.custid 
+	INTO #CustPT_Member
+	FROM CustPTSetting3rd_Member cg WITH(NOLOCK)
+	INNER JOIN #CustList ci ON ci.custid = cg.CustID		
+	WHERE SportType = @Sporttype 
+		
+	SELECT DISTINCT cg.AgentID AS CustID
+	INTO #CustPTGroup_Member
+	FROM CustPTGroupSetting3rd_Member cg WITH(NOLOCK)
+	INNER JOIN #CustList ci ON ci.custid = cg.AgentID			
+	WHERE SportType = @Sporttype 
+	
+	SELECT DISTINCT cg.custid 
+	INTO #CustWinLoss_Agent
+	FROM dbo.CustWinLossLimit_Agent cg WITH(NOLOCK)	
+	INNER JOIN #CustList ci ON ci.custid = cg.CustID		
+	WHERE SportType = @Sporttype 
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustWinLoss_Member
+	FROM dbo.CustWinLossLimit_Member cg WITH(NOLOCK)
+	INNER JOIN #CustList ci ON ci.custid = cg.CustID		
+	WHERE SportType = @Sporttype 
+	
+	DELETE cg
+	FROM CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustPT_Agent ci ON ci.custid = cg.CustID
+	WHERE SportType = @Sporttype
+						
+	DELETE cg
+	FROM CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustPT_Member ci ON ci.custid = cg.CustID
+	WHERE SportType = @Sporttype
+		
+	DELETE cg
+	FROM CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)	
+		INNER JOIN #CustPTGroup_Member ci ON ci.CustID = cg.AgentID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
+		INNER JOIN #CustWinLoss_Agent ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	DELETE cg
+	FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustWinLoss_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype
+
+	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
+	DECLARE @BitmapOrder TINYINT = 8 -- Fising world
 
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,1)),
