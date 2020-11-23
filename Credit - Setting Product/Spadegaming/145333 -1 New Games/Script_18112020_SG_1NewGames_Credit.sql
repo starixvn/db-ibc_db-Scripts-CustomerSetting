@@ -10,48 +10,48 @@ CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVA
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --DDD, IND, IDR, IDD, IN
-SELECT 4326 ,'0.2'  ,'10'      ,0.2  ,10      ,47   UNION ALL	--DDD	--DDD, IND, IDR, IDD, IN
-SELECT 4326 ,'0.2'  ,'10'      ,0.2  ,10      ,33   UNION ALL	--IDD	--DDD, IND, IDR, IDD, IN
-SELECT 4326 ,'0.2'  ,'10'      ,0.2  ,10      ,34   UNION ALL	--IDR	--DDD, IND, IDR, IDD, IN
-SELECT 4326 ,'0.2'  ,'10'      ,0.2  ,10      ,15   UNION ALL	--IN	--DDD, IND, IDR, IDD, IN
-SELECT 4326 ,'0.2'  ,'10'      ,0.2  ,10      ,22   UNION ALL	--IND	--DDD, IND, IDR, IDD, IN
+SELECT 4326 ,'0.05' ,'100'     ,0.05 ,100     ,47   UNION ALL	--DDD	--DDD, IND, IDR, IDD, IN
+SELECT 4326 ,'0.05' ,'100'     ,0.05 ,100     ,33   UNION ALL	--IDD	--DDD, IND, IDR, IDD, IN
+SELECT 4326 ,'0.05' ,'100'     ,0.05 ,100     ,34   UNION ALL	--IDR	--DDD, IND, IDR, IDD, IN
+SELECT 4326 ,'0.05' ,'100'     ,0.05 ,100     ,15   UNION ALL	--IN	--DDD, IND, IDR, IDD, IN
+SELECT 4326 ,'0.05' ,'100'     ,0.05 ,100     ,22   UNION ALL	--IND	--DDD, IND, IDR, IDD, IN
 --Euro, EUR,GBP
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,6    UNION ALL	--EURO	--Euro, EUR,GBP
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,12   UNION ALL	--GBP	--Euro, EUR,GBP
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,78   UNION ALL	--EUR	--Euro, EUR,GBP
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,6    UNION ALL	--EURO	--Euro, EUR,GBP
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,12   UNION ALL	--GBP	--Euro, EUR,GBP
 --INH
-SELECT 4326 ,'1'    ,'50'      ,1    ,50      ,51   UNION ALL	--INH	--INH
+SELECT 4326 ,'0.1'  ,'500'     ,0.1  ,500     ,51   UNION ALL	--INH	--INH,YNG,UUS
 --RM,HKK, HK$,PLN,KHR
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,5    UNION ALL	--HK$	--RM,HKK, HK$,PLN,KHR
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,67   UNION ALL	--HKK	--RM,HKK, HK$,PLN,KHR
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,71   UNION ALL	--KHR	--RM,HKK, HK$,PLN,KHR
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,56   UNION ALL	--PLN	--RM,HKK, HK$,PLN,KHR
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,2    UNION ALL	--RM	--RM,HKK, HK$,PLN,KHR
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,5    UNION ALL	--HK$	--RM,HKK, HK$,PLN,KHR
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,67   UNION ALL	--HKK	--RM,HKK, HK$,PLN,KHR
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,71   UNION ALL	--KHR	--RM,HKK, HK$,PLN,KHR
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,56   UNION ALL	--PLN	--RM,HKK, HK$,PLN,KHR
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,2    UNION ALL	--RM	--RM,HKK, HK$,PLN,KHR
 --RMB, CY, YUN,NOK,SEK
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,81   UNION ALL	--CY	--RMB, CY, YUN,NOK,SEK
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,54   UNION ALL	--NOK	--RMB, CY, YUN,NOK,SEK
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,13   UNION ALL	--RMB	--RMB, CY, YUN,NOK,SEK
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,53   UNION ALL	--SEK	--RMB, CY, YUN,NOK,SEK
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,66   UNION ALL	--YUN	--RMB, CY, YUN,NOK,SEK
+SELECT 4326 ,'0.1'  ,'100'     ,0.1  ,100     ,81   UNION ALL	--CY	--RMB, CY, YUN,NOK,SEK
+SELECT 4326 ,'0.1'  ,'100'     ,0.1  ,100     ,54   UNION ALL	--NOK	--RMB, CY, YUN,NOK,SEK
+SELECT 4326 ,'0.1'  ,'100'     ,0.1  ,100     ,13   UNION ALL	--RMB	--RMB, CY, YUN,NOK,SEK
+SELECT 4326 ,'0.1'  ,'100'     ,0.1  ,100     ,53   UNION ALL	--SEK	--RMB, CY, YUN,NOK,SEK
+SELECT 4326 ,'0.1'  ,'100'     ,0.1  ,100     ,66   UNION ALL	--YUN	--RMB, CY, YUN,NOK,SEK
 --RUB,INR,JPY
-SELECT 4326 ,'10'   ,'500'     ,10   ,500     ,61   UNION ALL	--INR	--RUB,INR,JPY
-SELECT 4326 ,'10'   ,'500'     ,10   ,500     ,32   UNION ALL	--JPY	--RUB,INR,JPY
-SELECT 4326 ,'10'   ,'500'     ,10   ,500     ,55   UNION ALL	--RUB	--RUB,INR,JPY
+SELECT 4326 ,'1'    ,'2000'    ,1    ,2000    ,61   UNION ALL	--INR	--RUB,INR,JPY
+SELECT 4326 ,'1'    ,'2000'    ,1    ,2000    ,32   UNION ALL	--JPY	--RUB,INR,JPY
+SELECT 4326 ,'1'    ,'2000'    ,1    ,2000    ,55   UNION ALL	--RUB	--RUB,INR,JPY
 --THB, TB
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,4    UNION ALL	--TB	--THB, TB
-SELECT 4326 ,'1'    ,'100'     ,1    ,100     ,43   UNION ALL	--THB	--THB, TB
+SELECT 4326 ,'1'    ,'200'     ,1    ,200     ,4    UNION ALL	--TB	--THB, TB
+SELECT 4326 ,'1'    ,'200'     ,1    ,200     ,43   UNION ALL	--THB	--THB, TB
 --Won
-SELECT 4326 ,'100'  ,'5000'    ,100  ,5000    ,45   UNION ALL	--Won	--Won
+SELECT 4326 ,'10'   ,'20000'   ,10   ,20000   ,45   UNION ALL	--Won	--Won
 --Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,35   UNION ALL	--$US	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,9    UNION ALL	--AUD	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,69   UNION ALL	--MMK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
-SELECT 4326 ,'0.1'  ,'5'       ,0.1  ,5       ,16   			--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,35   UNION ALL	--$US	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,9    UNION ALL	--AUD	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,69   UNION ALL	--MMK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
+SELECT 4326 ,'0.01' ,'10'      ,0.01 ,10      ,16				--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
