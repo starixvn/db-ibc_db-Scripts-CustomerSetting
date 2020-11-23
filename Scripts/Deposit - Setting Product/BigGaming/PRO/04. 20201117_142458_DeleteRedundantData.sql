@@ -38,7 +38,7 @@ BEGIN
 							7,-- VND(DON)
 							2,-- MYR(RM)
 							4,-- THB(TB)
-							69,-- MMK(MMK)
+							70,-- MMK(MMK)
 							94,-- MMK(MK)   
 							32,-- JPY(JPY)
 							3,-- USD(US$)
