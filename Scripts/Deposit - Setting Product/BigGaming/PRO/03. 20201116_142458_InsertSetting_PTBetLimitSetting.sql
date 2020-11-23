@@ -407,6 +407,23 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
 		OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20,72)))
+		AND ci.currency IN (13,-- CNY(RMB)
+							66,-- CNY(YUN)
+							15,-- IDR(IN)
+							51,-- VND(INH) 
+							7,-- VND(DON)
+							2,-- MYR(RM)
+							4,-- THB(TB)
+							69,-- MMK(MMK)
+							94,-- MMK(MK)   
+							32,-- JPY(JPY)
+							3,-- USD(US$)
+							96,-- USD(USDT)
+							6,-- EUR(EURO)
+							12,-- GBP(GBP)
+							61,-- INR(INR)
+							55 -- RUB(RUB)
+							)
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -461,6 +478,23 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
 		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
 		OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20,72)))
+		AND ci.currency IN (13,-- CNY(RMB)
+							66,-- CNY(YUN)
+							15,-- IDR(IN)
+							51,-- VND(INH) 
+							7,-- VND(DON)
+							2,-- MYR(RM)
+							4,-- THB(TB)
+							69,-- MMK(MMK)
+							94,-- MMK(MK)   
+							32,-- JPY(JPY)
+							3,-- USD(US$)
+							96,-- USD(USDT)
+							6,-- EUR(EURO)
+							12,-- GBP(GBP)
+							61,-- INR(INR)
+							55 -- RUB(RUB)
+							)
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
