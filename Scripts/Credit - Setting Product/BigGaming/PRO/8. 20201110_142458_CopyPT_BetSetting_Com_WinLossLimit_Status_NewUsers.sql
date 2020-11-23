@@ -31,6 +31,7 @@ WHERE ci.roleid = 4
 								47,-- IDR(DDD)
 								51,-- VND(INH)
 								2,-- MYR(RM)
+								67,--HKD(HKK)
 								43,-- THB(THB)
 								69,-- MMK(MMK)
 								3,-- USD(US$)

@@ -220,6 +220,14 @@ BEGIN
 	SELECT 3501, 7, '100', '20,000', 100, 20000 UNION ALL -- VND(DON)
 	SELECT 3501, 7, '1,000', '50,000', 1000, 50000 UNION ALL -- VND(DON)
 
+	SELECT 3501, 20, '50', '5,000', 50, 5000 UNION ALL -- UUS(UUS)
+	SELECT 3501, 20, '100', '20,000', 100, 20000 UNION ALL -- UUS(UUS)
+	SELECT 3501, 20, '1,000', '50,000', 1000, 50000 UNION ALL -- UUS(UUS)
+
+	SELECT 3501, 72, '50', '5,000', 50, 5000 UNION ALL -- YNG(YNG)
+	SELECT 3501, 72, '100', '20,000', 100, 20000 UNION ALL -- YNG(YNG)
+	SELECT 3501, 72, '1,000', '50,000', 1000, 50000 UNION ALL -- YNG(YNG)
+
 	SELECT 3501, 2, '10', '1,000', 10, 1000 UNION ALL -- MYR(RM)
 	SELECT 3501, 2, '50', '5,000', 50, 5000 UNION ALL -- MYR(RM)
 	SELECT 3501, 2, '100', '10,000', 100, 10000 UNION ALL -- MYR(RM)
@@ -422,7 +430,9 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							6,-- EUR(EURO)
 							12,-- GBP(GBP)
 							61,-- INR(INR)
-							55 -- RUB(RUB)
+							55, -- RUB(RUB)
+							20, --UUS(UUS)
+							72 --YNG(YNG)
 							)
 ORDER BY ci.custid 
 
@@ -493,7 +503,9 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							6,-- EUR(EURO)
 							12,-- GBP(GBP)
 							61,-- INR(INR)
-							55 -- RUB(RUB)
+							55, -- RUB(RUB)
+							20, --UUS(UUS)
+							72 --YNG(YNG)
 							)
 ORDER BY ci.custid 
 
