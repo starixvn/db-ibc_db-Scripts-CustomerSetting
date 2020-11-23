@@ -10,6 +10,10 @@ SELECT custid
 FROM vw_customer WITH(NOLOCK)
 WHERE roleid = 4
 	AND site IN ('789y')
+	AND custid IN (SELECT custid
+					FROM Acc_CustGroup (NOLOCK)
+					WHERE GroupName in ('ACCUT','ACCYEN789','ACCYEN889')					
+					)
 	
 --custsetting
 SELECT mb.username,cs.*
@@ -81,6 +85,7 @@ UNION SELECT 241 --	BBIN
 UNION SELECT 243 --	AE Casino
 UNION SELECT 244 --	SA Gaming
 UNION SELECT 245 --	Virtual Games
+UNION SELECT 233 --WM
 
 SELECT mb.username,cs.*
 INTO #tmpCustPTSetting3rd_Member
