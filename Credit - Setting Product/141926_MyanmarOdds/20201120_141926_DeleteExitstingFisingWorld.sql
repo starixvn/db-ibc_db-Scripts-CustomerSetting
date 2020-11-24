@@ -7,9 +7,9 @@
 USE CustDB
 GO
 
-	DECLARE @Sporttype SMALLINT ,@MaxCustID INT
+	DECLARE @Sporttype SMALLINT 
 	
-	SELECT @Sporttype = 219, @MaxCustID = xxx
+	SELECT @Sporttype = 219
 	
 	CREATE TABLE #supers (custid int)
 	
@@ -23,7 +23,6 @@ GO
 			AND cs.isinternal = 0
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
-			AND ci.custid <= @MaxCustID
 			AND ci.Site IN ('76666B')
 			AND ci.currency IN (69) -- MMK
 	
