@@ -24,7 +24,6 @@ GO
 			AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 			AND s.islicensee = 0
 			AND ci.Site IN ('76666B')
-			AND ci.currency IN (69) -- MMK
 	
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Agent
