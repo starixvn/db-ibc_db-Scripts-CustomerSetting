@@ -44,7 +44,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 		UPDATE ProductSettingDetail 
 		SET DisplayOrder = CASE WHEN DisplayOrder = 4 THEN 9 
 								WHEN DisplayOrder = 3 THEN 7 END 
-		WHERE ProductID = @productID AND DisplayOrder in (2)
+		WHERE ProductID = @productID AND DisplayOrder in (3,4)
 		
 		UPDATE ProductSettingDetail SET DisplayOrder = 3 
 		WHERE ProductID = @productID AND DisplayOrder in (2)
