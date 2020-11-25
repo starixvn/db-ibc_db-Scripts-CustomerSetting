@@ -24,11 +24,13 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN	
 
-	DECLARE @Sporttype SMALLINT 
+	DECLARE @Sporttype SMALLINT ,@betType SMALLINT
 	CREATE TABLE #supers (custid INT)
 
-	SELECT @Sporttype = 231
+	SELECT @Sporttype = 231 , @betType = 5301 
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -48,36 +50,60 @@ BEGIN
 	FROM dbo.CustPTSetting3rd_Agent cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustPTSetting3rd_Member
 	FROM dbo.CustPTSetting3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 	SELECT DISTINCT cg.AgentID
 	INTO #CustPTGroupSetting3rd_Member
 	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.AgentID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustBetSetting3rd_Agent 
+	FROM dbo.CustBetSetting3rd_Agent  cg WITH(NOLOCK)	
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype AND BetType = @betType
+
+	SELECT DISTINCT cg.custid 
+	INTO #CustBetSetting3rd_Member 
+	FROM dbo.CustBetSetting3rd_Member cg WITH(NOLOCK)		
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 	DELETE cg
 	FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 	DELETE cg
 	FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 	DELETE cg
 	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
 		INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
-	WHERE SportType = @Sporttype
+	WHERE SportType = @Sporttype AND BetType = @betType
+
+	DELETE cg
+	FROM dbo.CustBetSetting3rd_Agent  cg WITH(ROWLOCK)		
+		INNER JOIN #CustBetSetting3rd_Agent  ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype AND BetType = @betType
+
+	DELETE cg
+	FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)		
+		INNER JOIN #CustBetSetting3rd_Member ci ON ci.custid = cg.CustID	
+	WHERE SportType = @Sporttype AND BetType = @betType
 
 END	
 GO

@@ -11,7 +11,7 @@ GO
 
 PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @SportType SMALLINT = 233
+DECLARE @SportType SMALLINT = 233, @Bettype INT = 5301
 DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
@@ -35,22 +35,36 @@ DELETE cg
 FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType = @SportType
+WHERE SportType = @SportType AND BetType = @Bettype
 	AND cg.custid > @maxcustID
 
 DELETE cg
 FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
-WHERE SportType = @SportType
+WHERE SportType = @SportType AND BetType = @Bettype
 	AND cg.custid > @maxcustID
 
 DELETE cg
 FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID= c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
-WHERE SportType = @SportType
+WHERE SportType = @SportType AND BetType = @Bettype
 	AND cg.AgentID > @maxcustID
+	
+DELETE cg
+FROM dbo.CustBetSetting3rd_Agent  cg WITH(ROWLOCK)		
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType AND BetType = @Bettype
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)		
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid			
+WHERE SportType = @SportType AND BetType = @Bettype
+	AND cg.custid > @maxcustID
 
 
 PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

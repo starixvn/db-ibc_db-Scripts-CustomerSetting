@@ -40,6 +40,15 @@ IF NOT EXISTS(	SELECT TOP 1 1
 					AND BetType = @betType			
 			)
 	BEGIN
+		
+		UPDATE ProductSettingDetail 
+		SET DisplayOrder = CASE WHEN DisplayOrder = 4 THEN 9 
+								WHEN DisplayOrder = 3 THEN 7 END 
+		WHERE ProductID = @productID AND DisplayOrder in (2)
+		
+		UPDATE ProductSettingDetail SET DisplayOrder = 3 
+		WHERE ProductID = @productID AND DisplayOrder in (2)
+	
 		INSERT INTO [ProductSettingDetail]
            ([SettingType]
            ,[SportType]
@@ -59,8 +68,41 @@ IF NOT EXISTS(	SELECT TOP 1 1
            ,[MaxChoice])
 		VALUES	
 		--PT	
-				(	1	         , @Sporttype		, @Bettype		, 0     , @ProductID	, @MaxPT, NULL			, NULL		, NULL		, NULL			, 2           , 3           , @SettingStatus, NULL, @RealProductId, NULL)
+				(	1	         , @Sporttype		, @Bettype		, 0     , @ProductID	, @MaxPT, NULL			, NULL		, NULL		, NULL			, 2           , 7           , @SettingStatus, NULL, @RealProductId, NULL)
 		--Comm	
-			,	(	20	         , @Sporttype		, @Bettype		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 2           , 2           , @SettingStatus, @IntervalValue, @RealProductId, NULL)
+			,	(	20	         , @Sporttype		, @Bettype		, 0     , @ProductID	, NULL, @MaxDiscount	, NULL		, NULL		, NULL			, 4           , 5           , @SettingStatus, @IntervalValue, @RealProductId, NULL)
 
 	END		
+
+
+DELETE FROM ProductBetSetting WHERE Sporttype = @sportType AND Bettype = @betType
+
+CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY)
+
+INSERT INTO #TempBetLimit(currency,MinBet,MaxBet)
+VALUES ('EURO',2,2500),
+		('$US',2,2500),
+		('CAN',2,2500),
+		('DDD',18,18000),
+		('GBP',1,2000),
+		('HK$',10,20000),
+		('HKK',5,10000),
+		('IDD',18,18000),
+		('IDR',18,18000),
+		('IN',18,18000),
+		('IND',18,18000),
+		('MMK',2,3000),
+		('RM',5,10000),
+		('RMB',10,20000),
+		('THB',50,50000),
+		('US$',2,2500),
+		('USD',2,2500),
+		('UT',2,2500),
+		('Won',2000,3000000),
+		('Yen',2,2500)
+INSERT INTO ProductBetSetting(Sporttype,Bettype,Currency,MinBet,IsDep,MaxBet,MaxPerMatch)
+SELECT @sportType AS SportType,@betType AS BetType,b.ExchangeId AS Currency,a.MinBet,0 AS IsDep,a.MaxBet ,0 AS MaxPerMatch
+FROM #TempBetLimit a
+INNER JOIN exchange b WITH(NOLOCK) on a.currency = b.currency
+
+DROP TABLE #TempBetLimit

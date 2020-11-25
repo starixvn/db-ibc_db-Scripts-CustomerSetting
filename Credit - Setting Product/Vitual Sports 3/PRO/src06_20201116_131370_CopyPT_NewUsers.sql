@@ -34,7 +34,7 @@ CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSp
 INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 SELECT	180, 1201, SportType, BetType, 0, SettingType, 0
 FROM ProductSettingDetail WITH (NOLOCK)
-WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1) --  PT
+WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (1,20) --  PT, Bet limit
 
 CREATE TABLE #MemberTemp
 (
@@ -54,6 +54,31 @@ CREATE TABLE #SMATemp
 	roleid TINYINT,
 	currency INT
 )
+
+CREATE TABLE #TempBetLimit (ExchangeId INT,currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY)
+
+INSERT INTO #TempBetLimit(ExchangeId,currency,MinBet,MaxBet)
+	VALUES (6,'EURO',2,2500),
+			(35,'$US',2,2500),
+			(50,'CAN',2,2500),
+			(47,'DDD',18,18000),
+			(12,'GBP',1,2000),
+			(5,'HK$',10,20000),
+			(67,'HKK',5,10000),
+			(33,'IDD',18,18000),
+			(34,'IDR',18,18000),
+			(15,'IN',18,18000),
+			(22,'IND',18,18000),
+			(69,'MMK',2,3000),
+			(2,'RM',5,10000),
+			(13,'RMB',10,20000),
+			(43,'THB',50,50000),
+			(3,'US$',2,2500),
+			(95,'USD',2,2500),
+			(64,'UT',2,2500),
+			(45,'Won',2000,3000000),
+			(16,'Yen',2,2500),
+			(20,'UUS',2,2500)
 
 INSERT INTO #MemberTemp (CustID, currency)
 SELECT custid, currency
@@ -163,6 +188,47 @@ FROM dbo.CustPTGroupSetting3rd_Member C WITH(NOLOCK)
 WHERE C.bettype = @fBetType AND C.SportType = @fSportType
 		AND dest.SettingType = 1
 
+
+--------------------------------------Bet Limit -------------------------------------------------
+	--Agent Level
+	INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+	SELECT cs.CustID, dest.tSportType, dest.tBetType, 
+		CASE 
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END AS MinBet, 
+		CASE 
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END AS MaxBet,  
+		0 as MaxPerMatch	
+	FROM dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+		INNER JOIN #TempBetLimit t ON t.ExchangeId = ci.currency
+		CROSS APPLY #DestinationSportBetType dest 
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 20
+
+	--Member Level
+	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
+	SELECT cs.CustID, dest.tSportType, dest.tBetType, 
+		CASE 
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END AS MinBet, 
+		CASE 
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
+			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END AS MaxBet, 
+		0 as MaxPerMatch	
+	FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK)
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON ci.CustID = cs.CustID 
+		INNER JOIN #TempBetLimit t ON t.ExchangeId = ci.currency
+		CROSS APPLY #DestinationSportBetType dest 
+	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+		AND dest.SettingType = 20
+	------------------------------------------------------------------------------------------------	
+		
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
