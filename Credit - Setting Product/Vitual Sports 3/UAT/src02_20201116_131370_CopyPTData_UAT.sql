@@ -180,12 +180,10 @@ BEGIN
 	INSERT INTO dbo.CustBetSetting3rd_Agent (CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
 	SELECT cs.CustID, dest.tSportType, dest.tBetType, 
 		CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 			WHEN cs.MinBet < dest.MinBet   THEN dest.MinBet ELSE cs.MinBet END AS MinBet, 
 		CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 			WHEN cs.MaxBet > dest.MaxBet   THEN dest.MaxBet ELSE cs.MaxBet END AS MaxBet,  
 		0 as MaxPerMatch	
 	FROM dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK)
@@ -198,12 +196,10 @@ BEGIN
 	INSERT INTO dbo.CustBetSetting3rd_Member(CustID, SportType, BetType, MinBet, MaxBet, MaxPerMatch)	      
 	SELECT cs.CustID, dest.tSportType, dest.tBetType, 
 		CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 			WHEN cs.MinBet < dest.MinBet   THEN dest.MinBet ELSE cs.MinBet END AS MinBet, 
 		CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 			WHEN cs.MaxBet > dest.MaxBet   THEN dest.MaxBet ELSE cs.MaxBet END AS MaxBet, 
 		0 as MaxPerMatch	
 	FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK)

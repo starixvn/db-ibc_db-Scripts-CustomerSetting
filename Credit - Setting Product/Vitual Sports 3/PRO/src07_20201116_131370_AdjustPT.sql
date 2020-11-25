@@ -175,12 +175,10 @@ CREATE TABLE #supers (custid int)
 	INSERT INTO #SMAList_BetSetting (custid, minBet, MaxBet)
 	SELECT cs.custid, 
 			CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 			WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END AS MinBet,
 			CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 			WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END AS MaxBet
 	FROM dbo.CustBetSetting3rd_Agent cs WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
@@ -191,12 +189,10 @@ CREATE TABLE #supers (custid int)
 			AND ci.roleid IN (2,3,4) AND Enabled = 1
 			AND (
 				cs.minBet <> CASE 
-								WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-								WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+								WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 								WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END
 				OR cs.MaxBet <> CASE 
-									WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-									WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+									WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 									WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END						
 				)
 
@@ -206,12 +202,10 @@ CREATE TABLE #supers (custid int)
 	INSERT INTO #MemberList_BetSetting (custid, minBet, MaxBet)
 	SELECT ci.custid, 
 			CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 			WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END AS MinBet,
 			CASE 
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-			WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+			WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 			WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END AS MaxBet
 	FROM dbo.CustBetSetting3rd_Member cs WITH(NOLOCK)
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
@@ -222,12 +216,10 @@ CREATE TABLE #supers (custid int)
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (
 				cs.minBet <> CASE 
-								WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MinBet
-								WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MinBet
+								WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 								WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END
 				OR cs.MaxBet <> CASE 
-									WHEN cs.MinBet = 0  AND cs.MaxBet = 0  THEN cs.MaxBet
-									WHEN cs.MinBet = 0  AND cs.MaxBet = 0.1  THEN cs.MaxBet
+									WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 									WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END						
 						
 				)
