@@ -163,30 +163,13 @@ CREATE TABLE #supers (custid int)
 	
 	CREATE TABLE #SMAList_BetSetting (custid INT, minBet MONEY, MaxBet MONEY)
 	CREATE TABLE #MemberList_BetSetting (custid INT, minBet MONEY, MaxBet MONEY)
-	CREATE TABLE #TempBetLimit (ExchangeId INT,currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY)
+	CREATE TABLE #TempBetLimit (ExchangeId INT, MinBet MONEY,MaxBet MONEY)
 
-	INSERT INTO #TempBetLimit(ExchangeId,currency,MinBet,MaxBet)
-	VALUES (6,'EURO',2,2500),
-			(35,'$US',2,2500),
-			(50,'CAN',2,2500),
-			(47,'DDD',18,18000),
-			(12,'GBP',1,2000),
-			(5,'HK$',10,20000),
-			(67,'HKK',5,10000),
-			(33,'IDD',18,18000),
-			(34,'IDR',18,18000),
-			(15,'IN',18,18000),
-			(22,'IND',18,18000),
-			(69,'MMK',2,3000),
-			(2,'RM',5,10000),
-			(13,'RMB',10,20000),
-			(43,'THB',50,50000),
-			(3,'US$',2,2500),
-			(95,'USD',2,2500),
-			(64,'UT',2,2500),
-			(45,'Won',2000,3000000),
-			(16,'Yen',2,2500),
-			(20,'UUS',2,2500)
+	INSERT INTO #TempBetLimit(ExchangeId,MinBet,MaxBet)
+	SELECT Currency,MinBet,MaxBet 
+	FROM ProductBetSetting WITH(NOLOCK)
+	WHERE Sporttype = @Sporttype AND Bettype = @Bettype 
+	
 
 	--Agent Level
 	INSERT INTO #SMAList_BetSetting (custid, minBet, MaxBet)
