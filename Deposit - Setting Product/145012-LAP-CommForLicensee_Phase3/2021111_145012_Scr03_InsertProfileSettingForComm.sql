@@ -29,7 +29,7 @@ UNION ALL SELECT 77,34, 9, 0, 4, 1--Arcadia Gaming
 UNION ALL SELECT 78,42, 9, 0, 4, 1--Saba.club
 UNION ALL SELECT 79,39, 9, 0, 4, 1--SA Gaming
 UNION ALL SELECT 80,55, 9, 0, 4, 1 --PG Soft
-UNION ALL SELECT 81,27, 9, 0, 4, 1 --Allbet
+UNION ALL SELECT 81,21, 9, 0, 4, 1 --Allbet
 
 INSERT INTO [CustDB].[dbo].[Dep_ProductSettingDetail]
            ([ProductSettingID]
