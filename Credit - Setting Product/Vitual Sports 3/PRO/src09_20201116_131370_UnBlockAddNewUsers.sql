@@ -14,7 +14,7 @@ PRINT N'Step 9: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 DECLARE  @SiteID INT,@Currency INT
 
 SELECT  @SiteID =  0,@Currency = 0
-DELETE FROM UMConfig WHERE SportType = 180 AND BetType = 1201  
+DELETE FROM UMConfig WITH (ROWLOCK) WHERE SportType = 180 AND BetType = 1201  
 AND SiteID  = @SiteID AND Currency = @Currency
 
 PRINT N'Step 9: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

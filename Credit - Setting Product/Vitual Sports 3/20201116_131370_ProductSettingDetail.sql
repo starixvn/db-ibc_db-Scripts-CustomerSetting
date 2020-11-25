@@ -41,14 +41,12 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			)
 	BEGIN
 		
-		UPDATE ProductSettingDetail 
-		SET DisplayOrder = CASE WHEN DisplayOrder = 4 THEN 9 
-								WHEN DisplayOrder = 3 THEN 7 END 
-		WHERE ProductID = @productID AND DisplayOrder in (3,4)
+		UPDATE ProductSettingDetail WITH (ROWLOCK, UPDLOCK) 
+		SET DisplayOrder = CASE WHEN SettingType = 6 THEN 9
+								WHEN SettingType = 2 THEN 3  
+								WHEN SettingType = 1 THEN 7 END 
+		WHERE ProductID = @productID AND SettingType in (1,6,2)
 		
-		UPDATE ProductSettingDetail SET DisplayOrder = 3 
-		WHERE ProductID = @productID AND DisplayOrder in (2)
-	
 		INSERT INTO [ProductSettingDetail]
            ([SettingType]
            ,[SportType]
@@ -75,7 +73,8 @@ IF NOT EXISTS(	SELECT TOP 1 1
 	END		
 
 
-DELETE FROM ProductBetSetting WHERE Sporttype = @sportType AND Bettype = @betType
+DELETE FROM ProductBetSetting WITH (ROWLOCK)  
+WHERE Sporttype = @sportType AND Bettype = @betType
 
 CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY)
 

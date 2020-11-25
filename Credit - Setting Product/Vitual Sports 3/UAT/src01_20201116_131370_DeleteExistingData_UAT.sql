@@ -29,7 +29,7 @@ BEGIN
 
 	DECLARE @Sporttype SMALLINT ,@betType SMALLINT
 	CREATE TABLE #supers (custid INT)
-
+	DECLARE @Batch TABLE (CustID INT)
 	SELECT @Sporttype = 231 , @betType = 5301 
 
 	INSERT INTO #supers(custid)
@@ -79,32 +79,84 @@ BEGIN
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype AND BetType = @betType
+	
+	Declare @BatchNum INT  = 3000
 
-	DELETE cg
-	FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype AND BetType = @betType
+	--Agent
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (@BatchNum) #CustPTSetting3rd_Agent
+		OUTPUT DELETED.CustID INTO @Batch(CustID)			
 
-	DELETE cg
-	FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype AND BetType = @betType
+		IF @@ROWCOUNT = 0 BREAK
 
-	DELETE cg
-	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
-	WHERE SportType = @Sporttype AND BetType = @betType
+		DELETE cg
+		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
+			INNER JOIN @Batch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @betType
 
-	DELETE cg
-	FROM dbo.CustBetSetting3rd_Agent  cg WITH(ROWLOCK)		
-		INNER JOIN #CustBetSetting3rd_Agent  ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype AND BetType = @betType
+		DELETE FROM @Batch
+	END
 
-	DELETE cg
-	FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustBetSetting3rd_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype AND BetType = @betType
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (@BatchNum) #CustPTSetting3rd_Member
+		OUTPUT DELETED.CustID INTO @Batch(CustID)			
 
+		IF @@ROWCOUNT = 0 BREAK
+
+		DELETE cg
+		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN @Batch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @betType
+
+		DELETE FROM @Batch
+	END
+
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (@BatchNum) #CustPTGroupSetting3rd_Member
+		OUTPUT DELETED.AgentID INTO @Batch(CustID)			
+
+		IF @@ROWCOUNT = 0 BREAK
+
+		DELETE cg
+		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN @Batch ci ON ci.CustID = cg.AgentID	
+		WHERE SportType = @Sporttype AND BetType = @betType
+
+		DELETE FROM @Batch
+	END
+	
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (@BatchNum) #CustBetSetting3rd_Agent
+		OUTPUT DELETED.CustID INTO @Batch(CustID)			
+
+		IF @@ROWCOUNT = 0 BREAK
+
+		DELETE cg
+		FROM dbo.CustBetSetting3rd_Agent  cg WITH(ROWLOCK)		
+			INNER JOIN @Batch  ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @betType
+
+		DELETE FROM @Batch
+	END
+	
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (@BatchNum) #CustBetSetting3rd_Member
+		OUTPUT DELETED.CustID INTO @Batch(CustID)			
+
+		IF @@ROWCOUNT = 0 BREAK
+
+		DELETE cg
+		FROM dbo.CustBetSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN @Batch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @betType
+
+		DELETE FROM @Batch
+	END
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
