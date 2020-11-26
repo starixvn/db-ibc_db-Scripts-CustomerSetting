@@ -11,7 +11,7 @@ GO
 
 PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
-DECLARE @SportType SMALLINT = 233, @Bettype INT = 5301
+DECLARE @SportType SMALLINT = 231, @Bettype INT = 5301
 DECLARE @MaxCustID INT
 	
 SELECT @MaxCustID = xxx
