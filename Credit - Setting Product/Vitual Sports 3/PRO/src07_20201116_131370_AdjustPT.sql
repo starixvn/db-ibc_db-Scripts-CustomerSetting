@@ -188,10 +188,10 @@ CREATE TABLE #supers (custid int)
 	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 			AND ci.roleid IN (2,3,4) AND Enabled = 1
 			AND (
-				cs.minBet <> CASE 
+				csa.minBet <> CASE 
 								WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 								WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END
-				OR cs.MaxBet <> CASE 
+				OR csa.MaxBet <> CASE 
 									WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 									WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END						
 				)
@@ -215,10 +215,10 @@ CREATE TABLE #supers (custid int)
 	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (
-				cs.minBet <> CASE 
+				csa.minBet <> CASE 
 								WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MinBet
 								WHEN cs.MinBet < t.MinBet   THEN t.MinBet ELSE cs.MinBet END
-				OR cs.MaxBet <> CASE 
+				OR csa.MaxBet <> CASE 
 									WHEN cs.MinBet  <= 0.1  AND cs.MaxBet <= 0.1  THEN cs.MaxBet
 									WHEN cs.MaxBet > t.MaxBet   THEN t.MaxBet ELSE cs.MaxBet END						
 						
