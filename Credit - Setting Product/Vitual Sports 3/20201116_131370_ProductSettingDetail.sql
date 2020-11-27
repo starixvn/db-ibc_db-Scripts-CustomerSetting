@@ -100,7 +100,7 @@ VALUES ('EURO',2,2500),
 		('Yen',2,2500),
 		('UUS',2,2500)
 INSERT INTO ProductBetSetting(Sporttype,Bettype,Currency,MinBet,IsDep,MaxBet,DefaultMinBet,DefaultMaxBet)
-SELECT @sportType AS SportType,@betType AS BetType,b.ExchangeId AS Currency,a.MinBet,0 AS IsDep,a.MaxBet ,0 AS DefaultMinBet,0 AS DefaultMaxBet
+SELECT @sportType AS SportType,@betType AS BetType,b.ExchangeId AS Currency,a.MinBet,0 AS IsDep,a.MaxBet ,a.MinBet AS DefaultMinBet,a.MaxBet AS DefaultMaxBet
 FROM #TempBetLimit a
 INNER JOIN exchange b WITH(NOLOCK) on a.currency = b.currency
 
