@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20201127@Tina
 	Task: Insert StakeLevel for Gold Diamond Gaming (GDG) - Real Currency [Redmine: #144105]

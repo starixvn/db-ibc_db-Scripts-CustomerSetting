@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20201127@Tina
 	Task: Initialize Product Status of Gold Diamond Gaming for Credit customers -UUS [Redmine: #144105]

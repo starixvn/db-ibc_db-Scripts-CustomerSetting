@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20201127@Tina
 	Task: Insert product profile for Gold Diamond Gaming (GDG) [RedmineID: #144105]

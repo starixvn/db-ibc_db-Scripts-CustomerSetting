@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20201127@Tina
 	Task: Insert CanSee for Gold Diamond Gaming YNG [Redmine: #144105] 

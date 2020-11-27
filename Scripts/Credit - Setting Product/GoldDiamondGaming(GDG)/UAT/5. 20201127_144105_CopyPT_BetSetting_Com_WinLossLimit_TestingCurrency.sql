@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20201127@Tina
 	Task: Copy PT & Comm & WinLossLimit for Gold Diamond Gaming - Real Currency [Redmine: #144105]
