@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20201116
-	Task: Copy Setting for new created users of Leap Gaming Virtual Sports [RedmineID:#131370]
+	Task: Adjust Setting for users edit when clone setting of Leap Gaming Virtual Sports [RedmineID:#131370]
 	DB: DBCust/CustDB
 */
 ------------------------------------------------------
