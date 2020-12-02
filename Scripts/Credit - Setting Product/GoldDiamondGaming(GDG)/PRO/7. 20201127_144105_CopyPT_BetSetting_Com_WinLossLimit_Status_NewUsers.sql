@@ -50,7 +50,6 @@ WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (@Set
 
 
 CREATE TABLE #tmpSTListSMA (BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
-CREATE TABLE #tmpSTListMember(BettypeID INT, Currency INT, StakeLevelList VARCHAR(500))
 
 CREATE TABLE #MemberTemp
 (
@@ -284,7 +283,6 @@ DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
 DROP TABLE #DestinationSportBetType	
 DROP TABLE #tmpSTListSMA
-DROP TABLE #tmpSTListMember
 DROP TABLE #supers
 DROP TABLE #CustList
 
