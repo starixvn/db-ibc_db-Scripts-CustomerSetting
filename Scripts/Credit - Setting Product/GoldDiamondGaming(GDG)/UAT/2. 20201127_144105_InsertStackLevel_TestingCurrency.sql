@@ -18,9 +18,9 @@ CREATE TABLE #temp(
 
 GO
 INSERT #temp (GameTypeID, ExchangeId, MinLabel, MaxLabel, MinStake, MaxStake)
-SELECT 5701, 72, '50', '2,500', 50, 2500 UNION ALL -- YNG(YNG)
+SELECT 5701, 72, '5', '2,500', 5, 2500 UNION ALL -- YNG(YNG)
 
-SELECT 5701, 20, '50', '2,500', 50, 2500  -- UUS(UUS)
+SELECT 5701, 20, '5', '2,500', 5, 2500  -- UUS(UUS)
 
 DELETE S
 FROM StakeLevel S WITH(ROWLOCK) 
