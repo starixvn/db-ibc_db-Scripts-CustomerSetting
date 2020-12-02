@@ -71,6 +71,22 @@ SELECT @p1
 	,@p2
 GO	
 
+--WinboxSuperIN
+DECLARE @p1 INT
+SET @p1 = 0
+DECLARE @p2 NVARCHAR(4000)
+SET @p2 = N''
+
+EXEC NAP_LM_LicenseePositionTakingUpd @ErrCode = @p1 OUTPUT
+	,@ErrMsg = @p2 OUTPUT
+	,@CustID = 46924768	--WinboxSuperIN
+	,@Sporttype = 1
+	,@ptVALUE = 0.9065
+	
+SELECT @p1
+	,@p2
+GO	
+
 --update SB2
 DECLARE @tmpAgent TABLE (custid INT, superID INT, ErrCode INT, ErrMsg NVARCHAR(200), isFinished BIT DEFAULT 0)
 
