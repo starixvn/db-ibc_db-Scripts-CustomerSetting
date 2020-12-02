@@ -56,8 +56,8 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
-	INNER JOIN DBACC.bodb02.dbo.site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN DBACC.bodb02.dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
 		AND ci.username NOT LIKE '3rdSuper%'
 		AND cs.isinternal = 0
