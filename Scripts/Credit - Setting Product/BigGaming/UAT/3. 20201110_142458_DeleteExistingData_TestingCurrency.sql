@@ -33,6 +33,15 @@ BEGIN
 
 	DECLARE @Sporttype SMALLINT 
 	CREATE TABLE #supers (custid INT)
+	CREATE TABLE #CustStakeLevel_AgentTemp(custid INT)
+	CREATE TABLE #CustStakeLevel_MemberTemp(custid INT)
+	CREATE TABLE #CustPTSetting3rd_AgentTemp(custid INT)
+	CREATE TABLE #CustPTSetting3rd_MemberTemp(custid INT)
+	CREATE TABLE #CustPTGroupSetting3rd_MemberTemp(AgentID INT)
+	CREATE TABLE #CustDiscount3rd_MemberTemp(custid INT)
+	CREATE TABLE #CustDiscount3rd_AgentTemp(custid INT)
+	CREATE TABLE #CustWinLossLimit_AgentTemp(custid INT)
+	CREATE TABLE #CustWinLossLimit_MemberTemp(custid INT)
 
 	SELECT @Sporttype = 239
 
@@ -113,50 +122,141 @@ BEGIN
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 	WHERE SportType = @Sporttype
 
-	DELETE cg
-	FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
-		INNER JOIN #CustStakeLevel_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustStakeLevel_Agent)
+	BEGIN
+		DELETE TOP (3000) #CustStakeLevel_Agent OUTPUT DELETED.* INTO #CustStakeLevel_AgentTemp
 
-	DELETE cg
-	FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustStakeLevel_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		IF @@ROWCOUNT=0
+			BREAK		
 
-	DELETE cg
-	FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTSetting3rd_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		DELETE cg
+		FROM dbo.CustStakeLevel_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustStakeLevel_AgentTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
 
-	DELETE cg
-	FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTSetting3rd_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		TRUNCATE TABLE #CustStakeLevel_AgentTemp
+	END
 
-	DELETE cg
-	FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustPTGroupSetting3rd_Member ci ON ci.AgentID = cg.AgentID	
-	WHERE SportType = @Sporttype
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustStakeLevel_Member)
+	BEGIN
+		DELETE TOP (3000) #CustStakeLevel_Member OUTPUT DELETED.* INTO #CustStakeLevel_MemberTemp
 
-	DELETE cg
-	FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustDiscount3rd_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		IF @@ROWCOUNT=0
+			BREAK		
 
-	DELETE cg
-	FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
-		INNER JOIN #CustDiscount3rd_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		DELETE cg
+		FROM dbo.CustStakeLevel_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustStakeLevel_MemberTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
 
-	DELETE cg
-	FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
-		INNER JOIN #CustWinLossLimit_Agent ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+		TRUNCATE TABLE #CustStakeLevel_MemberTemp
+	END	
 
-	DELETE cg
-	FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
-		INNER JOIN #CustWinLossLimit_Member ci ON ci.custid = cg.CustID	
-	WHERE SportType = @Sporttype
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTSetting3rd_Agent)
+	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #CustPTSetting3rd_AgentTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_AgentTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustPTSetting3rd_AgentTemp
+	END
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTSetting3rd_Member)
+	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #CustPTSetting3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_MemberTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustPTSetting3rd_MemberTemp
+	END
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTGroupSetting3rd_Member)
+	BEGIN
+		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #CustPTGroupSetting3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTGroupSetting3rd_MemberTemp ci ON ci.AgentID = cg.AgentID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustPTGroupSetting3rd_MemberTemp
+	END
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscount3rd_Member)
+	BEGIN
+		DELETE TOP (3000) #CustDiscount3rd_Member OUTPUT DELETED.* INTO #CustDiscount3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustDiscount3rd_MemberTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustDiscount3rd_MemberTemp
+	END
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscount3rd_Agent)
+	BEGIN
+		DELETE TOP (3000) #CustDiscount3rd_Agent OUTPUT DELETED.* INTO #CustDiscount3rd_AgentTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustDiscount3rd_AgentTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustDiscount3rd_AgentTemp
+	END
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLossLimit_Agent)
+	BEGIN
+		DELETE TOP (3000) #CustWinLossLimit_Agent OUTPUT DELETED.* INTO #CustWinLossLimit_AgentTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustWinLossLimit_AgentTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustWinLossLimit_AgentTemp
+	END
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLossLimit_Member)
+	BEGIN
+		DELETE TOP (3000) #CustWinLossLimit_Member OUTPUT DELETED.* INTO #CustWinLossLimit_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustWinLossLimit_MemberTemp ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype
+
+		TRUNCATE TABLE #CustWinLossLimit_MemberTemp
+	END
+
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

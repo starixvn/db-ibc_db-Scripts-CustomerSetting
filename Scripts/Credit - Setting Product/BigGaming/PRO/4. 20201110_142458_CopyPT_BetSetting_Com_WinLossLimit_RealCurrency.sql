@@ -32,7 +32,7 @@ BEGIN
 
 	DECLARE @ProductID TINYINT = 41, @Sporttype INT = 239 ,@Bettype INT  = 3501
 	DECLARE @SettingType_PT INT = 18 , @SettingType_Comm INT = 19, @SettingType_WinLoss INT = 6
-	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
+	DECLARE @fSportType SMALLINT, @fBetType SMALLINT, @StakeLevelID_Min INT
 	DECLARE @Currency INT
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 
@@ -234,6 +234,11 @@ BEGIN
 	WHERE ExchangeId=@currency
 
 	--Member Level
+	SET  @StakeLevelID_Min  = (SELECT TOP 1 StakeLevelID 
+									FROM StakeLevel WITH(NOLOCK)
+									WHERE ExchangeId=@currency AND GameTypeID = @Bettype 
+									ORDER BY MaxStake ASC)
+
 
 	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
 	BEGIN
@@ -247,7 +252,7 @@ BEGIN
 										   ,[BetType]
 										   ,[StakeLevelList]
 										   ,LastUpdated) 
-		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(MIN(StakeLevelID) AS varchar(50)),GETDATE()
+		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(@StakeLevelID_Min AS varchar(50)),GETDATE()
 		FROM StakeLevel S WITH(NOLOCK) INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID
 		CROSS JOIN  #MemberTempBatch t
 		WHERE ExchangeId=@currency

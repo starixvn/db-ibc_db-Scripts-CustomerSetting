@@ -185,7 +185,7 @@
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=@ProductSettingID_PT)
 
 	--------------------------------------Bet Setting-------------------------------------------------
-		CREATE TABLE #SMATemp
+	CREATE TABLE #SMATemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		Currency INT,
@@ -197,7 +197,13 @@
 		CustID INT PRIMARY KEY CLUSTERED,
 		Currency INT,
 		SiteID INT
+	)
 
+	CREATE TABLE #MemberTempBatch
+	(
+		CustID	INT PRIMARY KEY CLUSTERED,
+		currency INT,
+		SiteID INT
 	)
 
 	CREATE TABLE #tmpSTListSMA (BettypeID INT, StakeLevelList VARCHAR(500), SiteID INT)
@@ -247,14 +253,24 @@
 	WHERE S.ExchangeID = t.Currency  AND S.SiteID = T.SiteID
 
 	--Member Level
-	INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
-	SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(StakeLevelID AS varchar(50)),GETDATE()
-	FROM (SELECT StakeLevelID,GameTypeID,ExchangeId,SiteID,ROW_NUMBER() OVER(PARTITION BY ExchangeId,SiteID ORDER BY MaxStake ASC) AS STT 
-			  FROM Dep_StakeLevel WITH(NOLOCK)
-			  WHERE GameTypeID = @Bettype) S  INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
-		CROSS JOIN  #MemberTemp t
-	WHERE S.ExchangeId = t.Currency AND S.SiteID = T.SiteID	 AND S.STT = 1
-	
+	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
+	BEGIN
+		DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
+
+		IF @@ROWCOUNT=0
+			BREAK	
+
+		INSERT INTO dbo.Dep_CustStakeLevel_Member([CustID],[SportType],[BetType],[StakeLevelList],LastUpdated) 
+		SELECT DISTINCT t.custid,@Sporttype,TB.BettypeID, CAST(StakeLevelID AS varchar(50)),GETDATE()
+		FROM (SELECT StakeLevelID,GameTypeID,ExchangeId,SiteID,ROW_NUMBER() OVER(PARTITION BY ExchangeId,SiteID ORDER BY MaxStake ASC) AS STT 
+				  FROM Dep_StakeLevel WITH(NOLOCK)
+				  WHERE GameTypeID = @Bettype) S  INNER JOIN #tmpSTListMember TB WITH (NOLOCK) ON S.GameTypeID = TB.BettypeID 
+			INNER JOIN #MemberTempBatch T WITH (NOLOCK) ON S.ExchangeId = T.Currency
+		WHERE S.ExchangeId = t.Currency AND S.SiteID = T.SiteID	 AND S.STT = 1
+		
+		TRUNCATE TABLE #MemberTempBatch
+	END
+
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT t.custid,@ProductSettingID_BetLimit
 	FROM #supers t
@@ -305,4 +321,5 @@
 	DROP TABLE #Dummy
 	DROP TABLE #tmpSTListSMA
 	DROP TABLE #tmpSTListMember
+	DROP TABLE #MemberTempBatch
 
