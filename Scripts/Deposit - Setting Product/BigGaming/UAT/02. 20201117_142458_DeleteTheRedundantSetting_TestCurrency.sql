@@ -41,6 +41,12 @@ BEGIN
 	CREATE TABLE #CustBetSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
 	CREATE TABLE #CustBetSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
 
+	CREATE TABLE #CustPTSetting3rd_AgentTemp(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustPTSetting3rd_MemberTemp(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustPTGroupSetting3rd_MemberTemp(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
+	CREATE TABLE #CustBetSetting3rd_AgentTemp(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #CustBetSetting3rd_MemberTemp(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+
 	INSERT INTO #CustPTSetting3rd_Agent(CustID,SporttypeID,Bettype,IsLive)
 	SELECT s.Custid,SportType,BetType,IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
@@ -71,46 +77,81 @@ BEGIN
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
+		DELETE TOP (3000) #CustPTSetting3rd_Agent OUTPUT DELETED.* INTO #CustPTSetting3rd_AgentTemp
+
+		IF @@ROWCOUNT=0
+			BREAK	
+
 		DELETE cg
 		FROM Dep_CustPTSetting_Agent cg 	
-			INNER JOIN #CustPTSetting3rd_Agent t 
+			INNER JOIN #CustPTSetting3rd_AgentTemp t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
+
+		TRUNCATE TABLE #CustPTSetting3rd_AgentTemp
 	END	
 	
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
-	BEGIN					
+	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
+	BEGIN		
+		DELETE TOP (3000) #CustPTSetting3rd_Member OUTPUT DELETED.* INTO #CustPTSetting3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK
+						
 		DELETE cg
 		FROM Dep_CustPTSetting_Member cg
-			INNER JOIN #CustPTSetting3rd_Member t 
+			INNER JOIN #CustPTSetting3rd_MemberTemp t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
-		OPTION(MAXDOP 1)		
+		OPTION(MAXDOP 1)	
+		
+		TRUNCATE TABLE #CustPTSetting3rd_MemberTemp	
 	END  
 	
-	IF EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
-	BEGIN	
+	WHILE EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
+	BEGIN
+		DELETE TOP (3000) #CustPTGroupSetting3rd_Member OUTPUT DELETED.* INTO #CustPTGroupSetting3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK
+				
 		DELETE cg
 		FROM Dep_CustPTGroupSetting_Member cg 
-			INNER JOIN #CustPTGroupSetting3rd_Member t 
-				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
+			INNER JOIN #CustPTGroupSetting3rd_MemberTemp t 
+				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive	
+				
+		TRUNCATE TABLE #CustPTGroupSetting3rd_MemberTemp	
 	END 		
 			
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
+	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
 	BEGIN		
+		DELETE TOP (3000) #CustBetSetting3rd_Agent OUTPUT DELETED.* INTO #CustBetSetting3rd_AgentTemp
+
+		IF @@ROWCOUNT=0
+			BREAK
+
 		DELETE cg
 		FROM Dep_CustStakeLevel_Agent cg
-			INNER  JOIN #CustBetSetting3rd_Agent t
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 		
+			INNER  JOIN #CustBetSetting3rd_AgentTemp t
+				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
+				
+		TRUNCATE TABLE #CustBetSetting3rd_AgentTemp	
 	END 
 
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
+	WHILE EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
 	BEGIN
+		DELETE TOP (3000) #CustBetSetting3rd_Member OUTPUT DELETED.* INTO #CustBetSetting3rd_MemberTemp
+
+		IF @@ROWCOUNT=0
+			BREAK
+
 		DELETE cg
 		FROM Dep_CustStakeLevel_Member cg	
-			INNER JOIN #CustBetSetting3rd_Member t 
+			INNER JOIN #CustBetSetting3rd_MemberTemp t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
+
+		TRUNCATE TABLE #CustBetSetting3rd_MemberTemp
 	END	
 END	
 GO

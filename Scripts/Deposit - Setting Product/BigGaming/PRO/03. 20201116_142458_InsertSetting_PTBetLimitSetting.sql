@@ -430,9 +430,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							6,-- EUR(EURO)
 							12,-- GBP(GBP)
 							61,-- INR(INR)
-							55, -- RUB(RUB)
-							20, --UUS(UUS)
-							72 --YNG(YNG)
+							55 -- RUB(RUB)
 							)
 ORDER BY ci.custid 
 
@@ -503,9 +501,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							6,-- EUR(EURO)
 							12,-- GBP(GBP)
 							61,-- INR(INR)
-							55, -- RUB(RUB)
-							20, --UUS(UUS)
-							72 --YNG(YNG)
+							55 -- RUB(RUB)
 							)
 ORDER BY ci.custid 
 
