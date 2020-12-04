@@ -49,7 +49,8 @@ BEGIN
 							6,-- EUR(EURO)
 							12,-- GBP(GBP)
 							61,-- INR(INR)
-							55 -- RUB(RUB)
+							55, -- RUB(RUB)
+							20,72 --Test currencies
 							)
 
 
