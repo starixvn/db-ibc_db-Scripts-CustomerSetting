@@ -181,7 +181,7 @@ BEGIN
 		FROM Dep_CustProductStatus d WITH(ROWLOCK) 
 		WHERE d.custid=@CustID	
 		
-	EXEC Acc_Dep_DynamicCustSetting_03
+	EXEC Acc_Dep_DynamicCustSetting_08
 				@ActionID=2,
 				@CustID=@CustID,
 				@bitmapOrder=@bitmapOrder,					
