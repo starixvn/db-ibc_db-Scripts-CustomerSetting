@@ -28,34 +28,34 @@ SELECT 4256 ,'0.2'  ,'8'       ,0.2  ,8       ,12   UNION ALL	--GBP	--GBP
 SELECT 4257 ,'0.1'  ,'18'      ,0.1  ,18      ,12   UNION ALL	--GBP	--GBP
 --=============================================
 --IDR, IN
-SELECT 4244 ,'3.6'  ,'30'      ,3.6  ,30      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4245 ,'2.4'  ,'180'     ,2.4  ,180     ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4246 ,'9'    ,'900'     ,9    ,900     ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4247 ,'3'    ,'112.5'   ,3    ,112.5   ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4248 ,'3.6'  ,'54'      ,3.6  ,54      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4249 ,'4.5'  ,'45'      ,4.5  ,45      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4250 ,'4.5'  ,'45'      ,4.5  ,45      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4251 ,'5.4'  ,'44'      ,5.4  ,44      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4252 ,'5.4'  ,'44'      ,5.4  ,44      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4253 ,'5.4'  ,'44'      ,5.4  ,44      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4254 ,'4.5'  ,'135'     ,4.5  ,135     ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4255 ,'5.4'  ,'44'      ,5.4  ,44      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4256 ,'5.4'  ,'80'      ,5.4  ,80      ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4257 ,'4.5'  ,'324'     ,4.5  ,324     ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4244 ,'3.6'  ,'30'      ,3.6  ,30      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4245 ,'2.4'  ,'180'     ,2.4  ,180     ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4246 ,'9'    ,'900'     ,9    ,900     ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4247 ,'3'    ,'112.5'   ,3    ,112.5   ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4248 ,'3.6'  ,'54'      ,3.6  ,54      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4249 ,'4.5'  ,'45'      ,4.5  ,45      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4250 ,'4.5'  ,'45'      ,4.5  ,45      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4251 ,'5.4'  ,'44'      ,5.4  ,44      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4252 ,'5.4'  ,'44'      ,5.4  ,44      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4253 ,'5.4'  ,'44'      ,5.4  ,44      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4254 ,'4.5'  ,'135'     ,4.5  ,135     ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4255 ,'5.4'  ,'44'      ,5.4  ,44      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4256 ,'5.4'  ,'80'      ,5.4  ,80      ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4257 ,'4.5'  ,'324'     ,4.5  ,324     ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4244 ,'1.8'  ,'30'      ,1.8  ,30      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4245 ,'1.8'  ,'180'     ,1.8  ,180     ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4246 ,'2.25' ,'900'     ,2.25 ,900     ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4247 ,'2.25' ,'112.5'   ,2.25 ,112.5   ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4248 ,'1.8'  ,'54'      ,1.8  ,54      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4249 ,'0.9'  ,'45'      ,0.9  ,45      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4250 ,'2.25' ,'45'      ,2.25 ,45      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4251 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4252 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4253 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4254 ,'0.9'  ,'135'     ,0.9  ,135     ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4255 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4256 ,'1.8'  ,'80'      ,1.8  ,80      ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4257 ,'0.9'  ,'324'     ,0.9  ,324     ,34   UNION ALL	--IDR	--IDR, IN
+SELECT 4244 ,'1.8'  ,'30'      ,1.8  ,30      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4245 ,'1.8'  ,'180'     ,1.8  ,180     ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4246 ,'2.25' ,'900'     ,2.25 ,900     ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4247 ,'2.25' ,'112.5'   ,2.25 ,112.5   ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4248 ,'1.8'  ,'54'      ,1.8  ,54      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4249 ,'0.9'  ,'45'      ,0.9  ,45      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4250 ,'2.25' ,'45'      ,2.25 ,45      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4251 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4252 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4253 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4254 ,'0.9'  ,'135'     ,0.9  ,135     ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4255 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4256 ,'1.8'  ,'80'      ,1.8  ,80      ,15   UNION ALL	--IN	--IDR, IN
+SELECT 4257 ,'0.9'  ,'324'     ,0.9  ,324     ,15   UNION ALL	--IN	--IDR, IN
 --=============================================
 --INH,VND
 SELECT 4244 ,'3.6'  ,'54'      ,3.6  ,54      ,51   UNION ALL	--INH	--INH,VND
