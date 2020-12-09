@@ -256,21 +256,6 @@ SELECT 4255 ,'0.6'  ,'30'      ,0.6  ,30      ,67   UNION ALL	--HKK	--HKK
 SELECT 4256 ,'0.6'  ,'78'      ,0.6  ,78      ,67   UNION ALL	--HKK	--HKK
 SELECT 4257 ,'0.3'  ,'600'     ,0.3  ,600     ,67   UNION ALL	--HKK	--HKK
 --=============================================
---INH
-SELECT 4244 ,'3.6'  ,'72'      ,3.6  ,72      ,51   UNION ALL	--INH	--INH
-SELECT 4245 ,'3.6'  ,'1350'    ,3.6  ,1350    ,51   UNION ALL	--INH	--INH
-SELECT 4246 ,'4.5'  ,'900'     ,4.5  ,900     ,51   UNION ALL	--INH	--INH
-SELECT 4247 ,'4.5'  ,'450'     ,4.5  ,450     ,51   UNION ALL	--INH	--INH
-SELECT 4248 ,'3.6'  ,'216'     ,3.6  ,216     ,51   UNION ALL	--INH	--INH
-SELECT 4249 ,'1.8'  ,'90'      ,1.8  ,90      ,51   UNION ALL	--INH	--INH
-SELECT 4250 ,'4.5'  ,'180'     ,4.5  ,180     ,51   UNION ALL	--INH	--INH
-SELECT 4251 ,'3.6'  ,'72'      ,3.6  ,72      ,51   UNION ALL	--INH	--INH
-SELECT 4252 ,'3.6'  ,'72'      ,3.6  ,72      ,51   UNION ALL	--INH	--INH
-SELECT 4253 ,'3.6'  ,'72'      ,3.6  ,72      ,51   UNION ALL	--INH	--INH
-SELECT 4254 ,'1.8'  ,'1800'    ,1.8  ,1800    ,51   UNION ALL	--INH	--INH
-SELECT 4255 ,'3.6'  ,'72'      ,3.6  ,72      ,51   UNION ALL	--INH	--INH
-SELECT 4257 ,'1.8'  ,'1800'    ,1.8  ,1800    ,51   UNION ALL	--INH	--INH
---=============================================
 --RM
 SELECT 4244 ,'0.6'  ,'12'      ,0.6  ,12      ,2    UNION ALL	--RM	--RM
 SELECT 4245 ,'0.6'  ,'120'     ,0.6  ,120     ,2    UNION ALL	--RM	--RM
