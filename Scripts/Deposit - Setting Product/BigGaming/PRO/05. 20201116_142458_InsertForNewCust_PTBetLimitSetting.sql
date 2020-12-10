@@ -195,7 +195,8 @@
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		Currency INT,
-		SiteID INT
+		SiteID INT,
+		Finished BIT DEFAULT 0
 	)
 
 	CREATE TABLE #MemberTempBatch
@@ -254,7 +255,10 @@
 	--Member Level
 	WHILE EXISTS(SELECT 1 FROM #MemberTemp)
 	BEGIN
-		DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempBatch
+		UPDATE TOP (3000) #MemberTemp 
+		SET Finished = 1 
+		OUTPUT inserted.CustID, inserted.Currency INTO #MemberTempBatch(CustID, currency)
+		WHERE Finished = 0
 
 		IF @@ROWCOUNT=0
 			BREAK	
