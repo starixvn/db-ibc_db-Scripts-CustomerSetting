@@ -257,7 +257,7 @@
 	BEGIN
 		UPDATE TOP (3000) #MemberTemp 
 		SET Finished = 1 
-		OUTPUT inserted.CustID, inserted.Currency INTO #MemberTempBatch(CustID, currency)
+		OUTPUT inserted.CustID, inserted.Currency, inserted.SiteID INTO #MemberTempBatch(CustID, currency, SiteID)
 		WHERE Finished = 0
 
 		IF @@ROWCOUNT=0
