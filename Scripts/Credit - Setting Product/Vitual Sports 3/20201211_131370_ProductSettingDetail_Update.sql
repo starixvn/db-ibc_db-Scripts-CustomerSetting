@@ -6,8 +6,8 @@
 	DB: DBCust/CustDB
 */
 
-USE CustDB
-GO
+--USE CustDB
+--GO
 
  
 IF EXISTS(	SELECT TOP 1 1 
