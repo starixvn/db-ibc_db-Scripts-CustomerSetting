@@ -30,6 +30,6 @@ SELECT
 	,@MsgName
 	,@MsgName
 	,@MsgName
-	,N'Đây là người chơi VIP. Để bật BA, vui lòng tắt VIP cho người chơi trước?''
+	,N'Đây là người chơi VIP. Để bật BA, vui lòng tắt VIP cho người chơi trước?'
 	,1
 	,@MsgName   
