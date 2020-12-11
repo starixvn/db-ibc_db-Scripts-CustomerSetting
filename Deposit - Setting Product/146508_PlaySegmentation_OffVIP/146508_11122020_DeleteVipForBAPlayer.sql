@@ -17,5 +17,5 @@ GO
 
 --- delete vip
 DELETE V
-FROM Dep_CustVIP V 
+FROM Dep_CustVIP V WITH (ROWLOCK)  
 WHERE EXISTS (SELECT 1 FROM Dep_CustBAActive b WITH(NOLOCK) WHERE b.custid = v.custid)
