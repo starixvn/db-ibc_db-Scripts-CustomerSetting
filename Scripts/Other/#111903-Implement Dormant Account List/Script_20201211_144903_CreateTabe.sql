@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20201211@Eden
-	Task: Create Cust_ArchiveAccount table [RM#111903]	
+	Task: Create Cust_ArchiveAccount table [RM#144903]	
 	DB: DBCUST/CustDB
 */
 USE [CustDB]
