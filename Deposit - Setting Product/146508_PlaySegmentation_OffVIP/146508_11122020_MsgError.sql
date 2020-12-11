@@ -5,7 +5,7 @@
 */
 --Step 1: add MsgError @DBCUST/CustDB
 
-DECLARE @MsgName  NVARCHAR(256) = 'This is VIP player. To turn on BA, please turn off VIP for the player first?'
+DECLARE @MsgName  NVARCHAR(256) = 'This is VIP player. To turn on BA, please turn off VIP for the player first.'
 
 INSERT INTO [dbo].[MsgError]
            ([MsgID]
@@ -30,6 +30,6 @@ SELECT
 	,@MsgName
 	,@MsgName
 	,@MsgName
-	,N'Đây là người chơi VIP. Để bật BA, vui lòng tắt VIP cho người chơi trước?'
+	,N'Đây là người chơi VIP. Để bật BA, vui lòng tắt VIP cho người chơi trước.'
 	,1
 	,@MsgName   
