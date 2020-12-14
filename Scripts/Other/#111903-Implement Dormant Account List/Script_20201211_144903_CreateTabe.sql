@@ -22,9 +22,15 @@ CREATE TABLE [dbo].[Cust_ArchiveAccount](
 	[TotalDownline] [int] NULL CONSTRAINT [DF_Cust_ArchiveAccount_TotalDownline] DEFAULT ((0)),
 	[RoleID] [tinyint] NULL,
 	[ArchivedDate] [date] NULL,
+	[recommend] [int] NULL,
+	[mrecommend] [int] NULL,
+	[srecommend] [int] NULL,
 CONSTRAINT PK_Cust_ArchiveAccount PRIMARY KEY CLUSTERED  
 (
 	[CustID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON DATA
 ) ON DATA
 GO
+CREATE NONCLUSTERED INDEX ix_Cust_ArchiveAccount_recommend ON Cust_ArchiveAccount(recommend)
+CREATE NONCLUSTERED INDEX ix_Cust_ArchiveAccount_mrecommend ON Cust_ArchiveAccount(mrecommend)
+CREATE NONCLUSTERED INDEX ix_Cust_ArchiveAccount_srecommend ON Cust_ArchiveAccount(srecommend)
