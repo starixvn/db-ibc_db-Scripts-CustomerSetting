@@ -9,5 +9,5 @@ USE CustDB
 GO
 
 UPDATE Dep_UMConfig
-SET EndTime = '2020-12-15 4:30:00'
+SET EndTime = '2020-12-18 01:00:00'
 WHERE  [FunctionType] = 1 AND  [ProductID] = 0 AND SettingType = 0 and  LicenseeID = 0
