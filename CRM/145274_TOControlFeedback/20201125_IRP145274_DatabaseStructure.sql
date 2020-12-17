@@ -21,8 +21,7 @@ CREATE TABLE [dbo].[crmTOControlFeedbackInfo](
 	[Level] [tinyint] NULL,
 	[TotalTurnover] [money] NULL,
 	[MaxTurnover] [money] NULL,
-	[HouseTurnover] [money] NULL,
-	[Outstanding] [money] NULL,
+	[HouseTurnover] [money] NULL,	
 	[NotifiedDate] [datetime] NULL,
 	[Status] [varchar](20) NOT NULL,
 	[CreatedDate] [datetime] NULL,
@@ -36,19 +35,11 @@ GO
 
 CREATE CLUSTERED INDEX [CIX_crmTOControlFeedbackInfo] ON [dbo].[crmTOControlFeedbackInfo] 
 (	
-	[CustID] ASC,
-	[MatchID] ASC,
-	[ProfileID] ASC,
-	[Level] ASC,
+	[LogID] ASC,	
+	[CustID] ASC,	
 	[Status] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 GO
-
-ALTER TABLE [crmTOControlFeedbackInfo] ADD CONSTRAINT PK_LogID PRIMARY KEY NONCLUSTERED 
-(
-	[LogID] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
-
 
 CREATE NONCLUSTERED INDEX [IX_CreatedDate] ON [dbo].[crmTOControlFeedbackInfo] 
 (
@@ -56,3 +47,14 @@ CREATE NONCLUSTERED INDEX [IX_CreatedDate] ON [dbo].[crmTOControlFeedbackInfo]
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 GO
 
+CREATE TABLE [dbo].[crmTOControlOutstandingInfo](
+	[LogID] [int] NOT NULL,
+	[CustID] [int] NULL,
+	[MatchID] [int] NULL,
+	[Outstanding] [money] NULL
+ CONSTRAINT [PK_crmTOControlOutstandingInfo] PRIMARY KEY CLUSTERED 
+(
+	[LogID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
+) ON [DATA]
+GO

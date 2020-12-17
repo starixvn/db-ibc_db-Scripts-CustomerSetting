@@ -9,7 +9,7 @@ INSERT INTO SystemSetting(SettingName, Value, ServiceName)
 SELECT 'JobStatus','Completed','TOControlFB'
 UNION SELECT 'ServiceFlag','1','TOControlFB'
 UNION SELECT 'BatchSize','10','TOControlFB'
-UNION SELECT 'LastNotifiedDate',CONVERT( VARCHAR(20),GETDATE(),20),'TOControlFB'
+UNION SELECT 'LastLogID','0','TOControlFB'
 UNION SELECT 'LastRuntime',CONVERT( VARCHAR(20),GETDATE(),20),'TOControlFB'
 UNION SELECT 'ConfigUAT','1','TOControlFB'
 UNION SELECT 'ConfigPRO','0','TOControlFB'
