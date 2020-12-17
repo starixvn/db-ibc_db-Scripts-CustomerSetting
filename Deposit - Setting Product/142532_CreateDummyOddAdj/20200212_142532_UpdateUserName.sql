@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20201202
-	Task:  Config deploy 1sp dep OddsAdj  [RedmineID:#142532]
+	Task:  Update UserName Max custid  [RedmineID:#142532]
 	DB: DBCust/CustDB
 */
 USE CustDB
@@ -12,9 +12,9 @@ GO
  
  
 UPDATE Customer WITH (ROWLOCK, UPDLOCK) 
-SET username = 'FLCRMB0110000'
+SET username = 'FLCRMB0119512'
 WHERE custid = 47203894 AND username = 'FLCRMB01017'
 
 UPDATE custInfo WITH (ROWLOCK, UPDLOCK) 
-SET username = 'FLCRMB0110000'
+SET username = 'FLCRMB0119512'
 WHERE custid = 47203894 AND username = 'FLCRMB01017'
