@@ -23,7 +23,6 @@ SELECT 4251 ,'0.2'  ,'10'      ,0.2  ,10      ,20   UNION ALL	--UUS	--$US, US$, 
 SELECT 4252 ,'0.2'  ,'10'      ,0.2  ,10      ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4253 ,'0.2'  ,'12'      ,0.2  ,12      ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4254 ,'0.1'  ,'32'      ,0.1  ,32      ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
-SELECT 4255 ,'0.2'  ,'10'      ,0.2  ,10      ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4256 ,'0.2'  ,'26'      ,0.2  ,26      ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4257 ,'0.1'  ,'200'     ,0.1  ,200     ,20   UNION ALL	--UUS	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 
@@ -38,7 +37,6 @@ SELECT 4251 ,'0.2'  ,'10'      ,0.2  ,10      ,72   UNION ALL	--YNG	--$US, US$, 
 SELECT 4252 ,'0.2'  ,'10'      ,0.2  ,10      ,72   UNION ALL	--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4253 ,'0.2'  ,'12'      ,0.2  ,12      ,72   UNION ALL	--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4254 ,'0.1'  ,'32'      ,0.1  ,32      ,72   UNION ALL	--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
-SELECT 4255 ,'0.2'  ,'10'      ,0.2  ,10      ,72   UNION ALL	--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4256 ,'0.2'  ,'26'      ,0.2  ,26      ,72   UNION ALL	--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 SELECT 4257 ,'0.1'  ,'200'     ,0.1  ,200     ,72				--YNG	--$US, US$, UT, Yen,USD,MMK, Euro, EUR,UUS, YNG
 

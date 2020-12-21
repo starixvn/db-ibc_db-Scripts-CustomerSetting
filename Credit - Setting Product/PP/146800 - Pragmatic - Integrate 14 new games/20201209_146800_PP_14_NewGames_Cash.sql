@@ -23,7 +23,6 @@ SELECT 4251 ,'0.2'  ,'4'       ,0.2  ,4       ,12   UNION ALL	--GBP	--GBP
 SELECT 4252 ,'0.2'  ,'4'       ,0.2  ,4       ,12   UNION ALL	--GBP	--GBP
 SELECT 4253 ,'0.2'  ,'4'       ,0.2  ,4       ,12   UNION ALL	--GBP	--GBP
 SELECT 4254 ,'0.1'  ,'10'      ,0.1  ,10      ,12   UNION ALL	--GBP	--GBP
-SELECT 4255 ,'0.2'  ,'4'       ,0.2  ,4       ,12   UNION ALL	--GBP	--GBP
 SELECT 4256 ,'0.2'  ,'8'       ,0.2  ,8       ,12   UNION ALL	--GBP	--GBP
 SELECT 4257 ,'0.1'  ,'18'      ,0.1  ,18      ,12   UNION ALL	--GBP	--GBP
 --=============================================
@@ -39,7 +38,6 @@ SELECT 4251 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4252 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4253 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4254 ,'0.9'  ,'135'     ,0.9  ,135     ,34   UNION ALL	--IDR	--IDR, IN
-SELECT 4255 ,'1.8'  ,'44'      ,1.8  ,44      ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4256 ,'1.8'  ,'80'      ,1.8  ,80      ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4257 ,'0.9'  ,'324'     ,0.9  ,324     ,34   UNION ALL	--IDR	--IDR, IN
 SELECT 4244 ,'1.8'  ,'30'      ,1.8  ,30      ,15   UNION ALL	--IN	--IDR, IN
@@ -53,7 +51,6 @@ SELECT 4251 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
 SELECT 4252 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
 SELECT 4253 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
 SELECT 4254 ,'0.9'  ,'135'     ,0.9  ,135     ,15   UNION ALL	--IN	--IDR, IN
-SELECT 4255 ,'1.8'  ,'44'      ,1.8  ,44      ,15   UNION ALL	--IN	--IDR, IN
 SELECT 4256 ,'1.8'  ,'80'      ,1.8  ,80      ,15   UNION ALL	--IN	--IDR, IN
 SELECT 4257 ,'0.9'  ,'324'     ,0.9  ,324     ,15   UNION ALL	--IN	--IDR, IN
 --=============================================
@@ -69,7 +66,6 @@ SELECT 4251 ,'3.6'  ,'108'     ,3.6  ,108     ,51   UNION ALL	--INH	--INH,VND
 SELECT 4252 ,'3.6'  ,'108'     ,3.6  ,108     ,51   UNION ALL	--INH	--INH,VND
 SELECT 4253 ,'3.6'  ,'108'     ,3.6  ,108     ,51   UNION ALL	--INH	--INH,VND
 SELECT 4254 ,'1.8'  ,'360'     ,1.8  ,360     ,51   UNION ALL	--INH	--INH,VND
-SELECT 4255 ,'3.6'  ,'108'     ,3.6  ,108     ,51   UNION ALL	--INH	--INH,VND
 SELECT 4256 ,'3.6'  ,'216'     ,3.6  ,216     ,51   UNION ALL	--INH	--INH,VND
 SELECT 4257 ,'1.8'  ,'1296'    ,1.8  ,1296    ,51   UNION ALL	--INH	--INH,VND
 --=============================================
@@ -85,7 +81,6 @@ SELECT 4251 ,'10'   ,'300'     ,10   ,300     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4252 ,'10'   ,'300'     ,10   ,300     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4253 ,'10'   ,'300'     ,10   ,300     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4254 ,'5'    ,'1000'    ,5    ,1000    ,61   UNION ALL	--INR	--INR, RUB
-SELECT 4255 ,'10'   ,'300'     ,10   ,300     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4256 ,'10'   ,'600'     ,10   ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4257 ,'5'    ,'3600'    ,5    ,3600    ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4244 ,'10'   ,'100'     ,10   ,100     ,55   UNION ALL	--RUB	--INR, RUB
@@ -99,7 +94,6 @@ SELECT 4251 ,'10'   ,'300'     ,10   ,300     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4252 ,'10'   ,'300'     ,10   ,300     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4253 ,'10'   ,'300'     ,10   ,300     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4254 ,'5'    ,'1000'    ,5    ,1000    ,55   UNION ALL	--RUB	--INR, RUB
-SELECT 4255 ,'10'   ,'300'     ,10   ,300     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4256 ,'10'   ,'600'     ,10   ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4257 ,'5'    ,'3600'    ,5    ,3600    ,55   UNION ALL	--RUB	--INR, RUB
 --=============================================
@@ -115,7 +109,6 @@ SELECT 4251 ,'20'   ,'600'     ,20   ,600     ,32   UNION ALL	--JPY	--JPY
 SELECT 4252 ,'20'   ,'600'     ,20   ,600     ,32   UNION ALL	--JPY	--JPY
 SELECT 4253 ,'20'   ,'600'     ,20   ,600     ,32   UNION ALL	--JPY	--JPY
 SELECT 4254 ,'10'   ,'2000'    ,10   ,2000    ,32   UNION ALL	--JPY	--JPY
-SELECT 4255 ,'20'   ,'600'     ,20   ,600     ,32   UNION ALL	--JPY	--JPY
 SELECT 4256 ,'20'   ,'1200'    ,20   ,1200    ,32   UNION ALL	--JPY	--JPY
 SELECT 4257 ,'10'   ,'7200'    ,10   ,7200    ,32   UNION ALL	--JPY	--JPY
 --=============================================
@@ -131,7 +124,6 @@ SELECT 4251 ,'200'  ,'6000'    ,200  ,6000    ,45   UNION ALL	--Won	--KRW, Won
 SELECT 4252 ,'200'  ,'6000'    ,200  ,6000    ,45   UNION ALL	--Won	--KRW, Won
 SELECT 4253 ,'200'  ,'6000'    ,200  ,6000    ,45   UNION ALL	--Won	--KRW, Won
 SELECT 4254 ,'100'  ,'20000'   ,100  ,20000   ,45   UNION ALL	--Won	--KRW, Won
-SELECT 4255 ,'200'  ,'6000'    ,200  ,6000    ,45   UNION ALL	--Won	--KRW, Won
 SELECT 4256 ,'200'  ,'12000'   ,200  ,12000   ,45   UNION ALL	--Won	--KRW, Won
 SELECT 4257 ,'100'  ,'72000'   ,100  ,72000   ,45   UNION ALL	--Won	--KRW, Won
 --=============================================
@@ -147,7 +139,6 @@ SELECT 4251 ,'0.6'  ,'14'      ,0.6  ,14      ,71   UNION ALL	--KHR	--RM, MYR,  
 SELECT 4252 ,'0.6'  ,'14'      ,0.6  ,14      ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
 SELECT 4253 ,'0.6'  ,'14'      ,0.6  ,14      ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
 SELECT 4254 ,'0.3'  ,'45'      ,0.3  ,45      ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
-SELECT 4255 ,'0.6'  ,'14'      ,0.6  ,14      ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
 SELECT 4256 ,'0.6'  ,'26'      ,0.6  ,26      ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
 SELECT 4257 ,'0.3'  ,'108'     ,0.3  ,108     ,71   UNION ALL	--KHR	--RM, MYR,  PLN, KHR
 SELECT 4244 ,'0.6'  ,'8'       ,0.6  ,8       ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
@@ -161,7 +152,6 @@ SELECT 4251 ,'0.6'  ,'14'      ,0.6  ,14      ,56   UNION ALL	--PLN	--RM, MYR,  
 SELECT 4252 ,'0.6'  ,'14'      ,0.6  ,14      ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
 SELECT 4253 ,'0.6'  ,'14'      ,0.6  ,14      ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
 SELECT 4254 ,'0.3'  ,'45'      ,0.3  ,45      ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
-SELECT 4255 ,'0.6'  ,'14'      ,0.6  ,14      ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
 SELECT 4256 ,'0.6'  ,'26'      ,0.6  ,26      ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
 SELECT 4257 ,'0.3'  ,'108'     ,0.3  ,108     ,56   UNION ALL	--PLN	--RM, MYR,  PLN, KHR
 SELECT 4244 ,'0.6'  ,'8'       ,0.6  ,8       ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
@@ -175,7 +165,6 @@ SELECT 4251 ,'0.6'  ,'14'      ,0.6  ,14      ,2    UNION ALL	--RM	--RM, MYR,  P
 SELECT 4252 ,'0.6'  ,'14'      ,0.6  ,14      ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
 SELECT 4253 ,'0.6'  ,'14'      ,0.6  ,14      ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
 SELECT 4254 ,'0.3'  ,'45'      ,0.3  ,45      ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
-SELECT 4255 ,'0.6'  ,'14'      ,0.6  ,14      ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
 SELECT 4256 ,'0.6'  ,'26'      ,0.6  ,26      ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
 SELECT 4257 ,'0.3'  ,'108'     ,0.3  ,108     ,2    UNION ALL	--RM	--RM, MYR,  PLN, KHR
 --=============================================
@@ -191,7 +180,6 @@ SELECT 4251 ,'1.2'  ,'30'      ,1.2  ,30      ,13   UNION ALL	--RMB	--RMB, CNY, 
 SELECT 4252 ,'1.2'  ,'30'      ,1.2  ,30      ,13   UNION ALL	--RMB	--RMB, CNY, YUN
 SELECT 4253 ,'1.2'  ,'30'      ,1.2  ,30      ,13   UNION ALL	--RMB	--RMB, CNY, YUN
 SELECT 4254 ,'0.6'  ,'90'      ,0.6  ,90      ,13   UNION ALL	--RMB	--RMB, CNY, YUN
-SELECT 4255 ,'1.2'  ,'30'      ,1.2  ,30      ,13   UNION ALL	--RMB	--RMB, CNY, YUN
 SELECT 4256 ,'1.2'  ,'54'      ,1.2  ,54      ,13   UNION ALL	--RMB	--RMB, CNY, YUN
 SELECT 4257 ,'0.6'  ,'216'     ,0.6  ,216     ,13   UNION ALL	--RMB	--RMB, CNY, YUN
 SELECT 4244 ,'1.2'  ,'12'      ,1.2  ,12      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
@@ -205,7 +193,6 @@ SELECT 4251 ,'1.2'  ,'30'      ,1.2  ,30      ,66   UNION ALL	--YUN	--RMB, CNY, 
 SELECT 4252 ,'1.2'  ,'30'      ,1.2  ,30      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
 SELECT 4253 ,'1.2'  ,'30'      ,1.2  ,30      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
 SELECT 4254 ,'0.6'  ,'90'      ,0.6  ,90      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
-SELECT 4255 ,'1.2'  ,'30'      ,1.2  ,30      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
 SELECT 4256 ,'1.2'  ,'54'      ,1.2  ,54      ,66   UNION ALL	--YUN	--RMB, CNY, YUN
 SELECT 4257 ,'0.6'  ,'216'     ,0.6  ,216     ,66   UNION ALL	--YUN	--RMB, CNY, YUN
 --=============================================
@@ -221,7 +208,6 @@ SELECT 4251 ,'6'    ,'180'     ,6    ,180     ,4    UNION ALL	--TB	--TB
 SELECT 4252 ,'6'    ,'180'     ,6    ,180     ,4    UNION ALL	--TB	--TB
 SELECT 4253 ,'6'    ,'180'     ,6    ,180     ,4    UNION ALL	--TB	--TB
 SELECT 4254 ,'3'    ,'600'     ,3    ,600     ,4    UNION ALL	--TB	--TB
-SELECT 4255 ,'6'    ,'180'     ,6    ,180     ,4    UNION ALL	--TB	--TB
 SELECT 4256 ,'6'    ,'360'     ,6    ,360     ,4    UNION ALL	--TB	--TB
 SELECT 4257 ,'3'    ,'2160'    ,3    ,2160    ,4    UNION ALL	--TB	--TB
 --=============================================
@@ -237,7 +223,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--USD,EUR,SG
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,9    UNION ALL	--AUD	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4244 ,'0.2'  ,'2'       ,0.2  ,2       ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
@@ -251,7 +236,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--USD,EUR,S
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,6    UNION ALL	--EURO	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4244 ,'0.2'  ,'2'       ,0.2  ,2       ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
@@ -265,7 +249,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--USD,EUR,SG
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,3    UNION ALL	--US$	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4244 ,'0.2'  ,'2'       ,0.2  ,2       ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
@@ -279,7 +262,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--USD,EUR,S
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,96   UNION ALL	--USDT	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4244 ,'0.2'  ,'2'       ,0.2  ,2       ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
@@ -293,7 +275,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD,EUR,SG
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,20   UNION ALL	--UUS	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4244 ,'0.2'  ,'2'       ,0.2  ,2       ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
@@ -307,7 +288,6 @@ SELECT 4251 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD,EUR,SG
 SELECT 4252 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4253 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4254 ,'0.1'  ,'20'      ,0.1  ,20      ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
-SELECT 4255 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4256 ,'0.2'  ,'12'      ,0.2  ,12      ,72   UNION ALL	--YNG	--USD,EUR,SGD,AUD,YNG,UUS
 SELECT 4257 ,'0.1'  ,'72'      ,0.1  ,72      ,72				--YNG	--USD,EUR,SGD,AUD,YNG,UUS
 
