@@ -7,9 +7,9 @@
 USE CheckResultDB
 GO
 
---DELETE FROM Rule_Credit WITH(ROWLOCK) WHERE ruleID = 329
+--DELETE FROM Rule_Credit WITH(ROWLOCK) WHERE ruleID IN (329,330)
 
-INSERT INTO dbo.Rule_Credit (RuleID,RuleName)
-VALUES (329,'Maxbet > Global Maxbet')
+INSERT INTO dbo.Rule_Credit (RuleID,RuleName) VALUES (329,'Maxbet > Global Maxbet')
+INSERT INTO dbo.Rule_Credit (RuleID,RuleName) VALUES (330,'Minbet < Global Minbet')
 
-SELECT * FROM Rule_Credit WITH(NOLOCK) WHERE ruleID = 329
+SELECT * FROM Rule_Credit WITH(NOLOCK) WHERE ruleID IN (329,330)
