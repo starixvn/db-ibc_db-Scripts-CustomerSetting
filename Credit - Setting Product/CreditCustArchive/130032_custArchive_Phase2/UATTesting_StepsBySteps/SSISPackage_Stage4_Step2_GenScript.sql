@@ -96,7 +96,7 @@ WHERE ag.isFinished = 1
 	AND se.srecommend IS NULL
 	
 
-
+/*
 --Get more other cust based on s4 condition
 INSERT INTO #tmpAg
 SELECT ag.custid, isnull(MemCount, 0) [Member Count], isnull(TransCount, 0) [Trans Count]
@@ -141,7 +141,7 @@ WHERE ag.roleid = 2
 		)
 	AND agci.custid NOT IN (SELECT recommend FROM bodb_report.dbo.tmpCustArchived)
 	AND se.srecommend IS NULL
-	
+*/
 		
 
 DECLARE @xmlData NVARCHAR(MAX) = ''
