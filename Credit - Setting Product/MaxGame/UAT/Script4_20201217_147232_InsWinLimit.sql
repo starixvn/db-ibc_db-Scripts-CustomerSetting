@@ -4,7 +4,7 @@
 	Task: Add WinLimit_ProductOffer for Max Game [RM:#147232]
 	DB: DBTRANS/bodb02
 */
-DECLARE @ProductID TINYINT = 60, @Bettype INT =  5401
+DECLARE @ProductID TINYINT = 60, @Bettype INT =  4001
 
 IF NOT EXISTS(	SELECT TOP 1 1 
 				FROM dbo.WinLimit_ProductOffer psd WITH(NOLOCK)
