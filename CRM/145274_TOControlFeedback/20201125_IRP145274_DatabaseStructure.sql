@@ -8,7 +8,7 @@ USE [bodb_CRM]
 GO
 
 CREATE TABLE [dbo].[crmTOControlFeedbackInfo](
-	[LogID] [int] IDENTITY(1,1) NOT NULL,
+	[LogID] [int] NOT NULL,
 	[CustID] [int] NOT NULL,
 	[MatchID] [int] NOT NULL,
 	[ProfileID] [int] NOT NULL,
@@ -21,8 +21,7 @@ CREATE TABLE [dbo].[crmTOControlFeedbackInfo](
 	[Level] [tinyint] NULL,
 	[TotalTurnover] [money] NULL,
 	[MaxTurnover] [money] NULL,
-	[HouseTurnover] [money] NULL,	
-	[NotifiedDate] [datetime] NULL,
+	[HouseTurnover] [money] NULL,		
 	[Status] [varchar](20) NOT NULL,
 	[CreatedDate] [datetime] NULL,
 	[UpdatedTime] [datetime] NULL,
