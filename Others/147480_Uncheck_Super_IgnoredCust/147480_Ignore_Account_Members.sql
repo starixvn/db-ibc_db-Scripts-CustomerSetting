@@ -12,13 +12,6 @@ CREATE TABLE #temp (custid INT)
 INSERT INTO #temp (custid)
 VALUES  (47218617),(47218640),(47218690)
 
-
-DELETE m FROM Dep_LicenseeProductSetting m WITH (ROWLOCK) 	
-	INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid = m.custid	
-	INNER JOIN #temp t ON m.custid = t.custid
-WHERE ci.roleid =  4 AND m.ProductSettingID = 28
-
-
 INSERT INTO [dbo].[IgnoredCust]
            ([CustID]
            ,[RoleID]
