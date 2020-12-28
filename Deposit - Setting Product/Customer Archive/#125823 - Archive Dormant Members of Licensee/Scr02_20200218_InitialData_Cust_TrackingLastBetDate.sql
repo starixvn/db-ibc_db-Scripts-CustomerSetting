@@ -48,6 +48,7 @@ BEGIN
 		AND ci.username NOT LIKE '%BetTrade%' 
 		AND ci.username NOT LIKE '%CashOut%' 
 		AND ci.username NOT LIKE '%ClearBal%'
+		AND ci.username NOT LIKE '%01OddsAdj%'
 		AND ag.username NOT LIKE '%ACC%' 
 
 	DELETE FROM #Member
