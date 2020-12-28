@@ -3,7 +3,7 @@
 	Created: 20201228@Eden
 	Task: get report for CSD [RM#144903]	
 		--Step 1 : Create Procedure
-		--Step 2 : exec Procedure to insert data to ArrchivedMasterAgent_stage3 table
+		--Step 2 : exec Procedure to insert data to ArchivedMasterAgent_Stage3 table
 	DB: DBCUST/CustDB
 */
 --Step 1 : Create Procedure
@@ -24,7 +24,7 @@ AS
 		EXEC [Acc_Archive_GetDeletedCustomers]
 */
 BEGIN
-	TRUNCATE TABLE ArrchivedMasterAgent_stage3
+	TRUNCATE TABLE ArchivedMasterAgent_Stage3
 
 	SELECT DISTINCT custid 
 	INTO #Masterlist
@@ -36,7 +36,7 @@ BEGIN
 	FROM tmpCustArchived WITH(NOLOCK) 
 	WHERE IsFinished = 1 AND ISNULL(ErrMsg,'') = ''
 
-	INSERT INTO ArrchivedMasterAgent_stage3(CustID,username,Level)
+	INSERT INTO ArchivedMasterAgent_Stage3(CustID,username,Level)
 	SELECT s.CustID,
 		c.username,
 		'Agent' AS [Level]
