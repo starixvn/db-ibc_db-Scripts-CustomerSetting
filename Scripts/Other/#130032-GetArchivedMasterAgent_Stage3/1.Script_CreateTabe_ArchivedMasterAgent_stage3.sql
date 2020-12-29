@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20201211@Eden
-	Task: Create ArchivedMasterAgent_Stage3 table  to get report for CSD [RM#144903]	
+	Task: Create ArchivedMasterAgent_Stage3 table  to get report for CSD [RM#130032]	
 	DB: DBCUST/CustDB
 */
 
@@ -22,6 +22,4 @@ GO
 CREATE NONCLUSTERED INDEX ix_ArchivedMasterAgent_Stage3_username ON ArchivedMasterAgent_Stage3(username)
 GO
 GRANT SELECT ON OBJECT::[dbo].ArchivedMasterAgent_Stage3 TO dot_casino; 
-GO
-GRANT SELECT ON OBJECT::[dbo].ArchivedMasterAgent_Stage3 TO vnteam; 
 GO
