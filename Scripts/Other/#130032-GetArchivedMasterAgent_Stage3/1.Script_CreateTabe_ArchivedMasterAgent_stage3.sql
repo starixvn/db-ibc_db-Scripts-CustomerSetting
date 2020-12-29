@@ -23,3 +23,5 @@ CREATE NONCLUSTERED INDEX ix_ArchivedMasterAgent_Stage3_username ON ArchivedMast
 GO
 GRANT SELECT ON OBJECT::[dbo].ArchivedMasterAgent_Stage3 TO dot_casino; 
 GO
+GRANT SELECT ON OBJECT::[dbo].ArchivedMasterAgent_Stage3 TO vnteam; 
+GO
