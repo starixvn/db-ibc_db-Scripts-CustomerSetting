@@ -20,3 +20,6 @@ CREATE TABLE [dbo].ArchivedMasterAgent_Stage3(
 ) ON DATA
 GO
 CREATE NONCLUSTERED INDEX ix_ArchivedMasterAgent_Stage3_username ON ArchivedMasterAgent_Stage3(username)
+GO
+GRANT SELECT ON OBJECT::[dbo].ArchivedMasterAgent_Stage3 TO dot_casino; 
+GO
