@@ -13,8 +13,7 @@ CREATE TABLE #LogAction (ActionID	INT, SPName VARCHAR(50), ActionName VARCHAR(25
 DECLARE @ActionName  VARCHAR(256) = 'Set up new currency for licensee'
 
 INSERT INTO #LogAction (ActionID, SPName, ActionName)
-VALUES (5572,'Nap_LM_Currency_Licensee_Insert','Set up new currency for licensee'),
-	   (2216,'Dot_Dep_CreateCurrencyLicensee','Create Currency for Licensee')
+VALUES (2216,'Dot_Dep_CreateCurrencyLicensee','Create Currency for Licensee')
 
 DELETE a FROM LogAction a INNER JOIN #LogAction b ON a.ActionID = b.ActionID
 
