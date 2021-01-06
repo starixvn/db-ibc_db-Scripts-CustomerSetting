@@ -188,7 +188,7 @@ BEGIN
 	SELECT @custids = STUFF(@custids,1,1,'')
 		
 	EXEC dbo.Acc_DynamicCustomerInfo_09 @custids = @custids			
-			,@target = 'REPLICATED'			
+			,@target = 'DBCUST'			
 END
 GO
 -- END STEP 3: RUN THIS SCRIPT AT DBCUST/CUSTDB-----
