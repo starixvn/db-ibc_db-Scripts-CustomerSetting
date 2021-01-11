@@ -4,6 +4,12 @@
 	Task:  Insert Setting StakeLevelGroupDetail Max Game - Credit - UUS [RM:#147232]
 	DB: DBCust/CustDB
 */
+DELETE g
+FROM StakeLevelGroupDetail g WITH(ROWLOCK)
+	INNER JOIN StakeLevel s (NOLOCK) ON g.StakeLevelID = s.StakeLevelID
+WHERE g.GameTypeID BETWEEN 5401 AND 5410
+	AND s.ExchangeId IN(20,72)
+
 CREATE TABLE #StakeLevel_Temp (MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50),MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8),ExchangeId int, GameGroupID int default(19))
 
 CREATE TABLE #OfferGameType (GameTypeID INT)
@@ -48,6 +54,6 @@ DROP TABLE #OfferGameType
 SELECT * 
 FROM StakeLevelGroupDetail g (NOLOCK)
 	INNER JOIN StakeLevel s (NOLOCK) ON g.StakeLevelID = s.StakeLevelID
-WHERE g.GameTypeID BETWEEN 5401 AND 5409
+WHERE g.GameTypeID BETWEEN 5401 AND 5410
 	AND s.ExchangeId IN(20,72)
 */
