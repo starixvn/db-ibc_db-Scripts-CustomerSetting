@@ -2,7 +2,7 @@
 	Created: Eden
 	Date: 20200218
 	Task: Job daily scan to Update LastBetDate for Cust_TrackingLastBetDate ( use for Scan Dormant Customer ) [RM:#125823]
-	DB: DBACC/bodb02
+	DB: DBACC
 */
 USE [msdb]
 GO
