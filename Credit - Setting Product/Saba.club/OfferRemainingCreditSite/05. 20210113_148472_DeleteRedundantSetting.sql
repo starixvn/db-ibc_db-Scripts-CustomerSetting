@@ -1,0 +1,87 @@
+/*
+	Created: 20210113@Tina
+	Task: Delete redundant setting [RedmineID: 148472]
+	DB: DBCUST/CustDB
+*/ 
+USE CustDB
+GO
+
+PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
+
+DECLARE @MaxCustID INT, @Sporttype SMALLINT = 200
+	
+SELECT @MaxCustID = xxx
+CREATE TABLE #supers (custid int)
+
+INSERT INTO #supers(custid)	
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND cs.isinternal = 0
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND s.islicensee = 0
+	AND ci.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
+	AND ci.currency IN (2,  --MYR(RM)
+						67, --HKD(HKK)
+						5,  --HKD(HK$)
+						69, --MMK(MMK)
+						13, --CNY(RMB)
+						6,  --EUR(EURO)
+						12, --GBP(GBP)
+						45, --KRW(Won)
+						20  --UUS
+)
+
+DELETE cg
+FROM CustPTSetting3rd_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID
+						
+DELETE cg
+FROM CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID
+		
+DELETE cg
+FROM CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND c.custid > @maxcustID
+				
+DELETE cg
+FROM CustStakeLevel_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM CustStakeLevel_Member cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM CustWinLossLimit_Agent cg WITH(ROWLOCK)	
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID
+
+DELETE cg
+FROM CustWinLossLimit_Member cg WITH(ROWLOCK)
+	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
+	INNER JOIN #supers s ON c.srecommend = s.custid	
+WHERE SportType = @Sporttype
+	AND cg.custid > @maxcustID	
+
+PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
