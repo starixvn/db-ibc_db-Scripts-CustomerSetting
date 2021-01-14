@@ -31,7 +31,9 @@ WHERE ci.roleid = 4
 						12, --GBP(GBP)
 						45, --KRW(Won)
 						20  --UUS
-)
+	)
+	-- Exclude currency 20 for bestodd since already inserted before
+	 AND 1 = CASE WHEN ci.site = 'BEST-ODDS' and ci.currency = 20 THEN 0 ELSE 1 END
 
 DECLARE @ProductID TINYINT = 42
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
