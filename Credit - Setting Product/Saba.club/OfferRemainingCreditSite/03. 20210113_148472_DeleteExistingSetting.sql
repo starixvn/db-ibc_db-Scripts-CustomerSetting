@@ -201,7 +201,7 @@ BEGIN
 		TRUNCATE TABLE #CustWinLoss_AgentTemp
 	END
 
-	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLoss_Agent)
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLoss_MemberTemp)
 	BEGIN
 		DELETE TOP (3000) #CustWinLoss_Member OUTPUT DELETED.* INTO #CustWinLoss_MemberTemp
 
