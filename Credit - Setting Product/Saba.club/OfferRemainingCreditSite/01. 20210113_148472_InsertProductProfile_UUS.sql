@@ -24,4 +24,7 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
 	AND e.exchangeid IN (20) -- ('UUS')
-	AND NOT EXISTS (SELECT 1 FROM ProductLaunchedSiteCurrency PC WITH (NOLOCK) WHERE PC.SportType = 200 AND PC.BetType = 1611 and PC.Currency = e.ExchangeId)
+	AND NOT EXISTS (SELECT 1 
+					FROM [ProductStatusSiteCurrency] PC WITH (NOLOCK) 
+					WHERE PC.SportType = 200 AND PC.BetType = 1611 and PC.Currency = e.ExchangeId AND PC.SiteID = S.siteid)
+
