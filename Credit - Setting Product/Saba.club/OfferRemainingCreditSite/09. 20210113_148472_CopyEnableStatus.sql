@@ -26,59 +26,20 @@ BEGIN
 	
 	CREATE TABLE #MemberTemp
 	(
-		CustID INT,
-	)
-
-	CREATE TABLE #SMATemp
-	(
-		CustID INT,
-		roleid TINYINT
+		CustID INT
 	)
 
 	CREATE TABLE #MemberTempUpdate
 	(
-		CustID INT PRIMARY KEY CLUSTERED,
+		CustID INT PRIMARY KEY CLUSTERED
 	)
 
-	CREATE TABLE #SMATempUpdate
-	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		roleid TINYINT
-	)
 	
 	INSERT INTO #MemberTemp (CustID)
 	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @Custid AND roleid = 1  AND Enabled = 1
-	
-	
-	INSERT INTO #SMATemp (CustID, roleid)
-	SELECT custid, roleid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @Custid AND roleid IN (2,3) AND Enabled = 1
+	WHERE srecommend = @Custid  AND Enabled = 1
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-	WHERE cs.CustID = @Custid
-
-	WHILE EXISTS (SELECT 1 FROM #SMATemp)
-	BEGIN
-		DELETE TOP (3000) #SMATemp OUTPUT DELETED.* INTO #SMATempUpdate
-
-		IF @@ROWCOUNT=0
-			BREAK
-
-		UPDATE cs
-		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-			INNER JOIN #SMATempUpdate ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-		
-		TRUNCATE TABLE #SMATempUpdate
-
-	END
 
 	WHILE EXISTS (SELECT 1 FROM #MemberTemp)
 	BEGIN
