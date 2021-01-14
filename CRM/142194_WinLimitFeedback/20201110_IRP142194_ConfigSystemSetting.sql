@@ -9,7 +9,7 @@ SET Value = '1'
 WHERE SettingName = 'ConfigUAT'
 	AND ServiceName = 'WinLimitFB'
 
---Step 1: ConfigUAT =0
+--Step 1: ConfigUAT =0 
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET Value = '0'
 WHERE SettingName = 'ConfigUAT'
