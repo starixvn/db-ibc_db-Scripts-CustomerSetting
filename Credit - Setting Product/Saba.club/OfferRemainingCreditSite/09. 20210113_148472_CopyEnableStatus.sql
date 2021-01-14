@@ -26,10 +26,21 @@ BEGIN
 	
 	CREATE TABLE #MemberTemp
 	(
-		CustID INT PRIMARY KEY CLUSTERED,
+		CustID INT,
 	)
 
 	CREATE TABLE #SMATemp
+	(
+		CustID INT,
+		roleid TINYINT
+	)
+
+	CREATE TABLE #MemberTempUpdate
+	(
+		CustID INT PRIMARY KEY CLUSTERED,
+	)
+
+	CREATE TABLE #SMATempUpdate
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		roleid TINYINT
@@ -52,25 +63,39 @@ BEGIN
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
 	WHERE cs.CustID = @Custid
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	WHERE ci.roleid = 3
+	WHILE EXISTS (SELECT 1 FROM #SMATemp)
+	BEGIN
+		DELETE TOP (3000) #SMATemp OUTPUT DELETED.* INTO #SMATempUpdate
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-		INNER JOIN #SMATemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-	WHERE ci.roleid = 2
+		IF @@ROWCOUNT=0
+			BREAK
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		UPDATE cs
+		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+			INNER JOIN #SMATempUpdate ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+		
+		TRUNCATE TABLE #SMATempUpdate
+
+	END
+
+	WHILE EXISTS (SELECT 1 FROM #MemberTemp)
+	BEGIN
+		DELETE TOP (3000) #MemberTemp OUTPUT DELETED.* INTO #MemberTempUpdate
+
+		IF @@ROWCOUNT=0
+			BREAK
+
+		UPDATE cs
+		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0))
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
+			INNER JOIN #MemberTempUpdate ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+
+	TRUNCATE TABLE #MemberTempUpdate
+
+	END
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
