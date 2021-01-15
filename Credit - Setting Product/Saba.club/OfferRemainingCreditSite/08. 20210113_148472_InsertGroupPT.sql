@@ -50,8 +50,6 @@ BEGIN
 							45, --KRW(Won)
 							20  --UUS
 						)
-	-- Exclude currency 20 for bestodd since already inserted before
-	 AND 1 = CASE WHEN c.site = 'BEST-ODDS' and c.currency = 20 THEN 0 ELSE 1 END
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
