@@ -152,7 +152,7 @@ BEGIN
 				@Bettype = @Bettype	
 		END
 		
-		WAITFOR DELAY '00:00:0.1'	
+		WAITFOR DELAY '00:00:0.28'	
 	END		
 END	
 
