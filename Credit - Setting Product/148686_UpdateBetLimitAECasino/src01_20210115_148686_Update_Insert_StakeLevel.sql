@@ -80,7 +80,7 @@
 	FROM StakeLevel a WITH (ROWLOCK, UPDLOCK) 	
 		INNER JOIN #tempChange c ON a.GameTypeID = c.GameTypeID AND a.MinLabel = c.MinLabel  AND  a.MaxLabel = c.MaxLabel AND a.MinStake = c.MinStake AND a.MaxStake = c.MaxStake
 					AND a.ExchangeId = c.ExchangeId
-	WHERE a.GameGroupID = 3101
+	WHERE a.GameTypeID = 3101
 
 	DROP TABLE #tempChange
 
