@@ -37,8 +37,8 @@ FROM CustSetting3rd  cs WITH(NOLOCK)
 WHERE ((1 = CASE WHEN cs.bettype IN ( 81, 83 ,86 , 88) AND cs.isautopositiontaking = 0 THEN 1
 				WHEN cs.bettype IN ( 85, 86 ,87 , 89, 90 ) AND cs.isautolivepositiontaking = 0 THEN 1 ELSE 0 END
 			)													
-	OR ( 1 = CASE WHEN (cs.bettype IN (81 , 83, 86 ,88 ) AND cs.isautopositiontaking = 1 AND cs.autopositiontaking < cs.spositiontaking)
-					OR (cs.bettype IN ( 85, 86 ,87 , 89, 90 ) AND cs.isautolivepositiontaking = 1 AND cs.autolivepositiontaking < cs.slivepositiontaking) THEN 1 ELSE 0 END
+	OR ( 1 = CASE WHEN (cs.bettype IN (81 , 83, 86 ,88 ) AND cs.isautopositiontaking = 1 AND cs.autopositiontaking < scs.spositiontaking)
+					OR (cs.bettype IN ( 85, 86 ,87 , 89, 90 ) AND cs.isautolivepositiontaking = 1 AND cs.autolivepositiontaking < scs.slivepositiontaking) THEN 1 ELSE 0 END
 		)	
 	)		
 	AND cs.sporttype = 161
