@@ -11,6 +11,13 @@ WHERE SettingName = 'ConfigUAT'
 	AND ServiceName = 'AutoFB'
 GO
 
+--Step 2:Set ConfigUAT= 0
+UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
+SET Value = 0
+WHERE SettingName = 'ConfigUAT'
+	AND ServiceName = 'AutoFB'
+GO
+
 --Step 2:Config mode for real tickets
 --UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 --SET Value = 1
