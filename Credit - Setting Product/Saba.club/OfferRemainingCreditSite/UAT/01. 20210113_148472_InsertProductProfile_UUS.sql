@@ -1,6 +1,6 @@
 /*
 	Created: 20210113@Tina
-	Task: Insert product profile for Saba.club [RedmineID: 148472]
+	Task: Insert product profile for Saba.club [RedmineID: 148472] - Test currrency
 	DB: DBCUST/CustDB
 */
 

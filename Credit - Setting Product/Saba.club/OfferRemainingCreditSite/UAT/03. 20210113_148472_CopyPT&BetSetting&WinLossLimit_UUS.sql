@@ -1,6 +1,6 @@
 /*
 	Created: 20210112@Tina
-	Task: Copy PT & Bet Setting & WinLossLimit for Saba.club [RedmineID: 148472]
+	Task: Copy PT & Bet Setting & WinLossLimit for Saba.club [RedmineID: 148472] - Test currrency
 	DB: DBCUST/CustDB
 	Date: 20200508
 */ 
@@ -201,16 +201,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
-	AND ci.currency IN (2,  --MYR(RM)
-						67, --HKD(HKK)
-						5,  --HKD(HK$)
-						69, --MMK(MMK)
-						13, --CNY(RMB)
-						6,  --EUR(EURO)
-						12, --GBP(GBP)
-						45, --KRW(Won)
-						20  --UUS
-						)
+	AND ci.currency = 20  --UUS
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -263,16 +254,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
 	AND ci.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
-	AND ci.currency IN (2,  --MYR(RM)
-						67, --HKD(HKK)
-						5,  --HKD(HK$)
-						69, --MMK(MMK)
-						13, --CNY(RMB)
-						6,  --EUR(EURO)
-						12, --GBP(GBP)
-						45, --KRW(Won)
-						20  --UUS
-						)
+	AND ci.currency = 20  --UUS
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

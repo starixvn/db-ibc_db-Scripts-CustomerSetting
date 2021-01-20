@@ -1,7 +1,7 @@
 /*
 	Created: Tina
 	Date: 20210112
-	Task: Delete existing data of Saba.club [RedmineID: 148472]
+	Task: Delete existing data of Saba.club [RedmineID: 148472] - Test currrency
 	DB: DBCUST/CustDB
 */
  
@@ -50,17 +50,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND ci.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
-		AND ci.currency IN (
-						2,  --MYR(RM)
-						67, --HKD(HKK)
-						5,  --HKD(HK$)
-						69, --MMK(MMK)
-						13, --CNY(RMB)
-						6,  --EUR(EURO)
-						12, --GBP(GBP)
-						45, --KRW(Won)
-						20  --UUS
-						)
+		AND ci.currency = 20  --UUS
 		
 	SELECT DISTINCT cg.custid 
 	INTO #CustPT_Agent

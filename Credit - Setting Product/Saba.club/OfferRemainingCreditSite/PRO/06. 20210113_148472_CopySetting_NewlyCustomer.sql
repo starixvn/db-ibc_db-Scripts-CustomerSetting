@@ -29,8 +29,7 @@ WHERE ci.roleid = 4
 						13, --CNY(RMB)
 						6,  --EUR(EURO)
 						12, --GBP(GBP)
-						45, --KRW(Won)
-						20  --UUS
+						45 --KRW(Won)
 	)
 
 DECLARE @ProductID TINYINT = 42

@@ -1,6 +1,6 @@
 /*
 	Created: 20210113@Tina
-	Task: Group PT Setting for Saba.club [RedmineID: 148472]
+	Task: Group PT Setting for Saba.club [RedmineID: 148472] - Test currrency
 	DB: DBCUST/CustDB
 */  
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
@@ -40,16 +40,7 @@ BEGIN
 		INNER JOIN dbo.customer c ON ci.custid = c.custid
 	WHERE ci.Enabled = 1 
 		AND c.site IN ('222223', '611111', '722222', '733333', '7aa666', 'BEST-ODDS', 'KORIBC', 'XYZBET')
-		AND c.currency IN (2,  --MYR(RM)
-							67, --HKD(HKK)
-							5,  --HKD(HK$)
-							69, --MMK(MMK)
-							13, --CNY(RMB)
-							6,  --EUR(EURO)
-							12, --GBP(GBP)
-							45, --KRW(Won)
-							20  --UUS
-						)
+		AND c.currency = 20  --UUS
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
