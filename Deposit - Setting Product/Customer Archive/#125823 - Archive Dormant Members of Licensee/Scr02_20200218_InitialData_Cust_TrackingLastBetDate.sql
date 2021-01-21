@@ -7,7 +7,9 @@
 USE bodb02
 GO
 ---------------------Step 1 - Run on DBACC/bodb02-----------------------
-ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
+DROP PROC Acc_Dep_DynamicCustSetting_09_Archive
+GO
+CREATE PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09_Archive]
 	@recommend INT 
 AS
 BEGIN
@@ -250,7 +252,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @recommend) WITH NOWAIT
 
-	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @recommend = @recommend
+	EXEC dbo.Acc_Dep_DynamicCustSetting_09_Archive @recommend = @recommend
 						
 	waitfor delay '00:00:0.100'
 END
