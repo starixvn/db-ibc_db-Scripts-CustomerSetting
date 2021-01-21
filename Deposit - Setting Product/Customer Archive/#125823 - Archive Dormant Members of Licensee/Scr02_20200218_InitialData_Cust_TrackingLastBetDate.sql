@@ -60,8 +60,6 @@ BEGIN
 	DELETE FROM #Member
 	WHERE custid IN (SELECT custid FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK))
 
-	TRUNCATE TABLE Cust_TrackingLastBetDate
-
 	WHILE ( 1 = 1 )
 	BEGIN
 		TRUNCATE TABLE #tmpMember
@@ -240,6 +238,8 @@ DECLARE @msg_total NVARCHAR(200) = 'Total of Agents: %d.'
 
 SET @agent_cnt = (SELECT COUNT(*) FROM #Agent )
 RAISERROR (@msg_total, 0, 1, @agent_cnt) WITH NOWAIT
+
+TRUNCATE TABLE Cust_TrackingLastBetDate
 
 WHILE (1 = 1)
 BEGIN
