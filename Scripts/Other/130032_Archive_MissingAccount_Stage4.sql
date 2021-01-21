@@ -10,7 +10,7 @@
 INSERT INTO ArchivedMasterAgent_Stage3 (CustID, username, Level)
 SELECT b.custid, b.username
 --, b.username2, b.creatdate, b.site, ArchiveDate, c.roleid
-, a.Level
+, Level = CASE WHEN c.roleid = 2 then 'Agent' ELSE 'Master' END
 FROM custInfo_old c with (nolock)
 	INNER JOIN customer_old b with(nolock) on b.custid = c.custid
 	LEFT JOIN ArchivedMasterAgent_Stage3_20201224_test a on a.custid = c.custid
