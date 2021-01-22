@@ -127,10 +127,13 @@ FROM #temp_Customer_old
 SET IDENTITY_INSERT dbo.Customer OFF
 
 --------------------- step 2- INSERT CustInfo ----------------------
-INSERT INTO custinfo (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, CreditUpdatedDate, DangerLevel, CustomerClass)
-SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, 0, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, CreditUpdatedDate, DangerLevel, CustomerClass
+INSERT INTO custinfo (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
+	, Enabled
+	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass)
+SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
+	, 0
+	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass
 FROM #temp_Custinfo_old
-
 --------------------------
 DROP TABLE #CustID_tmp
 DROP TABLE #temp_CustInfo_old
