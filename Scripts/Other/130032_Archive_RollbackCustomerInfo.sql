@@ -132,6 +132,8 @@ SELECT custid, firstname, lastname, address, postal, city, state, country, phone
 FROM #temp_Customer_old o
 WHERE NOT EXISTS (SELECT TOP 1 1 FROM Customer c (NOLOCK) WHERE c.username = o.username)
 	AND NOT EXISTS (SELECT TOP 1 1 FROM Customer c1 (NOLOCK) WHERE c1.username2 = o.username)
+	AND NOT EXISTS (SELECT TOP 1 1 FROM custSub cs (NOLOCK) WHERE cs.username = o.username)
+	AND NOT EXISTS (SELECT TOP 1 1 FROM custSub cs1 (NOLOCK) WHERE cs1.username2 = o.username)
 SET IDENTITY_INSERT dbo.Customer OFF
 
 --------------------- step 2- INSERT CustInfo ----------------------
