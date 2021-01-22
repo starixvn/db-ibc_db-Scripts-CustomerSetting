@@ -131,7 +131,7 @@ INSERT INTO Customer (custid, firstname, lastname, address, postal, city, state,
 SELECT custid, firstname, lastname, address, postal, city, state, country, phone, mobilephone, fax, email, birthday, refcode1, refcode2, remark, creatdate, creator, username, currency, userpwd, lastlogged, pwdexpiry, roleid, mrecommend, recommend, ugroup, logincount, on_sessionid, site, iplogin, important, srecommend, username2
 FROM #temp_Customer_old o
 WHERE NOT EXISTS (SELECT TOP 1 1 FROM Customer c (NOLOCK) WHERE c.username = o.username)
-	AND NOT EXISTS (SELECT TOP 1 1 FROM Customer c (NOLOCK) WHERE c.username2 = o.username)
+	AND NOT EXISTS (SELECT TOP 1 1 FROM Customer c1 (NOLOCK) WHERE c1.username2 = o.username)
 SET IDENTITY_INSERT dbo.Customer OFF
 
 --------------------- step 2- INSERT CustInfo ----------------------
