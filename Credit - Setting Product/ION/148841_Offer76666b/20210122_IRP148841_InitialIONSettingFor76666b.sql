@@ -219,3 +219,18 @@ SELECT  [CustID]
 FROM #tblCust 
 WHERE roleid = 1
 ------------------------------------------------------
+
+------------------------------------------------------
+--product status
+DECLARE @bitmapOrder TINYINT = 27--ION 
+
+--1077 rows affect
+UPDATE cs
+SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
+	bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,isDisabled.value)) 	
+FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #tblCust ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(CS.bitmapIsDisabled, 22) as isDisabled--AE 
+
+
+
