@@ -145,7 +145,7 @@ SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, da
 FROM #temp_Custinfo_old o
 	INNER JOIN customer c WITH (NOLOCK) ON o.custid = c.custid
 --------------------------
--- list of agent/master not insert already
+----- list of agent/master not insert already
 SELECT o.custid 
 FROM #temp_Customer_old o
 	LEFT JOIN Customer c WITH (NOLOCK) ON c.custid = o.custid
