@@ -141,11 +141,11 @@ SET IDENTITY_INSERT dbo.Customer OFF
 INSERT INTO custinfo (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
 	, Enabled
 	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass)
-SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
+SELECT username, o.custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
 	, 0
 	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass
 FROM #temp_Custinfo_old o
-	INNER JOIN customer c WITH (NOLOCK) ON o.custid = c.custid
+	CROSS APPLY (SELECT TOP 1 custid FROM customer c WITH (NOLOCK) WHERE o.custid = c.custid) AS t
 --------------------------
 ----- list of agent/master not insert already
 SELECT o.custid 
