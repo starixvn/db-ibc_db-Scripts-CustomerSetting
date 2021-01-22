@@ -118,8 +118,8 @@ SELECT ArchiveDate, username, custid, currency, roleid, srecommend, mrecommend, 
 FROM db05.bodb_customer.dbo.custinfo_old with (nolock)
 WHERE custid in (SELECT custid FROM #CustID_tmp)
 
-INSERT INTO #temp_CustInfo_old (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableMicrogame, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass)
-SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableMicrogame, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass
+INSERT INTO #temp_CustInfo_old (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe,  DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass)
+SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe,  DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass
 FROM DBNOTI.custdb_20210117.dbo.custinfo WITH (NOLOCK)
 WHERE custid in (SELECT custid FROM #CustID_tmp)
 	AND custid NOT IN (SELECT custid FROM #temp_CustInfo_old)
@@ -129,18 +129,33 @@ WHERE custid in (SELECT custid FROM #CustID_tmp)
 SET IDENTITY_INSERT dbo.Customer ON
 INSERT INTO Customer (custid, firstname, lastname, address, postal, city, state, country, phone, mobilephone, fax, email, birthday, refcode1, refcode2, remark, creatdate, creator, username, currency, userpwd, lastlogged, pwdexpiry, roleid, mrecommend, recommend, ugroup, logincount, on_sessionid, site, iplogin, important, srecommend, username2)
 SELECT custid, firstname, lastname, address, postal, city, state, country, phone, mobilephone, fax, email, birthday, refcode1, refcode2, remark, creatdate, creator, username, currency, userpwd, lastlogged, pwdexpiry, roleid, mrecommend, recommend, ugroup, logincount, on_sessionid, site, iplogin, important, srecommend, username2
-FROM #temp_Customer_old
+FROM #temp_Customer_old o
+WHERE NOT EXISTS (SELECT TOP 1 1 FROM Customer c (NOLOCK) WHERE c.username = o.username)
+	AND NOT EXISTS (SELECT TOP 1 1 FROM Customer c (NOLOCK) WHERE c.username2 = o.username)
 SET IDENTITY_INSERT dbo.Customer OFF
 
 --------------------- step 2- INSERT CustInfo ----------------------
+-- make sure insert into custinfo if inserted customer already
 INSERT INTO custinfo (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
 	, Enabled
 	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass)
 SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99
 	, 0
 	, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, MaxPerMatch99MP, DisableNumber, maxpermatch161, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164,  DangerLevel, CustomerClass
-FROM #temp_Custinfo_old
+FROM #temp_Custinfo_old o
+	INNER JOIN customer c WITH (NOLOCK) ON o.custid = c.custid
 --------------------------
+-- list of agent/master not insert already
+SELECT o.custid 
+FROM #temp_Customer_old o
+	LEFT JOIN Customer c WITH (NOLOCK) ON c.custid = o.custid
+WHERE c.custid IS NULL
+
+SELECT o.custid 
+FROM #temp_Customer_old o
+	LEFT JOIN Custinfo c WITH (NOLOCK) ON c.custid = o.custid
+WHERE c.custid IS NULL
+
 DROP TABLE #CustID_tmp
 DROP TABLE #temp_CustInfo_old
 DROP TABLE #temp_Customer_old
