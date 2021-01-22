@@ -119,7 +119,7 @@ WHERE custid in (SELECT custid FROM #CustID_tmp)
 
 INSERT INTO #temp_CustInfo_old (username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableMicrogame, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass)
 SELECT username, custid, currency, roleid, srecommend, mrecommend, recommend, dangercust, autosuspend, reject, credit, closed, MatchLimit, VirtualMultiplier, maxpermatch, maxpermatch2, maxpermatch3, maxpermatch5, maxpermatch8, maxpermatch10, maxpermatch11, maxpermatch12, maxpermatch99, Enabled, danger, DisableCasino, SyncCasino, danger2, danger3, DisableOutright, DisableNumber, MaxPerMatch161, MaxPerMatch99MP, MaxPerBall161, Abnormal, DoubleCommLosing, autosuspend2, HideKeno, DisableEsports, HideGoldDeluxe, DisableGoldDeluxe, DisableMicrogame, DisableSuperLive, DisableColossusBet, HideColossusBet, LockUpd, MaxPerMatch1MP, BonusWalletFlag, maxpermatch164, DangerLevel, CustomerClass
-FROM DBSPARE.custDB_Test.custinfo WITH (NOLOCK)
+FROM DBNOTI.custdb_20210117.dbo.custinfo WITH (NOLOCK)
 WHERE custid in (SELECT custid FROM #CustID_tmp)
 	AND custid NOT IN (SELECT custid FROM #temp_CustInfo_old)
 
