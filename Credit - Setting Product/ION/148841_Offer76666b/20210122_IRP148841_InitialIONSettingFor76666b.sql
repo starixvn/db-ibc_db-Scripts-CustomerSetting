@@ -72,7 +72,7 @@ INSERT INTO [dbo].[CustPTSetting3rd_Member]
            ,[AutoSuperPT]
            ,[AutoMasterPT])
 SELECT [CustID]
-	   ,255 as [SportType]
+	   ,225 as [SportType]
 	   ,5601 as [BetType]
 	   ,[IsLive]
 	   ,[IsAutoMasterPT]
