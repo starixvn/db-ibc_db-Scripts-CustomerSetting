@@ -106,6 +106,7 @@ VALUES
 -- master
 ,(18313830),(4140770),(15493067),(32247548)
 --(41510673),(28178870) --M2
+,(21998589) -- master
 
 INSERT INTO #temp_Customer_old (custid, firstname, lastname, address, postal, city, state, country, phone, mobilephone, fax, email, birthday, refcode1, refcode2, remark, creatdate, creator, username, currency, userpwd, lastlogged, pwdexpiry, roleid, mrecommend, recommend, ugroup, logincount, on_sessionid, site, iplogin, important, srecommend, username2)
 SELECT custid, firstname, lastname, address, postal, city, state, country, phone, mobilephone, fax, email, birthday, refcode1, refcode2, remark, creatdate, creator, username, currency, userpwd, lastlogged, pwdexpiry, roleid, mrecommend, recommend, ugroup, logincount, on_sessionid, site, iplogin, important, srecommend, username2
