@@ -6,8 +6,7 @@
 */
 USE bodb02
 GO
-
-DECLARE @CheckBettrans_CustPerBatch  INT = 2000
+DECLARE @CheckBettrans_CustPerBatch  INT = 5000
 
 INSERT INTO Cust_TrackingLastBetDate(custid)
 SELECT cust.custid
@@ -66,13 +65,13 @@ BEGIN
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM bettrans b with (NOLOCK)
 	WHERE bettype <> 20000 
-		AND b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+		AND b.custid IN (SELECT CustID FROM #tmpMember b )
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	--> scan ticket from bettransRNG
@@ -80,13 +79,13 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM bettransRNG b with (NOLOCK)
-	WHERE b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+	WHERE b.custid IN (SELECT CustID FROM #tmpMember b )
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	--> scan ticket from bettransLC
@@ -94,13 +93,13 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM bettransLC b with (NOLOCK)
-	WHERE b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+	WHERE b.custid IN (SELECT CustID FROM #tmpMember )
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	--> scan ticket from translog
@@ -108,13 +107,13 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM translog b with (NOLOCK)
-	WHERE b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+	WHERE b.custid IN (SELECT CustID FROM #tmpMember b)
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino
@@ -122,13 +121,13 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK)
-	WHERE b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+	WHERE b.custid IN (SELECT CustID FROM #tmpMember b)
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
@@ -136,19 +135,20 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT custid, MAX(b.transdate) AS transdate
 	FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK)
-	WHERE b.custid IN (SELECT CustID FROM #tmpMember b WITH(NOLOCK) )
+	WHERE b.custid IN (SELECT CustID FROM #tmpMember b )
 	GROUP BY b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
 	FROM #Member a
-		INNER JOIN #BettingMember b with (NOLOCK) ON a.custID = b.custid
+		INNER JOIN #BettingMember b ON a.custID = b.custid
 	WHERE a.LastBetDate < b.LastBetDate
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
-	FROM Cust_TrackingLastBetDate a WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #Member b with (NOLOCK) ON a.custID = b.custid
+	FROM Cust_TrackingLastBetDate a WITH(ROWLOCK)
+		INNER JOIN #Member b ON a.custID = b.custid
+		INNER JOIN #tmpMember c ON c.custID = b.custid
 	WHERE ISNULL(a.LastBetDate,'1900/01/01') < b.LastBetDate 
 		AND b.LastBetDate > '1900/01/01'
 
