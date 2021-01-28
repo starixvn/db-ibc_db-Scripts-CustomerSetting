@@ -239,7 +239,7 @@ DECLARE @msg_total NVARCHAR(200) = 'Total of Agents: %d.'
 SET @agent_cnt = (SELECT COUNT(*) FROM #Agent )
 RAISERROR (@msg_total, 0, 1, @agent_cnt) WITH NOWAIT
 
-TRUNCATE TABLE Cust_TrackingLastBetDate
+--TRUNCATE TABLE Cust_TrackingLastBetDate
 
 WHILE (1 = 1)
 BEGIN
