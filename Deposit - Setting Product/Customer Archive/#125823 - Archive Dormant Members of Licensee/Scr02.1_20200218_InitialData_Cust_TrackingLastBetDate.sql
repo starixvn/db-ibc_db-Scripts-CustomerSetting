@@ -43,22 +43,20 @@ BEGIN
 	INSERT INTO #Member (custid)
 	SELECT cust.custid
 	FROM customer cust WITH (NOLOCK)
-	INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
-	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid = ci.recommend
+		INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
 	WHERE cust.roleid = 1
 		AND cust.recommend = @recommend
-		AND cust.srecommend IN (SELECT custid FROM Dep_CustSuper (NOLOCK))
 		AND ci.username NOT LIKE '%BetTrade%' 
 		AND ci.username NOT LIKE '%CashOut%' 
 		AND ci.username NOT LIKE '%ClearBal%'
 		AND ci.username NOT LIKE '%01OddsAdj%'
-		AND ag.username NOT LIKE '%ACC%' 
 
+	DELETE 
+	FROM #Member 
+	WHERE custid IN (SELECT CustID FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK) WHERE status IN ('archived','completed') )
+	
 	DELETE FROM #Member
 	WHERE custid IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_Customer_Archived_Exception WITH (NOLOCK))
-
-	DELETE FROM #Member
-	WHERE custid IN (SELECT custid FROM bodb02.dbo.Dep_Customer_Archived WITH (NOLOCK))
 
 	WHILE ( 1 = 1 )
 	BEGIN
@@ -227,9 +225,10 @@ CREATE TABLE #Agent (AgentID int PRIMARY KEY , isProcessed BIT DEFAULT 0)
 INSERT INTO #Agent (AgentID)
 SELECT cust.custid
 FROM customer cust WITH (NOLOCK)
-INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
+	INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
 WHERE cust.roleid = 2
 	AND cust.srecommend IN (SELECT custid FROM Dep_CustSuper (NOLOCK))
+	AND cust.username NOT LIKE '%ACC%'
 
 -- For deployer info
 DECLARE @agent_cnt INT, @index INT = 0
