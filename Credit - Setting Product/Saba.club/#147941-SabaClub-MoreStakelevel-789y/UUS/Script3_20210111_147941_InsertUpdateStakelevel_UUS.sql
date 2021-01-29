@@ -24,7 +24,7 @@ SET GameTypeID = 1611,
 --Update New game Group ( change from level 1 to level 2 ) for current stake level 
 UPDATE s 
 SET s.GameGroupID = 20
-FROM StakeLevel s WITH(NOLOCK) 
+FROM StakeLevel s WITH(ROWLOCK) 
 	INNER JOIN StakeLevelGroupDetail g WITH(NOLOCK) ON s.StakeLevelID = g.StakeLevelID AND g.GameTypeID = 1611
 WHERE GameGroupID = 13
 	AND s.ExchangeId IN( SELECT ExchangeId FROM @StakeLevel)
