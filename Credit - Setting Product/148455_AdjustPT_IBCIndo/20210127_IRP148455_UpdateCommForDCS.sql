@@ -75,7 +75,7 @@ BEGIN
 	SELECT @xml = '<ROOT>' + @xml + '</ROOT>'
 
 	--execrept to update commission
-	EXEC dbo.Acc_DynamicCustSetting3rd_06
+	EXEC dbo.Acc_DynamicCustSetting3rd_09
 			@CustId			= @custid
 			, @RoleId		= 3
 			, @SettingType  = @SettingType
