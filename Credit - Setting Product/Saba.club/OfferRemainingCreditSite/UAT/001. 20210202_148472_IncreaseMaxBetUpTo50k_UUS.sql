@@ -8,9 +8,9 @@
 UPDATE GD SET GD.MaxStake = 50000, GD.MaxLabel = '50,000'
 FROM StakeLevelGroupDetail GD WITH (ROWLOCK)
 	JOIN StakeLevel SL WITH (NOLOCK) ON SL.StakeLevelID = GD.StakeLevelID
-WHERE SL.GameTypeID = 1611 AND SL.ExchangeId = 20 AND GameGroupID = 20
+WHERE GD.GameTypeID = 1611 AND SL.ExchangeId = 20 AND SL.GameGroupID = 20
 
 SELECT *
 FROM StakeLevelGroupDetail GD WITH (NOLOCK)
 	JOIN StakeLevel SL WITH (NOLOCK) ON SL.StakeLevelID = GD.StakeLevelID
-WHERE SL.GameTypeID = 1611 AND SL.ExchangeId = 20 AND GameGroupID = 20
+WHERE GD.GameTypeID = 1611 AND SL.ExchangeId = 20 AND SL.GameGroupID = 20
