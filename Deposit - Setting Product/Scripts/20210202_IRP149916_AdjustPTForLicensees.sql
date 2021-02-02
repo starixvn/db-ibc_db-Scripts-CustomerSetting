@@ -15,7 +15,7 @@ WHERE site IN ('Lucky88','11bet','Fabet','One88','Five88','zbet','Sunwin','Debet
 DECLARE @srecommend INT,
 		@ids VARCHAR(MAX),
 		@Sporttype INT = 1,
-		@ptVALUE MONEY = 0.865,
+		@ptVALUE MONEY = 0.88,
 		@rowcnt INT
 
 -- For deployer info
