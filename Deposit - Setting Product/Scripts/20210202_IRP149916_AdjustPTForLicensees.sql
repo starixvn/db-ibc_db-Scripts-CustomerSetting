@@ -54,7 +54,7 @@ BEGIN
 	BEGIN
 		SELECT @ids = ''
 
-		UPDATE TOP (4000) t
+		UPDATE TOP (200) t
 		SET @ids = @ids + CASE @ids WHEN '' THEN '' ELSE ',' END + CAST(custid AS VARCHAR(12))
 			,isfinished = 1
 		FROM #tblCust t
@@ -64,7 +64,7 @@ BEGIN
 
 		EXEC Acc_CustSetting3rd_12 @ids = @ids, @Sporttype = @Sporttype, @ptVALUE = @ptVALUE
 
-		IF @rowcnt < 4000 BREAK
+		IF @rowcnt < 200 BREAK
 
 		WAITFOR DELAY '00:00:00.28'
 	END
