@@ -5,7 +5,7 @@
 
 */ 
 
-UPDATE GD SET GD.MaxStake = 30000, GD.MaxLabel = '30,000'
+UPDATE GD SET GD.MaxStake = 3000, GD.MaxLabel = '3,000'
 FROM StakeLevelGroupDetail GD WITH (ROWLOCK)
 	JOIN StakeLevel SL WITH (NOLOCK) ON SL.StakeLevelID = GD.StakeLevelID
 WHERE GD.GameTypeID = 1611 AND SL.ExchangeId = 20 AND SL.GameGroupID = 13
