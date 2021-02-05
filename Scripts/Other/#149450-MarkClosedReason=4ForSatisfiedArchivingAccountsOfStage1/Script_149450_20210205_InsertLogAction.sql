@@ -10,9 +10,9 @@ GO
 
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT	1179, 'Update Close Reason By Archive', 'DBA_ArchiveAccount1_CloseAgentLine', 1, 5, NULL UNION ALL
-SELECT	1180, 'Update Close Reason By Archive', 'DBA_ArchiveAccount1_CloseMaster', 1, 5, NULL UNION ALL
-SELECT	1181, 'Update Close Reason By Archive', 'DBA_ArchiveAccount1_CloseSuper', 1, 5, NULL
+SELECT	1179, 'Update Close Reason By Archive Process', 'DBA_ArchiveAccount1_CloseAgentLine', 1, 5, NULL UNION ALL
+SELECT	1180, 'Update Close Reason By Archive Process', 'DBA_ArchiveAccount1_CloseMaster', 1, 5, NULL UNION ALL
+SELECT	1181, 'Update Close Reason By Archive Process', 'DBA_ArchiveAccount1_CloseSuper', 1, 5, NULL
 
 DELETE l FROM dbo.LogAction l INNER JOIN @tmpAction t ON t.ActionID = l.ActionID
 
