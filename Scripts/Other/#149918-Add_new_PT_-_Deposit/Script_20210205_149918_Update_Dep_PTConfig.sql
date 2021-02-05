@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCHECK-CheckResultDB"></info>*/
  /*
-	Created: 20200205@Eden
+	Created: 20210205@Eden
 	Task: add new pt 0.935 for SB [Redmine:#149918]	
 	DB: DBCHECK/CheckResultDB
 */
