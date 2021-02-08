@@ -17,11 +17,11 @@ CREATE TABLE #SMATemp
 	   ,Currency INT
 	)
 
-CREATE TABLE #MemberTemp
-	(
-		CustID INT PRIMARY KEY CLUSTERED
-	   ,Currency INT
-	)
+--CREATE TABLE #MemberTemp
+--	(
+--		CustID INT PRIMARY KEY CLUSTERED
+--	   ,Currency INT
+--	)
 
 
 CREATE TABLE #supers (custid int)
@@ -55,10 +55,10 @@ SELECT custid, currency
 FROM Custinfo WITH (NOLOCK)
 WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
 
-INSERT INTO #MemberTemp(CustID,Currency)
-SELECT custid, currency
-FROM Custinfo WITH (NOLOCK)
-WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid
+--INSERT INTO #MemberTemp(CustID,Currency)
+--SELECT custid, currency
+--FROM Custinfo WITH (NOLOCK)
+--WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid
 
 --> Update StakeLevelList SMA(s)
 UPDATE cs
@@ -72,20 +72,20 @@ FROM CustStakeLevel_Agent cs WITH(ROWLOCK)
 WHERE cs.SportType = @SportType
 	AND cs.BetType = @BetType
 
---> Update StakeLevelList Members
-UPDATE cs
-SET StakeLevelList = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID)
-						FROM StakeLevel s WITH(NOLOCK) 
-						WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = @BetType
-						ORDER BY s.GameGroupID
-					  )
-	,LastUpdated = GETDATE()
-FROM CustStakeLevel_Member cs WITH(ROWLOCK)
-	INNER JOIN #MemberTemp tmp ON cs.CustID = tmp.CustID
-WHERE cs.SportType = @SportType
-	AND cs.BetType = @BetType
+----> Update StakeLevelList Members
+--UPDATE cs
+--SET StakeLevelList = (	SELECT TOP 1 CONVERT(VARCHAR(5),s.StakeLevelID)
+--						FROM StakeLevel s WITH(NOLOCK) 
+--						WHERE s.ExchangeId = tmp.Currency AND s.GameTypeID = @BetType
+--						ORDER BY s.GameGroupID
+--					  )
+--	,LastUpdated = GETDATE()
+--FROM CustStakeLevel_Member cs WITH(ROWLOCK)
+--	INNER JOIN #MemberTemp tmp ON cs.CustID = tmp.CustID
+--WHERE cs.SportType = @SportType
+--	AND cs.BetType = @BetType
 
 DROP TABLE #SMATemp
-DROP TABLE #MemberTemp
+--DROP TABLE #MemberTemp
 DROP TABLE #supers
 
