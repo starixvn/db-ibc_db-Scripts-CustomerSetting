@@ -28,7 +28,7 @@ UNION ALL SELECT 20
 --UPDATE StakeLevel
 UPDATE s 
 SET s.GameGroupID = CASE WHEN s.GameGroupID = 20 THEN 13 ELSE 20 END
-FROM StakeLevel s 
+FROM StakeLevel s WITH (ROWLOCK)
 WHERE s.GameTypeID = 1611 
 	AND s.ExchangeId IN(SELECT ExchangeId FROM @StakeLevel)
 
@@ -39,7 +39,7 @@ SET   g.MinLabel ='0.01'
 	, g.MinStake = 0.01
 	, g.MaxStake = 3000
 FROM StakeLevel s WITH (NOLOCK)
-	INNER JOIN StakeLevelGroupDetail g WITH(NOLOCK) On s.StakeLevelID = g.StakeLevelID
+	INNER JOIN StakeLevelGroupDetail g WITH(ROWLOCK) On s.StakeLevelID = g.StakeLevelID
 WHERE s.GameTypeID = 1611 
 	AND s.GameGroupID = 13
 	AND s.ExchangeId IN(SELECT ExchangeId FROM @StakeLevel)
@@ -50,7 +50,7 @@ SET   g.MinLabel ='0.01'
 	, g.MinStake = 0.01
 	, g.MaxStake = 5000
 FROM StakeLevel s WITH (NOLOCK)
-	INNER JOIN StakeLevelGroupDetail g WITH(NOLOCK) On s.StakeLevelID = g.StakeLevelID
+	INNER JOIN StakeLevelGroupDetail g WITH(ROWLOCK) On s.StakeLevelID = g.StakeLevelID
 WHERE s.GameTypeID = 1611 
 	AND s.GameGroupID = 20
 	AND s.ExchangeId IN(SELECT ExchangeId FROM @StakeLevel)
