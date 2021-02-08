@@ -9,4 +9,5 @@ GO
 UPDATE c
 SET c.apositiontaking = 0
 FROM dep_custsetting c WITH(ROWLOCK) 
-WHERE custid = 40956522
+	INNER JOIN Dep_CustBAActive b WITH(NOLOCK) ON c.custid = b.CustId
+WHERE c.custid = 40956522
