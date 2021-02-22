@@ -220,29 +220,19 @@ GO
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 DECLARE @recommend INT
 
-CREATE TABLE #Agent (AgentID int PRIMARY KEY , isProcessed BIT DEFAULT 0)
-
-INSERT INTO #Agent (AgentID)
-SELECT cust.custid
-FROM customer cust WITH (NOLOCK)
-	INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
-WHERE cust.roleid = 2
-	AND cust.srecommend IN (SELECT custid FROM Dep_CustSuper (NOLOCK))
-	AND cust.username NOT LIKE '%ACC%'
-
 -- For deployer info
 DECLARE @agent_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, AgentID : %d.'
 DECLARE @msg_total NVARCHAR(200) = 'Total of Agents: %d.'
 
-SET @agent_cnt = (SELECT COUNT(*) FROM #Agent )
+SET @agent_cnt = (SELECT COUNT(*) FROM TmpAgent_Cust_TrackingLastBetDate WITH(NOLOCK) WHERE isProcessed = 0 )
 RAISERROR (@msg_total, 0, 1, @agent_cnt) WITH NOWAIT
 
 --TRUNCATE TABLE Cust_TrackingLastBetDate
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Agent
+	UPDATE TOP (1) TmpAgent_Cust_TrackingLastBetDate 
 	SET isProcessed = 1
 		,@recommend = AgentID	
 	WHERE isProcessed = 0
@@ -259,6 +249,5 @@ END
 
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
-DROP TABLE #Agent
 GO
 ---------------------END step 2-----------------------------------------------------
