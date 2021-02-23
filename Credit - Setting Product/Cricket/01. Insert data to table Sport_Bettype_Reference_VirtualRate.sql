@@ -201,3 +201,9 @@ VALUES
 (50, 9604, 27, 3, 0),
 (50, 9605, 27, 2, 0),
 (50, 9606, 27, 3, 0)
+
+/*
+SELECT *
+FROM Sport_Bettype_Reference_VirtualRate S WITH (NOLOCK)
+WHERE S.SportType = 50
+*/
