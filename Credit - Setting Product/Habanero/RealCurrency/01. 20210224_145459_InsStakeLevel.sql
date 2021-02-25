@@ -10,7 +10,7 @@ GO
 PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #StakeLevel_Temp ( GameTypeID INT,
 								ExchangeId int,
-								GameGroupID int default(17))
+								GameGroupID int default(21))
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,ExchangeId)
 SELECT 7001, 13   UNION ALL --CNY(RMB)
