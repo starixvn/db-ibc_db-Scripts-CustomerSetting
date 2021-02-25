@@ -156,7 +156,7 @@ FROM customer ag WITH (NOLOCK)
 	INNER JOIN #tmpAg t WITH (NOLOCK) ON ag.custid = t.custid
 	INNER JOIN customer mag WITH (NOLOCK) ON ag.mrecommend = mag.custid AND mag.roleid = 3
 	INNER JOIN customer sag WITH (NOLOCK) ON ag.srecommend = sag.custid AND sag.roleid = 4
-	LEFT JOIN  dbo.bettrans bt WITH(NOLOCK) ON ag.custid = bt.custid  AND bt.bettype = 20000
+	LEFT JOIN  dbo.bettrans bt WITH(NOLOCK) ON ag.custid = bt.custid  AND bt.bettype = 20000 AND bt.matchid = 0
 WHERE bt.custid IS NULL
 ORDER BY [Member Count] DESC
 FOR XML PATH ('r'))
