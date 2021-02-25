@@ -1,9 +1,11 @@
 /*
 	Created: 20210224@Tina
-	Task: Insert GameGroup for Habanero
+	Task: Insert GameGroup for Habanero - CREDIT
 	Redmine: https://nexdev.net/issues/145459
 	DB: DBCUST/CustDB
 */
+USE [CustDB]
+GO
 
 /*
 DELETE FROM GameGroup WITH(ROWLOCK) WHERE GameGroupID = 21

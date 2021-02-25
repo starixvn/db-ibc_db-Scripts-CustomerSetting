@@ -1,6 +1,6 @@
 /*
 	Created: 20210224@Tina
-	Task: Insert product profile for Habanero
+	Task: Insert product profile for Habanero - CREDIT
 	Redmine: https://nexdev.net/issues/145459
 	DB: DBCUST/CustDB
 */
