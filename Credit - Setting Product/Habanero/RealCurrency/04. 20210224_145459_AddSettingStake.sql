@@ -140,6 +140,8 @@ PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 				
 		waitfor delay '00:00:0.280'
 	END
+
+	DROP TABLE #supers
 	GO
 	PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
@@ -191,6 +193,6 @@ PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 							
 		waitfor delay '00:00:0.280'
 	END
-
+	DROP TABLE #supers
 	PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 

@@ -11,5 +11,6 @@ SELECT @BetType =  7001,@SportType = 238
 UPDATE S
 SET S.SettingStatus = 0
 FROM ProductSettingDetail S WITH(ROWLOCK) 
-WHERE Sporttype = @SportType AND ProductID = 22	
+WHERE Sporttype = @SportType AND ProductID = 61	
 	AND SettingType = 8 AND BetType = @BetType
+
