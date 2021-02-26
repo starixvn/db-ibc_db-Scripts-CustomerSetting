@@ -30,7 +30,28 @@ PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 				AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 				AND s.islicensee = 0
 				AND ci.Site NOT IN ('CN88')
-				AND ci.currency NOT IN (20,72) -- Test Currency
+					AND ci.currency IN ( 13      --RMB
+								,6       --EURO
+								,12      --GBP
+								,5       --HK$
+								,67      --HKK
+								,15      --IN
+								,22      --IND
+								,33      --IDD
+								,34      --IDR
+								,47      --DDD
+								,45      --Won
+								,69      --MMK
+								,2       --RM
+								,43      --THB
+								,35      --$US
+								,3       --US$
+								,16      --Yen
+								,95      --USD
+								,64      --UT
+								,7       --DON
+								,51      --INH
+								)
 	--====================== Check Data
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Agent
