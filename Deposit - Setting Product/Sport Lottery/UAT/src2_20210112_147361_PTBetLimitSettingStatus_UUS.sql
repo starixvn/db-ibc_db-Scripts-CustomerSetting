@@ -3,6 +3,8 @@
 	Date: 20200828
 	Task: Insert PT and Betlimit for Sports Lottery [Redmine: 147361]
 	DB: DBCUST/CustDB
+	
+	P/s : Step 2 Insert PT and Betlimit for Sports Lottery UUS
 */
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
