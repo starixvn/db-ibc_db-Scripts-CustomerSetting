@@ -91,7 +91,7 @@
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = C.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 		INNER JOIN dbo.CustPTSetting3rd_Member csm WITH(NOLOCK) ON csm.custid = c.custid 
-	WHERE C.bettype = @fBetType AND C.sporttype = @tSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
+	WHERE C.bettype = @fBetType AND C.sporttype = @fSportType AND csm.SportType = @tSportType AND csm.BetType = @tBetType
 			AND ci.roleid = 1 AND Enabled = 1
 			AND (
 				C.SuperPT <> csm.SuperPT
