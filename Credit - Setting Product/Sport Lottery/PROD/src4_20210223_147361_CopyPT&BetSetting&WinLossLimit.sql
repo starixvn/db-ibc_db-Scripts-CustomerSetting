@@ -23,13 +23,10 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
 
 	DECLARE @ProductID TINYINT = 44, @Sporttype INT = 169 ,@Bettype INT  = 3611
