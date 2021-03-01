@@ -39,12 +39,12 @@ BEGIN
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	220, 1024, SportType, BetType, 0, SettingType, 0
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (2,18) --  PT,WinLossLimit
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (2,18) --  PT,BetLimit
 	
 	INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
 	SELECT	220, 1021, SportType, BetType, 0, SettingType, 0
 	FROM ProductSettingDetail WITH (NOLOCK)
-	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (6) --  BetLimit
+	WHERE ProductID = @ProductID AND SportType = @Sporttype AND SettingType IN (6) --  WinLossLimit
 
 	CREATE TABLE #MemberTemp
 	(
