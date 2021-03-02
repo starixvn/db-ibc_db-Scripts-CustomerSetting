@@ -86,6 +86,7 @@ WHERE ag.isFinished = 1
 			creatdate >= @startdate
 		)
 	AND se.srecommend IS NULL
+	AND ag.IsFinished = 1 AND (ISNULL(ag.ErrMsg,'') = '' OR ag.ErrMsg LIKE '%archived%')
 	
 /*
 --Get more other cust based on s2 condition
