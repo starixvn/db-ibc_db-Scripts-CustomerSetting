@@ -39,6 +39,12 @@ BEGIN
 
 	IF @@ROWCOUNT = 0
 		BREAK;
+
+	--Delete log S4
+	DELETE l
+	FROM dblog.bodb_CustomerLog.dbo.UserLog_RunSP l WITH(ROWLOCK)
+	WHERE CustID = @CustID
+		AND ActionID = 1500
 	
 	--Insert Archived log
 	IF @RoleID = 2
