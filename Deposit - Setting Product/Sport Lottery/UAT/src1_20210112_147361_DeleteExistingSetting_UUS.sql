@@ -63,13 +63,13 @@ BEGIN
 
 	INSERT INTO #CustBetSetting_Agent(CustID,Sporttype,Bettype)
 	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
+	FROM Dep_CustBetSetting_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting_Member(CustID,Sporttype,Bettype)
 	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
+	FROM Dep_CustBetSetting_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
@@ -101,7 +101,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #CustBetSetting_Agent)
 	BEGIN		
 		DELETE cg
-		FROM Dep_CustStakeLevel_Agent cg
+		FROM Dep_CustBetSetting_Agent cg
 			INNER  JOIN #CustBetSetting_Agent t
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 		
 	END 
@@ -109,7 +109,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #CustBetSetting_Member)
 	BEGIN
 		DELETE cg
-		FROM Dep_CustStakeLevel_Member cg	
+		FROM Dep_CustBetSetting_Member cg	
 			INNER JOIN #CustBetSetting_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
