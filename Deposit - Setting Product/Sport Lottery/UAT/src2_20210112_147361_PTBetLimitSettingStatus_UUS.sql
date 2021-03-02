@@ -329,7 +329,7 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid = 48088928
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -337,7 +337,6 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
-	AND ci.CustID = 48088896
 	AND ci.Enabled=1
 	AND cs.site IN('spondemo','Athena000')
 	AND ci.currency in (72,20)
