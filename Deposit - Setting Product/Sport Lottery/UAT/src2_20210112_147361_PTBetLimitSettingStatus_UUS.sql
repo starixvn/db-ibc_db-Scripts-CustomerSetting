@@ -30,8 +30,6 @@ BEGIN
 		
 		OR dbo.f_CheckRepTable('CustInfo') = 0 
 		OR dbo.f_CheckRepTable('Customer') = 0 
-
-		OR dbo.f_CheckRepTable('Dep_StakeLevel') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 

@@ -19,8 +19,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
 
