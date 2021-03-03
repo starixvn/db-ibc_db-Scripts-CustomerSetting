@@ -229,7 +229,7 @@ BEGIN
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT s.CustID,86
 	FROM #SMATemp s WITH(NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 86)
+	WHERE s.RoleID = 4 AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 86)
 	
 	-------------------------------------Betlimit Setting----------------------------------------------
 	INSERT INTO Dep_CustBetSetting_Agent(
@@ -261,7 +261,7 @@ BEGIN
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT s.CustID,87
 	FROM #SMATemp s WITH(NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 87)
+	WHERE s.RoleID = 4 AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 87)
 
 	--------------------------------------------Enable Status--------------------------------------------------
 	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
@@ -320,7 +320,7 @@ BEGIN
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT s.CustID,85
 	FROM #SMATemp s WITH(NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 85)
+	WHERE s.RoleID = 4 AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting D WITH(NOLOCK) WHERE D.CustID=s.CustID AND d.ProductSettingID = 85)
 		
 END		
 GO
