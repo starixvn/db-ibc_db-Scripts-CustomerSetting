@@ -14,7 +14,7 @@ DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE Sporttype = 238
 
 DECLARE @SettingStatus TINYINT, @ProductID INT, @RealProductID INT, @betType SMALLINT,@sportType SMALLINT
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
-SELECT @ProductID = 61
+SELECT @ProductID = 22
 SELECT @RealProductID = 22
 
 SET @sportType = 238
