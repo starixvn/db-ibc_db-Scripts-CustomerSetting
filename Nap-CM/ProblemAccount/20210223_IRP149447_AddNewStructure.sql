@@ -4,13 +4,14 @@
 	DB: DBCUST/CustDB
 */
 
---add new columns isCredit & isDeposit
-ALTER TABLE ProblemAccountAction ADD isCredit BIT 
-GO
-ALTER TABLE ProblemAccountAction ADD constraint DF_ProblemAccountAction_isCredit DEFAULT 0 FOR isCredit
-GO
+CREATE TABLE [dbo].[ProblemAccountLimitDownline](
+	[CustID] [int] NOT NULL,
+	[CreatedDate] [datetime] NULL,
+	[UserID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[custid] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [table_customer]
+) ON [table_customer]
 
-ALTER TABLE ProblemAccountAction ADD isDeposit BIT 
-GO
-ALTER TABLE ProblemAccountAction ADD CONSTRAINT DF_ProblemAccountAction_isDeposit DEFAULT 0 FOR isDeposit
 GO
