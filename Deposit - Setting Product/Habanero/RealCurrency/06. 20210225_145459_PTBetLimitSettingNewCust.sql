@@ -359,3 +359,20 @@ GO
 	DROP TABLE #TempProductStatus
 	DROP TABLE #AllUsers
 	PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+/*
+	SELECT TOP 10 *
+	FROM Dep_CustPTSetting_Agent A WITH (NOLOCK)
+		INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
+	WHERE A.SportType = 238 AND A.CustID > 48440011
+
+	SELECT TOP 10 *
+	FROM Dep_CustPTGroupSetting_Member  A WITH (NOLOCK)
+		INNER JOIN custInfo c WITH (NOLOCK) ON A.AgentID = C.custid AND C.currency NOT IN (20,72)
+	WHERE A.SportType = 238 AND A.AgentID > 48440011
+
+	SELECT TOP 10 *
+	FROM Dep_CustPTSetting_Member A WITH (NOLOCK)
+		INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
+	WHERE A.SportType = 238 AND A.CustID > 48440011
+*/

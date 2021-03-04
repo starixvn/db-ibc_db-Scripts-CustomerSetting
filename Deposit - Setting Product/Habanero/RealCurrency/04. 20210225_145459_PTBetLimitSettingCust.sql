@@ -457,3 +457,24 @@ PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 -- END STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
+
+/*
+SELECT TOP 10 *
+FROM Dep_CustPTSetting_Agent A WITH (NOLOCK)
+	INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustPTGroupSetting_Member  A WITH (NOLOCK)
+	INNER JOIN custInfo c WITH (NOLOCK) ON A.AgentID = C.custid AND C.currency NOT IN (20,72)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustPTSetting_Member A WITH (NOLOCK)
+	INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustSettingMode D WITH (NOLOCK)
+WHERE D.IsGroupedPT = 0
+*/

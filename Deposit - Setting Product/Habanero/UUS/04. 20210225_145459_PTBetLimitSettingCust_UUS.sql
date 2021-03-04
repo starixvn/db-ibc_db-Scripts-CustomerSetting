@@ -1,9 +1,11 @@
 /*
-	Created: Winfred
-	Date: 20200909
-	Task: Insert PT and Betlimit for Customer [Joker] - UUS deposit RedmineID:#131603
+	Created: 20210224@Tina
+	Task: Insert PT and Betlimit for Habanero - UUS - Deposit
+	Redmine: https://nexdev.net/issues/145459
 	DB: DBCUST/CustDB
 */
+USE [CustDB]
+GO
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
@@ -416,3 +418,20 @@ PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 -- END STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
+/*
+SELECT TOP 10 *
+FROM Dep_CustPTSetting_Agent A WITH (NOLOCK)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustPTGroupSetting_Member  A WITH (NOLOCK)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustPTSetting_Member A WITH (NOLOCK)
+WHERE A.SportType = 238
+
+SELECT TOP 10 *
+FROM Dep_CustSettingMode D WITH (NOLOCK)
+WHERE D.IsGroupedPT = 0
+*/

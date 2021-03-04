@@ -50,3 +50,9 @@ FROM #Dep_StakeLevel_Temp a
 
 DROP TABLE #Dep_StakeLevel_Temp
 PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+/*
+SELECT *
+FROM Dep_StakeLevel SL WITH (NOLOCK)
+WHERE SL.GameTypeID = 7001 AND ExchangeID NOT IN (20,72)
+*/

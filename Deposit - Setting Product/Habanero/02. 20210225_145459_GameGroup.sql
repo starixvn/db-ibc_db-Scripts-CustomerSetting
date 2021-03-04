@@ -23,3 +23,8 @@ BEGIN
 		   VALUES			(@GameGroupID , @sportType	  , @betType	, 'Level 1'	 , 1 )
 END		
 
+/*
+SELECT *
+FROM GameGroup GG WITH (NOLOCK)
+WHERE GG.GameGroupID = 22
+*/

@@ -46,3 +46,13 @@ WHERE D.SportType = @sportType
 
 INSERT INTO [dbo].Dep_ProductStatusProfile (Sporttype,Bettype,bitmapOrder)
 VALUES (@sportType,@betType,24)
+
+/*
+SELECT *
+FROM Dep_ProductSetting D WITH (NOLOCK)
+WHERE D.ProductSettingID BETWEEN 92 AND 94
+
+SELECT *
+FROM Dep_ProductStatusProfile D WITH (NOLOCK)
+WHERE D.Sporttype = 238
+*/

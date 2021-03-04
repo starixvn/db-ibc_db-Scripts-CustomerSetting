@@ -33,3 +33,9 @@ FROM #Dep_StakeLevel_Temp a
 DROP TABLE #Dep_StakeLevel_Temp
 
 PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+/*
+SELECT *
+FROM Dep_StakeLevel D WITH (NOLOCK)
+WHERE D.GameTypeID = 7001
+*/

@@ -278,3 +278,8 @@ WHEN NOT MATCHED THEN
 					 ;
 DROP TABLE #Dep_StakeLevel_Temp
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+/*
+SELECT *
+FROM Dep_StakeLevelGroupDetail A WITH (NOLOCK)
+WHERE A.GameTypeID between 7001 and 7300
+*/

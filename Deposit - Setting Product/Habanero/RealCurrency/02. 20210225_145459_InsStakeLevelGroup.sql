@@ -2023,3 +2023,10 @@ WHEN NOT MATCHED THEN
 					 ;
 DROP TABLE #Dep_StakeLevel_Temp
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+/*
+SELECT GD.*
+FROM Dep_StakeLevelGroupDetail GD WITH (NOLOCK)
+	INNER JOIN Dep_StakeLevel SL WITH (NOLOCK) ON SL.StakeLevelID = GD.StakeLevelID
+WHERE GD.GameTypeID Between 7001 and 7300 AND SL.ExchangeId NOT IN (20,72)
+*/
