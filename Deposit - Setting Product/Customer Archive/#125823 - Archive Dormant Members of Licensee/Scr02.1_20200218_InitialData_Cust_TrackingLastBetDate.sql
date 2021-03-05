@@ -185,7 +185,7 @@ BEGIN
 
 			INSERT INTO #BettingMember(custid,LastBetDate)	
 			SELECT  custid, MAX(accDate) AS accDate
-			FROM bodb_Report.dbo.STATEMENT st WITH  (NOLOCK, FORCESEEK)
+			FROM bodb_Report.dbo.STATEMENT st WITH  (NOLOCK)
 			WHERE accDate >= @fromDate_e AND accDate < @toDate_e
 				AND TransType <> N'bal' 
 				AND st.custid IN ( SELECT custid FROM #Member m)
