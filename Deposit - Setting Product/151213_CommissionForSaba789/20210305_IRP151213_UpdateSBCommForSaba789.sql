@@ -28,6 +28,8 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0
 		BREAK;
+		
+	DELETE #tblCust
 	
 	INSERT INTO #tblCust(custid,roleid)
 	SELECT custid,roleid
