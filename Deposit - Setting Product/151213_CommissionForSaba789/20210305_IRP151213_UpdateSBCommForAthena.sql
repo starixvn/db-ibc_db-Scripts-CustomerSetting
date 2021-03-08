@@ -14,8 +14,8 @@ WHERE site ='Athena000'
 	
 DECLARE @custid INT,
 	@discount DECIMAL(9, 8) = 0.0025,
-	@discountcs DECIMAL(9, 8) = 0.0025,
-	@discount1x2 DECIMAL(9, 8) = 0.01
+	@discountcs DECIMAL(9, 8) = 0.01,
+	@discount1x2 DECIMAL(9, 8) = 0.0025
 	
 WHILE(1=1)
 BEGIN
