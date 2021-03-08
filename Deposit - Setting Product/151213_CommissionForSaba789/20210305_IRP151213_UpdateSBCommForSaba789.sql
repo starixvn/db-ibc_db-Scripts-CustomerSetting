@@ -1,13 +1,14 @@
 /*
 	Created: 20210305@Johnson
-	Task: update sportbook comm for Athena000
+	Task: update sportbook comm for Saba789
 	DB: DBCUST/CustDB
 */
 
 CREATE TABLE #Supers (custid INT, isFinished BIT DEFAULT 0)
 CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT)
 
-INSERT INTO #Supers(cusitd)
+--2 supers
+INSERT INTO #Supers(custid)
 SELECT custid
 FROM Dep_CustSuper WITH(NOLOCK)
 WHERE site ='Saba789'
@@ -28,12 +29,11 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		BREAK;
 	
-	--1k customers
 	INSERT INTO #tblCust(custid,roleid)
 	SELECT custid,roleid
 	FROM custinfo WITH(NOLOCK)
 	WHERE srecommend = @custid
-		AND cusitd NOT IN (SELECT custid 
+		AND mrecommend NOT IN (SELECT custid 
 							FROM customer WITH(NOLOCK)
 							WHERE srecommend = @custid
 								AND roleid =3

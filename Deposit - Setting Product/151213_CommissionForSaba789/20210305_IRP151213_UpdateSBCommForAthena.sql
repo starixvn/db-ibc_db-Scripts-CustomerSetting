@@ -7,7 +7,7 @@
 CREATE TABLE #Supers (custid INT, isFinished BIT DEFAULT 0)
 CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT)
 
-INSERT INTO #Supers(cusitd)
+INSERT INTO #Supers(custid)
 SELECT custid
 FROM Dep_CustSuper WITH(NOLOCK)
 WHERE site ='Athena000'
@@ -32,7 +32,7 @@ BEGIN
 	SELECT custid,roleid
 	FROM custinfo WITH(NOLOCK)
 	WHERE srecommend = @custid
-		AND cusitd NOT IN (SELECT custid 
+		AND mrecommend NOT IN (SELECT custid 
 							FROM customer WITH(NOLOCK)
 							WHERE srecommend = @custid
 								AND roleid =3
