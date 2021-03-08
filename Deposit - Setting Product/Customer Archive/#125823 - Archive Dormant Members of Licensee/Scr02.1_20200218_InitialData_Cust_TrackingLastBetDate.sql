@@ -62,9 +62,10 @@ BEGIN
 	BEGIN
 		TRUNCATE TABLE #tmpMember
 
-		INSERT INTO #tmpMember
-		SELECT TOP (@CheckBettrans_CustPerBatch) custid
-		FROM #Member 
+		UPDATE TOP (@CheckBettrans_CustPerBatch) t
+		SET  isProcessed = 1
+		OUTPUT deleted.custid INTO #tmpMember(custid)
+		FROM #Member t
 		WHERE isProcessed = 0
 		
 		IF (@@ROWCOUNT = 0) 
@@ -154,16 +155,52 @@ BEGIN
 		FROM #Member a
 			INNER JOIN #BettingMember b  ON a.custID = b.custid
 		WHERE ISNULL(a.LastBetDate,'1900/01/01') < b.LastBetDate
-
-		UPDATE #Member
-		SET isProcessed = 1
-		WHERE custid IN (SELECT custid FROM #tmpMember)
 	END
 
-	INSERT INTO Cust_TrackingLastBetDate (custid,LastBetDate)
-	SELECT custid,LastBetDate FROM #Member WHERE LastBetDate IS NOT NULL
+	DELETE t
+	OUTPUT deleted.custid,deleted.LastBetDate INTO Cust_TrackingLastBetDate(custid,LastBetDate)
+	FROM #Member t
+	WHERE LastBetDate IS NOT NULL
 
-	DELETE FROM #Member WHERE LastBetDate IS NOT NULL
+	UPDATE #Member SET isProcessed = 0
+
+	--Scan bettrans14
+	IF EXISTS(SELECT 1 FROM #Member)
+	BEGIN
+		WHILE ( 1 = 1 )
+		BEGIN
+			TRUNCATE TABLE #tmpMember
+
+			UPDATE TOP (@CheckBettrans_CustPerBatch) t
+			SET  isProcessed = 1
+			OUTPUT deleted.custid INTO #tmpMember(custid)
+			FROM #Member t
+			WHERE isProcessed = 0
+		
+			IF (@@ROWCOUNT = 0) 
+				BREAK
+
+			--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
+			TRUNCATE TABLE #BettingMember
+			INSERT INTO #BettingMember(custid,LastBetDate)
+			SELECT custid, MAX(b.transdate) AS transdate
+			FROM bettrans14 b with (NOLOCK)
+			WHERE b.custid IN (SELECT CustID FROM #tmpMember b  )
+			GROUP BY b.custid
+
+			UPDATE a
+			SET a.LastBetDate = b.LastBetDate
+			FROM #Member a
+				INNER JOIN #BettingMember b  ON a.custID = b.custid
+			WHERE ISNULL(a.LastBetDate,'1900/01/01') < b.LastBetDate
+		END
+
+		DELETE t
+		OUTPUT deleted.custid,deleted.LastBetDate INTO Cust_TrackingLastBetDate(custid,LastBetDate)
+		FROM #Member t
+		WHERE LastBetDate IS NOT NULL
+
+	END
 
 	IF EXISTS(SELECT 1 FROM #Member)
 	BEGIN
