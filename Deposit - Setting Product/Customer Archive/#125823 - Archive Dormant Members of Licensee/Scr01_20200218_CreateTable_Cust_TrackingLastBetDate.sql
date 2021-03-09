@@ -2,7 +2,7 @@
 	Created: Eden
 	Date: 20200218
 	Task: Create table Cust_TrackingLastBetDate to keep lastest bet date [RM:#125823]
-	DB: DBACC/bodb02
+	DB: DBACC/bodb02, DBACC- Clone DB
 */
 USE bodb02
 GO
