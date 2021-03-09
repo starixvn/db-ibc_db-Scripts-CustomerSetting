@@ -87,6 +87,10 @@ UNION
 SELECT b.custid
 FROM #Agent c
 	INNER JOIN DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK) ON c.AgentID = b.recommend
+UNION
+SELECT b.custid
+FROM #Agent c
+	INNER JOIN bettrans14 b with (NOLOCK) ON c.AgentID = b.recommend
 
 INSERT INTO #Cust_TrackingLastBetDate(custid, LastBetDate)
 SELECT c.custid, ISNULL(c.LastBetDate,'1900/01/01') AS LastBetDate
@@ -155,6 +159,21 @@ BEGIN
 	INSERT INTO #BettingMember(custid,LastBetDate)
 	SELECT b.custid, MAX(b.transdate) AS transdate
 	FROM translog b with (NOLOCK)
+		INNER JOIN #tmpMember t ON t.custid = b.custid
+	WHERE b.transdate > t.LastBetDate 
+	GROUP BY b.custid
+
+	UPDATE a
+	SET  a.LastBetDate = b.LastBetDate
+		,a.IsUpdate = 1
+	FROM #tmpMember a
+		INNER JOIN #BettingMember b ON a.custID = b.custid
+
+	----> scan ticket from bettrans14
+	TRUNCATE TABLE #BettingMember
+	INSERT INTO #BettingMember(custid,LastBetDate)
+	SELECT b.custid, MAX(b.transdate) AS transdate
+	FROM bettrans14 b with (NOLOCK)
 		INNER JOIN #tmpMember t ON t.custid = b.custid
 	WHERE b.transdate > t.LastBetDate 
 	GROUP BY b.custid
