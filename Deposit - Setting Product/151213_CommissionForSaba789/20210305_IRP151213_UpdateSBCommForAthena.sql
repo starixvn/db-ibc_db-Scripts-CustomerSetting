@@ -58,8 +58,8 @@ BEGIN
 								 WHEN bettype IN (4,6,9,10,20) THEN @discountcs END			
 						ELSE discount END,
 		playerdiscount = 0,
-		apositiontaking = CASE WHEN roleid IN (1,2) THEN 0.805 ELSE 0 END
-		mpositiontaking = CASE WHEN roleid IN (3) THEN 0.805 ELSE 0 END
+		apositiontaking = CASE WHEN roleid IN (1,2) THEN 0.805 ELSE 0 END,
+		mpositiontaking = CASE WHEN roleid IN (3) THEN 0.805 ELSE 0 END,
 		spositiontaking = CASE WHEN roleid IN (4) THEN 0.805 ELSE 0 END
 	FROM Dep_CustSetting cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
