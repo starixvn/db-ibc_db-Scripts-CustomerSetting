@@ -2,6 +2,9 @@
 /*
 	Created: 20210301@Eden
 	Task: Update data for VRCustLockStatus [RM#149370]
+		-Correct Data for Check performance Job (China/desktop view and Agent Profiler)
+		-Correct Data for SPU Job
+		-Correct for VR Status : For current accounts with VR Status = 0, set VR Lock Soccer = 1 and VR Lock Other Sports = 1
 	DB: DBCUST/CustDB
 */
 USE CustDB
@@ -113,11 +116,46 @@ BEGIN
 	WHERE v.CustID IS NULL
 END
 Print 'End Correct Data for SPU Job'
+Print '----------------------------------------------------------------------------------'
+-------------Correct Data for VR status--------------------------
+Print 'Begin Correct Data for VR status'
+
+CREATE TABLE #DisbledVR_Cust (CustID INT, Type TINYINT, IsFinished BIT DEFAULT 0)
+
+INSERT INTO #DisbledVR_Cust(CustID,Type)
+SELECT custid, tp.Type
+FROM custinfo d WITH(NOLOCK) 
+	CROSS JOIN #TblType tp
+WHERE VirtualMultiplier = 0	 
+	AND Enabled = 1
+
+--> set Soccer VR Lock = 1 and Other Sports VR Lock = 1 
+WHILE 1 = 1
+BEGIN
+	TRUNCATE TABLE #TmpCust_Batch
+
+	UPDATE TOP(5000) a
+	SET a.IsFinished = 1
+	OUTPUT deleted.custid,deleted.Type INTO #TmpCust_Batch( CustID,Type)
+	FROM #DisbledVR_Cust a
+	WHERE a.IsFinished = 0
+
+	IF @@ROWCOUNT = 0
+		BREAK;
+
+	INSERT INTO VRCustLockStatus(CustID,Type)
+	SELECT t.CustID,t.Type
+	FROM #TmpCust_Batch t
+		LEFT JOIN VRCustLockStatus v WITH(NOLOCK) ON t.CustID = v.CustID AND t.Type = v.Type
+	WHERE v.CustID IS NULL
+END
+
+Print 'End Correct Data for VR status'
+
 
 DROP TABLE #TmpCust
 DROP TABLE #TmpCust_Batch
 DROP TABLE #TblType
 DROP TABLE #SPUJob_Cust
 DROP TABLE #TmpUpdatedCust_Job2
-
-
+DROP TABLE #DisbledVR_Cust
