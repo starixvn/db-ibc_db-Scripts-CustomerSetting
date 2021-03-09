@@ -125,7 +125,7 @@ BEGIN
 		SELECT b.custid, MAX(b.transdate) AS transdate
 		FROM bettrans b with (NOLOCK)
 			INNER JOIN #tmpMember t ON b.custid = t.custid
-		WHERE bettype <> 20000 
+		WHERE bettype NOT IN(19999, 20000)
 		GROUP BY b.custid
 
 		UPDATE a

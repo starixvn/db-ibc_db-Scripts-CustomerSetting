@@ -66,7 +66,7 @@ INSERT INTO #BettingMember(custid)
 SELECT b.custid
 FROM Dep_CustSuper c WITH(NOLOCK)
 	INNER JOIN bettrans b with (NOLOCK,forceseek) ON c.CustID = b.srecommend
-WHERE bettype <> 20000 
+WHERE bettype NOT IN (19999, 20000)
 UNION
 SELECT  b.custid
 FROM #Agent c
@@ -114,7 +114,7 @@ BEGIN
 	SELECT b.custid, MAX(b.transdate) AS transdate
 	FROM bettrans b with (NOLOCK)
 		INNER JOIN #tmpMember t ON t.custid = b.custid
-	WHERE bettype <> 20000 
+	WHERE bettype NOT IN(19999, 20000)
 		AND b.transdate > t.LastBetDate 
 	GROUP BY b.custid
 
