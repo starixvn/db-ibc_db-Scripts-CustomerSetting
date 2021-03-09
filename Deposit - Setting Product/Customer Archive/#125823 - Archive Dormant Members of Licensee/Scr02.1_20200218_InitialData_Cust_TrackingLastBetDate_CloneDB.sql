@@ -104,7 +104,7 @@ BEGIN
 	WHERE custid IN (SELECT CustID FROM dbo.Dep_Customer_Archived WITH (NOLOCK) WHERE status IN ('archived','completed') )
 	
 	DELETE FROM #Member
-	WHERE custid IN (SELECT custid FROM DBCUST.CustDB.dbo.Dep_Customer_Archived_Exception WITH (NOLOCK))
+	WHERE custid IN (SELECT custid FROM KBTDBCUST.CustDB.dbo.Dep_Customer_Archived_Exception WITH (NOLOCK))
 
 	WHILE ( 1 = 1 )
 	BEGIN
@@ -270,7 +270,7 @@ BEGIN
 
 			INSERT INTO #BettingMember(custid,LastBetDate)	
 			SELECT  st.custid, MAX(accDate) AS accDate
-			FROM dbo.STATEMENT st WITH  (NOLOCK)
+			FROM bodb_Report.dbo.STATEMENT st WITH  (NOLOCK)
 				INNER JOIN #Member t ON st.custid = t.custid
 			WHERE accDate >= @fromDate_e AND accDate < @toDate_e
 				AND TransType <> N'bal' 
