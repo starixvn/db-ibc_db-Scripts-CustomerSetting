@@ -57,6 +57,7 @@
 ---------------------Step 3 - Run on DBACC - CLone DB-----------------------
 IF OBJECT_ID ('Acc_Dep_DynamicCustSetting_09_Archive') IS NOT NULL
     DROP PROC Acc_Dep_DynamicCustSetting_09_Archive
+GO
 CREATE PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09_Archive]
 	@recommend INT 
 AS
