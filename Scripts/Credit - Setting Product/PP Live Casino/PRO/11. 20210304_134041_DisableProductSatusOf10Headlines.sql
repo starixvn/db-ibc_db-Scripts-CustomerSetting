@@ -25,9 +25,7 @@ GO
 		INNER JOIN custAccount ca WITH (NOLOCK) ON ca.custid=c.custid
 		INNER JOIN #HeadlineSBOnly t ON t.GroupID=ca.groupID
 		INNER JOIN [site] s WITH (NOLOCK ) ON c.[site] = s.[site]
-		LEFT JOIN custsuper cs WITH (NOLOCK ) ON c.custid = cs.custid
 	WHERE c.username NOT LIKE '3rdSuper%'
-		AND cs.isinternal = 0
 		AND s.islicensee = 0
 		AND cu.[enabled] = 1
 		AND c.currency IN (13, --CNY(RMB)
