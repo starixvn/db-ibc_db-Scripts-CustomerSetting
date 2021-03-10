@@ -89,7 +89,7 @@ BEGIN
 
 	-- 1.Get infor of all customer in Customer and custinfo table
 	INSERT INTO #Member (custid)
-	SELECT cust.custid
+	SELECT DISTINCT cust.custid
 	FROM customer cust WITH (NOLOCK)
 		INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
 	WHERE cust.roleid = 1
