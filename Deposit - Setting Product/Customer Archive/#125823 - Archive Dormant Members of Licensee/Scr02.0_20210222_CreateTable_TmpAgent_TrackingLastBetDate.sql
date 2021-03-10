@@ -25,7 +25,7 @@ PRIMARY KEY CLUSTERED
 GO
 
 INSERT INTO TmpAgent_Cust_TrackingLastBetDate (AgentID)
-SELECT cust.custid
+SELECT DISTINCT cust.custid
 FROM customer cust WITH (NOLOCK)
 	INNER JOIN custInfo ci (NOLOCK) ON cust.custid = ci.custid
 	LEFT JOIN TmpAgent_Cust_TrackingLastBetDate tmp WITH(NOLOCK) ON cust.custid = tmp.AgentID
