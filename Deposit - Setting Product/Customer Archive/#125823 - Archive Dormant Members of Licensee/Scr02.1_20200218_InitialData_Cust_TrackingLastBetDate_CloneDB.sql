@@ -77,7 +77,7 @@ BEGIN
 
 	CREATE TABLE #BettingMember 
 		(
-			custid INT PRIMARY KEY
+			custid INT --PRIMARY KEY
 			,LastBetDate DATETIME 
 		)
 
@@ -270,11 +270,12 @@ BEGIN
 			INSERT INTO #BettingMember(custid,LastBetDate)
 			SELECT t.custid, a.transdate
 			FROM #tmpMember t 
-			CROSS APPLY( SELECT MAX(b.accDate) transdate
+			CROSS APPLY( SELECT TOP 1 accdate AS transdate
 						FROM bodb_Report.dbo.STATEMENT b with (NOLOCK)
 						WHERE b.custid = t.custid
-						AND TransType <> N'bal' 
-						AND b.accdate >= @MinBettingDate
+							AND TransType <> N'bal' 
+							AND b.accdate >= @MinBettingDate
+						ORDER BY transdate DESC
 				) a
 
 			UPDATE a
