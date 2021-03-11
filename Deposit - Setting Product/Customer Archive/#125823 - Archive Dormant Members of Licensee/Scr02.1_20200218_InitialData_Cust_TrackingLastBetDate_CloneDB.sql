@@ -16,7 +16,7 @@
 			DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
 
 		--Step 2: Create new index for some tables 
-			CREATE NONCLUSTERED INDEX ix_bettrans_transdate ON bettrans(bettype,custid,transdate)
+			CREATE NONCLUSTERED INDEX ix_bettrans_transdate ON bettrans(custid,transdate,bettype)
 			CREATE NONCLUSTERED INDEX ix_bettransRNG_transdate ON bettransRNG(custid,transdate)
 			CREATE NONCLUSTERED INDEX ix_bettransLC_transdate ON bettransLC(custid,transdate)
 			CREATE NONCLUSTERED INDEX ix_translog_transdate ON translog(custid,transdate)
@@ -118,14 +118,17 @@ BEGIN
 		IF (@@ROWCOUNT = 0) 
 			BREAK
 
-		--> scan ticket from bettrans
+		--scan ticket from bettrans
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM bettrans b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		WHERE bettype NOT IN(19999, 20000)
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM bettrans b with (NOLOCK)
+						WHERE b.custid = t.custid
+							AND bettype NOT IN(19999, 20000)
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -136,10 +139,13 @@ BEGIN
 		--> scan ticket from bettransRNG
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM bettransRNG b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM bettransRNG b with (NOLOCK)
+						WHERE b.custid = t.custid
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -150,10 +156,13 @@ BEGIN
 		--> scan ticket from bettransLC
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM bettransLC b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM bettransLC b with (NOLOCK)
+						WHERE b.custid = t.custid
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -164,10 +173,13 @@ BEGIN
 		--> scan ticket from translog
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM translog b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM translog b with (NOLOCK)
+						WHERE b.custid = t.custid
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -178,10 +190,13 @@ BEGIN
 		--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM dbo.bettrans_AGCasino b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM bettrans_AGCasino b with (NOLOCK)
+						WHERE b.custid = t.custid
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -192,10 +207,13 @@ BEGIN
 		--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
-		SELECT b.custid, MAX(b.transdate) AS transdate
-		FROM dbo.bettrans_GoldDeluxe b with (NOLOCK)
-			INNER JOIN #tmpMember t ON b.custid = t.custid
-		GROUP BY b.custid
+		SELECT t.custid, a.transdate
+		FROM #tmpMember t 
+		CROSS APPLY(	SELECT TOP 1 transdate
+						FROM bettrans_GoldDeluxe b with (NOLOCK)
+						WHERE b.custid = t.custid
+						ORDER BY transdate DESC
+			) a
 
 		UPDATE a
 		SET a.LastBetDate = b.LastBetDate
@@ -227,13 +245,16 @@ BEGIN
 			IF (@@ROWCOUNT = 0) 
 				BREAK
 
-			--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
+			--> scan ticket from bettrans14
 			TRUNCATE TABLE #BettingMember
 			INSERT INTO #BettingMember(custid,LastBetDate)
-			SELECT b.custid, MAX(b.transdate) AS transdate
-			FROM bettrans14 b with (NOLOCK)
-				INNER JOIN #tmpMember t ON b.custid = t.custid
-			GROUP BY b.custid
+			SELECT t.custid, a.transdate
+			FROM #tmpMember t 
+			CROSS APPLY(	SELECT TOP 1 transdate
+							FROM bettrans14 b with (NOLOCK)
+							WHERE b.custid = t.custid
+							ORDER BY transdate DESC
+				) a
 
 			UPDATE a
 			SET a.LastBetDate = b.LastBetDate
