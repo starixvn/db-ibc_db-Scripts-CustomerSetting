@@ -9,6 +9,7 @@
 */
 USE CustDB
 GO
+DECLARE @MaxCustID INT = xxx -- get MaxCustID
 CREATE TABLE #TmpCust (CustID INT, Type TINYINT, IsFinished BIT DEFAULT 0)
 CREATE TABLE #TmpCust_Batch (CustID INT, Type TINYINT)
 CREATE TABLE #TblType (Type TINYINT)
