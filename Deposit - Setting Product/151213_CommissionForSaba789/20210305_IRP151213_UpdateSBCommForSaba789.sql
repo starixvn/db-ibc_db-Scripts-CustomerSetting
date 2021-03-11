@@ -51,7 +51,7 @@ BEGIN
 		adiscount = CASE WHEN roleid IN (1,3) THEN 
 							CASE WHEN bettype IN (1,2,3,7,8) THEN @discount
 								 WHEN bettype IN (5,20) THEN @discount1x2
-								 WHEN bettype IN (4,6,9,10,20) THEN @discountcs END			
+								 WHEN bettype IN (4,6,9,10) THEN @discountcs END			
 						ELSE adiscount END,
 		discount = CASE WHEN roleid IN (1,2) THEN 
 							CASE WHEN bettype IN (1,2,3,7,8) THEN @discount
