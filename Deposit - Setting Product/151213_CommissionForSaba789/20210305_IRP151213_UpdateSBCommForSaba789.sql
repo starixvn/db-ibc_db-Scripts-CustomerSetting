@@ -45,18 +45,18 @@ BEGIN
 	UPDATE cs
 	SET sdiscount = CASE WHEN roleid IN (1,4) THEN 
 							CASE WHEN bettype IN (1,2,3,7,8) THEN @discount
-								 WHEN bettype = 5 THEN @discount1x2
-								 WHEN bettype IN (4,6,9,10,20) THEN @discountcs END			
+								 WHEN bettype IN (5,20) THEN @discount1x2
+								 WHEN bettype IN (4,6,9,10) THEN @discountcs END			
 						ELSE sdiscount END,
 		adiscount = CASE WHEN roleid IN (1,3) THEN 
 							CASE WHEN bettype IN (1,2,3,7,8) THEN @discount
-								 WHEN bettype = 5 THEN @discount1x2
+								 WHEN bettype IN (5,20) THEN @discount1x2
 								 WHEN bettype IN (4,6,9,10,20) THEN @discountcs END			
 						ELSE adiscount END,
 		discount = CASE WHEN roleid IN (1,2) THEN 
 							CASE WHEN bettype IN (1,2,3,7,8) THEN @discount
-								 WHEN bettype = 5 THEN @discount1x2
-								 WHEN bettype IN (4,6,9,10,20) THEN @discountcs END			
+								 WHEN bettype IN (5,20) THEN @discount1x2--money line belongs comm2
+								 WHEN bettype IN (4,6,9,10) THEN @discountcs END			
 						ELSE discount END
 	FROM Dep_CustSetting cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
