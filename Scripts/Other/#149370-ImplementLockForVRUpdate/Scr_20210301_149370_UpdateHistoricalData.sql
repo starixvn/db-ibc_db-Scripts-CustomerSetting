@@ -129,6 +129,19 @@ FROM custinfo d WITH(NOLOCK)
 WHERE VirtualMultiplier = 0	 
 	AND Enabled = 1
 
+--/*not update for dummy acc 
+SELECT DISTINCT dm.custid as DummyCustID
+INTO #Dummy
+FROM CustDirectAccount dr WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON ci.custid = dr.CustID
+	INNER JOIN custinfo dm WITH(NOLOCK) ON dm.custid IN (ci.recommend,ci.mrecommend,ci.srecommend)
+WHERE ci.roleid < dm.roleid
+
+DELETE t 
+FROM #DisbledVR_Cust t
+	INNER JOIN #Dummy d ON t.CustID = d.DummyCustID
+--*/not update for dummy acc - END 
+
 --> set Soccer VR Lock = 1 and Other Sports VR Lock = 1 
 WHILE 1 = 1
 BEGIN
