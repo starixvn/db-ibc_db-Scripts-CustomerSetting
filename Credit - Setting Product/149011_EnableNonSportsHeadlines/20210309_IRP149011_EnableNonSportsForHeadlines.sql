@@ -79,7 +79,7 @@ BEGIN
 	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLimit cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE isUpdateCasino = 1
@@ -216,7 +216,7 @@ BEGIN
 	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (2,3)
@@ -225,7 +225,7 @@ BEGIN
 	
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (1)
@@ -265,6 +265,7 @@ BEGIN
 	------------------------------------------------------------------
 	--Live casino(Allbet,WM,...)
 	DELETE @tmpSports
+	DELETE #tblCustSport
 	
 	INSERT INTO @tmpSports(sporttype)
 	SELECT sporttype
@@ -273,7 +274,7 @@ BEGIN
 		and SettingStatus = 0
 		AND settingType  = 13--status
 		AND sporttype <> 242--IBCBet Live Casino
-		
+			
 	;WITH stt AS
 	(SELECT t.custid,
 		t.roleid,
@@ -282,10 +283,10 @@ BEGIN
 		recommend
 		stt.sporttype,
 		stt.bettype,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -294,17 +295,73 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 		WHERE stt.Sporttype IN (SELECT sporttype FROM @tmpSports)
 	)
-	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
-	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend,isDisabledSuper,isDisabledMaster,isDisabledAgent)
+	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
 	FROM stt
 	WHERE 1 = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
 	
+	UPDATE t
+	SET t.UplineStakeLevelList = CASE WHEN roleid = 1 THEN	
+											CASE WHEN isDisabledAgent = 0 THEN acs.StakeLevelList
+												WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+												ELSE scs.StakeLevelList END,
+								WHEN roleid = 2 THEN	
+											CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+												ELSE scs.StakeLevelList END,
+								WHEN roleid = 3 THEN scs.StakeLevelList END
+								END				
+	FROM #tblCustSport t
+		LEFT JOIN CustStakeLevel_Agent scs WITH(NOLOCK) ON t.srecommend = scs.custid
+														AND t.sporttype = scs.sporttype
+														AND t.bettype = scs.bettype
+		LEFT JOIN CustStakeLevel_Agent mcs WITH(NOLOCK) ON t.mrecommend = mcs.custid
+														AND t.sporttype = mcs.sporttype
+														AND t.bettype = mcs.bettype												
+		LEFT JOIN CustStakeLevel_Agent acs WITH(NOLOCK) ON t.recommend = acs.custid
+														AND t.sporttype = acs.sporttype
+														AND t.bettype = acs.bettype
+	
+	UPDATE cs
+	SET cs.StakeLevelList = sr.LowestStakeLevel
+	FROM CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid 
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
+		CROSS APPLY (
+					SELECT TOP(1) ISNULL(CONVERT(VARCHAR(20), sl.StakeLevelID), '') AS LowestStakeLevel
+					FROM (
+						SELECT	CAST(val AS INT) AS val
+						FROM	dbo.strSplit(t.UplineStakeLevelList, ',')
+					) AS ss
+					INNER JOIN	dbo.StakeLevel AS sl WITH(NOLOCK)
+							ON	ss.val = sl.StakeLevelID
+					ORDER BY	sl.MaxStake, sl.MinStake
+				) sr						
+	WHERE roleid IN (2,3)	
+
+	UPDATE cs
+	SET cs.StakeLevelList = sr.LowestStakeLevel
+	FROM CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid 
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
+		CROSS APPLY (
+					SELECT TOP(1) ISNULL(CONVERT(VARCHAR(20), sl.StakeLevelID), '') AS LowestStakeLevel
+					FROM (
+						SELECT	CAST(val AS INT) AS val
+						FROM	dbo.strSplit(t.UplineStakeLevelList, ',')
+					) AS ss
+					INNER JOIN	dbo.StakeLevel AS sl WITH(NOLOCK)
+							ON	ss.val = sl.StakeLevelID
+					ORDER BY	sl.MaxStake, sl.MinStake
+				) sr						
+	WHERE roleid = 1
 	
 	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	=  CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<>BBIN
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCustSport t on cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
@@ -313,7 +370,7 @@ BEGIN
 	
 	UPDATE cs
 	SET MaxWinLimit	= CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<> BBIN
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCustSport t on cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
@@ -346,9 +403,9 @@ BEGIN
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
 	
-		UPDATE cs
+	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (2,3)
@@ -357,7 +414,7 @@ BEGIN
 	
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (1)
@@ -418,7 +475,7 @@ BEGIN
 	SELECT sporttype
 	FROM ProductSettingDetail WITH(NOLOCK)
 	WHERE ProductID = 44--RnG Lottery
-		--and SettingStatus = 0 comment when testing on local
+		--and SettingStatus = 0 --comment when testing on local
 		AND settingType  = 13--status
 		
 	;WITH stt AS
@@ -429,10 +486,10 @@ BEGIN
 		recommend
 		stt.sporttype,
 		stt.bettype,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -500,7 +557,7 @@ BEGIN
 	--winlimit 
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCustSport t on cs.custid = t.custid
 									AND cs.sporttype = t.sporttype
@@ -511,61 +568,125 @@ BEGIN
 	
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
 								AND cs.bettype = t.bettype
 	WHERE t.roleid IN (1)		
-	--End RnG Lottery-----------------------------------------------------
+	--End RnG Lottery-------------------------------------------------
 	
 	------------------------------------------------------------------
 	--Virtual games
-	SELECT @bitmapOrder = bitmapOrder
-	FROM ProductStatusProfile 
-	WHERE Sporttype = 245--Virtual games
+	DELETE #tblCustSport
 	
 	;WITH stt AS
 	(SELECT t.custid,
 		t.roleid,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		srecommend,
+		mrecommend,
+		recommend
+		stt.sporttype,
+		stt.bettype,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
 	FROM #tblCust t
+		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
 		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
 		LEFT JOIN CustProductStatus m WITH(NOLOCK) ON t.mrecommend = m.custid
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
+		WHERE stt.Sporttype = 245--Virtual Games
 	)
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend,isDisabledSuper,isDisabledMaster,isDisabledAgent)
+	SELECT custid,s.sporttype,s.bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
+	FROM stt
+		CROSS APPLY(SELECT 245 as sporttype, 4601 as bettype
+					UNION  245 as sporttype, 4602 as bettype)s
+	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+					WHEN isDisabled = 1 THEN 1 ELSE 0 END
+	
 	UPDATE t
-	SET t.isUpdateVirtualGames = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
-	FROM stt 
-		INNER JOIN #tblCust t ON stt.custid = t.custid
+	SET t.UplineStakeLevelList = CASE WHEN roleid = 1 THEN	
+											CASE WHEN isDisabledAgent = 0 THEN acs.StakeLevelList
+												WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+												ELSE scs.StakeLevelList END,
+								WHEN roleid = 2 THEN	
+											CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+												ELSE scs.StakeLevelList END,
+								WHEN roleid = 3 THEN scs.StakeLevelList END
+								END				
+	FROM #tblCustSport t
+		LEFT JOIN CustStakeLevel_Agent scs WITH(NOLOCK) ON t.srecommend = scs.custid
+														AND t.sporttype = scs.sporttype
+														AND t.bettype = scs.bettype
+		LEFT JOIN CustStakeLevel_Agent mcs WITH(NOLOCK) ON t.mrecommend = mcs.custid
+														AND t.sporttype = mcs.sporttype
+														AND t.bettype = mcs.bettype												
+		LEFT JOIN CustStakeLevel_Agent acs WITH(NOLOCK) ON t.recommend = acs.custid
+														AND t.sporttype = acs.sporttype
+														AND t.bettype = acs.bettype
+	
+	UPDATE cs
+	SET cs.StakeLevelList = sr.LowestStakeLevel
+	FROM CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid 
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
+		CROSS APPLY (
+					SELECT TOP(1) ISNULL(CONVERT(VARCHAR(20), sl.StakeLevelID), '') AS LowestStakeLevel
+					FROM (
+						SELECT	CAST(val AS INT) AS val
+						FROM	dbo.strSplit(t.UplineStakeLevelList, ',')
+					) AS ss
+					INNER JOIN	dbo.StakeLevel AS sl WITH(NOLOCK)
+							ON	ss.val = sl.StakeLevelID
+					ORDER BY	sl.MaxStake, sl.MinStake
+				) sr						
+	WHERE roleid IN (2,3)	
+
+	UPDATE cs
+	SET cs.StakeLevelList = sr.LowestStakeLevel
+	FROM CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid 
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
+		CROSS APPLY (
+					SELECT TOP(1) ISNULL(CONVERT(VARCHAR(20), sl.StakeLevelID), '') AS LowestStakeLevel
+					FROM (
+						SELECT	CAST(val AS INT) AS val
+						FROM	dbo.strSplit(t.UplineStakeLevelList, ',')
+					) AS ss
+					INNER JOIN	dbo.StakeLevel AS sl WITH(NOLOCK)
+							ON	ss.val = sl.StakeLevelID
+					ORDER BY	sl.MaxStake, sl.MinStake
+				) sr						
+	WHERE roleid = 1
 		
 	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
-	WHERE t.roleid IN (2,3)
-		AND isUpdateVirtualGames = 1
-		AND sporttype = 245
+		INNER JOIN (SELECT DISTINCT custid, sporttype
+					FROM #tblCustSport 
+					WHERE roleid IN (2,3))t on cs.custid = t.custid
+											AND cs.sporttype = t.sporttype
 	
 	UPDATE cs
 	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
+		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
-	WHERE t.roleid IN (1)
-		AND isUpdateVirtualGames = 1
-		AND sporttype = 245
+		INNER JOIN (SELECT DISTINCT custid, sporttype
+					FROM #tblCustSport 
+					WHERE roleid =1 )t on cs.custid = t.custid
+											AND cs.sporttype = t.sporttype
 	--End Virtual games-----------------------------------------------
 	
 END
-
+GO
 
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
@@ -600,6 +721,7 @@ INSERT INTO #Supers(custid,currency)
 SELECT ci.custid , ci.currency
 FROM vw_CustAccount ca WITH(NOLOCK)
 	INNER JOIN vw_customer ci WITH(NOLOCK) ON ca.custid = ci.custid
+	INNER JOIN custinfo c WITH(NOLOCK) ON ca.custid = c.custid
 WHERE ca.groupid in (
 	SELECT 	groupID 
 	FROM vw_custAccount WITH(NOLOCK)
@@ -607,8 +729,9 @@ WHERE ca.groupid in (
 					FROM custinfo WITH (NOLOCK) 
 					WHERE username IN ('CLM','S79RM','PHRM','KJH','MMMRM','M50RM','DDS','M789H','SFB','MTRE','MQRM','S59BR','S27A','VVG','S63H','S70RMB','S90R','WWR','XCN','M606HK'))
 		   )
-	AND roleid = 4
-	AND site NOT IN ('789y','IBCIndo')
+	AND ci.roleid = 4
+	AND c.enabled = 1
+	AND site NOT IN ('789y','IBCIndo','76666b')
 	AND ci.currency IN (SELECT currency FROM @tmpBetSetting)
 	
 SELECT @super_cnt = @@ROWCOUNT
