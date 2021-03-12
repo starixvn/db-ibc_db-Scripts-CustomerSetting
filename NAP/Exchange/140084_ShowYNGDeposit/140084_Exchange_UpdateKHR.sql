@@ -8,6 +8,6 @@ USE CustDB
 GO
 
 UPDATE e 
-SET OfferSite = 0  ,IsActive =1 
+SET OfferSite = 0 
 FROM Exchange e WITH (ROWLOCK)
 WHERE exchangeid = 71
