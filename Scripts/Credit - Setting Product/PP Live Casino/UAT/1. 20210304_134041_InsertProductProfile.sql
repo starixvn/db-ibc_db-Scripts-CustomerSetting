@@ -69,7 +69,9 @@ WHERE exchangeid NOT IN (13, --CNY(RMB)
 						95, --USD(USD)
 						64, --USD(UT)
 						16, --USD(Yen)
-						51 --VND(INH)
+						51, --VND(INH)
+						20, --UUS
+						72 --YNG
 					) --suported currencies
 
 
