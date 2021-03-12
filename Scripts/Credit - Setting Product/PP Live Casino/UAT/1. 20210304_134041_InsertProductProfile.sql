@@ -9,6 +9,7 @@ GO
 /*
 DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE Sporttype = 170 
 DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE Sporttype = 170 
+DELETE FROM ProductStatusSiteCurrency WITH(ROWLOCK) WHERE Sporttype = 170
 */
 
 
@@ -44,9 +45,43 @@ VALUES
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(170, 3701, @BitmapOrder)
 
+CREATE TABLE #NonOfferedCurency (Currency INT) 
+
+INSERT INTO #NonOfferedCurency (Currency)
+SELECT exchangeid 
+FROM exchange WITH(NOLOCK) 
+WHERE exchangeid NOT IN (13, --CNY(RMB)
+						6, --EUR(EURO)
+						12, --GBP(GBP)
+						5, --HKD(HK$)
+						67, --HKD(HKK)
+						47, --IDR(DDD)
+						33, --IDR(IDD)
+						34, --IDR(IDR)
+						15, --IDR(IN)
+						22, --IDR(IND)
+						45, --KRW(Won)
+						69, --MMK(MMK)
+						2, --MYR(RM)
+						43, --THB(THB)
+						35, --USD($US)
+						3, --USD(US$)
+						95, --USD(USD)
+						64, --USD(UT)
+						16, --USD(Yen)
+						51 --VND(INH)
+					) --suported currencies
+
+
+INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
+SELECT DISTINCT 170, 3701, 0, Currency, 1, 1, 1  
+FROM #NonOfferedCurency WITH (NOLOCK)
+
+DROP TABLE #NonOfferedCurency
 
 --SELECT * FROM ProductSettingDetail WHERE sporttype = 170
 --SELECT * FROM ProductStatusProfile  WHERE sporttype = 170
+--SELECT *  FROM dbo.ProductStatusSiteCurrency WHERE SportType = 170
 
 --DELETE FROM ProductSettingDetail WHERE sporttype = 170
 --DELETE FROM ProductStatusProfile WHERE Sporttype = 170

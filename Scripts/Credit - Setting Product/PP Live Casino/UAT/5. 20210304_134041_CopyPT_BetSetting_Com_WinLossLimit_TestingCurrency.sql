@@ -386,6 +386,6 @@ SELECT TOP 10 * FROM CustStakeLevel_Member A WITH (NOLOCK) WHERE A.SportType = 1
 SELECT TOP 10 * FROM CustPTSetting3rd_Agent A WITH (NOLOCK) WHERE A.SportType = 170
 SELECT TOP 10 * FROM CustPTSetting3rd_Member A WITH (NOLOCK) WHERE A.SportType = 170
 SELECT TOP 10 * FROM CustDiscount3rd_Agent A WITH (NOLOCK) WHERE A.SportType = 170
-SELECT TOP 10 * FROM CustWinLimit3rd_Member A WITH (NOLOCK) WHERE A.SportType = 170
-SELECT TOP 10 * FROM CustWinLimit3rd_Agent A WITH (NOLOCK) WHERE A.SportType = 170
+SELECT TOP 10 * FROM CustWinLossLimit_Agent A WITH (NOLOCK) WHERE A.SportType = 170
+SELECT TOP 10 * FROM CustWinLossLimit_Member A WITH (NOLOCK) WHERE A.SportType = 170
 */
