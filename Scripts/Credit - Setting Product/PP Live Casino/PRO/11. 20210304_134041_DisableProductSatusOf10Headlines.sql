@@ -28,28 +28,6 @@ GO
 	WHERE c.username NOT LIKE '3rdSuper%'
 		AND s.islicensee = 0
 		AND cu.[enabled] = 1
-		AND c.currency IN (13, --CNY(RMB)
-							6, --EUR(EURO)
-							12, --GBP(GBP)
-							5, --HKD(HK$)
-							67, --HKD(HKK)
-							47, --IDR(DDD)
-							33, --IDR(IDD)
-							34, --IDR(IDR)
-							15, --IDR(IN)
-							22, --IDR(IND)
-							45, --KRW(Won)
-							69, --MMK(MMK)
-							2, --MYR(RM)
-							43, --THB(THB)
-							35, --USD($US)
-							3, --USD(US$)
-							95, --USD(USD)
-							64, --USD(UT)
-							16, --USD(Yen)
-							51 --VND(INH)
-						) --supported currencies
-	
 	
 --------------------------------------Status Setting-------------------------------------------------		
 	DECLARE @BitmapOrder TINYINT = 33
