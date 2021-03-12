@@ -1,6 +1,6 @@
 /*
 	Created: 20210222@Johnson
-	Task: database structure for problem account [redmine:#149447]
+	Task: database structure for problem account [redmine:#149477]
 	DB: DBCUST/CustDB
 */
 

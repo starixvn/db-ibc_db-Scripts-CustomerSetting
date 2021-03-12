@@ -26,13 +26,17 @@ BEGIN
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT
 							,isUpdateNG BIT ,isUpdateVS BIT, isUpdateLottery BIT, isUpdateTableGame BIT
 							,isUpdateKeno BIT ,isUpdateRNGWar BIT)
+	CREATE TABLE #tblCustSport (custid INT, Sporttype INT, bettype INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT PRIMARY KEY(custid,sporttype,bettype))
+	
 	DECLARE @tmpSports TABLE (sporttype INT)
 	DECLARE @bitmapOrder TINYINT
 	
 	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend, isUpdateNG)
 	SELECT c.custid, c.roleid, c.srecommend, c.mrecommend, c.recommend, 
 		CASE WHEN c.roleid = 1 AND s.DisableNumber = 0 AND m.DisableNumber = 0 AND a.DisableNumber = 0 THEN 0
-			WHEN c.DisableNumber = 1 THEN 1 ELSE 0 END	
+			WHEN c.DisableNumber = 1 THEN 1 ELSE 0 END as isUpdateNG,
+		CASE WHEN c.roleid = 1 AND s.DisableCasino = 0 AND m.DisableCasino = 0 AND a.DisableCasino = 0 THEN 0
+			WHEN c.DisableCasino = 1 THEN 1 ELSE 0 END as isUpdateCasino	
 	FROM custinfo c WITH(NOLOCK)
 		LEFT JOIN custinfo s WITH(NOLOCK) ON c.srecommend = s.custid
 		LEFT JOIN custinfo m WITH(NOLOCK) ON c.mrecommend = m.custid
@@ -44,6 +48,7 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		RETURN;
 		
+	------------------------------------------------------------------
 	--NG, Happy 5
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1)	
@@ -67,36 +72,24 @@ BEGIN
 													AND cs.bettype = acs.bettype
 	WHERE cs.sporttype IN (161,164)
 		AND t.isUpdateNG = 1
+	---End NG,Happy5--------------------------------------------------
 	
-	--RNG Keno	
+	------------------------------------------------------------------
+	--RNG Casino
+	--winlimit
 	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)	
-							OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
-							OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN scs.minbet ELSE cs.minbet END,
-		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)		
-							OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
-							OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0.1 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN @MaxBet ELSE cs.maxbet END,					
-		cs.MaxPerGameType = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)
-									OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
-									OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0.1 
-								WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN @MPM ELSE cs.MaxPerGameType END,
-		cs.isDisabled = 0		
-	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.GameTypeID = scs.GameTypeID													
-		LEFT JOIN CustGameType mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.GameTypeID = mcs.GameTypeID												
-		LEFT JOIN CustGameType acs WITH(NOLOCK) ON acs.custid = t.recommend 
-													AND cs.GameTypeID = acs.GameTypeID													
-	WHERE cs.GameTypeID BETWEEN 1 AND 29
-		AND 1 = CASE WHEN t.roleid = 1 AND scs.IsDisabled = 0 AND mcs.IsDisabled = 0 AND acs.IsDisabled = 0 THEN 0
-					WHEN cs.IsDisabled = 1 THEN 1 ELSE 0 END	
-
+	SET MaxWinLimit	= 3,
+		MaxLossLimit = @MaxLoss
+	FROM CustWinLimit cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t on cs.custid = t.custid
+	WHERE isUpdateCasino = 1
+		AND sporttype = 208	
+	----End RnG Casino------------------------------------------------
+		
 	------------------------------------------------------------------				
 	--virtual sports
+	DELETE @tmpSports
+	
 	INSERT INTO @tmpSports(sporttype)
 	SELECT sporttype
 	FROM ProductSettingDetail WITH(NOLOCK)
@@ -124,7 +117,7 @@ BEGIN
 	SET t.isUpdateVS = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 							WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
-		INNER JOIN t ON stt.custid = t.custid
+		INNER JOIN #tblCust t ON stt.custid = t.custid
 		
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
@@ -220,7 +213,7 @@ BEGIN
 		AND t.isUpdateVS = 1
 		AND roleid IN (1)
 	
-	--winlimit vs
+	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	= 3,
 		MaxLossLimit = @MaxLoss
@@ -239,12 +232,100 @@ BEGIN
 		AND isUpdateVS = 1
 		AND sporttype = 180	
 	--End VS--------------------------------------------------------------
+		
+	------------------------------------------------------------------
+	--RNG Keno	
+	UPDATE cs
+	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)	
+							OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
+							OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0 
+						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN scs.minbet ELSE cs.minbet END,
+		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)		
+							OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
+							OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0.1 
+						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN @MaxBet ELSE cs.maxbet END,					
+		cs.MaxPerGameType = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.MaxPerGameType = 0.1)
+									OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.MaxPerGameType = 0.1)
+									OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.MaxPerGameType = 0.1) THEN 0.1 
+								WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.MaxPerGameType <> 0.1 THEN @MPM ELSE cs.MaxPerGameType END,
+		cs.isDisabled = 0		
+	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t ON cs.custid = t.custid
+		INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
+													AND cs.GameTypeID = scs.GameTypeID													
+		LEFT JOIN CustGameType mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
+													AND cs.GameTypeID = mcs.GameTypeID												
+		LEFT JOIN CustGameType acs WITH(NOLOCK) ON acs.custid = t.recommend 
+													AND cs.GameTypeID = acs.GameTypeID													
+	WHERE cs.GameTypeID BETWEEN 1 AND 29
+		AND 1 = CASE WHEN t.roleid = 1 AND scs.IsDisabled = 0 AND mcs.IsDisabled = 0 AND acs.IsDisabled = 0 THEN 0
+					WHEN cs.IsDisabled = 1 THEN 1 ELSE 0 END	
+	----End RnG Keno--------------------------------------------------
 	
 	------------------------------------------------------------------
-	--Lottery
+	--Live casino(Allbet,WM,...)
+	DELETE @tmpSports
+	
+	INSERT INTO @tmpSports(sporttype)
+	SELECT sporttype
+	FROM ProductSettingDetail WITH(NOLOCK)
+	WHERE ProductID = 41--live casino
+		and SettingStatus = 0
+		AND settingType  = 13--status
+		AND sporttype <> 242--IBCBet Live Casino
+		
+	;WITH stt AS
+	(SELECT t.custid,
+		t.roleid,
+		srecommend,
+		mrecommend,
+		recommend
+		stt.sporttype,
+		stt.bettype,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+	FROM #tblCust t
+		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
+		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
+		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
+		LEFT JOIN CustProductStatus m WITH(NOLOCK) ON t.mrecommend = m.custid
+		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
+		WHERE stt.Sporttype IN (SELECT sporttype FROM @tmpSports)
+	)
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
+	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
+	FROM stt
+	WHERE 1 = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+					WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	
+	
+	--winlimit
+	UPDATE cs
+	SET MaxWinLimit	=  CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<>BBIN
+		MaxLossLimit = @MaxLoss
+	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t on cs.custid = t.custid
+								AND cs.sporttype = t.sporttype
+								AND cs.bettype = t.bettype
+	WHERE t.roleid IN (2,3)		
+	
+	UPDATE cs
+	SET MaxWinLimit	= CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<> BBIN
+		MaxLossLimit = @MaxLoss
+	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCustSport t on cs.custid = t.custid
+								AND cs.sporttype = t.sporttype
+								AND cs.bettype = t.bettype	
+	WHERE t.roleid IN (1)			
+	--End Live casino------------------------------------------------------
+	
+	--------------------------------------------------------------------
+	--Macau Games
 	SELECT @bitmapOrder = bitmapOrder
 	FROM ProductStatusProfile 
-	WHERE Sporttype = 220--vs
+	WHERE Sporttype = 212--Macau Games
 	
 	;WITH stt AS
 	(SELECT t.custid,
@@ -260,10 +341,111 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 	)
 	UPDATE t
-	SET t.isUpdateLottery = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-								WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	SET t.isUpdateMacauGames = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
-		INNER JOIN t ON stt.custid = t.custid
+		INNER JOIN #tblCust t ON stt.custid = t.custid
+	
+		UPDATE cs
+	SET MaxWinLimit	= 3,
+		MaxLossLimit = @MaxLoss
+	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t on cs.custid = t.custid
+	WHERE t.roleid IN (2,3)
+		AND isUpdateMacauGames = 1
+		AND sporttype = 212
+	
+	UPDATE cs
+	SET MaxWinLimit	= 3,
+		MaxLossLimit = @MaxLoss
+	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t on cs.custid = t.custid
+	WHERE t.roleid IN (1)
+		AND isUpdateMacauGames = 1
+		AND sporttype = 212	
+	--End Macau Games----------------------------------------------------------------
+	
+	
+	------------------------------------------------------------------
+	--Fishing World	
+	SELECT @bitmapOrder = bitmapOrder
+	FROM ProductStatusProfile 
+	WHERE Sporttype = 219--Fishing World
+	
+	;WITH stt AS
+	(SELECT t.custid,
+		t.roleid,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+	FROM #tblCust t
+		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
+		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
+		LEFT JOIN CustProductStatus m WITH(NOLOCK) ON t.mrecommend = m.custid
+		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
+	)
+	UPDATE t
+	SET t.isUpdateFishingWorld = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	FROM stt 
+		INNER JOIN #tblCust t ON stt.custid = t.custid
+		
+	--winlimit
+	UPDATE cs
+	SET MaxWinLimit	= 3
+	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t on cs.custid = t.custid
+	WHERE t.roleid IN (2,3)
+		AND isUpdateFishingWorld = 1
+		AND sporttype = 219
+	
+	UPDATE cs
+	SET MaxWinLimit	= 3
+	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
+		INNER JOIN #tblCust t on cs.custid = t.custid
+	WHERE t.roleid IN (1)
+		AND isUpdateFishingWorld = 1
+		AND sporttype = 219	
+	--End Fishing World-----------------------------------------------
+	
+	------------------------------------------------------------------
+	--Lottery,Sports Lottery will go-live 18-Mar
+	DELETE @tmpSports
+	DELETE #tblCustSport
+	
+	INSERT INTO @tmpSports(sporttype)
+	SELECT sporttype
+	FROM ProductSettingDetail WITH(NOLOCK)
+	WHERE ProductID = 44--RnG Lottery
+		--and SettingStatus = 0 comment when testing on local
+		AND settingType  = 13--status
+		
+	;WITH stt AS
+	(SELECT t.custid,
+		t.roleid,
+		srecommend,
+		mrecommend,
+		recommend
+		stt.sporttype,
+		stt.bettype,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+	FROM #tblCust t
+		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
+		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
+		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
+		LEFT JOIN CustProductStatus m WITH(NOLOCK) ON t.mrecommend = m.custid
+		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
+		WHERE stt.Sporttype IN (SELECT sporttype FROM @tmpSports)
+	)
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
+	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
+	FROM stt
+	WHERE 1 = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+					WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
 		
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
@@ -276,16 +458,16 @@ BEGIN
 								OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0.1 
 							WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN @MPM ELSE cs.maxpermatch END
 	FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype	
 		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
 													AND cs.sporttype = scs.sporttype
 													AND cs.bettype = scs.bettype
 		LEFT JOIN CustBetSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
 													AND cs.sporttype = mcs.sporttype
 													AND cs.bettype = mcs.bettype		
-	WHERE cs.sporttype = 220
-		AND t.isUpdateLottery = 1
-		AND roleid IN (2,3)
+	WHERE roleid IN (2,3)
 		
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
@@ -301,7 +483,9 @@ BEGIN
 							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
 						ELSE @MPM END,				
 	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
+		INNER JOIN #tblCustSport t ON cs.custid = t.custid
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
 		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
 													AND cs.sporttype = scs.sporttype
 													AND cs.bettype = scs.bettype
@@ -311,16 +495,16 @@ BEGIN
 		LEFT JOIN CustBetSetting3rd_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend 
 													AND cs.sporttype = acs.sporttype
 													AND cs.bettype = acs.bettype
-	WHERE cs.sporttype = 220
-		AND t.isUpdateLottery = 1
-		AND roleid IN (1)
+	WHERE roleid IN (1)
 	
 	--winlimit 
 	UPDATE cs
 	SET MaxWinLimit	= 3,
 		MaxLossLimit = @MaxLoss
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
+		INNER JOIN #tblCustSport t on cs.custid = t.custid
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
 	WHERE t.roleid IN (2,3)
 		AND isUpdateLottery = 1
 		AND sporttype = 220
@@ -330,16 +514,16 @@ BEGIN
 		MaxLossLimit = @MaxLoss
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
-	WHERE t.roleid IN (1)
-		AND isUpdateLottery = 1
-		AND sporttype = 220	
-	--End Lottery-----------------------------------------------------
+								AND cs.sporttype = t.sporttype
+								AND cs.bettype = t.bettype
+	WHERE t.roleid IN (1)		
+	--End RnG Lottery-----------------------------------------------------
 	
 	------------------------------------------------------------------
-	--Table Game
+	--Virtual games
 	SELECT @bitmapOrder = bitmapOrder
-	FROM ProductStatusProfile WITH(NOLOCK)
-	WHERE Sporttype = 222--Table Game
+	FROM ProductStatusProfile 
+	WHERE Sporttype = 245--Virtual games
 	
 	;WITH stt AS
 	(SELECT t.custid,
@@ -355,70 +539,20 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 	)
 	UPDATE t
-	SET t.isUpdateTableGame = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-								WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	SET t.isUpdateVirtualGames = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
-		INNER JOIN t ON stt.custid = t.custid
+		INNER JOIN #tblCust t ON stt.custid = t.custid
 		
-	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN scs.minbet ELSE cs.minbet END,
-		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0.1 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN @MaxBet ELSE cs.maxbet END,
-		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-								OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0.1 
-							WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN @MPM ELSE cs.maxpermatch END
-	FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.sporttype = scs.sporttype
-													AND cs.bettype = scs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.sporttype = mcs.sporttype
-													AND cs.bettype = mcs.bettype		
-	WHERE cs.sporttype = 222
-		AND t.isUpdateTableGame = 1
-		AND roleid IN (2,3)
-		
-	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0 
-						ELSE scs.minbet END,
-		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MaxBet END,
-		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MPM END,				
-	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.sporttype = scs.sporttype
-													AND cs.bettype = scs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.sporttype = mcs.sporttype
-													AND cs.bettype = mcs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend 
-													AND cs.sporttype = acs.sporttype
-													AND cs.bettype = acs.bettype
-	WHERE cs.sporttype = 222
-		AND t.isUpdateTableGame = 1
-		AND roleid IN (1)
-	
-	--winlimit 
+	--winlimit
 	UPDATE cs
 	SET MaxWinLimit	= 3,
 		MaxLossLimit = @MaxLoss
 	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (2,3)
-		AND isUpdateTableGame = 1
-		AND sporttype = 222
+		AND isUpdateVirtualGames = 1
+		AND sporttype = 245
 	
 	UPDATE cs
 	SET MaxWinLimit	= 3,
@@ -426,106 +560,9 @@ BEGIN
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t on cs.custid = t.custid
 	WHERE t.roleid IN (1)
-		AND isUpdateTableGame = 1
-		AND sporttype = 222
-	--End Table Game-----------------------------------------------------
-	
-	------------------------------------------------------------------
-	--RNG War
-	SELECT @bitmapOrder = bitmapOrder
-	FROM ProductStatusProfile WITH(NOLOCK)
-	WHERE Sporttype = 224--RNG War
-	
-	;WITH stt AS
-	(SELECT t.custid,
-		t.roleid,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
-	FROM #tblCust t
-		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
-		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
-		LEFT JOIN CustProductStatus m WITH(NOLOCK) ON t.mrecommend = m.custid
-		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
-	)
-	UPDATE t
-	SET t.isUpdateRNGWar = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-								WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
-	FROM stt 
-		INNER JOIN t ON stt.custid = t.custid
-		
-	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN scs.minbet ELSE cs.minbet END,
-		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0.1 
-						WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN @MaxBet ELSE cs.maxbet END,
-		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-								OR (t.roleid = 2 AND mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1) THEN 0.1 
-							WHEN cs.minbet <> 0 AND cs.maxbet <> 0.1 AND cs.maxpermatch <> 0.1 THEN @MPM ELSE cs.maxpermatch END
-	FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.sporttype = scs.sporttype
-													AND cs.bettype = scs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.sporttype = mcs.sporttype
-													AND cs.bettype = mcs.bettype		
-	WHERE cs.sporttype = 224
-		AND t.isUpdateRNGWar = 1
-		AND roleid IN (2,3)
-		
-	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0 
-						ELSE scs.minbet END,
-		cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MaxBet END,
-		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
-							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
-							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MPM END,				
-	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.sporttype = scs.sporttype
-													AND cs.bettype = scs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.sporttype = mcs.sporttype
-													AND cs.bettype = mcs.bettype
-		LEFT JOIN CustBetSetting3rd_Agent acs WITH(NOLOCK) ON acs.custid = t.recommend 
-													AND cs.sporttype = acs.sporttype
-													AND cs.bettype = acs.bettype
-	WHERE cs.sporttype = 224
-		AND t.isUpdateRNGWar = 1
-		AND roleid IN (1)
-	
-	--winlimit 
-	UPDATE cs
-	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
-	FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
-	WHERE t.roleid IN (2,3)
-		AND cs.sporttype = 224
-		AND t.isUpdateRNGWar = 1
-	
-	UPDATE cs
-	SET MaxWinLimit	= 3,
-		MaxLossLimit = @MaxLoss
-	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
-	WHERE t.roleid IN (1)
-		AND cs.sporttype = 224
-		AND t.isUpdateRNGWar = 1
-	--End RNG War-----------------------------------------------------
-	
-	
+		AND isUpdateVirtualGames = 1
+		AND sporttype = 245
+	--End Virtual games-----------------------------------------------
 	
 END
 

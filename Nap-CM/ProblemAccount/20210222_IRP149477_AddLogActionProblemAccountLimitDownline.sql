@@ -1,6 +1,6 @@
 /*
 	Created: 20210222@Johnson
-	Task: add new log action for problem account limit downline[redmine:#149447]
+	Task: add new log action for problem account limit downline[redmine:#149477]
 	DB: DBLOG/bodb_CustomerLog
 */
 
