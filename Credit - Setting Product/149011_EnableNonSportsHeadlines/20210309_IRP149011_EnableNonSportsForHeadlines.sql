@@ -9,8 +9,7 @@ ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
 	@srecommend INT, 
 	@MaxBet MONEY,
 	@MaxLoss MONEY,
-	@MMP 	MONEY,
-	@MPB	MONEY,
+	@MPM 	MONEY,	
 	@target VARCHAR(20)	
 AS
 BEGIN
@@ -22,16 +21,33 @@ BEGIN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
 	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
+	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN	
+	IF dbo.f_CheckRepTable('CustGameType') = 0 RETURN
+	IF dbo.f_CheckRepTable('StakeLevel') = 0 RETURN
+	IF dbo.f_CheckRepTable('custsetting3rd') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLimit') = 0 RETURN
+	IF dbo.f_CheckRepTable('ProductSettingDetail') = 0 RETURN
+	IF dbo.f_CheckRepTable('ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	
-	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT
-							,isUpdateNG BIT ,isUpdateVS BIT, isUpdateLottery BIT, isUpdateTableGame BIT
-							,isUpdateKeno BIT ,isUpdateRNGWar BIT)
-	CREATE TABLE #tblCustSport (custid INT, Sporttype INT, bettype INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT PRIMARY KEY(custid,sporttype,bettype))
-	
+	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT,
+							isUpdateNG BIT, isUpdateCasino BIT, isUpdateVS BIT, isUpdateFishingWorld BIT, isUpdateMacauGames BIT)
+							
+	CREATE TABLE #tblCustSport (custid INT, Sporttype INT, bettype INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, UplineStakeLevelList VARCHAR(200),
+								isDisabledSuper BIT, isDisabledMaster BIT, isDisabledAgent BIT PRIMARY KEY(custid,sporttype,bettype))
+								
+		
 	DECLARE @tmpSports TABLE (sporttype INT)
 	DECLARE @bitmapOrder TINYINT
 	
-	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend, isUpdateNG)
+	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend, isUpdateNG, isUpdateCasino)
 	SELECT c.custid, c.roleid, c.srecommend, c.mrecommend, c.recommend, 
 		CASE WHEN c.roleid = 1 AND s.DisableNumber = 0 AND m.DisableNumber = 0 AND a.DisableNumber = 0 THEN 0
 			WHEN c.DisableNumber = 1 THEN 1 ELSE 0 END as isUpdateNG,
@@ -41,9 +57,9 @@ BEGIN
 		LEFT JOIN custinfo s WITH(NOLOCK) ON c.srecommend = s.custid
 		LEFT JOIN custinfo m WITH(NOLOCK) ON c.mrecommend = m.custid
 		LEFT JOIN custinfo a WITH(NOLOCK) ON c.recommend = a.custid
-	WHERE srecommend = @srecommend
-		AND roleid IN (1,2,3)
-		AND enabled = 1
+	WHERE c.srecommend = @srecommend
+		AND c.roleid IN (1,2,3)
+		AND c.enabled = 1
 	
 	IF @@ROWCOUNT = 0
 		RETURN;
@@ -97,7 +113,7 @@ BEGIN
 		AND settingType IN (2,20)
 	
 	SELECT @bitmapOrder = bitmapOrder
-	FROM ProductStatusProfile 
+	FROM ProductStatusProfile WITH(NOLOCK)
 	WHERE Sporttype = 180--vs
 	
 	;WITH stt AS
@@ -115,7 +131,7 @@ BEGIN
 	)
 	UPDATE t
 	SET t.isUpdateVS = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-							WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+							WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
 		
@@ -153,7 +169,7 @@ BEGIN
 		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
 							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
 							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MPM END,				
+						ELSE @MPM END			
 	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
 		INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
@@ -280,7 +296,7 @@ BEGIN
 		t.roleid,
 		srecommend,
 		mrecommend,
-		recommend
+		recommend,
 		stt.sporttype,
 		stt.bettype,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
@@ -298,18 +314,18 @@ BEGIN
 	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend,isDisabledSuper,isDisabledMaster,isDisabledAgent)
 	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
 	FROM stt
-	WHERE 1 = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-					WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	
 	UPDATE t
 	SET t.UplineStakeLevelList = CASE WHEN roleid = 1 THEN	
 											CASE WHEN isDisabledAgent = 0 THEN acs.StakeLevelList
 												WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
-												ELSE scs.StakeLevelList END,
-								WHEN roleid = 2 THEN	
-											CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
-												ELSE scs.StakeLevelList END,
-								WHEN roleid = 3 THEN scs.StakeLevelList END
+												ELSE scs.StakeLevelList END
+										WHEN roleid = 2 THEN	
+													CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+														ELSE scs.StakeLevelList END
+										WHEN roleid = 3 THEN scs.StakeLevelList 
 								END				
 	FROM #tblCustSport t
 		LEFT JOIN CustStakeLevel_Agent scs WITH(NOLOCK) ON t.srecommend = scs.custid
@@ -381,7 +397,7 @@ BEGIN
 	--------------------------------------------------------------------
 	--Macau Games
 	SELECT @bitmapOrder = bitmapOrder
-	FROM ProductStatusProfile 
+	FROM ProductStatusProfile WITH(NOLOCK)
 	WHERE Sporttype = 212--Macau Games
 	
 	;WITH stt AS
@@ -399,7 +415,7 @@ BEGIN
 	)
 	UPDATE t
 	SET t.isUpdateMacauGames = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+									WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
 	
@@ -444,7 +460,7 @@ BEGIN
 	)
 	UPDATE t
 	SET t.isUpdateFishingWorld = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-									WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+									WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
 		
@@ -483,7 +499,7 @@ BEGIN
 		t.roleid,
 		srecommend,
 		mrecommend,
-		recommend
+		recommend,
 		stt.sporttype,
 		stt.bettype,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
@@ -501,8 +517,8 @@ BEGIN
 	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
 	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
 	FROM stt
-	WHERE 1 = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
-					WHEN c.isDisabled = 1 THEN 1 ELSE 0 END
+	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 		
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
@@ -538,7 +554,7 @@ BEGIN
 		cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet = 0.1 AND scs.maxpermatch = 0.1)	
 							OR (mcs.minbet = 0 AND mcs.maxbet = 0.1 AND mcs.maxpermatch = 0.1)
 							OR (acs.minbet = 0 AND acs.maxbet = 0.1 AND acs.maxpermatch = 0.1) THEN 0.1 
-						ELSE @MPM END,				
+						ELSE @MPM END			
 	FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCustSport t ON cs.custid = t.custid
 									AND cs.sporttype = t.sporttype
@@ -563,14 +579,12 @@ BEGIN
 									AND cs.sporttype = t.sporttype
 									AND cs.bettype = t.bettype
 	WHERE t.roleid IN (2,3)
-		AND isUpdateLottery = 1
-		AND sporttype = 220
-	
+			
 	UPDATE cs
 	SET MaxWinLimit	= 3,
 		MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
 	FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tblCust t on cs.custid = t.custid
+		INNER JOIN #tblCustSport t on cs.custid = t.custid
 								AND cs.sporttype = t.sporttype
 								AND cs.bettype = t.bettype
 	WHERE t.roleid IN (1)		
@@ -585,7 +599,7 @@ BEGIN
 		t.roleid,
 		srecommend,
 		mrecommend,
-		recommend
+		recommend,
 		stt.sporttype,
 		stt.bettype,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
@@ -604,7 +618,7 @@ BEGIN
 	SELECT custid,s.sporttype,s.bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
 	FROM stt
 		CROSS APPLY(SELECT 245 as sporttype, 4601 as bettype
-					UNION  245 as sporttype, 4602 as bettype)s
+					UNION  SELECT 245 as sporttype, 4602 as bettype)s
 	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	
@@ -612,11 +626,11 @@ BEGIN
 	SET t.UplineStakeLevelList = CASE WHEN roleid = 1 THEN	
 											CASE WHEN isDisabledAgent = 0 THEN acs.StakeLevelList
 												WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
-												ELSE scs.StakeLevelList END,
-								WHEN roleid = 2 THEN	
-											CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
-												ELSE scs.StakeLevelList END,
-								WHEN roleid = 3 THEN scs.StakeLevelList END
+												ELSE scs.StakeLevelList END
+									WHEN roleid = 2 THEN	
+												CASE WHEN isDisabledMaster = 0 THEN mcs.StakeLevelList
+													ELSE scs.StakeLevelList END
+									WHEN roleid = 3 THEN scs.StakeLevelList 
 								END				
 	FROM #tblCustSport t
 		LEFT JOIN CustStakeLevel_Agent scs WITH(NOLOCK) ON t.srecommend = scs.custid
@@ -687,19 +701,16 @@ BEGIN
 	
 END
 GO
-
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
----
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @srecommend INT,		
 		@currency INT,	
 		@MaxBet MONEY,
-		@MPM MONEY,
-		@MPB MONEY,
+		@MPM MONEY,		
 		@MaxLoss MONEY,
 		@super_cnt INT, 
 		@index INT = 0
@@ -712,10 +723,8 @@ SELECT 2, 50, 500, 100, 1500 --RM
 UNION SELECT 5, 90, 900,180,2700 --HK$
 UNION SELECT 13, 90, 900,180,2700 --RMB
 UNION SELECT 33, 180,1800,360,5400 --IDD
-UNION SELECT 22, 180,1800,360,5400 --IND
-UNION SELECT 47, 180,1800,360,5400 --DDD
-UNION SELECT 4, 500, 5000,1000,15000 --TB
 UNION SELECT 43, 500, 5000,1000,15000 --THB
+UNION SELECT 67, 50, 500, 100, 1500 --HKK
 
 INSERT INTO #Supers(custid,currency)
 SELECT ci.custid , ci.currency
@@ -753,8 +762,7 @@ BEGIN
 	IF @@ROWCOUNT = 0 BREAK
 	
 	SELECT @MaxBet = MaxBet,
-		@MPM = MPM,
-		@MPB = MPB,
+		@MPM = MPM,		
 		@MaxLoss = MaxLoss
 	FROM @tmpBetSetting
 	WHERE currency =@currency
@@ -765,9 +773,8 @@ BEGIN
 	
 	EXEC dbo.[Acc_CustSetting3rd_19] 
 			@srecommend = @srecommend, 
-			@MaxBet = MaxBet,
-			@MPM = @MPM,
-			@MPB = @MPB,
+			@MaxBet = @MaxBet,
+			@MPM = @MPM,			
 			@MaxLoss = @MaxLoss,
 			@target = 'REPLICATED' 	
 				
@@ -777,4 +784,86 @@ GO
 -- END STEP 2: Run this SP at replicated DB -----
 -----------------------------------------------------------------------------------
 	  
+	  
+
+---
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST/CustDB SERVER -----
+--------------------------------------------------------------------------------------
+DECLARE @srecommend INT,		
+		@currency INT,	
+		@MaxBet MONEY,
+		@MPM MONEY,		
+		@MaxLoss MONEY,
+		@super_cnt INT, 
+		@index INT = 0
+		
+CREATE TABLE #Supers(CustID INT, currency INT, isfinished BIT DEFAULT(0))
+DECLARE @tmpBetSetting TABLE(currency INT, MaxBet MONEY, MPM MONEY, MPB MONEY, MaxLoss MONEY)
+
+INSERT INTO @tmpBetSetting(currency,MaxBet,MPM,MPB,MaxLoss)
+SELECT 2, 50, 500, 100, 1500 --RM
+UNION SELECT 5, 90, 900,180,2700 --HK$
+UNION SELECT 13, 90, 900,180,2700 --RMB
+UNION SELECT 33, 180,1800,360,5400 --IDD
+UNION SELECT 43, 500, 5000,1000,15000 --THB
+UNION SELECT 67, 50, 500, 100, 1500 --HKK
+
+INSERT INTO #Supers(custid,currency)
+SELECT ci.custid , ci.currency
+FROM vw_CustAccount ca WITH(NOLOCK)
+	INNER JOIN vw_customer ci WITH(NOLOCK) ON ca.custid = ci.custid
+	INNER JOIN custinfo c WITH(NOLOCK) ON ca.custid = c.custid
+WHERE ca.groupid in (
+	SELECT 	groupID 
+	FROM vw_custAccount WITH(NOLOCK)
+	WHERE custid IN (SELECT custid 
+					FROM custinfo WITH (NOLOCK) 
+					WHERE username IN ('CLM','S79RM','PHRM','KJH','MMMRM','M50RM','DDS','M789H','SFB','MTRE','MQRM','S59BR','S27A','VVG','S63H','S70RMB','S90R','WWR','XCN','M606HK'))
+		   )
+	AND ci.roleid = 4
+	AND c.enabled = 1
+	AND site NOT IN ('789y','IBCIndo','76666b')
+	AND ci.currency IN (SELECT currency FROM @tmpBetSetting)
+	
+SELECT @super_cnt = @@ROWCOUNT
+
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #supers
+	SET isfinished = 1
+		,@currency = currency
+		,@srecommend = custid		
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SELECT @MaxBet = MaxBet,
+		@MPM = MPM,		
+		@MaxLoss = MaxLoss
+	FROM @tmpBetSetting
+	WHERE currency =@currency
+	
+	SET @index = @index + 1
+	
+	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	
+	EXEC dbo.[Acc_CustSetting3rd_19] 
+			@srecommend = @srecommend, 
+			@MaxBet = @MaxBet,
+			@MPM = @MPM,			
+			@MaxLoss = @MaxLoss,
+			@target = 'DBCUST' 	
+				
+	WAITFOR DELAY '00:00:00.280'			
+END		
+GO	
+-- END STEP 3: Run this SP at DBCUST/CustDB -----
+-----------------------------------------------------------------------------------
+	  	  
 	  
