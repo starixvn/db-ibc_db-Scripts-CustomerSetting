@@ -1,6 +1,6 @@
 /*
 	Created: 20210309@Johnson
-	Task:  enable non-sports for the list of headlines
+	Task:  update bet settings, winlimit non-sports for the list of headlines
 	DB: DBCUST/CustDB
 */
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB
