@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20210317@Eden
-	Task: Update soccer parlay betlimit follow soccer hdp for reactivate accounts - missing logic for soccer parlay [RM#149370]
+	Task: Update soccer parlay betlimit follow soccer hdp for reactivate accounts - missing logic for soccer parlay [RM#151846]
 	DB: DBCUST/CustDB
 */
 USE CustDB
