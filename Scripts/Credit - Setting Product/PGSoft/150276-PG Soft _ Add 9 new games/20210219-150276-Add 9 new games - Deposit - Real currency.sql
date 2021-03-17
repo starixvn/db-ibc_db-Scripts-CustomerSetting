@@ -347,6 +347,7 @@ SELECT 6069 ,'2'  ,'200'	,2	,200    ,51   UNION ALL --VND(INH)
 SELECT 6070 ,'2'  ,'2000'	,2	,2000    ,51    --VND(INH)
 --#endregion insert data to temp table
 
+
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #Dep_StakeLevel_Temp t
