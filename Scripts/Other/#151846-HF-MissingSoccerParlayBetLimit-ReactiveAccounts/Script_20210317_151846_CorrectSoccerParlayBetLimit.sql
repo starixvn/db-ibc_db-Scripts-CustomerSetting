@@ -34,5 +34,6 @@ FROM Dep_CustSetting c WITH(ROWLOCK)
 	INNER JOIN Soccer_BetLimit sc ON c.custid = sc.custid
 WHERE c.custid IN( SELECT custid FROM #ReactiveCust)
 	AND sporttype = 1 AND bettype = 9
+	AND NOT ( c.minbet = sc.minbet AND c.maxbet = sc.maxbet)
 
 DROP TABLE #ReactiveCust
