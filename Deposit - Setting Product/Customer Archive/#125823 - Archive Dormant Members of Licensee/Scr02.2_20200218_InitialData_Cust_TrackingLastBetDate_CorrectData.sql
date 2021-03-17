@@ -79,14 +79,14 @@ UNION
 SELECT b.custid
 FROM #Agent c
 	INNER JOIN translog b with (NOLOCK) ON c.AgentID = b.recommend
-UNION
-SELECT b.custid
-FROM #Agent c
-	INNER JOIN DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK) ON c.AgentID = b.recommend
-UNION
-SELECT b.custid
-FROM #Agent c
-	INNER JOIN DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK) ON c.AgentID = b.recommend
+--UNION
+--SELECT b.custid
+--FROM #Agent c
+--	INNER JOIN DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK) ON c.AgentID = b.recommend
+--UNION
+--SELECT b.custid
+--FROM #Agent c
+--	INNER JOIN DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK) ON c.AgentID = b.recommend
 UNION
 SELECT b.custid
 FROM #Agent c
@@ -184,35 +184,35 @@ BEGIN
 	FROM #tmpMember a
 		INNER JOIN #BettingMember b ON a.custID = b.custid
 
-	----> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino
-	TRUNCATE TABLE #BettingMember
-	INSERT INTO #BettingMember(custid,LastBetDate)
-	SELECT b.custid, MAX(b.transdate) AS transdate
-	FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK)
-		INNER JOIN #tmpMember t ON t.custid = b.custid
-	WHERE b.transdate > t.LastBetDate 
-	GROUP BY b.custid
+	------> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino
+	--TRUNCATE TABLE #BettingMember
+	--INSERT INTO #BettingMember(custid,LastBetDate)
+	--SELECT b.custid, MAX(b.transdate) AS transdate
+	--FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK)
+	--	INNER JOIN #tmpMember t ON t.custid = b.custid
+	--WHERE b.transdate > t.LastBetDate 
+	--GROUP BY b.custid
 
-	UPDATE a
-	SET  a.LastBetDate = b.LastBetDate
-		,a.IsUpdate = 1
-	FROM #tmpMember a
-		INNER JOIN #BettingMember b ON a.custID = b.custid
+	--UPDATE a
+	--SET  a.LastBetDate = b.LastBetDate
+	--	,a.IsUpdate = 1
+	--FROM #tmpMember a
+	--	INNER JOIN #BettingMember b ON a.custID = b.custid
 
-	----> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
-	TRUNCATE TABLE #BettingMember
-	INSERT INTO #BettingMember(custid,LastBetDate)
-	SELECT b.custid, MAX(b.transdate) AS transdate
-	FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK)
-		INNER JOIN #tmpMember t ON t.custid = b.custid
-	WHERE b.transdate > t.LastBetDate 
-	GROUP BY b.custid
+	------> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
+	--TRUNCATE TABLE #BettingMember
+	--INSERT INTO #BettingMember(custid,LastBetDate)
+	--SELECT b.custid, MAX(b.transdate) AS transdate
+	--FROM DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK)
+	--	INNER JOIN #tmpMember t ON t.custid = b.custid
+	--WHERE b.transdate > t.LastBetDate 
+	--GROUP BY b.custid
 
-	UPDATE a
-	SET  a.LastBetDate = b.LastBetDate
-		,a.IsUpdate = 1
-	FROM #tmpMember a
-		INNER JOIN #BettingMember b ON a.custID = b.custid
+	--UPDATE a
+	--SET  a.LastBetDate = b.LastBetDate
+	--	,a.IsUpdate = 1
+	--FROM #tmpMember a
+	--	INNER JOIN #BettingMember b ON a.custID = b.custid
 
 	UPDATE a
 	SET a.LastBetDate = b.LastBetDate
@@ -220,6 +220,44 @@ BEGIN
 		INNER JOIN #tmpMember b ON a.custID = b.custid
 	WHERE b.IsUpdate = 1
 
+END
+
+--> Process scan DBPTCS.bodb_PlaytechCS tables
+TRUNCATE TABLE #BettingMember
+INSERT INTO #BettingMember(custid,LastBetDate)
+SELECT custid, transdate
+FROM OPENQUERY (DBPTCS, ';WITH TMP AS(
+							SELECT b.custid, b.transdate
+							FROM bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK)
+							WHERE transdate >= CONVERT(DATE,GETDATE() - 14)
+							UNION ALL
+							SELECT b.custid, b.transdate
+							FROM bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK)
+							WHERE transdate >= CONVERT(DATE,GETDATE() - 14)
+						)
+						SELECT CustID, MAX(transdate) AS transdate 
+						FROM tmp
+						GROUP BY CustID')
+
+IF EXISTS( SELECT 1 FROM #BettingMember)
+	BEGIN
+	WHILE ( 1 = 1 )
+	BEGIN
+		TRUNCATE TABLE #tmpMember
+
+		DELETE TOP (@CheckBettrans_CustPerBatch) a
+		OUTPUT deleted.custid,deleted.LastBetDate INTO #tmpMember(custid,LastBetDate)
+		FROM #BettingMember a
+		
+		IF (@@ROWCOUNT = 0) 
+			BREAK
+
+		UPDATE a
+		SET a.LastBetDate = b.LastBetDate
+		FROM Cust_TrackingLastBetDate a WITH(ROWLOCK)
+			INNER JOIN #tmpMember b ON a.custID = b.custid
+		WHERE b.LastBetDate > ISNULL(a.LastBetDate, '1900/01/01') 
+	END
 END
 
 DELETE a
