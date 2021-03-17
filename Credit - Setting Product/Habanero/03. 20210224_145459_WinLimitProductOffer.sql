@@ -10,7 +10,7 @@ GO
 DECLARE @ProductID INT, @betType SMALLINT,@sportType SMALLINT
 SELECT @ProductID = 61
 SET @sportType = 238
-SET @betType = 7001 
+SET @betType = 4001 
 
 IF NOT EXISTS(	SELECT TOP 1 1 
 				FROM dbo.WinLimit_ProductOffer psd WITH(NOLOCK)
