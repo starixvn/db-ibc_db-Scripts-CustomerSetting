@@ -23,7 +23,7 @@ WHERE custid IN( SELECT custid FROM #ReactiveCust)
 ;WITH Soccer_BetLimit AS
 (
 SELECT custid,minbet,maxbet
-FROM Dep_CustSetting c WITH(ROWLOCK) 
+FROM Dep_CustSetting c WITH(NOLOCK) 
 WHERE custid IN( SELECT custid FROM #ReactiveCust)
 	AND sporttype = 1 AND bettype = 1 AND islive = 0
 )
