@@ -72,11 +72,11 @@ BEGIN
 		SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet IN (0,0.1))  	
 								OR (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet IN (0,0.1))
 								OR (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet IN (0,0.1)) THEN 0 
-							WHEN cs.minbet <> 0 AND cs.maxbet NOT IN (0,0.1)) THEN scs.minbet ELSE cs.minbet END,
-			cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet IN (0,0.1)) THEN scs.maxbet
+							WHEN cs.minbet <> 0 AND cs.maxbet NOT IN (0,0.1) THEN scs.minbet ELSE cs.minbet END,
+			cs.maxbet = CASE WHEN scs.minbet = 0 AND scs.maxbet IN (0,0.1) THEN scs.maxbet
 							WHEN (t.roleid IN (1,2) AND mcs.minbet = 0 AND mcs.maxbet IN (0,0.1)) THEN mcs.maxbet
 							WHEN (t.roleid IN (1) AND acs.minbet = 0 AND acs.maxbet IN (0,0.1)) THEN acs.maxbet 
-							WHEN cs.minbet <> 0 AND cs.maxbet NOT IN (0,0.1)) THEN @MaxBet ELSE cs.maxbet END					
+							WHEN cs.minbet <> 0 AND cs.maxbet NOT IN (0,0.1) THEN @MaxBet ELSE cs.maxbet END					
 		FROM custsetting3rd cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
 			INNER JOIN custsetting3rd scs WITH(NOLOCK) ON scs.custid = t.srecommend 
@@ -175,8 +175,8 @@ BEGIN
 							WHEN (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxbet 
 							ELSE @MaxBet END,
 			cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet IN (0,0.1) AND scs.maxpermatch IN (0,0.1)) THEN scs.maxpermatch	
-								OR (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxpermatch	
-								OR (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxpermatch	
+								WHEN (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxpermatch	
+								WHEN (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxpermatch	
 							ELSE @MPM END			
 		FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
@@ -568,12 +568,12 @@ BEGIN
 								OR (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN 0 
 							ELSE scs.minbet END,
 			cs.maxbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet IN (0,0.1) AND scs.maxpermatch IN (0,0.1))	THEN scs.maxbet
-								OR (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxbet
-								OR (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxbet 
+								WHEN (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxbet
+								WHEN (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxbet 
 							ELSE @MaxBet END,
 			cs.maxpermatch = CASE WHEN (scs.minbet = 0 AND scs.maxbet IN (0,0.1) AND scs.maxpermatch IN (0,0.1)) THEN scs.maxpermatch	
-								OR (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxpermatch
-								OR (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxpermatch 
+								WHEN (mcs.minbet = 0 AND mcs.maxbet IN (0,0.1) AND mcs.maxpermatch IN (0,0.1)) THEN mcs.maxpermatch
+								WHEN (acs.minbet = 0 AND acs.maxbet IN (0,0.1) AND acs.maxpermatch IN (0,0.1)) THEN acs.maxpermatch 
 							ELSE @MPM END			
 		FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t ON cs.custid = t.custid

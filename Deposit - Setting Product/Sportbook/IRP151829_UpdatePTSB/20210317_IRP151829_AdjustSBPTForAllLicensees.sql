@@ -8,7 +8,7 @@
 ALTER PROCEDURE [dbo].Acc_CustSetting_19
 	@srecommend INT	
 	,@PT SMALLMONEY	
-	,@maxcustid INT
+	,@max_custid INT
 	,@target VARCHAR(20)
 AS
 BEGIN
@@ -46,6 +46,7 @@ BEGIN
 		AND mrecommend NOT IN (SELECT custid FROM #DummyMaster)
 		
 	INSERT INTO #tblCust (custid)
+	SELECT custid
 	FROM custinfo WITH(NOLOCK)
 	WHERE srecommend = @srecommend
 		AND roleid = 1
@@ -64,21 +65,21 @@ BEGIN
 		cs.mpositiontaking= CASE WHEN roleid IN(4,3) THEN @PT ELSE cs.mpositiontaking END,
 		cs.apositiontaking= CASE WHEN roleid IN(4,2) THEN @PT ELSE cs.apositiontaking END
 	FROM Dep_CustSetting cs WITH(ROWLOCK)
-		INNER JOIN #tmpSMA t ON cs.CustID=t.CustID	
+		INNER JOIN #tblSMA t ON cs.CustID=t.CustID	
 	
 	UPDATE cs
 	SET cs.SuperPT = CASE WHEN roleid = 4 THEN @PT*100 ELSE cs.SuperPT END,
 		cs.MasterPT = CASE WHEN roleid IN(4,3) THEN @PT*100 ELSE cs.MasterPT END,
 		cs.AgentPT = CASE WHEN roleid IN(4,2) THEN @PT*100 ELSE cs.AgentPT END
 	FROM Dep_CustPTSetting_Agent cs WITH(ROWLOCK)
-		INNER JOIN #tmpSMA t ON cs.CustID=t.CustID	
+		INNER JOIN #tblSMA t ON cs.CustID=t.CustID	
 	
 	UPDATE cs
 	SET SuperPT  = 0
 		,MasterPT = 0
 		,AgentPT  = @PT*100
 	FROM dbo.Dep_CustPTGroupSetting_Member cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN #tmpSMA t ON cs.CustID=t.CustID
+		INNER JOIN #tblSMA t ON cs.AgentID=t.CustID
 	WHERE roleid = 2
 		AND sporttype = 43
 	
@@ -379,8 +380,6 @@ UNION ALL SELECT 	'Jinyazhou',	0.9
 UNION ALL SELECT 	'Titancraft',	0.9
 UNION ALL SELECT 	'webet88',	0.9
 UNION ALL SELECT 	'HAPPY8',	0.9
-UNION ALL SELECT 	'BSSB168',	0.93
-UNION ALL SELECT 	'TSEnter',	0.93
 
 INSERT INTO #supers(custid, PT)
 SELECT ci.custid, t.PT 	
@@ -400,11 +399,11 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1)
+	UPDATE TOP (1) s
 	SET @srecommend = custid, 
 		@PT = PT,
 		isFinished = 1
-	FROM #supers
+	FROM #supers s
 	WHERE isFinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -412,7 +411,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_CustSetting_19 @srecommend = @srecommend, @PT = @PT
-			,@maxcustid = @max_custid
+			,@max_custid = @max_custid
 			,@target = 'REPLICATED'
 
 	SET @index = @index + 1						
@@ -677,8 +676,6 @@ UNION ALL SELECT 	'Jinyazhou',	0.9
 UNION ALL SELECT 	'Titancraft',	0.9
 UNION ALL SELECT 	'webet88',	0.9
 UNION ALL SELECT 	'HAPPY8',	0.9
-UNION ALL SELECT 	'BSSB168',	0.93
-UNION ALL SELECT 	'TSEnter',	0.93
 
 INSERT INTO #supers(custid, PT)
 SELECT ci.custid, t.PT 	
@@ -698,11 +695,11 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1)
+	UPDATE TOP (1) s
 	SET @srecommend = custid, 
 		@PT = PT,
 		isFinished = 1
-	FROM #supers
+	FROM #supers s
 	WHERE isFinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -710,7 +707,7 @@ BEGIN
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 	EXEC dbo.Acc_CustSetting_19 @srecommend = @srecommend, @PT = @PT
-			,@maxcustid = @max_custid
+			,@max_custid = @max_custid
 			,@target = 'DBCUST'
 
 	SET @index = @index + 1						
