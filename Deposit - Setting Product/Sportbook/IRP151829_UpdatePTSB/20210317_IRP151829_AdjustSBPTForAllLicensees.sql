@@ -73,7 +73,8 @@ BEGIN
 		cs.AgentPT = CASE WHEN roleid IN(4,2) THEN @PT*100 ELSE cs.AgentPT END
 	FROM Dep_CustPTSetting_Agent cs WITH(ROWLOCK)
 		INNER JOIN #tblSMA t ON cs.CustID=t.CustID	
-	
+	WHERE sporttype = 43
+		
 	UPDATE cs
 	SET SuperPT  = 0
 		,MasterPT = 0
@@ -82,7 +83,7 @@ BEGIN
 		INNER JOIN #tblSMA t ON cs.AgentID=t.CustID
 	WHERE roleid = 2
 		AND sporttype = 43
-	
+		
 	WHILE(1=1)
 	BEGIN
 		DELETE TOP (5000) #tblCustNoGrouped OUTPUT DELETED.* INTO #tmpCust
@@ -387,6 +388,7 @@ FROM Dep_custsuper cs WITH (NOLOCK)
 	INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 	INNER JOIN @tmpSite t ON cs.site = t.site
 WHERE ci.Enabled=1
+	AND cs.custid NOT IN (932063,932167)--AB88SuperUS$  ,AB88SuperEURO
 	
 
 -- For deployer info
@@ -683,7 +685,7 @@ FROM Dep_custsuper cs WITH (NOLOCK)
 	INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 	INNER JOIN @tmpSite t ON cs.site = t.site
 WHERE ci.Enabled=1
-	
+	AND cs.custid NOT IN (932063,932167)--AB88SuperUS$  ,AB88SuperEURO	
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 1

@@ -263,7 +263,8 @@ FROM Dep_custsuper cs WITH (NOLOCK)
 	INNER JOIN custinfo ci WITH(NOLOCK) ON cs.custid = ci.custid
 	INNER JOIN @tmpSite t ON cs.site = t.site
 WHERE ci.Enabled=1
-
+	AND cs.custid NOT IN (932063,932167)--AB88SuperUS$  ,AB88SuperEURO
+	
 CREATE TABLE #tblCust (custid INT PRIMARY KEY, srecommend INT)	
 CREATE TABLE #tblCustNoGrouped (custid INT PRIMARY KEY, srecommend INT)
 CREATE TABLE #tmpCust (custid INT PRIMARY KEY, srecommend INT)	
@@ -315,6 +316,7 @@ SET cs.SuperPT = CASE WHEN roleid = 4 THEN s.PT*100 ELSE cs.SuperPT END,
 FROM Dep_CustPTSetting_Agent cs WITH(ROWLOCK)
 	INNER JOIN #tblSMA t ON cs.CustID=t.CustID	
 	INNER JOIN #Supers s ON t.srecommend = s.custid
+WHERE sporttype = 43
 
 UPDATE cs
 SET SuperPT  = 0
