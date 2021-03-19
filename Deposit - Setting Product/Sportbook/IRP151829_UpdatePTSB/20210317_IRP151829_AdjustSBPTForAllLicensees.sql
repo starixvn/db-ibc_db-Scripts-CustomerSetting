@@ -14,9 +14,13 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at DBCUST only
-	
+	--IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at all replicated servers
+	--IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at DBCUST only
+	IF (@target = 'DB06x' AND @@SERVERNAME NOT IN ('DB061', 'DB06C2\DB06','DB234')) RETURN 
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST', 'DBSPARE', 'SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only	
+	IF (@target = 'DBTP' AND @@SERVERNAME NOT IN ('DBTP', 'DB06')) RETURN --command will affect only DBTP, MNL DB06	
+	IF (@target = 'DBMNL' AND @@SERVERNAME NOT IN ('DBMNL')) RETURN --command will affect only MNL DBMNL		 
+
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_CustBAActive') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSetting') = 0 RETURN
@@ -414,7 +418,7 @@ BEGIN
 
 	EXEC dbo.Acc_CustSetting_19 @srecommend = @srecommend, @PT = @PT
 			,@max_custid = @max_custid
-			,@target = 'REPLICATED'
+			,@target = 'DB06x'--change to 'DBTP','DBMNL' if run @DBTP/@DBMNL
 
 	SET @index = @index + 1						
 	WAITFOR DELAY '00:00:0.100'
