@@ -38,6 +38,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustBetSetting3rd_Agent') = 0 RETURN
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT,
+							
 							isUpdateNG BIT, isUpdateCasino BIT, isUpdateVS BIT, isUpdateFishingWorld BIT, isUpdateMacauGames BIT)
 							
 	CREATE TABLE #tblCustSport (custid INT, Sporttype INT, bettype INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, UplineStakeLevelList VARCHAR(200),

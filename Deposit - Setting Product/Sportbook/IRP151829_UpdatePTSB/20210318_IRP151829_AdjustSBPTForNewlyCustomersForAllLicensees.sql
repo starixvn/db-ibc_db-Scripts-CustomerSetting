@@ -323,7 +323,7 @@ SET SuperPT  = 0
 	,MasterPT = 0
 	,AgentPT  = s.PT*100
 FROM dbo.Dep_CustPTGroupSetting_Member cs WITH(UPDLOCK,ROWLOCK)
-	INNER JOIN #tblSMA t ON cs.CustID=t.CustID
+	INNER JOIN #tblSMA t ON cs.AgentID=t.CustID
 	INNER JOIN #Supers s ON t.srecommend = s.custid
 WHERE roleid = 2
 	AND sporttype = 43
