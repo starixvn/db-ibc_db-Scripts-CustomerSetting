@@ -23,6 +23,7 @@ BEGIN
 							isUpdateNG BIT, isUpdateCasino BIT)
 	
 	CREATE TABLE #tblCustBitmap (custid INT, bitmapOrder TINYINT PRIMARY KEY(custid,bitmapOrder))
+	CREATE TABLE #tblCustSetting3rd (custid INT, sporttype INT, maxbet MONEY PRIMARY KEY(custid,sporttype))
 	
 	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend, isUpdateNG, isUpdateCasino)
 	SELECT c.custid, c.roleid, c.srecommend, c.mrecommend, c.recommend, 
@@ -36,15 +37,56 @@ BEGIN
 		LEFT JOIN custinfo a WITH(NOLOCK) ON c.recommend = a.custid
 	WHERE c.srecommend = @srecommend		
 		AND c.enabled = 1
-		
+	
+	IF dbo.f_CheckRepTable('CustSetting3rd') = 0 
+	BEGIN
+		DECLARE @query varchar(max) 
+
+		select @query = 'SELECT *
+		FROM OPENQUERY(DBCUST,''SELECT custid, sporttype, maxbet 
+								FROM custdb.dbo.custsetting3rd with (nolock) 
+								WHERE custid in (select custid 
+												from custdb.dbo.customer with (nolock) 
+												where srecommend = '+cast(@srecommend AS VARCHAR(20))+')
+								AND sporttype IN (161,164) 
+								AND bettype IN (81,8101)'')'
+
+		exec (@query)
+
+		INSERT #tblCustSetting3rd
+		SELECT *
+		FROM OPENQUERY(DBCUST, 'SELECT custid, sporttype, maxbet 
+								FROM custdb.dbo.custsetting3rd with (nolock) 
+								WHERE custid in(SELECT custid 
+											FROM custdb.dbo.customer with (nolock) 
+											WHERE srecommend = '+cast(@srecommend AS VARCHAR(20))+' 
+											AND sporttype IN (161,164) 
+											AND bettype IN (81,8101)')
+	END
+	ELSE 
+	BEGIN
+		INSERT #tblCustSetting3rd
+		SELECT custid, sporttype, maxbet 
+		FROM dbo.custsetting3rd WITH (NOLOCK) 
+		WHERE custid IN (SELECT custid 
+						FROM #tblCust)
+		AND sporttype IN (161,164) 
+		AND bettype IN (81,8101)
+	END	
+	
 	UPDATE ci
-	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 NOT IN (0,0.1) THEN @MPM ELSE maxpermatch161 END,
-		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxperball161 NOT IN (0,0.1) THEN @MPB ELSE maxperball161 END,
-		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch164 NOT IN (0,0.1) THEN @MPM ELSE maxpermatch164 END,
+	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1 AND maxbet161 >= 1 THEN @MPM ELSE maxpermatch161 END,
+		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPB ELSE maxperball161 END,
+		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch164 >= 1 AND maxbet164 >= 1 THEN @MPM ELSE maxpermatch164 END,
 		DisableNumber = CASE WHEN isUpdateNG = 1 THEN 0 ELSE DisableNumber END,
 		DisableCasino = CASE WHEN isUpdateCasino = 1 THEN 0 ELSE DisableCasino END
 	FROM custinfo ci WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t ON ci.custid = t.custid
+		INNER JOIN (SELECT custid, 
+						MAX(CASE WHEN sporttype = 161 THEN maxbet ELSE 0 END) as Maxbet161,
+						MAX(CASE WHEN sporttype = 164 THEN maxbet ELSE 0 END) as Maxbet164
+					FROM #tblCustSetting3rd cs
+					GROUP BY custid) cs ON t.custid = cs.custid
 	WHERE (isUpdateCasino = 1 OR isUpdateNG = 1)
 	
 	--update status for DCS products	
@@ -58,12 +100,12 @@ BEGIN
 	SELECT sporttype
 	FROM ProductSettingDetail WITH(NOLOCK)
 	WHERE (ProductID = 41--live casino
-		and SettingStatus = 0
+		AND SettingStatus = 0
 		AND settingType  = 13--status
 		AND sporttype <> 242--IBCBet Live Casino
 		)
 		OR (ProductID = 44--RnG Lottery
-		--and SettingStatus = 0 --comment when testing on local
+		AND SettingStatus = 0
 		AND settingType  = 13--status
 		)		
 	UNION SELECT 180--vs
