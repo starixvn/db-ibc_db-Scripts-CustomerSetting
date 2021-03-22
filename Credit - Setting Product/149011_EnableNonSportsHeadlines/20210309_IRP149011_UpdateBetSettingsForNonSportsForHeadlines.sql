@@ -84,7 +84,7 @@ BEGIN
 		UPDATE cs
 		SET cs.minbet = CASE WHEN (cs.sporttype = 161 AND ((scs.maxbet < 1 OR t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 < 1)
 														OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 < 1))
-														OR (t.roleid IN (1) AND (acs.maxbet < 1 OR t.a_maxpermatch161 < 1 OR t.a_maxperball161 < 1)))
+														OR (t.roleid IN (1) AND (acs.maxbet < 1 OR t.a_maxpermatch161 < 1 OR t.a_maxperball161 < 1))))
 								OR (cs.sporttype = 164 AND ((scs.maxbet < 1 OR t.s_maxpermatch164 < 1)
 														OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR t.m_maxpermatch164 <1))
 														OR (t.roleid IN (1) AND (acs.maxbet< 1 OR t.a_maxpermatch164 < 1)))) THEN 0 
@@ -93,11 +93,11 @@ BEGIN
 			cs.maxbet = CASE WHEN scs.maxbet < 1 AND ((cs.sporttype = 161 AND t.s_maxpermatch161 < 1 AND t.s_maxperball161 < 1)
 														OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.maxbet
 							WHEN (t.roleid IN (1,2) AND mcs.maxbet < 1 AND ((cs.sporttype = 161 AND t.m_maxpermatch161 < 1 AND t.m_MaxPerBall161 <1 )
-																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1)) THEN mcs.maxbet
+																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1))) THEN mcs.maxbet
 							WHEN (t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND t.a_maxpermatch161 < 1 AND t.a_MaxPerBall161 <1 )
 																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1))) THEN acs.maxbet 
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype =161 AND t.maxpermatch161 >= 1 AND t.MaxPerBall161 >= 161)
-													OR (cs.sporttype =164 AND t.maxpermatch164 >= 1))) THEN @MaxBet ELSE cs.maxbet END					
+													OR (cs.sporttype =164 AND t.maxpermatch164 >= 1)) THEN @MaxBet ELSE cs.maxbet END					
 		FROM custsetting3rd cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
 			INNER JOIN custsetting3rd scs WITH(NOLOCK) ON scs.custid = t.srecommend 

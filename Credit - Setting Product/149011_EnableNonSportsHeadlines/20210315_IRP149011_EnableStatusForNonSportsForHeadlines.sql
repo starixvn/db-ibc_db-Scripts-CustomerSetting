@@ -75,8 +75,8 @@ BEGIN
 	END	
 	
 	UPDATE ci
-	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1 AND maxbet161 >= 1 THEN @MPM ELSE maxpermatch161 END,
-		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPB ELSE maxperball161 END,
+	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1 AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPM ELSE maxpermatch161 END,
+		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1  AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPB ELSE maxperball161 END,
 		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch164 >= 1 AND maxbet164 >= 1 THEN @MPM ELSE maxpermatch164 END,
 		DisableNumber = CASE WHEN isUpdateNG = 1 THEN 0 ELSE DisableNumber END,
 		DisableCasino = CASE WHEN isUpdateCasino = 1 THEN 0 ELSE DisableCasino END
