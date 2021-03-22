@@ -51,17 +51,8 @@ BEGIN
 								AND sporttype IN (161,164) 
 								AND bettype IN (81,8101)'')'
 
-		exec (@query)
-
 		INSERT #tblCustSetting3rd
-		SELECT *
-		FROM OPENQUERY(DBCUST, 'SELECT custid, sporttype, maxbet 
-								FROM custdb.dbo.custsetting3rd with (nolock) 
-								WHERE custid in(SELECT custid 
-											FROM custdb.dbo.customer with (nolock) 
-											WHERE srecommend = '+cast(@srecommend AS VARCHAR(20))+' 
-											AND sporttype IN (161,164) 
-											AND bettype IN (81,8101)')
+		exec (@query)
 	END
 	ELSE 
 	BEGIN
