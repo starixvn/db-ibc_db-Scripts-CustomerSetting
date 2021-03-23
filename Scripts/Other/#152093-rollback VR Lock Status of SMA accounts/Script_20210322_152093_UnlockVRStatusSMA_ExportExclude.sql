@@ -39,8 +39,8 @@ SELECT tmp.custid,MAX(c.username) username,
 					WHEN MAX(c.roleid) = 4 THEN 'Super' END,
 	Reason = CASE SUM(tmp.Reason)
 		WHEN 1 THEN 'Locked' 
-		WHEN 3 THEN 'Unlocked' 
-		WHEN 2 THEN 'Both' 
+		WHEN 2 THEN 'Unlocked' 
+		WHEN 3 THEN 'Both' 
 		END
 FROM Tmp
 	INNER JOIN custInfo c(NOLOCK)
