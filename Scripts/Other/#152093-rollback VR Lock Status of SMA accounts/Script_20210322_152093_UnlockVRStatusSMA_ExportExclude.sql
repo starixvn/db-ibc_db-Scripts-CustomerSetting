@@ -52,7 +52,7 @@ SELECT tmp.custid,MAX(c.username) username,
 					WHEN 3 THEN 'Both' 
 					ELSE ''
 				END,
-	Reason2 = CASE WHEN Max(tmp.Reason) = 4 THEN 'Super Enable' ELSE '' END
+	Reason2 = CASE WHEN Max(tmp.Reason) = 4 THEN 'Super Enable VR' ELSE '' END
 FROM Tmp
 	INNER JOIN custInfo c(NOLOCK)
 	ON tmp.custid = c.custid
