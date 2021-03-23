@@ -42,7 +42,7 @@ DELETE @AdjustList WHERE StakeLevelID = @MinStackLevelID
 		JOIN Dep_StakeLevel SL WITH (ROWLOCK) ON SL.StakeLevelID = AL.StakeLevelID
 
 --Step 3: Update MaxBet of 1st level to "15000"
-	UPDATE Dep_StakeLevel SET MaxStake = 15000
+	UPDATE Dep_StakeLevel WITH (ROWLOCK) SET MaxStake = 15000
 							 ,MaxLabel = '15,000'
 	WHERE StakeLevelID = @MinStackLevelID
 
