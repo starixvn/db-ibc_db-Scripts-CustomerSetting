@@ -62,8 +62,17 @@ BEGIN
 			ON t.CustID = c.CustID
 END
 
-Print 'End Correct Data for VR status'
+--> Export exclude list
+SELECT v.CustID,c.username
+	,Level = CASE	WHEN c.roleid = 2 THEN 'Agent' 
+					WHEN c.roleid = 3 THEN 'Master'
+					WHEN c.roleid = 4 THEN 'Super' END
+FROM #VRLock_manual v
+	INNER JOIN custinfo c WITH(NOLOCK)
+		ON v.CustID = c.custid
+ORDER BY c.srecommend,c.mrecommend,c.username
 
+Print 'End Correct Data for VR status'
 DROP TABLE #TmpCust
 DROP TABLE #TmpCust_Batch
 DROP TABLE #DisbledVR_Cust
