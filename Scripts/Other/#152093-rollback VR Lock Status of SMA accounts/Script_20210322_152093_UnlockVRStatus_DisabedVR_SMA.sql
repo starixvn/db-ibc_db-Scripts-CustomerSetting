@@ -24,12 +24,14 @@ UNION -- All Agents locked follow by their master
 SELECT c.CUSTID
 FROM dblog.bodb_CustomerLog.dbo.UserLog_RunSP l WITH(NOLOCK)
 	INNER JOIN custinfo c (NOLOCK) ON l.custid = c.mrecommend AND c.custid <> l.custid AND c.RoleID = 2
-WHERE L.ActionID in(829)
+WHERE L.ActionID in(829,830)
+	AND TrackingValue LIKE '%VRLock="1"%'
 UNION -- All Agents and masters locked follow by their supers
 SELECT c.custid
 FROM dblog.bodb_CustomerLog.dbo.UserLog_RunSP l WITH(NOLOCK)
 	INNER JOIN custinfo c (NOLOCK) ON l.custid = c.srecommend AND c.custid <> l.custid	 AND c.roleid IN(2,3)
-WHERE L.ActionID in(829)
+WHERE L.ActionID in(829,830)
+	AND TrackingValue LIKE '%VRLock="1"%'
 
 INSERT INTO #DisbledVR_Cust(CustID)
 SELECT DISTINCT d.custid
