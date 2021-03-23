@@ -57,5 +57,6 @@ FROM Tmp
 	INNER JOIN custInfo c(NOLOCK)
 	ON tmp.custid = c.custid
 WHERE c.currency <> 20
+	AND c.Enabled = 1
 GROUP BY tmp.custid
 ORDER BY Max(c.srecommend), Max(c.mrecommend),2,3 DESC
