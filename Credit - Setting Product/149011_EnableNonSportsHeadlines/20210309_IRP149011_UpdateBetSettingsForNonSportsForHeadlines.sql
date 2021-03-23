@@ -84,12 +84,12 @@ BEGIN
 		UPDATE cs
 		SET cs.minbet = CASE WHEN (cs.sporttype = 161 AND ((cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1)
 								OR (cs.sporttype = 164 AND ((cs.maxbet < 1 OR t.maxpermatch164 < 1) THEN cs.minbet 
-							WHEN (cs.sporttype = 161 AND ((scs.maxbet < 1 OR t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 < 1)
-														OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 < 1))
-														OR (t.roleid IN (1) AND (acs.maxbet < 1 OR t.a_maxpermatch161 < 1 OR t.a_maxperball161 < 1))))
-								OR (cs.sporttype = 164 AND ((scs.maxbet < 1 OR t.s_maxpermatch164 < 1)
-														OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR t.m_maxpermatch164 <1))
-														OR (t.roleid IN (1) AND (acs.maxbet< 1 OR t.a_maxpermatch164 < 1)))) THEN 0 
+							WHEN t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.a_maxpermatch161 < 1 OR t.a_MaxPerBall161 <1))
+																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1))) THEN acs.minbet  
+							WHEN t.roleid IN (1,2) AND mcs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
+																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1))) THEN mcs.minbet  												
+							WHEN scs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 <1))
+																			OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1))) THEN scs.minbet  																			
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype = 161 AND t.maxpermatch161 >= 1 AND t.maxperball161 >= 1)
 													OR (cs.sporttype = 164 AND t.maxpermatch164 >= 1)) THEN scs.minbet ELSE cs.minbet END,
 			cs.maxbet = CASE WHEN (cs.sporttype = 161 AND ((cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1)
@@ -170,8 +170,8 @@ BEGIN
 	BEGIN
 		UPDATE cs
 		SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.minbet
-							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
-								OR (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN 0 
+							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.minbet
+							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet									
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN scs.minbet ELSE cs.minbet END,
 			cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxbet
 							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxbet
@@ -194,9 +194,9 @@ BEGIN
 			AND roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
-								OR (mcs.maxbet < 1 OR mcs.maxpermatch < 1)
-								OR (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
+							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.minbet
+							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet
 							ELSE scs.minbet END,
 			cs.maxbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet 
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
@@ -225,7 +225,8 @@ BEGIN
 		--virtual sports 3
 		UPDATE cs
 		SET cs.minbet = CASE WHEN cs.maxbet < 1	THEN cs.minbet
-							WHEN scs.maxbet < 1 OR (t.roleid = 2 AND mcs.maxbet < 1) THEN 0 
+							WHEN t.roleid = 2 AND mcs.maxbet < 1 THEN mcs.minbet
+							WHEN scs.maxbet < 1 THEN scs.minbet
 							WHEN cs.maxbet >= 1 THEN scs.minbet ELSE cs.minbet END,
 			cs.maxbet = CASE WHEN cs.maxbet < 1	THEN cs.maxbet
 							WHEN (t.roleid = 2 AND mcs.maxbet < 1) THEN mcs.maxbet
@@ -244,7 +245,9 @@ BEGIN
 			AND roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet <1 OR mcs.maxbet <1 OR acs.maxbet <1) THEN 0 
+		SET cs.minbet = CASE WHEN acs.maxbet <1 THEN acs.minbet
+							WHEN mcs.maxbet <1 THEN mcs.minbet
+							WHEN scs.maxbet <1 THEN scs.minbet
 							ELSE scs.minbet END,
 			cs.maxbet = CASE 
 							WHEN acs.maxbet < 1 THEN acs.maxbet
@@ -291,9 +294,9 @@ BEGIN
 	--RNG Keno	
 	UPDATE cs
 	SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.minbet	
-						WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1)	
-							OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR mcs.MaxPerGameType < 1))
-							OR (t.roleid IN (1) AND (acs.maxbet < 1 OR acs.MaxPerGameType <1)) THEN 0 
+						WHEN (t.roleid IN (1) AND (acs.maxbet < 1 OR acs.MaxPerGameType <1)) THEN acs.minbet
+						WHEN (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR mcs.MaxPerGameType < 1)) THEN mcs.minbet
+						WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1)	THEN scs.minbet
 						WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN scs.minbet ELSE cs.minbet END,
 		cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.maxbet
 						WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.maxbet
@@ -575,8 +578,8 @@ BEGIN
 	BEGIN
 		UPDATE cs
 		SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.minbet
-							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
-								OR (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN 0 
+							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.minbet
+							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN scs.minbet ELSE cs.minbet END,
 			cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxbet 
 							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxbet
@@ -599,9 +602,9 @@ BEGIN
 		WHERE roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
-								OR (mcs.maxbet < 1 OR mcs.maxpermatch < 1)
-								OR (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
+							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.minbet	
+							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet									
 							ELSE scs.minbet END,
 			cs.maxbet = CASE 
 							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet
