@@ -37,7 +37,8 @@ INSERT INTO #DisbledVR_Cust(CustID)
 SELECT DISTINCT d.custid
 FROM custinfo d WITH(NOLOCK) 
 	INNER JOIN VRCustLockStatus lock WITH(ROWLOCK)  ON d.custid = lock.CustID --AND lock.Type = 1
-WHERE VirtualMultiplier = 0	 
+	INNER JOIN custinfo s WITH(NOLOCK) ON d.srecommend = s.custid AND s.VirtualMultiplier = 0 --Just correct for Accounts whose super is Disable VR
+WHERE d.VirtualMultiplier = 0	 
 	AND d.Enabled = 1
 	AND d.roleid IN (2,3,4)
 	AND d.custid NOT IN(SELECT CustID FROM #VRLock_manual)
