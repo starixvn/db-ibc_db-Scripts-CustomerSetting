@@ -302,7 +302,7 @@ BEGIN
 	WAITFOR DELAY '00:00:00.280'			
 END		
 GO	
--- END STEP 2: Run this SP at DBCUST/CustDB DB -----
+-- END STEP 3: Run this SP at DBCUST/CustDB DB -----
 -----------------------------------------------------------------------------------
 	  	  
 	  

@@ -90,11 +90,11 @@ BEGIN
 														OR (t.roleid IN (1) AND (acs.maxbet< 1 OR t.a_maxpermatch164 < 1)))) THEN 0 
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype = 161 AND t.maxpermatch161 >= 1 AND t.maxperball161 >= 1)
 													OR (cs.sporttype = 164 AND t.maxpermatch164 >= 1)) THEN scs.minbet ELSE cs.minbet END,
-			cs.maxbet = CASE WHEN scs.maxbet < 1 AND ((cs.sporttype = 161 AND t.s_maxpermatch161 < 1 AND t.s_maxperball161 < 1)
+			cs.maxbet = CASE WHEN scs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_maxperball161 < 1))
 														OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.maxbet
-							WHEN (t.roleid IN (1,2) AND mcs.maxbet < 1 AND ((cs.sporttype = 161 AND t.m_maxpermatch161 < 1 AND t.m_MaxPerBall161 <1 )
+							WHEN (t.roleid IN (1,2) AND mcs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
 																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1))) THEN mcs.maxbet
-							WHEN (t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND t.a_maxpermatch161 < 1 AND t.a_MaxPerBall161 <1 )
+							WHEN (t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.a_maxpermatch161 < 1 OR t.a_MaxPerBall161 <1))
 																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1))) THEN acs.maxbet 
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype =161 AND t.maxpermatch161 >= 1 AND t.MaxPerBall161 >= 161)
 													OR (cs.sporttype =164 AND t.maxpermatch164 >= 1)) THEN @MaxBet ELSE cs.maxbet END					
@@ -165,14 +165,14 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #tblCust WHERE isUpdateVS = 1)
 	BEGIN
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	
-								OR (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
+								OR (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN 0 
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN scs.minbet ELSE cs.minbet END,
-			cs.maxbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	THEN scs.maxbet
-							WHEN (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxbet
+			cs.maxbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	THEN scs.maxbet
+							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxbet
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN @MaxBet ELSE cs.maxbet END,
-			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxpermatch	
-								WHEN (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxpermatch 
+			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
+								WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxpermatch 
 								WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN @MPM ELSE cs.maxpermatch END
 		FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
@@ -187,17 +187,17 @@ BEGIN
 			AND roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	
-								OR (mcs.maxbet < 1 AND mcs.maxpermatch < 1)
-								OR (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
+								OR (mcs.maxbet < 1 OR mcs.maxpermatch < 1)
+								OR (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN 0 
 							ELSE scs.minbet END,
-			cs.maxbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxbet	
-							WHEN (mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxbet	
-							WHEN (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN acs.maxbet 
+			cs.maxbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxbet	
+							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
+							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet 
 							ELSE @MaxBet END,
-			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxpermatch	
-								WHEN (mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxpermatch	
-								WHEN (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN acs.maxpermatch	
+			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
+								WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxpermatch	
+								WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxpermatch	
 							ELSE @MPM END			
 		FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
@@ -280,17 +280,17 @@ BEGIN
 	------------------------------------------------------------------
 	--RNG Keno	
 	UPDATE cs
-	SET cs.minbet = CASE WHEN (scs.minbet = 0 AND scs.maxbet < 1 AND scs.MaxPerGameType < 1)	
-							OR (t.roleid IN (1,2) AND mcs.maxbet < 1 AND mcs.MaxPerGameType < 1)
-							OR (t.roleid IN (1) AND acs.maxbet < 1 AND acs.MaxPerGameType <1) THEN 0 
+	SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1)	
+							OR (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR mcs.MaxPerGameType < 1))
+							OR (t.roleid IN (1) AND (acs.maxbet < 1 OR acs.MaxPerGameType <1)) THEN 0 
 						WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN scs.minbet ELSE cs.minbet END,
-		cs.maxbet = CASE WHEN (scs.maxbet < 1 AND scs.MaxPerGameType < 1) THEN scs.maxbet		
-						WHEN (t.roleid IN (1,2) AND mcs.maxbet <1 AND mcs.MaxPerGameType <1) THEN mcs.maxbet
-						WHEN (t.roleid IN (1) AND acs.maxbet <1 AND acs.MaxPerGameType <1) THEN acs.maxbet
-						WHEN cs.minbet <> 0 AND cs.maxbet >= 1 AND cs.MaxPerGameType >=1 THEN @MaxBet ELSE cs.maxbet END,					
-		cs.MaxPerGameType = CASE WHEN (scs.maxbet <1 AND scs.MaxPerGameType <1) THEN scs.MaxPerGameType
-								WHEN (t.roleid IN (1,2) AND mcs.maxbet <1 AND mcs.MaxPerGameType <1) THEN mcs.MaxPerGameType
-								WHEN (t.roleid IN (1) AND acs.maxbet <1 AND acs.MaxPerGameType <1) THEN acs.MaxPerGameType
+		cs.maxbet = CASE WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1) THEN scs.maxbet		
+						WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.maxbet
+						WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.maxbet
+						WHEN cs.maxbet >= 1 AND cs.MaxPerGameType >=1 THEN @MaxBet ELSE cs.maxbet END,					
+		cs.MaxPerGameType = CASE WHEN (scs.maxbet <1 OR scs.MaxPerGameType <1) THEN scs.MaxPerGameType
+								WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.MaxPerGameType
+								WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.MaxPerGameType
 								WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN @MPM ELSE cs.MaxPerGameType END,
 		cs.isDisabled = 0		
 	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
@@ -560,14 +560,14 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #tblCustSport)
 	BEGIN
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	
-								OR (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
+								OR (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN 0 
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN scs.minbet ELSE cs.minbet END,
-			cs.maxbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	THEN scs.maxbet
-							WHEN (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxbet
+			cs.maxbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	THEN scs.maxbet
+							WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxbet
 							WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN @MaxBet ELSE cs.maxbet END,
-			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxpermatch	
-								WHEN (t.roleid = 2 AND mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxpermatch 
+			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
+								WHEN (t.roleid = 2 AND (mcs.maxbet < 1 OR mcs.maxpermatch < 1)) THEN mcs.maxpermatch 
 								WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN @MPM ELSE cs.maxpermatch END
 		FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t ON cs.custid = t.custid
@@ -582,17 +582,17 @@ BEGIN
 		WHERE roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1)	
-								OR (mcs.maxbet < 1 AND mcs.maxpermatch < 1)
-								OR (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN 0 
+		SET cs.minbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1)	
+								OR (mcs.maxbet < 1 OR mcs.maxpermatch < 1)
+								OR (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN 0 
 							ELSE scs.minbet END,
-			cs.maxbet = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxbet	
-							WHEN (mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxbet	
-							WHEN (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN acs.maxbet 
+			cs.maxbet = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxbet	
+							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
+							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet 
 							ELSE @MaxBet END,
-			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 AND scs.maxpermatch < 1) THEN scs.maxpermatch	
-								WHEN (mcs.maxbet < 1 AND mcs.maxpermatch < 1) THEN mcs.maxpermatch	
-								WHEN (acs.maxbet < 1 AND acs.maxpermatch < 1) THEN acs.maxpermatch	
+			cs.maxpermatch = CASE WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
+								WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxpermatch	
+								WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxpermatch	
 							ELSE @MPM END
 		FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t ON cs.custid = t.custid
