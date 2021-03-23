@@ -2,7 +2,7 @@
 /*
 	Created: 20210301@Eden
 	Task: 
-		- Correct for VR Status : For current SMAs with VR Status = 0 --> remove VR lock status --> Export exclude Data [RM#149370]
+		- Correct for VR Status : For current SMAs with VR Status = 0 --> remove VR lock status --> Export exclude Data [RM#152093]
 	DB: DBCUST/CustDB
 */
 USE CustDB

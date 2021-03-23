@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20210301@Eden
-	Task: Update data for VRCustLockStatus [RM#149370]
+	Task: Update data for VRCustLockStatus [RM#152093]
 		- Correct for VR Status : For current SMAs with VR Status = 0 --> remove VR lock status
 	DB: DBCUST/CustDB
 */
