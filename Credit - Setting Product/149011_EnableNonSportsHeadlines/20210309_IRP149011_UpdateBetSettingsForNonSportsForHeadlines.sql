@@ -82,22 +82,22 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #tblCust WHERE isUpdateNG = 1)
 	BEGIN
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (cs.sporttype = 161 AND ((cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1)
-								OR (cs.sporttype = 164 AND ((cs.maxbet < 1 OR t.maxpermatch164 < 1) THEN cs.minbet 
+		SET cs.minbet = CASE WHEN (cs.sporttype = 161 AND (cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1))
+								OR (cs.sporttype = 164 AND (cs.maxbet < 1 OR t.maxpermatch164 < 1)) THEN cs.minbet 
 							WHEN t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.a_maxpermatch161 < 1 OR t.a_MaxPerBall161 <1))
-																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1))) THEN acs.minbet  
+																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1)) THEN acs.minbet  
 							WHEN t.roleid IN (1,2) AND mcs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
-																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1))) THEN mcs.minbet  												
+																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1)) THEN mcs.minbet  												
 							WHEN scs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 <1))
-																			OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1))) THEN scs.minbet  																			
+																			OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.minbet  																			
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype = 161 AND t.maxpermatch161 >= 1 AND t.maxperball161 >= 1)
 													OR (cs.sporttype = 164 AND t.maxpermatch164 >= 1)) THEN scs.minbet ELSE cs.minbet END,
-			cs.maxbet = CASE WHEN (cs.sporttype = 161 AND ((cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1)
-								OR (cs.sporttype = 164 AND ((cs.maxbet < 1 OR t.maxpermatch164 < 1) THEN cs.maxbet 
-							WHEN (t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.a_maxpermatch161 < 1 OR t.a_MaxPerBall161 <1))
-																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1))) THEN acs.maxbet 
-							WHEN (t.roleid IN (1,2) AND mcs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
-																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1))) THEN mcs.maxbet
+			cs.maxbet = CASE WHEN (cs.sporttype = 161 AND (cs.maxbet < 1 OR t.maxpermatch161 < 1 OR t.MaxPerBall161 < 1))
+								OR (cs.sporttype = 164 AND (cs.maxbet < 1 OR t.maxpermatch164 < 1)) THEN cs.maxbet 
+							WHEN t.roleid IN (1) AND acs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.a_maxpermatch161 < 1 OR t.a_MaxPerBall161 <1))
+																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1)) THEN acs.maxbet 
+							WHEN t.roleid IN (1,2) AND mcs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
+																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1)) THEN mcs.maxbet
 							WHEN scs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_maxperball161 < 1))
 														OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.maxbet							
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype =161 AND t.maxpermatch161 >= 1 AND t.MaxPerBall161 >= 161)
