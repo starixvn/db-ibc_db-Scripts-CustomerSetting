@@ -47,4 +47,4 @@ FROM Tmp
 	ON tmp.custid = c.custid
 WHERE c.currency <> 20
 GROUP BY tmp.custid
-ORDER BY 2,3 DESC
+ORDER BY Max(c.srecommend), Max(c.mrecommend),2,3 DESC
