@@ -50,6 +50,7 @@ SELECT tmp.custid,MAX(c.username) username,
 					WHEN 1 THEN 'Locked' 
 					WHEN 2 THEN 'Unlocked' 
 					WHEN 3 THEN 'Both' 
+					ELSE ''
 				END,
 	Reason2 = CASE WHEN Max(tmp.Reason) = 4 THEN 'Super Enable' ELSE '' END
 FROM Tmp
