@@ -199,7 +199,8 @@ BEGIN
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.minbet
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet
 							ELSE scs.minbet END,
-			cs.maxbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet 
+			cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxbet
+							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet 
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxbet	
 							ELSE @MaxBet END,
