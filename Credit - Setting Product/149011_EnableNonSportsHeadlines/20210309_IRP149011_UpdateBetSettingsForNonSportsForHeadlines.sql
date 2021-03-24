@@ -194,7 +194,8 @@ BEGIN
 			AND roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
+		SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.minbet 
+							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.minbet
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet
 							ELSE scs.minbet END,
@@ -202,7 +203,7 @@ BEGIN
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxbet	
 							ELSE @MaxBet END,
-			cs.maxpermatch = CASE 
+			cs.maxpermatch = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxpermatch
 								WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxpermatch	
 								WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxpermatch	
 								WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
@@ -245,11 +246,12 @@ BEGIN
 			AND roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN acs.maxbet <1 THEN acs.minbet
+		SET cs.minbet = CASE WHEN cs.maxbet <1 THEN cs.minbet 
+							WHEN acs.maxbet <1 THEN acs.minbet
 							WHEN mcs.maxbet <1 THEN mcs.minbet
 							WHEN scs.maxbet <1 THEN scs.minbet
 							ELSE scs.minbet END,
-			cs.maxbet = CASE 
+			cs.maxbet = CASE WHEN cs.maxbet < 1 THEN cs.maxbet
 							WHEN acs.maxbet < 1 THEN acs.maxbet
 							WHEN mcs.maxbet < 1 THEN mcs.maxbet
 							WHEN scs.maxbet < 1 THEN scs.maxbet	
@@ -602,16 +604,17 @@ BEGIN
 		WHERE roleid IN (2,3)
 			
 		UPDATE cs
-		SET cs.minbet = CASE WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
+		SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.minbet 
+							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.minbet
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.minbet	
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.minbet									
 							ELSE scs.minbet END,
-			cs.maxbet = CASE 
+			cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxbet
 							WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxbet
 							WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxbet	
 							WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxbet	
 							ELSE @MaxBet END,
-			cs.maxpermatch = CASE 
+			cs.maxpermatch = CASE WHEN (cs.maxbet < 1 OR cs.maxpermatch < 1) THEN cs.maxpermatch
 								WHEN (acs.maxbet < 1 OR acs.maxpermatch < 1) THEN acs.maxpermatch	
 								WHEN (mcs.maxbet < 1 OR mcs.maxpermatch < 1) THEN mcs.maxpermatch	
 								WHEN (scs.maxbet < 1 OR scs.maxpermatch < 1) THEN scs.maxpermatch	
