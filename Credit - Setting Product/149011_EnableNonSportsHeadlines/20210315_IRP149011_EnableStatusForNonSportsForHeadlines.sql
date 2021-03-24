@@ -20,13 +20,25 @@ BEGIN
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN	
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT,
+							maxpermatch161 MONEY, MaxPerBall161 MONEY,maxpermatch164 MONEY,
+							s_maxpermatch161 MONEY, s_MaxPerBall161 MONEY,s_maxpermatch164 MONEY,
+							m_maxpermatch161 MONEY, m_MaxPerBall161 MONEY,m_maxpermatch164 MONEY,
+							a_maxpermatch161 MONEY, a_MaxPerBall161 MONEY,a_maxpermatch164 MONEY,
 							isUpdateNG BIT, isUpdateCasino BIT)
 	
 	CREATE TABLE #tblCustBitmap (custid INT, bitmapOrder TINYINT PRIMARY KEY(custid,bitmapOrder))
 	CREATE TABLE #tblCustSetting3rd (custid INT, sporttype INT, maxbet MONEY PRIMARY KEY(custid,sporttype))
 	
-	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend, isUpdateNG, isUpdateCasino)
+	INSERT INTO #tblCust(custid, roleid, srecommend, mrecommend, recommend,
+						maxpermatch161 , MaxPerBall161, maxpermatch164,
+						s_maxpermatch161, s_MaxPerBall161 ,s_maxpermatch164,
+						m_maxpermatch161, m_MaxPerBall161 ,m_maxpermatch164,
+						a_maxpermatch161, a_MaxPerBall161 ,a_maxpermatch164, isUpdateNG, isUpdateCasino)
 	SELECT c.custid, c.roleid, c.srecommend, c.mrecommend, c.recommend, 
+		c.maxpermatch161 , c.MaxPerBall161, c.maxpermatch164,
+		s.maxpermatch161, s.MaxPerBall161 ,s.maxpermatch164,
+		m.maxpermatch161, m.MaxPerBall161 ,m.maxpermatch164,
+		a.maxpermatch161, a.MaxPerBall161 ,a.maxpermatch164,
 		CASE WHEN c.roleid = 1 AND s.DisableNumber = 0 AND m.DisableNumber = 0 AND a.DisableNumber = 0 THEN 0
 			WHEN c.DisableNumber = 1 THEN 1 ELSE 0 END as isUpdateNG,
 		CASE WHEN c.roleid = 1 AND s.DisableCasino = 0 AND m.DisableCasino = 0 AND a.DisableCasino = 0 THEN 0
@@ -60,24 +72,50 @@ BEGIN
 		SELECT custid, sporttype, maxbet 
 		FROM dbo.custsetting3rd WITH (NOLOCK) 
 		WHERE custid IN (SELECT custid 
-						FROM #tblCust)
+						FROM customer ci WITH(NOLOCK)
+						WHERE ci.srecommend = @srecommend
+						)
 		AND sporttype IN (161,164) 
 		AND bettype IN (81,8101)
 	END	
 	
+	;WITH tmp AS 
+	(SELECT custid, 
+		MAX(CASE WHEN sporttype = 161 THEN maxbet ELSE 0 END) as Maxbet161,
+		MAX(CASE WHEN sporttype = 164 THEN maxbet ELSE 0 END) as Maxbet164
+	FROM #tblCustSetting3rd cs
+	GROUP BY custid)
 	UPDATE ci
-	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1 AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPM ELSE maxpermatch161 END,
-		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch161 >= 1  AND maxperball161 >= 1 AND maxbet161 >= 1 THEN @MPB ELSE maxperball161 END,
-		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 AND maxpermatch164 >= 1 AND maxbet164 >= 1 THEN @MPM ELSE maxpermatch164 END,
+	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
+								CASE WHEN cs.Maxbet161 < 1 OR t.maxpermatch161 <1 OR t.maxperball161 < 1 THEN ci.maxpermatch161
+									WHEN roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
+									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
+									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch161 <1 OR t.s_maxperball161 < 1) THEN t.s_maxpermatch161
+									ELSE @MPM END
+							ELSE ci.maxpermatch161 END,
+		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
+								CASE WHEN cs.Maxbet161 < 1 OR t.maxpermatch161 <1 OR t.maxperball161 < 1 THEN ci.maxpermatch161
+									WHEN roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
+									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
+									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch161 <1 OR t.s_maxperball161 < 1) THEN t.s_maxpermatch161
+									ELSE @MPB END
+							ELSE ci.maxperball161 END,
+		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
+								CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
+								CASE WHEN cs.Maxbet164 < 1 OR t.maxpermatch164 THEN ci.maxpermatch164
+									WHEN roleid = 1 AND (acs.Maxbet164 < 1 OR t.a_maxpermatch164) THEN t.a_maxpermatch164
+									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch164 < 1) THEN t.m_maxpermatch164
+									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch164 < 1) THEN t.s_maxpermatch164
+									ELSE @MPM END
+							ELSE ci.maxpermatch164 END,
 		DisableNumber = CASE WHEN isUpdateNG = 1 THEN 0 ELSE DisableNumber END,
 		DisableCasino = CASE WHEN isUpdateCasino = 1 THEN 0 ELSE DisableCasino END
 	FROM custinfo ci WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #tblCust t ON ci.custid = t.custid
-		INNER JOIN (SELECT custid, 
-						MAX(CASE WHEN sporttype = 161 THEN maxbet ELSE 0 END) as Maxbet161,
-						MAX(CASE WHEN sporttype = 164 THEN maxbet ELSE 0 END) as Maxbet164
-					FROM #tblCustSetting3rd cs
-					GROUP BY custid) cs ON t.custid = cs.custid
+		INNER JOIN tmp as cs ON t.custid = cs.custid
+		INNER JOIN tmp as scs ON t.srecommend = scs.custid
+		LEFT JOIN tmp as mcs ON t.mrecommend = mcs.custid
+		LEFT JOIN tmp as acs ON t.recommend = acs.custid
 	WHERE (isUpdateCasino = 1 OR isUpdateNG = 1)
 	
 	--update status for DCS products	
