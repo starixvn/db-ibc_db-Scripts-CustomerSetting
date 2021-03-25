@@ -100,7 +100,7 @@ BEGIN
 																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1)) THEN mcs.maxbet
 							WHEN scs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_maxperball161 < 1))
 														OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.maxbet							
-							WHEN cs.maxbet >= 1 AND ((cs.sporttype =161 AND t.maxpermatch161 >= 1 AND t.MaxPerBall161 >= 161)
+							WHEN cs.maxbet >= 1 AND ((cs.sporttype =161 AND t.maxpermatch161 >= 1 AND t.MaxPerBall161 >= 1)
 													OR (cs.sporttype =164 AND t.maxpermatch164 >= 1)) THEN @MaxBet ELSE cs.maxbet END					
 		FROM custsetting3rd cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t ON cs.custid = t.custid
