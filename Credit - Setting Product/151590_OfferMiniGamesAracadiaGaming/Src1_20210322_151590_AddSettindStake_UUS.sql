@@ -28,7 +28,7 @@ WHERE MaxStake > 999
 DELETE  a
 FROM StakeLevelGroupDetail a
 INNER JOIN StakeLevel b WITH(NOLOCK) ON a.StakeLevelID = b.StakeLevelID
-WHERE b.GameTypeID = 1901 AND b.ExchangeId IN (SELECT DISTINCT ExchangeId FROM #StakeLevel_Temp)
+WHERE b.GameTypeID = 1901 AND a.GameTypeID IN (1902,1903,1905) AND  b.ExchangeId IN (SELECT DISTINCT ExchangeId FROM #StakeLevel_Temp)
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
