@@ -88,23 +88,23 @@ BEGIN
 	UPDATE ci
 	SET maxpermatch161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
 								CASE WHEN cs.Maxbet161 < 1 OR t.maxpermatch161 <1 OR t.maxperball161 < 1 THEN ci.maxpermatch161
-									WHEN roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
-									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
+									WHEN t.roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
+									WHEN t.roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
 									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch161 <1 OR t.s_maxperball161 < 1) THEN t.s_maxpermatch161
 									ELSE @MPM END
 							ELSE ci.maxpermatch161 END,
 		maxperball161 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
 								CASE WHEN cs.Maxbet161 < 1 OR t.maxpermatch161 <1 OR t.maxperball161 < 1 THEN ci.maxpermatch161
-									WHEN roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
-									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
+									WHEN t.roleid = 1 AND (acs.Maxbet161 < 1 OR t.a_maxpermatch161 <1 OR t.a_maxperball161 < 1) THEN t.a_maxpermatch161
+									WHEN t.roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch161 <1 OR t.m_maxperball161 < 1) THEN t.m_maxpermatch161
 									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch161 <1 OR t.s_maxperball161 < 1) THEN t.s_maxpermatch161
 									ELSE @MPB END
 							ELSE ci.maxperball161 END,
 		maxpermatch164 = CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
 								CASE WHEN t.roleid <> 4 AND isUpdateNG = 1 THEN 
 								CASE WHEN cs.Maxbet164 < 1 OR t.maxpermatch164 THEN ci.maxpermatch164
-									WHEN roleid = 1 AND (acs.Maxbet164 < 1 OR t.a_maxpermatch164) THEN t.a_maxpermatch164
-									WHEN roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch164 < 1) THEN t.m_maxpermatch164
+									WHEN t.roleid = 1 AND (acs.Maxbet164 < 1 OR t.a_maxpermatch164) THEN t.a_maxpermatch164
+									WHEN t.roleid IN (1,2) AND (mcs.Maxbet161 < 1 OR t.m_maxpermatch164 < 1) THEN t.m_maxpermatch164
 									WHEN (scs.Maxbet161 < 1 OR t.s_maxpermatch164 < 1) THEN t.s_maxpermatch164
 									ELSE @MPM END
 							ELSE ci.maxpermatch164 END,
