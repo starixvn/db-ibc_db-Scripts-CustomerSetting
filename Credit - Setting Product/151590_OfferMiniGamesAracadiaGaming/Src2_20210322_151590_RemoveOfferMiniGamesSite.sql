@@ -24,6 +24,6 @@ SELECT 165 as SportType,1905 as BetType --11HiLo
 DELETE a FROM SportNonOfferedSiteCurrency a  WITH(ROWLOCK) 
 INNER JOIN #Sport_Temp b ON a.SportType = b.SportType AND a.BetType = b.BetType
 INNER JOIN Site c WITH(NOLOCK)  ON c.siteid = a.SiteID AND c.isActive = 1 AND c.isLicensee = 0 AND c.isDeposit = 0
-WHERE a.Currency IN (2,3,5,6,13,15,16,22,33,34,35,43,45,47,51,64,67,69,95)
+
 DROP TABLE #Sport_Temp
 
