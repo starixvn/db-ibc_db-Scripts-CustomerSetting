@@ -88,7 +88,7 @@ BEGIN
 																			OR (cs.sporttype = 164 AND t.a_maxpermatch164 < 1)) THEN acs.minbet  
 							WHEN t.roleid IN (1,2) AND (mcs.maxbet < 1 OR (cs.sporttype = 161 AND (t.m_maxpermatch161 < 1 OR t.m_MaxPerBall161 <1))
 																			OR (cs.sporttype = 164 AND t.m_maxpermatch164 < 1)) THEN mcs.minbet  												
-							WHEN scs.maxbet < 1 AND ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 <1))
+							WHEN scs.maxbet < 1 OR ((cs.sporttype = 161 AND (t.s_maxpermatch161 < 1 OR t.s_MaxPerBall161 <1))
 																			OR (cs.sporttype = 164 AND t.s_maxpermatch164 < 1)) THEN scs.minbet  																			
 							WHEN cs.maxbet >= 1 AND ((cs.sporttype = 161 AND t.maxpermatch161 >= 1 AND t.maxperball161 >= 1)
 													OR (cs.sporttype = 164 AND t.maxpermatch164 >= 1)) THEN scs.minbet ELSE cs.minbet END,
