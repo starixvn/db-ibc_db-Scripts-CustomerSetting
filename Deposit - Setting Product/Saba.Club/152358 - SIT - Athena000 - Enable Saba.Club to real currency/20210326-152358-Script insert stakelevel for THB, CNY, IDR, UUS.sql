@@ -10,7 +10,7 @@ GO
 -- SELECT * FROM DEP_StakeLevel WITH(NOLOCK) WHERE GameTypeID = 1611
 -- SELECT * FROM Dep_StakeLevelGroupDetail WITH(NOLOCK) WHERE GameTypeID = 1611
 DECLARE @Sporttype INT = 200, @Bettype INT = 1611
-DECLARE  @list varchar (max) = 'THB,CNY,IDR,UUS'
+DECLARE  @list varchar (max) = 'THB,CNY,IDR'
 DECLARE @MaxStakeLevelID INT
 SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
 
