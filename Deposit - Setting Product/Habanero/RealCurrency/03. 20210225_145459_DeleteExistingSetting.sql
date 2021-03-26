@@ -70,7 +70,9 @@ BEGIN
 							3,	--USD(US$)
 							96,	--USD(USDT)
 							7,	--VND(DON)
-							51	--VND(INH)
+							51,	--VND(INH)
+							20, --UUS
+							72  --YNG
 							)	
 
 	

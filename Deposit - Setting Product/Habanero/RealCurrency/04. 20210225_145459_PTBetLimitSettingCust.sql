@@ -53,7 +53,7 @@ BEGIN
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
 	DECLARE @BitOrder INT
 
@@ -344,7 +344,9 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							3,	--USD(US$)
 							96,	--USD(USDT)
 							7,	--VND(DON)
-							51	--VND(INH)
+							51,	--VND(INH)
+							20, --UUS
+							72  --YNG
 							)
 ORDER BY ci.custid 
 
@@ -417,7 +419,9 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							3,	--USD(US$)
 							96,	--USD(USDT)
 							7,	--VND(DON)
-							51	--VND(INH)
+							51,	--VND(INH)
+							20, --UUS
+							72  --YNG
 							)
 ORDER BY ci.custid 
 

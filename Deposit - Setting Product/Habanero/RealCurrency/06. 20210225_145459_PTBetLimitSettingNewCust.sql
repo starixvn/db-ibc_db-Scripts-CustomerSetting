@@ -42,7 +42,9 @@ GO
 							3,	--USD(US$)
 							96,	--USD(USDT)
 							7,	--VND(DON)
-							51	--VND(INH)
+							51,	--VND(INH)
+							20, --UUS
+							72  --YNG
 							)
 			ORDER BY ci.custid 
 	
@@ -91,7 +93,7 @@ GO
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
 	WHERE srecommend IN(SELECT CustID FROM #supers) 
-	AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 
 	-------------------------------------PT Setting-----------------------------------------------
 	--Agent Level
