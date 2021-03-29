@@ -6,6 +6,11 @@
 */
 USE CheckResultDB
 GO
+
+--> UpdateValue Config PTValue
+ALTER TABLE [Dep_PTConfig] ALTER COLUMN [PTValue] VARCHAR(1000)
+GO
+
 --> UpdateConfig for Esport
 UPDATE a 
 SET a.PTValue = a.PTValue + ',91.50,92.00,95.00'
