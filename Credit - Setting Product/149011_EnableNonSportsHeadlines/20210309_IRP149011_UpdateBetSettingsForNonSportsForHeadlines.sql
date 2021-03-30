@@ -125,7 +125,7 @@ BEGIN
 	BEGIN
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) = 0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLimit cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE isUpdateCasino = 1
@@ -275,7 +275,7 @@ BEGIN
 		--winlimit
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (2,3)
@@ -284,7 +284,7 @@ BEGIN
 		
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (1)
@@ -435,7 +435,7 @@ BEGIN
 		--winlimit
 		UPDATE cs
 		SET MaxWinLimit	=  CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<>BBIN
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t on cs.custid = t.custid
 									AND cs.sporttype = t.sporttype
@@ -444,7 +444,7 @@ BEGIN
 		
 		UPDATE cs
 		SET MaxWinLimit	= CASE WHEN cs.sporttype <> 241 THEN 3 ELSE MaxWinLimit END,--<> BBIN
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t on cs.custid = t.custid
 									AND cs.sporttype = t.sporttype
@@ -482,7 +482,7 @@ BEGIN
 	BEGIN
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (2,3)
@@ -491,7 +491,7 @@ BEGIN
 		
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (1)
@@ -646,7 +646,7 @@ BEGIN
 		--winlimit 
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t on cs.custid = t.custid
 										AND cs.sporttype = t.sporttype
@@ -655,7 +655,7 @@ BEGIN
 				
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t on cs.custid = t.custid
 									AND cs.sporttype = t.sporttype
@@ -758,7 +758,7 @@ BEGIN
 		--winlimit
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN (SELECT DISTINCT custid, sporttype
 						FROM #tblCustSport 
@@ -767,7 +767,7 @@ BEGIN
 		
 		UPDATE cs
 		SET MaxWinLimit	= 3,
-			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR MaxLossLimit =0 THEN @MaxLoss ELSE MaxLossLimit END
+			MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN (SELECT DISTINCT custid, sporttype
 						FROM #tblCustSport 
