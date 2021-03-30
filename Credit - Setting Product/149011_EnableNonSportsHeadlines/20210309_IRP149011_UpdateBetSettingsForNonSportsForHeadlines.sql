@@ -324,6 +324,14 @@ BEGIN
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
 		AND 1 = CASE WHEN t.roleid = 1 AND scs.IsDisabled = 0 AND mcs.IsDisabled = 0 AND acs.IsDisabled = 0 THEN 0
 					WHEN cs.IsDisabled = 1 THEN 1 ELSE 0 END	
+	
+	--enable keno for super
+	UPDATE cs
+	SET cs.isDisabled = 0		
+	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
+	WHERE custid = @srecommend
+		AND GameTypeID BETWEEN 1 AND 29
+		AND isDisabled = 1
 	----End RnG Keno--------------------------------------------------
 	
 	------------------------------------------------------------------
