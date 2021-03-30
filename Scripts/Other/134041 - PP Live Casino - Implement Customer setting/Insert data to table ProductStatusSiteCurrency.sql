@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: 20210330@Tina
-	Task: Support QC test - Non offer PP Live Casino for PP Live Casino
+	Task: Support QC test - Non offer PP Live Casino for 733333
 	DB: DBCUST/CustDB
 */
 
