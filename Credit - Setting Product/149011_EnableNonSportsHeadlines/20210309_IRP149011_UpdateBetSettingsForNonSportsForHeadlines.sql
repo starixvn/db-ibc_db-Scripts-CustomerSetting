@@ -528,9 +528,9 @@ BEGIN
 			
 	IF EXISTS(SELECT 1 FROM #tblCust WHERE isUpdateFishingWorld=1)
 	BEGIN
-		--winlimit
+		--losslimit
 		UPDATE cs
-		SET MaxWinLimit	= 3
+		SET MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (2,3)
@@ -538,7 +538,7 @@ BEGIN
 			AND sporttype = 219
 		
 		UPDATE cs
-		SET MaxWinLimit	= 3
+		SET MaxLossLimit = CASE WHEN MaxLossLimit > @MaxLoss OR ISNULL(MaxLossLimit,0) =0 THEN @MaxLoss ELSE MaxLossLimit END
 		FROM CustWinLossLimit_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCust t on cs.custid = t.custid
 		WHERE t.roleid IN (1)
