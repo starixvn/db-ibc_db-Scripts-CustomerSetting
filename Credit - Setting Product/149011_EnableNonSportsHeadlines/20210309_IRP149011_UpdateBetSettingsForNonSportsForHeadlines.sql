@@ -153,7 +153,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, @bitmapOrder)) as IsHidden
 	FROM #tblCust t
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
 		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
@@ -161,10 +162,12 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 	)
 	UPDATE t
-	SET t.isUpdateVS = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+	SET t.isUpdateVS = CASE WHEN IsHidden = 1 THEN 0
+							WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 							WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
+		
 	
 	IF EXISTS(SELECT 1 FROM #tblCust WHERE isUpdateVS = 1)
 	BEGIN
@@ -358,7 +361,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, bitmapOrder)) as IsHidden
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -372,6 +376,7 @@ BEGIN
 	FROM stt
 	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
+		AND IsHidden = 0			
 	
 	IF EXISTS(SELECT 1 FROM #tblCustSport)
 	BEGIN
@@ -465,7 +470,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, @bitmapOrder)) as isHidden
 	FROM #tblCust t
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
 		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
@@ -473,7 +479,8 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 	)
 	UPDATE t
-	SET t.isUpdateMacauGames = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+	SET t.isUpdateMacauGames = CASE WHEN isHidden = 1 THEN 0
+									WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 									WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
@@ -513,7 +520,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, @bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, @bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, @bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, @bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, @bitmapOrder)) as isHidden
 	FROM #tblCust t
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
 		LEFT JOIN CustProductStatus s WITH(NOLOCK) ON t.srecommend = s.custid
@@ -521,7 +529,8 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 	)
 	UPDATE t
-	SET t.isUpdateFishingWorld = CASE WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+	SET t.isUpdateFishingWorld = CASE WHEN isHidden = 1 THEN 0
+									WHEN t.roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 									WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	FROM stt 
 		INNER JOIN #tblCust t ON stt.custid = t.custid
@@ -570,7 +579,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, bitmapOrder)) as isHidden
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -582,7 +592,8 @@ BEGIN
 	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
 	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
 	FROM stt
-	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+	WHERE 1 = CASE WHEN isHidden = 1 THEN 0
+					WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	
 	IF EXISTS(SELECT 1 FROM #tblCustSport)
@@ -677,7 +688,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, bitmapOrder)) as isHidden
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -691,7 +703,8 @@ BEGIN
 	FROM stt
 		CROSS APPLY(SELECT 245 as sporttype, 4601 as bettype
 					UNION  SELECT 245 as sporttype, 4602 as bettype)s
-	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
+	WHERE 1 = CASE WHEN isHidden = 1 THEN 0
+					WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 	
 	IF EXISTS(SELECT 1 FROM #tblCustSport)

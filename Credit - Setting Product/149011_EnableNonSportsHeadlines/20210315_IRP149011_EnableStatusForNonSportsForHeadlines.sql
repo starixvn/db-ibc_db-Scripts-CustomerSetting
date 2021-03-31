@@ -148,7 +148,8 @@ BEGIN
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, bitmapOrder)) as isDisabledSuper,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(m.bitmapIsDisabled, bitmapOrder)) as isDisabledMaster,
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(a.bitmapIsDisabled, bitmapOrder)) as isDisabledAgent,
-		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsDisabled, bitmapOrder)) as isDisabled,
+		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, bitmapOrder)) as IsHidden
 	FROM #tblCust t
 		CROSS APPLY ProductStatusProfile stt WITH(NOLOCK)
 		INNER JOIN CustProductStatus c WITH(NOLOCK) ON t.custid = c.custid
@@ -162,6 +163,7 @@ BEGIN
 	FROM stt
 	WHERE 1 = CASE WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
+		AND IsHidden = 0			
 	
 	;WITH tmp AS(
 	SELECT custid,( SELECT (SELECT t2.bitmapOrder as '@b', 0 as '@s' 
