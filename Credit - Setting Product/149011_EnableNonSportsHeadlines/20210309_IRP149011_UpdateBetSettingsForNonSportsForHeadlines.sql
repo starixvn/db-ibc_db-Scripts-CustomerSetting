@@ -602,8 +602,7 @@ BEGIN
 								WHEN cs.maxbet >= 1 AND cs.maxpermatch >= 1 THEN @MPM ELSE cs.maxpermatch END
 		FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t ON cs.custid = t.custid
-										AND cs.sporttype = t.sporttype
-										AND cs.bettype = t.bettype	
+										AND cs.sporttype = t.sporttype										
 			INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
 														AND cs.sporttype = scs.sporttype
 														AND cs.bettype = scs.bettype
@@ -630,8 +629,7 @@ BEGIN
 							ELSE @MPM END
 		FROM CustBetSetting3rd_Member cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #tblCustSport t ON cs.custid = t.custid
-										AND cs.sporttype = t.sporttype
-										AND cs.bettype = t.bettype
+										AND cs.sporttype = t.sporttype										
 			INNER JOIN CustBetSetting3rd_Agent scs WITH(NOLOCK) ON scs.custid = t.srecommend 
 														AND cs.sporttype = scs.sporttype
 														AND cs.bettype = scs.bettype
