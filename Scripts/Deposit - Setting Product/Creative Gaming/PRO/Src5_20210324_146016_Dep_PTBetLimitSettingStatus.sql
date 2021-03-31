@@ -1,8 +1,9 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210324
-	Task: Insert PT and Betlimit for Customer [Creative Gaming] - deposit RedmineID:#146016
-	DB: DBCUST/CustDB
+	Date:	 20210324
+	Task:	 Insert PT and Betlimit for Customer [Creative Gaming] - deposit RedmineID:#146016
+	DB:		 DBCUST/CustDB
 	P/s : Step 5 Insert PT,Betlimit and enable Status Creative Gaming
 */
 -- BEGIN STEP 5.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running

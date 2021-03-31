@@ -1,9 +1,9 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210324
-	Task:  Insert Setting StakeLevelGroupDetail [Creative Gaming] - deposit RedmineID:#146016
-	DB: DBCust/CustDB
+	Date:	 20210324
+	Task:	 Insert Setting StakeLevelGroupDetail [Creative Gaming] - deposit RedmineID:#146016
+	DB:		 DBCust/CustDB
 	P/s : Step 3 Insert Setting StakeLevelGroupDetail
 */
 PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

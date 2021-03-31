@@ -1,8 +1,9 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210324
-	Task: Update SettingStatus = 2 (PROD) for Creative Gaming [Redmine: 146016]
-	DB: DBCUST/CustDB
+	Date:	 20210324
+	Task:	 Update SettingStatus = 2 (PROD) for Creative Gaming [Redmine: 146016]
+	DB:		 DBCUST/CustDB
 	P/s : Step 1 hide Creative Gaming
 */ 
 

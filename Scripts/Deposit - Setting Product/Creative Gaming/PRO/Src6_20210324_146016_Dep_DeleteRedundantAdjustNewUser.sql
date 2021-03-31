@@ -1,8 +1,9 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210324
-	Task: Delete redundant and add new setting newly created customer for Creative Gaming RedmineID:#146016
-	DB: DBCUST/CustDB
+	Date:	 20210324
+	Task:	 Delete redundant and add new setting newly created customer for Creative Gaming RedmineID:#146016
+	DB:		 DBCUST/CustDB
 	P/s : Step 6 Delete redundant and add new setting newly created customer Creative Gaming
 */
 USE [CustDB]
