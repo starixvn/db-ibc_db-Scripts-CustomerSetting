@@ -1,9 +1,9 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: Winfred
-	Date:	20210324
-	Task:	Insert Game Group [Creative Gaming] - deposit RedmineID:#146016
-	DB:		DBCust/CustDB
+	Created:	Winfred
+	Date:		20210324
+	Task:		Insert Game Group [Creative Gaming] - deposit RedmineID:#146016
+	DB:			DBCust/CustDB
 */
 DECLARE @GameGroupID SMALLINT ,@betType SMALLINT,@sportType SMALLINT
 SET @GameGroupID =  24 	

@@ -3,7 +3,7 @@
 	Created:Winfred
 	Date:	20210324
 	Task:	Insert Setting StakeLevel [Creative Gaming] - UUS deposit RedmineID:#146016
-	DB:		DBCust/CustDB
+	DB: DBCust/CustDB
 	P/s : Step 1 Insert Setting StakeLevel UUS
 */
 PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

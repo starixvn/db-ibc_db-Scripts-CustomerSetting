@@ -1,8 +1,8 @@
 /*
 	Created: Winfred
-	Date:	 20210324
-	Task:	 Delete Exists PT and Betlimit for Customer [Creative Gaming] - UUS deposit RedmineID:#146016
-	DB:		 DBCUST/CustDB
+	Date: 20210324
+	Task: Delete Exists PT and Betlimit for Customer [Creative Gaming] - UUS deposit RedmineID:#146016
+	DB: DBCUST/CustDB
 	P/s : Step 3 Delete Exists PT and Betlimit Creative Gaming UUS
 */
 -- BEGIN STEP 3.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
