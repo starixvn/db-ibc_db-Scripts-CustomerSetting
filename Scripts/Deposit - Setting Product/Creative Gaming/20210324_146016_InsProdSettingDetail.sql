@@ -1,9 +1,9 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210324
-	Task:  Insert new Product [Creative Gaming] - deposit RedmineID:#146016
-	DB: DBCust/CustDB
+	Date:	 20210324
+	Task:    Insert new Product [Creative Gaming] - deposit RedmineID:#146016
+	DB:		 DBCust/CustDB
 */
 DECLARE @productID SMALLINT ,@betType SMALLINT,@sportType SMALLINT
 SET @productID = 62 
