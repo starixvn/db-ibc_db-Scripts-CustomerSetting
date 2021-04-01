@@ -298,25 +298,11 @@ BEGIN
 		
 	------------------------------------------------------------------
 	--RNG Keno	
-	UPDATE cs
-	SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.minbet	
-						WHEN (t.roleid IN (1) AND (acs.maxbet < 1 OR acs.MaxPerGameType <1)) THEN acs.minbet
-						WHEN (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR mcs.MaxPerGameType < 1)) THEN mcs.minbet
-						WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1)	THEN scs.minbet
-						WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN scs.minbet ELSE cs.minbet END,
-		cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.maxbet
-						WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.maxbet
-						WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.maxbet
-						WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1) THEN scs.maxbet								
-						WHEN cs.maxbet >= 1 AND cs.MaxPerGameType >=1 THEN @MaxBet ELSE cs.maxbet END,					
-		cs.MaxPerGameType = CASE
-								WHEN (cs.maxbet <1 OR cs.MaxPerGameType <1) THEN cs.MaxPerGameType	
-								WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.MaxPerGameType
-								WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.MaxPerGameType
-								WHEN (scs.maxbet <1 OR scs.MaxPerGameType <1) THEN scs.MaxPerGameType																
-								WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN @MPM ELSE cs.MaxPerGameType END,
-		cs.isDisabled = 0		
-	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
+	DELETE #tblCustSport
+	
+	INSERT INTO #tblCustSport(custid,bettype,roleid,srecommend,mrecommend,recommend)
+	SELECT cs.custid,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
+	FROM CustGameType cs WITH(NOLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
 		INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
 													AND cs.GameTypeID = scs.GameTypeID													
@@ -327,6 +313,37 @@ BEGIN
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
 		AND 1 = CASE WHEN t.roleid = 1 AND scs.IsDisabled = 0 AND mcs.IsDisabled = 0 AND acs.IsDisabled = 0 THEN 0
 					WHEN cs.IsDisabled = 1 THEN 1 ELSE 0 END	
+		
+	IF EXISTS(SELECT 1 FROM #tblCustSport)	
+	BEGIN
+		UPDATE cs
+		SET cs.minbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.minbet	
+							WHEN (t.roleid IN (1) AND (acs.maxbet < 1 OR acs.MaxPerGameType <1)) THEN acs.minbet
+							WHEN (t.roleid IN (1,2) AND (mcs.maxbet < 1 OR mcs.MaxPerGameType < 1)) THEN mcs.minbet
+							WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1)	THEN scs.minbet
+							WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN scs.minbet ELSE cs.minbet END,
+			cs.maxbet = CASE WHEN (cs.maxbet < 1 OR cs.MaxPerGameType < 1) THEN cs.maxbet
+							WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.maxbet
+							WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.maxbet
+							WHEN (scs.maxbet < 1 OR scs.MaxPerGameType < 1) THEN scs.maxbet								
+							WHEN cs.maxbet >= 1 AND cs.MaxPerGameType >=1 THEN @MaxBet ELSE cs.maxbet END,					
+			cs.MaxPerGameType = CASE
+									WHEN (cs.maxbet <1 OR cs.MaxPerGameType <1) THEN cs.MaxPerGameType	
+									WHEN (t.roleid IN (1) AND (acs.maxbet <1 OR acs.MaxPerGameType <1)) THEN acs.MaxPerGameType
+									WHEN (t.roleid IN (1,2) AND (mcs.maxbet <1 OR mcs.MaxPerGameType <1)) THEN mcs.MaxPerGameType
+									WHEN (scs.maxbet <1 OR scs.MaxPerGameType <1) THEN scs.MaxPerGameType																
+									WHEN cs.maxbet >=1 AND cs.MaxPerGameType >=1 THEN @MPM ELSE cs.MaxPerGameType END,
+			cs.isDisabled = 0		
+		FROM CustGameType cs WITH(ROWLOCK)
+			INNER JOIN #tblCustSport t ON cs.custid = t.custid
+										AND cs.GameTypeID = t.bettype
+			INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
+														AND cs.GameTypeID = scs.GameTypeID													
+			LEFT JOIN CustGameType mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
+														AND cs.GameTypeID = mcs.GameTypeID												
+			LEFT JOIN CustGameType acs WITH(NOLOCK) ON acs.custid = t.recommend 
+														AND cs.GameTypeID = acs.GameTypeID																
+	END
 	
 	--enable keno for super
 	UPDATE cs
