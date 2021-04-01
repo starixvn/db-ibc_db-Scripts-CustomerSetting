@@ -300,8 +300,8 @@ BEGIN
 	--RNG Keno	
 	DELETE #tblCustSport
 	
-	INSERT INTO #tblCustSport(custid,bettype,roleid,srecommend,mrecommend,recommend)
-	SELECT cs.custid,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
+	SELECT cs.custid,202 as sporttype,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
 	FROM CustGameType cs WITH(NOLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
 		INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
@@ -314,7 +314,7 @@ BEGIN
 		AND t.roleid = 1 
 		AND (scs.IsDisabled <> 0 AND mcs.IsDisabled <> 0 AND acs.IsDisabled <> 0 AND cs.IsDisabled = 1)	
 	UNION ALL
-	SELECT cs.custid,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
+	SELECT cs.custid,202 as sporttype,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
 	FROM CustGameType cs WITH(NOLOCK)
 		INNER JOIN #tblCust t ON cs.custid = t.custid
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
