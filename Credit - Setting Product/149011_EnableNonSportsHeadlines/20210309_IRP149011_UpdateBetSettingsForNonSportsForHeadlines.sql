@@ -311,9 +311,16 @@ BEGIN
 		LEFT JOIN CustGameType acs WITH(NOLOCK) ON acs.custid = t.recommend 
 													AND cs.GameTypeID = acs.GameTypeID													
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
-		AND 1 = CASE WHEN t.roleid = 1 AND scs.IsDisabled = 0 AND mcs.IsDisabled = 0 AND acs.IsDisabled = 0 THEN 0
-					WHEN cs.IsDisabled = 1 THEN 1 ELSE 0 END	
-		
+		AND t.roleid = 1 
+		AND (scs.IsDisabled <> 0 AND mcs.IsDisabled <> 0 AND acs.IsDisabled <> 0 AND cs.IsDisabled = 1)	
+	UNION ALL
+	SELECT cs.custid,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
+	FROM CustGameType cs WITH(NOLOCK)
+		INNER JOIN #tblCust t ON cs.custid = t.custid
+	WHERE cs.GameTypeID BETWEEN 1 AND 29
+		AND t.roleid IN (2,3) 	
+		AND cs.IsDisabled = 1
+	
 	IF EXISTS(SELECT 1 FROM #tblCustSport)	
 	BEGIN
 		UPDATE cs
