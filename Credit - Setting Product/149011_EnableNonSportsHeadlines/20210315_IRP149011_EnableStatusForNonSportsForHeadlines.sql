@@ -50,18 +50,18 @@ BEGIN
 	WHERE c.srecommend = @srecommend		
 		AND c.enabled = 1
 	
-	IF dbo.f_CheckRepTable('CustSetting3rd') = 0 
+	IF @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) -- run at dbcust only
 	BEGIN
 		DECLARE @query varchar(max) 
 
 		select @query = 'SELECT *
 		FROM OPENQUERY(DBCUST,''SELECT custid, sporttype, maxbet 
-								FROM custdb.dbo.custsetting3rd with (nolock) 
+								FROM custdb.dbo.tmpcustsetting3rd with (nolock) 
 								WHERE custid in (select custid 
 												from custdb.dbo.customer with (nolock) 
 												where srecommend = '+cast(@srecommend AS VARCHAR(20))+')
 								AND sporttype IN (161,164) 
-								AND bettype IN (81,8101)'')'
+								'')'
 
 		INSERT #tblCustSetting3rd
 		exec (@query)
@@ -70,13 +70,12 @@ BEGIN
 	BEGIN
 		INSERT #tblCustSetting3rd
 		SELECT custid, sporttype, maxbet 
-		FROM dbo.custsetting3rd WITH (NOLOCK) 
+		FROM tmpCustsetting3rd WITH (NOLOCK) 
 		WHERE custid IN (SELECT custid 
 						FROM customer ci WITH(NOLOCK)
 						WHERE ci.srecommend = @srecommend
 						)
-		AND sporttype IN (161,164) 
-		AND bettype IN (81,8101)
+		AND sporttype IN (161,164) 		
 	END	
 	
 	;WITH tmp AS 
