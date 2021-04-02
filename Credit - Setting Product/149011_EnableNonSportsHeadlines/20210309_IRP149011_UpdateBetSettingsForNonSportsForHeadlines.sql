@@ -312,7 +312,8 @@ BEGIN
 													AND cs.GameTypeID = acs.GameTypeID													
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
 		AND t.roleid = 1 
-		AND (scs.IsDisabled <> 0 AND mcs.IsDisabled <> 0 AND acs.IsDisabled <> 0 AND cs.IsDisabled = 1)	
+		AND acs.IsDisabled = 1 
+		AND cs.IsDisabled = 1	
 	UNION ALL
 	SELECT cs.custid,202 as sporttype,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
 	FROM CustGameType cs WITH(NOLOCK)
