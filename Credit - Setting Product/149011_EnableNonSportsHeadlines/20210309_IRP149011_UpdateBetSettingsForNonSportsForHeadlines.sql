@@ -303,11 +303,7 @@ BEGIN
 	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
 	SELECT cs.custid,202 as sporttype,cs.GameTypeID,roleid,srecommend,mrecommend,recommend
 	FROM CustGameType cs WITH(NOLOCK)
-		INNER JOIN #tblCust t ON cs.custid = t.custid
-		INNER JOIN CustGameType scs WITH(NOLOCK) ON scs.custid = t.srecommend 
-													AND cs.GameTypeID = scs.GameTypeID													
-		INNER JOIN CustGameType mcs WITH(NOLOCK) ON mcs.custid = t.mrecommend 
-													AND cs.GameTypeID = mcs.GameTypeID												
+		INNER JOIN #tblCust t ON cs.custid = t.custid														
 		INNER JOIN CustGameType acs WITH(NOLOCK) ON acs.custid = t.recommend 
 													AND cs.GameTypeID = acs.GameTypeID													
 	WHERE cs.GameTypeID BETWEEN 1 AND 29
