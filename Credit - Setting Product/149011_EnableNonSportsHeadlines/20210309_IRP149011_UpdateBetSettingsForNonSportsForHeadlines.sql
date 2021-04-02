@@ -75,7 +75,17 @@ BEGIN
 		AND c.enabled = 1
 	
 	IF @@ROWCOUNT = 0
+	BEGIN
+		--enable keno for super
+		UPDATE cs
+		SET cs.isDisabled = 0		
+		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
+		WHERE custid = @srecommend
+			AND GameTypeID BETWEEN 1 AND 29
+			AND isDisabled = 1
+
 		RETURN;
+	END	
 		
 	------------------------------------------------------------------
 	--NG, Happy 5
