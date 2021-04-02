@@ -50,7 +50,7 @@ BEGIN
 	WHERE c.srecommend = @srecommend		
 		AND c.enabled = 1
 	
-	IF @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) -- run at dbcust only
+	IF @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2') -- run at dbcust only
 	BEGIN
 		DECLARE @query varchar(max) 
 
