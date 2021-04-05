@@ -5,7 +5,7 @@
 	Task: Get list licensee for Sports Lottery - API Licensee - Deposit [Redmine: 147361]
 	DB: DBCUST/CustDB
 	
-	P/s : Step 0 Get list licensee for Sports Lottery for Sports Lottery
+	P/s : Get list licensee for Sports Lottery for Sports Lottery
 */
 -- Get licensee active
 CREATE TABLE #supers (custid INT,site VARCHAR(20))

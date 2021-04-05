@@ -3,6 +3,8 @@
 	Created: 20210223@Winfred
 	Task: copy pt Lottery to new pt for Sports Lottery [Redmine:#147361]	
 	DB: DBCHECK/CheckResultDB
+	
+		P/s : Step 0 Add config job check PT
 */
 USE CheckResultDB
 GO
