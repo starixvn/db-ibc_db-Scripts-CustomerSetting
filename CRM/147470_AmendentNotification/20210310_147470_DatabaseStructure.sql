@@ -22,6 +22,7 @@ CREATE TABLE [dbo].[crmAmendmentNotiFeedbackInfo](
 	[Status] [varchar](20) NULL,
 	[MatchId] [int] NULL,
 	[MatchCode] [nvarchar](100) NULL,
+	[MessageId] [int] NULL,
 	[EventType] [tinyint] NULL,
 	[ActualResult] [nvarchar](max) NULL,
 	[WrongResult] [nvarchar](max) NULL,
