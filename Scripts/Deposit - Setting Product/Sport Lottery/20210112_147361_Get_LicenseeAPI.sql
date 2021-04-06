@@ -31,7 +31,7 @@ INNER JOIN #supers ds WITH (NOLOCK) ON ds.custid= ci.srecommend
 CROSS APPLY dbo.f_CustSetting_ProductStatusSel(cps.bitmapIsDisabled, 6) as isDisabled
 WHERE ISNULL(isDisabled.value, 1) = 0 -- offer=0 | not offer=1
 
-SELECT DISTINCT Site FROM #Result
+SELECT DISTINCT Site FROM #Result ORDER BY site 
 
 DROP TABLE #ActiveLic
 DROP TABLE #supers
