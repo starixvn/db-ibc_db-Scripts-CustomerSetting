@@ -1,6 +1,6 @@
 /*
-	Created: Winfred
-	Task : Database structure for Amendment Notification  CRM [redmine:#147470]
+	Created: 202010303@Winfred
+	Task : Database structure for Amendment Notification CRM [redmine:#147470]
 	DB: DBCRM/bodb_CRM
 */
 
