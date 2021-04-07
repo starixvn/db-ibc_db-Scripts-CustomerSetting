@@ -31,7 +31,7 @@ WHERE ca.groupid in (
 	AND site NOT IN ('789y','IBCIndo','76666b')
 	AND ci.currency IN (SELECT currency FROM @tmpBetSetting)
 
-SELECT ci.custid, cs.DisableNumber, cs.DisableCasino, cs.maxperball161, cs.maxpermatch161, cs.maxpermatch164
+SELECT ci.custid, cs.DisableNumber, cs.DisableCasino, cs.maxperball161, cs.maxpermatch161, cs.maxpermatch164, 0 isFinished
 INTO #tblCust
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN DBCUST.CUSTDB.dbo.custinfo cs WITH(NOLOCK) ON ci.custid = cs.custid
@@ -44,14 +44,27 @@ WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		OR ci.maxpermatch164 <> cs.maxpermatch164
 		)
 
-UPDATE ci
-SET ci.DisableNumber = CASE WHEN ci.DisableNumber <> cs.DisableNumber THEN cs.DisableNumber ELSE ci.DisableNumber END,
-	ci.DisableCasino = CASE WHEN ci.DisableCasino <> cs.DisableCasino THEN cs.DisableCasino ELSE ci.DisableCasino END,
-	ci.maxpermatch161 = CASE WHEN ci.maxpermatch161 <> cs.maxpermatch161 THEN cs.maxpermatch161 ELSE ci.maxpermatch161 END,
-	ci.maxperball161 = CASE WHEN ci.maxperball161 <> cs.maxperball161 THEN cs.maxperball161 ELSE ci.maxperball161 END,
-	ci.maxpermatch164 = CASE WHEN ci.maxpermatch164 <> cs.maxpermatch164 THEN cs.maxpermatch164 ELSE ci.maxpermatch164 END
-FROM custinfo ci WITH(ROWLOCK)
-	INNER JOIN #tblCust cs ON ci.custid = cs.custid	
+WHILE(1=1)
+BEGIN
+	UPDATE TOP (5000) t
+	SET isFinished = 1
+	FROM #tblCust t 
+	WHERE isFinished = 0
 	
+	IF @@rowcount = 0
+		BREAK;
+		
+	UPDATE ci
+	SET ci.DisableNumber = CASE WHEN ci.DisableNumber <> cs.DisableNumber THEN cs.DisableNumber ELSE ci.DisableNumber END,
+		ci.DisableCasino = CASE WHEN ci.DisableCasino <> cs.DisableCasino THEN cs.DisableCasino ELSE ci.DisableCasino END,
+		ci.maxpermatch161 = CASE WHEN ci.maxpermatch161 <> cs.maxpermatch161 THEN cs.maxpermatch161 ELSE ci.maxpermatch161 END,
+		ci.maxperball161 = CASE WHEN ci.maxperball161 <> cs.maxperball161 THEN cs.maxperball161 ELSE ci.maxperball161 END,
+		ci.maxpermatch164 = CASE WHEN ci.maxpermatch164 <> cs.maxpermatch164 THEN cs.maxpermatch164 ELSE ci.maxpermatch164 END
+	FROM custinfo ci WITH(ROWLOCK)
+		INNER JOIN #tblCust cs ON ci.custid = cs.custid	
+	WHERE isFinished = 1
+	
+	DELETE #tblCust WHERE isFinished = 1
+END
 	
 	
