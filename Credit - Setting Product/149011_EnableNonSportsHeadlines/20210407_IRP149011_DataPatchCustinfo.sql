@@ -35,7 +35,7 @@ SELECT ci.custid, cs.DisableNumber, cs.DisableCasino, cs.maxperball161, cs.maxpe
 INTO #tblCust
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN DBCUST.CUSTDB.dbo.custinfo cs WITH(NOLOCK) ON ci.custid = cs.custid
-WHERE ci.srecommend IN (SELECT custid FROM #super)
+WHERE ci.srecommend IN (SELECT custid FROM #supers)
 	AND ci.enabled = 1
 	AND (ci.DisableNumber <> cs.DisableNumber
 		OR ci.DisableCasino <> cs.DisableCasino
