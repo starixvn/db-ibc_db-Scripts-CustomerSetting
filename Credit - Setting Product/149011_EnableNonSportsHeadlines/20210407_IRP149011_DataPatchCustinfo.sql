@@ -31,13 +31,14 @@ WHERE ca.groupid in (
 	AND site NOT IN ('789y','IBCIndo','76666b')
 	AND ci.currency IN (SELECT currency FROM @tmpBetSetting)
 
-SELECT ci.custid, cs.DisableNumber, cs.maxperball161, cs.maxpermatch161, cs.maxpermatch164
+SELECT ci.custid, cs.DisableNumber, cs.DisableCasino, cs.maxperball161, cs.maxpermatch161, cs.maxpermatch164
 INTO #tblCust
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN DBCUST.CUSTDB.dbo.custinfo cs WITH(NOLOCK) ON ci.custid = cs.custid
 WHERE ci.srecommend IN (SELECT custid FROM #super)
 	AND ci.enabled = 1
 	AND (ci.DisableNumber <> cs.DisableNumber
+		OR ci.DisableCasino <> cs.DisableCasino
 		OR ci.maxpermatch161 <> cs.maxpermatch161
 		OR ci.maxperball161 <> cs.maxperball161
 		OR ci.maxpermatch164 <> cs.maxpermatch164
@@ -45,6 +46,7 @@ WHERE ci.srecommend IN (SELECT custid FROM #super)
 
 UPDATE ci
 SET ci.DisableNumber = CASE WHEN ci.DisableNumber <> cs.DisableNumber THEN cs.DisableNumber ELSE ci.DisableNumber END,
+	ci.DisableCasino = CASE WHEN ci.DisableCasino <> cs.DisableCasino THEN cs.DisableCasino ELSE ci.DisableCasino END,
 	ci.maxpermatch161 = CASE WHEN ci.maxpermatch161 <> cs.maxpermatch161 THEN cs.maxpermatch161 ELSE ci.maxpermatch161 END,
 	ci.maxperball161 = CASE WHEN ci.maxperball161 <> cs.maxperball161 THEN cs.maxperball161 ELSE ci.maxperball161 END,
 	ci.maxpermatch164 = CASE WHEN ci.maxpermatch164 <> cs.maxpermatch164 THEN cs.maxpermatch164 ELSE ci.maxpermatch164 END
