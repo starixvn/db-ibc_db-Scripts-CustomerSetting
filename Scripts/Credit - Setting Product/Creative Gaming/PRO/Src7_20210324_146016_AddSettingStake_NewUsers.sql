@@ -25,8 +25,8 @@
 				AND cs.isinternal = 0
 				AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 				AND s.islicensee = 0
-				AND s.site NOT IN ('CN88')
-				AND ci.currency NOT IN (20,72) -- UUS,YNG
+				AND s.site NOT IN ('CN88','76666B')
+				AND ci.currency IN (2,3,5,6,7,12,13,15,16,22,33,34,35,43,45,47,51,64,67,69,95) --RM, US$, HK$, EUR, DON, GBP, RMB, IN, Yen, IND, IDD, IDR, $US, THB, Won, DDD, INH, UT, HKK, MMK, USD
 	--====================== Check Data
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Agent
