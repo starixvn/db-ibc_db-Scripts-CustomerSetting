@@ -16,7 +16,7 @@ UNION SELECT 67, 50, 500, 100, 1500 --HKK
 
 INSERT INTO #Supers(custid,currency)
 SELECT ci.custid , ci.currency
-FROM vw_CustAccount ca WITH(NOLOCK)
+FROM DBCUST.CUSTDB.dbo.CustAccount ca WITH(NOLOCK)
 	INNER JOIN vw_customer ci WITH(NOLOCK) ON ca.custid = ci.custid
 	INNER JOIN custinfo c WITH(NOLOCK) ON ca.custid = c.custid
 WHERE ca.groupid in (
