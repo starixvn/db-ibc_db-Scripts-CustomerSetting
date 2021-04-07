@@ -37,13 +37,17 @@ BEGIN
 	    OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
 	   )
 		RETURN
-
+	
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
-	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY)
-	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
+	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY CLUSTERED,isfinished BIT DEFAULT(0))
+	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,RoleID INT,isfinished BIT DEFAULT(0))
+
+	CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
+	CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY ,RoleID INT)
 
 	DECLARE @SportType SMALLINT = 169
 	DECLARE @BitOrder INT 
+	DECLARE @batch SMALLINT = 5000
 
 	SELECT @BitOrder= bitmapOrder 
 	FROM Dep_ProductStatusProfile WITH(NOLOCK) 
@@ -71,7 +75,7 @@ BEGIN
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
-DECLARE @SportBetType TABLE
+	DECLARE @SportBetType TABLE
 	(
 		SportType	SMALLINT, 
 		BetType		SMALLINT,
@@ -79,114 +83,143 @@ DECLARE @SportBetType TABLE
 		fBettype	SMALLINT
 	)
 	INSERT INTO @SportBetType(SportType, BetType, fSportType, fBettype) VALUES (169, 3611, 220, 1021)
-
-	-------------------------------------PT Setting-----------------------------------------------
-	--Agent Level
-	INSERT INTO dbo.Dep_CustPTSetting_Agent
-		(	[CustID]
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		 )
-	SELECT 
-			a.CustID
-		   ,t.SportType
-		   ,t.BetType
-		   ,cs.IsLive
-		   ,cs.SuperPT
-		   ,cs.MasterPT
-		   ,cs.AgentPT
-	FROM #tmpSMA a WITH(NOLOCK)
-		INNER JOIN Dep_CustPTSetting_Agent cs WITH (NOLOCK) ON cs.CustID = a.CustID
-		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
-
-	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
-		(	AgentID
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		 )
-	SELECT 
-			a.CustID
-		   ,t.SportType
-		   ,t.BetType
-		   ,cs.IsLive
-		   ,cs.SuperPT
-		   ,cs.MasterPT
-		   ,cs.AgentPT
-	FROM #tmpSMA a WITH(NOLOCK)
-		INNER JOIN Dep_CustPTGroupSetting_Member cs WITH (NOLOCK) ON cs.AgentID = a.CustID
-		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
-	WHERE a.RoleID=2
-	--Member Level
-	INSERT INTO dbo.Dep_CustPTSetting_Member
-		(	CustID
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		 )
-	SELECT 
-			a.CustID
-		   ,t.SportType
-		   ,t.BetType
-		   ,cs.IsLive
-		   ,cs.SuperPT
-		   ,cs.MasterPT
-		   ,cs.AgentPT
-	FROM #tmpCust a WITH(NOLOCK)
-		INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON m.CustID=a.CustID
-		INNER JOIN Dep_CustPTSetting_Member cs WITH (NOLOCK) ON cs.CustID = a.CustID
-		INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
-	WHERE m.IsGroupedPT=0
-
-	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-	SELECT t.CustID,1
-	FROM #tmpCust t WITH(NOLOCK) 
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
-		AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
-
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) 
-							WHERE Custid=@srecommend AND ProductSettingID=86)
+	-- SMA LEVEL
+	WHILE(1 =1)
 	BEGIN
-		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,86
+		
+		UPDATE TOP (@batch) c WITH (ROWLOCK)
+		SET c.isfinished = 1
+		OUTPUT DELETED.CustID,DELETED.RoleID INTO #tmpSMATemp(CustID,RoleID)
+		FROM #tmpSMA c 
+		WHERE isfinished = 0
+		
+		IF @@ROWCOUNT = 0 BREAK
+		-------------------------------------PT Setting-----------------------------------------------
+		--Agent Level
+		INSERT INTO dbo.Dep_CustPTSetting_Agent
+			(	[CustID]
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			 )
+		SELECT 
+				a.CustID
+			   ,t.SportType
+			   ,t.BetType
+			   ,cs.IsLive
+			   ,cs.SuperPT
+			   ,cs.MasterPT
+			   ,cs.AgentPT
+		FROM #tmpSMATemp a WITH(NOLOCK)
+			INNER JOIN Dep_CustPTSetting_Agent cs WITH (NOLOCK) ON cs.CustID = a.CustID
+			INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
+
+		INSERT INTO dbo.Dep_CustPTGroupSetting_Member
+			(	AgentID
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			 )
+		SELECT 
+				a.CustID
+			   ,t.SportType
+			   ,t.BetType
+			   ,cs.IsLive
+			   ,cs.SuperPT
+			   ,cs.MasterPT
+			   ,cs.AgentPT
+		FROM #tmpSMATemp a WITH(NOLOCK)
+			INNER JOIN Dep_CustPTGroupSetting_Member cs WITH (NOLOCK) ON cs.AgentID = a.CustID
+			INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
+		WHERE a.RoleID=2
+		
+		-------------------------------------Betlimit Setting----------------------------------------------
+		INSERT INTO Dep_CustBetSetting_Agent(
+			 CustID
+			,SportType
+			,BetType
+			,MinBet
+			,MaxBet
+			,MaxPerMatch
+		)
+		SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
+		FROM #tmpSMATemp t WITH(NOLOCK)
+			INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID
+			INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+
+		TRUNCATE TABLE #tmpSMATemp
 	END
+	--MEMBER LEVEL
+	WHILE(1 =1)
+	BEGIN
+		
+		UPDATE TOP (@batch) c WITH (ROWLOCK)
+		SET c.isfinished = 1
+		OUTPUT DELETED.CustID INTO #tmpCustTemp(CustID)
+		FROM #tmpCust c 
+		WHERE isfinished = 0
+		
+		IF @@ROWCOUNT = 0 BREAK
+		-------------------------------------PT Setting-----------------------------------------------
+		--Member Level
+		INSERT INTO dbo.Dep_CustPTSetting_Member
+			(	CustID
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			 )
+		SELECT 
+				a.CustID
+			   ,t.SportType
+			   ,t.BetType
+			   ,cs.IsLive
+			   ,cs.SuperPT
+			   ,cs.MasterPT
+			   ,cs.AgentPT
+		FROM #tmpCustTemp a WITH(NOLOCK)
+			INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON m.CustID=a.CustID
+			INNER JOIN Dep_CustPTSetting_Member cs WITH (NOLOCK) ON cs.CustID = a.CustID
+			INNER JOIN @SportBetType t ON t.fBetType = cs.BetType AND t.fSportType = cs.SportType
+		WHERE m.IsGroupedPT=0
 
-	-------------------------------------Betlimit Setting----------------------------------------------
-	INSERT INTO Dep_CustBetSetting_Agent(
-		 CustID
-		,SportType
-		,BetType
-		,MinBet
-		,MaxBet
-		,MaxPerMatch
-	)
-	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
-	FROM #tmpSMA t WITH(NOLOCK)
-		INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID
-		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
-
-	INSERT INTO Dep_CustBetSetting_Member(
-		 CustID
-		,SportType
-		,BetType
-		,MinBet
-		,MaxBet
-		,MaxPerMatch
-	)
-	SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
-	FROM #tmpCust t WITH(NOLOCK)
-		INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID
-		INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
+		SELECT t.CustID,1
+		FROM #tmpCustTemp t WITH(NOLOCK) 
+		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
+			AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
+		-------------------------------------Betlimit Setting----------------------------------------------
+			INSERT INTO Dep_CustBetSetting_Member(
+			 CustID
+			,SportType
+			,BetType
+			,MinBet
+			,MaxBet
+			,MaxPerMatch
+		)
+		SELECT t.CustID,b.SportType,b.BetType,cs.MinBet,cs.MaxBet,cs.MaxPerMatch
+		FROM #tmpCustTemp t WITH(NOLOCK)
+			INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID
+			INNER JOIN @SportBetType b ON b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+		
+		TRUNCATE TABLE #tmpCustTemp
+	END 	
+	---------------------------------Check Licensee-----------------------------------------------------
+	
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) 
+								WHERE Custid=@srecommend AND ProductSettingID=86)
+		BEGIN
+			INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+			SELECT @srecommend,86
+		END
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=87)
 	BEGIN
@@ -220,8 +253,7 @@ DECLARE @SportBetType TABLE
 		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #tmpCust temp ON temp.CustID = c.custid
 
-	DECLARE @batch int = 3000
-	WHILE 1 = 1 
+	WHILE (1 = 1) 
 	BEGIN
 		TRUNCATE TABLE #TempProductStatus
 
