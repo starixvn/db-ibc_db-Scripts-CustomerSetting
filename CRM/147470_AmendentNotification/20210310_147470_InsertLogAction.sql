@@ -5,5 +5,5 @@
 */
 
 INSERT INTO crmLogAction(ActionID,SPName,ActionNameEN,IsInternal,ExcludedForCn88,ActionTypeID)
-SELECT 107,'Acc_CRM_AmendmentNoti_MultiCustIns', N'Sync Multiple Related Customers',0,NULL	,NULL
+SELECT 107,'Acc_CRM_AmendmentNoti_MultiCustIns', N'Add the general information for customer',0,NULL	,NULL
 
