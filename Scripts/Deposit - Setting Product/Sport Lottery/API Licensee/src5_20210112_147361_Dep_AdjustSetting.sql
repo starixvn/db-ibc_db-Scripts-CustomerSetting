@@ -5,9 +5,9 @@
 	Task: Adjust Setting API Licensee Deposit for Sports Lottery [Redmine: 147361]
 	DB: DBCUST/CustDB
 	
-	P/s : Step 4 Adjust Setting API Licensee Deposit
+	P/s : Step 5 Adjust Setting API Licensee Deposit
 */
--- BEGIN STEP 4.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
+-- BEGIN STEP 5.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	@target VARCHAR(20)
@@ -111,21 +111,21 @@ BEGIN
 	DROP TABLE #CustBetSetting_Member
 END
 GO
--- END STEP 4.1: DEPLOY THIS SP @ DBCUST.CustDB -------
+-- END STEP 5.1: DEPLOY THIS SP @ DBCUST.CustDB -------
 
 ------------------------------------------------------	
--- BEGIN STEP 4.2: Run this SP at replicated DB: DB06, DBTP -----
+-- BEGIN STEP 5.2: Run this SP at replicated DB: DB06, DBTP -----
 --------------------------------------------------------------------------------------
-PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
 EXEC dbo.Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
 
-PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
 -- BEGIN STEP 4.3: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
-PRINT N'Step 4: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
 EXEC dbo.Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'
 
-PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'

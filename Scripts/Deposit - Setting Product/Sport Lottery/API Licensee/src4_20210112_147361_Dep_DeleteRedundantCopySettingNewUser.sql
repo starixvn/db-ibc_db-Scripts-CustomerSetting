@@ -5,9 +5,9 @@
 	Task: Delete redundant and copy new setting newly created customer API Licensee Deposit for Sports Lottery [Redmine: 147361]
 	DB: DBCUST/CustDB
 	
-	P/s : Step 3 Delete redundant and copy new setting newly created customer API Licensee Deposit
+	P/s : Step 4 Delete redundant and copy new setting newly created customer API Licensee Deposit
 */
--- BEGIN STEP 3.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
+-- BEGIN STEP 4.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 USE CustDB
 GO
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
@@ -439,10 +439,10 @@ BEGIN
 		
 END		
 GO
--- END STEP 3.1: DEPLOY THIS SP @DBCUST.CustDB --------
+-- END STEP 4.1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 3.2: RUN THIS SCRIPT AT DBCUST SERVERS -----
+-- BEGIN STEP 4.2: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
 DECLARE @MaxCustID INT
 	

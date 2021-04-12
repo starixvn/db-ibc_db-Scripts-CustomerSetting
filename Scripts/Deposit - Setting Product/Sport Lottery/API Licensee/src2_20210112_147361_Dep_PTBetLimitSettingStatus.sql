@@ -334,6 +334,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 					  'Lefu','Weiwei','369588vip','3ge888','7Kplatfrom','Easywin22','XINSHNEG','WBG88','WB101','9wtest','M88ASIA','9w','HOT88','TXG','Sunbet138','UN168',
 					  'UNOGAMING','Vwin88','KingBet','LS88','skykey','Comebet','Yabo3','AOGcasino','Pay4d','7Konline','ECBet88','HY6','Opadmin','RICbet','Dabet','Kbet',
 					  'TIC88','XO88','Cali','SampleSite')
+	AND ci.custid NOT IN (3287311,1574102,13682916,1574008) -- large member
+
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -407,6 +409,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 					  'Lefu','Weiwei','369588vip','3ge888','7Kplatfrom','Easywin22','XINSHNEG','WBG88','WB101','9wtest','M88ASIA','9w','HOT88','TXG','Sunbet138','UN168',
 					  'UNOGAMING','Vwin88','KingBet','LS88','skykey','Comebet','Yabo3','AOGcasino','Pay4d','7Konline','ECBet88','HY6','Opadmin','RICbet','Dabet','Kbet',
 					  'TIC88','XO88','Cali','SampleSite')
+	AND ci.custid NOT IN (3287311,1574102,13682916,1574008) -- large member					  
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
