@@ -31,12 +31,11 @@ BEGIN
 		cs2.maxpermatch8 = cs1.maxpermatch8,
 		cs2.maxpermatch10 = cs1.maxpermatch10,
 		cs2.maxpermatch11 = cs1.maxpermatch11,
-		cs2.maxpermatch12 = cs1.maxpermatch12,
+		cs2.maxpermatch1MP = cs1.maxpermatch1MP,
 		cs2.maxpermatch99 = cs1.maxpermatch99,
 		cs2.MaxPerMatch99MP = cs1.MaxPerMatch99MP,
 		cs2.maxpermatch161 = cs1.maxpermatch161,
-		cs2.MaxPerBall161 = cs1.MaxPerBall161,
-		cs2.maxpermatch164 = cs1.maxpermatch164
+		cs2.MaxPerBall161 = cs1.MaxPerBall161
 	FROM custinfo cs2 WITH(ROWLOCK)
 		INNER JOIN #tblCust t ON cs2.custid = t.custid2
 		INNER JOIN custinfo cs1 WITH(NOLOCK) ON cs1.custid = t.custid1													
@@ -69,7 +68,8 @@ BEGIN
 													
 	UPDATE cs2
 	SET cs2.minbet = cs1.minbet,
-		cs2.maxbet = cs1.maxbet
+		cs2.maxbet = cs1.maxbet,
+		cs2.MaxPerGameType  = cs1.MaxPerGameType 
 	FROM custgametype cs2 WITH(ROWLOCK)
 		INNER JOIN #tblCust t ON cs2.custid = t.custid2
 		INNER JOIN custgametype cs1 WITH(NOLOCK) ON cs1.custid = t.custid1
