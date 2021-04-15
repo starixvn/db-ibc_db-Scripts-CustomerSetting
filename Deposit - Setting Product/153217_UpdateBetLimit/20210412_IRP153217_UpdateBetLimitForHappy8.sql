@@ -120392,12 +120392,12 @@ FROM dbo.f_SplitString(@string, ',')
 OPTION (MAXRECURSION 0)
 
 SELECT LEFT(LTRIM(val), CHARINDEX('CC', val) - 1) AS custidM88, RIGHT (val, len (val) - (CHARINDEX('CC', val) + 1) ) AS custidH8
-INTO #tblCust
+INTO #tblCust2
 FROM #temp
 
 INSERT INTO #tmpCust(custidM88,custidH8)
 select replace (replace(replace(custidM88,char(9),''),char(13),''),char(10),'') as custidM88, replace (replace(replace(custidH8,char(9),''),char(13),''),char(10),'') as custidH8
-from #tblCust
+from #tblCust2
 
 
 DECLARE @custids VARCHAR(MAX) = ''
