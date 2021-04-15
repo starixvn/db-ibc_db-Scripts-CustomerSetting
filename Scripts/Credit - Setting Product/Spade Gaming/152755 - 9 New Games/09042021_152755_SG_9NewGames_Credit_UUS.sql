@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Date: 20210409
 	Created: Winfred 
