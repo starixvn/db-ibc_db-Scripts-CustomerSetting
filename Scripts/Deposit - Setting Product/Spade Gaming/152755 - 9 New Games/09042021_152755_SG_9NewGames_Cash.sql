@@ -189,6 +189,35 @@ SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $
 SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+
+SELECT 4354 ,'0.4'  ,'500'     ,0.4  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4355 ,'0.2'  ,'500'     ,0.2  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4356 ,'0.5'  ,'500'     ,0.5  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4357 ,'0.5'  ,'500'     ,0.5  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4358 ,'0.3'  ,'450'     ,0.3  ,450     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4359 ,'0.2'  ,'500'     ,0.2  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4360 ,'0.5'  ,'500'     ,0.5  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4361 ,'0.5'  ,'500'     ,0.5  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4362 ,'0.2'  ,'500'     ,0.2  ,500     ,92    UNION ALL	--HID	--RM,HKK,HK$,PLN,KHR
+SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4357 ,'0.5'  ,'100'     ,0.5  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4358 ,'0.3'  ,'150'     ,0.3  ,150     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,94    UNION ALL	--MK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4357 ,'0.5'  ,'100'     ,0.5  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4358 ,'0.3'  ,'150'     ,0.3  ,150     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,96    UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,96	 UNION ALL	--USDT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+
 SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
