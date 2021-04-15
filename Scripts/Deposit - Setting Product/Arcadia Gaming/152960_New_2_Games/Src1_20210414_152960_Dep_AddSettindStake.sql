@@ -5,6 +5,31 @@
 	Task:  Arcadia Gaming - Offer 2 new mini Games for other deposit RedmineID:#152960
 	DB: DBCust/CustDB
 */
+
+CREATE TABLE #Dep_StakeLevel ( GameTypeID INT,
+								ExchangeId int,
+								GameGroupID int default(10))
+								
+INSERT INTO #Dep_StakeLevel(GameTypeID,ExchangeId)
+SELECT 1901,7     UNION ALL     -- DON	
+SELECT 1901,92				     -- HID	
+
+DELETE a
+FROM #Dep_StakeLevel a
+INNER JOIN Dep_StakeLevel  b WITH(NOLOCK) on a.GameTypeID = b.GameTypeID AND a.ExchangeId = b.ExchangeID
+					AND a.GameGroupID = b.GameGroupID 
+WHERE b.GameTypeID = 1901
+
+DECLARE @MaxStakeLevelID INT
+SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
+
+INSERT INTO Dep_StakeLevel(GameTypeID,ExchangeId,GameGroupID,StakeLevelID)
+SELECT a.GameTypeID,a.ExchangeId,a.GameGroupID,StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY exchangeid) 
+FROM #Dep_StakeLevel a
+
+DROP TABLE #Dep_StakeLevel
+
+
 PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
