@@ -1,7 +1,7 @@
 /*
-	Date: 20201118
+	Date: 20210409
 	Created: Winfred 
-	Task: #145333 - Spadegaming - 1 new games Nov 2020 - Cash
+	Task: #145333 - Spadegaming - 1 new games 2021 - Cash
 	DB: DBCUST/CUSTDB
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
@@ -20,15 +20,6 @@ SELECT 4360 ,'0.5'  ,'1000'    ,0.5  ,1000    ,15   UNION ALL	--IN	--DDD, IND, I
 SELECT 4361 ,'0.5'  ,'1000'    ,0.5  ,1000    ,15   UNION ALL	--IN	--DDD, IND, IDR, IDD, IN
 SELECT 4362 ,'0.2'  ,'1000'    ,0.2  ,1000    ,15   UNION ALL	--IN	--DDD, IND, IDR, IDD, IN
 --Euro, EUR,GBP
-SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4357 ,'0.5'  ,'100'     ,0.5  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4358 ,'0.3'  ,'150'     ,0.3  ,150     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
-SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,78   UNION ALL	--EUR	--Euro, EUR,GBP
 SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,6    UNION ALL	--EURO	--Euro, EUR,GBP
 SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,6    UNION ALL	--EURO	--Euro, EUR,GBP
 SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,6    UNION ALL	--EURO	--Euro, EUR,GBP
@@ -198,24 +189,6 @@ SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $
 SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,70   UNION ALL	--MKK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4357 ,'0.5'  ,'100'     ,0.5  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4358 ,'0.3'  ,'150'     ,0.3  ,150     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,1    UNION ALL	--SD$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4357 ,'0.5'  ,'100'     ,0.5  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4358 ,'0.3'  ,'150'     ,0.3  ,150     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4359 ,'0.2'  ,'100'     ,0.2  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4360 ,'0.5'  ,'100'     ,0.5  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4361 ,'0.5'  ,'100'     ,0.5  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
-SELECT 4362 ,'0.2'  ,'100'     ,0.2  ,100     ,74   UNION ALL	--TH	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4354 ,'0.4'  ,'100'     ,0.4  ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4355 ,'0.2'  ,'100'     ,0.2  ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4356 ,'0.05' ,'100'     ,0.05 ,100     ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
