@@ -4,6 +4,31 @@
 	Task: #145333 - Spadegaming - 1 new games 2021 - Cash
 	DB: DBCUST/CUSTDB
 */
+CREATE TABLE #Dep_StakeLevel_Temp ( GameTypeID INT,
+								ExchangeId int,
+								GameGroupID int default(11))
+								
+INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,ExchangeId)
+SELECT 4301,92    UNION ALL     -- HID	
+SELECT 4301,94    UNION ALL     -- MK	
+SELECT 4301,96				   -- USDT	
+
+DELETE a
+FROM #Dep_StakeLevel_Temp a
+INNER JOIN Dep_StakeLevel  b WITH(NOLOCK) on a.GameTypeID = b.GameTypeID AND a.ExchangeId = b.ExchangeID
+					AND a.GameGroupID = b.GameGroupID 
+WHERE b.GameTypeID = 4301
+
+DECLARE @MaxStakeLevelID INT
+SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
+
+INSERT INTO Dep_StakeLevel(GameTypeID,ExchangeId,GameGroupID,StakeLevelID)
+SELECT a.GameTypeID,a.ExchangeId,a.GameGroupID,StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY exchangeid) 
+FROM #Dep_StakeLevel_Temp a
+
+DROP TABLE #Dep_StakeLevel_Temp
+
+
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
 								,ExchangeId int, GameGroupID int default(11))
