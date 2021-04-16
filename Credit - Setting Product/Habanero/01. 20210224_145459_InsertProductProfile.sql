@@ -8,7 +8,8 @@
 USE CustDB
 GO
 /*
-DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE Sporttype = 238 
+SELECT * FROM ProductSettingDetail WITH(NOLOCK) WHERE Sporttype = 238 
+
 */
 
 
@@ -20,12 +21,14 @@ SELECT @RealProductID = 22
 SET @sportType = 238
 SET @betType = 7001 
 
+DELETE FROM ProductSettingDetail WITH(ROWLOCK) WHERE Sporttype = 238 
+
 --PT Setting
 INSERT INTO	dbo.ProductSettingDetail
 		(SettingType, SportType	, BetType	, IsLive, ProductID		, MaxPT	, MaxDiscount	, IsSync	, IsHidden	, IsDisabled	, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId	, MaxChoice)
 VALUES	
 --BetSetting																																				
-		(8          , @sportType, @betType	, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 6           , @SettingStatus, NULL		   , @RealProductID	, NULL)
+		(8          , @sportType, @betType	, 0     , @ProductID	, NULL	, NULL			, NULL		, NULL		, NULL			, 2           , 5           , @SettingStatus, NULL		   , @RealProductID	, NULL)
 
 
 
