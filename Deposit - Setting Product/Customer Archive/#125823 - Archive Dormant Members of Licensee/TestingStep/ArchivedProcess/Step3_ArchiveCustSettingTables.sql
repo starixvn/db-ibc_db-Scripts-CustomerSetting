@@ -6,5 +6,5 @@
 */
 USE bodb02
 GO
-EXEC DBAGE.bodb02.dbo.ArchiveDeposit_Step3
+EXEC dbo.ArchiveDeposit_Step3
 

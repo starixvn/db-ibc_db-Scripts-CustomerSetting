@@ -6,5 +6,5 @@
 */
 USE bodb02
 GO
-EXEC DBTXN.bodb02.dbo.[Task_Dep_Cust_Archive_Clear_Balance_UAT4]
+EXEC dbo.[Task_Dep_Cust_Archive_Clear_Balance_UAT4]
 	@BatchSize = 100

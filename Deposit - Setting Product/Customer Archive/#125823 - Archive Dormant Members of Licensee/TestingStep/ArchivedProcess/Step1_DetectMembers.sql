@@ -6,7 +6,7 @@
 */
 USE bodb02
 GO
-EXEC  DBACC.bodb02.dbo.Task_Dep_Customer_Archive_GetDormantCustomer_UAT4
+EXEC dbo.Task_Dep_Customer_Archive_GetDormantCustomer_UAT4
 	@CheckBettrans_CustPerBatch = 2000,
 	@InsertRepTable_CustPerBatch = 6000
 
