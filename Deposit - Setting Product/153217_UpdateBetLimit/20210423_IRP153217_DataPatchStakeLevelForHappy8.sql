@@ -36,9 +36,10 @@ BEGIN
 	UNION SELECT 4602,8750,4102
 
 	UPDATE cs
-	SET cs.StakeLevelList = CASE WHEN cs.StakeLevelList = t.StakeLevelID THEN t.StakeLevelID_New ELSE cs.StakeLevelList END
+	SET cs.StakeLevelList = t.StakeLevelID_New
 	FROM Dep_CustStakeLevel_Member cs WITH(ROWLOCK)
-		INNER JOIN @tmp t ON cs.BetType = t.Bettype
+		INNER JOIN @tmp t ON cs.BetType = t.Bettype 
+						AND t.StakeLevelID= cs.StakeLevelList
 	WHERE custid IN (SELECT custid FROM #tblCust)
 		AND sporttype = 245
 	
