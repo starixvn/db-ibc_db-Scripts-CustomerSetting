@@ -18,7 +18,7 @@ BEGIN
 	
 	INSERT INTO #tblCust(custid)
 	SELECT	val
-	FROM FROM dbo.f_SplitString(@custids, ',')
+	FROM dbo.f_SplitString(@custids, ',')
 	OPTION (MAXRECURSION 0)
 	
 	DECLARE @tmp TABLE(Bettype INT, StakeLevelID VARCHAR(50),StakeLevelID_New VARCHAR(50))
