@@ -120348,7 +120348,7 @@ BEGIN
 	
 	UPDATE TOP(2000) t	
 	SET isFinished = 1,
-		@custids = @custids + CAST(custid AS VARCHAR(20))
+		@custids = @custids + ','+ CAST(custid AS VARCHAR(20))
 	FROM #tmpCust t
 	WHERE isFinished = 0
 	
