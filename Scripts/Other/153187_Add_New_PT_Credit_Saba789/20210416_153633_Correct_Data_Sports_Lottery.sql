@@ -1,0 +1,26 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
+ /*
+	Created: 20210416@Winfred
+	Task:  Add new PT into Dep_PTconfig for credit licensee Saba789 [RedmineID:#153187]
+		-  Add new PT into Dep_PTconfig for credit licensee 9w [RedmineID:#153633]
+	DB: DBCUST-CUSTDB
+*/
+USE CUSTDB
+GO
+
+CREATE TABLE #supers (custid int)
+
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM custInfo ci WITH (NOLOCK) 	
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.username NOT LIKE '3rdSuper%'	
+	AND ci.CustID IN (1574024,2397885,28929006,28929026,28929156,28929212,38366148,38366223,38366251,38366340,38366366,38451672,38451711,42989558,42989728,42989900,14107222,28929180,38366037,38366076,38366194,38366306,38451644,38583357,41047195,41767024,45421520,46492145,47183060,49055623,49350806,49391615
+)
+ORDER BY ci.custid 
+
+DELETE cg
+FROM dbo.Dep_LicenseeProductSetting cg WITH(ROWLOCK)		
+INNER JOIN #supers t ON cg.CustID=t.CustID AND CG.ProductSettingID = 86	
+
+DROP TABLE #supers
