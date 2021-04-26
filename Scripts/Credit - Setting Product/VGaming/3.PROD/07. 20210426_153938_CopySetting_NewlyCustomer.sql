@@ -1,0 +1,175 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20210426@Eden
+	Task: Copy Setting for newly created customer - VGaming [#RM:153938]
+	DB: DBCUST/CustDB
+*/
+PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+
+DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
+	
+SELECT @MaxCustID = xxx
+	
+CREATE TABLE #supers (custid int)
+
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND cs.isinternal = 0
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND s.islicensee = 0
+	AND ci.site IN ('733333','722222','222223','222225')
+	AND ci.currency <> 20
+
+DECLARE @ProductID TINYINT = 66
+CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
+INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
+SELECT	200, 1611, SportType, BetType, 0, SettingType, 0
+FROM dbo.ProductSettingDetail WITH (NOLOCK)
+WHERE ProductID = @ProductID AND SettingType IN (1,6)
+
+INSERT INTO #DestinationSportBetType (fSportType, fBetType, tSportType, tBetType, IsLive, SettingType, IsFinished)
+SELECT	NULL, NULL, SportType, BetType, 0, SettingType, 0 
+FROM dbo.ProductSettingDetail WITH (NOLOCK)
+WHERE ProductID = @ProductID AND SettingType = 8
+
+CREATE TABLE #MemberTemp
+(
+	CustID INT PRIMARY KEY CLUSTERED,
+	currency INT
+)
+
+CREATE TABLE #SMATemp
+(
+	CustID INT PRIMARY KEY CLUSTERED,
+	roleid TINYINT,
+	currency INT
+)
+	
+INSERT INTO #MemberTemp (CustID, currency)
+SELECT custid, currency
+FROM Custinfo WITH (NOLOCK)
+WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid	
+	
+INSERT INTO #SMATemp (CustID, roleid, currency)
+SELECT custid, roleid, currency
+FROM Custinfo WITH (NOLOCK)
+WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid 
+
+DECLARE @MaxPT TINYINT
+SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
+	
+--------------------------------------PT Setting-------------------------------------------------	
+SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+FROM #DestinationSportBetType		
+WHERE SettingType = 1
+
+--AGENT LEVEL
+INSERT INTO dbo.CustPTSetting3rd_Agent
+	(	[CustID]
+		,[SportType]
+		,[BetType]
+		,[IsLive]
+		,[SuperPT]
+		,[MasterPT]
+		,[AgentPT]
+		,[IsAutoMasterPT]
+		,[AutoMasterPT]
+		,[IsAutoSuperPT]
+		,[AutoSuperPT]
+		,[MinPT]
+		,[MaxPT])
+SELECT 
+	cs.custid, dest.tsporttype, dest.tbettype, dest.IsLive
+	,cs.SuperPT
+	,cs.MasterPT
+	,cs.AgentPT
+	,cs.IsAutoMasterPT
+	,cs.AutoMasterPT
+	,cs.IsAutoSuperPT
+	,cs.AutoSuperPT
+	,cs.MinPT
+	,@MaxPT
+FROM dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) 
+	INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.custid = cs.custid
+	CROSS APPLY #DestinationSportBetType dest
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 1
+	
+--MEMBER LEVEL
+INSERT INTO dbo.CustPTSetting3rd_Member
+	(	[custid]
+		,	[sporttype]
+		,	[bettype]
+		,	[islive]
+		,	[superPT]
+		,	[masterPT]
+		,	[agentPT]
+		,	[IsAutoMasterPT]
+		,	[AutoMasterPT]
+		,	[IsAutoSuperPT]
+		,	[AutoSuperPT])
+SELECT 
+	cs.custid, dest.tsporttype, dest.tbettype, dest.IsLive
+	,cs.SuperPT
+	,cs.MasterPT
+	,cs.AgentPT
+	,cs.IsAutoMasterPT
+	,cs.AutoMasterPT
+	,cs.IsAutoSuperPT
+	,cs.AutoSuperPT
+FROM dbo.CustPTSetting3rd_Member cs WITH(NOLOCK)
+	INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
+	CROSS APPLY #DestinationSportBetType dest
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 1
+	
+--------------------------------------Bet Setting-------------------------------------------------		
+--Agent Level
+INSERT INTO dbo.CustStakeLevel_Agent (CustID, SportType, BetType, StakeLevelList)	      
+SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20))		
+FROM dbo.StakeLevel s WITH(NOLOCK)
+	INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
+	CROSS APPLY #SMATemp ci WITH(NOLOCK) 
+WHERE dest.SettingType = 8 AND ci.currency = s.ExchangeId
+
+--Member Level
+INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList, LastUpdated)	      
+SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20)), GETDATE()
+FROM dbo.StakeLevel s WITH(NOLOCK)
+	INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
+	CROSS APPLY #MemberTemp ci WITH(NOLOCK) 
+WHERE dest.SettingType = 8 AND ci.currency = s.ExchangeId
+
+--------------------------------------Win Loss Limit-------------------------------------------------		
+SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
+FROM #DestinationSportBetType		
+WHERE SettingType = 6
+
+--Agent Level
+INSERT INTO dbo.CustWinLossLimit_Agent (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.MaxWinLimit, cs.MaxLossLimit, cs.IsAutoReset
+FROM #SMATemp ci WITH(NOLOCK) 
+	INNER JOIN dbo.CustWinLossLimit_Agent cs WITH (NOLOCK) ON ci.CustID = cs.CustId
+	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 6
+
+--Member Level
+INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.MaxWinLimit, cs.MaxLossLimit, cs.IsAutoReset
+FROM #MemberTemp ci WITH(NOLOCK) 
+	INNER JOIN dbo.CustWinLossLimit_Member cs WITH (NOLOCK) ON ci.CustID = cs.CustId
+	CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+	AND dest.SettingType = 6
+
+DROP TABLE #SMATemp
+DROP TABLE #MemberTemp
+DROP TABLE #DestinationSportBetType		
+
+PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
