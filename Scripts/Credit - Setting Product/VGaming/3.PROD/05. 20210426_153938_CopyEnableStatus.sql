@@ -73,6 +73,10 @@ BEGIN
 		TRUNCATE TABLE #CustStatus_batch
 
 	END
+
+	DROP TABLE #CustStatus
+	DROP TABLE #CustStatus_batch
+	DROP TABLE #CustTemp
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -134,4 +138,5 @@ BEGIN
 			
 	waitfor delay '00:00:00.100'
 END
+DROP TABLE #supers
 GO

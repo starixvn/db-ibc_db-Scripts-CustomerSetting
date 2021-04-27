@@ -206,6 +206,21 @@ BEGIN
 		TRUNCATE TABLE #CustWinLoss_MemberTemp
 	END
 
+	DROP TABLE #CustBet_Agent
+	DROP TABLE #CustBet_AgentTemp
+	DROP TABLE #CustBet_Member
+	DROP TABLE #CustBet_MemberTemp
+	DROP TABLE #CustPT_Agent
+	DROP TABLE #CustPT_AgentTemp
+	DROP TABLE #CustPT_Member
+	DROP TABLE #CustPT_MemberTemp
+	DROP TABLE #CustPTGroup_Member
+	DROP TABLE #CustPTGroup_MemberTemp
+	DROP TABLE #CustWinLoss_Agent
+	DROP TABLE #CustWinLoss_AgentTemp
+	DROP TABLE #CustWinLoss_Member
+	DROP TABLE #CustWinLoss_MemberTemp
+	DROP TABLE #supers
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

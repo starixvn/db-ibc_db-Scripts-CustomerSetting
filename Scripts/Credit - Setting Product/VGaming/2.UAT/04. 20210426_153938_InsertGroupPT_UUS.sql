@@ -87,6 +87,8 @@ BEGIN
 
 		DELETE @AgentTmp
 	END
+	DROP TABLE #AgentList
+	DROP TABLE #DestinationSportBetType
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

@@ -66,7 +66,7 @@ BEGIN
 	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
 
 	DECLARE @MaxPT TINYINT, @Currency INT
-	SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
+	--SELECT TOP 1 @MaxPT = MaxPT FROM dbo.ProductSettingDetail WITH (NOLOCK) WHERE ProductID = @ProductID AND SettingType = 1
 	SELECT @Currency = currency FROM customer WITH (NOLOCK) WHERE custid = @srecommend
 	
 	--------------------------------------PT Setting-------------------------------------------------	
@@ -99,7 +99,7 @@ BEGIN
 		,cs.IsAutoSuperPT
 		,cs.AutoSuperPT
 		,cs.MinPT
-		,@MaxPT
+		,cs.MaxPT
 	FROM dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) 
 		INNER JOIN #SMATemp ci WITH(NOLOCK) ON ci.custid = cs.custid
 		CROSS APPLY #DestinationSportBetType dest
@@ -238,4 +238,5 @@ BEGIN
 			
 	waitfor delay '00:00:0.200'
 END
+DROP TABLE #supers
 GO

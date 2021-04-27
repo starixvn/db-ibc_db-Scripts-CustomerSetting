@@ -22,12 +22,12 @@ WHERE ci.roleid = 4
 	AND ci.site IN ('733333','722222','222223','222225')
 	AND ci.currency <> 20
 
-CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY)
+CREATE TABLE #SMAList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 CREATE TABLE #MemberList_PT (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY)	
 CREATE TABLE #SMAList_WinLossLimit (custid INT, MaxWinLimit SMALLMONEY, MaxLossLimit MONEY, IsAutoReset BIT)
 CREATE TABLE #MemberList_WinLossLimit (custid INT, MaxWinLimit SMALLMONEY, MaxLossLimit MONEY, IsAutoReset BIT)
 
-DECLARE @tmp_PT TABLE (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY)
+DECLARE @tmp_PT TABLE (custid INT, SPositionTaking SMALLMONEY, MPositionTaking SMALLMONEY, APositionTaking SMALLMONEY, IsAutoMPositionTaking BIT, AutoMPositionTaking SMALLMONEY, IsAutoPositionTaking BIT, AutoPositionTaking SMALLMONEY, MinPositionTaking SMALLMONEY, MaxPositionTaking SMALLMONEY)
 DECLARE @tmp_WinLossLimit TABLE (custid INT, MaxWinLimit SMALLMONEY, MaxLossLimit MONEY, IsAutoReset BIT) 
 
 DECLARE @ProductID TINYINT = 66
@@ -42,7 +42,7 @@ CREATE TABLE #CustStatus
 		isHidden BIT
 	)
 
-	CREATE TABLE #CustStatus_batch
+CREATE TABLE #CustStatus_batch
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
 		isDisabled BIT,
@@ -56,8 +56,9 @@ CREATE TABLE #CustStatus
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, @bitmapOrderSource)) as isHidden,
 		c.CustID
 	FROM CustProductStatus c WITH (NOLOCK)
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.custid
-	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	WHERE ci.Enabled = 1
 )
 ,tmpVGaming AS
 (
@@ -66,8 +67,9 @@ CREATE TABLE #CustStatus
 		(SELECT value FROM dbo.f_CustSetting_ProductStatusSel(c.bitmapIsHidden, @bitmapOrderDest)) as isHidden,
 		c.CustID
 	FROM CustProductStatus c WITH (NOLOCK)
-	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.custid
-	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = c.custid
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	WHERE ci.Enabled = 1
 )
 INSERT INTO #CustStatus(isDisabled,isHidden,CustID)
 SELECT a.isDisabled,a.isHidden,a.CustID
@@ -93,8 +95,6 @@ BEGIN
 
 		WAITFOR DELAY '00:00:00.050'
 END
-
-DROP TABLE #CustStatus
 ------------------------------------------------------------------------------------
 	
 CREATE TABLE #DestinationSportBetType(fSportType SMALLINT, fBetType SMALLINT,tSportType SMALLINT, tBetType SMALLINT, IsLive BIT,  SettingType INT, IsFinished BIT)
@@ -109,8 +109,8 @@ FROM #DestinationSportBetType
 WHERE SettingType = 1
 
 --AGENT LEVEL
-INSERT INTO  #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking)
-SELECT ci.custid, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT, cs.MinPT
+INSERT INTO  #SMAList_PT (custid, SPositionTaking, MPositionTaking, APositionTaking, IsAutoMPositionTaking, AutoMPositionTaking, IsAutoPositionTaking, AutoPositionTaking, MinPositionTaking, MaxPositionTaking)
+SELECT ci.custid, cs.SuperPT, cs.MasterPT, cs.AgentPT, cs.IsAutoMasterPT, cs.AutoMasterPT, cs.IsAutoSuperPT, cs.AutoSuperPT, cs.MinPT, cs.MaxPT
 FROM dbo.CustPTSetting3rd_Agent cs WITH(NOLOCK) 
 	INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cs.custid
 	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
@@ -126,6 +126,7 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csa.SportType = 
 			OR cs.IsAutoSuperPT <> csa.IsAutoSuperPT
 			OR cs.AutoSuperPT <> csa.AutoSuperPT
 			OR cs.MinPT <> csa.MinPT 
+			OR cs.MaxPT <> csa.MaxPT
 			)
 
 --MEMBER LEVEL
@@ -150,7 +151,7 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType AND csm.SportType = 
 WHILE (1 = 1)
 BEGIN				
 	DELETE TOP (4000) t 
-	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking, Deleted.MinPositionTaking
+	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking, Deleted.MinPositionTaking,deleted.MaxPositionTaking
 	INTO @tmp_PT
 	FROM #SMAList_PT t
 		
@@ -165,6 +166,7 @@ BEGIN
 		,csa.IsAutoSuperPT = cs.isautopositiontaking 
 		,csa.AutoSuperPT = cs.autopositiontaking
 		,csa.MinPT = cs.minpositiontaking
+		,csa.MaxPT = cs.MaxPositionTaking
 	FROM dbo.CustPTSetting3rd_Agent csa WITH(ROWLOCK)
 		INNER JOIN @tmp_PT cs ON csa.custid = cs.custid AND csa.SportType = @tSportType AND csa.BetType = @tBetType
 
@@ -176,7 +178,7 @@ END
 WHILE (1 = 1)
 BEGIN				
 	DELETE TOP (4000) t 
-	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking, NULL
+	OUTPUT Deleted.custid, Deleted.SPositionTaking, Deleted.MPositionTaking, Deleted.APositionTaking, Deleted.IsAutoMPositionTaking, Deleted.AutoMPositionTaking, Deleted.IsAutoPositionTaking, Deleted.AutoPositionTaking, NULL,NULL
 	INTO @tmp_PT
 	FROM #MemberList_PT t
 		
@@ -276,3 +278,10 @@ BEGIN
 END
 
 DROP TABLE #DestinationSportBetType	
+DROP TABLE #CustStatus_batch
+DROP TABLE #MemberList_PT
+DROP TABLE #MemberList_WinLossLimit
+DROP TABLE #SMAList_PT
+DROP TABLE #SMAList_WinLossLimit
+DROP TABLE #supers
+DROP TABLE #CustStatus

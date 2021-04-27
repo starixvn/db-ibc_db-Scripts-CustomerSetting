@@ -170,6 +170,7 @@ WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
 
 DROP TABLE #SMATemp
 DROP TABLE #MemberTemp
-DROP TABLE #DestinationSportBetType		
+DROP TABLE #DestinationSportBetType	
+DROP TABLE #supers
 
 PRINT N'Step 7: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

@@ -40,7 +40,7 @@ BEGIN
 		INNER JOIN dbo.custInfo ci ON ci.custid = cs.AgentID
 		INNER JOIN dbo.customer c ON ci.custid = c.custid
 	WHERE ci.Enabled = 1 
-		AND ci.site IN ('733333','722222','222223','222225')
+		AND c.site IN ('733333','722222','222223','222225')
 		AND c.currency <> 20
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
@@ -87,7 +87,11 @@ BEGIN
 
 		DELETE @AgentTmp
 	END
+
+	DROP TABLE #AgentList
+	DROP TABLE #DestinationSportBetType
 END
+GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
