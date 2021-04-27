@@ -21,7 +21,7 @@ SELECT @sporttype,@bettype, e.exchangeid AS exchangeid, s.siteid, 0 AS IsHidden,
 FROM dbo.[Site] s WITH(NOLOCK)
 	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
 WHERE s.isActive = 1 AND s.isLicensee = 0
-	AND s.site IN ('733333','722222','222223','222225')
+	AND s.site IN ('BEST-ODDS', 'INDO', 'XYZBET', '611111', '722222', '733333', '222223', '755555', 'KORIBC', '7aa666')
 	AND e.exchangeid IN (
 						2,  --MYR(RM)
 						67, --HKD(HKK)
