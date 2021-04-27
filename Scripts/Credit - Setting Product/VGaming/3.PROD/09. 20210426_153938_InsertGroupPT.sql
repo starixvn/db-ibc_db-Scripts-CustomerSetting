@@ -41,7 +41,39 @@ BEGIN
 		INNER JOIN dbo.customer c ON ci.custid = c.custid
 	WHERE ci.Enabled = 1 
 		AND c.site IN ('BEST-ODDS', 'INDO', 'XYZBET', '611111', '722222', '733333', '222223', '755555', 'KORIBC', '7aa666')
-		AND c.currency <> 20
+		AND c.currency IN (
+							2,  --MYR(RM)
+							3,  --USD(US$)
+							5,  --HKD(HK$)
+							6,  --EUR(EURO)
+							7,  --VND(DON)
+							9,  --AUD(AUD)
+							12,  --GBP(GBP)
+							13,  --CNY(RMB)
+							15,  --IDR(IN)
+							16,  --USD(Yen)
+							22,  --IDR(IND)
+							33,  --IDR(IDD)
+							34,  --IDR(IDR)
+							35,  --USD($US)
+							41,  --CHF(CHF)
+							43,  --THB(THB)
+							45,  --KRW(Won)
+							47,  --IDR(DDD)
+							50,  --CAD(CAN)
+							51,  --VND(INH)
+							52,  --DKK(DKK)
+							53,  --SEK(SEK)
+							54,  --NOK(NOK)
+							57,  --CZK(CZK)
+							58,  --RON(RON)
+							64,  --USD(UT)
+							67,  --HKD(HKK)
+							69,  --MMK(MMK)
+							71,  --KHR(KHR)
+							81,  --CNY(CY)
+							95   --USD(USD)
+			)
 
 	DECLARE @fSportType SMALLINT, @fBetType SMALLINT
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
