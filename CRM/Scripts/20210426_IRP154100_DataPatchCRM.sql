@@ -9,6 +9,27 @@ SET SettingID = 3025
 WHERE SettingID = 3012
 GO
 
+UPDATE crmFeedback with (ROWLOCK) 
+SET MainCategoryID = 3025
+where MainCategoryID = 3012
+GO
 
 DELETE crmSetting WITH(ROLOCK)
 WHERE SettingID = 3012
+GO
+DELETE crmSetting_bk WITH(ROLOCK)
+WHERE SettingID = 3012
+GO
+
+DELETE crmSettingRelation 
+WHERE SettingID = 3012
+GO
+
+DELETE crmSettingRelation_bk 
+WHERE SettingID = 3012
+
+
+
+
+
+
