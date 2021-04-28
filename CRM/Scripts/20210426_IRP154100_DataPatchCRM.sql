@@ -14,18 +14,18 @@ SET MainCategoryID = 3025
 where MainCategoryID = 3012
 GO
 
-DELETE crmSetting WITH(ROLOCK)
+DELETE crmSetting WITH(ROWLOCK)
 WHERE SettingID = 3012
 GO
-DELETE crmSetting_bk WITH(ROLOCK)
-WHERE SettingID = 3012
-GO
-
-DELETE crmSettingRelation 
+DELETE crmSetting_bk WITH(ROWLOCK)
 WHERE SettingID = 3012
 GO
 
-DELETE crmSettingRelation_bk 
+DELETE crmSettingRelation WITH(ROWLOCK)
+WHERE SettingID = 3012
+GO
+
+DELETE crmSettingRelation_bk WITH(ROWLOCK)
 WHERE SettingID = 3012
 GO
 
