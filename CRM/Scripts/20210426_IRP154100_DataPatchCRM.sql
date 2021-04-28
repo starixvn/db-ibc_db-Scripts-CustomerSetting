@@ -32,6 +32,11 @@ GO
 UPDATE crmSettingRelation WITH(ROWLOCK)
 SET ParentID = 3025
 where SettingID= 4029 and ParentID = 3012
+GO
+
+UPDATE crmSettingRelationB_bk WITH(ROWLOCK)
+SET ParentID = 3025
+where SettingID= 4029 and ParentID = 3012
 
 
 
