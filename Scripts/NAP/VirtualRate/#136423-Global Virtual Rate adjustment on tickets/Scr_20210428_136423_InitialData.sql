@@ -4,9 +4,9 @@
 	Task: Initial data for VRSettingRule, VRSettingRuleDetail, VRSettingRuleDetail_NotApply base on exsting Rule on place bet SPs [RM#136423]
 	DB: DBCUST/CustDB
 */
---TRUNCATE TABLE VRSettingRuleDetail_NotApply
---TRUNCATE TABLE VRSettingRuleDetail
---TRUNCATE TABLE VRSettingRule 
+TRUNCATE TABLE VRSettingRuleDetail_NotApply
+TRUNCATE TABLE VRSettingRuleDetail
+TRUNCATE TABLE VRSettingRule 
 DECLARE @ID INT
 --> Rule 1
 INSERT INTO [VRSettingRule](
@@ -250,33 +250,33 @@ SELECT @ID as RuleID
 	,0 as DateOfWeek
 	,0 as LeagueGroupID
 	,0 as LeagueID
---UNION ALL
---SELECT @ID as RuleID
---	,0 as Sporttype
---	,0 as Bettype
---	,0 as SiteID
---	,8 as CustomerClass
---	,0 as DateOfWeek
---	,0 as LeagueGroupID
---	,0 as LeagueID
---UNION ALL
---SELECT @ID as RuleID
---	,0 as Sporttype
---	,0 as Bettype
---	,0 as SiteID
---	,9 as CustomerClass
---	,0 as DateOfWeek
---	,0 as LeagueGroupID
---	,0 as LeagueID
---UNION ALL
---SELECT @ID as RuleID
---	,0 as Sporttype
---	,0 as Bettype
---	,0 as SiteID
---	,10 as CustomerClass
---	,0 as DateOfWeek
---	,0 as LeagueGroupID
---	,0 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,8 as CustomerClass
+	,0 as DateOfWeek
+	,0 as LeagueGroupID
+	,0 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,9 as CustomerClass
+	,0 as DateOfWeek
+	,0 as LeagueGroupID
+	,0 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,10 as CustomerClass
+	,0 as DateOfWeek
+	,0 as LeagueGroupID
+	,0 as LeagueID
 --select @ID
 --select * from [VRSettingRule]
 
