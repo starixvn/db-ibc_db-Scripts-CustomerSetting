@@ -4,7 +4,8 @@
 	DB: DBCUST/CustDB
 */
 --deploy these tables on DBCUST/CustDB
--- then setup replication for them under pub DBCUST_CustSetting
+-- then setup replication for table ProblemAccountClassification & CategoryConfig
+-- under pub DBCUST_CustSetting
 CREATE TABLE ProblemAccountClassification (custid INT NOT NULL, 
 	IsReviewed BIT, 
 	ModifiedDate DATETIME
@@ -30,7 +31,9 @@ CREATE TABLE CategoryConfig (CategoryID SMALLINT NOT NULL,
 ) ON [DATA]
 GO
 
-CREATE TABLE CustCategoryHistory (LogID BIGINT IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+-----------------------------------------------------------
+--setup on dbcust only for this table
+CREATE TABLE CustCategoryHistory (LogID BIGINT IDENTITY(1,1) NOT NULL,
 	custid INT NOT NULL, 
 	CategoryID SMALLINT NULL, 
 	CustomerClass SMALLINT NULL,

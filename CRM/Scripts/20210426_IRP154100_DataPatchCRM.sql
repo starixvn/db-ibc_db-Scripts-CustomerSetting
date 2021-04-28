@@ -27,8 +27,11 @@ GO
 
 DELETE crmSettingRelation_bk 
 WHERE SettingID = 3012
+GO
 
-
+UPDATE crmSettingRelation WITH(ROWLOCK)
+SET ParentID = 3025
+where SettingID= 4029 and ParentID = 3012
 
 
 
