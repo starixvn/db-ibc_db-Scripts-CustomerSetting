@@ -55,8 +55,7 @@ BEGIN
 							45, --KRW(Won)
 							69, --MMK(MMK)
 							2,  --MYR(RM)
-							43, --THB(THB)
-							95  --USD(USD)
+							43 --THB(THB)
 						
 	)
 	AND 1 = (CASE WHEN c.[site] = 'BEST-ODDS' AND ci.currency IN (43,47,33,34,15,22) THEN 0 ELSE 1 END) --exclude Site BEST-ODDS with currencies: THB(THB), IDR(DDD), IDR(IDR), IDR(IDR), IDR(IN), IDR(IND)

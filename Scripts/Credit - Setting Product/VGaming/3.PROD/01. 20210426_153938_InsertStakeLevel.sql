@@ -26,9 +26,7 @@ WHERE exchangeid IN (
 						45, --KRW(Won)
 						69, --MMK(MMK)
 						2,  --MYR(RM)
-						43, --THB(THB)
-						95  --USD(USD)
-						
+						43 --THB(THB)
 					)
 	AND GameTypeID =  @fBettype
 
@@ -56,8 +54,7 @@ AND t.ExchangeId IN (
 						45, --KRW(Won)
 						69, --MMK(MMK)
 						2,  --MYR(RM)
-						43, --THB(THB)
-						95  --USD(USD)
+						43 --THB(THB)
 ) 
 
 /*				
