@@ -14,9 +14,9 @@ SELECT @Bettype, NULL, NULL, NULL, NULL, exchangeid, NULL, @GameGroupID
 FROM dbo.StakeLevel WITH (NOLOCK)
 WHERE exchangeid IN (
 						13, --CNY(RMB)
-						6, --EUR(EURO)
+						6,  --EUR(EURO)
 						12, --GBP(GBP)
-						5, --HKD(HK$)
+						5,  --HKD(HK$)
 						67, --HKD(HKK)
 						47, --IDR(DDD)
 						33, --IDR(IDD)
@@ -25,13 +25,10 @@ WHERE exchangeid IN (
 						22, --IDR(IND)
 						45, --KRW(Won)
 						69, --MMK(MMK)
-						2, --MYR(RM)
+						2,  --MYR(RM)
 						43, --THB(THB)
-						35, --USD($US)
-						3, --USD(US$)
-						95, --USD(USD)
-						64, --USD(UT)
-						16 --USD(Yen)
+						95  --USD(USD)
+						
 					)
 	AND GameTypeID =  @fBettype
 
@@ -47,9 +44,9 @@ FROM dbo.StakeLevel t WITH (NOLOCK)
 WHERE t.GameTypeID = @Bettype 
 AND t.ExchangeId IN (
 						13, --CNY(RMB)
-						6, --EUR(EURO)
+						6,  --EUR(EURO)
 						12, --GBP(GBP)
-						5, --HKD(HK$)
+						5,  --HKD(HK$)
 						67, --HKD(HKK)
 						47, --IDR(DDD)
 						33, --IDR(IDD)
@@ -58,13 +55,9 @@ AND t.ExchangeId IN (
 						22, --IDR(IND)
 						45, --KRW(Won)
 						69, --MMK(MMK)
-						2, --MYR(RM)
+						2,  --MYR(RM)
 						43, --THB(THB)
-						35, --USD($US)
-						3, --USD(US$)
-						95, --USD(USD)
-						64, --USD(UT)
-						16 --USD(Yen)
+						95  --USD(USD)
 ) 
 
 /*				

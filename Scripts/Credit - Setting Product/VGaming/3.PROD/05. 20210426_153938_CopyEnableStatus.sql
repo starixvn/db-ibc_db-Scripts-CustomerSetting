@@ -111,9 +111,9 @@ WHERE ci.roleid = 4
 	AND ci.site IN ('BEST-ODDS', 'INDO', 'XYZBET', '611111', '722222', '733333', '222223', '755555', 'KORIBC', '7aa666', 'IBCIndo')
 	AND ci.currency IN (
 							13, --CNY(RMB)
-							6, --EUR(EURO)
+							6,  --EUR(EURO)
 							12, --GBP(GBP)
-							5, --HKD(HK$)
+							5,  --HKD(HK$)
 							67, --HKD(HKK)
 							47, --IDR(DDD)
 							33, --IDR(IDD)
@@ -122,14 +122,13 @@ WHERE ci.roleid = 4
 							22, --IDR(IND)
 							45, --KRW(Won)
 							69, --MMK(MMK)
-							2, --MYR(RM)
+							2,  --MYR(RM)
 							43, --THB(THB)
-							35, --USD($US)
-							3, --USD(US$)
-							95, --USD(USD)
-							64, --USD(UT)
-							16 --USD(Yen)
-			)
+							95  --USD(USD)
+						
+	)
+	AND 1 = (CASE WHEN s.[site] = 'BEST-ODDS' AND ci.currency IN (43,47,33,34,15,22) THEN 0 ELSE 1 END) --exclude Site BEST-ODDS with currencies: THB(THB), IDR(DDD), IDR(IDR), IDR(IDR), IDR(IN), IDR(IND)
+
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
