@@ -25,6 +25,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	1 as SiteType --credit
 	,'p' AS Betfrom
@@ -41,6 +42,7 @@ SELECT 	1 as SiteType --credit
 	,1
 	,'Low Stake for Soccer, credit, phone betting: 0%'
 	,1
+	,'Site,Sporttype,BetFrom,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -101,6 +103,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	1 as SiteType --credit
 	,'' AS Betfrom
@@ -117,6 +120,7 @@ SELECT 	1 as SiteType --credit
 	,2
 	,'Low Stake for Soccer, credit, class 8,9,10: 0%'
 	,1
+	,'Site,CustomerClass,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -194,6 +198,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	1 as SiteType --credit
 	,'' AS Betfrom
@@ -210,6 +215,7 @@ SELECT 	1 as SiteType --credit
 	,3
 	,'Low Stake for Soccer, credit: -99%'
 	,1
+	,'Site,CustomerClass,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -298,6 +304,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	0 as SiteType --All
 	,'' AS Betfrom
@@ -314,6 +321,7 @@ SELECT 	0 as SiteType --All
 	,4
 	,'Low Stake for Soccer, credit&Licensee: -99%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -373,6 +381,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	1 as SiteType --Credit
 	,'' AS Betfrom
@@ -389,6 +398,7 @@ SELECT 	1 as SiteType --Credit
 	,5
 	,'Low Stake for Basketball, credit: -99%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -448,6 +458,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --Licensee
 	,'' AS Betfrom
@@ -464,6 +475,7 @@ SELECT 	2 as SiteType --Licensee
 	,6
 	,'Low Stake for Basketball, Haifa, IBM, Mansion88: -99%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -521,6 +533,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --Licensee
 	,'' AS Betfrom
@@ -537,6 +550,7 @@ SELECT 	2 as SiteType --Licensee
 	,7
 	,'Low Stake for Basketball, Other Licensees: -99%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -622,6 +636,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --All
 	,'' AS Betfrom
@@ -638,6 +653,7 @@ SELECT 	2 as SiteType --All
 	,8
 	,'By Hour Soccer, all days: VR -3%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,TicketTime'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -696,6 +712,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --All
 	,'' AS Betfrom
@@ -712,6 +729,7 @@ SELECT 	2 as SiteType --All
 	,9
 	,'By Hour Soccer, Week days, >= 20:00 (GMT-4): VR -2%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -789,6 +807,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --All
 	,'' AS Betfrom
@@ -805,6 +824,7 @@ SELECT 	2 as SiteType --All
 	,10
 	,'By Hour Soccer, Week days, 00:00 to 01:00 AM (GMT-4): VR -2%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -882,6 +902,7 @@ INSERT INTO [VRSettingRule](
 	,Priority
 	,RuleName
 	,Status
+	,Enabled_Column
 )
 SELECT 	2 as SiteType --All
 	,'' AS Betfrom
@@ -898,6 +919,7 @@ SELECT 	2 as SiteType --All
 	,10
 	,'By Hour Soccer, 01:00 to 06:00 AM (GMT-4): VR +3%'
 	,1
+	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,TicketTime'
 
 SELECT @ID = SCOPE_IDENTITY()
 
