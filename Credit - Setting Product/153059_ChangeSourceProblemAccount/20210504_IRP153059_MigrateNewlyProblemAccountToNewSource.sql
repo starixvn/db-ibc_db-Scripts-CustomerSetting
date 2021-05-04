@@ -15,7 +15,7 @@ WHERE
 	AND p.custid IS NULL			
 ORDER BY roleid DESC				
 					
---step 2: get mark date from CTS
+--step 2: get mark date from CTS & robotUsers
 
 --step 3: import PA from CTS & RobotUsers which not have in ProblemAccount table
 --will get lastest when release
