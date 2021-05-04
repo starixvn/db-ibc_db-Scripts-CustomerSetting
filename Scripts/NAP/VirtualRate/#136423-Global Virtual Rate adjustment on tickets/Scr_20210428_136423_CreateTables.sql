@@ -17,9 +17,9 @@ GO
 --	DROP VIEW [dbo].VRSettingRuleDetail 
 --GO
 
---DROP TABLE [VRSettingRule]
---DROP TABLE [VRSettingRuleDetail]
---DROP TABLE [VRSettingRuleDetail_NotApply]
+DROP TABLE [VRSettingRule]
+DROP TABLE [VRSettingRuleDetail]
+DROP TABLE [VRSettingRuleDetail_NotApply]
 --GO
 SET QUOTED_IDENTIFIER ON
 GO
@@ -39,7 +39,7 @@ CREATE TABLE [dbo].[VRSettingRule](
 	[Adjustmenttype] [tinyint] NOT NULL,
 	[AdjustmentValue] SMALLMONEY NOT NULL,
 	[Priority] INT NOT NULL,
-	[Status] BIT NOT NULL,
+	[Status] TINYINT NOT NULL,
 	[CreatedDTS] DATETIME NULL CONSTRAINT [DF_VRSettingRule_CreatedDTS]  DEFAULT GETDATE(),
 	[CreatedBy] VARCHAR(30) NULL,
  CONSTRAINT [PK_VRSettingRule] PRIMARY KEY CLUSTERED 
