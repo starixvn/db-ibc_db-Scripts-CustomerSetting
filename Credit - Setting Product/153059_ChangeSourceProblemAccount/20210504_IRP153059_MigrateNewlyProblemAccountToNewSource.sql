@@ -3,7 +3,21 @@
 	Task: migrate data from ProblemAccount to new source
 	DB: DBCUST-CustDB
 */
---import PA from CTS & RobotUsers which not have in ProblemAccount table
+--step 1: get list PA not import to ProblemAccountClassification
+SELECT ci.custid,ci.customerclass, ci.username, ci.roleid , closed				
+FROM custinfo ci (nolock)				
+	LEFT JOIN ProblemAccountClassification p (nolock) on p.CustId = ci.custid			
+WHERE				
+	CustomerClass  in (8,9,10,11,13)				
+	AND enabled = 1			
+	AND currency <> 20			
+	AND srecommend NOT IN (SELECT custid from dep_custsuper WITH(NOLOCK))			
+	AND p.custid IS NULL			
+ORDER BY roleid DESC				
+					
+--step 2: get mark date from CTS
+
+--step 3: import PA from CTS & RobotUsers which not have in ProblemAccount table
 --will get lastest when release
 ;WITH t AS (
 	--List PA not robot users
