@@ -916,7 +916,7 @@ SELECT 	2 as SiteType --All
 	,1 as LiveIndicator --Live
 	,2 AS Adjustmenttype --fixed value
 	,0.03 AS AdjustmentValue
-	,10
+	,11
 	,'By Hour Soccer, 01:00 to 06:00 AM (GMT-4): VR +3%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,TicketTime'
