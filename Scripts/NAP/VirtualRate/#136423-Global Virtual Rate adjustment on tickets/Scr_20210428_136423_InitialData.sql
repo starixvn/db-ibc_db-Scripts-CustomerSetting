@@ -60,8 +60,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 
 INSERT INTO VRSettingRuleDetail_NotApply(
@@ -80,8 +80,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 2
@@ -136,8 +136,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,8 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,1 as Sporttype
@@ -145,8 +145,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,9 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,1 as Sporttype
@@ -154,8 +154,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,10 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -173,8 +173,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 3
@@ -229,8 +229,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -248,8 +248,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -257,8 +257,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,8 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -266,8 +266,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,9 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -275,8 +275,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,10 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 --select @ID
 --select * from [VRSettingRule]
 
@@ -333,8 +333,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -352,8 +352,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 5
@@ -408,8 +408,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -427,8 +427,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 6
@@ -483,8 +483,8 @@ SELECT @ID as RuleID
 	,44 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,2 as Sporttype
@@ -492,8 +492,8 @@ SELECT @ID as RuleID
 	,165 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,2 as Sporttype
@@ -501,8 +501,8 @@ SELECT @ID as RuleID
 	,34 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 --------------------------------------
 --> Rule 7
 INSERT INTO [VRSettingRule](
@@ -556,8 +556,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -575,8 +575,8 @@ SELECT @ID as RuleID
 	,44 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -584,8 +584,8 @@ SELECT @ID as RuleID
 	,165 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -593,8 +593,8 @@ SELECT @ID as RuleID
 	,34 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -602,8 +602,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 --------------------------------------
 --> Rule 8
 INSERT INTO [VRSettingRule](
@@ -657,8 +657,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -676,8 +676,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 --------------------------------------
 --> Rule 9
 INSERT INTO [VRSettingRule](
@@ -731,8 +731,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -750,8 +750,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -759,8 +759,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,1 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -768,8 +768,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,7 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 9
@@ -824,8 +824,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -843,8 +843,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -852,8 +852,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,1 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
@@ -861,8 +861,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,7 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 10
@@ -917,8 +917,8 @@ SELECT @ID as RuleID
 	,0 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 INSERT INTO VRSettingRuleDetail_NotApply(
 	 RuleID
@@ -936,8 +936,8 @@ SELECT @ID as RuleID
 	,329 as SiteID
 	,0 as CustomerClass
 	,0 as DateOfWeek
-	,0 as LeagueGroupID
-	,0 as LeagueID
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 --UNION ALL
 --SELECT @ID as RuleID
 --	,0 as Sporttype
@@ -945,8 +945,8 @@ SELECT @ID as RuleID
 --	,0 as SiteID
 --	,0 as CustomerClass
 --	,6 as DateOfWeek
---	,0 as LeagueGroupID
---	,0 as LeagueID
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 --UNION ALL
 --SELECT @ID as RuleID
 --	,0 as Sporttype
@@ -954,8 +954,8 @@ SELECT @ID as RuleID
 --	,0 as SiteID
 --	,0 as CustomerClass
 --	,7 as DateOfWeek
---	,0 as LeagueGroupID
---	,0 as LeagueID
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 -----------------------Return Data-------------------
 --Update Priority = Priority * 10
 UPDATE [VRSettingRule] WITH(ROWLOCK)
