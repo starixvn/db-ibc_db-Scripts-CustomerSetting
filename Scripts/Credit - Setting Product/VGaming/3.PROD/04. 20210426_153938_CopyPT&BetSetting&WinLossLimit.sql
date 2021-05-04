@@ -45,6 +45,14 @@ BEGIN
 
 	CREATE TABLE #MemberTemp
 	(
+		CustID INT,
+		InsPTSetting BIT DEFAULT 0,
+		InsBetSetting BIT DEFAULT 0,
+		InsWinLoss BIT DEFAULT 0
+	)
+
+	CREATE TABLE #MemberTempIns
+	(
 		CustID INT PRIMARY KEY CLUSTERED,
 	)
 
@@ -107,32 +115,43 @@ BEGIN
 		AND dest.SettingType = 1
 	
 	--MEMBER LEVEL
-	INSERT INTO dbo.CustPTSetting3rd_Member
-		(	[custid]
-			,	[sporttype]
-			,	[bettype]
-			,	[islive]
-			,	[superPT]
-			,	[masterPT]
-			,	[agentPT]
-			,	[IsAutoMasterPT]
-			,	[AutoMasterPT]
-			,	[IsAutoSuperPT]
-			,	[AutoSuperPT])
-	SELECT 
-		cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
-		,cs.SuperPT
-		,cs.MasterPT
-		,cs.AgentPT
-		,cs.IsAutoMasterPT
-		,cs.AutoMasterPT
-		,cs.IsAutoSuperPT
-		,cs.AutoSuperPT
-	FROM dbo.CustPTSetting3rd_Member cs WITH(NOLOCK)
-		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON cs.CustID = ci.custid
-		CROSS APPLY #DestinationSportBetType dest
-	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-		AND dest.SettingType = 1
+	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsPTSetting = 0)
+	BEGIN
+		TRUNCATE TABLE #MemberTempIns
+
+		UPDATE TOP (3000) #MemberTemp SET InsPTSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+
+		IF @@ROWCOUNT=0
+			BREAK
+
+		INSERT INTO dbo.CustPTSetting3rd_Member
+			(	[custid]
+				,	[sporttype]
+				,	[bettype]
+				,	[islive]
+				,	[superPT]
+				,	[masterPT]
+				,	[agentPT]
+				,	[IsAutoMasterPT]
+				,	[AutoMasterPT]
+				,	[IsAutoSuperPT]
+				,	[AutoSuperPT])
+		SELECT 
+			cs.custid, dest.tSportType, dest.tBetType, dest.IsLive
+			,cs.SuperPT
+			,cs.MasterPT
+			,cs.AgentPT
+			,cs.IsAutoMasterPT
+			,cs.AutoMasterPT
+			,cs.IsAutoSuperPT
+			,cs.AutoSuperPT
+		FROM dbo.CustPTSetting3rd_Member cs WITH(NOLOCK)
+			INNER JOIN #MemberTempIns ci WITH(NOLOCK) ON cs.CustID = ci.custid
+			CROSS APPLY #DestinationSportBetType dest
+		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+			AND dest.SettingType = 1
+	END
+	
 
 	--------------------------------------Bet Setting-------------------------------------------------		
 	--Agent Level
@@ -144,13 +163,23 @@ BEGIN
 	WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
 
 	--Member Level
-	INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList, LastUpdated)	      
-	SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20)), GETDATE()
-	FROM dbo.StakeLevel s WITH(NOLOCK)
-		INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
-		CROSS APPLY #MemberTemp ci WITH(NOLOCK) 
-	WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
+	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsBetSetting = 0)
+	BEGIN
+		TRUNCATE TABLE #MemberTempIns
 
+		UPDATE TOP (3000) #MemberTemp SET InsBetSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+
+		IF @@ROWCOUNT=0
+			BREAK
+
+		INSERT INTO dbo.CustStakeLevel_Member(CustID, SportType, BetType, StakeLevelList, LastUpdated)	      
+		SELECT CustID, dest.tSportType, dest.tBetType, CAST(s.StakeLevelID AS VARCHAR(20)), GETDATE()
+		FROM dbo.StakeLevel s WITH(NOLOCK)
+			INNER JOIN #DestinationSportBetType dest ON s.GameTypeID = dest.tBetType
+			CROSS APPLY #MemberTempIns ci WITH(NOLOCK) 
+		WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
+	END
+	
 	--------------------------------------Win Loss Limit-------------------------------------------------	
 	SELECT TOP (1) @fBetType = fBetType, @fSportType = fSportType 
 	FROM #DestinationSportBetType		
@@ -166,17 +195,29 @@ BEGIN
 		AND dest.SettingType = 6
 
 	--Member Level
-	INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
-	SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.MaxWinLimit, cs.MaxLossLimit, cs.IsAutoReset
-	FROM #MemberTemp ci WITH(NOLOCK) 
-		INNER JOIN dbo.CustWinLossLimit_Member cs WITH (NOLOCK) ON ci.CustID = cs.CustId
-		CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
-	WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
-		AND dest.SettingType = 6
+	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsWinLoss = 0)
+	BEGIN
+		TRUNCATE TABLE #MemberTempIns
+
+		UPDATE TOP (3000) #MemberTemp SET InsWinLoss = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+
+		IF @@ROWCOUNT=0
+			BREAK
+
+		INSERT INTO dbo.CustWinLossLimit_Member (CustId, SportType, BetType, MaxWinLimit, MaxLossLimit, IsAutoReset)
+		SELECT ci.custid, dest.tsporttype, dest.tbettype, cs.MaxWinLimit, cs.MaxLossLimit, cs.IsAutoReset
+		FROM #MemberTempIns ci WITH(NOLOCK) 
+			INNER JOIN dbo.CustWinLossLimit_Member cs WITH (NOLOCK) ON ci.CustID = cs.CustId
+			CROSS APPLY #DestinationSportBetType dest WITH(NOLOCK) 
+		WHERE cs.bettype = @fBetType AND cs.sporttype = @fSportType
+			AND dest.SettingType = 6
+	END
+	
 
 	DROP TABLE #SMATemp
 	DROP TABLE #MemberTemp
-	DROP TABLE #DestinationSportBetType			
+	DROP TABLE #DestinationSportBetType	
+	DROP TABLE #MemberTempIns		
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
