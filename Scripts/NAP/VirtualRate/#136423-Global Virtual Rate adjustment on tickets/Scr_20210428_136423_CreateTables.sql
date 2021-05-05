@@ -6,16 +6,21 @@
 */
 SET ANSI_NULLS ON
 GO
---IF EXISTS(
---	SELECT TOP 1 1 FROM sys.views v WHERE OBJECT_NAME(v.object_id) = 'VRSettingRule'
---)
---	DROP VIEW [dbo].VRSettingRule 
---GO
---IF EXISTS(
---	SELECT TOP 1 1 FROM sys.views v WHERE OBJECT_NAME(v.object_id) = 'VRSettingRuleDetail'
---)
---	DROP VIEW [dbo].VRSettingRuleDetail 
---GO
+IF EXISTS(
+	SELECT TOP 1 1 FROM sys.views v WHERE OBJECT_NAME(v.object_id) = 'VRSettingRule'
+)
+	DROP VIEW [dbo].VRSettingRule 
+GO
+IF EXISTS(
+	SELECT TOP 1 1 FROM sys.views v WHERE OBJECT_NAME(v.object_id) = 'VRSettingRuleDetail'
+)
+	DROP VIEW [dbo].VRSettingRuleDetail 
+GO
+IF EXISTS(
+	SELECT TOP 1 1 FROM sys.views v WHERE OBJECT_NAME(v.object_id) = 'VRSettingRuleDetail_NotApply'
+)
+	DROP VIEW [dbo].VRSettingRuleDetail_NotApply 
+GO
 
 DROP TABLE [VRSettingRule]
 DROP TABLE [VRSettingRuleDetail]

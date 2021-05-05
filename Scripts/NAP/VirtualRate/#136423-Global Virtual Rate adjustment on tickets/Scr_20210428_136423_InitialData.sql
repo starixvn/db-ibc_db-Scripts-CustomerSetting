@@ -609,15 +609,15 @@ SELECT @ID as RuleID
 	,0 as DateOfWeek
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
-UNION ALL
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--UNION ALL
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 --------------------------------------
 --> Rule 8
 INSERT INTO [VRSettingRule](
