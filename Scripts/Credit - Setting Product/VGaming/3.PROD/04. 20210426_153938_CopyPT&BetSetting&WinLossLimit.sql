@@ -115,11 +115,11 @@ BEGIN
 		AND dest.SettingType = 1
 	
 	--MEMBER LEVEL
-	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsPTSetting = 0)
+	WHILE (1=1)
 	BEGIN
 		TRUNCATE TABLE #MemberTempIns
 
-		UPDATE TOP (3000) #MemberTemp SET InsPTSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+		UPDATE TOP (3000) t SET t.InsPTSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns(CustID) FROM #MemberTemp t WHERE t.InsPTSetting = 0
 
 		IF @@ROWCOUNT=0
 			BREAK
@@ -163,11 +163,11 @@ BEGIN
 	WHERE dest.SettingType = 8 AND s.ExchangeId = @Currency
 
 	--Member Level
-	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsBetSetting = 0)
+	WHILE (1=1)
 	BEGIN
 		TRUNCATE TABLE #MemberTempIns
 
-		UPDATE TOP (3000) #MemberTemp SET InsBetSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+		UPDATE TOP (3000)  t SET t.InsBetSetting = 1 OUTPUT DELETED.CustID INTO #MemberTempIns(CustID) FROM #MemberTemp t WHERE t.InsBetSetting = 0
 
 		IF @@ROWCOUNT=0
 			BREAK
@@ -195,11 +195,11 @@ BEGIN
 		AND dest.SettingType = 6
 
 	--Member Level
-	WHILE EXISTS(SELECT TOP 1 1 FROM #MemberTemp WHERE InsWinLoss = 0)
+	WHILE (1=1)
 	BEGIN
 		TRUNCATE TABLE #MemberTempIns
 
-		UPDATE TOP (3000) #MemberTemp SET InsWinLoss = 1 OUTPUT DELETED.CustID INTO #MemberTempIns
+		UPDATE TOP (3000)  t SET t.InsWinLoss = 1 OUTPUT DELETED.CustID INTO #MemberTempIns(CustID) FROM #MemberTemp t WHERE t.InsWinLoss = 0
 
 		IF @@ROWCOUNT=0
 			BREAK
