@@ -66,24 +66,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueID
 
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 2
@@ -161,24 +161,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 3
@@ -248,15 +248,15 @@ INSERT INTO VRSettingRuleDetail_NotApply(
 	,LeagueGroupID
 	,LeagueID
 )
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-UNION ALL
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
+--UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
 	,0 as Bettype
@@ -344,24 +344,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 5
@@ -421,24 +421,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 
 --------------------------------------
 --> Rule 6
@@ -646,7 +646,7 @@ SELECT 	2 as SiteType --All
 	,0.99 AS VR_To
 	,1 AS VRStatus --Enabled
 	,'06:00' AS BeginTime
-	,'20:00' AS EndTime
+	,'19:59:59.999' AS EndTime
 	,1 as LiveIndicator --Live
 	,2 AS Adjustmenttype --fixed value
 	,-0.03 AS AdjustmentValue
@@ -676,24 +676,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 --------------------------------------
 --> Rule 9
 INSERT INTO [VRSettingRule](
@@ -722,12 +722,12 @@ SELECT 	2 as SiteType --All
 	,0.99 AS VR_To
 	,1 AS VRStatus --Enabled
 	,'20:00' AS BeginTime
-	,'00:00' AS EndTime
+	,'23:59:59.999' AS EndTime
 	,1 as LiveIndicator --Live
 	,2 AS Adjustmenttype --fixed value
 	,-0.02 AS AdjustmentValue
 	,9
-	,'By Hour Soccer, Week days, >= 20:00 (GMT-4): VR -2%'
+	,'By Hour Soccer, Week days, >= 20:00 (GMT+8): VR -2%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
@@ -762,15 +762,15 @@ INSERT INTO VRSettingRuleDetail_NotApply(
 	,LeagueGroupID
 	,LeagueID
 )
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-UNION ALL
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
+--UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
 	,0 as Bettype
@@ -817,12 +817,12 @@ SELECT 	2 as SiteType --All
 	,0.99 AS VR_To
 	,1 AS VRStatus --Enabled
 	,'00:00' AS BeginTime
-	,'01:00' AS EndTime
+	,'00:59:59.999' AS EndTime
 	,1 as LiveIndicator --Live
 	,2 AS Adjustmenttype --fixed value
 	,-0.02 AS AdjustmentValue
 	,10
-	,'By Hour Soccer, Week days, 00:00 to 01:00 AM (GMT-4): VR -2%'
+	,'By Hour Soccer, Week days, 00:00 to 01:00 AM (GMT+8): VR -2%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
@@ -857,15 +857,15 @@ INSERT INTO VRSettingRuleDetail_NotApply(
 	,LeagueGroupID
 	,LeagueID
 )
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-UNION ALL
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
+--UNION ALL
 SELECT @ID as RuleID
 	,0 as Sporttype
 	,0 as Bettype
@@ -912,12 +912,12 @@ SELECT 	2 as SiteType --All
 	,0.99 AS VR_To
 	,1 AS VRStatus --Enabled
 	,'01:00' AS BeginTime
-	,'06:00' AS EndTime
+	,'05:59:59.999' AS EndTime
 	,1 as LiveIndicator --Live
 	,2 AS Adjustmenttype --fixed value
 	,0.03 AS AdjustmentValue
 	,11
-	,'By Hour Soccer, 01:00 to 06:00 AM (GMT-4): VR +3%'
+	,'By Hour Soccer, 01:00 to 06:00 AM (GMT+8): VR +3%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,TicketTime'
 
@@ -942,24 +942,24 @@ SELECT @ID as RuleID
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
 
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,329 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
+--INSERT INTO VRSettingRuleDetail_NotApply(
+--	 RuleID
+--	,Sporttype
+--	,Bettype
+--	,SiteID
+--	,CustomerClass
+--	,DateOfWeek
+--	,LeagueGroupID
+--	,LeagueID
+--)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
 --UNION ALL
 --SELECT @ID as RuleID
 --	,0 as Sporttype
