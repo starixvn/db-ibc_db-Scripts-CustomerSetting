@@ -9,6 +9,7 @@
 -- BEGIN STEP 5.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@Custid INT
+	,@Mincustid INT
 	,@maxcustid INT
 	,@target VARCHAR(20)
 
@@ -47,11 +48,12 @@ BEGIN
 		AND ci.Enabled = 1
 		AND ci.roleid in (2,3,4)
 		AND ci.custid <= @maxcustid
+		AND ci.custid > @Mincustid
 	
 	INSERT INTO #CustListMember(CustID)
 	SELECT custid
 	FROM dbo.custInfo ci WITH (NOLOCK)
-	WHERE ci.srecommend = @Custid AND ci.Enabled = 1 AND ci.roleid = 1	AND ci.custid <= @maxcustid 
+	WHERE ci.srecommend = @Custid AND ci.Enabled = 1 AND ci.roleid = 1	AND ci.custid > @Mincustid AND ci.custid <= @maxcustid 
 	--------------------------------- BetSetting ---------------------------------
 	INSERT INTO dbo.CustStakeLevel_Agent  ([CustID]
 										   ,[SportType]
@@ -98,7 +100,8 @@ GO
 		DROP TABLE	#supers;
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-	DECLARE @max_custid INT, @srecommend INT
+	DECLARE @max_custid INT, @srecommend INT ,@Min_custid INT
+	SELECT @Min_custid = xxx
 	SELECT @max_custid = xxx
 
 	INSERT INTO #supers(custid)
@@ -136,6 +139,7 @@ GO
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 		EXEC dbo.Acc_DynamicCustSetting3rd_09 @custid = @srecommend
+				,@Mincustid = @Min_custid
 				,@maxcustid = @max_custid
 				,@target = 'REPLICATED'
 				
@@ -151,7 +155,8 @@ GO
 		DROP TABLE	#supers;
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-	DECLARE @max_custid INT, @srecommend INT
+	DECLARE @max_custid INT, @srecommend INT,@Min_custid INT
+	SELECT @Min_custid = xxx
 	SELECT @max_custid = xxx
 
 	INSERT INTO #supers(custid)
@@ -189,6 +194,7 @@ GO
 		RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
 		EXEC dbo.Acc_DynamicCustSetting3rd_09 @custid = @srecommend
+				,@Mincustid = @Min_custid
 				,@maxcustid = @max_custid
 				,@target = 'DBCUST'
 							
