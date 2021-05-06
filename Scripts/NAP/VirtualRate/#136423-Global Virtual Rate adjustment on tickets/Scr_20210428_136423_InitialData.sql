@@ -321,7 +321,7 @@ SELECT 	0 as SiteType --All
 	,4
 	,'Low Stake for Soccer, credit&Licensee: -99%'
 	,1
-	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
+	,'VRValue,VRStatus,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
