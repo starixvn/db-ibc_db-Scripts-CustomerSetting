@@ -638,7 +638,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	2 as SiteType --All
+SELECT 	1 as SiteType --Credit
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
@@ -714,7 +714,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	2 as SiteType --All
+SELECT 	1 as SiteType --Credit
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
@@ -809,7 +809,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	2 as SiteType --All
+SELECT 	1 as SiteType --Credit
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
@@ -904,7 +904,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	2 as SiteType --All
+SELECT 	1 as SiteType --Credit
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
