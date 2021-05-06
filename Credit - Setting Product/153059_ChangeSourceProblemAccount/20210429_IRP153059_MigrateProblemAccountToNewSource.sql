@@ -29,7 +29,7 @@ BEGIN
 	FROM ProblemAccount p WITH (NOLOCK)
 		INNER JOIN custinfo ci WITH (NOLOCK) on p.CustId = ci.custid	
 	WHERE enabled = 1
-		AND srecommend NOT IN (SELECT custid FROM dep_custsuper WITH(NOLOCK)))	
+		AND srecommend NOT IN (SELECT custid FROM dep_custsuper WITH(NOLOCK))	
 		AND CustomerClass IN (8,9,10,11,13)
 		AND NOT EXISTS (SELECT 1 FROM ProblemAccountClassification pc WITH(NOLOCK) WHERE pc.custid = ci.custid)
 	
