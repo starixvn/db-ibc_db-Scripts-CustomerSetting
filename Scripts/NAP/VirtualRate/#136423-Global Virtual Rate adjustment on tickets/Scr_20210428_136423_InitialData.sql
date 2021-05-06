@@ -727,7 +727,7 @@ SELECT 	2 as SiteType --All
 	,2 AS Adjustmenttype --fixed value
 	,-0.02 AS AdjustmentValue
 	,9
-	,'By Hour Soccer, Week days, >= 20:00 (GMT+8): VR -2%'
+	,'By Hour Soccer, Week days, from 20:00 to 00:00: VR -2%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
@@ -917,7 +917,7 @@ SELECT 	2 as SiteType --All
 	,2 AS Adjustmenttype --fixed value
 	,0.03 AS AdjustmentValue
 	,11
-	,'By Hour Soccer, 01:00 to 06:00 AM (GMT+8): VR +3%'
+	,'By Hour Soccer, all days: VR 3%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,TicketTime'
 
