@@ -56,7 +56,7 @@ SET cf.MinDays = c.MinDays,
 	cf.CustIDBalanceDummy = c.CustIDBalanceDummy,
 	cf.Status = c.Status
 FROM #Dep_Customer_Archived_Config 	c
-		 INNER JOIN Dep_Customer_Archived_Config cf WITH(NOLOCK) ON c.Recommend = cf.Recommend
+		 INNER JOIN Dep_Customer_Archived_Config cf WITH(ROWLOCK) ON c.Recommend = cf.Recommend
 WHERE c.CustIDBalanceDummy IS NOT NULL
 
 DROP TABLE #TempAgents
