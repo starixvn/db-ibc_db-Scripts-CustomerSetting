@@ -48,7 +48,16 @@ INSERT INTO Dep_Customer_Archived_Config (Recommend,Site,MinBalance,MinDays,Cust
 SELECT Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status
 FROM #Dep_Customer_Archived_Config 
 WHERE CustIDBalanceDummy IS NOT NULL
-	AND Recommend NOT IN( SELECT Recommend FROM Dep_Customer_Archived_Config)
+	AND Recommend NOT IN( SELECT Recommend FROM Dep_Customer_Archived_Config WITH(NOLOCK))
+
+UPDATE cf
+SET cf.MinDays = c.MinDays,
+	cf.MinBalance = c.MinBalance,
+	cf.CustIDBalanceDummy = c.CustIDBalanceDummy,
+	cf.Status = c.Status
+FROM #Dep_Customer_Archived_Config 	c
+		 INNER JOIN Dep_Customer_Archived_Config cf WITH(NOLOCK) ON c.Recommend = cf.Recommend
+WHERE c.CustIDBalanceDummy IS NOT NULL
 
 DROP TABLE #TempAgents
 DROP TABLE #Dep_Customer_Archived_Config
