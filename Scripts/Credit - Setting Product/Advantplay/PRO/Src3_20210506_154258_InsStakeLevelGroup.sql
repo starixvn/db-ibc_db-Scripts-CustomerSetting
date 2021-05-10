@@ -208,7 +208,6 @@ SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,2    UNION ALL	--RM	--RM
 SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,13   UNION ALL	--RMB	--RMB	
 SELECT 7711 ,'100'  ,'5000'    ,100  ,5000    ,43   UNION ALL	--THB	--THB	
 SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,3    UNION ALL	--US$	--US$	
-SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,35   UNION ALL	--$US	--$US	
 SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,95   UNION ALL	--USD	--USD	
 SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,64   UNION ALL	--UT	--UT	
 SELECT 7711 ,'3000' ,'150000'  ,3000 ,150000  ,45   UNION ALL	--Won	--Won	
