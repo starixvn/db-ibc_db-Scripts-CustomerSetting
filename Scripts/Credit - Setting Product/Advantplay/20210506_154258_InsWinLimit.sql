@@ -7,7 +7,7 @@
 */
 IF NOT EXISTS(	SELECT TOP 1 1 
 				FROM dbo.WinLimit_ProductOffer psd WITH(NOLOCK)
-				WHERE 	psd.BetType = 7701
+				WHERE 	psd.BetType = 4001
 				AND ProductID = 67			
 			)
 	BEGIN
@@ -19,7 +19,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
          VALUES
          (
 			 67, --	ProductID
-			 7701, -- BetType
+			 4001, -- BetType
 			 1, -- IsActive_SMA
 			 0   -- IsActive_Company
          )  
@@ -28,5 +28,5 @@ ELSE
 	BEGIN
 	   UPDATE WinLimit_ProductOffer WITH(ROWLOCK)
 	   SET	IsActive_SMA = 1
-	   WHERE BetType = 7701 AND ProductID = 67
+	   WHERE BetType = 4001 AND ProductID = 67
 	END	
