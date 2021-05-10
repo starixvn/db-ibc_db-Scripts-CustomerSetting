@@ -7,7 +7,18 @@
 */
 USE CustDB
 GO
---DECLARE @Archive_Agents VARCHAR(MAX) = 'xxx,11232123' 
+--> Delete waiting agents before new scan
+SELECT CustID
+INTO #TempDeleted
+FROM Dep_Customer_Archived WITH(NOLOCK) 
+WHERE status = 'waiting'
+
+DELETE d
+FROM #TempDeleted t
+	INNER JOIN  Dep_Customer_Archived d WITH(ROWLOCK)  
+		ON t.CustID = d.CustID
+-------------------------------------
+
 DECLARE @MinBalance money = 2.00
 		,@Mindays INT = 1095
 
@@ -44,6 +55,13 @@ BEGIN
 	RETURN
 END
 
+--> Update another agents to pending (do not scan now)
+UPDATE cf 
+SET cf.Status = 2 --Pending
+FROM Dep_Customer_Archived_Config cf WITH(ROWLOCK)
+WHERE cf.Status = 0
+
+--> INSERT/UPDATE agents ready to scan
 INSERT INTO Dep_Customer_Archived_Config (Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status)
 SELECT Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status
 FROM #Dep_Customer_Archived_Config 
