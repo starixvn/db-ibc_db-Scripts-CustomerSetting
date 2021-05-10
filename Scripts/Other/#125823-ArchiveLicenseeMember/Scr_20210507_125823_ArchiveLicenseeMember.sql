@@ -2,7 +2,7 @@
 /*
 	Created: 20210507@Eden
 	Task: https://nexdev.net/issues/125823
-		Step 0: Config Agents whose members will be archived for Licensees: Indowin" & "Allbetclub
+		Step 0: Config Agents whose members will be archived for Licensees: 'Indowin',,Allbetclub','GWORLD','Webet138','WeBet168','Win88'
 	DB: DBCUST.CustDB
 */
 USE CustDB
@@ -27,10 +27,10 @@ CREATE TABLE #TempAgents (CustID INT PRIMARY KEY)
 INSERT INTO #TempAgents
 SELECT c.custid
 FROM customer c(NOLOCK) 
-WHERE c.site IN ('Indowin','Allbetclub')
+WHERE c.site IN ('Indowin','Allbetclub','GWORLD','Webet138','WeBet168','Win88')
 	AND c.roleid = 2
 
-SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status
+SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status, c.srecommend
 INTO #Dep_Customer_Archived_Config
 FROM custInfo c WITH(NOLOCK) 
 	INNER JOIN Customer cu WITH(NOLOCK) ON c.custid = cu.custid
@@ -48,9 +48,10 @@ IF EXISTS (	SELECT TOP 1 1
 			WHERE CustIDBalanceDummy IS NULL
 )
 BEGIN
-	SELECT Recommend, 'This Line have not ClearBal account'
-	FROM #Dep_Customer_Archived_Config
-	WHERE CustIDBalanceDummy IS NULL
+	SELECT c.Recommend,c.srecommend,ci.username as Super, 'This Line have not ClearBal account'
+	FROM #Dep_Customer_Archived_Config c (NOLOCK)
+	INNER JOIN Customer ci ON c.srecommend = ci.custid
+	WHERE c.CustIDBalanceDummy IS NULL
 
 	RETURN
 END
@@ -79,3 +80,4 @@ WHERE c.CustIDBalanceDummy IS NOT NULL
 
 DROP TABLE #TempAgents
 DROP TABLE #Dep_Customer_Archived_Config
+DROP TABLE #TempDeleted
