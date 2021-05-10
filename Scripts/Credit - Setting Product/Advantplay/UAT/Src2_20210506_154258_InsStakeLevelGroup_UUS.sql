@@ -24,6 +24,7 @@ SELECT 7707 ,'5'    ,'1500'    ,5    ,1500    ,20   UNION ALL	--UUS	--UUS,YNG
 SELECT 7708 ,'5'    ,'1500'    ,5    ,1500    ,20   UNION ALL	--UUS	--UUS,YNG
 SELECT 7709 ,'5'    ,'1500'    ,5    ,1500    ,20   UNION ALL	--UUS	--UUS,YNG
 SELECT 7710 ,'5'    ,'1500'    ,5    ,1500    ,20   UNION ALL	--UUS	--UUS,YNG
+--YNG
 SELECT 7701 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7702 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7703 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
@@ -33,7 +34,10 @@ SELECT 7706 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7707 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7708 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7709 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
-SELECT 7710 ,'5'    ,'1500'    ,5    ,1500    ,72				--YNG	--UUS,YNG
+SELECT 7710 ,'5'    ,'1500'    ,5    ,1500    ,72	UNION ALL	--YNG	--UUS,YNG
+-- Mini Games
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,20   UNION ALL	--UUS	--UUS
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,72				--YNG	--YNG
 
 UPDATE t
 SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))

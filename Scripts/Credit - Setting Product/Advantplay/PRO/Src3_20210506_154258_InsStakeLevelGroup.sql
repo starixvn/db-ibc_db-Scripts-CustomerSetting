@@ -189,7 +189,31 @@ SELECT 7706 ,'250'  ,'100000'  ,250  ,100000  ,45   UNION ALL	--Won	--WON
 SELECT 7707 ,'250'  ,'100000'  ,250  ,100000  ,45   UNION ALL	--Won	--WON
 SELECT 7708 ,'250'  ,'100000'  ,250  ,100000  ,45   UNION ALL	--Won	--WON
 SELECT 7709 ,'250'  ,'100000'  ,250  ,100000  ,45   UNION ALL	--Won	--WON
-SELECT 7710 ,'250'  ,'100000'  ,250  ,100000  ,45				--Won	--WON
+SELECT 7710 ,'250'  ,'100000'  ,250  ,100000  ,45	UNION ALL	--Won	--WON
+-- Mini Games
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,35   UNION ALL	--$US	--$US	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,81   UNION ALL	--CY	--CY	
+SELECT 7711 ,'30'   ,'1700'    ,30   ,1700    ,47   UNION ALL	--DDD	--DDD	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,6    UNION ALL	--EURO	--EURO	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,12   UNION ALL	--GBP	--GBP	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,5    UNION ALL	--HK$	--HK$	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,67   UNION ALL	--HKK	--HKK	
+SELECT 7711 ,'30'   ,'1700'    ,30   ,1700    ,33   UNION ALL	--IDD	--IDD	
+SELECT 7711 ,'30'   ,'1700'    ,30   ,1700    ,34   UNION ALL	--IDR	--IDR	
+SELECT 7711 ,'30'   ,'1700'    ,30   ,1700    ,15   UNION ALL	--IN	--IN	
+SELECT 7711 ,'30'   ,'1700'    ,30   ,1700    ,22   UNION ALL	--IND	--IND	
+SELECT 7711 ,'50'   ,'2800'    ,50   ,2800    ,51   UNION ALL	--INH	--INH	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,71   UNION ALL	--KHR	--KHR	
+SELECT 7711 ,'5'    ,'150'     ,5    ,150     ,69   UNION ALL	--MMK	--MMK	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,2    UNION ALL	--RM	--RM	
+SELECT 7711 ,'10'   ,'500'     ,10   ,500     ,13   UNION ALL	--RMB	--RMB	
+SELECT 7711 ,'100'  ,'5000'    ,100  ,5000    ,43   UNION ALL	--THB	--THB	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,3    UNION ALL	--US$	--US$	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,95   UNION ALL	--USD	--USD	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,64   UNION ALL	--UT	--UT	
+SELECT 7711 ,'3000' ,'150000'  ,3000 ,150000  ,45   UNION ALL	--Won	--Won	
+SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,16				--Yen	--Yen	
+
 
 UPDATE t
 SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
