@@ -33,8 +33,7 @@ SELECT 7701,64   UNION ALL     -- UT
 SELECT 7701,67   UNION ALL     -- HKK
 SELECT 7701,69   UNION ALL     -- MMK
 SELECT 7701,71   UNION ALL     -- KHR
-SELECT 7701,81   UNION ALL     -- CY
-SELECT 7701,95			     -- USD
+SELECT 7701,95			       -- USD
 
 INSERT INTO StakeLevel(GameTypeID,ExchangeId,GameGroupID)
 SELECT GameTypeID,ExchangeId,GameGroupID 
