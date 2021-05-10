@@ -31,5 +31,5 @@ SELECT 	@SportType AS SportType,
 FROM Site s WITH(NOLOCK) 
 INNER JOIN exchange e WITH(NOLOCK) ON s.isActive  = e.IsActive
  WHERE s.isActive = 1   AND s.site NOT IN('76666b')
-	AND e.ExchangeId NOT IN  (2,3,7,13,15,16,22,33,34,35,43,45,47,51,64,67,95)
+	AND e.ExchangeId NOT IN  (2,3,7,13,15,16,20,22,33,34,35,43,45,47,51,64,67,72,95)
 	AND isLicensee = 0 AND isDeposit = 0 AND e.OfferSite in (0,1)
