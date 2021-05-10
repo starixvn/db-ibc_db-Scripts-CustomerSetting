@@ -40,9 +40,9 @@ SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,20   UNION ALL	--UUS	--UUS
 SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,72				--YNG	--YNG
 
 UPDATE t
-SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #StakeLevel_Temp t
-WHERE MinStake > 999
+WHERE MaxStake > 999
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
