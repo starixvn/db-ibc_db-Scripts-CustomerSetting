@@ -3,7 +3,7 @@
 	Task: Sync customer classification from CTS
 	DB: DBCUST/CustDB
 */
---deploy these tables on DBCUST/CustDB
+--step 1: deploy these tables on DBCUST/CustDB
 -- then setup replication for table ProblemAccountClassification & CategoryConfig
 -- under pub DBCUST_CustSetting
 CREATE TABLE ProblemAccountClassification (custid INT NOT NULL, 
@@ -32,7 +32,7 @@ CREATE TABLE CategoryConfig (CategoryID SMALLINT NOT NULL,
 GO
 
 -----------------------------------------------------------
---setup on dbcust only for this table
+--step 2: setup on dbcust only for this table
 CREATE TABLE CustCategoryHistory (LogID BIGINT IDENTITY(1,1) NOT NULL,
 	custid INT NOT NULL, 
 	CategoryID SMALLINT NULL, 
@@ -55,7 +55,7 @@ GO
 -------------------------------------------------------------------------------------
 
 
---Setup structure store old data for CustCategoryHistory 
+--step 3: Setup structure store old data for CustCategoryHistory 
 --at DBLOG.bodb_CustomerLog
 USE bodb_CustomerLog
 GO
@@ -88,3 +88,18 @@ CREATE TABLE CustCategoryHistory_Old (LogID BIGINT NOT NULL,
 		[LogID] ASC
 	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [CustCategoryHistory]
 ) ON [CustCategoryHistory]
+-------------------------------------------------------------------------------------
+
+
+--step 4: import CategoryConfig at @DBCust/CustDB
+INSERT INTO CategoryConfig(CategoryID,CategoryName)
+SELECT 52, 'Group Betting'
+UNION SELECT 53,'Hedging'
+UNION SELECT 54,	'Arbitrage'
+UNION SELECT 55,	'Fixed Game'
+UNION SELECT 56,	'AB Bet'
+UNION SELECT 57,	'Robot Betting'
+UNION SELECT 58,	'Irrigation Bet'
+UNION SELECT 59,	'System Formula Bet'
+UNION SELECT 60,	'Bonus Hunter'
+UNION SELECT 61,	'Robot User'
