@@ -10,12 +10,14 @@ CREATE TABLE [dbo].[crmProblemAccountFeedbackInfo](
 	CustID		INT NOT NULL,
 	CategoryID	SMALLINT,
 	HeadlineID	INT NULL,
+	HeadlineName VARCHAR(50),
 	RelatedCustID INT NULL,	
-	Status	VARCHAR(20),
+	Status		VARCHAR(20),
 	CreatedDate	DATETIME,
 	UpdatedTime	DATETIME,
 	Description	VARCHAR(1000) NULL,
-	RetryCount	TINYINT 
+	RetryCount	TINYINT,
+	Enviroment 	VARCHAR(20)
 ) ON [DATA]
 GO
 

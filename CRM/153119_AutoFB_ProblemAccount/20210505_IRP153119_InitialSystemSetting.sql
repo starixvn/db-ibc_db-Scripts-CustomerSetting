@@ -6,12 +6,12 @@
 
 INSERT INTO SystemSetting(SettingName, Value, ServiceName)
 SELECT 'JobStatus','Completed','ProblemAccountFB'
+UNION SELECT 'JobStatusUAT','Completed','ProblemAccountFB'
 UNION SELECT 'ServiceFlag','1','ProblemAccountFB'
 UNION SELECT 'BatchSize','10','ProblemAccountFB'
-UNION SELECT 'LastLogID_UAT','0','ProblemAccountFB'
-UNION SELECT 'LastLogID_PRO','0','ProblemAccountFB'
+UNION SELECT 'LastLogIdUAT','0','ProblemAccountFB'
+UNION SELECT 'LastLogID','0','ProblemAccountFB'
 UNION SELECT 'LastRuntime',CONVERT( VARCHAR(20),GETDATE(),20),'ProblemAccountFB'
+UNION SELECT 'LastRuntimeUAT',CONVERT( VARCHAR(20),GETDATE(),20),'ProblemAccountFB'
 UNION SELECT 'ConfigUAT','1','ProblemAccountFB'
 UNION SELECT 'ConfigPRO','0','ProblemAccountFB'
-UNION SELECT 'IsCredit','1','ProblemAccountFB'
-UNION SELECT 'IsDeposit','0','ProblemAccountFB'
