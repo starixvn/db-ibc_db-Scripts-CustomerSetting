@@ -113,7 +113,7 @@ GO
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
 			AND s.site NOT IN ('CN88','76666B')
-			AND ci.currency IN (2,3,5,6,7,12,13,15,16,20,22,33,34,35,43,45,47,51,64,67,69,71,72,95) --RM,US$,HK$,EURO,DON,GBP,RMB,IN,Yen,UUS,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,MMK,KHR,YNG,USD
+			AND ci.currency IN (2,3,5,6,7,12,13,15,16,20,22,33,34,35,43,45,47,51,64,67,69,72,95) --RM,US$,HK$,EURO,DON,GBP,RMB,IN,Yen,UUS,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,MMK,YNG,USD
 			
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
@@ -166,7 +166,7 @@ GO
 			AND s.islicensee = 0
 			AND ci.custid <= @max_custid
 			AND s.site NOT IN ('CN88','76666B')
-			AND ci.currency IN (2,3,5,6,7,12,13,15,16,20,22,33,34,35,43,45,47,51,64,67,69,71,72,95) --RM,US$,HK$,EURO,DON,GBP,RMB,IN,Yen,UUS,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,MMK,KHR,YNG,USD
+			AND ci.currency IN (2,3,5,6,7,12,13,15,16,20,22,33,34,35,43,45,47,51,64,67,69,72,95) --RM,US$,HK$,EURO,DON,GBP,RMB,IN,Yen,UUS,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,MMK,YNG,USD
 
 	-- For deployer info
 	DECLARE @super_cnt INT, @index INT = 0
