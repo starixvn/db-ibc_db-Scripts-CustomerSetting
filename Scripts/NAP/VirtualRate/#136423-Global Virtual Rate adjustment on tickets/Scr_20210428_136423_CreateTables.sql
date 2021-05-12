@@ -22,9 +22,9 @@ IF EXISTS(
 	DROP VIEW [dbo].VRSettingRuleDetail_NotApply 
 GO
 
-DROP TABLE [VRSettingRule]
-DROP TABLE [VRSettingRuleDetail]
-DROP TABLE [VRSettingRuleDetail_NotApply]
+--DROP TABLE [VRSettingRule]
+--DROP TABLE [VRSettingRuleDetail]
+--DROP TABLE [VRSettingRuleDetail_NotApply]
 --GO
 SET QUOTED_IDENTIFIER ON
 GO
