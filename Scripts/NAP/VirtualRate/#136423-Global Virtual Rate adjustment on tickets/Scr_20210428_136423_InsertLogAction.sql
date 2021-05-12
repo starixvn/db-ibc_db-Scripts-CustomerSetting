@@ -1,6 +1,6 @@
 /*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
-	Created: 20210325@Eden
+	Created: 20210512@Eden
 	Task: Insert LogAction VREngine [RM#136423]
 	DB: DBLOG/bodb_CustomerLog
 */
