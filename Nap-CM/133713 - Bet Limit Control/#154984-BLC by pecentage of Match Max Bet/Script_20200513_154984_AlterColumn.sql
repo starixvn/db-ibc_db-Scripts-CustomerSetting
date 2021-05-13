@@ -27,18 +27,3 @@ GO
 --> Set column is not null
 ALTER TABLE dbo.BetLimitControlCustSetting ALTER COLUMN Mode TINYINT NOT NULL
 GO
-
-----INSERT INTO  DBACC.bodb02.dbo.BetLimitControlCustSetting(
-----CustID
-----,BetLimitTypeID
-----,MaxBet
-----,MaxPerMatch
-----,Mode
-----)
-----SELECT s.CustID,s.BetLimitTypeID,s.MaxBet,s.MaxPerMatch,s.mode
-----FROM BetLimitControlCustSetting s
----- LEFT JOIN DBACC.bodb02.dbo.BetLimitControlCustSetting d on s.CustID = d.custid and s.BetLimitTypeID = d.BetLimitTypeID
----- where d.CustID is null
-
---select * from BetLimitControlCustSetting
---select * from DBACC.bodb02.dbo.BetLimitControlCustSetting
