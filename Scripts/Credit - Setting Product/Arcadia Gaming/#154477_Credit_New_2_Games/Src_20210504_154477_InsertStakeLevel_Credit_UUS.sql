@@ -2,7 +2,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Eden@20210504
-	Task:  Arcadia Gaming - Offer 2 new mini Games for other Credit sites - UUS RedmineID:#154477
+	Task:  Arcadia Gaming - Offer 3 new mini Games for other Credit sites - UUS RedmineID:#154477
 	DB: DBCust/CustDB
 */
 PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
@@ -14,9 +14,11 @@ INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,Exch
 -- UUS
 SELECT 1909 ,'5'    ,'5000'    ,5    ,5000    ,20   UNION ALL	--UUS	--INH,UUS,YNG
 SELECT 1910 ,'5'    ,'5000'    ,5    ,5000    ,20	UNION ALL	--UUS	--INH,UUS,YNG
+SELECT 1911 ,'5'    ,'5000'    ,5    ,5000    ,20	UNION ALL	--UUS	--INH,UUS,YNG
 --YNG
 SELECT 1909 ,'5'    ,'5000'    ,5    ,5000    ,72   UNION ALL	--YNG	--INH,UUS,YNG
-SELECT 1910 ,'5'    ,'5000'    ,5    ,5000    ,72				--YNG	--INH,UUS,YNG
+SELECT 1910 ,'5'    ,'5000'    ,5    ,5000    ,72	UNION ALL	--YNG	--INH,UUS,YNG
+SELECT 1911 ,'5'    ,'5000'    ,5    ,5000    ,72				--YNG	--INH,UUS,YNG
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
