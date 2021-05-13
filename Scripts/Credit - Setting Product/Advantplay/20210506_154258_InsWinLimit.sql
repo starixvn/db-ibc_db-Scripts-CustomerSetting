@@ -21,7 +21,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			 67, --	ProductID
 			 4001, -- BetType
 			 1, -- IsActive_SMA
-			 0   -- IsActive_Company
+			 1   -- IsActive_Company
          )  
 	END
 ELSE
