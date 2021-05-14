@@ -95,10 +95,10 @@ BEGIN
 		@KenoList=@KenoListDummy,@IP=@IP,@ErrCode=@ErrCode OUTPUT,@ErrMsg=@ErrMsg OUTPUT
 
 	IF @ErrMsg <> ''
-		PRINT 'Agent' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
+		PRINT 'AgentID' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
 	ELSE 
 	BEGIN
-		PRINT 'Agent ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
+		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
 
 		UPDATE #Dep_Customer_Archived_Config
 		SET CustIDBalanceDummy = @tmpClearBalCustID
