@@ -29,6 +29,7 @@ SELECT c.custid
 FROM customer c(NOLOCK) 
 WHERE c.site IN ('Indowin','Allbetclub','GWORLD','Webet138','WeBet168','Win88')
 	AND c.roleid = 2
+	AND c.username NOT LIKE '%ACC%'
 
 SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status, c.srecommend
 INTO #Dep_Customer_Archived_Config
