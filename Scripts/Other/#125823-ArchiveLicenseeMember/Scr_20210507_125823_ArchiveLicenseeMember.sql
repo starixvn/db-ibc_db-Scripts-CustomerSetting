@@ -98,7 +98,7 @@ BEGIN
 		PRINT 'Agent' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
 	ELSE 
 	BEGIN
-		PRINT 'Agent' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
+		PRINT 'Agent ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
 
 		UPDATE #Dep_Customer_Archived_Config
 		SET CustIDBalanceDummy = @tmpClearBalCustID
