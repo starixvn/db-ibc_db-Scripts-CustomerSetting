@@ -106,6 +106,18 @@ BEGIN
 	END
 END
 
+IF EXISTS (	SELECT TOP 1 1
+			FROM #Dep_Customer_Archived_Config
+			WHERE CustIDBalanceDummy IS NULL
+)
+BEGIN
+	SELECT c.Recommend,c.Agent, 'This Agent have not ClearBal account' ERROR
+	FROM #Dep_Customer_Archived_Config c (NOLOCK)
+	WHERE c.CustIDBalanceDummy IS NULL
+	
+	RETURN
+END
+
 --> Update another agents to pending (do not scan now)
 UPDATE cf 
 SET cf.Status = 2 --Pending
