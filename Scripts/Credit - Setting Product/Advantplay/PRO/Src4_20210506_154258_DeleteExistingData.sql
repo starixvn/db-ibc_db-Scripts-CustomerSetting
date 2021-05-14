@@ -46,7 +46,7 @@ DECLARE @Sporttype SMALLINT
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0			
 		AND ci.Site NOT IN ('CN88','76666B')
-		AND ci.currency IN (2,3,5,6,7,12,13,15,16,22,33,34,35,43,45,47,51,64,67,69,95) --RM,US$,HK$,EURO,DON,GBP,RMB,IN,Yen,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,MMK,USD
+		AND ci.currency IN (2,3,7,13,15,16,22,33,34,35,43,45,47,51,64,67,95) --RM,US$,DON,RMB,IN,Yen,IND,IDD,IDR,$US,THB,Won,DDD,INH,UT,HKK,USD
 
 	SELECT DISTINCT cg.custid 
 	INTO #CustStakeLevel_Agent

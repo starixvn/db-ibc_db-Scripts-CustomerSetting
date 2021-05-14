@@ -34,10 +34,7 @@ SELECT 7706 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7707 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7708 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
 SELECT 7709 ,'5'    ,'1500'    ,5    ,1500    ,72   UNION ALL	--YNG	--UUS,YNG
-SELECT 7710 ,'5'    ,'1500'    ,5    ,1500    ,72	UNION ALL	--YNG	--UUS,YNG
--- Mini Games
-SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,20   UNION ALL	--UUS	--UUS
-SELECT 7711 ,'2'    ,'100'     ,2    ,100     ,72				--YNG	--YNG
+SELECT 7710 ,'5'    ,'1500'    ,5    ,1500    ,72				--YNG	--UUS,YNG
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
