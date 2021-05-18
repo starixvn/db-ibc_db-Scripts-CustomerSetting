@@ -6,5 +6,14 @@
 */
 USE bodb02
 GO
-EXEC dbo.[Task_Dep_Cust_Archive_Clear_Balance_UAT4]
+
+WHILE EXISTS (	SELECT 1
+				FROM CustDB.dbo.Dep_Customer_Archived WITH(NOLOCK)
+				WHERE Status = 'waiting'
+			)
+BEGIN
+  EXEC dbo.[Task_Dep_Cust_Archive_Clear_Balance_UAT4]
 	@BatchSize = 100
+
+	WAITFOR DELAY '00:00:00.010'
+END
