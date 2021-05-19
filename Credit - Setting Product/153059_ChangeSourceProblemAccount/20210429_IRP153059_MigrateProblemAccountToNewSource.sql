@@ -29363,7 +29363,7 @@
 	INSERT INTO ProblemAccountClassification(custid,IsReviewed,ModifiedDate)
 	SELECT custid, 0, GETDATE()
 	FROM custinfo ci WITH(NOLOCK) 
-	WHERE NOT EXISTS (SELECT 1 FROM ProblemAccountClassification pc WITH(NOLOCK) WHERE pc.custid = t.custid)
+	WHERE NOT EXISTS (SELECT 1 FROM ProblemAccountClassification pc WITH(NOLOCK) WHERE pc.custid = ci.custid)
 		AND ci.customerClass BETWEEN 8 AND 13
 		AND custid IN (
 		--robotdate is null
