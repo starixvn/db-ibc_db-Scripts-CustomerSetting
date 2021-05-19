@@ -389,7 +389,7 @@ SELECT 	1 as SiteType --Credit
 	,199.9999 AS StakeRM_To
 	,0 AS VR_From
 	,0.99 AS VR_To
-	,1 AS VRStatus --Enabled
+	,2 AS VRStatus --all
 	,'' AS BeginTime
 	,'' AS EndTime
 	,2 as LiveIndicator
@@ -398,7 +398,7 @@ SELECT 	1 as SiteType --Credit
 	,5
 	,'Low Stake for Basketball, credit: -99%'
 	,1
-	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
+	,'Site,VRValue,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -466,7 +466,7 @@ SELECT 	2 as SiteType --Licensee
 	,99.9999 AS StakeRM_To
 	,0 AS VR_From
 	,0.99 AS VR_To
-	,1 AS VRStatus --Enabled
+	,2 AS VRStatus --all
 	,'' AS BeginTime
 	,'' AS EndTime
 	,2 as LiveIndicator
@@ -475,7 +475,7 @@ SELECT 	2 as SiteType --Licensee
 	,6
 	,'Low Stake for Basketball, Haifa, IBM, Mansion88: -99%'
 	,1
-	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
+	,'Site,VRValue,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
@@ -541,7 +541,7 @@ SELECT 	2 as SiteType --Licensee
 	,399.9999 AS StakeRM_To
 	,0 AS VR_From
 	,0.99 AS VR_To
-	,1 AS VRStatus --Enabled
+	,2 AS VRStatus --all
 	,'' AS BeginTime
 	,'' AS EndTime
 	,2 as LiveIndicator
@@ -550,7 +550,7 @@ SELECT 	2 as SiteType --Licensee
 	,7
 	,'Low Stake for Basketball, Other Licensees: -99%'
 	,1
-	,'Site,VRValue,VRStatus,Sporttype,StakeRM'
+	,'Site,VRValue,Sporttype,StakeRM'
 
 SELECT @ID = SCOPE_IDENTITY()
 
