@@ -4,6 +4,8 @@
 	Task: Initial data for VRSettingRule, VRSettingRuleDetail, VRSettingRuleDetail_NotApply base on exsting Rule on place bet SPs [RM#136423]
 	DB: DBCUST/CustDB
 */
+USE CustDB
+GO
 TRUNCATE TABLE VRSettingRuleDetail_NotApply
 TRUNCATE TABLE VRSettingRuleDetail
 TRUNCATE TABLE VRSettingRule 
@@ -160,6 +162,24 @@ SELECT @ID as RuleID
 	,0 as DateOfWeek
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,1 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,12 as CustomerClass
+	,0 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,1 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,13 as CustomerClass
+	,0 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
 
 --INSERT INTO VRSettingRuleDetail_NotApply(
 --	 RuleID
@@ -280,6 +300,24 @@ SELECT @ID as RuleID
 	,0 as Bettype
 	,0 as SiteID
 	,10 as CustomerClass
+	,0 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,12 as CustomerClass
+	,0 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,13 as CustomerClass
 	,0 as DateOfWeek
 	,-1 as LeagueGroupID
 	,-1 as LeagueID
