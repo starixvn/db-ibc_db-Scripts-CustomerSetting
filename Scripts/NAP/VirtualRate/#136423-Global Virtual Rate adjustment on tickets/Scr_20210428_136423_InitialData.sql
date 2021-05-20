@@ -981,7 +981,9 @@ SELECT @ID as RuleID
 -----------------------Return Data-------------------
 --Update Priority = Priority * 10
 UPDATE [VRSettingRule] WITH(ROWLOCK)
-SET Priority = Priority * 100, CreatedBy = 10278938
+SET Priority = Priority * 100
+	, CreatedBy = 10278938
+	, Status = 0
 
 /*
 SELECT r.*,'---------' as '---------' ,rd.*
