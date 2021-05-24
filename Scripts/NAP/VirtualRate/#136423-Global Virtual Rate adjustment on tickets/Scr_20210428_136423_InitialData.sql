@@ -120,7 +120,7 @@ SELECT 	1 as SiteType --credit
 	,1 AS Adjustmenttype --fixed value
 	,1.00 AS AdjustmentValue
 	,2
-	,'Low Stake for Soccer, credit, class 8,9,10: 0%'
+	,'Low Stake for Soccer, credit, class 8,9,10,12,13: 0%'
 	,1
 	,'Site,CustomerClass,Sporttype,StakeRM'
 
