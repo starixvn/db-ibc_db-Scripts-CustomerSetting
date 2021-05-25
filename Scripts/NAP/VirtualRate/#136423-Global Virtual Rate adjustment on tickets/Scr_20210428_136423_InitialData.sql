@@ -676,7 +676,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	1 as SiteType --Credit
+SELECT 	0 as SiteType --All
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
@@ -752,7 +752,7 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	1 as SiteType --Credit
+SELECT 	0 as SiteType --All
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
@@ -766,101 +766,6 @@ SELECT 	1 as SiteType --Credit
 	,-0.02 AS AdjustmentValue
 	,9
 	,'By Hour Soccer, Week days, from 20:00 to 00:00: VR -2%'
-	,1
-	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
-
-SELECT @ID = SCOPE_IDENTITY()
-
-INSERT INTO [VRSettingRuleDetail](
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
-SELECT @ID as RuleID
-	,1 as Sporttype
-	,0 as Bettype
-	,0 as SiteID
-	,0 as CustomerClass
-	,0 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-
-INSERT INTO VRSettingRuleDetail_NotApply(
-	 RuleID
-	,Sporttype
-	,Bettype
-	,SiteID
-	,CustomerClass
-	,DateOfWeek
-	,LeagueGroupID
-	,LeagueID
-)
---SELECT @ID as RuleID
---	,0 as Sporttype
---	,0 as Bettype
---	,329 as SiteID
---	,0 as CustomerClass
---	,0 as DateOfWeek
---	,-1 as LeagueGroupID
---	,-1 as LeagueID
---UNION ALL
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,0 as SiteID
-	,0 as CustomerClass
-	,1 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-UNION ALL
-SELECT @ID as RuleID
-	,0 as Sporttype
-	,0 as Bettype
-	,0 as SiteID
-	,0 as CustomerClass
-	,7 as DateOfWeek
-	,-1 as LeagueGroupID
-	,-1 as LeagueID
-
---------------------------------------
---> Rule 9
-INSERT INTO [VRSettingRule](
-	 SiteType
-	,Betfrom
-	,StakeRM_From
-	,StakeRM_To
-	,VR_From
-	,VR_To
-	,VRStatus
-	,BeginTime
-	,EndTime
-	,LiveIndicator
-	,Adjustmenttype
-	,AdjustmentValue
-	,Priority
-	,RuleName
-	,Status
-	,Enabled_Column
-)
-SELECT 	1 as SiteType --Credit
-	,'' AS Betfrom
-	,0 AS StakeRM_From
-	,0 AS StakeRM_To
-	,0 AS VR_From
-	,0.99 AS VR_To
-	,1 AS VRStatus --Enabled
-	,'00:00' AS BeginTime
-	,'00:59:59.999' AS EndTime
-	,1 as LiveIndicator --Live
-	,2 AS Adjustmenttype --fixed value
-	,-0.02 AS AdjustmentValue
-	,10
-	,'By Hour Soccer, Week days, 00:00 to 01:00 AM (GMT+8): VR -2%'
 	,1
 	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
 
@@ -942,7 +847,102 @@ INSERT INTO [VRSettingRule](
 	,Status
 	,Enabled_Column
 )
-SELECT 	1 as SiteType --Credit
+SELECT 	0 as SiteType --All
+	,'' AS Betfrom
+	,0 AS StakeRM_From
+	,0 AS StakeRM_To
+	,0 AS VR_From
+	,0.99 AS VR_To
+	,1 AS VRStatus --Enabled
+	,'00:00' AS BeginTime
+	,'00:59:59.999' AS EndTime
+	,1 as LiveIndicator --Live
+	,2 AS Adjustmenttype --fixed value
+	,-0.02 AS AdjustmentValue
+	,10
+	,'By Hour Soccer, Week days, 00:00 to 01:00 AM (GMT+8): VR -2%'
+	,1
+	,'Site,VRValue,VRStatus,Sporttype,LiveIndicator,DateOfWeek,TicketTime'
+
+SELECT @ID = SCOPE_IDENTITY()
+
+INSERT INTO [VRSettingRuleDetail](
+	 RuleID
+	,Sporttype
+	,Bettype
+	,SiteID
+	,CustomerClass
+	,DateOfWeek
+	,LeagueGroupID
+	,LeagueID
+)
+SELECT @ID as RuleID
+	,1 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,0 as CustomerClass
+	,0 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+
+INSERT INTO VRSettingRuleDetail_NotApply(
+	 RuleID
+	,Sporttype
+	,Bettype
+	,SiteID
+	,CustomerClass
+	,DateOfWeek
+	,LeagueGroupID
+	,LeagueID
+)
+--SELECT @ID as RuleID
+--	,0 as Sporttype
+--	,0 as Bettype
+--	,329 as SiteID
+--	,0 as CustomerClass
+--	,0 as DateOfWeek
+--	,-1 as LeagueGroupID
+--	,-1 as LeagueID
+--UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,0 as CustomerClass
+	,1 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+UNION ALL
+SELECT @ID as RuleID
+	,0 as Sporttype
+	,0 as Bettype
+	,0 as SiteID
+	,0 as CustomerClass
+	,7 as DateOfWeek
+	,-1 as LeagueGroupID
+	,-1 as LeagueID
+
+--------------------------------------
+--> Rule 11
+INSERT INTO [VRSettingRule](
+	 SiteType
+	,Betfrom
+	,StakeRM_From
+	,StakeRM_To
+	,VR_From
+	,VR_To
+	,VRStatus
+	,BeginTime
+	,EndTime
+	,LiveIndicator
+	,Adjustmenttype
+	,AdjustmentValue
+	,Priority
+	,RuleName
+	,Status
+	,Enabled_Column
+)
+SELECT 	0 as SiteType --All
 	,'' AS Betfrom
 	,0 AS StakeRM_From
 	,0 AS StakeRM_To
