@@ -20,4 +20,6 @@ UNION SELECT 'ConfigUAT','1','AmendmentNotiFB'
 UNION SELECT 'ConfigPRO','0','AmendmentNotiFB'
 UNION SELECT 'IsCredit','1','AmendmentNotiFB'
 UNION SELECT 'IsDeposit','0','AmendmentNotiFB'
-
+UNION SELECT 'LastTicketIDUAT','0','AmendmentNotiFB'
+UNION SELECT 'JobStatusUAT','0','AmendmentNotiFB'
+UNION SELECT 'LastRuntimeUAT',CONVERT( VARCHAR(20),GETDATE(),20),'AmendmentNotiFB'
