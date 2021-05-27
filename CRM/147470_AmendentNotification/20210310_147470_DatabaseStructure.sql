@@ -25,7 +25,8 @@ CREATE TABLE [dbo].[crmAmendmentNotiFeedbackInfo](
 	[WrongResult] [nvarchar](max) NULL,
 	[CreatedDate] [datetime] NULL,
 	[Description] [varchar](1000) NULL,
-	[Listbettype] [varchar](max) NULL
+	[Listbettype] [varchar](max) NULL,
+	[Enviroment] [varchar](20) NULL,
 ) ON [DATA]
 
 GO
