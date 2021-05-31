@@ -357,7 +357,7 @@ SELECT 	0 as SiteType --All
 	,1 AS Adjustmenttype --fixed value
 	,0.01 AS AdjustmentValue
 	,4
-	,'Low Stake for Soccer, credit&Licensee: -99%'
+	,'Low Stake for Soccer, credit and Licensee: -99%'
 	,1
 	,'VRValue,VRStatus,Sporttype,StakeRM'
 
