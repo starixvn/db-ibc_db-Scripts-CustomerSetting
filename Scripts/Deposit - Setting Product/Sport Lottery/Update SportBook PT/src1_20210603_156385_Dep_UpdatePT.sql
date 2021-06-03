@@ -47,7 +47,7 @@ BEGIN
 	BEGIN
 		WHILE(1 =1)
 		BEGIN
-			
+			--1 turn run 2500 member safe (large line) .
 			UPDATE TOP (@batch) c WITH (ROWLOCK)
 			SET c.isfinished = 1
 			OUTPUT DELETED.CustID INTO #CustListTemp(CustID)
@@ -191,7 +191,7 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-	
+		-- WAITFOR DELAY 5000 member 1 turn
 	    UPDATE TOP (@batch) a
 		SET a.isfinished = 1
 		OUTPUT INSERTED.CustID INTO #tmpSMATemp(CustID)	
