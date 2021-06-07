@@ -39,7 +39,7 @@ BEGIN
 	WHERE dc.sporttype IN (233,234,239,169,236,238) AND cs.site NOT IN ('Athena000')
 	
 END
-
+GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
