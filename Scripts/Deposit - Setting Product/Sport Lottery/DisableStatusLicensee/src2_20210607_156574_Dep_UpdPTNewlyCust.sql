@@ -67,7 +67,6 @@ BEGIN
 	INSERT INTO #MemberTemp(CustID,mrecommend)
 	SELECT a.custid, a.mrecommend
 	FROM Custinfo a WITH (NOLOCK)
-	INNER JOIN #supers b ON a.srecommend = b.custid
 	WHERE srecommend IN (SELECT custid FROM #supers) AND a.roleid = 1  AND a.Enabled = 1 AND a.custid > @maxcustID	
 	AND a.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	------------------------------------Status Setting-------------------------------------------------	
