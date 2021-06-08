@@ -16,12 +16,9 @@ AS
 BEGIN			
 	
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductSettingDetail') = 0 RETURN
 	IF dbo.f_CheckRepTable('site') = 0 RETURN
 	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
 
