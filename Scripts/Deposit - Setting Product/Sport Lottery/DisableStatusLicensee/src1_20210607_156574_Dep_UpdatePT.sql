@@ -88,9 +88,6 @@ CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,isfinished BIT DEFAULT(0))
 CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID INT,isfinished BIT DEFAULT(0))
 
-CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
-CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
-
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
@@ -126,6 +123,9 @@ SELECT CustID,RoleID,srecommend
 FROM custInfo ci WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT CustID FROM #supers) AND ci.custid<=@max_custid 
 	AND roleid IN(2,3,4) AND ci.Enabled=1 AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
+
+CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
+CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
 
 SELECT @BitOrder= bitmapOrder 
 FROM Dep_ProductStatusProfile WITH(NOLOCK) 
@@ -233,9 +233,6 @@ CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,isfinished BIT DEFAULT(0))
 CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID INT,isfinished BIT DEFAULT(0))
 
-CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
-CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
-
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
@@ -271,6 +268,9 @@ SELECT CustID,RoleID,srecommend
 FROM custInfo ci WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT CustID FROM #supers) AND ci.custid<=@max_custid 
 	AND roleid IN(2,3,4) AND ci.Enabled=1 AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
+
+CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
+CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
 
 SELECT @BitOrder= bitmapOrder 
 FROM Dep_ProductStatusProfile WITH(NOLOCK) 
