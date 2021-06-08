@@ -20,11 +20,11 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
 	IF dbo.f_CheckRepTable('site') = 0 RETURN
-	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
 
 	DECLARE @batch int = 3000,@BitOrder INT
 
-	CREATE TABLE #supers (custid INT PRIMARY KEY,PT_SB MONEY)
+	CREATE TABLE #supers (custid INT PRIMARY KEY)
 	DECLARE @SportBetType TABLE
 	(
 		SportType	SMALLINT, 
@@ -70,7 +70,7 @@ BEGIN
 	INNER JOIN #supers b ON a.srecommend = b.custid
 	WHERE srecommend IN (SELECT custid FROM #supers) AND a.roleid = 1  AND a.Enabled = 1 AND a.custid > @maxcustID	
 	AND a.mrecommend NOT IN (SELECT custid FROM #Dummy)
-	------------------------------------PT Setting-------------------------------------------------	
+	------------------------------------Status Setting-------------------------------------------------	
 	
 	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
 	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsDisabled binary(32))
