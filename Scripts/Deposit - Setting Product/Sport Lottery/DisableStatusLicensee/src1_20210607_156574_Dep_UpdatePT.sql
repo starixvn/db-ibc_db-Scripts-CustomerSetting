@@ -88,6 +88,9 @@ CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,isfinished BIT DEFAULT(0))
 CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID INT,isfinished BIT DEFAULT(0))
 
+CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
+CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
+
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
@@ -230,8 +233,8 @@ CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,isfinished BIT DEFAULT(0))
 CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID INT,isfinished BIT DEFAULT(0))
 
-CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend) INCLUDE(isfinished )
-CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend) INCLUDE(RoleID,isfinished )
+CREATE NONCLUSTERED INDEX ix_tmpCust ON #tmpCust(srecommend,isfinished )
+CREATE NONCLUSTERED INDEX ix_tmpSMA ON #tmpSMA(srecommend,isfinished )
 
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
