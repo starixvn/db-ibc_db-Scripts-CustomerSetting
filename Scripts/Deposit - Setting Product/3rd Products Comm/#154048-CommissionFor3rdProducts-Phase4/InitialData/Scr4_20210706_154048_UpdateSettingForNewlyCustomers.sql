@@ -5,13 +5,13 @@
 	DB: DBCUST/CUSTDB 
 
 	Notes: 
-	ProductName		ProductID	SportType	BetType
-	WM				51			233			3401
-	Joker			56			234			6401
-	BG				57			239			3501
-	Sports Lottery	63			169			3611
-	GDG				59			236			5701
-	Habanero		61			238			7001
+	ProductID	SportType	BetType	ProductName
+	51	233	3401	WM
+	56	234	6401	Joker
+	57	239	3501	BG
+	63	169	3611	Sports Lottery
+	59	236	5701	GDG
+	61	238	7001	Habanero
 */
 
 DECLARE @max_custid INT	 = xxx
