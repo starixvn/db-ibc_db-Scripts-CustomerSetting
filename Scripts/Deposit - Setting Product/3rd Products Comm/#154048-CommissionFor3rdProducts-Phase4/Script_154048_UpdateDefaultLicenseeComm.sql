@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-bodb_Licensee"></info>*/
 /*
 	Created: Eden@20210602
-	Task: Add new columns into LicenseeCustComm & LicenseeGroupComm [Redmine: #154048]   
+	Task: Update data for new columns of LicenseeCustComm & LicenseeGroupComm [Redmine: #154048]   
 	DB: DBCUST/bodb_Licensee and all subscriber DBs
 */
 
