@@ -5,7 +5,8 @@
 */
 USE [bodb_CRM]
 GO
-
+--DROP TABLE [dbo].[crmAmendmentNotiFeedbackInfo]
+--DROP TABLE [dbo].[crmCustAmendment]
 CREATE TABLE [dbo].[crmAmendmentNotiFeedbackInfo](
 	[LogID] [int] IDENTITY(1,1) NOT NULL,
 	[TicketEventId] [int] NULL,
@@ -27,6 +28,7 @@ CREATE TABLE [dbo].[crmAmendmentNotiFeedbackInfo](
 	[Description] [varchar](1000) NULL,
 	[Listbettype] [varchar](max) NULL,
 	[Environment] [varchar](20) NULL,
+	[SubmitDate] [datetime] NULL,
 ) ON [DATA]
 
 GO
@@ -53,18 +55,29 @@ CREATE NONCLUSTERED INDEX [IX_TicketEventId] ON [dbo].[crmAmendmentNotiFeedbackI
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 GO
 
+CREATE NONCLUSTERED INDEX [IX_SubmitDate] ON [dbo].[crmAmendmentNotiFeedbackInfo] 
+(
+	[TicketEventId] ASC,
+	[SubmitDate] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
+GO
+
 
 CREATE TABLE [dbo].[crmCustAmendment](
 	[TicketId] [int] NOT NULL,
 	[CustId] [int] NULL,
 	[HeadlineID] [int] NULL,
 	[LogID] [int] NULL,
-	[TicketEventId] [int] NULL,
+	[TicketEventId] [int] NOT NULL,
 	[CreateDate] [datetime] NULL,
 	[Bettype] [smallint] NULL,
+	[Seq] [int] NOT NULL,
  CONSTRAINT [PK_crmCustAmendment] PRIMARY KEY CLUSTERED 
 (
-	[TicketId] ASC
+	[TicketId] ASC,
+	[TicketEventId] ASC,
+	[Seq] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 ) ON [DATA]
 GO
+
