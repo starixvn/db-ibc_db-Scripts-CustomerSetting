@@ -1,6 +1,6 @@
 /*
 	Created by: Elodie
-	Date: 20200131
+	Date: 20210614
 	Task: Correct LogAction for Profile picture
 	DB: DBLOG/bodb_CustomerLog
 */
