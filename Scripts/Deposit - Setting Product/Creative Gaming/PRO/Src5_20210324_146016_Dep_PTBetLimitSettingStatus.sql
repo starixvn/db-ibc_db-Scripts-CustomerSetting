@@ -343,6 +343,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							,92   -- HID
 							,94   -- MK
 							,96   -- USDT
+							,20	  -- UUS	
+							,72	  -- YNG
 							)
 ORDER BY ci.custid 
 
@@ -417,6 +419,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							,92   -- HID
 							,94   -- MK
 							,96   -- USDT
+							,20	  -- UUS	
+							,72	  -- YNG
 							)
 ORDER BY ci.custid 
 

@@ -5,7 +5,7 @@
 	Task:	 Update SettingStatus = 0 (PROD) for Creative Gaming [Redmine: 146016]
 	DB:		 DBCUST/CustDB
 	
-	P/s : Step 7 unhide Creative Gaming
+	P/s : Step 8 unhide Creative Gaming
 */ 
 USE [CustDB]
 Go

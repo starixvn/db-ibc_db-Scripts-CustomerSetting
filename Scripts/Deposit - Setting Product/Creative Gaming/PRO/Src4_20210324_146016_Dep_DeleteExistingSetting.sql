@@ -65,6 +65,8 @@ BEGIN
 							,92   -- HID
 							,94   -- MK
 							,96   -- USDT
+							,20	  -- UUS	
+							,72	  -- YNG
 							)
 
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
