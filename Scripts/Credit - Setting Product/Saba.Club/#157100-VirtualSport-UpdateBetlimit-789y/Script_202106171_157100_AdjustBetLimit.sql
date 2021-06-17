@@ -49,6 +49,7 @@ FROM  CustBetSetting3rd_Agent bt WITH(NOLOCK)
 WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
 	AND c.srecommend IN (SELECT custid FROM #supers) 
 	AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
+	AND c.Enabled = 1
 
 WHILE 1 = 1
 BEGIN
@@ -81,7 +82,7 @@ FROM  CustBetSetting3rd_Member bt WITH(NOLOCK)
 WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
 	AND c.srecommend IN (SELECT custid FROM #supers)
 	AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
-
+	AND c.Enabled = 1
 
 WHILE 1 = 1
 BEGIN
