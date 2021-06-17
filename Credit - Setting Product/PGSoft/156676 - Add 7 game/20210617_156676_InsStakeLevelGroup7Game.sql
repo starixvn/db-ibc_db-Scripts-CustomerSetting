@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20210617
-	Task:  Add 7 new game [PG Game]  - Credit UUS RedmineID:#156676
+	Task:  Add 7 new game [PG Game]  - Credit real currency RedmineID:#156676
 	DB: DBCust/CustDB
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
