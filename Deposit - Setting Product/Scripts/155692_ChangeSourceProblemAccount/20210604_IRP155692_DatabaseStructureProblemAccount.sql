@@ -49,3 +49,15 @@ SET c.OfferDeposit = t.OfferDeposit,
 	c.CategoryNameCS = t.Name
 FROM CategoryConfig c WITH(ROWLOCK)
 	INNER JOIN t ON c.CategoryID = t.ID
+	
+IF NOT EXISTS(SELECT 1 FROM CategoryConfig WHERE CategoryID = 162)
+BEGIN	
+	INSERT INTO [dbo].[CategoryConfig]
+			   ([CategoryID]
+			   ,[CategoryName]
+			   ,[OfferDeposit]
+			   ,[CategoryNameCS]
+			   ,[CustomerClass])
+	SELECT 162,'Info Bet',1,N'资讯单',12
+END
+	
