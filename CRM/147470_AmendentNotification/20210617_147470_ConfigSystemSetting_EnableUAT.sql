@@ -1,0 +1,17 @@
+/*
+	Created: 202010303@Winfred
+	Task : config setting for Amendment Notification  CRM [redmine:#147470]
+	DB: DBCRM/bodb_CRM
+*/
+
+
+
+USE [bodb_CRM]
+GO
+	
+
+UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
+SET Value = '1'
+WHERE SettingName = 'ConfigUAT'
+	AND ServiceName = 'AmendmentNotiFB'	
+
