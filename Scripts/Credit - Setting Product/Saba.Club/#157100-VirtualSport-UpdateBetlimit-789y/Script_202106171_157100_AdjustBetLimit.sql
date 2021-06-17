@@ -50,14 +50,6 @@ WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
 	AND c.srecommend IN (SELECT custid FROM #supers) 
 	AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
 
-INSERT INTO #Membertemp (CustID)
-SELECT DISTINCT bt.CustID
-FROM  CustBetSetting3rd_Member bt WITH(NOLOCK)
-	INNER JOIN custinfo c WITH(NOLOCK) ON bt.custid = c.custid
-WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
-	AND c.srecommend IN (SELECT custid FROM #supers)
-	AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
-
 WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #SMATempUpdate
@@ -79,6 +71,17 @@ BEGIN
 	WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
 		AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
 END
+
+
+
+INSERT INTO #Membertemp (CustID)
+SELECT DISTINCT bt.CustID
+FROM  CustBetSetting3rd_Member bt WITH(NOLOCK)
+	INNER JOIN custinfo c WITH(NOLOCK) ON bt.custid = c.custid
+WHERE bt.sporttype IN(180,181,182,183,184,185,186,190,191,192,193,199,231)
+	AND c.srecommend IN (SELECT custid FROM #supers)
+	AND (bt.MaxPerMatch > 10000 OR BT.MaxBet > 10000 OR bt.MinBet > 10000)
+
 
 WHILE 1 = 1
 BEGIN
