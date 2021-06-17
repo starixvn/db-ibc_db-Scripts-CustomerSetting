@@ -62,7 +62,7 @@ WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #SMATempUpdate
 
-	DELETE TOP (700) #SMATemp 
+	DELETE TOP (350) #SMATemp 
 	OUTPUT DELETED.CustID
 	INTO #SMATempUpdate(CustID)
 
@@ -84,7 +84,7 @@ WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #MembertempUpdate
 
-	DELETE TOP (700) #Membertemp 
+	DELETE TOP (350) #Membertemp 
 	OUTPUT DELETED.CustID
 	INTO #MembertempUpdate(CustID)
 
