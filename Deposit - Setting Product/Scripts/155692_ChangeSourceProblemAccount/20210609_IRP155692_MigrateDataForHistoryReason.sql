@@ -8,7 +8,7 @@
 	;WITH T AS (
 			SELECT c.custid, tv.CreatedDate, tv.SubIssueTypeID
 			FROM custinfo c WITH(NOLOCK)
-				INNER JOIN DBACC.bod02.dbo.TicketVoiding_VoidedTransaction tv WITH (NOLOCK) ON c.CustId = tv.custid			
+				INNER JOIN DBACC.bodb02.dbo.TicketVoiding_VoidedTransaction tv WITH (NOLOCK) ON c.CustId = tv.custid			
 			WHERE IssueTypeId = 11
 				AND c.srecommend IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 				AND c.CustomerClass BETWEEN 8 AND 13
