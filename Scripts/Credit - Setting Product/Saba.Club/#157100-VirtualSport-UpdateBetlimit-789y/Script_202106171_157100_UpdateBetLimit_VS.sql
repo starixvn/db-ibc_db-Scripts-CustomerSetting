@@ -121,17 +121,19 @@ DECLARE @max_custid INT, @srecommend INT
 SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
-FROM customer ci WITH (NOLOCK) 
-	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-WHERE ci.roleid = 4  
-	AND ci.username NOT LIKE '3rdSuper%'
-	AND cs.isinternal = 0
-	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+SELECT c.custid
+FROM customer c WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
+	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
+	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid 
+WHERE c.roleid = 4  
 	AND s.islicensee = 0
+	AND cs.isinternal = 0
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND ci.Enabled = 1
+	AND c.site = '789y'
 	AND ci.custid <= @max_custid
-	AND ci.site IN ('789y')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
