@@ -7,42 +7,7 @@
 USE bodb_Message
 GO
 
-CREATE TABLE #temp(
-	 CustID               INT, 
-	 SubAccID             INT, 
-	 LastSeenNormalMsg    DATETIME, 
-	 LastSeenPersonalMsg  DATETIME, 
-	 LastSeenSpecialMsg   DATETIME, 
-	 LastSeenSystemUpdMsg DATETIME
-)
-
-INSERT INTO #temp (
-	CustId
-	,SubAccId
-	,LastSeenNormalMsg
-	,LastSeenPersonalMsg
-	,LastSeenSpecialMsg
-	,LastSeenSystemUpdMsg
-)
-SELECT CustId
-	,SubAccId
-	,LastSeenNormalMsg
-	,LastSeenPersonalMsg
-	,LastSeenSpecialMsg
-	,LastSeenSystemUpdMsg
-FROM OPENQUERY (DB05BK1, '
-	SELECT s.CustId
-		,s.SubAccId
-		,s.LastSeenNormalMsg
-		,s.LastSeenPersonalMsg
-		,s.LastSeenSpecialMsg
-		,s.LastSeenSystemUpdMsg 
-	FROM bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK)
-	WHERE s.LastSeenSystemUpdMsg >= ''2021/06/18 05:00:00''
-			AND s.LastSeenNormalMsg > = ''2021/06/18 05:00:00''
-			AND s.LastSeenPersonalMsg >= ''2021/06/18 05:00:00''
-			AND s.LastSeenSpecialMsg > = ''2021/06/18 05:00:00''
-	')
+DECLARE @syncFromDate DATETIME = '2021/06/18 05:00:00' --Date begin sync data
 
 --> MsgCustReadStatus
 INSERT INTO dbo.MsgCustReadStatus (
@@ -59,6 +24,10 @@ SELECT s.CustId
 	,s.LastSeenPersonalMsg
 	,s.LastSeenSpecialMsg
 	,s.LastSeenSystemUpdMsg 
-FROM #temp s
+FROM db05bk1.bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK)
 	LEFT JOIN MsgCustReadStatus d WITH(NOLOCK) ON s.CustID = d.CustID AND s.SubAccID = d.SubAccID
 WHERE d.CustID IS NULL
+	AND s.LastSeenSystemUpdMsg >= @syncFromDate
+	AND s.LastSeenNormalMsg > = @syncFromDate
+	AND s.LastSeenPersonalMsg >= @syncFromDate
+	AND s.LastSeenSpecialMsg > = @syncFromDate
