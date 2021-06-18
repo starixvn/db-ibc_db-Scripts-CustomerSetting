@@ -62,6 +62,7 @@ BEGIN
 	
 	DROP TABLE #tmpCust
 END
+GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
@@ -70,7 +71,7 @@ END
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 EXEC Acc_CustSetting_19 @target = 'REPLICATED'
-
+GO
 -- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 -----------------------------------------------------------------------------------	
 	
