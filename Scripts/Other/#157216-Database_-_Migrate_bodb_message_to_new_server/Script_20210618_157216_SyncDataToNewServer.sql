@@ -24,7 +24,7 @@ SELECT s.CustId
 	,s.LastSeenPersonalMsg
 	,s.LastSeenSpecialMsg
 	,s.LastSeenSystemUpdMsg 
-FROM DBMSG_OLD.bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK)
+FROM db05bk1.bodb_Message.dbo.MsgCustReadStatus s WITH(NOLOCK)
 	LEFT JOIN MsgCustReadStatus d WITH(NOLOCK) ON s.CustID = d.CustID AND s.SubAccID = d.SubAccID
 WHERE d.CustID IS NULL
 	AND (s.LastSeenSystemUpdMsg >= @syncFromDate
