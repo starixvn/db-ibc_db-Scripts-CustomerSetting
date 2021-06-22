@@ -2,7 +2,7 @@
 /*
 	Created: Eden@20210617
 	Task: Add new columns into Cust_ArchiveAccount [Redmine: #157123]   
-	DB: DBCUST/bodb_Licensee
+	DB: DBCUST/CustDB
 */
 
 USE CustDB

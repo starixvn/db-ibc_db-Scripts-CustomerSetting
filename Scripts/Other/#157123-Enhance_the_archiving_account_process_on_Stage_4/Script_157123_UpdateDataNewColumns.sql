@@ -1,7 +1,7 @@
 /*
 	Created: Eden@20210617
 	Task: update data Stage 3 for new columns of Cust_ArchiveAccount [Redmine: #157123]   
-	DB: DBCUST/bodb_Licensee
+	DB: DBCUST/CustDB
 */
 
 USE CustDB
