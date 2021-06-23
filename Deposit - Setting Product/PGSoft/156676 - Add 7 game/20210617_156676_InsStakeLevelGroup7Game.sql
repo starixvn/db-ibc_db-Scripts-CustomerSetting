@@ -5,6 +5,24 @@
 	Task:  Add 7 new game [PG Game]  - Deposit real currency RedmineID:#156676
 	DB: DBCust/CustDB
 */
+-- InsStakeLevel
+CREATE TABLE #Dep_StakeLevel ( GameTypeID INT,
+								ExchangeId int,
+								GameGroupID int default(16))
+								
+INSERT INTO #Dep_StakeLevel(GameTypeID,ExchangeId)
+SELECT 6001,122       -- KZT 
+
+DECLARE @MaxStakeLevelID INT
+SELECT @MaxStakeLevelID = MAX(StakeLevelID) FROM DEP_StakeLevel WITH(NOLOCK)
+
+INSERT INTO Dep_StakeLevel(GameTypeID,ExchangeId,GameGroupID,StakeLevelID)
+SELECT a.GameTypeID,a.ExchangeId,a.GameGroupID,StakeLevelID = @MaxStakeLevelID + ROW_NUMBER() OVER(ORDER BY exchangeid) 
+FROM #Dep_StakeLevel a
+
+DROP TABLE #Dep_StakeLevel
+-- END InsStakeLevel
+-- InsStakeLevel Grpu[
 CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
 								,ExchangeId int, GameGroupID int default(16))
@@ -288,6 +306,14 @@ SELECT 6074 ,'0.2'  ,'200'     ,0.2  ,200     ,96   UNION ALL	--USDT	--USD
 SELECT 6075 ,'0.2'  ,'20'      ,0.2  ,20      ,96   UNION ALL	--USDT	--USD
 SELECT 6076 ,'0.2'  ,'20'      ,0.2  ,20      ,96   UNION ALL	--USDT	--USD
 SELECT 6077 ,'0.2'  ,'20'      ,0.2  ,20      ,96   UNION ALL	--USDT	--USD
+--KZT 
+SELECT 6071 ,'40'  ,'40000'    ,40  ,40000   ,122   UNION ALL	--KZT 	--KZT 
+SELECT 6072 ,'40'  ,'4000'     ,40  ,4000    ,122   UNION ALL	--KZT 	--KZT 
+SELECT 6073 ,'40'  ,'40000'    ,40  ,40000   ,122   UNION ALL	--KZT 	--KZT
+SELECT 6074 ,'40'  ,'40000'    ,40  ,40000   ,122   UNION ALL	--KZT 	--KZT
+SELECT 6075 ,'40'  ,'4000'     ,40  ,4000    ,122   UNION ALL	--KZT 	--KZT
+SELECT 6076 ,'40'  ,'4000'     ,40  ,4000    ,122   UNION ALL	--KZT 	--KZT
+SELECT 6077 ,'40'  ,'4000'     ,40  ,4000    ,122   UNION ALL	--KZT 	--KZT
 --VND
 SELECT 6071 ,'2'    ,'2000'    ,2    ,2000    ,7    UNION ALL	--DON	--VND
 SELECT 6072 ,'2'    ,'200'     ,2    ,200     ,7    UNION ALL	--DON	--VND
