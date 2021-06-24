@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Eden@20210617
 	Task: update data Stage 3 for new columns of Cust_ArchiveAccount [Redmine: #157123]   
