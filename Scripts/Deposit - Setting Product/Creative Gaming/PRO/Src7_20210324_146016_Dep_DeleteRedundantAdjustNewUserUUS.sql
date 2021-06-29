@@ -14,7 +14,7 @@ GO
 
 	DECLARE @maxcustid INT
 
-	SELECT @maxcustid = xxx
+	SELECT @maxcustid = 50250688
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
