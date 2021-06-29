@@ -4,7 +4,7 @@ GO
 --DROP TABLE dbo.VRCustLog
 
 CREATE TABLE [dbo].[VRCustLog](
-	[LogId] [bigint] IDENTITY(1,1) NOT NULL,
+	[LogId] [bigint] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[CustID] [int] NOT NULL,
 	[ActionID] [smallint] NULL,
