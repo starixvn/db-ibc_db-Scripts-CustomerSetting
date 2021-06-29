@@ -7,13 +7,13 @@ USE bodb_CustomerLog_Archive
 GO
 
 DECLARE @__archiveDate DATETIME, @MinLogId BIGINT, @MaxLogId BIGINT, @Batch INT = 1000
-SELECT @__archiveDate = DATEADD(DAY, 1, dbo.f_CustomerLog_GetArchiveDate())
+SELECT @__archiveDate = DATEADD(DAY, 1, bodb_CustomerLog.dbo.f_CustomerLog_GetArchiveDate())
 DECLARE @msg NVARCHAR(200) = 'Currently at batch %d'
 
 SELECT @MinLogId = MIN(LogId) FROM bodb_CustomerLog.dbo.VRCustLog WITH (NOLOCK)
 
 DECLARE @i INT = 1
-
+SELECT @__archiveDate
 WHILE EXISTS (SELECT 1 FROM bodb_CustomerLog.dbo.VRCustLog WITH (NOLOCK) WHERE LogId = @MinLogId AND LogTime < @__archiveDate) --AND @i < 50
 BEGIN
 	SELECT @MaxLogId = @MinLogId + @Batch
