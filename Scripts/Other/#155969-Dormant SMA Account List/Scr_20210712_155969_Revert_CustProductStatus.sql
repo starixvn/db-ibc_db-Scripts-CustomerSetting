@@ -23,11 +23,20 @@ WHERE Enabled = 0
 	AND p.CustID IS NULL
 
 --Insert Revert Cust List to temptable use for future purpose 
-SELECT t.CustID
-INTO Temp_Revert_CustProductStatus
+SELECT	 old.CustID
+		,old.bitmapHasSynced
+		,old.bitmapIsHidden
+		,old.bitmapIsDisabled
+		,old.SuspendInfo
+		,old.Locked
+		,old.CloseInfo
+INTO Temp_Revert_CustProductStatus 
 FROM #Revert_Cust t
 	INNER JOIN DBARCCUST.bodb_Customer.dbo.CustProductStatus_old  old WITH(NOLOCK) 
 		ON t.CustID = old.custid
+
+ALTER TABLE Temp_Revert_CustProductStatus
+ADD CONSTRAINT PK_Temp_Revert_CustProductStatus PRIMARY KEY (CustID)
 
 --> Revert CustProductStatus
 WHILE 1= 1
@@ -58,11 +67,8 @@ BEGIN
 		,old.Locked
 		,old.CloseInfo
 	FROM #Revert_Cust_tmpBatch t
-		INNER JOIN DBARCCUST.bodb_Customer.dbo.CustProductStatus_old  old WITH(NOLOCK) 
+		INNER JOIN Temp_Revert_CustProductStatus  old WITH(NOLOCK) 
 			ON t.CustID = old.custid
-		LEFT JOIN dbo.CustProductStatus c2 WITH(NOLOCK) 
-			ON t.CustID = c2.CustID
-	WHERE c2.CustID IS NULL
 
 	WAITFOR DELAY '00:00:00.200'
 END
