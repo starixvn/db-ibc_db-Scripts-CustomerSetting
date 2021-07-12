@@ -63,6 +63,8 @@ BEGIN
 		LEFT JOIN dbo.CustProductStatus c2 WITH(NOLOCK) 
 			ON t.CustID = c2.CustID
 	WHERE c2.CustID IS NULL
+
+	WAITFOR DELAY '00:00:00.200'
 END
 
 DROP TABLE #Revert_Cust

@@ -36,6 +36,8 @@ BEGIN
 	FROM #Deleted_Cust_tmpBatch t
 		INNER JOIN dbo.CustProductStatus p WITH(ROWLOCK,UPDLOCK) 
 			ON t.CustID = p.custid
+
+	WAITFOR DELAY '00:00:00.200'
 END
 
 DROP TABLE #Deleted_Cust
