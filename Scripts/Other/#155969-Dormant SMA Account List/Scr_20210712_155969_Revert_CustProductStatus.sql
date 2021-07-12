@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/  
 /*
 	Created: Eden@21210712
 	Task: Revert data CustProductStatus table for customers who were archived on stage 3 [Redmine: #155969]  
