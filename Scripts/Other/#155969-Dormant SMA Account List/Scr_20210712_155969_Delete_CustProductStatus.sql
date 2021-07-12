@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Eden@21210712
 	Task: Delete data CustProductStatus table for customers who were archived on stage 4 [Redmine: #155969] 

@@ -1,6 +1,9 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Eden@21210712
-	Task: Revert data CustProductStatus table for customers who were archived on stage 3 [Redmine: #155969]   
+	Task: Revert data CustProductStatus table for customers who were archived on stage 3 [Redmine: #155969]  
+		1. Backup data to table Temp_Revert_CustProductStatus
+		2. Revert CustProductStatus
 	DB: DBCUST/CustDB
 */
 
