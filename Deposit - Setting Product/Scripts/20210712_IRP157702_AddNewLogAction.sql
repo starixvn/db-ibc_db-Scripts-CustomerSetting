@@ -19,5 +19,5 @@ INSERT INTO [dbo].[LogAction]
            ,[IsInternal]
            ,[ActionNameVI]
            ,[ActionNameCN])
-SELECT 2218,'Acc_Dep_LicenseeOddsGroupUpd','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee',1,'Update odds group for licensee','Update odds group for licensee'
+SELECT 2217,'Acc_Dep_LicenseeOddsGroupUpd','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee','Update odds group for licensee',1,'Update odds group for licensee','Update odds group for licensee'
       
