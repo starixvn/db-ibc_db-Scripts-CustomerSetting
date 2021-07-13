@@ -20,7 +20,7 @@ BEGIN
 	SELECT @NextLogId = @MinLogId + @Batch
 
 	INSERT INTO VRCustLog (LogId, SportType, CustID, ActionID, TrackingValue1, TrackingValue2, UserID, LogTime, Duration, IP)
-	SELECT LogId, SportType, CustID, ActionID, TrackingValue1, TrackingValue2, UserID, LogTime, Duration, IP
+	SELECT LogId, SportType, vr.CustID, ActionID, TrackingValue1, TrackingValue2, UserID, LogTime, Duration, IP
 	FROM bodb_CustomerLog.dbo.VRCustLog vr WITH (NOLOCK)
 		INNER JOIN bodb02.dbo.CustInfo c WITH (NOLOCK) ON vr.custid = c.custid
 	WHERE LogId >= @MinLogId AND LogId < @NextLogId
