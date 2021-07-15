@@ -15,6 +15,9 @@
 */
 
 DECLARE @max_custid INT	 = xxx
+DECLARE @Max_Custid2 INT
+
+SELECT TOP(1) @Max_Custid2 = custid FROM custinfo WITH(NOLOCK) ORDER BY custid DESC
 	
 CREATE TABLE #Super(CustID INT)
 CREATE TABLE #tblCust(CustID INT PRIMARY KEY)
@@ -41,7 +44,7 @@ WHERE srecommend IN (SELECT custid FROM #super)
 								AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 								AND roleid=3
 						)
-	AND ci.custid > @max_custid
+	AND ci.custid > @max_custid AND ci.custid < @Max_Custid2
 	AND isGroupedComm = 0
 	AND roleid = 1
 		
