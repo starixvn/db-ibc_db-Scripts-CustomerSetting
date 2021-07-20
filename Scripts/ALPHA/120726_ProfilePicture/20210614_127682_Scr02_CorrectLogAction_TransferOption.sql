@@ -1,4 +1,5 @@
-﻿/*
+﻿/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
 	Created by: Elodie
 	Date: 20210614
 	Task: Correct LogAction for Transfer Option

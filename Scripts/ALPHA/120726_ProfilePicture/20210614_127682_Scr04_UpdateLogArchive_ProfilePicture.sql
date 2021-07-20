@@ -1,3 +1,4 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog_Archive"></info>*/
 /*
 	Created by: Elodie
 	Date: 20210614
