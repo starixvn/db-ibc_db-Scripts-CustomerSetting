@@ -20,3 +20,4 @@ UPDATE ul
 SET ul.ActionID = CASE WHEN t.ActionId = 700 THEN 95000 ELSE 95001 END
 FROM UserLog_RunSP ul WITH (ROWLOCK)
 	INNER JOIN #tmpLog t ON ul.logid = t.logid
+WHERE ul.ActionId IN (700, 701)
