@@ -1,7 +1,9 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20210721@Johnson
+	Created: Johnson
+	Date: 20210721
 	Task: update bet limit for licensee Happy8	
+	DB: DBCust/CustDB
 */
 ALTER PROCEDURE [dbo].Acc_ExecRep_Cust_19
 	@custids VARCHAR(MAX)	
