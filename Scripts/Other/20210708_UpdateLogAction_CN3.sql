@@ -43,6 +43,8 @@ UNION ALL
 SELECT 75040, N'Cập nhật Trạng thái Đóng cho Master.'
 UNION ALL
 SELECT 75041, N'Cập nhật Trạng thái Đóng cho Agent.'
+UNION ALL
+SELECT 950, N'Tài khoản phụ bị đóng do nhập sai mật khẩu 5 lần.'
 
 UPDATE l
 SET l.ActionNameVI = t.ActionNameVI
