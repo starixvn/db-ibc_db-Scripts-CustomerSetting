@@ -38,7 +38,9 @@ BEGIN
 		AND srecommend IN (SELECT custid FROM dep_custsuper WITH(NOLOCK))	
 		AND CustomerClass BETWEEN 8 AND 13
 		AND NOT EXISTS (SELECT 1 FROM ProblemAccountClassification pc WITH(NOLOCK) WHERE pc.custid = ci.custid)
-		AND custid IN (14083606
+		AND custid IN (46314715
+						,44247609
+						,14083606
 						,36553441
 						,36553646
 						,36553696
