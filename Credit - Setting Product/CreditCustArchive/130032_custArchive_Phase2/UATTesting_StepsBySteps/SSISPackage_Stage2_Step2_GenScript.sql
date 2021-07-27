@@ -2,6 +2,8 @@
 	Created: 20200611@Max
 	Task: https://nexdev.net/issues/130032
 	DB: DBSPARE.CustDB
+	Revisions:
+		20210727@Tina: get closed status from CustProductStatus [RedmineID: #148600]
 */
 USE CustDB
 GO
@@ -61,6 +63,7 @@ SELECT ag.recommend custid, isnull(MemCount, 0) [Member Count]
 INTO #tmpAg
 FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	INNER JOIN custinfo agci WITH (NOLOCK) ON agci.custid = ag.recommend
+	INNER JOIN CustProductStatus cps WITH (NOLOCK) ON agci.custid = cps.CustID
 	LEFT JOIN (
 		SELECT recommend
 			,COUNT(*) MemCount
@@ -71,7 +74,7 @@ FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	LEFT JOIN #Super_Exception se ON se.srecommend = agci.srecommend
 WHERE ag.isFinished = 1
 	--AND isnull(MemCount, 0) > 0
-	AND agci.closed = 1
+	AND cps.CloseInfo > 0
 	--AND agci.enabled = 1
 	AND ag.recommend NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND agci.custid NOT IN (
