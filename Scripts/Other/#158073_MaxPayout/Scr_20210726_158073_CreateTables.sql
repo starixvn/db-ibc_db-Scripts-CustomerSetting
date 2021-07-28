@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Eden@20212607
-	Task: Create new tables to store bet setting for Sportbooks and NumberGame - credit[Redmine: #154048]   
+	Task: Create new tables to store bet setting for Sportbooks and NumberGame - credit[Redmine: #158073]   
 	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
 */
 USE [CustDB]
