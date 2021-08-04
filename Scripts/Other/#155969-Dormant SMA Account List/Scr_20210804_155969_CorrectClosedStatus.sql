@@ -33,12 +33,14 @@ SELECT ci.custid, ci.roleid
 FROM CustInfo ci WITH (NOLOCK)
 	INNER JOIN #AgentArchive alg WITH (NOLOCK) ON alg.CustID = ci.recommend
 	INNER JOIN CustProductStatus cps WITH (NOLOCK) ON ci.custID = cps.CustID
-	CROSS APPLY (SELECT MemberStatus FROM f_GetInfoStatus(cps.CloseInfo)) AS cl
-WHERE  ci.roleid = 1 AND cl.MemberStatus = 0 --check member's bit = 0 
+	CROSS APPLY (SELECT AgentStatus, MemberStatus FROM f_GetInfoStatus(cps.CloseInfo)) AS cl
+WHERE  ci.roleid = 1 AND (cl.MemberStatus = 0 OR cl.AgentStatus = 0) --check member's bit = 0 OR agent's bit = 0 
 
 --Correct CloseInfo
 UPDATE cps
-	SET CloseInfo = (SELECT suspendinfo FROM dbo.f_GenerateSuspendInfo(ci.RoleID,@Closed,ISNULL(CloseInfo,0))) -- turn on agent's bit = 1 or member's bit = 1
+	SET CloseInfo = CASE WHEN ci.RoleID = 1 THEN CloseInfo|3 -- turn on member's bit = 1 and agent's bit = 1
+											 WHEN ci.RoleID = 2 THEN CloseInfo|POWER(2,ci.RoleID - 1) -- turn on agent's bit = 1. It means this agent is closed.
+										END
 FROM #UpdateCloseInfo ci WITH (NOLOCK)
 	INNER JOIN CustProductStatus cps WITH (UPDLOCK,ROWLOCK) ON cps.CustID = ci.custid
 
