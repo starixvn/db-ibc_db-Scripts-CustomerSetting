@@ -36,7 +36,7 @@ FROM #UpdateCloseInfo ci WITH (NOLOCK)
 
 --Member was archived but closedReason <> 4
 INSERT INTO #UpdateClosedReason (CustID)
-SELECT ci.custid, ci.roleid
+SELECT ci.custid
 FROM CustInfo ci WITH (NOLOCK)
 	INNER JOIN #AgentArchive alg WITH (NOLOCK) ON alg.CustID = ci.recommend
 	INNER JOIN CustLoginInfo_Member cl WITH (NOLOCK) ON ci.custid = cl.CustID
