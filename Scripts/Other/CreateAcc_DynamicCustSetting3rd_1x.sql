@@ -1,0 +1,70 @@
+USE [CustDB]
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_10
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_11
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_12
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_13
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_14
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_15
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_16
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_17
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_18
+AS
+BEGIN
+       RETURN
+END
+
+GO
+CREATE PROCEDURE Acc_DynamicCustSetting3rd_19
+AS
+BEGIN
+       RETURN
+END
