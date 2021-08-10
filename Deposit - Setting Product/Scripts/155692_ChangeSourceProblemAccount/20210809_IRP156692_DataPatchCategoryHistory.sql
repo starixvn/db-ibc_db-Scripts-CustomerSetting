@@ -4689,7 +4689,7 @@ FROM T
 
 DELETE t
 FROM #tmpCategoryHistory t
-WHERE NOT EXISTS(SELECT 1 FROM custinfo c WITH(NOLOCK) WHERE t.custid = c.custid AND t.customerClass <> c.customerClass)
+WHERE NOT EXISTS(SELECT 1 FROM custinfo c WITH(NOLOCK) WHERE t.custid = c.custid AND t.customerClass = c.customerClass)
 
 DECLARE @tmp TABLE (custid INT, CategoryID INT, CustomerClass SMALLINT)
 	
