@@ -25,7 +25,7 @@ BEGIN
 	)
 	UPDATE p
 	SET p.ModifiedDate = maxdate
-	FROM ProblemAccountClassification p WITH(UPDLOCK)
+	FROM ProblemAccountClassification p WITH(ROWLOCK)
 		INNER JOIN T on p.custid = t.custid
 	WHERE ModifiedDate <> maxdate
 	
