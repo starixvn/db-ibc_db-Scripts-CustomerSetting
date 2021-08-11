@@ -1,6 +1,6 @@
 /*
 	Created: 20210809@Johnson
-	Task: Delete Dep_CustCategoryHistory to re-import 
+	Task: update last ModifiedDate for ProblemAccountClassification
 	DB: DBCUST/CustDB
 */
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
