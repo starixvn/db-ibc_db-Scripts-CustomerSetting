@@ -1,0 +1,233 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20210804@Johnson
+	Task: update bet limit for licensee Happy8	
+	DB: DBCust/CustDB
+*/
+ALTER PROCEDURE [dbo].Acc_ExecRep_Cust_19
+	@custids VARCHAR(MAX)	
+	,@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at DBCUST only
+	
+	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	
+	CREATE TABLE #tblCust (custid1 INT PRIMARY KEY, custid2 INT)
+	
+	DECLARE @xml XML = CAST (@custids as XML)
+	
+	INSERT INTO #tblCust(custid1,custid2)
+	SELECT T.c.query('.').value('(r/@id1)[1]', 'int') AS id1,
+	T.c.query('.').value('(r/@id2)[1]', 'int') AS id2
+	FROM   @xml.nodes('/Root/r') T(c)  
+	
+	UPDATE cs2
+	SET cs2.maxpermatch = cs1.maxpermatch,
+		cs2.maxpermatch2 = cs1.maxpermatch2,
+		cs2.maxpermatch3 = cs1.maxpermatch3,
+		cs2.maxpermatch5 = cs1.maxpermatch5,
+		cs2.maxpermatch8 = cs1.maxpermatch8,
+		cs2.maxpermatch10 = cs1.maxpermatch10,
+		cs2.maxpermatch11 = cs1.maxpermatch11,
+		cs2.maxpermatch1MP = cs1.maxpermatch1MP,
+		cs2.maxpermatch99 = cs1.maxpermatch99,
+		cs2.MaxPerMatch99MP = cs1.MaxPerMatch99MP
+	FROM custinfo cs2 WITH(ROWLOCK)
+		INNER JOIN #tblCust t ON cs2.custid = t.custid2
+		INNER JOIN custinfo cs1 WITH(NOLOCK) ON cs1.custid = t.custid1													
+	
+	IF dbo.f_CheckRepTable('Dep_CustSetting') = 0 RETURN		
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN			
+	
+	UPDATE cs2
+	SET cs2.minbet = cs1.minbet,
+		cs2.maxbet = cs1.maxbet
+	FROM Dep_CustSetting cs2 WITH(ROWLOCK)
+		INNER JOIN #tblCust t ON cs2.custid = t.custid2
+		INNER JOIN Dep_CustSetting cs1 WITH(NOLOCK) ON cs1.custid = t.custid1
+													AND cs1.sporttype = cs2.sporttype
+													AND cs1.bettype = cs2.bettype
+													AND cs1.islive = cs2.islive
+	
+	UPDATE cs2
+	SET cs2.minbet = cs1.minbet,
+		cs2.maxbet = cs1.maxbet,
+		cs2.maxpermatch = cs1.maxpermatch
+	FROM Dep_CustBetSetting_Member cs2 WITH(ROWLOCK)
+		INNER JOIN #tblCust t ON cs2.custid = t.custid2
+		INNER JOIN Dep_CustBetSetting_Member cs1 WITH(NOLOCK) ON cs1.custid = t.custid1
+													AND cs1.sporttype = cs2.sporttype
+													AND cs1.bettype = cs2.bettype																								
+	WHERE cs2.sporttype = 43
+	
+	DROP TABLE #tblCust
+END
+
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+--------------------------------------------------------------------------------------
+CREATE TABLE #tmpCust (custidM88 INT PRIMARY KEY, custidH8 INT, isFinished BIT DEFAULT 0)
+
+declare @string varchar(max) =
+'4740116CC54046612,
+5503552CC49462376,
+7316376CC54046613,
+7461538CC49465128,
+14177188CC54046614,
+20163238CC49487259,
+22263256CC49491367,
+23890902CC49494963,
+24060689CC54046615,
+25985588CC49500264,
+26511331CC54046616,
+27079597CC54046617,
+27862755CC49506536,
+28066624CC49507135,
+28710496CC49509482,
+28947199CC49510424,
+29546131CC49512400,
+29628205CC54046618,
+30810602CC49516145,
+32383706CC49517470,
+33101557CC54046619,
+33341006CC54046620,
+33505037CC49524321,
+33604304CC54046621,
+33993157CC49526665,
+34237982CC54046622,
+34277900CC49527917,
+34924060CC49528106,
+36868233CC54046623,
+37102705CC54046624,
+38450468CC54046625,
+38690294CC54046626,
+38771078CC54046627,
+39009053CC49551656,
+45599685CC54046628,
+39290443CC49553281,
+52947700CC54046629,
+39695213CC49554225,
+50315467CC54046630,
+40963414CC49559480,
+51149259CC54046631,
+40561816CC49563638,
+41968539CC54046633,
+41402803CC49568901,
+41931344CC49570823,
+41645801CC49570915,
+42747233CC54046634,
+43448058CC49576370,
+45861125CC54046636,
+44055129CC49578513,
+44551305CC49580041,
+50714290CC54046641,
+45613140CC54046643,
+46212958CC54046644,
+47018324CC49585579,
+51613124CC54046648,
+47156378CC54046649,
+47265238CC54046650,
+47648023CC49586734,
+47691122CC54046661,
+48149107CC54046666,
+47935419CC49587024,
+48089329CC49587044,
+48544626CC54046667,
+47945874CC49587299,
+48278531CC54046670,
+48247957CC54046680,
+48313109CC54046684,
+48392588CC54046686,
+50755473CC54046687,
+49103701CC54046689,
+48830585CC49588514,
+49054993CC54046696,
+49001599CC49588685,
+49050168CC54046703,
+49098482CC54046704,
+49120122CC54046705,
+49288334CC49588994,
+49249446CC54046706,
+49372624CC54046709,
+49341060CC54046710,
+49427805CC54046713,
+49414029CC54046714,
+49436098CC54046715,
+49590700CC50778273,
+50425728CC54046718,
+49728441CC54046720,
+49896886CC54046721,
+49863247CC54046724,
+49842513CC54046725,
+52453898CC54046726,
+50764423CC54046727,
+50622692CC54046729,
+50295925CC54046731,
+50315013CC54046733,
+50457653CC50778248,
+50860201CC54046740,
+50796760CC54046742,
+51487142CC54046744,
+50744701CC54046746,
+50807823CC54046747,
+50810119CC54046748,
+50819255CC54046750,
+51201719CC54046761,
+51287559CC54046762,
+51860248CC54046763,
+52152261CC54046764,
+52910418CC54046765,
+53498214CC54046769'
+
+SELECT val
+INTO #temp
+FROM dbo.f_SplitString(@string, ',')
+OPTION (MAXRECURSION 0)
+
+SELECT LEFT(LTRIM(val), CHARINDEX('CC', val) - 1) AS custidM88, RIGHT (val, len (val) - (CHARINDEX('CC', val) + 1) ) AS custidH8
+INTO #tblCust2
+FROM #temp
+
+INSERT INTO #tmpCust(custidM88,custidH8)
+select replace (replace(replace(custidM88,char(9),''),char(13),''),char(10),'') as custidM88, replace (replace(replace(custidH8,char(9),''),char(13),''),char(10),'') as custidH8
+from #tblCust2
+
+
+DECLARE @custids VARCHAR(MAX) = ''
+DECLARE @tmp TABLE (custidM88 INT,custidH8 INT)
+
+WHILE(1=1)
+BEGIN		
+	DELETE @tmp	
+	
+	UPDATE TOP(500) t	
+	SET isFinished = 1
+	OUTPUT DELETED.custidM88, DELETED.custidH8 INTO @tmp(custidM88,custidH8)
+	FROM #tmpCust t
+	WHERE isFinished = 0
+	
+	IF @@rowcount = 0
+		BREAK;
+		
+	SELECT @custids =(
+		SELECT custidM88 as '@id1', custidH8 '@id2'
+		FROM @tmp
+		FOR XML PATH('r'), ROOT('Root')
+	)
+	
+	EXEC Acc_ExecRep_Cust_19 @custids = @custids,
+							@target = 'REPLICATED'--change target = 'DBCUST' if run on DBCUST
+	
+	WAITFOR DELAY '0:0:0.028'						
+	
+END
+--END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+--------------------------------------------------------------------------------------
+
+
