@@ -178,8 +178,8 @@ BEGIN
 			)
 		AND new.SportType IN (161,164)
 
-	SELECT * FROM #CustBetSetting_Agent
-	SELECT * FROM #CustBetSetting_Member
+	--SELECT * FROM #CustBetSetting_Agent
+	--SELECT * FROM #CustBetSetting_Member
 
 	--> Update maxper payout
 	UPDATE c
