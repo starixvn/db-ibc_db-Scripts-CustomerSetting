@@ -82,7 +82,7 @@ WHERE ci.roleid = 4
 	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site IN ('733333', '722222', '222223')
-	AND ci.currency  IN (2, 67, 20)
+	AND ci.currency  IN (2, 67)
 	
 DECLARE @totalCust_cnt INT, @index INT = 0
 SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
@@ -137,7 +137,7 @@ WHERE ci.roleid = 4
 	AND ci.custid <= @max_custid
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site IN ('733333', '722222', '222223')
-	AND ci.currency  IN (2, 67, 20)
+	AND ci.currency  IN (2, 67)
 	
 DECLARE @totalCust_cnt INT, @index INT = 0
 SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )

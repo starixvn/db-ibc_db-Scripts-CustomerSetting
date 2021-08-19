@@ -22,7 +22,7 @@
 			AND s.islicensee = 0
 			AND c.username NOT LIKE '3rdSuper%'
 			AND s.site IN ('733333', '722222', '222223')
-			AND ci.currency  IN (2, 67, 20)
+			AND ci.currency  IN (2, 67)
 		
 
 	CREATE TABLE #CustList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
