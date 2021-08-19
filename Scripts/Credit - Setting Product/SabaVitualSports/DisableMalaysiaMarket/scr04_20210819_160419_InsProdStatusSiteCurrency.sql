@@ -23,8 +23,8 @@ SET @betType = 1 -- Handicap
 SET @sportType = 98
 
 -- delete old currency  
---DELETE ps 
-SELECT *
+DELETE ps 
+--SELECT *
 FROM ProductStatusSiteCurrency ps
 	INNER JOIN @SiteOffer s ON s.SiteId = ps.SiteID
 	INNER JOIN @CurrencyOffer c ON ps.Currency = c.CurrencyID
