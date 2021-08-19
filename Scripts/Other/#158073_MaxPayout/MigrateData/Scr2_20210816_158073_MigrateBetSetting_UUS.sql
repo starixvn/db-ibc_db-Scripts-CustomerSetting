@@ -2,7 +2,8 @@
 /*
 	Created: Eden@20210816
 	Task: Migrate bet setting from custsetting table and custsetting3rd table 
-			to CustBetSetting_Agent and CustBetSetting_Member tables - UUS accounts [Redmine: #154048]   
+			to CustBetSetting_Agent and CustBetSetting_Member tables - UUS accounts [Redmine: #154048] 
+	Notes:Get MaxcustID to insert setting for UUS afterr released  
 	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
 */
 
