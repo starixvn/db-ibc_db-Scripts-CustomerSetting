@@ -10,7 +10,8 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId, Level)
-SELECT 951, 'Update Security Code Option', 'Age_CustomerUpdSecurityFunctionInfo', 0, 4, NULL
+SELECT 951, 'Update Security Code Option - Bet List', 'Age_CustomerUpdSecurityFunctionInfo', 0, 4, NULL UNION ALL
+SELECT 952, 'Update Security Code Option - Statement', 'Age_CustomerUpdSecurityFunctionInfo', 0, 4, NULL
 
 --DELETE FROM LogAction WITH (ROWLOCK) WHERE ActionID IN (SELECT ActionID FROM @tmpAction)
 --DELETE FROM LogActionDetail WITH (ROWLOCK) WHERE ActionID IN (SELECT ActionID FROM @tmpAction)
