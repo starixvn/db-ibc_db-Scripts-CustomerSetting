@@ -10,6 +10,11 @@ GO
 BEGIN
 	DECLARE @max_custid INT = xxx
 
+	-------------------Delete redundant data---------------------------------------------
+	DELETE FROM CustBetSetting_Agent WITH(ROWLOCK,UPDLOCK) WHERE custid > @max_custid
+	DELETE FROM CustBetSetting_Member WITH(ROWLOCK,UPDLOCK) WHERE custid > @max_custid
+	-------------------------------------------------------------------------------------
+
 	CREATE TABLE #supers (custid INT PRIMARY KEY)
 
 	CREATE TABLE #SMAs(
