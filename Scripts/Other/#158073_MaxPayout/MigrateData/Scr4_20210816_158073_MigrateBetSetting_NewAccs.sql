@@ -78,6 +78,7 @@ BEGIN
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND c.Enabled = 1
+		AND ci.currency <> 20
 
 	INSERT INTO #SMAs (
 		custid
