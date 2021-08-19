@@ -26,6 +26,7 @@ SET @sportType = 98
 DELETE ps 
 FROM ProductStatusSiteCurrency ps
 	INNER JOIN @SiteOffer s ON s.SiteId = ps.SiteID
+	INNER JOIN @CurrencyOffer c ON ps.Currency = c.CurrencyID
 WHERE ps.SportType =@sportType
 	AND ps.BetType = @betType
 
