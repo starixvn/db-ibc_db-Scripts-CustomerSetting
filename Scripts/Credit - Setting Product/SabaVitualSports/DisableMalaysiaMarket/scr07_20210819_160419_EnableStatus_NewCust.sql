@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20210819@Elodie
 	Task : Enable status Saba Virtual Sport for Malaysia Market [RedmineID: #160419]
