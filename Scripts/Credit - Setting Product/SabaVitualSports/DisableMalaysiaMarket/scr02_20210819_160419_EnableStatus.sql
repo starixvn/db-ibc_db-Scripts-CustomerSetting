@@ -68,6 +68,21 @@ CREATE TABLE #supers (custid INT,isfinished BIT DEFAULT(0))
 DECLARE @srecommend INT,@max_custid INT
 SELECT @max_custid = xxx
 
+----Get list dummy super
+--SELECT DISTINCT srecommend INTO #temp1
+--FROM CustDirectAccount da WITH (NOLOCK)
+--	INNER JOIN vw_customer ci WITH(NOLOCK) ON da.CustID = ci.custid
+--WHERE ci.site IN ('733333', '222223', '722222')
+--	AND ci.roleid IN (2, 3) AND ci.currency IN (2,67)
+--UNION 
+--SELECT DISTINCT ci.srecommend
+--FROM CustDirectAccount da WITH (NOLOCK)
+--	INNER JOIN vw_customer ci WITH(NOLOCK) ON da.CustID = ci.custid
+--	INNER JOIN vw_customer ca WITH(NOLOCK) ON ci.recommend = ca.custid
+--WHERE ci.site IN ('733333', '222223', '722222')
+--	AND ci.roleid IN (1) AND ci.currency IN (2,67)
+--ORDER BY srecommend
+
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM dbo.customer c WITH (NOLOCK) 
@@ -83,6 +98,8 @@ WHERE ci.roleid = 4
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site IN ('733333', '722222', '222223')
 	AND ci.currency  IN (2, 67)
+UNION ALL
+SELECT 2
 	
 DECLARE @totalCust_cnt INT, @index INT = 0
 SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
@@ -138,7 +155,9 @@ WHERE ci.roleid = 4
 	AND c.username NOT LIKE '3rdSuper%'
 	AND s.site IN ('733333', '722222', '222223')
 	AND ci.currency  IN (2, 67)
-	
+UNION ALL
+SELECT 2
+
 DECLARE @totalCust_cnt INT, @index INT = 0
 SET @totalCust_cnt = (SELECT COUNT(1) FROM #Supers )
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, CustID: %d.'
