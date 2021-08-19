@@ -13,26 +13,17 @@
 	SELECT 2
 
 	CREATE TABLE #CustList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
-	CREATE TABLE #MemberList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
 
 	INSERT INTO #CustList(CustID)
 	SELECT ci.custid
 	FROM dbo.customer c WITH (NOLOCK) 
 		INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 	WHERE ci.srecommend IN (SELECT custid FROM #supers) 
-		AND ci.roleid IN (3,2)
+		AND ci.roleid IN (3,2,1)
 		AND ci.Enabled = 1
 		AND ci.custid > @max_custid
 		AND c.site IN ('733333', '722222', '222223')
 		AND ci.currency  IN (2, 67)
-
-	INSERT INTO #MemberList(CustID)
-	SELECT ci.custid
-	FROM #CustList c WITH (NOLOCK) 
-		INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.recommend
-	WHERE ci.roleid = 1
-		AND ci.Enabled = 1
-		AND ci.custid > @max_custid
 
 	DECLARE @Cust_Temp TABLE(CustID INT)
 	DECLARE @BatchSize SMALLINT = 5000
@@ -61,28 +52,6 @@
 		DELETE FROM @Cust_Temp
 	END
 
-	WHILE(1 =1)
-	BEGIN
-		UPDATE TOP (@BatchSize) c WITH (ROWLOCK)
-		SET c.isfinished = 1
-		OUTPUT DELETED.CustID INTO @Cust_Temp(CustID)
-		FROM #MemberList c 
-		WHERE isfinished = 0
-		
-		IF @@ROWCOUNT = 0
-		BEGIN 
-			BREAK
-		END 	
-			
-		UPDATE cs
-		SET 
-			cs.bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrderSapa,1)),
-			cs.bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrderSapa,0)),
-			cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrderSapa,0)) 
-		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK)
-			INNER JOIN @Cust_Temp ci ON cs.CustID = ci.CustID	
-		
-		DELETE FROM @Cust_Temp
-	END
+	
 
 
