@@ -19,11 +19,11 @@ CREATE TABLE [dbo].[CustBetSetting_Agent_History](
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
-	[MinBet] [money] NULL CONSTRAINT [DF_CustBetSetting_Agent_History_MinBet]  DEFAULT ((0)),
-	[MaxBet] [money] NULL CONSTRAINT [DF_CustBetSetting_Agent_History_MaxBet]  DEFAULT ((0)),
-	[MaxPerMatch] [money] NULL CONSTRAINT [DF_CustBetSetting_Agent_History_MPM]  DEFAULT ((0)),
-	[MaxPerNumber] [money] NULL CONSTRAINT [DF_CustBetSetting_Agent_History_MPN]  DEFAULT ((0)),
-	[MaxPayoutPerMatch] [money] NULL CONSTRAINT [DF_CustBetSetting_Agent_History_MPPM]  DEFAULT ((0)),
+	[MinBet] [money] NULL,
+	[MaxBet] [money] NULL,
+	[MaxPerMatch] [money] NULL,
+	[MaxPerNumber] [money] NULL,
+	[MaxPayoutPerMatch] [money] NULL,
 	[UpdateTime] [DATETIME] NOT NULL CONSTRAINT [DF_CustBetSetting_Agent_History_UpdateTime]  DEFAULT (GETDATE()),
  CONSTRAINT [PK_CustBetSetting_Agent_History] PRIMARY KEY CLUSTERED 
 (
@@ -46,11 +46,11 @@ CREATE TABLE [dbo].[CustBetSetting_Member_History](
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
-	[MinBet] [money] NULL CONSTRAINT [DF_CustBetSetting_Member_History_MinBet]  DEFAULT ((0)),
-	[MaxBet] [money] NULL CONSTRAINT [DF_CustBetSetting_Member_History_MaxBet]  DEFAULT ((0)),
-	[MaxPerMatch] [money] NULL CONSTRAINT [DF_CustBetSetting_Member_History_MPM]  DEFAULT ((0)),
-	[MaxPerNumber] [money] NULL CONSTRAINT [DF_CustBetSetting_Member_History_MPN]  DEFAULT ((0)),
-	[MaxPayoutPerMatch] [money] NULL CONSTRAINT [DF_CustBetSetting_Member_History_MPPM]  DEFAULT ((0)),
+	[MinBet] [money] NULL,
+	[MaxBet] [money] NULL,
+	[MaxPerMatch] [money] NULL,
+	[MaxPerNumber] [money] NULL,
+	[MaxPayoutPerMatch] [money],
 	[UpdateTime] [DATETIME] NOT NULL CONSTRAINT [DF_CustBetSetting_Member_History_UpdateTime]  DEFAULT (GETDATE()),
  CONSTRAINT [PK_CustBetSetting_Member_History] PRIMARY KEY CLUSTERED 
 (
