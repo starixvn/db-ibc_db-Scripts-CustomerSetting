@@ -352,6 +352,28 @@ ELSE
 
 Print 'Server Name : ' + @target
 
+IF EXISTS(
+SELECT TOP 1 1
+FROM CustBetSetting_Agent b WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON b.custid = ci.custid
+WHERE ci.currency <> 20
+) 
+BEGIN
+	PRINT 'Error - Exists Real Data'
+	RETURN
+END
+
+IF EXISTS(
+SELECT TOP 1 1
+FROM CustBetSetting_Member b WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON b.custid = ci.custid
+WHERE ci.currency <> 20
+) 
+BEGIN
+	PRINT 'Error - Exists Real Data'
+	RETURN
+END
+
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @max_custid INT, @srecommend INT
