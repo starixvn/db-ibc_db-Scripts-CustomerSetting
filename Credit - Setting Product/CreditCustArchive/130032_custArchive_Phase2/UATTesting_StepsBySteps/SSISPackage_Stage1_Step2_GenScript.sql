@@ -21,19 +21,24 @@ BEGIN
 
 END
 
-CREATE TABLE #Super_Exception (srecommend INT)
+CREATE TABLE #Super_Exception (srecommend INT PRIMARY KEY)
 
 INSERT INTO #Super_Exception (srecommend)
-SELECT DISTINCT ci.srecommend		
+SELECT ci.srecommend		
 FROM CustGroupHeadline gl (nolock)		
 	INNER JOIN Customer ci (nolock) ON gl.CustID = ci.custid		
 WHERE GroupID > 0 and ci.roleid in (1,2,3,4)
 UNION
-SELECT DISTINCT ag.custid
+SELECT ag.custid
 FROM phonebettingCustomerList p WITH(NOLOCK)
 	INNER JOIN custinfo c WITH(NOLOCK) ON p.username = c.username
 	INNER JOIN custinfo ag WITH(NOLOCK) ON ag.custid = c.srecommend
 
+--Exclude SuperID: 44671646
+INSERT INTO #Super_Exception(srecommend)
+SELECT t.custid
+FROM (VALUES(44671646)) AS t(custID)
+WHERE NOT EXISTS( SELECT 1 FROM #Super_Exception WHERE srecommend = t.custID)
 
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT custid
