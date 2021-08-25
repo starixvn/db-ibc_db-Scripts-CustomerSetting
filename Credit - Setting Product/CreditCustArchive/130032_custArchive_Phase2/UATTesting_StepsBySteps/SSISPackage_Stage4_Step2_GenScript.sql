@@ -19,19 +19,27 @@ BEGIN
 
 END
 
-CREATE TABLE #Super_Exception (srecommend INT)
+CREATE TABLE #Super_Exception (srecommend INT PRIMARY KEY)
 
 INSERT INTO #Super_Exception (srecommend)
-SELECT DISTINCT ci.srecommend		
+SELECT ci.srecommend		
 FROM CustGroupHeadline gl (nolock)		
 	INNER JOIN Customer ci (nolock) ON gl.CustID = ci.custid		
 WHERE GroupID > 0 and ci.roleid in (1,2,3,4)
 UNION
-SELECT DISTINCT ag.custid
+SELECT ag.custid
 FROM phonebettingCustomerList p WITH(NOLOCK)
 	INNER JOIN custinfo c WITH(NOLOCK) ON p.username = c.username
 	INNER JOIN custinfo ag WITH(NOLOCK) ON ag.custid = c.srecommend
 
+CREATE TABLE #Exclude_Agents(recommend INT PRIMARY KEY)
+
+--Exclude Direct and Dummy agents
+INSERT INTO #Exclude_Agents(recommend)
+SELECT DISTINCT ci.recommend
+FROM CustDirectAccount d WITH(NOLOCK)
+	INNER JOIN custinfo ci WITH(NOLOCK) ON d.CustID = ci.custid
+WHERE ci.roleid IN (1,2)
 
 DECLARE @DDiff DATETIME
 
@@ -81,6 +89,7 @@ WHERE ag.isFinished = 1
 	AND isnull(MemCount, 0) > 0 AND isnull(TransCount, 0) = 0
 	AND agci.enabled = 0
 	AND ag.recommend NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
+	AND ag.recommend NOT IN(SELECT recommend FROM #Exclude_Agents)
 	AND agci.custid NOT IN (
 		SELECT DISTINCT recommend
 		FROM bodb_report.dbo.tempCustID tc
@@ -174,3 +183,4 @@ FROM @xml.nodes('/r') AS x(v)
 
 DROP TABLE #tmpAg
 DROP TABLE #Super_Exception
+DROP TABLE #Exclude_Agents
