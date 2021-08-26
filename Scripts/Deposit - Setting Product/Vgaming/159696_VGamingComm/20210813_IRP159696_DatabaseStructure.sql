@@ -1,7 +1,7 @@
 /*
 	Created: 20210813@Johnson
 	Task: Database structure for VGaming commission for LAP
-	DB: DBLIC/bodb_Licensee
+	DB: DBCUST/bodb_Licensee
 */
 
 USE bodb_Licensee
