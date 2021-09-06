@@ -8,7 +8,7 @@
 USE CustDB
 GO
 BEGIN
-	DECLARE @max_custid INT = xxx
+	DECLARE @max_custid INT = 55143646 -- get on 09/06/2021 3:00 PM GMT +7 ( UAT)
 
 	CREATE TABLE #supers (custid INT PRIMARY KEY)
 
