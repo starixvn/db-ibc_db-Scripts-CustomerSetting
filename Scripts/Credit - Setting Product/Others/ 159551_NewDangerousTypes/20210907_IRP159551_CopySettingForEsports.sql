@@ -27,6 +27,7 @@ BEGIN
 	WHERE srecommend = @srecommend
 		AND custid <= @max_custid
 		AND Danger3 IN (8, 9, 16, 17, 21)
+		AND ISNULL(Danger5,0) <> Danger3
 	
 	WHILE(1=1)
 	BEGIN
@@ -41,6 +42,7 @@ BEGIN
 		SET danger5 = Danger3
 		WHERE custid IN (SELECT custid FROM @tmp)
 			AND Danger3 IN (8, 9, 16, 17, 21)
+			AND ISNULL(danger5,0) <> danger3
 		
 		DELETE @tmp
 		
