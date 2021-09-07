@@ -1,0 +1,197 @@
+/*<info serverAlias="DBTP-bodb02"></info>*/
+ALTER TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
+AFTER UPDATE
+AS
+/*  
+
+	Created by: 20120731@  
+
+	Task: Trigger for updating Custinfo table  
+
+	DB: DBTP/bodb02  
+
+	Revisions:   
+
+	- 20120731@Dan: add fields for Virtual soccer  
+
+	- 20120821@Elodie: add Abnormal fields to support Abnormal bets  
+
+	- 20120925@Dan: add fields for LCS-Win Limit  
+
+	- 20121004@Johnson: add double comm losing status  
+
+	- 20130125@Tom: add fields for Virtual Tennis  
+
+	- 20130221@Elodie: add field maxpermatch181 for Virtual Horse Racing  
+
+	- 20130604@Jamie: Add new field maxpermatch182 for Virtual Greyhound  
+
+	- 20130718@Lukas: add column DisableCasinoBonus   
+
+	- 20130830@Jamie: Add MaxPerMatch184 for Virtual Motor Racing   
+
+	- 20131011@Elodie: Add HR Fixed Odds [Redmine:#6505]  
+
+	- 20131022@Lukas: add autosuspend2 for other sports [Redmine:#5520]  
+
+	- 20131022@Lukas: add maxpermatch for virtual Speedway & Cycling [Redmine:#5520]  
+
+	- 20140224@Elodie: Add Keno [Redmine:#11658]  
+
+	- 20140402@Lukas: add some columns that missed before   
+
+	Disable151_AU  
+
+	Disable152_AU  
+
+	Disable152_UK  
+
+	Disable153_AU  
+
+	MaxPerMatch151_AU  
+
+	MaxPerMatch152_AU  
+
+	MaxPerMatch152_UK  
+
+	MaxPerMatch153_AU  
+
+	- 20141022@Logan: Add DisableEsports [Redmine: #20531]  
+
+	- 20150421@Johnson: Add HideGoldDeluxe & DisableGoldDeluxe   
+
+	- 20150615@Lukas: Migrate history tables to new database bodb_CustHistory on DBTP  
+
+	- 20150715@Elodie: Add DisableMicrogame and DisableSuperLive  
+
+	- 20150825@Helen: Colossus Bet - [Redmine: #42208]  
+
+	- 20151015@Elodie: Add maxpermatch44 for Muay Thai [Redmine: #45048]  
+
+	- 20151030@Patrick: Rename field named DisableMicrogame to DisableMicrogameLC & add more field named DisableMicrogameRNG [Redmine: #46597]  
+
+	- 20151202@Billy: Add DisableBinaryOptions for Binary Options [Redmine: #47194]  
+
+	- 20160104@Helen: Disallow SMA changes password or updates account status of members[Redmine: #49967]  
+
+	- 20160914@Patrick: Remove DisableMicrogame field [Redmine: #56591]  
+
+	- 20161107@Winnie: Separate Bet Setting for Soccer - Parlay [Redmine: #66265]  
+	- 20170407@Winnie: Add the column BonusWalletFlag for Bonus system [Redmine: #66797]  
+	- 20181109@Johnson: add column maxpermatch164 for Happy 5 [Redmine: #104006]
+	- 20191105@Elodie: Remove inactive product [Redmine: #118699]
+	- 20190224@Eden: Add Dangerlevel column [Redmine: #129085]  
+	- 20200901@Johnson: add CustomerClass [redmine:#140809]
+	- 20210806@Johnson: Add Danger4,Danger5 [redmine:#159551]
+*/
+BEGIN
+	SET NOCOUNT ON
+
+	INSERT INTO bodb_CustHistory.dbo.CustInfo_history (
+		username
+		,custid
+		,currency
+		,roleid
+		,srecommend
+		,mrecommend
+		,recommend
+		,dangercust
+		,autosuspend
+		,reject
+		,credit
+		,closed
+		,MatchLimit
+		,VirtualMultiplier
+		,maxpermatch
+		,maxpermatch2
+		,maxpermatch3
+		,maxpermatch5
+		,maxpermatch8
+		,maxpermatch10
+		,maxpermatch11
+		,maxpermatch12
+		,maxpermatch99
+		,[Enabled]
+		,danger		
+		,DisableCasino
+		,SyncCasino
+		,danger2
+		,danger3
+		,DisableOutright		
+		,[DisableNumber]
+		,[MaxPerMatch161]
+		,[MaxPerMatch99MP]
+		,[MaxPerBall161]		
+		,Abnormal
+		,DoubleCommLosing		
+		,autosuspend2
+		,HideKeno		
+		,DisableEsports
+		,HideGoldDeluxe
+		,DisableGoldDeluxe
+		,DisableSuperLive
+		,DisableColossusBet
+		,HideColossusBet		
+		,LockUpd
+		,MaxPerMatch1MP
+		,BonusWalletFlag
+		,MaxPerMatch164
+		,DangerLevel
+		,CustomerClass
+		,danger4
+		,danger5
+		)
+	SELECT username
+		,custid
+		,currency
+		,roleid
+		,srecommend
+		,mrecommend
+		,recommend
+		,dangercust
+		,autosuspend
+		,reject
+		,credit
+		,closed
+		,MatchLimit
+		,VirtualMultiplier
+		,maxpermatch
+		,maxpermatch2
+		,maxpermatch3
+		,maxpermatch5
+		,maxpermatch8
+		,maxpermatch10
+		,maxpermatch11
+		,maxpermatch12
+		,maxpermatch99
+		,[Enabled]
+		,danger	
+		,DisableCasino
+		,SyncCasino
+		,danger2
+		,danger3
+		,DisableOutright
+		,[DisableNumber]
+		,[MaxPerMatch161]
+		,[MaxPerMatch99MP]
+		,[MaxPerBall161]
+		,Abnormal
+		,DoubleCommLosing
+		,autosuspend2
+		,HideKeno
+		,DisableEsports
+		,HideGoldDeluxe
+		,DisableGoldDeluxe
+		,DisableSuperLive
+		,DisableColossusBet
+		,HideColossusBet
+		,LockUpd
+		,MaxPerMatch1MP
+		,BonusWalletFlag
+		,MaxPerMatch164
+		,DangerLevel
+		,CustomerClass
+		,danger4
+		,danger5
+	FROM [DELETED]
+END
