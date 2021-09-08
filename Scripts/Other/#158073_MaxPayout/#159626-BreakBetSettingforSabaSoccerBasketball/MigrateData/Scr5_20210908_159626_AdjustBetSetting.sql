@@ -14,7 +14,6 @@ BEGIN
 		MinBet            MONEY, 
 		MaxBet            MONEY, 
 		MaxPerMatch       MONEY, 
-		MaxPerNumber      MONEY, 
 		MaxPayoutPerMatch MONEY
 	)
 
@@ -25,7 +24,6 @@ BEGIN
 		MinBet            MONEY, 
 		MaxBet            MONEY, 
 		MaxPerMatch       MONEY, 
-		MaxPerNumber      MONEY, 
 		MaxPayoutPerMatch MONEY
 	)
 
@@ -36,11 +34,15 @@ BEGIN
 		MinBet            MONEY, 
 		MaxBet            MONEY, 
 		MaxPerMatch       MONEY, 
-		MaxPerNumber      MONEY, 
 		MaxPayoutPerMatch MONEY
 	)
 
 	CREATE TABLE #supers (custid INT PRIMARY KEY)
+	CREATE TABLE #sportbettype(fsporttype INT, fbettype INT, tsporttype INT, tbettype INT)
+
+	INSERT INTO #sportbettype (fsporttype,fbettype,tsporttype,tbettype)
+	SELECT 1,1,9901,1 UNION ALL
+	SELECT 2,1,9902,1
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
@@ -56,148 +58,80 @@ BEGIN
 		AND c.Enabled = 1
 		AND ci.currency <> 20
 
-	----> Agents
-	INSERT INTO #CustBetSetting_Agent(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
-	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,
-		CASE WHEN new.sporttype = 1 AND new.bettype = 1 THEN ci.maxpermatch
-			WHEN new.sporttype = 1 AND new.bettype = 9 THEN ci.MaxPerMatch1MP
-			WHEN new.sporttype = 2 AND new.bettype = 1 THEN ci.maxpermatch2
-			WHEN new.sporttype = 3 AND new.bettype = 1 THEN ci.maxpermatch3
-			WHEN new.sporttype = 5 AND new.bettype = 1 THEN ci.maxpermatch5
-			WHEN new.sporttype = 8 AND new.bettype = 1 THEN ci.maxpermatch8
-			WHEN new.sporttype = 10 AND new.bettype = 1 THEN ci.maxpermatch10
-			WHEN new.sporttype = 11 AND new.bettype = 1 THEN ci.maxpermatch11
-			WHEN new.sporttype = 99 AND new.bettype = 1 THEN ci.maxpermatch99
-			WHEN new.sporttype = 99 AND new.bettype = 9 THEN ci.MaxPerMatch99MP
-			WHEN new.sporttype = 161 THEN ci.maxpermatch161
-			WHEN new.sporttype = 164 THEN ci.maxpermatch164
-		END AS MaxPerMatch
+	---->Saba Agents 
+	INSERT INTO #CustBetSetting_Agent(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch)
+	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,c.MaxPerMatch,c.MaxPayoutPerMatch
 	FROM CustBetSetting_Agent new WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
-		INNER JOIN custSetting c WITH(NOLOCK) ON new.CustID = c.custid AND new.SportType = c.sporttype AND new.BetType = c.bettype
+		INNER JOIN #sportbettype s ON new.SportType = s.tsporttype AND new.BetType = s.tbettype
+		INNER JOIN CustBetSetting_Agent c WITH(NOLOCK) ON new.CustID = c.custid AND s.fSportType = c.sporttype AND s.fbettype = c.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		AND ci.roleid IN (2,3,4)
 		AND ci.Enabled = 1
 		AND (   new.MinBet <> c.minbet
 				OR new.MaxBet <> c.maxbet 
-				OR new.MaxPerMatch <>  CASE WHEN new.sporttype = 1 AND new.bettype = 1 THEN ci.maxpermatch
-											WHEN new.sporttype = 1 AND new.bettype = 9 THEN ci.MaxPerMatch1MP
-											WHEN new.sporttype = 2 AND new.bettype = 1 THEN ci.maxpermatch2
-											WHEN new.sporttype = 3 AND new.bettype = 1 THEN ci.maxpermatch3
-											WHEN new.sporttype = 5 AND new.bettype = 1 THEN ci.maxpermatch5
-											WHEN new.sporttype = 8 AND new.bettype = 1 THEN ci.maxpermatch8
-											WHEN new.sporttype = 10 AND new.bettype = 1 THEN ci.maxpermatch10
-											WHEN new.sporttype = 11 AND new.bettype = 1 THEN ci.maxpermatch11
-											WHEN new.sporttype = 99 AND new.bettype = 1 THEN ci.maxpermatch99
-											WHEN new.sporttype = 99 AND new.bettype = 9 THEN ci.MaxPerMatch99MP
-										END
+				OR new.MaxPerMatch <> c.MaxPerMatch
+				OR new.MaxPayoutPerMatch <> c.MaxPayoutPerMatch
+				OR new.MinBet IS NULL
+				OR new.MaxBet IS NULL
+				OR new.MaxPerMatch IS NULL
+				OR new.MaxPayoutPerMatch IS NULL
 			)
-		AND new.SportType NOT IN (161,164)
 
-	INSERT INTO #CustBetSetting_Agent(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber)
-	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,
-		CASE WHEN new.sporttype = 161 THEN ci.maxpermatch161
-			WHEN new.sporttype = 164 THEN ci.maxpermatch164
-		END AS MaxPerMatch,
-		CASE WHEN new.sporttype = 161 THEN ci.MaxPerBall161
-		END AS MaxPerNumber
-	FROM CustBetSetting_Agent new WITH(NOLOCK)
-		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
-		INNER JOIN CustSetting3rd c WITH(NOLOCK) ON new.CustID = c.custid AND new.SportType = c.sporttype AND new.BetType = c.bettype
-	WHERE ci.srecommend IN (SELECT custid FROM #supers)
-		AND ci.roleid IN (2,3,4)
-		AND ci.Enabled = 1
-		AND (   new.MinBet <> c.minbet
-				OR new.MaxBet <> c.maxbet 
-				OR new.MaxPerMatch <>  CASE WHEN new.sporttype = 161 THEN ci.maxpermatch161
-											WHEN new.sporttype = 164 THEN ci.maxpermatch164
-										END
-				OR new.MaxPerNumber <>  CASE WHEN new.sporttype = 161 THEN ci.MaxPerBall161
-										END
-			)
-		AND new.SportType IN (161,164)
-
-
-	----> Members
+	---->Saba Members
 	INSERT INTO #CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
-	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,
-		CASE WHEN new.sporttype = 1 AND new.bettype = 1 THEN ci.maxpermatch
-			WHEN new.sporttype = 1 AND new.bettype = 9 THEN ci.MaxPerMatch1MP
-			WHEN new.sporttype = 2 AND new.bettype = 1 THEN ci.maxpermatch2
-			WHEN new.sporttype = 3 AND new.bettype = 1 THEN ci.maxpermatch3
-			WHEN new.sporttype = 5 AND new.bettype = 1 THEN ci.maxpermatch5
-			WHEN new.sporttype = 8 AND new.bettype = 1 THEN ci.maxpermatch8
-			WHEN new.sporttype = 10 AND new.bettype = 1 THEN ci.maxpermatch10
-			WHEN new.sporttype = 11 AND new.bettype = 1 THEN ci.maxpermatch11
-			WHEN new.sporttype = 99 AND new.bettype = 1 THEN ci.maxpermatch99
-			WHEN new.sporttype = 99 AND new.bettype = 9 THEN ci.MaxPerMatch99MP
-			WHEN new.sporttype = 161 THEN ci.maxpermatch161
-			WHEN new.sporttype = 164 THEN ci.maxpermatch164
-		END AS MaxPerMatch
+	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,c.MaxPerMatch,c.MaxPayoutPerMatch
 	FROM CustBetSetting_Member new WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
-		INNER JOIN custSetting c WITH(NOLOCK) ON new.CustID = c.custid AND new.SportType = c.sporttype AND new.BetType = c.bettype
+		INNER JOIN #sportbettype s ON new.SportType = s.tsporttype AND new.BetType = s.tbettype
+		INNER JOIN CustBetSetting_Member c WITH(NOLOCK) ON new.CustID = c.custid AND s.fSportType = c.sporttype AND s.fbettype = c.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		AND ci.roleid = 1
 		AND ci.Enabled = 1
 		AND (   new.MinBet <> c.minbet
 				OR new.MaxBet <> c.maxbet 
-				OR new.MaxPerMatch <>  CASE WHEN new.sporttype = 1 AND new.bettype = 1 THEN ci.maxpermatch
-											WHEN new.sporttype = 1 AND new.bettype = 9 THEN ci.MaxPerMatch1MP
-											WHEN new.sporttype = 2 AND new.bettype = 1 THEN ci.maxpermatch2
-											WHEN new.sporttype = 3 AND new.bettype = 1 THEN ci.maxpermatch3
-											WHEN new.sporttype = 5 AND new.bettype = 1 THEN ci.maxpermatch5
-											WHEN new.sporttype = 8 AND new.bettype = 1 THEN ci.maxpermatch8
-											WHEN new.sporttype = 10 AND new.bettype = 1 THEN ci.maxpermatch10
-											WHEN new.sporttype = 11 AND new.bettype = 1 THEN ci.maxpermatch11
-											WHEN new.sporttype = 99 AND new.bettype = 1 THEN ci.maxpermatch99
-											WHEN new.sporttype = 99 AND new.bettype = 9 THEN ci.MaxPerMatch99MP
-										END
+				OR new.MaxPerMatch <> c.MaxPerMatch
+				OR new.MaxPayoutPerMatch <> c.MaxPayoutPerMatch
+				OR new.MinBet IS NULL
+				OR new.MaxBet IS NULL
+				OR new.MaxPerMatch IS NULL
+				OR new.MaxPayoutPerMatch IS NULL
 			)
-		AND new.SportType NOT IN (161,164)
 
-	INSERT INTO #CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber)
-	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,
-		CASE WHEN new.sporttype = 161 THEN ci.maxpermatch161
-			WHEN new.sporttype = 164 THEN ci.maxpermatch164
-		END AS MaxPerMatch,
-		CASE WHEN new.sporttype = 161 THEN ci.MaxPerBall161
-		END AS MaxPerNumber
+	---->mix sport Agents 
+	INSERT INTO #CustBetSetting_Agent(CustID,SportType,BetType)
+	SELECT new.custid,new.sporttype,new.bettype
+	FROM CustBetSetting_Agent new WITH(NOLOCK)
+		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
+	WHERE ci.srecommend IN (SELECT custid FROM #supers)
+		AND ci.roleid IN (2,3,4)
+		AND ci.Enabled = 1
+		AND (   new.MaxPayoutPerMatch <> CASE WHEN new.MaxPerMatch >= 1 THEN new.MaxPerMatch * 10 ELSE new.MaxPerMatch END
+				OR new.MaxPayoutPerMatch IS NULL
+			)
+		AND new.BetType = 9 
+		AND new.SportType IN(1,99)
+
+	---->mix sport Members
+	INSERT INTO #CustBetSetting_Member(CustID,SportType,BetType)
+	SELECT new.custid,new.sporttype,new.bettype
 	FROM CustBetSetting_Member new WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
-		INNER JOIN CustSetting3rd c WITH(NOLOCK) ON new.CustID = c.custid AND new.SportType = c.sporttype AND new.BetType = c.bettype
+		INNER JOIN #sportbettype s ON new.SportType = s.tsporttype AND new.BetType = s.tbettype
+		INNER JOIN CustBetSetting_Member c WITH(NOLOCK) ON new.CustID = c.custid AND s.fSportType = c.sporttype AND s.fbettype = c.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		AND ci.roleid = 1
 		AND ci.Enabled = 1
-		AND (   new.MinBet <> c.minbet
-				OR new.MaxBet <> c.maxbet 
-				OR new.MaxPerMatch <>  CASE WHEN new.sporttype = 161 THEN ci.maxpermatch161
-											WHEN new.sporttype = 164 THEN ci.maxpermatch164
-										END
-				OR new.MaxPerNumber <>  CASE WHEN new.sporttype = 161 THEN ci.MaxPerBall161
-										END
+		AND (   new.MaxPayoutPerMatch <> CASE WHEN new.MaxPerMatch >= 1 THEN new.MaxPerMatch * 10 ELSE new.MaxPerMatch END
+				OR new.MaxPayoutPerMatch IS NULL
 			)
-		AND new.SportType IN (161,164)
+		AND new.BetType = 9 
+		AND new.SportType IN(1,99)
 
 	--SELECT * FROM #CustBetSetting_Agent
 	--SELECT * FROM #CustBetSetting_Member
 
-	--> Update maxper payout
-	UPDATE c
-	SET c.MaxPayoutPerMatch = CASE WHEN c.MaxPerMatch >= 1 THEN c.MaxPerMatch*10 ELSE c.MaxPerMatch  END
-	FROM #CustBetSetting_Agent c
-	WHERE c.SportType NOT IN (161,164) 
-		AND c.BetType <> 9 
-
-	UPDATE c
-	SET c.MaxPayoutPerMatch = CASE WHEN c.MaxPerMatch >= 1 THEN c.MaxPerMatch*10 ELSE c.MaxPerMatch  END
-	FROM #CustBetSetting_Member c
-	WHERE c.SportType NOT IN (161,164) 
-		AND c.BetType <> 9
-
-	--SELECT * FROM #CustBetSetting_Agent
-	--SELECT * FROM #CustBetSetting_Member
-
+	--> Adjust Saba Soccer, Saba Basketball
 	WHILE 1 = 1
 	BEGIN
 		TRUNCATE TABLE #CustBetSetting_TmpBatch
@@ -209,8 +143,7 @@ BEGIN
 			   deleted.MinBet, 
 			   deleted.MaxBet, 
 			   deleted.MaxPerMatch, 
-			   deleted.MaxPayoutPerMatch, 
-			   deleted.MaxPerNumber
+			   deleted.MaxPayoutPerMatch
 		INTO #CustBetSetting_TmpBatch(
 			CustID, 
 			SportType, 
@@ -218,10 +151,10 @@ BEGIN
 			MinBet, 
 			MaxBet, 
 			MaxPerMatch, 
-			MaxPayoutPerMatch, 
-			MaxPerNumber
+			MaxPayoutPerMatch
 			)
 		FROM #CustBetSetting_Agent a
+		WHERE a.SportType IN(9901,9902)
 
 		IF @@ROWCOUNT = 0
 			BREAK
@@ -230,8 +163,7 @@ BEGIN
 		SET b.MinBet = t.MinBet,
 			b.MaxBet = t.MaxBet,
 			b.MaxPerMatch = t.MaxPerMatch,
-			b.MaxPayoutPerMatch = t.MaxPayoutPerMatch,
-			b.MaxPerNumber = t.MaxPerNumber
+			b.MaxPayoutPerMatch = t.MaxPayoutPerMatch
 		FROM CustBetSetting_Agent b WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustBetSetting_TmpBatch t 
 				ON b.CustID = t.CustID
@@ -251,8 +183,7 @@ BEGIN
 			   deleted.MinBet, 
 			   deleted.MaxBet, 
 			   deleted.MaxPerMatch, 
-			   deleted.MaxPayoutPerMatch, 
-			   deleted.MaxPerNumber
+			   deleted.MaxPayoutPerMatch
 		INTO #CustBetSetting_TmpBatch(
 			CustID, 
 			SportType, 
@@ -260,10 +191,10 @@ BEGIN
 			MinBet, 
 			MaxBet, 
 			MaxPerMatch, 
-			MaxPayoutPerMatch, 
-			MaxPerNumber
+			MaxPayoutPerMatch
 			)
 		FROM #CustBetSetting_Member a
+		WHERE a.SportType IN(9901,9902)
 
 		IF @@ROWCOUNT = 0
 			BREAK
@@ -272,8 +203,7 @@ BEGIN
 		SET b.MinBet = t.MinBet,
 			b.MaxBet = t.MaxBet,
 			b.MaxPerMatch = t.MaxPerMatch,
-			b.MaxPayoutPerMatch = t.MaxPayoutPerMatch,
-			b.MaxPerNumber = t.MaxPerNumber
+			b.MaxPayoutPerMatch = t.MaxPayoutPerMatch
 		FROM CustBetSetting_Member b WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustBetSetting_TmpBatch t 
 				ON b.CustID = t.CustID
@@ -281,10 +211,70 @@ BEGIN
 				AND b.BetType = t.BetType
 
 	END
+	
+	--> Adjust max payout per match of parlay sport 
+	WHILE 1 = 1
+	BEGIN
+		TRUNCATE TABLE #CustBetSetting_TmpBatch
+		
+		DELETE TOP (5000) a
+		OUTPUT deleted.CustID, 
+			   deleted.SportType, 
+			   deleted.BetType
+		INTO #CustBetSetting_TmpBatch(
+			CustID, 
+			SportType, 
+			BetType
+			)
+		FROM #CustBetSetting_Agent a
+		WHERE a.SportType IN(1,99)
+			AND a.BetType = 9
+
+		IF @@ROWCOUNT = 0
+			BREAK
+
+		UPDATE b
+		SET b.MaxPayoutPerMatch = CASE WHEN b.MaxPerMatch >= 1 THEN b.MaxPerMatch * 10 ELSE b.MaxPerMatch END
+		FROM CustBetSetting_Agent b WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustBetSetting_TmpBatch t 
+				ON b.CustID = t.CustID
+				AND b.SportType = t.SportType
+				AND b.BetType = t.BetType
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		TRUNCATE TABLE #CustBetSetting_TmpBatch
+		
+		DELETE TOP (5000) a
+		OUTPUT deleted.CustID, 
+			   deleted.SportType, 
+			   deleted.BetType
+		INTO #CustBetSetting_TmpBatch(
+			CustID, 
+			SportType, 
+			BetType
+			)
+		FROM #CustBetSetting_Member a
+		WHERE a.SportType IN(1,99)
+			AND a.BetType = 9
+
+		IF @@ROWCOUNT = 0
+			BREAK
+
+		UPDATE b
+		SET b.MaxPayoutPerMatch = CASE WHEN b.MaxPerMatch >= 1 THEN b.MaxPerMatch * 10 ELSE b.MaxPerMatch END
+		FROM CustBetSetting_Member b WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustBetSetting_TmpBatch t 
+				ON b.CustID = t.CustID
+				AND b.SportType = t.SportType
+				AND b.BetType = t.BetType
+	END
 
 	DROP TABLE #CustBetSetting_Agent
 	DROP TABLE #CustBetSetting_Member
 	DROP TABLE #supers
 	DROP TABLE #CustBetSetting_TmpBatch
+	DROP TABLE #sportbettype
 END
 GO
