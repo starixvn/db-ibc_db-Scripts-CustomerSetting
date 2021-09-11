@@ -1,0 +1,11 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
+/*
+	Created: Eden@20210911
+	Task: Insert member DTE425AA11000,DTE425AA11001 to VRMemberBigStake - exception [Redmine: #161471]   
+	DB: DBCUST/CUSTDB
+*/
+USE CUSTDB
+GO
+INSERT INTO VRMemberBigStake(CustID,Type,Status)
+SELECT 54928532, 1, 0 UNION ALL --DTE425AA11000
+SELECT 54928572, 1, 0 --DTE425AA11001
