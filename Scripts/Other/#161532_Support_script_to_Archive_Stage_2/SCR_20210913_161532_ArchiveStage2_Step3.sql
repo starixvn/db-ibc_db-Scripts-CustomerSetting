@@ -47,25 +47,32 @@ BEGIN
 							
 	INSERT INTO #ReduceCredit (CustId,srecommend,RoleID,Credit)
 	SELECT c.custid, c.srecommend, 3 ,credit
-	FROM (SELECT DISTINCT Master FROM dbo.tmpCustArchived  WITH (NOLOCK)  WHERE IsFinished = 0) AS t
+	FROM (SELECT DISTINCT Master FROM dbo.tmpCustArchived  WITH (NOLOCK)) AS t
 		CROSS APPLY (SELECT custid,srecommend,credit FROM dbo.custInfo c1 WITH (NOLOCK) WHERE c1.username= t.Master and c1.roleid = 3) AS c
 		
 	INSERT INTO #ReduceCredit (CustId,srecommend,RoleID,Credit)
 	SELECT c.custid, c.custid, 4,credit
-	FROM (SELECT DISTINCT super FROM dbo.tmpCustArchived  WITH (NOLOCK)  WHERE IsFinished = 0) AS t
+	FROM (SELECT DISTINCT super FROM dbo.tmpCustArchived  WITH (NOLOCK)) AS t
 		CROSS APPLY (SELECT custid,credit FROM dbo.custInfo c1 WITH (NOLOCK) WHERE c1.username= t.Super and c1.roleid = 4) AS c 
 		
 	EXEC DBA_ArchiveAccount_GenMasterSuperGroupLevel @StageId = @stage
 
 	---Exclude finished agent and correct ReduceCredit info for them
-	UPDATE r 
-	SET ReduceCredit = ReduceCredit + ca.ReducedCredit
+	;WITH TempTBL AS(
+	SELECT r.CustId, 
+		SUM(ISNULL(ca.ReducedCredit,0)) AS ReducedCredit
 	FROM tmpCustArchived a WITH (NOLOCK) 
 		INNER JOIN custInfo c WITH(NOLOCK) ON a.recommend = c.custid
 		INNER JOIN #ReduceCredit r ON r.custid IN (c.mrecommend,c.srecommend)
 		INNER JOIN Cust_ArchiveAccount ca WITH(NOLOCK) ON a.recommend = ca.CustID
 	WHERE a.IsFinished = 1 
 		AND a.ErrMsg = ''
+	GROUP BY r.CustId
+	)
+	UPDATE r
+	SET r.ReduceCredit = t.ReducedCredit
+	FROM #ReduceCredit r 
+		INNER JOIN TempTBL t ON r.CustId = t.CustId
 	-------------------------------------------------------------------
 		
 	WHILE(1=1)
