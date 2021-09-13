@@ -1,4 +1,5 @@
-﻿/*
+﻿/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
 	Created by: Elodie
 	Date: 20190405
 	Task: Update LogAction for New Simplified Chinese (CN88) 
