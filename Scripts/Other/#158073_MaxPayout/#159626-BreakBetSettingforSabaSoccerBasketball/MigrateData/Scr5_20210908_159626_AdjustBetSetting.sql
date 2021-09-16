@@ -117,8 +117,6 @@ BEGIN
 	SELECT new.custid,new.sporttype,new.bettype
 	FROM CustBetSetting_Member new WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
-		INNER JOIN #sportbettype s ON new.SportType = s.tsporttype AND new.BetType = s.tbettype
-		INNER JOIN CustBetSetting_Member c WITH(NOLOCK) ON new.CustID = c.custid AND s.fSportType = c.sporttype AND s.fbettype = c.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #supers)
 		AND ci.roleid = 1
 		AND ci.Enabled = 1
