@@ -79,7 +79,7 @@ BEGIN
 			)
 
 	---->Saba Members
-	INSERT INTO #CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+	INSERT INTO #CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch)
 	SELECT new.custid,new.sporttype,new.bettype,c.minbet,c.maxbet,c.MaxPerMatch,c.MaxPayoutPerMatch
 	FROM CustBetSetting_Member new WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) ON new.CustID = ci.custid
