@@ -1,6 +1,5 @@
-﻿--﻿/* <info serverAlias="DBLOG-bodb_CustomerLog"></info> */
-
-/*
+﻿﻿/* <info serverAlias="DBLOG-bodb_CustomerLog"></info> */
+/* 
 	Created: 20210802@Eden
 	Task: Prepare for log status of Max Payout Per Match [#RM:158073]
 	DB: DBLOG/bodb_CustomerLog
