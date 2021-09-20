@@ -1,6 +1,6 @@
-﻿/*<info serverAlias=DBCUST-CUSTDB></info>*/
+﻿﻿/* <info serverAlias="DBCUST-CustDB"></info> */
 /* 
-	Created: Eden@20212607
+	Created: Eden@20210920
 	Task: Insert new Error Message [Redmine: #154048]   
 	DB: DBCUST/CUSTDB
 */
