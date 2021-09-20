@@ -1,4 +1,4 @@
-﻿﻿/* <info serverAlias="DBLOG-bodb_CustomerLog"></info> */
+﻿--﻿/* <info serverAlias="DBLOG-bodb_CustomerLog"></info> */
 
 /*
 	Created: 20210802@Eden
@@ -20,13 +20,13 @@ DECLARE @Log TABLE (Level TINYINT, ProductID TINYINT, ActionID INT
 DECLARE @ActionTypeID INT = 3, @IsInternal BIT = 0
 
 INSERT INTO @Log (Level, ProductID, ActionID, ActionNameEN, SPName,ActionNameCS,ActionNameCH,ActionNameTH)
-SELECT 4, 1, 220020,'Update Sportsbook Bet Setting for super','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 4, 1, 220021,'Update Sportsbook Bet Setting for super indirectly','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 3, 1, 220022,'Update Sportsbook Bet Setting for master','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 3, 1, 220023,'Update Sportsbook Bet Setting for master indirectly','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 2, 1, 220024,'Update Sportsbook Bet Setting for agent','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 2, 1, 220025,'Update Sportsbook Bet Setting for agent indirectly','Acc_CustomerUpd_BetSetting',N'',N'',N'' UNION ALL
-SELECT 1, 1, 220026,'Update Sportsbook Bet Setting for member','Acc_CustomerUpd_BetSetting',N'',N'',N'' 
+SELECT 4, 1, 220020,'Update Sportsbook Bet Setting for Super','Acc_CustomerUpd_BetSetting',N'更新超级总代理的体育博彩投注设置',N'更新超級總代理的體育博彩投注設置',N'อัปเดตการตั้งค่าการเดิมพันกีฬาสำหรับซุปเปอร์' UNION ALL
+SELECT 4, 1, 220021,'Indirectly update Sportsbook Bet Setting for Super ','Acc_CustomerUpd_BetSetting',N'间接地更新超级总代理的体育博彩投注设置',N'間接地更新超級總代理的體育博彩投注設置',N'อัปเดตการตั้งค่าเดิมพันกีฬาทางอ้อมสำหรับซุปเปอร์' UNION ALL
+SELECT 3, 1, 220022,'Update Sportsbook Bet Setting for Master','Acc_CustomerUpd_BetSetting',N'更新总代理的体育博彩投注设置',N'更新總代理的體育博彩投注設置',N'อัปเดตการตั้งค่าการเดิมพันกีฬาสำหรับมาสเตอร์' UNION ALL
+SELECT 3, 1, 220023,'Indirectly update Sportsbook Bet Setting for Master','Acc_CustomerUpd_BetSetting',N'间接地更新总代理的体育博彩投注设置',N'間接地更新總代理的體育博彩投注設置',N'อัปเดตการตั้งค่าเดิมพันกีฬาทางอ้อมสำหรับมาสเตอร์' UNION ALL
+SELECT 2, 1, 220024,'Update Sportsbook Bet Setting for Agent','Acc_CustomerUpd_BetSetting',N'更新代理的体育博彩投注设置',N'更新代理的體育博彩投注設置',N'อัปเดตการตั้งค่าการเดิมพันกีฬาสำหรับเอเจ้น' UNION ALL
+SELECT 2, 1, 220025,'Indirectly update Sportsbook Bet Setting for Agent','Acc_CustomerUpd_BetSetting',N'间接地更新代理的体育博彩投注设置',N'間接地更新代理的體育博彩投注設置',N'อัปเดตการตั้งค่าเดิมพันกีฬาทางอ้อมสำหรับเอเจ้น' UNION ALL
+SELECT 1, 1, 220026,'Update Sportsbook Bet Setting for Member','Acc_CustomerUpd_BetSetting',N'更新会员体的育博彩投注设置',N'更新會員的體育博彩投注設置',N'อัปเดตการตั้งค่าการเดิมพันกีฬาสำหรับสมาชิก' 
  
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
 SELECT ActionID, SPName, @ActionTypeID, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameEN,  ActionNameTH,ActionNameEN, @IsInternal, ActionNameEN
