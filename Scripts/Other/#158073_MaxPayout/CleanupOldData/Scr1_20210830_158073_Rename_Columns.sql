@@ -11,3 +11,5 @@ EXEC sp_rename 'custsetting.maxbet','DEL_maxbet', 'COLUMN'
 
 EXEC sp_rename 'custsetting3rd.minbet','DEL_minbet', 'COLUMN'
 EXEC sp_rename 'custsetting3rd.maxbet','DEL_maxbet', 'COLUMN'
+
+EXEC sp_rename 'custinfo.maxpermatch164','DEL_maxpermatch164', 'COLUMN'

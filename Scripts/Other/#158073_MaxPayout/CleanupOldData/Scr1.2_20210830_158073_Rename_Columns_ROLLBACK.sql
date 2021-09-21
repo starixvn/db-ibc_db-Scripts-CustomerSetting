@@ -8,3 +8,8 @@ USE [CustDB]
 GO
 EXEC sp_rename 'custsetting.DEL_minbet','minbet', 'COLUMN'
 EXEC sp_rename 'custsetting.DEL_maxbet','maxbet', 'COLUMN'
+
+EXEC sp_rename 'custsetting3rd.DEL_minbet','minbet', 'COLUMN'
+EXEC sp_rename 'custsetting3rd.DEL_maxbet','maxbet', 'COLUMN'
+
+EXEC sp_rename 'custinfo.DEL_maxpermatch164','maxpermatch164', 'COLUMN'
