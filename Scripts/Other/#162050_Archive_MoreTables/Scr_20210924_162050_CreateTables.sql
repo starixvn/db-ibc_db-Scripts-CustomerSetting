@@ -82,3 +82,6 @@ CREATE TABLE [dbo].[CustMaster_old](
 ) ON [DATA]
 
 GO
+
+ALTER TABLE [CustLoginInfo_Old] ADD FunctionInfo TINYINT ,ProtectionCode varchar(30), IsProtectedMode BIT
+ALTER TABLE [CustLoginInfoSub_Old] ADD FunctionInfo TINYINT ,ProtectionCode varchar(30)
