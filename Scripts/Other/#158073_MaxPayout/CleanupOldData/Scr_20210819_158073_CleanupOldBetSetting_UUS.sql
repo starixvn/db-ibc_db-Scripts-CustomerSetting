@@ -115,7 +115,6 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND c.Enabled = 1
 	AND ci.currency = 20
-	AND ci.custID IN (xxx,xxx)
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
