@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Eden@20210816
-	Task: Migrate bet setting from custsetting table and custsetting3rd table 
+	Task: Migrate bet setting from custsetting table and custsetting3rd tables 
 			to CustBetSetting_Agent and CustBetSetting_Member tables - UUS New Accounts [Redmine: #154048]   
 	DB: DBCUST/CUSTDB
 */
