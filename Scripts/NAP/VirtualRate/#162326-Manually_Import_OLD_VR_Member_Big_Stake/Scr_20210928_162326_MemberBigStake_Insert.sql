@@ -31,7 +31,7 @@ WHERE c.roleid = 1
 
 DECLARE @LogData_member VARCHAR(MAX) --log each member
 
-SELECT @LogData_member = '<R Type="Sportsbook except Basketball and Esports" />'
+SELECT @LogData_member = '<R Type="Sportsbook except Basketball and Esports (By IT)" />'
 
 --Insert members to queue
 WHILE 0 = 0
@@ -57,7 +57,7 @@ BEGIN
 		ActionID, 
 		TrackingValue
 	)
-	SELECT 0, 
+	SELECT 10278938,  --starixIT
 		CustID, 
 		836, 
 		@LogData_member
