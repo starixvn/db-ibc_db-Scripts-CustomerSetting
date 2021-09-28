@@ -10,7 +10,6 @@ ALTER TABLE custsetting DROP CONSTRAINT DF_custSetting_minbet
 ALTER TABLE custsetting DROP CONSTRAINT DF_custSetting_maxbet
 ALTER TABLE custsetting3rd DROP CONSTRAINT DF_custSetting3rd_minbet
 ALTER TABLE custsetting3rd DROP CONSTRAINT DF_custSetting3rd_maxbet
-ALTER TABLE custinfo DROP CONSTRAINT DF_CustInfo_maxpermatch164
 
 ALTER TABLE custsetting DROP COLUMN DEL_minbet
 ALTER TABLE custsetting DROP COLUMN DEL_maxbet

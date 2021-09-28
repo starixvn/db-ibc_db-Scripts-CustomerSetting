@@ -6,4 +6,6 @@
 */
 USE [CustDB]
 GO
+ALTER TABLE custinfo DROP CONSTRAINT DF_CustInfo_maxpermatch164
+
 ALTER TABLE custinfo DROP COLUMN DEL_maxpermatch164
