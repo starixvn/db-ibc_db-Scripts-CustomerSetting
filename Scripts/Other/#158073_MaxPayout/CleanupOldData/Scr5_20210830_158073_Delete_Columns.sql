@@ -2,7 +2,7 @@
 /*
 	Created: Eden@20210830
 	Task: Delete column minbet,maxbet (not used) of custsetting and custsetting3rd table [Redmine: #154048]   
-	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
+	DB: DBCUST/CUSTDB and all subscribers of all publication
 */
 USE [CustDB]
 GO
@@ -16,5 +16,3 @@ ALTER TABLE custsetting DROP COLUMN DEL_minbet
 ALTER TABLE custsetting DROP COLUMN DEL_maxbet
 ALTER TABLE custsetting3rd DROP COLUMN DEL_minbet
 ALTER TABLE custsetting3rd DROP COLUMN DEL_maxbet
-
-ALTER TABLE custinfo DROP COLUMN DEL_maxpermatch164
