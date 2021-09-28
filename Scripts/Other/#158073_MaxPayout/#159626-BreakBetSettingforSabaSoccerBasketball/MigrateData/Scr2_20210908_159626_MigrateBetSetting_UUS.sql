@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
-	Created: Eden@20210908
+	Created: Eden@20210908 
 	Task: Initial data for Saba Soccer and Saba Basketball - UUS [Redmine: #159626]
 	Notes:Get MaxcustID to insert setting for UUS after released  
 	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication

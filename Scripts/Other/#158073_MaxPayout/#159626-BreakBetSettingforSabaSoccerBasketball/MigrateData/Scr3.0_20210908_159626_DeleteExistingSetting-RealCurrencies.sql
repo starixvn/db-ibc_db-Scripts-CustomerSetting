@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
-	Created: Eden@20210908
+	Created: Eden@20210908 
 	Task: Delete existing data of Saba Soccer and Saba Basketball - Real Currencies [Redmine: #159626]   
 	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
 */
