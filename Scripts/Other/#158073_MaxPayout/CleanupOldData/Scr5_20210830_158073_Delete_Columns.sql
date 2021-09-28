@@ -16,4 +16,5 @@ ALTER TABLE custsetting DROP COLUMN DEL_minbet
 ALTER TABLE custsetting DROP COLUMN DEL_maxbet
 ALTER TABLE custsetting3rd DROP COLUMN DEL_minbet
 ALTER TABLE custsetting3rd DROP COLUMN DEL_maxbet
+
 ALTER TABLE custinfo DROP COLUMN DEL_maxpermatch164
