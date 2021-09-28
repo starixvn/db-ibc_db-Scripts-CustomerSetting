@@ -7,7 +7,7 @@
 USE [CustDB]
 GO
 
-DECLARE @Inserted_Cust TABLE (CustID INT, Type TINYINT, Islog BIT DEFAULT 0)
+DECLARE @Inserted_Cust TABLE (CustID INT, Type TINYINT)
 
 CREATE TABLE #TblCust (CustID INT, Type TINYINT)
 
@@ -29,14 +29,16 @@ WHERE c.roleid = 1
 	AND pvs.sporttype = 1 AND pvs.bettype = 1 AND pvs.islive = 1
 	AND c.currency <> 20
 
-DECLARE @custID INT, @Type TINYINT, @LogData_member VARCHAR(MAX) --log each member
+DECLARE @LogData_member VARCHAR(MAX) --log each member
+
+SELECT @LogData_member = '<R Type="Sportsbook except Basketball and Esports" />'
 
 --Insert members to queue
 WHILE 0 = 0
 BEGIN
 	DELETE FROM @Inserted_Cust
 
-	DELETE TOP(10000) t
+	DELETE TOP(5000) t
 	OUTPUT deleted.CustID,deleted.Type INTO @Inserted_Cust(CustID,Type)
 	FROM #TblCust t
 
@@ -49,33 +51,18 @@ BEGIN
 		LEFT JOIN VRMemberBigStake v WITH(NOLOCK) ON v.custid = t.custid AND v.Type = t.Type
 	WHERE v.CustID IS NULL
 
-	--Log for each member if not White list
-	BEGIN
-		WHILE 1 = 1
-		BEGIN
-			UPDATE TOP(1) c
-			SET c.islog = 1,
-				@custID = c.CustID,
-				@Type = c.Type
-			FROM @Inserted_Cust c
-			WHERE Islog = 0
+	INSERT INTO DBLOG.bodb_customerlog.dbo.UserLog_RunSP(	
+		UserID, 
+		CustID, 
+		ActionID, 
+		TrackingValue
+	)
+	SELECT 0, 
+		CustID, 
+		836, 
+		@LogData_member
+	FROM @Inserted_Cust
 
-			IF @@ROWCOUNT = 0 BREAK;
-
-			SELECT @LogData_member = '<R '
-								+ 'Type="'
-										+ CASE	WHEN @Type = 1 THEN 'Sportsbook except Basketball and Esports' 
-												ELSE space(1) 
-											END+ '" '
-								+ ' />'
-	
-			EXEC dbo.Acc_WriteLog_UserLog_RunSP_Wrapper
-				@UserId				= 0,
-				@custID				= @custID,
-				@ActionId			= 836,
-				@TrackingValue		= @LogData_member
-		END
-	END
 END
 
 DROP TABLE #TblCust
