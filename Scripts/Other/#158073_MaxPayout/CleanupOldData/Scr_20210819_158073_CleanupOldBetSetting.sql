@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Eden@20210819
-	Task: Cleanup betsetting of old structure tables - Real Currencies [Redmine: #154048]   
+	Task: Cleanup betsetting of old structure tables - Real Currencies [Redmine: #154048]
 	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
