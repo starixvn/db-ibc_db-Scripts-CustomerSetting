@@ -43,18 +43,18 @@ BEGIN
 		AND custid <= @maxcustid
 
 	------------------------------------------Initial DATA---------------------------------------------------------------
-	INSERT INTO CustBetSetting_Agent(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch)
+	INSERT INTO CustBetSetting_Agent(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch,MaxPerNumber)
 	SELECT t.custid
 		,sporttype = CASE WHEN mm.sporttype = 1 THEN 9901 ELSE 9902 END
-		,mm.bettype,mm.minbet,mm.maxbet,mm.MaxPerMatch,mm.MaxPayoutPerMatch
+		,mm.bettype,mm.minbet,mm.maxbet,mm.MaxPerMatch,mm.MaxPayoutPerMatch,mm.MaxPerNumber
 	FROM #SMAs t
 		INNER JOIN CustBetSetting_Agent mm WITH(NOLOCK) ON mm.custid = t.CustID
 	WHERE mm.SportType IN(1,2) AND mm.BetType = 1
 
-	INSERT INTO CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch)
+	INSERT INTO CustBetSetting_Member(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPayoutPerMatch,MaxPerNumber)
 	SELECT t.custid
 		,sporttype = CASE WHEN mm.sporttype = 1 THEN 9901 ELSE 9902 END
-		,mm.bettype,mm.minbet,mm.maxbet,mm.MaxPerMatch,mm.MaxPayoutPerMatch
+		,mm.bettype,mm.minbet,mm.maxbet,mm.MaxPerMatch,mm.MaxPayoutPerMatch,mm.MaxPerNumber
 	FROM #Members t
 		INNER JOIN CustBetSetting_Member mm WITH(NOLOCK) ON mm.custid = t.CustID
 	WHERE mm.SportType IN(1,2) AND mm.BetType = 1
