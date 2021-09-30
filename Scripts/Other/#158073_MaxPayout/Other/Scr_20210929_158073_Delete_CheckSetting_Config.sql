@@ -2,7 +2,7 @@
 /*
 	Created: Eden@20210929
 	Task: Remove config check betsetting on Custsetting3rd table  [Redmine: #154048]   
-	DB: DBCHECK-CheckResultDB
+	DB: DBCHECK-CheckResultDB 
 */
 USE CheckResultDB
 GO

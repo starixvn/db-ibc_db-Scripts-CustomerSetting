@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCHECK-CheckResultDB"></info>*/
 /*
 	Created: Eden@20210929
-	Task: Insert new rules for credit [Redmine: #154048]   
+	Task: Insert new rules for credit [Redmine: #154048]    
 	DB: DBCHECK-CheckResultDB
 */
 USE CheckResultDB
