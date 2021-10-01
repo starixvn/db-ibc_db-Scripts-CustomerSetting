@@ -1,8 +1,8 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Eden@20210819
-	Task: Cleanup betsetting of old structure tables - Real Currencies [Redmine: #154048]
-	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
+	Task: Cleanup betsetting of old structure tables [Redmine: #154048]
+	DB: DBCUST/CUSTDB and all replication of custsetting table
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	 @srecommend INT	
@@ -15,6 +15,8 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('custSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('custSetting3rd') = 0 RETURN
 
 	CREATE TABLE #Custinfo(CustID INT)
 	CREATE TABLE #Custinfo_TmpBatch(CustID INT)
@@ -49,36 +51,6 @@ BEGIN
 		FROM custSetting3rd c WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #Custinfo_TmpBatch t ON c.custid = t.CustID
 
-		UPDATE c
-		SET maxpermatch		= 0,
-			MaxPerMatch1MP	= 0,
-			maxpermatch2	= 0,
-			maxpermatch3	= 0,
-			maxpermatch5	= 0,
-			maxpermatch8	= 0,
-			maxpermatch10	= 0,
-			maxpermatch11	= 0,
-			maxpermatch99	= 0,
-			MaxPerMatch99MP	= 0,
-			maxpermatch161	= 0,
-			maxpermatch164	= 0,
-			maxperball161	= 0
-		FROM custInfo c WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #Custinfo_TmpBatch t ON c.custid = t.CustID
-		WHERE  NOT (maxpermatch		= 0
-					AND MaxPerMatch1MP	= 0
-					AND maxpermatch2	= 0
-					AND maxpermatch3	= 0
-					AND maxpermatch5	= 0
-					AND maxpermatch8	= 0
-					AND maxpermatch10	= 0
-					AND maxpermatch11	= 0
-					AND maxpermatch99	= 0
-					AND MaxPerMatch99MP	= 0
-					AND maxpermatch161	= 0
-					AND maxpermatch164	= 0
-					AND maxperball161	= 0
-					)
 	END
 
 	DROP TABLE #Custinfo
@@ -114,7 +86,6 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND c.Enabled = 1
-	AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

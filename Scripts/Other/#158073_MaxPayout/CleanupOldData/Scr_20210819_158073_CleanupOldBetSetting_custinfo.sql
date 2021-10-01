@@ -1,10 +1,10 @@
 /*<info serverAlias="DBCUST-CUSTDB"></info>*/
 /*
 	Created: Eden@20210819
-	Task: Cleanup betsetting of old structure tables - UUS [Redmine: #154048]
-	DB: DBCUST/CUSTDB and all subscribers of CustDB_CustSetting publication
+	Task: Cleanup betsetting of old structure tables- custinfo [Redmine: #154048]
+	DB:  DBCUST/CUSTDB and all replication of CustInfo table
 */
-ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
+ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	 @srecommend INT	
 	,@target VARCHAR(20)
 AS
@@ -29,25 +29,13 @@ BEGIN
 	BEGIN
 		TRUNCATE TABLE #Custinfo_TmpBatch
 
-		DELETE TOP (100) a
+		DELETE TOP (5000) a
 		OUTPUT deleted.custid
 		INTO #Custinfo_TmpBatch(custid)
 		FROM #Custinfo a
 
 		IF @@ROWCOUNT = 0 
 			BREAK;
-
-		UPDATE c
-		SET c.minbet = 0,
-			c.maxbet = 0
-		FROM custSetting c WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #Custinfo_TmpBatch t ON c.custid = t.CustID
-
-		UPDATE c
-		SET c.minbet = 0,
-			c.maxbet = 0
-		FROM custSetting3rd c WITH(ROWLOCK,UPDLOCK)
-			INNER JOIN #Custinfo_TmpBatch t ON c.custid = t.CustID
 
 		UPDATE c
 		SET maxpermatch		= 0,
@@ -114,7 +102,6 @@ WHERE ci.roleid = 4
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND c.Enabled = 1
-	AND ci.currency = 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -136,7 +123,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+	EXEC dbo.Acc_DynamicCustomerInfo_09 @srecommend = @srecommend
 			,@target = @target	
 			
 	WAITFOR DELAY '00:00:0.020'
