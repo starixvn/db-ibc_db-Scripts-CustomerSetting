@@ -18,7 +18,7 @@ SELECT 1186, 'Update Protection Status by login action', N'通過登錄操作更
 SELECT 1338, 'Login by Protection Code via Agent''s Site', N'通過使用保護碼登入代理網', N'通过使用保护码登入代理网', N'เข้าสู่ระบบด้วยรหัสป้องกันผ่านเว็บไซต์ของตัวแทน', N'Đăng nhập bằng Mã Bảo Vệ qua trang web Đại Lý', 'Age_LoginVerifyDownline', 0, NULL, NULL UNION ALL
 SELECT 1339, 'Login by Protection Code via Agent''s Site', N'通過使用保護碼登入代理網', N'通过使用保护码登入代理网', N'เข้าสู่ระบบด้วยรหัสป้องกันผ่านเว็บไซต์ของตัวแทน', N'Đăng nhập bằng Mã Bảo Vệ qua trang web Đại Lý', 'Age_LoginDownLine', 0, NULL, NULL UNION ALL
 SELECT 1340, 'Login by Protection Code via Agent''s Site', N'通過使用保護碼登入代理網', N'通过使用保护码登入代理网', N'เข้าสู่ระบบด้วยรหัสป้องกันผ่านเว็บไซต์ของตัวแทน', N'Đăng nhập bằng Mã Bảo Vệ qua trang web Đại Lý', 'Age_LoginDownLine_Sub', 0, NULL, NULL UNION ALL
-SELECT 1341, 'Login by Protection Code via Agent''s Site', N'通過使用保護碼登入代理網', N'通过使用保护码登入代理网', N'เข้าสู่ระบบด้วยรหัสป้องกันผ่านเว็บไซต์ของตัวแทน', N'Đăng nhập bằng Mã Bảo Vệ qua trang web Đại Lý', 'Age_LoginClaimDownline', 0, NULL, NULL
+SELECT 1341, 'Login by Protection Code via Agent''s Site', N'通過使用保護碼登入代理網', N'通过使用保护码登入代理网', N'เข้าสู่ระบบด้วยรหัสป้องกันผ่านเว็บไซต์ของตัวแทน', N'Đăng nhập bằng Mã Bảo Vệ qua trang web Đại Lý', 'Age_LoginClaimDownline', 1, NULL, NULL
 
 DELETE FROM LogAction WITH (ROWLOCK) WHERE ActionID IN (SELECT ActionID FROM @tmpAction)
 
