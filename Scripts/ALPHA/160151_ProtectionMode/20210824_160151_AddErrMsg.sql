@@ -1,4 +1,5 @@
-﻿/*
+﻿/*<info serverAlias="DBCust-CustDB"></info>*/
+/*
 	Created: 20210812@Elodie
 	Task : add MsgError [redmine:#159628]
 	
