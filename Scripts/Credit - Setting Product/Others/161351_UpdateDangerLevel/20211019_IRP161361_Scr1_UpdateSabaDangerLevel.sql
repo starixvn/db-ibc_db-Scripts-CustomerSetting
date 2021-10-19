@@ -23,11 +23,9 @@ BEGIN
 	DECLARE @xml XML = CAST (@CustList as XML)
 	DECLARE @batchNo INT
 	
-	INSERT INTO #tblCustWinloss (custid, sporttype, isParlay, winloss)
+	INSERT INTO #tblCustDangerLevel (custid, DangerLevel)
 	SELECT t.c.value('@id[1]','int'),
-		t.c.value('@sport[1]','int'),
-		t.c.value('@parlay[1]','bit'),
-		t.c.value('@winloss[1]','money')
+		t.c.value('@level[1]','bigint')
 	FROM @xml.nodes('Root/r')as t(c)
 	
 		
