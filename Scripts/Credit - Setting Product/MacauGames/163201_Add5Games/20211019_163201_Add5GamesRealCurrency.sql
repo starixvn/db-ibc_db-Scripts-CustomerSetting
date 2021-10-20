@@ -64,6 +64,10 @@ SELECT 4093 ,'0.1'  ,'40'      ,0.1  ,40      ,81   UNION ALL	--CY	--RMB, CY
 SELECT 4091 ,'0.1'  ,'8'       ,0.1  ,8       ,13   UNION ALL	--RMB	--RMB, CY
 SELECT 4092 ,'0.2'  ,'8'       ,0.2  ,8       ,13   UNION ALL	--RMB	--RMB, CY
 SELECT 4093 ,'0.1'  ,'40'      ,0.1  ,40      ,13   UNION ALL	--RMB	--RMB, CY
+--THB
+SELECT 4091 ,'1'    ,'80'      ,1    ,80      ,43   UNION ALL	--THB	--THB
+SELECT 4092 ,'2'    ,'80'      ,2    ,80      ,43   UNION ALL	--THB	--THB
+SELECT 4093 ,'1'    ,'400'     ,1    ,400     ,43   UNION ALL	--THB	--THB
 --US$, Yen, $US, UT, USD,UUS
 SELECT 4091 ,'0.1'  ,'4'       ,0.1  ,4       ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD,UUS
 SELECT 4092 ,'0.2'  ,'4'       ,0.2  ,4       ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD,UUS
