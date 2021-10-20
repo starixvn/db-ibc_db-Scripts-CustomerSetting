@@ -86,10 +86,10 @@ SELECT 4092 ,'200'  ,'4000'    ,200  ,4000    ,45   UNION ALL	--Won	--Won
 SELECT 4093 ,'100'  ,'10000'   ,100  ,10000   ,45   UNION ALL	--Won	--Won
 --================  VP    ================
 --AUD
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,9    UNION ALL	--AUD	--AUD
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,9    UNION ALL	--AUD	--AUD
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,9    UNION ALL	--AUD	--AUD
 --CAN
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,50   UNION ALL	--CAN	--CAN
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,50   UNION ALL	--CAN	--CAN
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,50   UNION ALL	--CAN	--CAN
 --CHF
 SELECT 4094 ,'2.5'  ,'25'      ,2.5  ,25      ,41   UNION ALL	--CHF	--CHF
@@ -123,15 +123,17 @@ SELECT 4095 ,'0.3'  ,'40'      ,0.3  ,40      ,15   UNION ALL	--IN	--IN,IND,IDD,
 SELECT 4094 ,'0.75' ,'250'     ,0.75 ,250     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD
 SELECT 4095 ,'0.3'  ,'40'      ,0.3  ,40      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD
 --MMK
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,69   UNION ALL	--MMK	--MMK
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,69   UNION ALL	--MMK	--MMK
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,69   UNION ALL	--MMK	--MMK
 --NOK
 SELECT 4094 ,'0.5'  ,'125'     ,0.5  ,125     ,54   UNION ALL	--NOK	--NOK
 SELECT 4095 ,'0.2'  ,'20'      ,0.2  ,20      ,54   UNION ALL	--NOK	--NOK
---RM,HKD
-SELECT 4094 ,'0.25' ,'62.5'    ,0.25 ,62.5    ,2    UNION ALL	--RM	--RM,HKD
-SELECT 4095 ,'0.1'  ,'10'      ,0.1  ,10      ,2    UNION ALL	--RM	--RM,HKD
---RMB, CY
+--RM,HKD,HKK
+SELECT 4094 ,'0.25' ,'62.5'    ,0.25 ,62.5    ,67   UNION ALL	--HKK	--RM,HKD,HKK
+SELECT 4095 ,'0.1'  ,'10'      ,0.1  ,10      ,67   UNION ALL	--HKK	--RM,HKD,HKK
+SELECT 4094 ,'0.25' ,'62.5'    ,0.25 ,62.5    ,2    UNION ALL	--RM	--RM,HKD,HKK
+SELECT 4095 ,'0.1'  ,'10'      ,0.1  ,10      ,2    UNION ALL	--RM	--RM,HKD,HKK
+--RMB, C
 SELECT 4094 ,'0.5'  ,'125'     ,0.5  ,125     ,81   UNION ALL	--CY	--RMB, CY
 SELECT 4095 ,'0.2'  ,'20'      ,0.2  ,20      ,81   UNION ALL	--CY	--RMB, CY
 SELECT 4094 ,'0.5'  ,'125'     ,0.5  ,125     ,13   UNION ALL	--RMB	--RMB, CY
@@ -146,19 +148,20 @@ SELECT 4095 ,'0.2'  ,'20'      ,0.2  ,20      ,53   UNION ALL	--SEK	--SEK
 SELECT 4094 ,'2.5'  ,'750'     ,2.5  ,750     ,43   UNION ALL	--THB	--THB
 SELECT 4095 ,'1'    ,'120'     ,1    ,120     ,43   UNION ALL	--THB	--THB
 --US$, Yen, $US, UT, USD 
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD 
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD 
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD 
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,3    UNION ALL	--US$	--US$, Yen, $US, UT, USD 
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,3    UNION ALL	--US$	--US$, Yen, $US, UT, USD 
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,3    UNION ALL	--US$	--US$, Yen, $US, UT, USD 
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,95   UNION ALL	--USD	--US$, Yen, $US, UT, USD 
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,95   UNION ALL	--USD	--US$, Yen, $US, UT, USD 
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,95   UNION ALL	--USD	--US$, Yen, $US, UT, USD 
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD 
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD 
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD 
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD 
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD 
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD 
 --Won
 SELECT 4094 ,'250'  ,'25000'   ,250  ,25000   ,45   UNION ALL	--Won	--Won
-SELECT 4095 ,'100'  ,'4000'    ,100  ,4000    ,45   			--Won	--Won
+SELECT 4095 ,'100'  ,'4000'    ,100  ,4000    ,45				--Won	--Won
+
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))

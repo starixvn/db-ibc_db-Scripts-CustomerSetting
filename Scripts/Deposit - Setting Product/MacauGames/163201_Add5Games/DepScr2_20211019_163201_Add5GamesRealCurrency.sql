@@ -86,13 +86,13 @@ SELECT 4092 ,'200'  ,'4000'    ,200  ,4000    ,45   UNION ALL	--Won	--Won
 SELECT 4093 ,'100'  ,'10000'   ,100  ,10000   ,45   UNION ALL	--Won	--Won
 --================  VP    ================
 --AUD
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,9    UNION ALL	--AUD	--AUD
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,9    UNION ALL	--AUD	--AUD
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,9    UNION ALL	--AUD	--AUD
 --BND
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,46   UNION ALL	--BND	--BND
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,46   UNION ALL	--BND	--BND
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,46   UNION ALL	--BND	--BND
 --CAN
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,50   UNION ALL	--CAN	--CAN
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,50   UNION ALL	--CAN	--CAN
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,50   UNION ALL	--CAN	--CAN
 --CHF
 SELECT 4094 ,'2.5'  ,'25'      ,2.5  ,25      ,41   UNION ALL	--CHF	--CHF
@@ -122,15 +122,16 @@ SELECT 4095 ,'0.3'  ,'40'      ,0.3  ,40      ,15   UNION ALL	--IN	--IN
 --INR
 SELECT 4094 ,'125'  ,'1250'    ,125  ,1250    ,61   UNION ALL	--INR	--INR
 SELECT 4095 ,'50'   ,'200'     ,50   ,200     ,61   UNION ALL	--INR	--INR
+--JPY
 SELECT 4094 ,'250'  ,'2500'    ,250  ,2500    ,32   UNION ALL	--JPY	--JPY
 SELECT 4095 ,'100'  ,'400'     ,100  ,400     ,32   UNION ALL	--JPY	--JPY
 --KHR
 SELECT 4094 ,'0.25' ,'62.5'    ,0.25 ,62.5    ,71   UNION ALL	--KHR	--KHR
 SELECT 4095 ,'0.1'  ,'10'      ,0.1  ,10      ,71   UNION ALL	--KHR	--KHR
 --MKK, MK
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,94   UNION ALL	--MK	--MKK, MK
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,94   UNION ALL	--MK	--MKK, MK
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,94   UNION ALL	--MK	--MKK, MK
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,70   UNION ALL	--MKK	--MKK, MK
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,70   UNION ALL	--MKK	--MKK, MK
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,70   UNION ALL	--MKK	--MKK, MK
 --NOK
 SELECT 4094 ,'0.5'  ,'125'     ,0.5  ,125     ,54   UNION ALL	--NOK	--NOK
@@ -159,13 +160,13 @@ SELECT 4095 ,'0.2'  ,'20'      ,0.2  ,20      ,53   UNION ALL	--SEK	--SEK
 SELECT 4094 ,'2.5'  ,'750'     ,2.5  ,750     ,4    UNION ALL	--TB	--TB
 SELECT 4095 ,'1'    ,'120'     ,1    ,120     ,4    UNION ALL	--TB	--TB
 --US$, USDT
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,3    UNION ALL	--US$	--US$, USDT
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,3    UNION ALL	--US$	--US$, USDT
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,3    UNION ALL	--US$	--US$, USDT
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,96   UNION ALL	--USDT	--US$, USDT
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,96   UNION ALL	--USDT	--US$, USDT
 SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,96   UNION ALL	--USDT	--US$, USDT
 --Won
 SELECT 4094 ,'250'  ,'25000'   ,250  ,25000   ,45   UNION ALL	--Won	--Won
-SELECT 4095 ,'100'  ,'4000'    ,100  ,4000    ,45   			--Won	--Won
+SELECT 4095 ,'100'  ,'4000'    ,100  ,4000    ,45				--Won	--Won
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))

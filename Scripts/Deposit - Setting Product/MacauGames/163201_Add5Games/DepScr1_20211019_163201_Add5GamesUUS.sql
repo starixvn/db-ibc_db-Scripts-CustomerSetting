@@ -15,8 +15,8 @@ SELECT 4091 ,'0.1'  ,'4'       ,0.1  ,4       ,20   UNION ALL	--UUS	--US$, USDT,
 SELECT 4092 ,'0.2'  ,'4'       ,0.2  ,4       ,20   UNION ALL	--UUS	--US$, USDT,UUS
 SELECT 4093 ,'0.1'  ,'10'      ,0.1  ,10      ,20   UNION ALL	--UUS	--US$, USDT,UUS
 --================  VP    ================
-SELECT 4094 ,'0.2'  ,'25'      ,0.2  ,25      ,20   UNION ALL	--UUS	--UUS
-SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,20   			--UUS	--UUS
+SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,20   UNION ALL	--UUS	--UUS
+SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,20				--UUS	--UUS
 
 
 ;WITH STAKE_TEMP AS (
