@@ -35,7 +35,7 @@ FROM phonebettingCustomerList p WITH(NOLOCK)
 --Exclude SuperID: 44671646
 INSERT INTO #Super_Exception(srecommend)
 SELECT t.custid
-FROM (VALUES(44671646)) AS t(custID)
+FROM (VALUES(44671646),(360418)) AS t(custID)
 WHERE NOT EXISTS( SELECT 1 FROM #Super_Exception WHERE srecommend = t.custID)
 
 INSERT INTO bodb_report.dbo.tempCustID
