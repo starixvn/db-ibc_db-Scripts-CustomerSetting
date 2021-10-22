@@ -11,7 +11,7 @@ GO
 DECLARE @tmpAction TABLE (ActionID INT, ActionNameEN NVARCHAR(256), ActionNameCH NVARCHAR(256), ActionNameCS NVARCHAR(256), ActionNameTH NVARCHAR(256), ActionNameVI NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT, Level TINYINT)
 
 INSERT INTO @tmpAction (ActionID, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameTH, ActionNameVI, SPName, IsInternal, ActionTypeId, Level)
-SELECT 1331, 'Kick out account', N'遭踢出賬戶', N'遭踢出账户', N'เตะสมาชิกออก', N'Buộc đăng xuất tài khoản','Age_OnUser_ForceKickedout', 0, NULL, NULL UNION ALL
+SELECT 1331, 'Kick out account', N'賬號被踢出', N'账号被踢出', N'บัญชีถูกเตะออก', N'Buộc đăng xuất tài khoản','Age_OnUser_ForceKickedout', 0, NULL, NULL UNION ALL
 SELECT 953, 'Reset Protection Code', N'重置保護碼', N'重置保护码', N'รีเซ็ตรหัสป้องกัน', N'Đổi Mã Bảo Vệ','Age_CustomerUpdProtectionCode', 0, 4, NULL UNION ALL
 SELECT 1183, 'Update Protection Status By Upline', N'上線更新保護碼狀態', N'上线更新保护码状态', N'อัปเดตสถานะการป้องกันโดยอัพไลน์', N'Cập nhật Trạng Thái Bảo Vệ bởi Cấp Trên', 'Age_CustomerUpdProtectedMode', 0, 5, NULL UNION ALL
 SELECT 1184, 'Update Protection Status by login action', N'通過登錄操作更新保護狀態', N'通过登录操作更新保护状态', N'อัปเดตสถานะการป้องกันโดยการดำเนินการเข้าสู่ระบบ', N'Cập nhật Trạng Thái Bảo Vệ bởi hành động đăng nhập', 'Age_LoginVerifyDownline', 0, 5, NULL UNION ALL
