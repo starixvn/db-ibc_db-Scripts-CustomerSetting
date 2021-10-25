@@ -14,7 +14,8 @@ DECLARE @MsgNameEN NVARCHAR(500) = N'Protection Code cannot be the same as the p
 DECLARE @MsgNameVI NVARCHAR(500) = N'Mã Bảo Vệ không được trùng với mật khẩu.'
 DECLARE @MsgNameCT NVARCHAR(500) = N'保護碼不能與密碼相同。'
 DECLARE @MsgNameCS NVARCHAR(500) = N'保护码不能与密码相同。'
-DECLARE @MsgNameTH NVARCHAR(500) = N'รหัสป้องกันจะต้องไม่ตรงกับรหัสผ่าน'
+DECLARE @MsgNameTH NVARCHAR(500) = N'รหัสป้องกันต้องไม่ตรงกับรหัสผ่าน'
+
 
 INSERT INTO [dbo].[MsgError]
            ([MsgID]
