@@ -11,12 +11,12 @@ CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVA
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --================  BP    ================
-SELECT 4091 ,'0.1'  ,'4'       ,0.1  ,4       ,20   UNION ALL	--UUS	--US$, USDT,UUS
+SELECT 4091 ,'0.2'  ,'4'       ,0.2  ,4       ,20   UNION ALL	--UUS	--US$, USDT,UUS
 SELECT 4092 ,'0.2'  ,'4'       ,0.2  ,4       ,20   UNION ALL	--UUS	--US$, USDT,UUS
-SELECT 4093 ,'0.1'  ,'10'      ,0.1  ,10      ,20   UNION ALL	--UUS	--US$, USDT,UUS
+SELECT 4093 ,'0.2'  ,'10'      ,0.2  ,10      ,20   UNION ALL	--UUS	--US$, USDT,UUS
 --================  VP    ================
 SELECT 4094 ,'0.25' ,'25'      ,0.25 ,25      ,20   UNION ALL	--UUS	--UUS
-SELECT 4095 ,'0.1'  ,'4'       ,0.1  ,4       ,20				--UUS	--UUS
+SELECT 4095 ,'0.5'  ,'4'       ,0.5  ,4       ,20				--UUS	--UUS
 
 
 ;WITH STAKE_TEMP AS (
