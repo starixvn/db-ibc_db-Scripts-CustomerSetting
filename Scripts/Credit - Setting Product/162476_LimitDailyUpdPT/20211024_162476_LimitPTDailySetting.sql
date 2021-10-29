@@ -7,11 +7,9 @@
 */
 USE CustDB
 GO
-
+--DROP TABLE LimitPTDailySetting
 CREATE TABLE [dbo].[LimitPTDailySetting](
 	[ProductID] [tinyint] NOT NULL,
-	[SportType] [smallint] NOT NULL,
-	[BetType] [smallint] NOT NULL,
 	[CustID] [int] NOT NULL,
 	[Currency] [tinyint] NOT NULL,
 	[SiteID] [int] NOT NULL ,
@@ -21,8 +19,6 @@ CREATE TABLE [dbo].[LimitPTDailySetting](
  CONSTRAINT [PK_LimitPTDailySetting] PRIMARY KEY CLUSTERED 
 (
 	[ProductID] ASC,
-	[SportType] ASC,
-	[BetType] ASC,
 	[CustID] ASC,
 	[Currency] ASC,
 	[SiteID] ASC
