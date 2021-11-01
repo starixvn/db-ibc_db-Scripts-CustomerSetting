@@ -112,7 +112,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,81   UNION ALL	--CY	--RMB , HK$,C
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,81   UNION ALL	--CY	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,81   UNION ALL	--CY	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'270'     ,4.5  ,270     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,81   UNION ALL	--CY	--RMB , HK$,CY
@@ -122,7 +122,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,5    UNION ALL	--HK$	--RMB , HK$,
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,5    UNION ALL	--HK$	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,5    UNION ALL	--HK$	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'270'     ,4.5  ,270     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,5    UNION ALL	--HK$	--RMB , HK$,CY
@@ -132,7 +132,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,13   UNION ALL	--RMB	--RMB , HK$,
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,13   UNION ALL	--RMB	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,13   UNION ALL	--RMB	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'270'     ,4.5  ,270     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,13   UNION ALL	--RMB	--RMB , HK$,CY
