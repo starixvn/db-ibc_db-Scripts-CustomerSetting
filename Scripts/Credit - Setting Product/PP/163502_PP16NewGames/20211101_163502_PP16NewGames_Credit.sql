@@ -23,56 +23,56 @@ SELECT 4289 ,'0.4'  ,'16'      ,0.4  ,16      ,12   UNION ALL	--GBP	--GBP
 SELECT 4290 ,'0.4'  ,'16'      ,0.4  ,16      ,12   UNION ALL	--GBP	--GBP
 SELECT 4291 ,'0.4'  ,'16'      ,0.4  ,16      ,12   UNION ALL	--GBP	--GBP
 --IDR,DDD,IDD,IN,IND
-SELECT 4282 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4283 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4284 ,'4.5'  ,'360'     ,4.5  ,360     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4285 ,'3'    ,'480'     ,3    ,480     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4286 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4287 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4288 ,'2.25' ,'360'     ,2.25 ,360     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4289 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4290 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4291 ,'1'    ,'240'     ,1    ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
-SELECT 4282 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4283 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4284 ,'4.5'  ,'360'     ,4.5  ,360     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4285 ,'3'    ,'480'     ,3    ,480     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4286 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4287 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4288 ,'2.25' ,'360'     ,2.25 ,360     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4289 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4290 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4291 ,'1'    ,'240'     ,1    ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
-SELECT 4282 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4283 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4284 ,'4.5'  ,'360'     ,4.5  ,360     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4285 ,'3'    ,'480'     ,3    ,480     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4286 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4287 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4288 ,'2.25' ,'360'     ,2.25 ,360     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4289 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4290 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4291 ,'1'    ,'240'     ,1    ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
-SELECT 4282 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4283 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4284 ,'4.5'  ,'360'     ,4.5  ,360     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4285 ,'3'    ,'480'     ,3    ,480     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4286 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4287 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4288 ,'2.25' ,'360'     ,2.25 ,360     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4289 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4290 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4291 ,'1'    ,'240'     ,1    ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
-SELECT 4282 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4283 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4284 ,'4.5'  ,'360'     ,4.5  ,360     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4285 ,'3'    ,'480'     ,3    ,480     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4286 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4287 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4288 ,'2.25' ,'360'     ,2.25 ,360     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4289 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4290 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
-SELECT 4291 ,'1'    ,'240'     ,1    ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4282 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4283 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4284 ,'0.9'  ,'360'     ,0.9  ,360     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4285 ,'0.6'  ,'480'     ,0.6  ,480     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4286 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4287 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4288 ,'0.45' ,'360'     ,0.45 ,360     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4289 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4290 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4291 ,'0.2'  ,'240'     ,0.2  ,240     ,47   UNION ALL	--DDD	--IDR,DDD,IDD,IN,IND
+SELECT 4282 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4283 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4284 ,'0.9'  ,'360'     ,0.9  ,360     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4285 ,'0.6'  ,'480'     ,0.6  ,480     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4286 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4287 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4288 ,'0.45' ,'360'     ,0.45 ,360     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4289 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4290 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4291 ,'0.2'  ,'240'     ,0.2  ,240     ,33   UNION ALL	--IDD	--IDR,DDD,IDD,IN,IND
+SELECT 4282 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4283 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4284 ,'0.9'  ,'360'     ,0.9  ,360     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4285 ,'0.6'  ,'480'     ,0.6  ,480     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4286 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4287 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4288 ,'0.45' ,'360'     ,0.45 ,360     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4289 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4290 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4291 ,'0.2'  ,'240'     ,0.2  ,240     ,34   UNION ALL	--IDR	--IDR,DDD,IDD,IN,IND
+SELECT 4282 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4283 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4284 ,'0.9'  ,'360'     ,0.9  ,360     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4285 ,'0.6'  ,'480'     ,0.6  ,480     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4286 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4287 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4288 ,'0.45' ,'360'     ,0.45 ,360     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4289 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4290 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4291 ,'0.2'  ,'240'     ,0.2  ,240     ,15   UNION ALL	--IN	--IDR,DDD,IDD,IN,IND
+SELECT 4282 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4283 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4284 ,'0.9'  ,'360'     ,0.9  ,360     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4285 ,'0.6'  ,'480'     ,0.6  ,480     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4286 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4287 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4288 ,'0.45' ,'360'     ,0.45 ,360     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4289 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4290 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
+SELECT 4291 ,'0.2'  ,'240'     ,0.2  ,240     ,22   UNION ALL	--IND	--IDR,DDD,IDD,IN,IND
 --INH
 SELECT 4282 ,'10'   ,'400'     ,10   ,400     ,51   UNION ALL	--INH	--INH
 SELECT 4283 ,'10'   ,'400'     ,10   ,400     ,51   UNION ALL	--INH	--INH
@@ -112,7 +112,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,81   UNION ALL	--CY	--RMB , HK$,C
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,81   UNION ALL	--CY	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,160     ,81   UNION ALL	--CY	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,81   UNION ALL	--CY	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,81   UNION ALL	--CY	--RMB , HK$,CY
@@ -122,7 +122,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,5    UNION ALL	--HK$	--RMB , HK$,
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,5    UNION ALL	--HK$	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,160     ,5    UNION ALL	--HK$	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,5    UNION ALL	--HK$	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,5    UNION ALL	--HK$	--RMB , HK$,CY
@@ -132,7 +132,7 @@ SELECT 4284 ,'9'    ,'180'     ,9    ,180     ,13   UNION ALL	--RMB	--RMB , HK$,
 SELECT 4285 ,'6'    ,'360'     ,6    ,360     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4286 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4287 ,'2'    ,'160'     ,2    ,160     ,13   UNION ALL	--RMB	--RMB , HK$,CY
-SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,160     ,13   UNION ALL	--RMB	--RMB , HK$,CY
+SELECT 4288 ,'4.5'  ,'160'     ,4.5  ,270     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4289 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4290 ,'2'    ,'300'     ,2    ,300     ,13   UNION ALL	--RMB	--RMB , HK$,CY
 SELECT 4291 ,'2'    ,'200'     ,2    ,200     ,13   UNION ALL	--RMB	--RMB , HK$,CY
