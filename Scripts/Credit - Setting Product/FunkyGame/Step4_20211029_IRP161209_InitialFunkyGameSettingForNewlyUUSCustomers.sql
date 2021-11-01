@@ -33,7 +33,7 @@ INSERT INTO #tblCust(custid, roleid, StakeLevelList)
 SELECT ci.custid, ci.roleid, StakeLevelList
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN #supers s ON ci.srecommend = s.custid
-WHERE ci.custid > @maxcustid
+WHERE ci.custid > @max_custid
 	AND enabled = 1
 	
 WHILE (1=1)

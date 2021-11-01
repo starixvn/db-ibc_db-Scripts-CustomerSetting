@@ -40,8 +40,7 @@ WHERE ci.roleid = 4
 						16	,--	Yen
 						64	,--	UT
 						3	,--	US$
-						35	,--	$US
-						72	--	YNG
+						35	--	$US						
 						)
 		
 CREATE TABLE #tblCust (custid INT PRIMARY KEY, StakeLevelList VARCHAR(10), roleid TINYINT)
@@ -51,7 +50,7 @@ INSERT INTO #tblCust(custid, roleid, StakeLevelList)
 SELECT ci.custid, ci.roleid, StakeLevelList
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN #supers s ON ci.srecommend = s.custid
-WHERE ci.custid > @maxcustid
+WHERE ci.custid > @max_custid
 	AND enabled = 1
 	
 WHILE (1=1)

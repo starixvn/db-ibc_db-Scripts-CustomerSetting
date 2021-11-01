@@ -116,8 +116,7 @@ WHERE ci.roleid = 4
 						16	,--	Yen
 						64	,--	UT
 						3	,--	US$
-						35	,--	$US
-						72	--	YNG
+						35	--	$US						
 						)
 		
 -- For deployer info
