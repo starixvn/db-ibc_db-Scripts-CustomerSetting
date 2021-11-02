@@ -6,7 +6,7 @@
 */
 USE bodb02
 GO
---DROP TABLE TmpAgent_Cust_TrackingLastBetDate
+DROP TABLE TmpAgent_Cust_TrackingLastBetDate
 GO
 SET ANSI_NULLS ON
 GO
