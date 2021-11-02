@@ -294,7 +294,7 @@ BEGIN
 			CROSS APPLY( SELECT TOP 1 accdate AS transdate
 						FROM bodb_Report.dbo.STATEMENT b with (NOLOCK)
 						WHERE b.custid = t.custid
-							AND TransType <> N'bal' 
+							AND ISNULL(TransType,'') <> N'bal' 
 							AND b.accdate >= @MinBettingDate
 						ORDER BY transdate DESC
 				) a
