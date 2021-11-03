@@ -288,13 +288,14 @@ BEGIN
 
 			--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_GoldDeluxe
 			TRUNCATE TABLE #BettingMember
+
 			INSERT INTO #BettingMember(custid,LastBetDate)
 			SELECT t.custid, a.transdate
 			FROM #tmpMember t 
 			CROSS APPLY( SELECT TOP 1 accdate AS transdate
 						FROM bodb_Report.dbo.STATEMENT b with (NOLOCK)
 						WHERE b.custid = t.custid
-							AND ISNULL(TransType,'') <> N'bal' 
+							AND bodb_Report.$PARTITION.pf_STATEMENT_monthly(accdate) >= 107 --2018-11-01
 							AND b.accdate >= @MinBettingDate
 						ORDER BY transdate DESC
 				) a
