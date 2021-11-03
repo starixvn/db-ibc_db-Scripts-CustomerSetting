@@ -36,7 +36,7 @@ WHERE recommend = 56948071
 
 --Update Username of MYGAMECVRMB201001 
 UPDATE t
-SET t.New_username = 'MYGAMECVRMB201xxx' 
+SET t.New_username = 'MYGAMECVRMB203xxx' 
 FROM @CustTable t
 WHERE t.username = 'MYGAMECVRMB201001'
 
