@@ -30,7 +30,7 @@ WHERE username LIKE 'dfbetCVRMB201%'
 
 --Update Username of MYGAMECVRMB201001 
 UPDATE t
-SET t.New_username = 'MYGAMECVRMB203xxx' 
+SET t.New_username = 'MYGAMECVRMB203103' 
 FROM @CustTable t
 WHERE t.username = 'MYGAMECVRMB201001'
 
