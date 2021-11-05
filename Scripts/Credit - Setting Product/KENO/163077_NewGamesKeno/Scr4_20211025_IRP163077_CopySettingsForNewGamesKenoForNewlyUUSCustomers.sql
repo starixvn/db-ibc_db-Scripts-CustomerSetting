@@ -55,11 +55,11 @@ BEGIN
 		   ,[IsDisabled])
 	SELECT cs.CustID
 		   ,t.GameTypeID
-		   ,[StakeLevelList]
-		   ,[MaxPerGameType]
-		   ,[MinBet]
-		   ,[MaxBet]
-		   ,[IsDisabled]
+		   ,cs.[StakeLevelList]
+		   ,cs.[MaxPerGameType]
+		   ,cs.[MinBet]
+		   ,cs.[MaxBet]
+		   ,cs.[IsDisabled]
 	FROM CustGameType cs WITH(NOLOCK)
 		CROSS APPLY (SELECT 30 as GameTypeID UNION SELECT 31) t
 		LEFT JOIN CustGameType cs2 WITH(NOLOCK) ON cs.custid = cs2.custid 

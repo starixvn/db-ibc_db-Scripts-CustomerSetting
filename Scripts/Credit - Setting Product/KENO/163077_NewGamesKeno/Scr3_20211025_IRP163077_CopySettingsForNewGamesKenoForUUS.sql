@@ -66,6 +66,7 @@ BEGIN
 	
 	DROP TABLE #tblCust
 END	
+GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 
 
