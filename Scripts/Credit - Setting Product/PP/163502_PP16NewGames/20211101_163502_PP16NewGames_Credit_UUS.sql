@@ -17,7 +17,7 @@ SELECT 4284 ,'1.8'  ,'27'      ,1.8  ,27      ,20   UNION ALL	--UUS	--USD , YEN 
 SELECT 4285 ,'1.2'  ,'60'      ,1.2  ,60      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4286 ,'0.4'  ,'100'     ,0.4  ,100     ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4287 ,'0.4'  ,'30'      ,0.4  ,30      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 4288 ,'0.9'  ,'45'      ,0.9  ,45      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 4288 ,'0.4'  ,'30'      ,0.4  ,30      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4289 ,'0.4'  ,'50'      ,0.4  ,50      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4290 ,'0.4'  ,'50'      ,0.4  ,50      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4291 ,'0.4'  ,'30'      ,0.4  ,30      ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
@@ -28,7 +28,7 @@ SELECT 4284 ,'1.8'  ,'27'      ,1.8  ,27      ,72   UNION ALL	--YNG	--USD , YEN 
 SELECT 4285 ,'1.2'  ,'60'      ,1.2  ,60      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4286 ,'0.4'  ,'100'     ,0.4  ,100     ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4287 ,'0.4'  ,'30'      ,0.4  ,30      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 4288 ,'0.9'  ,'45'      ,0.9  ,45      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 4288 ,'0.4'  ,'30'      ,0.4  ,30      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4289 ,'0.4'  ,'50'      ,0.4  ,50      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4290 ,'0.4'  ,'50'      ,0.4  ,50      ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 4291 ,'0.4'  ,'30'      ,0.4  ,30      ,72   			--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
