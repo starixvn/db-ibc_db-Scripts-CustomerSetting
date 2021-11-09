@@ -62,7 +62,7 @@ SELECT 4284 ,'4.5'  ,'180'     ,4.5  ,180     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4285 ,'3'    ,'600'     ,3    ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4286 ,'1'    ,'600'     ,1    ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4287 ,'1'    ,'600'     ,1    ,600     ,61   UNION ALL	--INR	--INR, RUB
-SELECT 4288 ,'2.25' ,'450'     ,2.25 ,450     ,61   UNION ALL	--INR	--INR, RUB
+SELECT 4288 ,'1'    ,'600'     ,1    ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4289 ,'1'    ,'600'     ,1    ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4290 ,'1'    ,'600'     ,1    ,600     ,61   UNION ALL	--INR	--INR, RUB
 SELECT 4291 ,'1'    ,'400'     ,1    ,400     ,61   UNION ALL	--INR	--INR, RUB
@@ -72,7 +72,7 @@ SELECT 4284 ,'4.5'  ,'180'     ,4.5  ,180     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4285 ,'3'    ,'600'     ,3    ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4286 ,'1'    ,'600'     ,1    ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4287 ,'1'    ,'600'     ,1    ,600     ,55   UNION ALL	--RUB	--INR, RUB
-SELECT 4288 ,'2.25' ,'450'     ,2.25 ,450     ,55   UNION ALL	--RUB	--INR, RUB
+SELECT 4288 ,'1'    ,'600'     ,1    ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4289 ,'1'    ,'600'     ,1    ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4290 ,'1'    ,'600'     ,1    ,600     ,55   UNION ALL	--RUB	--INR, RUB
 SELECT 4291 ,'1'    ,'400'     ,1    ,400     ,55   UNION ALL	--RUB	--INR, RUB
