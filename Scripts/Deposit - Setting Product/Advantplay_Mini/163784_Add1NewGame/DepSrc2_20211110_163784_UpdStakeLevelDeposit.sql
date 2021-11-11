@@ -22,6 +22,7 @@ SELECT 7802 ,'1'    ,'100'     ,1    ,100     ,6    UNION ALL	--EURO	--EURO
 SELECT 7802 ,'1'    ,'100'     ,1    ,100     ,12   UNION ALL	--GBP	--GBP
 SELECT 7802 ,'1'    ,'500'     ,1    ,500     ,80   UNION ALL	--GHS	--GHS
 SELECT 7802 ,'1'    ,'500'     ,1    ,500     ,5    UNION ALL	--HK$	--HK$
+SELECT 7802 ,'1'    ,'500'     ,1    ,500     ,92   UNION ALL	--HID	--HK$
 SELECT 7802 ,'3'    ,'1500'    ,3    ,1500    ,15   UNION ALL	--IN	--IN
 SELECT 7802 ,'5'    ,'2500'    ,5    ,2500    ,51   UNION ALL	--INH	--INH
 SELECT 7802 ,'5'    ,'2500'    ,5    ,2500    ,7    UNION ALL	--DON	--INH
