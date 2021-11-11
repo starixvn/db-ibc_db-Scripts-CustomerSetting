@@ -32,6 +32,11 @@ SELECT 6084 ,'2'    ,'1000'    ,2    ,1000    ,72   UNION ALL --YNG(YNG)
 SELECT 6085 ,'2'    ,'2000'    ,2    ,2000    ,72   UNION ALL --YNG(YNG)
 SELECT 6086 ,'2'    ,'200'     ,2    ,200     ,72			  --YNG(YNG)
 
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #StakeLevel_Temp t
+WHERE MaxStake > 999
+
 ;WITH STAKE_TEMP AS 
 (
 	SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
