@@ -229,11 +229,9 @@ SELECT custid, transdate
 FROM OPENQUERY (DBPTCS, ';WITH TMP AS(
 							SELECT b.custid, b.transdate
 							FROM bodb_PlaytechCS.dbo.bettrans_AGCasino b with (NOLOCK)
-							WHERE transdate >= CONVERT(DATE,GETDATE() - 14)
 							UNION ALL
 							SELECT b.custid, b.transdate
 							FROM bodb_PlaytechCS.dbo.bettrans_GoldDeluxe b with (NOLOCK)
-							WHERE transdate >= CONVERT(DATE,GETDATE() - 14)
 						)
 						SELECT CustID, MAX(transdate) AS transdate 
 						FROM tmp

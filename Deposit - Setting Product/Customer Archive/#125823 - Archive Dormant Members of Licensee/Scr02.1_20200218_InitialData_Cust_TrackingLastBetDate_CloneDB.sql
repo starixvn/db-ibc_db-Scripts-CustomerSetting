@@ -187,6 +187,7 @@ BEGIN
 			INNER JOIN #BettingMember b  ON a.custID = b.custid
 		WHERE ISNULL(a.LastBetDate,'1900/01/01') < b.LastBetDate
 
+		/*
 		--> scan ticket from DBPTCS.bodb_PlaytechCS.dbo.bettrans_AGCasino
 		TRUNCATE TABLE #BettingMember
 		INSERT INTO #BettingMember(custid,LastBetDate)
@@ -220,6 +221,7 @@ BEGIN
 		FROM #Member a
 			INNER JOIN #BettingMember b  ON a.custID = b.custid
 		WHERE ISNULL(a.LastBetDate,'1900/01/01') < b.LastBetDate
+		*/
 	END
 
 	DELETE t
