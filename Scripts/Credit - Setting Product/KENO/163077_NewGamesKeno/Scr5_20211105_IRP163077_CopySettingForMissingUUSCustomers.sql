@@ -8,7 +8,7 @@
 
 DECLARE @Custid INT, @max_custid INT
 
-SELECT @max_custid = xxx
+SELECT @max_custid = 57573048--max custid UUS
 
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT (0))
 
