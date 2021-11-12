@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBTP-bodb_CustHistory"></info>*/
 /*
 	Created: 202110263@Winfred
 	Task : Create table CustLimitPTSetting_History [Redmine:#162476]
