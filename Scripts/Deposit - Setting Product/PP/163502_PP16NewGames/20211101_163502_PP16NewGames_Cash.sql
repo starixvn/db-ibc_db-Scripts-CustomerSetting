@@ -184,7 +184,7 @@ SELECT 4291 ,'2'    ,'240'     ,2    ,240     ,4    UNION ALL	--TB	--THB , TB
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
@@ -194,7 +194,7 @@ SELECT 4291 ,'0.2'  ,'6'       ,0.2  ,6       ,9    UNION ALL	--AUD	--US$ ,USDT,
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,41   UNION ALL	--CHF	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
@@ -204,7 +204,7 @@ SELECT 4291 ,'0.2'  ,'6'       ,0.2  ,6       ,41   UNION ALL	--CHF	--US$ ,USDT,
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
@@ -214,7 +214,7 @@ SELECT 4291 ,'0.2'  ,'6'       ,0.2  ,6       ,6    UNION ALL	--EURO	--US$ ,USDT
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
@@ -224,7 +224,7 @@ SELECT 4291 ,'0.2'  ,'6'       ,0.2  ,6       ,3    UNION ALL	--US$	--US$ ,USDT,
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,96   UNION ALL	--USDT	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF

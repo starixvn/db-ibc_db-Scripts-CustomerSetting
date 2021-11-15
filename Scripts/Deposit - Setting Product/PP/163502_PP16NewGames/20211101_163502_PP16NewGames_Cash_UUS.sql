@@ -15,7 +15,7 @@ INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,Exch
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
@@ -25,7 +25,7 @@ SELECT 4291 ,'0.2'  ,'6'       ,0.2  ,6       ,20   UNION ALL	--UUS	--USD, AUD, 
 SELECT 4282 ,'0.4'  ,'6'       ,0.4  ,6       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4283 ,'0.2'  ,'7'       ,0.2  ,7       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4284 ,'0.9'  ,'9'       ,0.9  ,9       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 4285 ,'0.6'  ,'9'       ,0.6  ,9       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 4285 ,'0.6'  ,'8.4'     ,0.6  ,8.4     ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4286 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4287 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 4288 ,'0.2'  ,'6'       ,0.2  ,6       ,72   UNION ALL	--YNG	--USD, AUD, EUR, SGD,PTU,PS,YNG,UUS, CHF
