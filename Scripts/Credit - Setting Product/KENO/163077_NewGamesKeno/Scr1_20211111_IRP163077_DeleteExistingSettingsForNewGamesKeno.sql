@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20211025@Johnson
-	Task: Delete existing settings for new games keno for UUS currency
+	Task: Delete existing settings for new games keno for real currencies
 	DB: DBCust/CustDB
 */
 
