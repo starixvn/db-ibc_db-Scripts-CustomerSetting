@@ -7,7 +7,7 @@
 	
 	P/s : Step 2 Delete existing for New API Licensee Deposit -  UUS
 */
--- BEGIN STEP 1.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
+-- BEGIN STEP 2.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 	@target VARCHAR(20)
 AS
@@ -202,13 +202,13 @@ BEGIN
 	DROP TABLE #Dep_LicenseeProductSetting
 END	
 GO
--- END STEP 1.1: DEPLOY THIS SP @DBCUST.CustDB --------
+-- END STEP 2.1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 1.2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
+-- BEGIN STEP 2.2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
 EXEC Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
 
--- BEGIN STEP 1.3: RUN THIS SCRIPT AT DBCUST -----
+-- BEGIN STEP 2.3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
 EXEC Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'
