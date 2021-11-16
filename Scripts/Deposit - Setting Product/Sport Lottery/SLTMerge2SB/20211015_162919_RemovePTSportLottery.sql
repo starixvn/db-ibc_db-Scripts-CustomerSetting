@@ -14,11 +14,11 @@ SET @sportType = 169
 --Dep_ProductSetting
 DELETE D
 FROM Dep_ProductSetting D WITH (ROWLOCK)
-WHERE D.ProductID = @productID AND D.ProductSettingID = 86
+WHERE D.ProductID = @productID AND D.ProductSettingID IN ( 86 ,87)
 
 --Dep_ProductSettingDetail
 
 DELETE D
 FROM Dep_ProductSettingDetail D WITH (ROWLOCK)
-WHERE D.SportType = @sportType  AND D.ProductSettingID = 86
+WHERE D.SportType = @sportType  AND D.ProductSettingID IN ( 86 ,87)
 
