@@ -13,6 +13,11 @@ DECLARE @betType SMALLINT,@sportType SMALLINT
 SELECT @sportType = 175
 	 , @betType = 7901 	
 --============================Bet Setting
+
+DELETE P
+FROM ProductBetSetting P WITH (ROWLOCK)
+WHERE P.Sporttype = @Sporttype AND p.Bettype = @betType
+
 CREATE TABLE #ProductBetSetting (Currency INT,MinBet	money,MaxBet	money,MaxPerMatch	money,
 								DefaultMinBet	money,DefaultMaxBet	money,DefaultMaxPerMatch	money)
 				
@@ -52,13 +57,28 @@ SELECT 95 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS Defaul
 SELECT 20 AS Currency ,3 AS MinBet,1500 AS MaxBet,9000 AS MaxPerMatch,3 AS DefaultMinBet,1500 AS DefaultMaxBet,9000  AS DefaultMaxPerMatch Union ALL --UUS
 SELECT 72 AS Currency ,50 AS MinBet,25000 AS MaxBet,150000 AS MaxPerMatch,50 AS DefaultMinBet,25000 AS DefaultMaxBet,150000  AS DefaultMaxPerMatch		 --YNG
 
-UPDATE cs
-SET cs.MaxBet = ci.MaxBet,
-	cs.MaxPerMatch =ci.MaxPerMatch,
-	cs.DefaultMaxBet =ci.DefaultMaxBet,
-	cs.DefaultMaxPerMatch =ci.DefaultMaxPerMatch
-FROM dbo.ProductBetSetting cs WITH(UPDLOCK,ROWLOCK)
-INNER JOIN #ProductBetSetting ci ON cs.Currency = ci.Currency AND Cs.Sporttype = @sportType  AND cs.Bettype = @betType
-
+INSERT INTO dbo.ProductBetSetting
+        ( Sporttype ,
+          Bettype ,
+          Currency ,
+          MinBet ,
+          IsDep ,
+          MaxBet ,
+          MaxPerMatch ,
+          DefaultMinBet ,
+          DefaultMaxBet ,
+          DefaultMaxPerMatch
+        )
+SELECT @sportType ,
+	   @betType ,
+	   Currency ,
+	   MinBet ,
+	   0 AS IsDep ,
+	   MaxBet ,
+	   MaxPerMatch ,
+	   DefaultMinBet ,
+	   DefaultMaxBet ,
+	   DefaultMaxPerMatch
+FROM #ProductBetSetting 
 DROP Table #ProductBetSetting
 
