@@ -94,7 +94,7 @@ BEGIN
 			INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 			INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE dp.ProductID = 63 AND Dl.ProductSettingID IN (86 ,87)
+	WHERE dp.ProductID = 63 AND Dl.ProductSettingID IN (86 ,101)
 
 	DECLARE @batch int = 3000
 	
