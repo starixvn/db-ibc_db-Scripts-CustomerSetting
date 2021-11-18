@@ -58,7 +58,7 @@ WHERE c.site IN (
 					,'Wawabet'
 					,'Webet138'
 					,'Zzun88'
-					,'12Bet'
+					--,'12Bet'
 					,'24TECH'
 					,'3star88'
 					,'88Macao'
