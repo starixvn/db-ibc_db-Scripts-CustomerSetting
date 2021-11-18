@@ -30,18 +30,12 @@ BEGIN
 	CREATE TABLE #MemberTemp
 	(
 		CustID INT PRIMARY KEY CLUSTERED,
-		recommend INT, 
-		mrecommend INT, 
-		srecommend INT,
 		InsBetSetting BIT DEFAULT 0
 	)
 
 	CREATE TABLE #MemberTempIns
 	(
-		CustID INT PRIMARY KEY CLUSTERED,
-		recommend INT, 
-		mrecommend INT, 
-		srecommend INT
+		CustID INT PRIMARY KEY CLUSTERED
 	)
 
 	CREATE TABLE #SMATemp
@@ -50,8 +44,8 @@ BEGIN
 		roleid TINYINT
 	)
 
-	INSERT INTO #MemberTemp (CustID ,recommend ,mrecommend ,srecommend )
-	SELECT custid ,recommend ,mrecommend ,srecommend
+	INSERT INTO #MemberTemp (CustID  )
+	SELECT custid 
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
 	
@@ -64,39 +58,38 @@ BEGIN
 									SuperMinBet	MONEY,SuperMaxBet	MONEY,SuperMaxPerMatch	MONEY, Sporttype INT DEFAULT(175), Bettype INT DEFAULT(7901))
 					
 	INSERT INTO #ProductBetSetting(Currency,MinBet,MaxBet,MaxPerMatch,SuperMinBet,SuperMaxBet,SuperMaxPerMatch)
-	SELECT 2 AS Currency ,5 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,5 AS SuperMinBet,1500 AS SuperMaxBet,7500  AS SuperMaxPerMatch Union ALL --RM
-	SELECT 3 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --US$
-	SELECT 5 AS Currency ,10 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,10 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --HK$
-	SELECT 6 AS Currency ,2 AS MinBet,500 AS MaxBet,3000 AS MaxPerMatch,2 AS SuperMinBet,250 AS SuperMaxBet,1500  AS SuperMaxPerMatch Union ALL --EURO
-	SELECT 7 AS Currency ,25000 AS MinBet,12500000 AS MaxBet,75000000 AS MaxPerMatch,25000 AS SuperMinBet,7500000 AS SuperMaxBet,37500000  AS SuperMaxPerMatch Union ALL --DON
-	SELECT 9 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --AUD
-	SELECT 12 AS Currency ,2 AS MinBet,500 AS MaxBet,3000 AS MaxPerMatch,2 AS SuperMinBet,250 AS SuperMaxBet,1500  AS SuperMaxPerMatch Union ALL --GBP
-	SELECT 13 AS Currency ,10 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,10 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --RMB
-	SELECT 15 AS Currency ,25 AS MinBet,10000 AS MaxBet,60000 AS MaxPerMatch,25 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --IN
-	SELECT 16 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --Yen
-	SELECT 22 AS Currency ,25 AS MinBet,10000 AS MaxBet,60000 AS MaxPerMatch,25 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --IND
-	SELECT 33 AS Currency ,25 AS MinBet,10000 AS MaxBet,60000 AS MaxPerMatch,25 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --IDD
-	SELECT 34 AS Currency ,25 AS MinBet,10000 AS MaxBet,60000 AS MaxPerMatch,25 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --IDR
-	SELECT 35 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --$US
-	SELECT 41 AS Currency ,2 AS MinBet,500 AS MaxBet,3000 AS MaxPerMatch,2 AS SuperMinBet,250 AS SuperMaxBet,1500  AS SuperMaxPerMatch Union ALL --CHF
-	SELECT 42 AS Currency ,120 AS MinBet,30000 AS MaxBet,180000 AS MaxPerMatch,120 AS SuperMinBet,17500 AS SuperMaxBet,90000  AS SuperMaxPerMatch Union ALL --PE
-	SELECT 43 AS Currency ,100 AS MinBet,20000 AS MaxBet,120000 AS MaxPerMatch,100 AS SuperMinBet,12500 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --THB
-	SELECT 45 AS Currency ,2500 AS MinBet,750000 AS MaxBet,4500000 AS MaxPerMatch,2500 AS SuperMinBet,400000 AS SuperMaxBet,2250000  AS SuperMaxPerMatch Union ALL --Won
-	SELECT 47 AS Currency ,25 AS MinBet,10000 AS MaxBet,60000 AS MaxPerMatch,25 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --DDD
-	SELECT 50 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --CAN
-	SELECT 51 AS Currency ,25 AS MinBet,12500 AS MaxBet,75000 AS MaxPerMatch,25 AS SuperMinBet,6250 AS SuperMaxBet,37500  AS SuperMaxPerMatch Union ALL --INH
-	SELECT 52 AS Currency ,15 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,15 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --DKK
-	SELECT 53 AS Currency ,15 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,15 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --SEK
-	SELECT 54 AS Currency ,15 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,15 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --NOK
-	SELECT 57 AS Currency ,50 AS MinBet,12500 AS MaxBet,75000 AS MaxPerMatch,50 AS SuperMinBet,6250 AS SuperMaxBet,37500  AS SuperMaxPerMatch Union ALL --CZK
-	SELECT 58 AS Currency ,10 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,10 AS SuperMinBet,1500 AS SuperMaxBet,7500  AS SuperMaxPerMatch Union ALL --RON
-	SELECT 64 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch Union ALL --UT
-	SELECT 67 AS Currency ,5 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,5 AS SuperMinBet,1500 AS SuperMaxBet,7500  AS SuperMaxPerMatch Union ALL --HKK
-	SELECT 69 AS Currency ,4 AS MinBet,900 AS MaxBet,5400 AS MaxPerMatch,4 AS SuperMinBet,450 AS SuperMaxBet,2700  AS SuperMaxPerMatch Union ALL --MMK
-	SELECT 71 AS Currency ,10 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,10 AS SuperMinBet,1500 AS SuperMaxBet,7500  AS SuperMaxPerMatch Union ALL --KHR
-	SELECT 81 AS Currency ,10 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,10 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --CY
-	SELECT 95 AS Currency ,3 AS MinBet,750 AS MaxBet,4500 AS MaxPerMatch,3 AS SuperMinBet,500 AS SuperMaxBet,2250  AS SuperMaxPerMatch  --USD
-
+	SELECT 2 AS Currency ,5 AS MinBet,1500 AS MaxBet,7500 AS MaxPerMatch,5 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --RM
+	SELECT 3 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --US$
+	SELECT 5 AS Currency ,10 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,10 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --HK$
+	SELECT 6 AS Currency ,2 AS MinBet,250 AS MaxBet,1500 AS MaxPerMatch,2 AS SuperMinBet,500 AS SuperMaxBet,3000  AS SuperMaxPerMatch Union ALL --EURO
+	SELECT 7 AS Currency ,25000 AS MinBet,7500000 AS MaxBet,37500000 AS MaxPerMatch,25000 AS SuperMinBet,12500000 AS SuperMaxBet,75000000  AS SuperMaxPerMatch Union ALL --DON
+	SELECT 9 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --AUD
+	SELECT 12 AS Currency ,2 AS MinBet,250 AS MaxBet,1500 AS MaxPerMatch,2 AS SuperMinBet,500 AS SuperMaxBet,3000  AS SuperMaxPerMatch Union ALL --GBP
+	SELECT 13 AS Currency ,10 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,10 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --RMB
+	SELECT 15 AS Currency ,25 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,25 AS SuperMinBet,10000 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --IN
+	SELECT 16 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --Yen
+	SELECT 22 AS Currency ,25 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,25 AS SuperMinBet,10000 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --IND
+	SELECT 33 AS Currency ,25 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,25 AS SuperMinBet,10000 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --IDD
+	SELECT 34 AS Currency ,25 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,25 AS SuperMinBet,10000 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --IDR
+	SELECT 35 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --$US
+	SELECT 41 AS Currency ,2 AS MinBet,250 AS MaxBet,1500 AS MaxPerMatch,2 AS SuperMinBet,500 AS SuperMaxBet,3000  AS SuperMaxPerMatch Union ALL --CHF
+	SELECT 42 AS Currency ,120 AS MinBet,17500 AS MaxBet,90000 AS MaxPerMatch,120 AS SuperMinBet,30000 AS SuperMaxBet,180000  AS SuperMaxPerMatch Union ALL --PE
+	SELECT 43 AS Currency ,100 AS MinBet,12500 AS MaxBet,60000 AS MaxPerMatch,100 AS SuperMinBet,20000 AS SuperMaxBet,120000  AS SuperMaxPerMatch Union ALL --THB
+	SELECT 45 AS Currency ,2500 AS MinBet,400000 AS MaxBet,2250000 AS MaxPerMatch,2500 AS SuperMinBet,750000 AS SuperMaxBet,4500000  AS SuperMaxPerMatch Union ALL --Won
+	SELECT 47 AS Currency ,25 AS MinBet,5000 AS MaxBet,30000 AS MaxPerMatch,25 AS SuperMinBet,10000 AS SuperMaxBet,60000  AS SuperMaxPerMatch Union ALL --DDD
+	SELECT 50 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --CAN
+	SELECT 51 AS Currency ,25 AS MinBet,6250 AS MaxBet,37500 AS MaxPerMatch,25 AS SuperMinBet,12500 AS SuperMaxBet,75000  AS SuperMaxPerMatch Union ALL --INH
+	SELECT 52 AS Currency ,15 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,15 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --DKK
+	SELECT 53 AS Currency ,15 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,15 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --SEK
+	SELECT 54 AS Currency ,15 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,15 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --NOK
+	SELECT 57 AS Currency ,50 AS MinBet,6250 AS MaxBet,37500 AS MaxPerMatch,50 AS SuperMinBet,12500 AS SuperMaxBet,75000  AS SuperMaxPerMatch Union ALL --CZK
+	SELECT 58 AS Currency ,10 AS MinBet,1500 AS MaxBet,7500 AS MaxPerMatch,10 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --RON
+	SELECT 64 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch Union ALL --UT
+	SELECT 67 AS Currency ,5 AS MinBet,1500 AS MaxBet,7500 AS MaxPerMatch,5 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --HKK
+	SELECT 69 AS Currency ,4 AS MinBet,450 AS MaxBet,2700 AS MaxPerMatch,4 AS SuperMinBet,900 AS SuperMaxBet,5400  AS SuperMaxPerMatch Union ALL --MMK
+	SELECT 71 AS Currency ,10 AS MinBet,1500 AS MaxBet,7500 AS MaxPerMatch,10 AS SuperMinBet,2500 AS SuperMaxBet,15000  AS SuperMaxPerMatch Union ALL --KHR
+	SELECT 81 AS Currency ,10 AS MinBet,2500 AS MaxBet,15000 AS MaxPerMatch,10 AS SuperMinBet,5000 AS SuperMaxBet,30000  AS SuperMaxPerMatch Union ALL --CY
+	SELECT 95 AS Currency ,3 AS MinBet,500 AS MaxBet,2250 AS MaxPerMatch,3 AS SuperMinBet,750 AS SuperMaxBet,4500  AS SuperMaxPerMatch  --USD
 	--------------------------------------Bet Setting-------------------------------------------------
 	--SMA level
 	UPDATE cs
