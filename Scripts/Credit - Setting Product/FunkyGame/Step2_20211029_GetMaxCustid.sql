@@ -1,8 +1,8 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: Johnson
+	Created: Johnson 
 	Date: 20211029
-	Task: Initial settings for Funky Game 
+	Task: Initial settings for Funky Game
 	DB: DBCust/CustDB
 */
 
