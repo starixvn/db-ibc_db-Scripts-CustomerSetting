@@ -104,6 +104,7 @@ SELECT @max_custid = xxx
 INSERT INTO #tmpCust(CustID)
 SELECT ci.CustID
 FROM custInfo ci WITH(NOLOCK)
+INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ci.custid = ba.CustId
 WHERE ci.custid<=@max_custid AND roleid = 1 AND ci.Enabled=1 	
 		AND (cs.site NOT IN('spondemo','Athena000')
@@ -155,6 +156,7 @@ SELECT @max_custid = xxx
 INSERT INTO #tmpCust(CustID)
 SELECT ci.CustID
 FROM custInfo ci WITH(NOLOCK)
+INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ci.custid = ba.CustId
 WHERE ci.custid<=@max_custid AND roleid = 1 AND ci.Enabled=1
 		AND (cs.site NOT IN('spondemo','Athena000')

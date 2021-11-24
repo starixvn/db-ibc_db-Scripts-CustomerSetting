@@ -37,7 +37,8 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND cs.site NOT IN( 'Athena000') 
+		AND (cs.site NOT IN('spondemo','Athena000')
+		OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20,72)))
 				
 	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))

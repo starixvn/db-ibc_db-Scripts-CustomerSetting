@@ -104,9 +104,10 @@ SELECT @max_custid = xxx
 INSERT INTO #tmpCust(CustID)
 SELECT ci.CustID
 FROM custInfo ci WITH(NOLOCK)
+INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ci.custid = ba.CustId
-WHERE ci.custid<=@max_custid AND roleid = 1 AND ci.Enabled=1 	
-		AND ci.site IN('spondemo','Athena000')
+WHERE ci.custid<=@max_custid AND roleid = 1 AND ci.Enabled=1
+		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency in (72,20)
 
 DECLARE @Member_cnt INT,@Member_batch INT, @index INT = 0 
@@ -155,9 +156,10 @@ SELECT @max_custid = xxx
 INSERT INTO #tmpCust(CustID)
 SELECT ci.CustID
 FROM custInfo ci WITH(NOLOCK)
+INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ci.custid = ba.CustId
 WHERE ci.custid<=@max_custid AND roleid = 1 AND ci.Enabled=1
-		AND ci.site IN('spondemo','Athena000')
+		AND cs.site IN('spondemo','Athena000')
 		AND ci.currency in (72,20)	
 
 DECLARE @Member_cnt INT,@Member_batch INT, @index INT = 0 
