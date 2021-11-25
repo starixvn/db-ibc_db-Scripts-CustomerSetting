@@ -58,51 +58,51 @@ SELECT 6084 ,'0.2'  ,'100'     ,0.2  ,100     ,16   UNION ALL	--Yen	--USD
 SELECT 6085 ,'0.2'  ,'200'     ,0.2  ,200     ,16   UNION ALL	--Yen	--USD
 SELECT 6086 ,'0.2'  ,'20'      ,0.2  ,20      ,16   UNION ALL	--Yen	--USD
 --IDR
-SELECT 6078 ,'0.5'  ,'100'     ,0.5  ,100     ,47   UNION ALL	--DDD	--IDR
+SELECT 6078 ,'0.4'  ,'100'     ,0.4  ,100     ,47   UNION ALL	--DDD	--IDR
 SELECT 6079 ,'0.5'  ,'400'     ,0.5  ,400     ,47   UNION ALL	--DDD	--IDR
-SELECT 6080 ,'0.5'  ,'100'     ,0.5  ,100     ,47   UNION ALL	--DDD	--IDR
-SELECT 6081 ,'0.5'  ,'100'     ,0.5  ,100     ,47   UNION ALL	--DDD	--IDR
+SELECT 6080 ,'0.4'  ,'100'     ,0.4  ,100     ,47   UNION ALL	--DDD	--IDR
+SELECT 6081 ,'0.4'  ,'100'     ,0.4  ,100     ,47   UNION ALL	--DDD	--IDR
 SELECT 6082 ,'0.5'  ,'1000'    ,0.5  ,1000    ,47   UNION ALL	--DDD	--IDR
-SELECT 6083 ,'0.5'  ,'100'     ,0.5  ,100     ,47   UNION ALL	--DDD	--IDR
-SELECT 6084 ,'0.5'  ,'500'     ,0.5  ,500     ,47   UNION ALL	--DDD	--IDR
+SELECT 6083 ,'0.4'  ,'100'     ,0.4  ,100     ,47   UNION ALL	--DDD	--IDR
+SELECT 6084 ,'0.4'  ,'500'     ,0.4  ,500     ,47   UNION ALL	--DDD	--IDR
 SELECT 6085 ,'0.5'  ,'1000'    ,0.5  ,1000    ,47   UNION ALL	--DDD	--IDR
-SELECT 6086 ,'0.5'  ,'100'     ,0.5  ,100     ,47   UNION ALL	--DDD	--IDR
-SELECT 6078 ,'0.5'  ,'100'     ,0.5  ,100     ,33   UNION ALL	--IDD	--IDR
+SELECT 6086 ,'0.4'  ,'100'     ,0.4  ,100     ,47   UNION ALL	--DDD	--IDR
+SELECT 6078 ,'0.4'  ,'100'     ,0.4  ,100     ,33   UNION ALL	--IDD	--IDR
 SELECT 6079 ,'0.5'  ,'400'     ,0.5  ,400     ,33   UNION ALL	--IDD	--IDR
-SELECT 6080 ,'0.5'  ,'100'     ,0.5  ,100     ,33   UNION ALL	--IDD	--IDR
-SELECT 6081 ,'0.5'  ,'100'     ,0.5  ,100     ,33   UNION ALL	--IDD	--IDR
+SELECT 6080 ,'0.4'  ,'100'     ,0.4  ,100     ,33   UNION ALL	--IDD	--IDR
+SELECT 6081 ,'0.4'  ,'100'     ,0.4  ,100     ,33   UNION ALL	--IDD	--IDR
 SELECT 6082 ,'0.5'  ,'1000'    ,0.5  ,1000    ,33   UNION ALL	--IDD	--IDR
-SELECT 6083 ,'0.5'  ,'100'     ,0.5  ,100     ,33   UNION ALL	--IDD	--IDR
-SELECT 6084 ,'0.5'  ,'500'     ,0.5  ,500     ,33   UNION ALL	--IDD	--IDR
+SELECT 6083 ,'0.4'  ,'100'     ,0.4  ,100     ,33   UNION ALL	--IDD	--IDR
+SELECT 6084 ,'0.4'  ,'500'     ,0.4  ,500     ,33   UNION ALL	--IDD	--IDR
 SELECT 6085 ,'0.5'  ,'1000'    ,0.5  ,1000    ,33   UNION ALL	--IDD	--IDR
-SELECT 6086 ,'0.5'  ,'100'     ,0.5  ,100     ,33   UNION ALL	--IDD	--IDR
-SELECT 6078 ,'0.5'  ,'100'     ,0.5  ,100     ,34   UNION ALL	--IDR	--IDR
+SELECT 6086 ,'0.4'  ,'100'     ,0.4  ,100     ,33   UNION ALL	--IDD	--IDR
+SELECT 6078 ,'0.4'  ,'100'     ,0.4  ,100     ,34   UNION ALL	--IDR	--IDR
 SELECT 6079 ,'0.5'  ,'400'     ,0.5  ,400     ,34   UNION ALL	--IDR	--IDR
-SELECT 6080 ,'0.5'  ,'100'     ,0.5  ,100     ,34   UNION ALL	--IDR	--IDR
-SELECT 6081 ,'0.5'  ,'100'     ,0.5  ,100     ,34   UNION ALL	--IDR	--IDR
+SELECT 6080 ,'0.4'  ,'100'     ,0.4  ,100     ,34   UNION ALL	--IDR	--IDR
+SELECT 6081 ,'0.4'  ,'100'     ,0.4  ,100     ,34   UNION ALL	--IDR	--IDR
 SELECT 6082 ,'0.5'  ,'1000'    ,0.5  ,1000    ,34   UNION ALL	--IDR	--IDR
-SELECT 6083 ,'0.5'  ,'100'     ,0.5  ,100     ,34   UNION ALL	--IDR	--IDR
-SELECT 6084 ,'0.5'  ,'500'     ,0.5  ,500     ,34   UNION ALL	--IDR	--IDR
+SELECT 6083 ,'0.4'  ,'100'     ,0.4  ,100     ,34   UNION ALL	--IDR	--IDR
+SELECT 6084 ,'0.4'  ,'500'     ,0.4  ,500     ,34   UNION ALL	--IDR	--IDR
 SELECT 6085 ,'0.5'  ,'1000'    ,0.5  ,1000    ,34   UNION ALL	--IDR	--IDR
-SELECT 6086 ,'0.5'  ,'100'     ,0.5  ,100     ,34   UNION ALL	--IDR	--IDR
-SELECT 6078 ,'0.5'  ,'100'     ,0.5  ,100     ,15   UNION ALL	--IN	--IDR
+SELECT 6086 ,'0.4'  ,'100'     ,0.4  ,100     ,34   UNION ALL	--IDR	--IDR
+SELECT 6078 ,'0.4'  ,'100'     ,0.4  ,100     ,15   UNION ALL	--IN	--IDR
 SELECT 6079 ,'0.5'  ,'400'     ,0.5  ,400     ,15   UNION ALL	--IN	--IDR
-SELECT 6080 ,'0.5'  ,'100'     ,0.5  ,100     ,15   UNION ALL	--IN	--IDR
-SELECT 6081 ,'0.5'  ,'100'     ,0.5  ,100     ,15   UNION ALL	--IN	--IDR
+SELECT 6080 ,'0.4'  ,'100'     ,0.4  ,100     ,15   UNION ALL	--IN	--IDR
+SELECT 6081 ,'0.4'  ,'100'     ,0.4  ,100     ,15   UNION ALL	--IN	--IDR
 SELECT 6082 ,'0.5'  ,'1000'    ,0.5  ,1000    ,15   UNION ALL	--IN	--IDR
-SELECT 6083 ,'0.5'  ,'100'     ,0.5  ,100     ,15   UNION ALL	--IN	--IDR
-SELECT 6084 ,'0.5'  ,'500'     ,0.5  ,500     ,15   UNION ALL	--IN	--IDR
+SELECT 6083 ,'0.4'  ,'100'     ,0.4  ,100     ,15   UNION ALL	--IN	--IDR
+SELECT 6084 ,'0.4'  ,'500'     ,0.4  ,500     ,15   UNION ALL	--IN	--IDR
 SELECT 6085 ,'0.5'  ,'1000'    ,0.5  ,1000    ,15   UNION ALL	--IN	--IDR
-SELECT 6086 ,'0.5'  ,'100'     ,0.5  ,100     ,15   UNION ALL	--IN	--IDR
-SELECT 6078 ,'0.5'  ,'100'     ,0.5  ,100     ,22   UNION ALL	--IND	--IDR
+SELECT 6086 ,'0.4'  ,'100'     ,0.4  ,100     ,15   UNION ALL	--IN	--IDR
+SELECT 6078 ,'0.4'  ,'100'     ,0.4  ,100     ,22   UNION ALL	--IND	--IDR
 SELECT 6079 ,'0.5'  ,'400'     ,0.5  ,400     ,22   UNION ALL	--IND	--IDR
-SELECT 6080 ,'0.5'  ,'100'     ,0.5  ,100     ,22   UNION ALL	--IND	--IDR
-SELECT 6081 ,'0.5'  ,'100'     ,0.5  ,100     ,22   UNION ALL	--IND	--IDR
+SELECT 6080 ,'0.4'  ,'100'     ,0.4  ,100     ,22   UNION ALL	--IND	--IDR
+SELECT 6081 ,'0.4'  ,'100'     ,0.4  ,100     ,22   UNION ALL	--IND	--IDR
 SELECT 6082 ,'0.5'  ,'1000'    ,0.5  ,1000    ,22   UNION ALL	--IND	--IDR
-SELECT 6083 ,'0.5'  ,'100'     ,0.5  ,100     ,22   UNION ALL	--IND	--IDR
-SELECT 6084 ,'0.5'  ,'500'     ,0.5  ,500     ,22   UNION ALL	--IND	--IDR
+SELECT 6083 ,'0.4'  ,'100'     ,0.4  ,100     ,22   UNION ALL	--IND	--IDR
+SELECT 6084 ,'0.4'  ,'500'     ,0.4  ,500     ,22   UNION ALL	--IND	--IDR
 SELECT 6085 ,'0.5'  ,'1000'    ,0.5  ,1000    ,22   UNION ALL	--IND	--IDR
-SELECT 6086 ,'0.5'  ,'100'     ,0.5  ,100     ,22   UNION ALL	--IND	--IDR
+SELECT 6086 ,'0.4'  ,'100'     ,0.4  ,100     ,22   UNION ALL	--IND	--IDR
 --THB
 SELECT 6078 ,'4'    ,'400'     ,4    ,400     ,43   UNION ALL	--THB	--THB
 SELECT 6079 ,'5'    ,'2000'    ,5    ,2000    ,43   UNION ALL	--THB	--THB
@@ -235,5 +235,3 @@ WHEN NOT MATCHED THEN
 					 ;
 DROP TABLE #StakeLevel_Temp
 DROP TABLE #StakeLevel_Upd
-
-
