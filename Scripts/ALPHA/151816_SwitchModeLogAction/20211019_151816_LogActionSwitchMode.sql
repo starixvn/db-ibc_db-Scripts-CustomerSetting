@@ -22,7 +22,7 @@ INSERT INTO @Log (Level, ProductID, ActionID, ActionNameEN, SPName,ActionNameCS,
 SELECT 4, 1, 1342,'Switch Light - Dark Mode','Age_SwitchDarkMode',N'Switch Light - Dark Mode',N'Switch Light - Dark Mode',N'Switch Light - Dark Mode' 
 
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
-SELECT ActionID, SPName, Null, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameEN,  ActionNameTH,ActionNameEN, @IsInternal, ActionNameEN
+SELECT ActionID, SPName, 4 AS ActionTypeID, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameEN,  ActionNameTH,ActionNameEN, @IsInternal, ActionNameEN
 FROM @Log
 
 select * from LogAction  where ActionID = 1342
