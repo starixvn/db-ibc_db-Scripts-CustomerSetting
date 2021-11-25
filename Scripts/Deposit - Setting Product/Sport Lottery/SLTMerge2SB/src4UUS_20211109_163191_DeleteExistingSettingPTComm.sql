@@ -92,10 +92,9 @@ BEGIN
 	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT dl.CustID,dl.ProductSettingID
 	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
-			INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 			INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE dp.ProductID = 63 AND Dl.ProductSettingID IN (86 ,110)
+	WHERE Dl.ProductSettingID IN (86 ,110)
 
 	DECLARE @batch int = 3000
 	
