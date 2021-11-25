@@ -131,13 +131,86 @@ WHERE MaxStake > 999
 
 --The purpose is to have all games from PG Soft will start at min bet 0.50 on Indonesia Credit
 
+CREATE TABLE #StakeLevel_Upd (GameTypeID INT,MinStake float)
+INSERT INTO #StakeLevel_Upd(GameTypeID,MinStake )
+SELECT  6001 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6002 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6003 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6004 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6005 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6006 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6007 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6008 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6009 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6010 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6011 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6012 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6013 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6014 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6015 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6016 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6017 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6018 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6019 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6020 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6021 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6024 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6025 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6026 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6027 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6028 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6031 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6032 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6034 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6036 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6037 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6038 AS GameTypeID   ,0.1 AS MinStake UNION ALL
+SELECT  6039 AS GameTypeID   ,0.45 AS MinStake UNION ALL
+SELECT  6040 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6041 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6042 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6043 AS GameTypeID   ,0.45 AS MinStake UNION ALL
+SELECT  6044 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6045 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6046 AS GameTypeID   ,0.45 AS MinStake UNION ALL
+SELECT  6047 AS GameTypeID   ,0.45 AS MinStake UNION ALL
+SELECT  6048 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6050 AS GameTypeID   ,0.3 AS MinStake UNION ALL
+SELECT  6051 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6052 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6053 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6055 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6056 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6057 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6058 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6059 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6060 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6061 AS GameTypeID   ,0.2 AS MinStake UNION ALL
+SELECT  6062 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6063 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6064 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6065 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6066 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6067 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6068 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6069 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6070 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6071 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6072 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6073 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6074 AS GameTypeID   ,0.5 AS MinStake UNION ALL
+SELECT  6075 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6076 AS GameTypeID   ,0.4 AS MinStake UNION ALL
+SELECT  6077 AS GameTypeID   ,0.4 AS MinStake 
+
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
-SELECT g.GameTypeID,'0.5' AS  MinLabel, g.MaxLabel,0.5 AS MinStake, g.MaxStake,s.ExchangeId
+SELECT g.GameTypeID,CAST (u.MinStake AS VARCHAR(10)) AS  MinLabel, 
+g.MaxLabel,u.MinStake AS MinStake, g.MaxStake,s.ExchangeId 
 FROM StakeLevel s WITH(NOLOCK)
 INNER JOIN StakeLevelGroupDetail g WITH(NOLOCK) ON s.StakeLevelID = g.StakeLevelID
-WHERE s.GameTypeID = 6001 AND g.MinStake > 0.5
-AND GameGroupID = 15 AND ExchangeId IN (15,22,33,34,47) --IN,IND,IDD,IDR,DDD
-
+INNER JOIN #StakeLevel_Upd u ON g.GameTypeID = u.GameTypeID
+WHERE s.GameTypeID = 6001 
+AND GameGroupID = 15 AND s.ExchangeId IN (15,22,33,34,47) --IN,IND,IDD,IDR,DDD
 
 ;WITH STAKE_TEMP AS 
 (
@@ -161,5 +234,6 @@ WHEN NOT MATCHED THEN
 					VALUES (s.StakeLevelID,s.GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake)					
 					 ;
 DROP TABLE #StakeLevel_Temp
+DROP TABLE #StakeLevel_Upd
 
 
