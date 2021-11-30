@@ -6,11 +6,13 @@
 */
 USE [CustDB]
 GO
---DROP TABLE [dbo].[Initial_ProductConfig]
---DROP TABLE [dbo].[Initial_ProductConfig_Detail]
---DROP TABLE [dbo].[Initial_Super]
---DROP TABLE [dbo].[Initial_StepByConfig]
---GO
+/*
+DROP TABLE [dbo].[Initial_ProductConfig]
+DROP TABLE [dbo].[Initial_ProductConfig_Detail]
+DROP TABLE [dbo].[Initial_Customer]
+DROP TABLE [dbo].[Initial_StepByConfig]
+GO
+*/
 SET ANSI_NULLS ON
 GO
 
@@ -66,12 +68,13 @@ CREATE TABLE [dbo].[Initial_ProductConfig_Detail](
 
 GO
 
-CREATE TABLE [dbo].[Initial_Super](
-	[SuperID] [int] NOT NULL,
+CREATE TABLE [dbo].[Initial_Customer](
+	[CustID] [int] NOT NULL,
+	[RoleID] [tinyint],
 	[CurrentStep] [tinyint] NULL,
- CONSTRAINT [PK_Initial_Super] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Initial_Customer] PRIMARY KEY CLUSTERED 
 (
-	[SuperID] ASC
+	[CustID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
 ) ON [DATA]
 
