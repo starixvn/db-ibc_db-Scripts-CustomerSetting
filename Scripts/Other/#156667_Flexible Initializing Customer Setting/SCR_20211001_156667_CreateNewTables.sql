@@ -82,7 +82,7 @@ GO
 
 CREATE TABLE [dbo].[Initial_StepByConfig](
 	[StepID] [tinyint] NOT NULL,
-	[IsScanSuper] [BIT] NULL,
+	[IsScanCustomer] [BIT] NULL,
 	[SortOrder] [tinyint] IDENTITY(1,1)
 ) ON [DATA]
 
