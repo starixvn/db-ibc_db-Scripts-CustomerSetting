@@ -82,11 +82,13 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
+	INNER JOIN Custinfo c WITH (NOLOCK) ON c.custid = ci.custid
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
+	AND c.Enabled = 1
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
@@ -118,7 +120,7 @@ BEGIN
 			,@target = 'REPLICATED'
 			
 			
-	waitfor delay '00:00:0.200'
+	waitfor delay '00:00:0.100'
 END
 DROP TABLE #supers
 
@@ -137,11 +139,13 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
+	INNER JOIN Custinfo c WITH (NOLOCK) ON c.custid = ci.custid
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
 	AND ci.username NOT LIKE '3rdSuper%'
 	AND cs.isinternal = 0
+	AND c.Enabled = 1
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.custid <= @max_custid
@@ -172,7 +176,7 @@ BEGIN
 			,@maxcustid = @max_custid
 			,@target = 'DBCUST'
 						
-	waitfor delay '00:00:0.200'
+	waitfor delay '00:00:0.100'
 END
 
 PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

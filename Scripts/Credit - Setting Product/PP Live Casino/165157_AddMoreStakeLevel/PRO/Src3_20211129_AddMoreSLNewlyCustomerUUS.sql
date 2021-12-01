@@ -18,11 +18,13 @@
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
 	FROM customer ci WITH (NOLOCK) 
+		INNER JOIN Custinfo c WITH (NOLOCK) ON c.custid = ci.custid
 		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 		LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.roleid = 4  
 				AND ci.username NOT LIKE '3rdSuper%'
 				AND cs.isinternal = 0
+				AND c.Enabled = 1
 				AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 				AND ci.Site<>'CN88'
 				AND s.islicensee = 0
