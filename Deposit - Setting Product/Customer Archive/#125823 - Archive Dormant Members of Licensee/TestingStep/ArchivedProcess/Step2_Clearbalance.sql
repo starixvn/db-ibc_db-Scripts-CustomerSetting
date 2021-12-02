@@ -12,7 +12,7 @@ WHILE EXISTS (	SELECT 1
 				WHERE Status = 'waiting'
 			)
 BEGIN
-  EXEC dbo.[Task_Dep_Cust_Archive_Clear_Balance_UAT4]
+  EXEC dbo.[Task_Dep_Cust_Archive_Clear_Balance]
 	@BatchSize = 100
 
 	WAITFOR DELAY '00:00:00.010'
