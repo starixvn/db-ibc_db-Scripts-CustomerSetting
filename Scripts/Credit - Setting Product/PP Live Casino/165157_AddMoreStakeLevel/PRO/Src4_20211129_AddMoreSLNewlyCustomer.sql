@@ -79,7 +79,7 @@
 	SET cs.StakeLevelList = tb.StakeLevelList	
 	FROM dbo.CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN #SMATemp ci ON cs.CustID = ci.CustID
-	INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON TB.BettypeID = cs.BetType
+	INNER JOIN #tmpSTListSMA TB WITH (NOLOCK) ON TB.BettypeID = cs.BetType AND ci.currency = tb.Currency
 	WHERE cs.SportType = @Sporttype AND cs.BetType = @Bettype
 
 
