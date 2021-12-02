@@ -1,0 +1,18 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: Eden@2021123
+	Task: add column OverrideASLive, OverrideASNonLive [RM#164888]
+	DB: DBCust/CustDB
+*/
+USE CustDB
+GO
+
+ALTER TABLE CustSettingAutoSuspend 
+ADD OverrideASLive VARBINARY(30) CONSTRAINT DF_CustSettingAutoSuspend_OverrideASLive
+DEFAULT (0x000000000000000000000000000000000000000000000000000000000000)
+
+ALTER TABLE CustSettingAutoSuspend 
+ADD OverrideASNonLive VARBINARY(30) CONSTRAINT DF_CustSettingAutoSuspend_OverrideASNonLive
+DEFAULT (0x000000000000000000000000000000000000000000000000000000000000)
+
+
