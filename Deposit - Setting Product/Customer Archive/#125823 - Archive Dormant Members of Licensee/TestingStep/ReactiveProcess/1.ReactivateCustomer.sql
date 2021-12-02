@@ -8,7 +8,7 @@ USE CustDB
 declare @ErrCode int
 declare @ErrMsg nvarchar(2000)
 
-exec Dot_Dep_Customer_Archive_ReactiveCustomer_UAT4
+exec Dot_Dep_Customer_Archive_ReactiveCustomer
 	@CustID = xxx ,
 	@ReinitOldBalance = 1,
 	@ErrCode =@ErrCode OUTPUT,
