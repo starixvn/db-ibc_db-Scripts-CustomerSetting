@@ -1,7 +1,8 @@
 /*
 	Created: 20210416@Eden
 	Task: https://nexdev.net/issues/125823
-		Step 1: Detect members will be archived --> Run Job at DB061 : 'Archive Deposit Member - Step 1: Collect Dormant Member'
+		Step 1: Detect members will be archived 
+			--> Run Job at DB061 : 'Archive Deposit Member - Step 1: Collect Dormant Member'
 	DB: DBACC.bodb02
 */
 USE bodb02
