@@ -41,7 +41,7 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Initial 
 		@retry_attempts=0, 
 		@retry_interval=0, 
 		@os_run_priority=0, @subsystem=N'SSIS', 
-		@command=N'/FILE "\"D:\InitCustSetting_SSIS_Packages\InitialSettingProcess.dtsx\"" /CHECKPOINTING OFF /REPORTING E', 
+		@command=N'/FILE "\"H:\InitCustSetting_SSIS_Packages\InitialSettingProcess.dtsx\"" /CHECKPOINTING OFF /REPORTING E', 
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
