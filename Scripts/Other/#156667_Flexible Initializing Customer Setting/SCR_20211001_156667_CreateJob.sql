@@ -6,11 +6,12 @@
 */
 USE [msdb]
 GO
-/****** Object:  Job [CustDB: Initial Setting Process - Credit]    Script Date: 11/29/2021 10:57:14 AM ******/
+
+/****** Object:  Job [CustDB: Initial Setting Process - Credit]    Script Date: 12/6/2021 3:41:10 PM ******/
 BEGIN TRANSACTION
 DECLARE @ReturnCode INT
 SELECT @ReturnCode = 0
-/****** Object:  JobCategory [[Initial Setting]]    Script Date: 11/29/2021 10:57:14 AM ******/
+/****** Object:  JobCategory [[Initial Setting]]    Script Date: 12/6/2021 3:41:10 PM ******/
 IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Initial Setting]' AND category_class=1)
 BEGIN
 EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Initial Setting]'
@@ -20,7 +21,7 @@ END
 
 DECLARE @jobId BINARY(16)
 EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'CustDB: Initial Setting Process - Credit', 
-		@enabled=1, 
+		@enabled=0, 
 		@notify_level_eventlog=0, 
 		@notify_level_email=0, 
 		@notify_level_netsend=0, 
@@ -30,7 +31,7 @@ EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'CustDB: Initial Setting Proc
 		@category_name=N'[Initial Setting]', 
 		@owner_login_name=N'sa', @job_id = @jobId OUTPUT
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
-/****** Object:  Step [Initial Data]    Script Date: 11/29/2021 10:57:14 AM ******/
+/****** Object:  Step [Initial Data]    Script Date: 12/6/2021 3:41:11 PM ******/
 EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Initial Data', 
 		@step_id=1, 
 		@cmdexec_success_code=0, 
@@ -41,7 +42,7 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'Initial 
 		@retry_attempts=0, 
 		@retry_interval=0, 
 		@os_run_priority=0, @subsystem=N'SSIS', 
-		@command=N'/FILE "\"H:\InitCustSetting_SSIS_Packages\InitialSettingProcess.dtsx\"" /CHECKPOINTING OFF /REPORTING E', 
+		@command=N'/FILE "\"H:\InitCustSetting_SSIS_Packages\InitialSettingProcess.dtsx\"" /DECRYPT 1234aa /CHECKPOINTING OFF /REPORTING E', 
 		@database_name=N'master', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
@@ -70,5 +71,3 @@ QuitWithRollback:
 EndSave:
 
 GO
-
-
