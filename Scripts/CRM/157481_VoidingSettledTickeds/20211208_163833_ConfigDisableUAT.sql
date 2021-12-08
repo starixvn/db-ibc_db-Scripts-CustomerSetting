@@ -21,4 +21,6 @@ UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET Value = CONVERT( VARCHAR(20),GETDATE(),20)
 WHERE SettingName = 'LastDateUAT'
 	AND ServiceName = 'AutoVoidFB'		
+	
+GRANT SELECT ON crmCustomer TO bodbAdminNet;	
 
