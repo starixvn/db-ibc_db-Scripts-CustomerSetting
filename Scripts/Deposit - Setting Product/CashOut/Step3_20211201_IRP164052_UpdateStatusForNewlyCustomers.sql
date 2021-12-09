@@ -18,12 +18,13 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'		
 	AND ci.Enabled=1
 	AND cs.site NOT IN('Athena000')
-
+	AND cs.site IN (SELECT LicenseeName FROM bodb_Licensee..Licensees WITH(NOLOCK) WHERE IsActive =1)
+	
 CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)	
 CREATE TABLE #tblCust (CustID INT PRIMARY KEY)
 DECLARE @tmp TABLE (custid INT PRIMARY KEY)
 
-DECLARE @BitmapOrder INT = 31
+DECLARE @ProductID INT = 25
 	
 INSERT INTO #Dummy(CustID)
 SELECT CustID 
@@ -35,14 +36,14 @@ WHERE srecommend IN (SELECT custid FROM #Supers)
 INSERT INTO #tblCust(CustID)
 SELECT ci.CustID
 FROM custInfo ci WITH(NOLOCK)
-	INNER JOIN Dep_CustProductStatus cs WITH(NOLOCK) ON ci.custid = cs.custid
+	LEFT JOIN Dep_CustProductSetting cs WITH(NOLOCK) ON ci.custid = cs.custid	
+														AND cs.ProductID = @ProductID
 WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 	AND ci.custid > @max_custid 		
-	AND ci.Enabled=1
+	AND ci.Enabled=1	
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
-	AND ((SELECT value FROM dbo.f_CustSetting_ProductStatusSel(cs.bitmapIsHidden, @bitmapOrder)) = 1
-		OR (SELECT value FROM dbo.f_CustSetting_ProductStatusSel(cs.bitmapIsDisabled, @bitmapOrder)) = 1)
-	
+	AND roleid = 1
+	AND (cs.custid IS NULL OR cs.IsEnabled = 0)
 	
 WHILE(1=1)
 BEGIN
@@ -53,13 +54,16 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		BREAK;
 		
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0)) 	
-	FROM [dbo].[Dep_CustProductStatus] cs WITH(ROWLOCK)
-	WHERE custid IN (SELECT custid FROM @tmp)
-		
+	MERGE Dep_CustProductSetting target 
+	USING (SELECT custid, @ProductId as ProductID, 1 as IsEnabled 
+			FROM @tmp) as Source 
+	ON target.CustID = Source.custid AND target.ProductId = Source.ProductID
+	WHEN MATCHED AND Target.IsEnabled <> Source.IsEnabled THEN UPDATE SET Target.IsEnabled = Source.IsEnabled
+	WHEN NOT MATCHED THEN INSERT(custid,ProductID,IsEnabled) VALUES(Source.custid,Source.ProductID,Source.IsEnabled);
+			
 	DELETE @tmp		
+	
+	WAITFOR DELAY '0:0:1'
 END
 	
 DROP TABLE #tblCust	

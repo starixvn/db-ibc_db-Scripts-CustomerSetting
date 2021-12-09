@@ -19,16 +19,22 @@ BEGIN
 		
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
-	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN	
-	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN 
+	IF dbo.f_CheckRepTable('Dep_SupperProductSetting') = 0 RETURN	
+	IF dbo.f_CheckRepTable('Dep_CustProductSetting') = 0 RETURN 
 	
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)	
 	CREATE TABLE #tblCust (CustID INT PRIMARY KEY)
 	DECLARE @tmp TABLE (custid INT PRIMARY KEY)
 	
-	DECLARE @BitmapOrder INT = 31,
-		@ProductSettingID INT = 116
+	DECLARE @ProductId INT = 25
 	
+	MERGE Dep_SupperProductSetting target 
+	USING (SELECT @srecommend as custid, @ProductId as ProductID, 1 as IsEnabled ) as Source 
+	ON target.CustID = Source.custid AND target.ProductId = Source.ProductID
+	WHEN MATCHED AND Target.IsEnabled <> Source.IsEnabled THEN UPDATE SET Target.IsEnabled = Source.IsEnabled
+	WHEN NOT MATCHED THEN INSERT(custid,ProductID,IsEnabled) VALUES(Source.custid,Source.ProductID,Source.IsEnabled);
+
+		
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID 
 	FROM Customer WITH(NOLOCK) 
@@ -52,19 +58,14 @@ BEGIN
 		IF @@ROWCOUNT = 0
 			BREAK;
 			
-		UPDATE cs
-		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,0)) 	
-		FROM [dbo].[Dep_CustProductStatus] cs WITH(ROWLOCK)
-		WHERE custid IN (SELECT custid FROM @tmp)
-			
+		MERGE Dep_CustProductSetting target 
+		USING (SELECT custid, @ProductId as ProductID, 1 as IsEnabled 
+				FROM @tmp) as Source 
+		ON target.CustID = Source.custid AND target.ProductId = Source.ProductID
+		WHEN MATCHED AND Target.IsEnabled <> Source.IsEnabled THEN UPDATE SET Target.IsEnabled = Source.IsEnabled
+		WHEN NOT MATCHED THEN INSERT(custid,ProductID,IsEnabled) VALUES(Source.custid,Source.ProductID,Source.IsEnabled);
+					
 		DELETE @tmp		
-	END
-	
-	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=@ProductSettingID)
-	BEGIN
-		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend,@ProductSettingID
 	END
 		
 	DROP TABLE #tblCust	
@@ -85,7 +86,10 @@ ELSE
 
 Print 'Server Name : ' + @target
 
-DECLARE @Custid INT, @max_custid INT
+DECLARE @Custid INT, 
+	@max_custid INT,	
+	@ProductID INT = 25,
+	@UserID INT = 10278938 --starixIT	
 
 SELECT @max_custid = xxx
 
@@ -94,11 +98,11 @@ CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT (0))
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM custInfo ci WITH (NOLOCK) 	
-	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid	
 WHERE ci.username NOT LIKE '3rdSuper%'		
 	AND ci.Enabled=1
 	AND cs.site NOT IN('Athena000')
-
+	AND cs.site IN (SELECT LicenseeName FROM bodb_Licensee..Licensees WITH(NOLOCK) WHERE IsActive =1)
 		
 -- For deployer info
 DECLARE @Cust_CNT INT, @index INT = 0
@@ -122,7 +126,14 @@ BEGIN
 	EXEC dbo.Acc_Dep_DynamicCustSetting_09 @srecommend = @Custid
 			,@max_custid = @max_custid
 			,@target = @target	
-			
+	
+	IF @target = 'DBCUST'
+	BEGIN
+		EXEC Acc_CustomerInsDummyTrade	@ProductID	= @ProductID	
+									,@CustID	=@CustID
+									,@UserID	=@UserID								
+	END
+	
 	WAITFOR DELAY '00:00:0.280'
 END
 
