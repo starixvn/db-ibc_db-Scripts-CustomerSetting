@@ -14,8 +14,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2','DBSPARE')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2','DBSPARE')) RETURN -- run at dbcust only
 		
 	IF dbo.f_CheckRepTable('Custinfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
@@ -38,7 +38,8 @@ BEGIN
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID 
 	FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend=@srecommend AND roleid=3 
+		AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88' + 'CAS%')
 
 	INSERT INTO #tblCust(CustID)
 	SELECT CustID
@@ -46,6 +47,7 @@ BEGIN
 	WHERE ci.srecommend = @srecommend 
 		AND ci.custid<=@max_custid 		
 		AND ci.Enabled=1
+		AND roleid = 1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 		
 		
@@ -79,7 +81,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS & DBCUST -----
 --------------------------------------------------------------------------------------
 DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2','DBSPARE')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'

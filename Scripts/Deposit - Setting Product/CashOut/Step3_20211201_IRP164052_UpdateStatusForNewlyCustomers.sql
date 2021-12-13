@@ -31,7 +31,7 @@ SELECT CustID
 FROM Customer WITH(NOLOCK) 
 WHERE srecommend IN (SELECT custid FROM #Supers)
 	AND roleid=3 
-	AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88' + 'CAS%')
 
 INSERT INTO #tblCust(CustID)
 SELECT ci.CustID
