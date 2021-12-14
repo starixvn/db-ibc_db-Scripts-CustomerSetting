@@ -11,7 +11,7 @@
 	DECLARE @Sporttype INT = 170, @Bettype INT  = 3701
 	DECLARE @MaxCustID INT, @fSportType SMALLINT, @fBetType SMALLINT
 
-	SELECT @MaxCustID = xxx
+	SELECT @MaxCustID = 58528338
 
 	CREATE TABLE #supers (custid int)
 
