@@ -1,8 +1,8 @@
-/*<info serverAlias="DBTEST/CUSTDB"></info>*/
+/*<info serverAlias="DBBACKUP2/CUSTDB"></info>*/
 /*
 	Created: Eden@20211001
 	Task: hardcode sp [Acc_Initial_DCS_InsertStepByConfigID] to delete data only - for testing [Redmine: #156667]   
-	DB: DBTEST/CUSTDB
+	DB: DBBACKUP2/CUSTDB
 */
 /*<info serverAlias="DBCUST-CUSTDB" executers="" viewers="" isFunction="0"></info>*/
 ALTER PROCEDURE [dbo].[Acc_Initial_DCS_InsertStepByConfigID]

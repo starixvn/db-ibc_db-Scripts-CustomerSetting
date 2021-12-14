@@ -1,8 +1,8 @@
-/*<info serverAlias="DBTEST/CUSTDB"></info>*/
+/*<info serverAlias="DBBACKUP2/CUSTDB"></info>*/
 /*
 	Created: Eden@20211001
 	Task: Update status of config to planned [Redmine: #156667]   
-	DB: DBTEST/CUSTDB
+	DB: DBBACKUP2/CUSTDB
 */
 
 USE CUSTDB
