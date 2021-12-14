@@ -1,4 +1,4 @@
-/*<info serverAlias="DBBACKUP2/CUSTDB"></info>*/
+/*<info serverAlias="DBSPARE/CUSTDB"></info>*/
 /*
 	Created: Eden@20211001
 	Task: hardcode sp [Acc_Initial_DCS_InsertStepByConfigID] to delete data only - for testing [Redmine: #156667]   

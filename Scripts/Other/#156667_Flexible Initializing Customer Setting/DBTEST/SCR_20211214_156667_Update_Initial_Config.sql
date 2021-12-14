@@ -1,4 +1,4 @@
-/*<info serverAlias="DBBACKUP2/CUSTDB"></info>*/
+/*<info serverAlias="DBSPARE/CUSTDB"></info>*/
 /*
 	Created: Eden@20211001
 	Task: Update status of config to planned [Redmine: #156667]   
