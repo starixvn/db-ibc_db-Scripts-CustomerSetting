@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCHECK/CUSTDB"></info>*/
 /*
 	Created: Eden@20211001
-	Task: hardcode sp [Acc_Initial_DCS_InsertStepByConfigID] to delete data only - for testing [Redmine: #156667]   
+	Task: alter sp [Acc_Initial_DCS_InsertStepByConfigID]- back to origin[Redmine: #156667]   
 	DB: DBBACKUP2/CUSTDB
 */
 /*<info serverAlias="DBCUST-CUSTDB" executers="" viewers="" isFunction="0"></info>*/
