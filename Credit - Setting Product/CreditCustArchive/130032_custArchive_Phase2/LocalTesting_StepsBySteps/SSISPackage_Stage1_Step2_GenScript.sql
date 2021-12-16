@@ -39,10 +39,17 @@ FROM (VALUES(44671646),(45937167),(58561925)) AS t(custID)
 WHERE NOT EXISTS( SELECT 1 FROM #Super_Exception WHERE srecommend = t.custID)
 
 INSERT INTO bodb_report.dbo.tempCustID
-SELECT DISTINCT custid
+SELECT custid
 FROM bettrans with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM transfer with (NOLOCK)
 WHERE bettype <> 20000  
 	and recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+
 	--and recommend in  (42780012,42780013,42780014,42780015,42780016,42780017,42780018,42780020)
 	--AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 --UNION

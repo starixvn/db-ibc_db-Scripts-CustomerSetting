@@ -38,11 +38,15 @@ DECLARE @startdate smalldatetime
 SET @startdate = DATEADD(mm, - 4, GETDATE())
 
 INSERT INTO bodb_report.dbo.tempCustID
-SELECT distinct custid
+SELECT custid
 FROM bettrans with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION 
+SELECT custid
+FROM transfer with (NOLOCK)
 WHERE bettype <> 20000  
 	and recommend IN (xxx)
-	--and recommend in  (42780012,42780013,42780014,42780015,42780016,42780017,42780018,42780020)
 	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 --UNION
 --SELECT custid

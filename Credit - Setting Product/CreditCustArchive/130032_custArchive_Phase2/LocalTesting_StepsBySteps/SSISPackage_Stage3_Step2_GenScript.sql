@@ -42,11 +42,15 @@ FROM CustDirectAccount d WITH(NOLOCK)
 WHERE ci.roleid IN (1,2)
 
 INSERT INTO bodb_report.dbo.tempCustID
-SELECT distinct custid
+SELECT custid
 FROM bettrans with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM transfer with (NOLOCK)
 WHERE bettype <> 20000  
 	and recommend IN (xxx)
-	--and recommend in  (42780012,42780013,42780014,42780015,42780016,42780017,42780018,42780020)
 	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 --UNION
 --SELECT custid
@@ -62,7 +66,8 @@ WHERE bettype <> 20000
 --update exception list
 EXEC dbo.DBA_ArchiveAccount_UpdateException
 
-SELECT ag.custid, isnull(MemCount, 0) [Member Count], isnull(TransCount, 0) [Trans Count]
+SELECT ag.custid, isnull(MemCount, 0) [Member Count]
+	--, isnull(TransCount, 0) [Trans Count]
 INTO #tmpAg
 FROM customer ag WITH (NOLOCK)
     INNER JOIN bodb_report.dbo.tmpCustArchived tmp WITH (NOLOCK) 
@@ -79,13 +84,13 @@ FROM customer ag WITH (NOLOCK)
 		WHERE roleid = 1
 		GROUP BY recommend
 		) mem ON mem.recommend = agci.custid
-	LEFT JOIN (
-		SELECT recommend
-			,COUNT(*) TransCount
-		FROM bettrans b WITH (NOLOCK)
-		WHERE custid <> recommend
-		GROUP BY recommend
-		) b ON b.recommend = agci.custid	
+	--LEFT JOIN (
+	--	SELECT recommend
+	--		,COUNT(*) TransCount
+	--	FROM bettrans b WITH (NOLOCK)
+	--	WHERE custid <> recommend
+	--	GROUP BY recommend
+	--	) b ON b.recommend = agci.custid	
 	LEFT JOIN #Super_Exception se ON se.srecommend = ag.srecommend
 WHERE ag.roleid = 2
 	--AND isnull(MemCount, 0) > 0-- AND isnull(TransCount, 0) > 0

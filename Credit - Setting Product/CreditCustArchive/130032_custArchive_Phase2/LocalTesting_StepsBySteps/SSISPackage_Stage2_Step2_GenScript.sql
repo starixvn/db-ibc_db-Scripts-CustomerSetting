@@ -37,11 +37,15 @@ DECLARE @startdate smalldatetime
 SET @startdate = DATEADD(mm, - 4, GETDATE())
 
 INSERT INTO bodb_report.dbo.tempCustID
-SELECT distinct custid
+SELECT custid
 FROM bettrans with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION 
+SELECT custid
+FROM transfer with (NOLOCK)
 WHERE bettype <> 20000  
 	and recommend IN (xxx)
-	--and recommend in  (42780012,42780013,42780014,42780015,42780016,42780017,42780018,42780020)
 	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 --UNION
 --SELECT custid
@@ -62,6 +66,7 @@ SELECT ag.recommend custid, isnull(MemCount, 0) [Member Count]
 INTO #tmpAg
 FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	INNER JOIN custinfo agci WITH (NOLOCK) ON agci.custid = ag.recommend
+	INNER JOIN CustProductStatus cps WITH (NOLOCK) ON agci.custid = cps.CustID
 	LEFT JOIN (
 		SELECT recommend
 			,COUNT(*) MemCount
@@ -72,7 +77,7 @@ FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	LEFT JOIN #Super_Exception se ON se.srecommend = agci.srecommend
 WHERE ag.isFinished = 1
 	--AND isnull(MemCount, 0) > 0
-	AND agci.closed = 1
+	AND cps.CloseInfo > 0
 	--AND agci.enabled = 1
 	AND ag.recommend NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND agci.custid NOT IN (
