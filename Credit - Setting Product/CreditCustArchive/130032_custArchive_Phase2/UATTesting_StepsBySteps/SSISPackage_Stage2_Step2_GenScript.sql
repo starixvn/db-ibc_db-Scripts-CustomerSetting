@@ -42,8 +42,12 @@ SET @startdate = DATEADD(mm, - 4, @currentDate)
 
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT custid
-FROM bodb02.dbo.bettrans with (NOLOCK)
+FROM bodb02.dbo.transfer with (NOLOCK)
 WHERE bettype <> 20000 AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM bodb02.dbo.bettrans with (NOLOCK)
+WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 UNION
 SELECT custid
 FROM bodb02.dbo.translog with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)

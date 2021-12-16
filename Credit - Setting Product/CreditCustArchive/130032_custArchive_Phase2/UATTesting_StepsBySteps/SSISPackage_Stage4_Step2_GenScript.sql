@@ -49,8 +49,12 @@ SELECT @DDiff = DATEADD(week, -2, @DDiff)
 
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT custid
-FROM bodb02.dbo.bettrans with (NOLOCK)
+FROM bodb02.dbo.transfer with (NOLOCK)
 WHERE bettype <> 20000 AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM bodb02.dbo.bettrans with (NOLOCK)
+WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 UNION
 SELECT custid
 FROM bodb02.dbo.translog with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
@@ -66,7 +70,8 @@ EXEC CustDB.dbo.DBA_ArchiveAccount_UpdateException
 
 
 --Get cust from s3
-SELECT ag.recommend custid, isnull(MemCount, 0) [Member Count], isnull(TransCount, 0) [Trans Count]
+SELECT ag.recommend custid, isnull(MemCount, 0) [Member Count]
+--, isnull(TransCount, 0) [Trans Count]
 INTO #tmpAg
 FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	INNER JOIN custinfo agci WITH (NOLOCK) ON agci.custid = ag.recommend
@@ -77,16 +82,17 @@ FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 		WHERE roleid = 1
 		GROUP BY recommend
 		) mem ON mem.recommend = agci.custid
-	LEFT JOIN (
-		SELECT recommend
-			,COUNT(*) TransCount
-		FROM bodb02.dbo.bettrans b WITH (NOLOCK)
-		WHERE custid <> recommend
-		GROUP BY recommend
-		) b ON b.recommend = agci.custid	
+	--LEFT JOIN (
+	--	SELECT recommend
+	--		,COUNT(*) TransCount
+	--	FROM bodb02.dbo.bettrans b WITH (NOLOCK)
+	--	WHERE custid <> recommend
+	--	GROUP BY recommend
+	--	) b ON b.recommend = agci.custid	
 	LEFT JOIN #Super_Exception se ON se.srecommend = agci.srecommend
 WHERE ag.isFinished = 1
-	AND isnull(MemCount, 0) > 0 AND isnull(TransCount, 0) = 0
+	AND isnull(MemCount, 0) > 0 
+	--AND isnull(TransCount, 0) = 0
 	AND agci.enabled = 0
 	AND ag.recommend NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND ag.recommend NOT IN(SELECT recommend FROM #Exclude_Agents)
@@ -166,7 +172,7 @@ FROM customer ag WITH (NOLOCK)
 	INNER JOIN #tmpAg t WITH (NOLOCK) ON ag.custid = t.custid
 	INNER JOIN customer mag WITH (NOLOCK) ON ag.mrecommend = mag.custid AND mag.roleid = 3
 	INNER JOIN customer sag WITH (NOLOCK) ON ag.srecommend = sag.custid AND sag.roleid = 4
-	LEFT JOIN  dbo.bettrans bt WITH(NOLOCK) ON ag.custid = bt.custid  AND bt.bettype = 20000 AND bt.matchid = 0
+	LEFT JOIN  dbo.transfer bt WITH(NOLOCK) ON ag.custid = bt.custid  AND bt.bettype = 20000
 WHERE bt.custid IS NULL
 ORDER BY [Member Count] DESC
 FOR XML PATH ('r'))
