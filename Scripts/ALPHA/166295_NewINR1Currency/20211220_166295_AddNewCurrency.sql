@@ -157,7 +157,7 @@ WHERE Currency = @FromCurrency
 DELETE ProductStatusSiteCurrency WHERE Currency = @ToCurrency
 
 INSERT INTO ProductStatusSiteCurrency (SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
-SELECT SportType,BetType,@ToCurrency AS Currency,SiteID,0 AS IsHidden,IsDisabled,HasSynced
+SELECT SportType,BetType,@ToCurrency AS Currency,SiteID, IsHidden,IsDisabled,HasSynced
 FROM ProductStatusSiteCurrency  WITH (NOLOCK)
 WHERE Currency = @FromCurrency
 -------------exchange
