@@ -2,10 +2,10 @@
 /*
 	Created: 20211214@Winfred
 	Task : Create table LeagueGroup In DBCust [Redmine:#165393]
-	DB:  DBCUST/CustDB 
-	Replication : 
+	DB:  DBCUST/bodb02 
+	Replication : DB02_Cust_Events
 */
-USE CustDB
+USE bodb02
 GO
 
 CREATE TABLE [dbo].[LeagueGroup](
