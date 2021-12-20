@@ -19,6 +19,11 @@ SELECT Sporttype, Bettype, @ToCurrency, MinBet, IsDep, MaxBet, MaxPerMatch, Defa
 FROM ProductBetSetting WITH (NOLOCK)
 WHERE Currency = @FromCurrency AND Sporttype NOT BETWEEN 213 AND 218 AND Sporttype <> 206 --Cockfighting
 ----------------StakeLevel -- All product
+DELETE sld 
+FROM StakeLevelGroupDetail sld WITH(ROWLOCK)
+INNER JOIN StakeLevel sl WITH (NOLOCK) ON sld.StakeLevelID = sl.StakeLevelID
+WHERE sl.ExchangeId = @ToCurrency
+DELETE StakeLevel WHERE ExchangeId = @ToCurrency
 
 INSERT INTO dbo.StakeLevel (GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ExchangeId, ResourceId, GameGroupID)
 SELECT GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, @ToCurrency, ResourceId, GameGroupID
@@ -98,15 +103,13 @@ SELECT SportType, BetType, @ToCurrency AS Currency, 1 AS IsLaunched, 0 AS IsTest
 FROM GameLaunchPerCurrency WITH (NOLOCK)
 WHERE Currency = @FromCurrency
 
---SELECT 208, 2179, @ToCurrency, 1, 0
-
 --------------WinLimit_ProductSettingDetail
 DELETE WinLimit_ProductSettingDetail WHERE ExchangeID = @ToCurrency
 
 INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
 SELECT ProductID, GroupID, @ToCurrency, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
 FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
-WHERE ExchangeID = @FromCurrency
+WHERE ExchangeID = 61 --INR
 
 -------------MaxPayoutGlobalSetting
 DELETE MaxPayoutGlobalSetting WHERE Currency = @ToCurrency
