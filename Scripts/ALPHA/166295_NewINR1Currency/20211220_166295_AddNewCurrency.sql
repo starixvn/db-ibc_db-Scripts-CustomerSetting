@@ -119,7 +119,7 @@ DELETE WinLimit_ProductSettingDetail WHERE ExchangeID = @ToCurrency
 INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
 SELECT ProductID, GroupID, @ToCurrency, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
 FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
-WHERE SiteID = 1 AND ExchangeID = 61 --INR/ BEST-ODDS
+WHERE ExchangeID = 61 --INR/ BEST-ODDS
 
 -------------MaxPayoutGlobalSetting
 DELETE MaxPayoutGlobalSetting WHERE Currency = @ToCurrency
