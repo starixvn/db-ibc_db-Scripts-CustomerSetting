@@ -17,7 +17,7 @@ DELETE ProductBetSetting WHERE Currency = @ToCurrency
 INSERT INTO dbo.ProductBetSetting (Sporttype, Bettype, Currency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch)
 SELECT Sporttype, Bettype, @ToCurrency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch
 FROM ProductBetSetting WITH (NOLOCK)
-WHERE Currency = @FromCurrency AND Sporttype NOT BETWEEN 213 AND 218 AND Sporttype <> 206 --Cockfighting
+WHERE Currency = @FromCurrency AND Sporttype NOT BETWEEN 213 AND 218
 ----------------StakeLevel -- All product
 DELETE sld 
 FROM StakeLevelGroupDetail sld WITH(ROWLOCK)
