@@ -119,7 +119,7 @@ DELETE WinLimit_ProductSettingDetail WHERE ExchangeID = @ToCurrency
 INSERT INTO dbo.WinLimit_ProductSettingDetail(ProductID, GroupID, ExchangeID, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM)
 SELECT ProductID, GroupID, @ToCurrency, SiteID, LevelID, MaxWinLimit, IsBlockedPlaceBet, IsBlockedTransfer, MaxWinLimit_RM
 FROM WinLimit_ProductSettingDetail WITH (NOLOCK)
-WHERE ExchangeID = 61 --INR
+WHERE SiteID = 1 AND ExchangeID = 61 --INR/ BEST-ODDS
 
 -------------MaxPayoutGlobalSetting
 DELETE MaxPayoutGlobalSetting WHERE Currency = @ToCurrency
@@ -132,17 +132,17 @@ SELECT 99 AS SportType, 9 AS BetType ,@ToCurrency AS Currency, 1894000 AS Single
 DELETE ProductLaunchedSiteCurrency WHERE Currency = @ToCurrency
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, SiteID, Currency, IsLaunched, IsTest)
-SELECT SportType, SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest
+SELECT SportType,1 AS SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest
 FROM ProductLaunchedSiteCurrency
-WHERE Currency = @FromCurrency
+WHERE Currency = @FromCurrency -- 1: BEST-ODDS
 
 -------------ProductStatusSiteCurrency
 DELETE ProductStatusSiteCurrency WHERE Currency = @ToCurrency
 
 INSERT INTO ProductStatusSiteCurrency (SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
-SELECT SportType,BetType,@ToCurrency AS Currency,SiteID,1 AS IsHidden,IsDisabled,HasSynced
+SELECT SportType,BetType,@ToCurrency AS Currency, 1 AS SiteID,1 AS IsHidden,IsDisabled,HasSynced
 FROM ProductStatusSiteCurrency
-WHERE Currency = @FromCurrency
+WHERE Currency = @FromCurrency -- 1: BEST-ODDS
 
 
 DROP TABLE #TempReference
