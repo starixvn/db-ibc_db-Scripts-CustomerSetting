@@ -132,17 +132,17 @@ SELECT 99 AS SportType, 9 AS BetType ,@ToCurrency AS Currency, 1894000 AS Single
 DELETE ProductLaunchedSiteCurrency WHERE Currency = @ToCurrency
 
 INSERT INTO ProductLaunchedSiteCurrency (SportType, SiteID, Currency, IsLaunched, IsTest)
-SELECT SportType,1 AS SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest
+SELECT SportType, SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest
 FROM ProductLaunchedSiteCurrency
-WHERE Currency = @FromCurrency -- 1: BEST-ODDS
+WHERE Currency = @FromCurrency
 
 -------------ProductStatusSiteCurrency
 DELETE ProductStatusSiteCurrency WHERE Currency = @ToCurrency
 
 INSERT INTO ProductStatusSiteCurrency (SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
-SELECT SportType,BetType,@ToCurrency AS Currency, 1 AS SiteID,1 AS IsHidden,IsDisabled,HasSynced
+SELECT SportType,BetType,@ToCurrency AS Currency,SiteID,1 AS IsHidden,IsDisabled,HasSynced
 FROM ProductStatusSiteCurrency
-WHERE Currency = @FromCurrency -- 1: BEST-ODDS
+WHERE Currency = @FromCurrency
 
 
 DROP TABLE #TempReference
