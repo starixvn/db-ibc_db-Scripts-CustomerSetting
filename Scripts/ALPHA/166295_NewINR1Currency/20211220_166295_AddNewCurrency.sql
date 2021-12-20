@@ -143,6 +143,10 @@ INSERT INTO ProductStatusSiteCurrency (SportType,BetType,Currency,SiteID,IsHidde
 SELECT SportType,BetType,@ToCurrency AS Currency,SiteID,1 AS IsHidden,IsDisabled,HasSynced
 FROM ProductStatusSiteCurrency
 WHERE Currency = @FromCurrency
+-------------exchange
+
+UPDATE exchange WITH(ROWLOCK, UPDLOCK) 
+SET PJUnitPrice = 16.6418 WHERE ExchangeId = 10
 
 
 DROP TABLE #TempReference
