@@ -6,11 +6,11 @@
 	DB:			DBCust/CustDB
 */
 
-DECLARE @ToCurrency INT, @FromCurrency INT, @ToStakeLevelID INT, @ResourceId INT, @GameTypeID INT, @Type TINYINT, @GameGroupID INT ,@FromStakeLevelID INT
+DECLARE @ToCurrency INT, @FromCurrency INT, @ToStakeLevelID INT, @ResourceId INT, @GameTypeID INT, @Type TINYINT, @GameGroupID INT ,@FromStakeLevelID INT,@MinStake DECIMAL(19,8)
 
 SELECT	@ToCurrency = 10 ,  -- INR1
 		@FromCurrency = 43 -- THB
-CREATE TABLE #TempReference (GameTypeID INT, ResourceId INT, GameGroupID INT, Type TINYINT, IsFinish BIT DEFAULT (0)) --Type = 1: Use GameGroupID, = 2: Use ResourceID
+CREATE TABLE #TempReference (GameTypeID INT, ResourceId INT, GameGroupID INT,MinStake DECIMAL(19,8) , Type TINYINT, IsFinish BIT DEFAULT (0)) --Type = 1: Use GameGroupID, = 2: Use ResourceID
 --------------ProductBetSetting
 DELETE ProductBetSetting WHERE Currency = @ToCurrency
 
@@ -31,28 +31,31 @@ FROM stakeLevel WITH (NOLOCK)
 WHERE exchangeid = @FromCurrency 
 
 ----------------StakeLevelGroupDetail(Macau, AllBet)-----------------
-INSERT INTO #TempReference (GameTypeID, ResourceId, GameGroupID, Type)
+INSERT INTO #TempReference (GameTypeID, ResourceId, GameGroupID, MinStake , Type)
 --Macau
-SELECT 4001, NULL, 1, 1
-UNION ALL SELECT 4001, NULL, 2, 1
-UNION ALL SELECT 4101, NULL, 6, 1
-UNION ALL SELECT 1901, NULL, 9   ,  1 
-UNION ALL SELECT 4301, NULL, 12  ,  1 
-UNION ALL SELECT 1611, NULL, 13  ,  1 
-UNION ALL SELECT 6001, NULL, 15  ,  1 
-UNION ALL SELECT 6401, NULL, 17  ,  1 
-UNION ALL SELECT 5401, NULL, 19  ,  1 
-UNION ALL SELECT 7001, NULL, 21  ,  1 
-UNION ALL SELECT 7301, NULL, 23  ,  1 
-UNION ALL SELECT 3801, NULL, 25  ,  1 
-UNION ALL SELECT 7701, NULL, 27  ,  1 
-UNION ALL SELECT 7801, NULL, 29  ,  1 
-UNION ALL SELECT 5500, NULL, 32  ,  1 
---Allbet
-UNION ALL SELECT 2401, 152, NULL, 2
-UNION ALL SELECT 2401, 3, NULL, 2
-UNION ALL SELECT 2401, 30, NULL, 2
-UNION ALL SELECT 2401, 44, NULL, 2
+SELECT 4001, NULL, 1, NULL,1
+UNION ALL SELECT 4101, NULL, 6, NULL,1
+UNION ALL SELECT 1901, NULL, 9   ,  NULL,1 
+UNION ALL SELECT 4301, NULL, 12  ,  NULL,1 
+UNION ALL SELECT 1611, NULL, 13  ,  NULL,1 
+UNION ALL SELECT 6001, NULL, 15  ,  NULL,1 
+UNION ALL SELECT 6401, NULL, 17  ,  NULL,1 
+UNION ALL SELECT 5401, NULL, 19  ,  NULL,1 
+UNION ALL SELECT 7001, NULL, 21  ,  NULL,1 
+UNION ALL SELECT 7301, NULL, 23  ,  NULL,1 
+UNION ALL SELECT 3801, NULL, 25  ,  NULL,1 
+UNION ALL SELECT 7701, NULL, 27  ,  NULL,1 
+UNION ALL SELECT 7801, NULL, 29  ,  NULL,1 
+UNION ALL SELECT 5500, NULL, 32  ,  NULL,1 
+----Allbet
+UNION ALL SELECT 2401, 152, NULL, NULL,2
+UNION ALL SELECT 2401, 3, NULL, NULL,2
+UNION ALL SELECT 2401, 30, NULL, NULL,2
+UNION ALL SELECT 2401, 44, NULL, NULL,2
+----WM
+UNION ALL SELECT 3401, NULL, NULL, 200,3
+UNION ALL SELECT 3401, NULL, NULL, 50,3
+UNION ALL SELECT 3401, NULL, NULL, 500,3
 
 WHILE (1=1)
 BEGIN
@@ -61,6 +64,7 @@ BEGIN
 		@GameTypeID = GameTypeID,
 		@ResourceId = ResourceId,
 		@GameGroupID = GameGroupID,
+		@MinStake = MinStake,
 		@Type = Type
 	FROM #TempReference 
 	WHERE IsFinish = 0
@@ -79,7 +83,7 @@ BEGIN
 		WHERE exchangeid = @ToCurrency 
 			AND GameTypeID = @GameTypeID AND GameGroupID = @GameGroupID
 	END
-	ELSE
+	ELSE IF @Type = 2
 	BEGIN
 		SELECT @FromStakeLevelID = StakeLevelID
 		FROM dbo.StakeLevel WITH (NOLOCK)
@@ -90,6 +94,19 @@ BEGIN
 		FROM dbo.StakeLevel WITH (NOLOCK)
 		WHERE exchangeid = @ToCurrency 
 			AND GameTypeID = @GameTypeID AND ResourceId = @ResourceId
+	END
+	ELSE
+	BEGIN
+		SELECT @FromStakeLevelID = StakeLevelID
+		FROM dbo.StakeLevel WITH (NOLOCK)
+		WHERE exchangeid = @FromCurrency 
+			AND GameTypeID = @GameTypeID AND MinStake = @MinStake
+
+		SELECT @ToStakeLevelID = StakeLevelID
+		FROM dbo.StakeLevel WITH (NOLOCK)
+		WHERE exchangeid = @ToCurrency 
+			AND GameTypeID = @GameTypeID AND MinStake = @MinStake
+			
 	END
 
 	INSERT INTO dbo.StakeLevelGroupDetail (StakeLevelID, GameTypeID, MinLabel, MaxLabel, MinStake, MaxStake, ParentTypeID)
