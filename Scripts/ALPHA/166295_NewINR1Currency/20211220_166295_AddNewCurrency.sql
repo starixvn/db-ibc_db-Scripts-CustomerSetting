@@ -148,8 +148,8 @@ SELECT 99 AS SportType, 9 AS BetType ,@ToCurrency AS Currency, 1894000 AS Single
 -------------ProductLaunchedSiteCurrency
 DELETE ProductLaunchedSiteCurrency WHERE Currency = @ToCurrency
 
-INSERT INTO ProductLaunchedSiteCurrency (SportType, SiteID, Currency, IsLaunched, IsTest)
-SELECT SportType, SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest
+INSERT INTO ProductLaunchedSiteCurrency (SportType, SiteID, Currency, IsLaunched, IsTest,BetType,LaunchedLevel)
+SELECT SportType, SiteID, @ToCurrency, 0 AS IsLaunched, 0 AS IsTest,BetType,LaunchedLevel
 FROM ProductLaunchedSiteCurrency
 WHERE Currency = @FromCurrency
 
