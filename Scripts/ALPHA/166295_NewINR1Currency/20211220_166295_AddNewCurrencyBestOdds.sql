@@ -15,8 +15,8 @@ SELECT	@ToCurrency = 10 ,  -- INR1
 DELETE ProductStatusSiteCurrency WHERE Currency = @ToCurrency AND SiteID = @site
 
 INSERT INTO ProductStatusSiteCurrency (SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
-SELECT 171 AS SportType,3801 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 0 AS IsHidden,0 AS IsDisabled,0 AS HasSynced
+SELECT 171 AS SportType,3801 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 0 AS IsHidden,1 AS IsDisabled,0 AS HasSynced
 UNION ALL
-SELECT 200 AS SportType,1611 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 0 AS IsHidden,0 AS IsDisabled,0 AS HasSynced
+SELECT 200 AS SportType,1611 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 0 AS IsHidden,1 AS IsDisabled,0 AS HasSynced
 UNION ALL
-SELECT 219 AS SportType,1011 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 0 AS IsHidden,0 AS IsDisabled,0 AS HasSynced
+SELECT 219 AS SportType,1011 AS BetType,@ToCurrency AS Currency, @site AS SiteID, 1 AS IsHidden,1 AS IsDisabled,1 AS HasSynced
