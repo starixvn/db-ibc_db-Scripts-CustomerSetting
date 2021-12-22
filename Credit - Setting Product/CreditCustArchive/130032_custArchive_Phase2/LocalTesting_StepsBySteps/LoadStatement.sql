@@ -57,7 +57,7 @@ BEGIN
 	SELECT 
 		TOP 1 @to = winlostdate--balance-up date
 	FROM bodb02.dbo.transfer WITH(NOLOCK)
-	WHERE bettype = 20000 and matchid = 0 and custid = 3
+	WHERE bettype = 20000 and custid = 3
 
 	--select @from, @to, @status
 
