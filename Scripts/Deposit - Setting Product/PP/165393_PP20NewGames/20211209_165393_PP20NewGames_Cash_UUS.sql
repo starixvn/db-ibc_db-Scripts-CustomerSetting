@@ -97,7 +97,7 @@ SELECT 6711 ,'0.2'      ,'8'           ,0.2      ,8           ,72   UNION ALL	--
 SELECT 6712 ,'0.2'      ,'8'           ,0.2      ,8           ,72   UNION ALL	--YNG	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 6713 ,'0.38'     ,'3.8'         ,0.38     ,3.8         ,72   UNION ALL	--YNG	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 SELECT 6714 ,'0.2'      ,'8'           ,0.2      ,8           ,72   UNION ALL	--YNG	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
-SELECT 6715 ,'0.2'      ,'8'           ,0.2      ,8           ,72   UNION ALL	--YNG	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
+SELECT 6715 ,'0.2'      ,'8'           ,0.2      ,8           ,72				--YNG	--US$ ,USDT, USD, AUD, EURO, SGD,PTU,PS,YNG,UUS, CHF
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId
