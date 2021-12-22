@@ -4,7 +4,7 @@
 	Date:	 20211220
 	Task:	 Delete redundant and add new setting newly created customer for Creative Gaming - API Licensees  RedmineID:#166165
 	DB:		 DBCUST/CustDB
-	P/s : Step 6 Delete redundant and add new setting newly created customer Creative Gaming - API Licensees 
+	P/s : Step 5 Delete redundant and add new setting newly created customer Creative Gaming - API Licensees 
 */
 USE [CustDB]
 GO
