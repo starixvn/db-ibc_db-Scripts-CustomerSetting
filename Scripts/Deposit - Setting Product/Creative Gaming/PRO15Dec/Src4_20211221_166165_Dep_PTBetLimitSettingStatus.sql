@@ -48,7 +48,7 @@ BEGIN
 
 	SELECT @currency = c.currency, @siteId = s.siteid
 	FROM dbo.customer c WITH (NOLOCK) 
-		INNER JOIN site s ON s.site = c.site
+		INNER JOIN site s  WITH (NOLOCK) ON  s.site = c.site
 	WHERE c.custid = @srecommend
 
 	DECLARE @BitOrder INT
@@ -59,7 +59,7 @@ BEGIN
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
-	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88' + 'CAS%')
 
 	INSERT INTO #tmpCust(CustID)
 	SELECT CustID
