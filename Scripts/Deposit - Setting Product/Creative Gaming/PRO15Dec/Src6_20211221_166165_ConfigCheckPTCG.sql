@@ -11,7 +11,7 @@ PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 UPDATE a 
 SET a.PTValue = a.PTValue + ',93.00'
 FROM  Dep_PTConfig a WITH(ROWLOCK)
-WHERE a.SportType = 167 AND a.RuleID = 71 AND a.PTValue NOT LIKE '%,93.00'
+WHERE a.SportType = 167 AND a.RuleID = 71 AND a.PTValue NOT LIKE '%,93.00' AND IsAthena = 0
 
 GO
 
