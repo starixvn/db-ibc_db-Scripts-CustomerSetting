@@ -34,13 +34,10 @@ WHERE cba.Sporttype = @sportType AND Bettype = @betType
 
 SELECT @sportType = 200 , @betType = 1611
 
-UPDATE pbs
-SET pbs.IsDisabled = 1
-FROM ProductStatusSiteCurrency pbs  WITH(ROWLOCK, UPDLOCK) 
-WHERE pbs.Sporttype = @sportType AND Bettype = @betType AND pbs.Currency = @Currency 
+DELETE FROM ProductStatusSiteCurrency WITH (ROWLOCK) WHERE Sporttype = @sportType AND Bettype = @betType AND Currency = @Currency 
 
 --Win Loss Limit
-DELETE FROM WinLimit_ProductSettingDetail WITH (ROWLOCK) where ProductID = @productID and ExchangeID = @Currency
+DELETE FROM WinLimit_ProductSettingDetail WITH (ROWLOCK) WHERE ProductID = @productID and ExchangeID = @Currency
 
 DELETE FROM CustWinLossLimit_Agent WITH (ROWLOCK) WHERE custid IN (SELECT custid from #Supers)
 AND SportType = @sportType AND bettype = @betType 
