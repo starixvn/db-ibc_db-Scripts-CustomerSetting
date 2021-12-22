@@ -17,7 +17,7 @@ SELECT	@Currency = 10   -- INR1
 
 CREATE TABLE #Supers (custid INT)
 INSERT INTO #Supers(custid)				
-SELECT 58952555	AS custid UNION ALL SELECT 58956510	AS custid --'SRHB','HR'
+SELECT 58952555	AS custid --'HR'
 
 UPDATE pbs
 SET pbs.MinBet = 100 , pbs.MaxBet = 34000,pbs.DefaultMinBet = 100 , pbs.DefaultMaxBet = 34000
