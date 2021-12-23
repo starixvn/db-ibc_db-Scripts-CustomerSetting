@@ -9,6 +9,9 @@ USE [CustDB]
 GO
 
 UPDATE ProductSettingDetail WITH(ROWLOCK)
-SET SettingStatus = 0
+SET SettingStatus = 0,
+	IsHidden = 0,
+	IsDisabled = 0
 WHERE sporttype = 9903
 	AND settingType = 4
+
