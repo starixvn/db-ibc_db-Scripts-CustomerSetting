@@ -24,6 +24,7 @@ SELECT 1913 ,'1'    ,'1000'    ,1    ,1000    ,67   UNION ALL	--HKK	--RM,HKK, HK
 SELECT 1913 ,'1'    ,'1000'    ,1    ,1000    ,2    UNION ALL	--RM	--RM,HKK, HK$ 
 SELECT 1913 ,'2'    ,'1500'    ,2    ,1500    ,13   UNION ALL	--RMB	--RMB 
 SELECT 1913 ,'10'   ,'10000'   ,10   ,10000   ,43   UNION ALL	--THB	--THB 
+SELECT 1913 ,'10'   ,'10000'   ,10   ,10000   ,10   UNION ALL	--INR1	--INR 
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,35   UNION ALL	--$US	--US$, Yen, $US, UT, USD,MMK
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,69   UNION ALL	--MMK	--US$, Yen, $US, UT, USD,MMK
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,3    UNION ALL	--US$	--US$, Yen, $US, UT, USD,MMK

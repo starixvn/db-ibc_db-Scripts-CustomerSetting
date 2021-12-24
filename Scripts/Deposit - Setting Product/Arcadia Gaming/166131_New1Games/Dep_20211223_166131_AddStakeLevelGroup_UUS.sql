@@ -13,8 +13,8 @@ CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel
 INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
 --UUS
-SELECT 1912 ,'5'    ,'5000'    ,5    ,5000    ,20   UNION ALL	--UUS	--INH , DON,UUS,YNG
-SELECT 1912 ,'5'    ,'5000'    ,5    ,5000    ,72				--YNG	--INH , DON,UUS,YNG
+SELECT 1913 ,'5'    ,'5000'    ,5    ,5000    ,20   UNION ALL	--UUS	--INH , DON,UUS,YNG
+SELECT 1913 ,'5'    ,'5000'    ,5    ,5000    ,72				--YNG	--INH , DON,UUS,YNG
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
