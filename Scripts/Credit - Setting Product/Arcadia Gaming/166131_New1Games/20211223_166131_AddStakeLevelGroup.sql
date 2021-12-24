@@ -31,7 +31,7 @@ SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,3    UNION ALL	--US$	--US$, Yen, 
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,95   UNION ALL	--USD	--US$, Yen, $US, UT, USD,MMK
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD,MMK
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD,MMK
-SELECT 1913 ,'1000' ,'500000'  ,1000 ,500000  ,45				--Won	--Won 
+SELECT 1913 ,'1000' ,'300000'  ,1000 ,300000  ,45				--Won	--Won 
 
 UPDATE t
 SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))

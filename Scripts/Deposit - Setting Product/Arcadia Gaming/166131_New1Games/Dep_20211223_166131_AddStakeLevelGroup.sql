@@ -30,7 +30,7 @@ SELECT 1913 ,'10'   ,'10000'   ,10   ,10000   ,4    UNION ALL	--TB	--TB,INR,PKR
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,41   UNION ALL	--CHF	--GBP,CHF,USDT 
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,12   UNION ALL	--GBP	--GBP,CHF,USDT 
 SELECT 1913 ,'1'    ,'500'     ,1    ,500     ,96   UNION ALL	--USDT	--GBP,CHF,USDT 
-SELECT 1913 ,'1000' ,'500000'  ,1000 ,500000  ,45				--Won	--Won 
+SELECT 1913 ,'1000' ,'300000'  ,1000 ,300000  ,45				--Won	--Won 
 
 UPDATE t
 SET MinLabel = REVERSE(STUFF (REVERSE(t.MinLabel),4,0,','))
