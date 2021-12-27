@@ -1,0 +1,476 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: Winfred
+	Date:	 20210324
+	Task:	 Insert Setting StakeLevelGroupDetail [Creative Gaming] - API Licensees - deposit RedmineID:#166165
+	DB:		 DBCust/CustDB
+	P/s : Step 2 Insert Setting StakeLevelGroupDetail
+*/
+PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
+CREATE TABLE #Dep_StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
+								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
+								,ExchangeId int, GameGroupID int default(24))
+								
+INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
+--=============================================
+--AUD,CHF
+SELECT 7301 ,'1.8'  ,'180'     ,1.8  ,180     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7302 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7303 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7304 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7305 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7306 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7307 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7308 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7309 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7310 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7311 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7312 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7313 ,'0.5'  ,'15'      ,0.5  ,15      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7314 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7315 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7316 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7317 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7318 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7319 ,'0.75' ,'15'      ,0.75 ,15      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7320 ,'0.75' ,'50'      ,0.75 ,50      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7321 ,'0.5'  ,'50'      ,0.5  ,50      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7322 ,'0.75' ,'15'      ,0.75 ,15      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7323 ,'0.5'  ,'200'     ,0.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7324 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7325 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7326 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7327 ,'0.44' ,'2.93'    ,0.44 ,2.93    ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7328 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7329 ,'1.25' ,'150'     ,1.25 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7330 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7331 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7332 ,'1.25' ,'150'     ,1.25 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7333 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7334 ,'0.75' ,'50'      ,0.75 ,50      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7335 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7336 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7337 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7338 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7339 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7340 ,'0.75' ,'15'      ,0.75 ,15      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7341 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7342 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7343 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7344 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7345 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7346 ,'0.75' ,'15'      ,0.75 ,15      ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7347 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7348 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7349 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7350 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7351 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7352 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7353 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7354 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7355 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7356 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7357 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7358 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7359 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7360 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7361 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7362 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7363 ,'0.45' ,'150'     ,0.45 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7364 ,'0.45' ,'150'     ,0.45 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7365 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7366 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7367 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7368 ,'1.25' ,'150'     ,1.25 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7369 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7370 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7371 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7372 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7373 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7374 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7375 ,'0.75' ,'150'     ,0.75 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7376 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7377 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7378 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7379 ,'0.5'  ,'150'     ,0.5  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7380 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7381 ,'1.5'  ,'200'     ,1.5  ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7382 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7383 ,'0.25' ,'125'     ,0.25 ,125     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7384 ,'1.25' ,'150'     ,1.25 ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7385 ,'2'    ,'200'     ,2    ,200     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7386 ,'0.9'  ,'150'     ,0.9  ,150     ,9    UNION ALL	--AUD	--AUD,CHF
+SELECT 7301 ,'1.8'  ,'180'     ,1.8  ,180     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7302 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7303 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7304 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7305 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7306 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7307 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7308 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7309 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7310 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7311 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7312 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7313 ,'0.5'  ,'15'      ,0.5  ,15      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7314 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7315 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7316 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7317 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7318 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7319 ,'0.75' ,'15'      ,0.75 ,15      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7320 ,'0.75' ,'50'      ,0.75 ,50      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7321 ,'0.5'  ,'50'      ,0.5  ,50      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7322 ,'0.75' ,'15'      ,0.75 ,15      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7323 ,'0.5'  ,'200'     ,0.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7324 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7325 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7326 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7327 ,'0.44' ,'2.93'    ,0.44 ,2.93    ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7328 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7329 ,'1.25' ,'150'     ,1.25 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7330 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7331 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7332 ,'1.25' ,'150'     ,1.25 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7333 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7334 ,'0.75' ,'50'      ,0.75 ,50      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7335 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7336 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7337 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7338 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7339 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7340 ,'0.75' ,'15'      ,0.75 ,15      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7341 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7342 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7343 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7344 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7345 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7346 ,'0.75' ,'15'      ,0.75 ,15      ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7347 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7348 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7349 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7350 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7351 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7352 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7353 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7354 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7355 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7356 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7357 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7358 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7359 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7360 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7361 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7362 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7363 ,'0.45' ,'150'     ,0.45 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7364 ,'0.45' ,'150'     ,0.45 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7365 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7366 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7367 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7368 ,'1.25' ,'150'     ,1.25 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7369 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7370 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7371 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7372 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7373 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7374 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7375 ,'0.75' ,'150'     ,0.75 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7376 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7377 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7378 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7379 ,'0.5'  ,'150'     ,0.5  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7380 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7381 ,'1.5'  ,'200'     ,1.5  ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7382 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7383 ,'0.25' ,'125'     ,0.25 ,125     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7384 ,'1.25' ,'150'     ,1.25 ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7385 ,'2'    ,'200'     ,2    ,200     ,41   UNION ALL	--CHF	--AUD,CHF
+SELECT 7386 ,'0.9'  ,'150'     ,0.9  ,150     ,41   UNION ALL	--CHF	--AUD,CHF
+--INR
+SELECT 7301 ,'90'   ,'9000'    ,90   ,9000    ,61   UNION ALL	--INR	--INR
+SELECT 7302 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7303 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7304 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7305 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7306 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7307 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7308 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7309 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7310 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7311 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7312 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7313 ,'25'   ,'750'     ,25   ,750     ,61   UNION ALL	--INR	--INR
+SELECT 7314 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7315 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7316 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7317 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7318 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7319 ,'37.5' ,'750'     ,37.5 ,750     ,61   UNION ALL	--INR	--INR
+SELECT 7320 ,'37.5' ,'2500'    ,37.5 ,2500    ,61   UNION ALL	--INR	--INR
+SELECT 7321 ,'25'   ,'2500'    ,25   ,2500    ,61   UNION ALL	--INR	--INR
+SELECT 7322 ,'37.5' ,'750'     ,37.5 ,750     ,61   UNION ALL	--INR	--INR
+SELECT 7323 ,'25'   ,'10000'   ,25   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7324 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7325 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7326 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7327 ,'22'   ,'146.67'  ,22   ,146.67  ,61   UNION ALL	--INR	--INR
+SELECT 7328 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7329 ,'62.5' ,'7500'    ,62.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7330 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7331 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7332 ,'62.5' ,'7500'    ,62.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7333 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7334 ,'37.5' ,'2500'    ,37.5 ,2500    ,61   UNION ALL	--INR	--INR
+SELECT 7335 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7336 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7337 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7338 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7339 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7340 ,'37.5' ,'750'     ,37.5 ,750     ,61   UNION ALL	--INR	--INR
+SELECT 7341 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7342 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7343 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7344 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7345 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7346 ,'37.5' ,'750'     ,37.5 ,750     ,61   UNION ALL	--INR	--INR
+SELECT 7347 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7348 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7349 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7350 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7351 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7352 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7353 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7354 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7355 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7356 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7357 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7358 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7359 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7360 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7361 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7362 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7363 ,'22.5' ,'7500'    ,22.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7364 ,'22.5' ,'7500'    ,22.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7365 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7366 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7367 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7368 ,'62.5' ,'7500'    ,62.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7369 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7370 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7371 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7372 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7373 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7374 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7375 ,'37.5' ,'7500'    ,37.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7376 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7377 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7378 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7379 ,'25'   ,'7500'    ,25   ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7380 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7381 ,'75'   ,'10000'   ,75   ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7382 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7383 ,'12.5' ,'6250'    ,12.5 ,6250    ,61   UNION ALL	--INR	--INR
+SELECT 7384 ,'62.5' ,'7500'    ,62.5 ,7500    ,61   UNION ALL	--INR	--INR
+SELECT 7385 ,'100'  ,'10000'   ,100  ,10000   ,61   UNION ALL	--INR	--INR
+SELECT 7386 ,'45'   ,'7500'    ,45   ,7500    ,61   UNION ALL	--INR	--INR
+--JPY
+SELECT 7301 ,'180'  ,'18000'   ,180  ,18000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7302 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7303 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7304 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7305 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7306 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7307 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7308 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7309 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7310 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7311 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7312 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7313 ,'50'   ,'1500'    ,50   ,1500    ,32   UNION ALL	--JPY	--JPY
+SELECT 7314 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7315 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7316 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7317 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7318 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7319 ,'75'   ,'1500'    ,75   ,1500    ,32   UNION ALL	--JPY	--JPY
+SELECT 7320 ,'75'   ,'5000'    ,75   ,5000    ,32   UNION ALL	--JPY	--JPY
+SELECT 7321 ,'50'   ,'5000'    ,50   ,5000    ,32   UNION ALL	--JPY	--JPY
+SELECT 7322 ,'75'   ,'1500'    ,75   ,1500    ,32   UNION ALL	--JPY	--JPY
+SELECT 7323 ,'50'   ,'20000'   ,50   ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7324 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7325 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7326 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7327 ,'44'   ,'293.33'  ,44   ,293.33  ,32   UNION ALL	--JPY	--JPY
+SELECT 7328 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7329 ,'125'  ,'15000'   ,125  ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7330 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7331 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7332 ,'125'  ,'15000'   ,125  ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7333 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7334 ,'75'   ,'5000'    ,75   ,5000    ,32   UNION ALL	--JPY	--JPY
+SELECT 7335 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7336 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7337 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7338 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7339 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7340 ,'75'   ,'1500'    ,75   ,1500    ,32   UNION ALL	--JPY	--JPY
+SELECT 7341 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7342 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7343 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7344 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7345 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7346 ,'75'   ,'1500'    ,75   ,1500    ,32   UNION ALL	--JPY	--JPY
+SELECT 7347 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7348 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7349 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7350 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7351 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7352 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7353 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7354 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7355 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7356 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7357 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7358 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7359 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7360 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7361 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7362 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7363 ,'45'   ,'15000'   ,45   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7364 ,'45'   ,'15000'   ,45   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7365 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7366 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7367 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7368 ,'125'  ,'15000'   ,125  ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7369 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7370 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7371 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7372 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7373 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7374 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7375 ,'75'   ,'15000'   ,75   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7376 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7377 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7378 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7379 ,'50'   ,'15000'   ,50   ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7380 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7381 ,'150'  ,'20000'   ,150  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7382 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7383 ,'25'   ,'12500'   ,25   ,12500   ,32   UNION ALL	--JPY	--JPY
+SELECT 7384 ,'125'  ,'15000'   ,125  ,15000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7385 ,'200'  ,'20000'   ,200  ,20000   ,32   UNION ALL	--JPY	--JPY
+SELECT 7386 ,'90'   ,'15000'   ,90   ,15000   ,32   UNION ALL	--JPY	--JPY
+--KHR
+SELECT 7301 ,'3.6'  ,'360'     ,3.6  ,360     ,71   UNION ALL	--KHR	--KHR
+SELECT 7302 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7303 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7304 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7305 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7306 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7307 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7308 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7309 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7310 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7311 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7312 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7313 ,'1'    ,'30'      ,1    ,30      ,71   UNION ALL	--KHR	--KHR
+SELECT 7314 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7315 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7316 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7317 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7318 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7319 ,'1.5'  ,'30'      ,1.5  ,30      ,71   UNION ALL	--KHR	--KHR
+SELECT 7320 ,'1.5'  ,'100'     ,1.5  ,100     ,71   UNION ALL	--KHR	--KHR
+SELECT 7321 ,'1'    ,'100'     ,1    ,100     ,71   UNION ALL	--KHR	--KHR
+SELECT 7322 ,'1.5'  ,'30'      ,1.5  ,30      ,71   UNION ALL	--KHR	--KHR
+SELECT 7323 ,'1'    ,'400'     ,1    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7324 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7325 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7326 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7327 ,'0.88' ,'5.87'    ,0.88 ,5.87    ,71   UNION ALL	--KHR	--KHR
+SELECT 7328 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7329 ,'2.5'  ,'300'     ,2.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7330 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7331 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7332 ,'2.5'  ,'300'     ,2.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7333 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7334 ,'1.5'  ,'100'     ,1.5  ,100     ,71   UNION ALL	--KHR	--KHR
+SELECT 7335 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7336 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7337 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7338 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7339 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7340 ,'1.5'  ,'30'      ,1.5  ,30      ,71   UNION ALL	--KHR	--KHR
+SELECT 7341 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7342 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7343 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7344 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7345 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7346 ,'1.5'  ,'30'      ,1.5  ,30      ,71   UNION ALL	--KHR	--KHR
+SELECT 7347 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7348 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7349 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7350 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7351 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7352 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7353 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7354 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7355 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7356 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7357 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7358 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7359 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7360 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7361 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7362 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7363 ,'0.9'  ,'300'     ,0.9  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7364 ,'0.9'  ,'300'     ,0.9  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7365 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7366 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7367 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7368 ,'2.5'  ,'300'     ,2.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7369 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7370 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7371 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7372 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7373 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7374 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7375 ,'1.5'  ,'300'     ,1.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7376 ,'1.8'  ,'300'     ,1.8  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7377 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7378 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7379 ,'1'    ,'300'     ,1    ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7380 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7381 ,'3'    ,'400'     ,3    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7382 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7383 ,'0.5'  ,'250'     ,0.5  ,250     ,71   UNION ALL	--KHR	--KHR
+SELECT 7384 ,'2.5'  ,'300'     ,2.5  ,300     ,71   UNION ALL	--KHR	--KHR
+SELECT 7385 ,'4'    ,'400'     ,4    ,400     ,71   UNION ALL	--KHR	--KHR
+SELECT 7386 ,'1.8'  ,'300'     ,1.8  ,300     ,71				--KHR	--KHR
+
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #Dep_StakeLevel_Temp t
+WHERE MaxStake > 999
+
+;WITH STAKE_TEMP AS (
+SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
+FROM Dep_StakeLevel s WITH(NOLOCK)
+CROSS APPLY ( SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
+			  FROM #Dep_StakeLevel_Temp t 
+			  where t.ExchangeId = s.ExchangeId and t.GameGroupID = s.GameGroupID) t
+WHERE s.GameTypeID = 7301)
+
+MERGE Dep_StakeLevelGroupDetail as g 
+USING STAKE_TEMP s on g.StakeLevelID = s.StakeLevelID AND g.GameTypeID = s.GameTypeID
+WHEN MATCHED THEN UPDATE SET 
+					g.MinLabel = s.MinLabel,
+					g.MaxLabel = s.MaxLabel,
+					g.MinStake =  s.MinStake,
+					g.MaxStake =  s.MaxStake
+WHEN NOT MATCHED THEN 
+					INSERT (StakeLevelID,GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake)
+					VALUES (s.StakeLevelID,s.GameTypeID,s.MinLabel,s.MaxLabel,s.MinStake,s.MaxStake)					
+					 ;
+DROP TABLE #Dep_StakeLevel_Temp
+PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
