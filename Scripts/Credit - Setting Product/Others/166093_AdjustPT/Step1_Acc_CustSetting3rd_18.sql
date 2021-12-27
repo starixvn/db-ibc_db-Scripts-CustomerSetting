@@ -618,7 +618,7 @@ BEGIN
 					   AND cs3.bettype IN (85, 86, 87, 89, 90)
 					   AND cs3.slivepositiontaking + cs3.alivepositiontaking + cs3.mlivepositiontaking > scs.slivepositiontaking
 					   AND mb.custid IN (SELECT custid FROM @tmp)
-				RETURN
+				--RETURN
 			END
         END--end mode = 'number'        
         
@@ -843,7 +843,7 @@ BEGIN
                AND cs.apositiontaking + cs.mpositiontaking + cs.spositiontaking > scs.spositiontaking
 
 
-            RETURN
+            --RETURN
 
         END--end mode = 'Keno'
     END
