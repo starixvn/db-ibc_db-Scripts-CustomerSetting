@@ -36,6 +36,7 @@ BEGIN
 	     
     DECLARE @mpos smallmoney, @apos smallmoney, @spos smallmoney, @mapos1 smallmoney, @mapos2 smallmoney, @mapos smallmoney, @maxmapos smallmoney
     CREATE TABLE #tblCustNG (custid INT, isFinished BIT DEFAULT 0)	
+	CREATE TABLE #tblCustKeno (custid INT, isFinished BIT DEFAULT 0)	
 	DECLARE @tmp TABLE (custid INT)
 	
     --UPDATE min pt ON super
@@ -624,6 +625,28 @@ BEGIN
         
         IF @mode = 'Keno' OR @mode = 'GoldDeluxe'
         BEGIN        
+			SELECT @_srecommend = @srecommend
+
+			INSERT INTO #tblCustKeno(custid)
+			SELECT custid
+			FROM custinfo WITH(NOLOCK)
+			WHERE srecommend = @_srecommend
+                AND roleid = 1
+                AND Enabled = 1
+
+			WHILE(1=1)
+			BEGIN
+				DELETE @tmp
+			
+				UPDATE TOP (4000) t 	--34 rows settings for each member		
+				SET isFinished = 1
+				OUTPUT DELETED.custid INTO @tmp
+				FROM #tblCustKeno t
+				WHERE isFinished = 0
+			
+				IF @@ROWCOUNT = 0
+					BREAK;	
+
             --s1=min(s1,s4-m3) if i=0
             UPDATE cs
                SET cs.spositiontaking = scs.spositiontaking - mcs.mpositiontaking
@@ -635,16 +658,13 @@ BEGIN
         INNER JOIN CustSettingGame scs WITH(NOLOCK) ON scs.custid = @srecommend
                                                    AND scs.sporttype = cs.sporttype
                                                    AND scs.bettype = cs.bettype
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype
                AND (mcs.isautopositiontaking = 0
                     OR cs.isautopositiontaking = 0
                    )
                AND scs.spositiontaking - mcs.mpositiontaking < cs.spositiontaking
-
+			   AND ci.custid IN (SELECT custid FROM @tmp)
 
             --check agent min
             --a1=max(a1,n2)
@@ -664,13 +684,10 @@ BEGIN
         INNER JOIN CustSettingGame mcs WITH(NOLOCK) ON mcs.custid = ci.mrecommend
                                                    AND mcs.sporttype = cs.sporttype
                                                    AND mcs.bettype = cs.bettype
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype
                AND cs.apositiontaking < aco.minpositiontaking
-
+			    AND ci.custid IN (SELECT custid FROM @tmp)
 
             --Recal AUTO MPT m1=min(m3-a1,u2)
             UPDATE cs
@@ -695,15 +712,12 @@ BEGIN
         INNER JOIN CustSettingGame acs WITH(NOLOCK) ON acs.custid = ci.recommend
                                                    AND acs.sporttype = cs.sporttype
                                                    AND acs.bettype = cs.bettype
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype
                AND (cs.isautompositiontaking = 1
                     OR acs.isautompositiontaking = 1
                    )
-
+				 AND ci.custid IN (SELECT custid FROM @tmp)
 
             --check master min
             --m1=max(m1,n3-a1)
@@ -718,12 +732,9 @@ BEGIN
         INNER JOIN CustOverrideGame mco WITH(NOLOCK) ON mco.custid = ci.mrecommend
                                                     AND mco.sporttype = cs.sporttype
                                                     AND mco.bettype = cs.bettype
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype 
-
+			    AND ci.custid IN (SELECT custid FROM @tmp)
 
             --recal autopos
             UPDATE cs
@@ -748,15 +759,12 @@ BEGIN
         INNER JOIN CustSettingGame scs WITH(NOLOCK) ON scs.custid = @srecommend
                                                    AND scs.sporttype = cs.sporttype
                                                    AND scs.bettype = cs.bettype 
-              WHERE ci.srecommend = @srecommend
-                AND ci.roleid = 1
-                AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+              WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype 
                AND (cs.isautopositiontaking = 1
                     OR mcs.isautopositiontaking = 1
                    )
-
+				 AND ci.custid IN (SELECT custid FROM @tmp)
 
             --check super min
             --s1=max(n4-m1-a1,s1)
@@ -767,13 +775,10 @@ BEGIN
         INNER JOIN CustOverrideGame sco WITH(NOLOCK) ON sco.custid = @srecommend
                                                     AND sco.sporttype = cs.sporttype
                                                     AND sco.bettype = cs.bettype
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype 
                AND cs.apositiontaking + cs.mpositiontaking + cs.spositiontaking < sco.minpositiontaking
-
+			    AND ci.custid IN (SELECT custid FROM @tmp)
 
             --UPDATE s1,m1,a1 IN CASE s1+m1+a1>s4
             --s1=max(0,s4-m1-a1)
@@ -835,13 +840,10 @@ BEGIN
         INNER JOIN CustSettingGame scs WITH(NOLOCK) ON scs.custid = @srecommend
                                                    AND scs.sporttype = cs.sporttype
                                                    AND scs.bettype = cs.bettype 
-             WHERE ci.srecommend = @srecommend
-               AND ci.roleid = 1
-               AND ci.Enabled = 1
-               AND cs.sporttype = @sporttype
+             WHERE cs.sporttype = @sporttype
                AND cs.bettype = @bettype
                AND cs.apositiontaking + cs.mpositiontaking + cs.spositiontaking > scs.spositiontaking
-
+			    AND ci.custid IN (SELECT custid FROM @tmp)
 
             --RETURN
 
