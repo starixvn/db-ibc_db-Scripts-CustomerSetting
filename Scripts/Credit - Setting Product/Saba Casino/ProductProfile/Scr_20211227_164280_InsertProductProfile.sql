@@ -60,6 +60,25 @@ VALUES
 --	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
 --WHERE ProductId = 22 AND (e.Code = 'USD' OR e.exchangeid = 20)
 
+INSERT INTO SportNonOfferedSiteCurrency(SportType,BetType,SiteID,Currency)
+SELECT 208,2101,0,e.ExchangeId
+FROM exchange e WITH(NOLOCK)--SportNonOfferedSiteCurrency t WITH(NOLOCK) 
+WHERE e.ExchangeId NOT IN(
+					 2	-- 	RM
+					,3	-- 	US$
+					,13	-- 	RMB
+					,15	-- 	IN
+					,16	-- 	Yen
+					,22	-- 	IND
+					,33	-- 	IDD
+					,34	-- 	IDR
+					,35	-- 	$US
+					,43	-- 	THB
+					,47	-- 	DDD
+					,61	-- 	INR
+					,64	-- 	UT
+					,69	-- 	MMK
+					)
 /*
 SELECT * FROM ProductSettingDetail(NOLOCK) WHERE ProductID = 6
 SELECT * FROM ProductStatusProfile(NOLOCK) WHERE SportType = 208
@@ -67,5 +86,3 @@ SELECT * FROM dbo.ProductStatusSiteCurrency(NOLOCK) WHERE SportType = 208
 SELECT * FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
 SELECT * FROM dbo.GameGroup WITH (NOLOCK) WHERE RefBetType = 2101 
 */
-
-
