@@ -33,6 +33,14 @@ VALUES
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(208, 2101, @BitmapOrder)
 
+--GameGroup
+INSERT INTO	dbo.GameGroup (GameGroupID, RefSportType, RefBetType, GroupName, IsDeposit)      
+VALUES	
+	(33, 208, 2101, 'Level 1', 1),
+	(34, 208, 2101, 'Level 1', 0),
+	(35, 208, 2101, 'Level 2', 1),
+	(36, 208, 2101, 'Level 2', 0)
+
 --INSERT INTO [dbo].[ProductStatusSiteCurrency]
 --           ([SportType]
 --           ,[BetType]
@@ -52,14 +60,12 @@ VALUES	(208, 2101, @BitmapOrder)
 --	INNER JOIN dbo.exchange e ON e.exchangeid = lg.ExchangeId
 --WHERE ProductId = 22 AND (e.Code = 'USD' OR e.exchangeid = 20)
 
---SELECT * FROM ProductSettingDetail(NOLOCK) WHERE ProductID = 6
---SELECT * FROM ProductStatusProfile(NOLOCK) 
---SELECT * FROM dbo.ProductStatusSiteCurrency(NOLOCK) WHERE SportType = 208
---SELECT * FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
-
---DELETE FROM ProductSettingDetail(NOLOCK) WHERE ProductID = 6
---DELETE FROM ProductStatusProfile(NOLOCK) WHERE Sporttype = 208
---DELETE FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
-
+/*
+SELECT * FROM ProductSettingDetail(NOLOCK) WHERE ProductID = 6
+SELECT * FROM ProductStatusProfile(NOLOCK) WHERE SportType = 208
+SELECT * FROM dbo.ProductStatusSiteCurrency(NOLOCK) WHERE SportType = 208
+SELECT * FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
+SELECT * FROM dbo.GameGroup WITH (NOLOCK) WHERE RefBetType = 2101 
+*/
 
 

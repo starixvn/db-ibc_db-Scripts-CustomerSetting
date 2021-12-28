@@ -18,7 +18,8 @@ CREATE TABLE #StakeLevel(
 	[MinStake]		[decimal](19, 8) NULL,
 	[MaxStake]		[decimal](19, 8) NULL,
 	[ExchangeId]	[int],
-	[GameGroupID]	INT
+	[GameGroupID]	INT,
+	ID				INT IDENTITY(1,1)
 ) ON [PRIMARY]
 
 GO
@@ -845,10 +846,7 @@ UPDATE t
 SET t.GameGroupID = CASE WHEN tmp.level = 1 then 34 ELSE 36 END
 FROM #StakeLevel t
 INNER JOIN TMP 
-	ON t.ExchangeId = tmp.ExchangeId
-	AND t.GameTypeID = tmp.GameTypeID
-	AND t.MaxStake = tmp.MaxStake
-	AND t.MinLabel = tmp.MinStake
+	ON t.ID = tmp.ID
 
 -->Insert StakeLevel
 INSERT INTO StakeLevel(GameTypeID,ExchangeId,GameGroupID)
