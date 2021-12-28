@@ -620,6 +620,7 @@ BEGIN
 					   AND cs3.slivepositiontaking + cs3.alivepositiontaking + cs3.mlivepositiontaking > scs.slivepositiontaking
 					   AND mb.custid IN (SELECT custid FROM @tmp)
 				--RETURN
+				END
 			END
         END--end mode = 'number'        
         
