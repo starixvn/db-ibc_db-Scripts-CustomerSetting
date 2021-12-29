@@ -619,8 +619,7 @@ BEGIN
 					   AND cs3.bettype IN (85, 86, 87, 89, 90)
 					   AND cs3.slivepositiontaking + cs3.alivepositiontaking + cs3.mlivepositiontaking > scs.slivepositiontaking
 					   AND mb.custid IN (SELECT custid FROM @tmp)
-				--RETURN
-				END
+				--RETURN				
 			END
         END--end mode = 'number'        
         
@@ -848,9 +847,9 @@ BEGIN
 
             --RETURN
 
-        END--end mode = 'Keno'
-    END
-
+			END--end mode = 'Keno'
+		END
+	END
     
     --UPDATE min/max pt ON master
     ELSE IF @roleid = 3
