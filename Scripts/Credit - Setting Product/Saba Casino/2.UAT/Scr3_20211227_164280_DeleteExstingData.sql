@@ -236,9 +236,12 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
 --------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+DECLARE @target VARCHAR(20)
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')
+	SET @target = 'DBCUST'
+ELSE 
+	SET @target = 'REPLICATED'
 
+Print 'Server Name : ' + @target
 
--- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
---------------------------------------------------------------------------------------
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = @target
