@@ -2,7 +2,7 @@
 /*
 	Created: 20211227@Eden
 	Task: Insert Setting for Saba Casino - Real Currency [#164280]
-	DB: DBCUST/CustDB and all subscriber of Cust_custseting Pub
+	DB: DBCUST/CustDB and all subscriber of CustDB_custseting Pub
 */
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
