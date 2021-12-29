@@ -270,3 +270,14 @@ BEGIN
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitMapOrder,ci.HasSynced) as hs
 	END
 END
+/*
+DROP TABLE #AgentGroupPT
+DROP TABLE #Custlist_Status
+DROP TABLE #CustList_Status_Batch
+DROP TABLE #MemberList_PT
+DROP TABLE #MemberList_WL
+DROP TABLE #SMAList_PT
+DROP TABLE #SMAList_WL
+DROP TABLE #Super_WrongPT
+DROP TABLE #supers
+*/
