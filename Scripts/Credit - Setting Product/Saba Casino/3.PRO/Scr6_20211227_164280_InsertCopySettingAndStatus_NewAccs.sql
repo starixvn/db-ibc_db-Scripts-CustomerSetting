@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20211227@Eden
-	Task: Insert Setting for Saba Casino - Real Currency New Accs [#164280]
+	Task: Insert Setting and update status for Saba Casino - Real Currency New Accs [#164280]
 	DB: DBCUST/CustDB
 */
 USE CUSTDB
@@ -355,7 +355,8 @@ BEGIN
 	--SMA level
 	UPDATE cs
 	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.DisableCasino)) 	
+		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.DisableCasino)),
+		bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder,ci.SyncCasino)) 
 	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #SMATemp t WITH(NOLOCK) ON cs.CustID = t.CustID
 		INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.CustID
@@ -378,7 +379,8 @@ BEGIN
 
 		UPDATE cs
 		SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder,0)),
-			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.DisableCasino)) 	
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder,ci.DisableCasino)),
+			bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder,ci.SyncCasino)) 
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #MemberTempBatch t WITH(NOLOCK) ON cs.CustID = t.CustID
 			INNER JOIN custInfo ci WITH(NOLOCK) ON cs.CustID = ci.CustID
