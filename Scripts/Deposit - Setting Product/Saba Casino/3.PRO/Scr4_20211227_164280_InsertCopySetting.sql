@@ -34,6 +34,8 @@ BEGIN
 		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 
 		OR dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 
 	    OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
+		OR dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0	
+		OR dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0	
 	   )
 		RETURN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
@@ -307,6 +309,76 @@ BEGIN
 	BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT @srecommend,116
+	END
+
+	----------Commm--------------------------
+	--insert group comm setting
+	INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member 
+		(AgentID
+		,SportType
+		,BetType
+		,PlayerDiscount
+		,AgentDiscount
+		,MasterDiscount
+		,SuperDiscount		
+		)
+	SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0
+	FROM #tmpSMA t	
+		CROSS APPLY ( SELECT * FROM (VALUES (@SportType, @BetType)) AS sp(SportType, BetType)
+					)sb
+		LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
+			ON dcs.AgentID = t.CustID and dcs.SportType = sb.sporttype
+			AND dcs.BetType = sb.bettype	
+	WHERE t.roleid = 2 AND dcs.AgentID IS NULL
+
+	UPDATE #tmpCust SET isfinished = 0
+	
+	WHILE (1=1)
+	BEGIN
+		UPDATE TOP (@BatchSize) c WITH (ROWLOCK)
+		SET c.isfinished = 1
+		OUTPUT DELETED.CustID INTO @Cust_Temp(CustID)
+		FROM #tmpCust c 
+		WHERE isfinished = 0
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+		
+		-- UPDATE comm group for cust have not offered comm yet.
+		UPDATE cs
+			SET isGroupedComm = 1
+		FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN @Cust_Temp cb ON cb.CustID = cs.CustID
+			OUTER APPLY (SELECT TOP 1 dcs_m.CustID FROM Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
+						 WHERE dcs_m.CustID = cs.CustID
+						) AS tmp
+		WHERE ISNULL(cs.IsGroupedComm,0) = 0 AND tmp.CustID IS NULL
+		
+		-- insert private setting if already offered comm before and not belong to comm group
+		INSERT INTO Dep_CustDiscountSetting_Member (CustID
+							,SportType
+							,BetType
+							,PlayerDiscount
+							,AgentDiscount
+							,MasterDiscount
+							,SuperDiscount)  	
+		SELECT c.CustID, tmp.sporttype, tmp.bettype, 0,0,0,0
+		FROM Dep_CustSettingMode c WITH (NOLOCK)
+			INNER JOIN @Cust_Temp cb ON c.CustID = cb.CustID
+			CROSS APPLY (SELECT * FROM (VALUES (@SportType, @BetType)) AS sp(SportType, BetType)
+						) AS tmp
+			LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
+				ON dcs_m.CustID = c.CustID and dcs_m.SportType = tmp.sporttype
+				AND dcs_m.BetType = tmp.bettype				
+		WHERE c.IsGroupedComm = 0 AND dcs_m.custid IS NULL
+			
+		DELETE FROM @Cust_Temp
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID=119)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend,119
 	END
 
 	DROP TABLE #Dummy
