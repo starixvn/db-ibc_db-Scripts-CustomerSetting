@@ -56,11 +56,6 @@ SELECT 4056 ,'0.3' ,'120'     ,0.3 ,120     ,22   UNION ALL	--IND	--IN,IND,IDD,I
 SELECT 4062 ,'0.3' ,'24'      ,0.3 ,24      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD
 SELECT 4066 ,'0.6' ,'120'     ,0.6 ,120     ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD
 SELECT 4076 ,'0.3' ,'24'      ,0.3 ,24      ,22   UNION ALL	--IND	--IN,IND,IDD,IDR,DDD
---KHR
-SELECT 4056 ,'0.1' ,'40'      ,0.1 ,40      ,71   UNION ALL	--KHR	--KHR
-SELECT 4062 ,'0.1' ,'8'       ,0.1 ,8       ,71   UNION ALL	--KHR	--KHR
-SELECT 4066 ,'0.2' ,'40'      ,0.2 ,40      ,71   UNION ALL	--KHR	--KHR
-SELECT 4076 ,'0.1' ,'8'       ,0.1 ,8       ,71   UNION ALL	--KHR	--KHR
 --MMK
 SELECT 4056 ,'0.1' ,'10'      ,0.1 ,10      ,69   UNION ALL	--MMK	--MMK
 SELECT 4062 ,'0.1' ,'4'       ,0.1 ,4       ,69   UNION ALL	--MMK	--MMK
@@ -124,7 +119,6 @@ SELECT 4096 ,'0.25','25'      ,0.25,25      ,9    UNION ALL	--AUD	--AUD
 SELECT 4096 ,'0.25','25'      ,0.25,25      ,50   UNION ALL	--CAN	--CAN
 SELECT 4096 ,'2.5' ,'25'      ,2.5 ,25      ,41   UNION ALL	--CHF	--CHF
 SELECT 4096 ,'0.5' ,'125'     ,0.5 ,125     ,52   UNION ALL	--DKK	--DKK
-SELECT 4096 ,'2.5' ,'750'     ,2.5  ,750    ,42   UNION ALL	--PE	--PHP
 SELECT 4096 ,'1.5' ,'500'     ,1.5 ,500     ,7    UNION ALL	--DON	--DON, INH
 SELECT 4096 ,'1.5' ,'500'     ,1.5 ,500     ,51   UNION ALL	--INH	--DON, INH
 SELECT 4096 ,'2.5' ,'25'      ,2.5 ,25      ,6    UNION ALL	--EURO	--EURO
