@@ -10,9 +10,10 @@ GO
 PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-DECLARE @maxcustid INT
+DECLARE @maxcustid INT= xxx
 
-SELECT @maxcustid = xxx
+--DECLARE @maxcustid2 INT 
+--SELECT TOP(1) @maxcustid2 = custid FROM custinfo ci WITH(NOLOCK) ORDER BY custID DESC
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -27,8 +28,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		ORDER BY ci.custid 
 	
 DECLARE @SuperPT SMALLINT = 93
-DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT, @BitOrder INT
-DECLARE @SportType SMALLINT = 208, @BetType SMALLINT = 2101	 ,@GameGroupID INT = 30 
+DECLARE @currency INT, @BitOrder INT
+DECLARE @SportType SMALLINT = 208, @BetType SMALLINT = 2101
 DECLARE @BatchSize SMALLINT = 5000
 
 ----------------Delete exits data
@@ -68,6 +69,7 @@ FROM Dep_ProductStatusProfile WITH(NOLOCK)
 WHERE SportType=@Sporttype AND Bettype = @BetType
 
 CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
+
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
 WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
@@ -211,32 +213,67 @@ WHERE t.custid>@maxcustid
 -------------------------------------Betlimit Setting-----------------------------------------------
 CREATE TABLE #MemberTemp  (CustID INT PRIMARY KEY,StakeLevelID VARCHAR(100),isfinished BIT DEFAULT(0))	
 CREATE TABLE #SMATemp  (CustID INT PRIMARY KEY,StakeLevelID VARCHAR(100))	
+
+SELECT e.currency
+	,CAST (STUFF (STL, 1,1, '') AS VARCHAR(500)) AS StakeLevelList
+	,CAST (M.StakeLevelID AS VARCHAR(10)) AS Min_StakeLevel
+INTO #StakeLevelList
+FROM (VALUES (@BetType)) AS t(Bettype)
+	CROSS APPLY (
+					SELECT Currency 
+					FROM ( VALUES
+							 (2)	-- 	RM
+							,(3)	-- 	US$
+							,(13)	-- 	RMB
+							,(15)	-- 	IN
+							,(16)	-- 	Yen
+							,(22)	-- 	IND
+							,(33)	-- 	IDD
+							,(34)	-- 	IDR
+							,(35)	-- 	$US
+							,(43)	-- 	THB
+							,(47)	-- 	DDD
+							,(61)	-- 	INR
+							,(64)	-- 	UT
+							,(69)	-- 	MMK
+					) exchange(Currency)
+					) e
+	CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))
+				FROM Dep_StakeLevel S WITH (NOLOCK)
+				WHERE S.GameTypeID = t.BetType AND S.ExchangeId = e.Currency
+				FOR XML PATH ('') 
+				) AS A(STL)
+	CROSS APPLY (SELECT TOP 1 StakeLevelID
+				FROM Dep_StakeLevel S WITH (NOLOCK)
+					LEFT JOIN GameGroup gg WITH(NOLOCK) 
+						ON s.GameGroupID = gg.GameGroupID
+				WHERE S.GameTypeID = t.BetType AND S.ExchangeId = e.Currency
+				ORDER BY s.MaxStake ASC, s.MinStake ASC, gg.GroupName ASC
+				) AS M
+
 --Agent Level
-INSERT INTO  #SMATemp (CustID,StakeLevelID)
-SELECT CI.custid, CAST(sl.StakeLevelID	AS VARCHAR(100))
+INSERT INTO #SMATemp (CustID,StakeLevelID)
+SELECT CI.custid, sl.StakeLevelList
 FROM Custinfo CI WITH (NOLOCK)
 	INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
-	INNER JOIN dbo.DEP_StakeLevel sl WITH (NOLOCK) ON sl.GameTypeID = @BetType
-							AND sl.GameGroupID = @GameGroupID
-							AND sl.ExchangeId = c.currency
+	INNER JOIN #StakeLevelList sl ON c.currency= sl.Currency
 WHERE ci.srecommend IN(SELECT CustID FROM #supers) 
-AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
-AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
-SELECT   custid,@Sporttype, @BetType, StakeLevelID
+SELECT custid,@Sporttype, @BetType, StakeLevelID
 FROM #SMATemp
+
 --Member Level
-INSERT INTO #MemberTemp  (CustID,StakeLevelID) 
-SELECT CI.custid, CAST(sl.StakeLevelID	AS VARCHAR(100))
+INSERT INTO #MemberTemp (CustID,StakeLevelID) 
+SELECT CI.custid, sl.Min_StakeLevel
 FROM Custinfo CI WITH (NOLOCK)
 	INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
-	INNER JOIN dbo.DEP_StakeLevel sl WITH (NOLOCK) ON sl.GameTypeID = @BetType
-							AND sl.GameGroupID = @GameGroupID
-							AND sl.ExchangeId = c.currency
+	INNER JOIN #StakeLevelList sl ON c.currency= sl.Currency
 WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (1) 
-AND Enabled = 1 AND ci.custid > @maxcustid 
-AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 DECLARE @Cust_Temp TABLE(CustID INT,StakeLevelID VARCHAR(100))
 	
@@ -282,14 +319,16 @@ SELECT DISTINCT M.CustID FROM #MemberTemp M WITH (NOLOCK)
 INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
 SELECT c.CustID
 	,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrder,0))
-	,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,0))
+	,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,ci.DisableCasino))
 FROM Dep_CustProductStatus c WITH(NOLOCK)
+	INNER JOIN custInfo ci WITH(NOLOCK) ON c.CustID = ci.custid
 	INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 UNION ALL
 SELECT c.CustID
 	,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrder,0))
-	,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,0))
+	,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,ci.DisableCasino))
 FROM Dep_CustProductStatus c WITH(NOLOCK)
+	INNER JOIN custInfo ci WITH(NOLOCK) ON c.CustID = ci.custid
 	INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
 SET @BatchSize = 5000
@@ -314,11 +353,13 @@ BEGIN
 
 	WAITFOR DELAY '00:00:00.100'
 END
+
 INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
 SELECT	A.custid
-		, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
+		, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,ci.DisableCasino) AS bitmapIsDisabled
 		, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
 FROM #AllUsers A
+	INNER JOIN custInfo ci WITH(NOLOCK) ON A.CustID = ci.custid
 WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -333,5 +374,7 @@ DROP TABLE #SMATemp
 DROP TABLE #Dep_CustProductStatus
 DROP TABLE #TempProductStatus
 DROP TABLE #AllUsers
+DROP TABLE #StakeLevelList
+DROP TABLE #supers
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
