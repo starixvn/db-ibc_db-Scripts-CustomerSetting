@@ -19,6 +19,13 @@ BEGIN
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0
+
+		OR dbo.f_CheckRepTable('Dep_StakeLevel') = 0 
+		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 
+		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 
+
+		OR dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0		
+		OR dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0
 		
 		OR dbo.f_CheckRepTable('Dep_ProductSetting') = 0
 		OR dbo.f_CheckRepTable('Dep_ProductSettingDetail') = 0
@@ -27,9 +34,7 @@ BEGIN
 		OR dbo.f_CheckRepTable('CustInfo') = 0 
 		OR dbo.f_CheckRepTable('Customer') = 0 
 
-		OR dbo.f_CheckRepTable('Dep_StakeLevel') = 0 
-		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 
-		OR dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 
+		
 		OR dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 
 	    OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
 	   )
@@ -68,6 +73,8 @@ BEGIN
 	CREATE TABLE #Dep_CustPTGroupSetting3rd_Member(CustID INT)
 	CREATE TABLE #Dep_CustStakeLevel_Agent(CustID INT)
 	CREATE TABLE #Dep_CustStakeLevel_Member(CustID INT)
+	CREATE TABLE #Dep_CustDiscountSetting_Member(CustID INT)
+	CREATE TABLE #Dep_CustDiscountGroupSetting_Member(CustID INT)
 
 	INSERT INTO #Dep_CustPTSetting3rd_Agent(CustID)
 	SELECT s.Custid
@@ -99,15 +106,30 @@ BEGIN
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
+	INSERT INTO #Dep_CustDiscountSetting_Member(CustID)
+	SELECT s.Custid
+	FROM Dep_CustDiscountSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+
+	INSERT INTO #Dep_CustDiscountGroupSetting_Member(CustID)
+	SELECT s.AgentID
+	FROM Dep_CustDiscountGroupSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
+	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+
 	--SELECT * FROM #Dep_CustStakeLevel_Agent
 	--SELECT * FROM #Dep_CustStakeLevel_Member
 	--SELECT * FROM #Dep_CustPTGroupSetting3rd_Member
 	--SELECT * FROM #Dep_CustPTSetting3rd_Agent
 	--SELECT * FROM #Dep_CustPTSetting3rd_Member
+	--SELECT * FROM #Dep_CustDiscountSetting_Member
+	--SELECT * FROM #Dep_CustDiscountGroupSetting_Member
 
 	DECLARE @BatchNum INT = 5000
 	CREATE TABLE #CustTempBatch (CustID INT)
 
+	---------------PT---------------------------
 	WHILE 1 = 1
 	BEGIN
 		DELETE TOP (@BatchNum) #Dep_CustPTSetting3rd_Agent 
@@ -156,6 +178,7 @@ BEGIN
 		TRUNCATE TABLE #CustTempBatch
 	END
 	
+	--------------StakeLevel---------------------------------
 	WHILE 1 = 1
 	BEGIN
 		DELETE TOP (@BatchNum) #Dep_CustStakeLevel_Agent 
@@ -188,6 +211,39 @@ BEGIN
 		TRUNCATE TABLE #CustTempBatch
 	END
 
+	---------------Comm------------------------------------
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustDiscountSetting_Member 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustDiscountSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustDiscountGroupSetting_Member 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustDiscountGroupSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.AgentID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
 	DROP TABLE #CustTempBatch
 	DROP TABLE #Dep_CustPTGroupSetting3rd_Member
 	DROP TABLE #Dep_CustPTSetting3rd_Agent
@@ -195,6 +251,8 @@ BEGIN
 	DROP TABLE #Dep_CustStakeLevel_Agent
 	DROP TABLE #Dep_CustStakeLevel_Member
 	DROP TABLE #supers
+	DROP TABLE #Dep_CustDiscountGroupSetting_Member
+	DROP TABLE #Dep_CustDiscountSetting_Member
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
