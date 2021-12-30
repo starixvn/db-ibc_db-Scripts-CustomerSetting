@@ -348,10 +348,22 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20,72)))
-		AND Ci.currency IN (12,13,15,2,20,3,32,4,45,46,49,5,51,55,56,6,61,66,70,71,72,79,80,82,83,85,86,93,94,96,97,7,92)
-		--, GBP, RMB, IN, RM, UUS, US$, JPY, TB, Won, BND, MXN, HK$, INH, RUB, PLN, EURO, INR, YUN, MKK, KHR, YNG, KES, GHS, BRL, CLP, PEN, ARS, LAK, MK, USDT, BDT , DON,HID	
-ORDER BY ci.custid 
+			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20)))
+		AND Ci.currency IN (
+							 2	-- 	RM
+							,3	-- 	US$
+							,4	-- 	TB
+							,12	-- 	GBP
+							,13	-- 	RMB
+							,15	-- 	IN
+							,51	-- 	INH
+							,61	-- 	INR
+							,66	-- 	YUN
+							,70	-- 	MKK
+							,96	-- 	USDT
+							,20 --	UUS
+							)
+		ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
 

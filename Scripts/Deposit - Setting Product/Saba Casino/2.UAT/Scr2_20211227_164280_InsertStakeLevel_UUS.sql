@@ -16,7 +16,8 @@ CREATE TABLE #StakeLevel(
 	[MaxStake]		[decimal](19, 8) NULL,
 	[ExchangeId]	[int],
 	[GameGroupID]	INT,
-	ID				INT IDENTITY(1,1)
+	ID				INT IDENTITY(1,1),
+	StakeLevelID	INT
 ) ON [PRIMARY]
 
 GO
@@ -80,24 +81,30 @@ SELECT 2207, 20, '0.1', '500', 0.1, 500 UNION ALL -- UUS
 SELECT 2208, 20, '0.1', '50', 0.1, 50 UNION ALL -- UUS
 SELECT 2208, 20, '0.1', '100', 0.1, 100  -- UUS
 
+DECLARE @Max_StakeLevelID INT
+
+SELECT @Max_StakeLevelID = MAX(StakeLevelID) FROM Dep_StakeLevel WITH(NOLOCK)
+
 ;WITH TMP AS(
 	SELECT s.*,
-	ROW_NUMBER() OVER( PARTITION BY GameTypeID,ExchangeID ORDER BY MaxStake,MinStake) AS Level
+	ROW_NUMBER() OVER( PARTITION BY GameTypeID,ExchangeID ORDER BY MaxStake,MinStake) AS Level,
+	ROW_NUMBER() OVER( PARTITION BY GameTypeID ORDER BY ExchangeID,MaxStake,MinStake) + @Max_StakeLevelID AS StakeLevelID_TMP
 	FROM #StakeLevel s
 )
 UPDATE t
-SET t.GameGroupID = CASE WHEN tmp.level = 1 then 34 ELSE 36 END
+SET t.GameGroupID = CASE WHEN tmp.level = 1 then 33 ELSE 35 END,
+	t.StakeLevelID = tmp.StakeLevelID_TMP
 FROM #StakeLevel t
 INNER JOIN TMP 
 	ON t.ID = tmp.ID
 
 -->Insert StakeLevel
-INSERT INTO StakeLevel(GameTypeID,ExchangeId,GameGroupID)
-SELECT GameTypeID, ExchangeID,t.GameGroupID
+INSERT INTO Dep_StakeLevel(StakeLevelID,GameTypeID,ExchangeId,GameGroupID)
+SELECT StakeLevelID,GameTypeID, ExchangeID,t.GameGroupID
 FROM #StakeLevel t
 WHERE t.GameTypeID = 2101
-	AND NOT EXISTS (	SELECT 1 
-					FROM StakeLevel s WITH(NOLOCK) 
+	AND NOT EXISTS (SELECT 1 
+					FROM Dep_StakeLevel s WITH(NOLOCK) 
 					WHERE t.ExchangeId = s.ExchangeId 
 						AND t.GameTypeID = s.GameTypeID
 						AND t.GameGroupID = s.GameGroupID )
@@ -106,14 +113,14 @@ WHERE t.GameTypeID = 2101
 --Insert StakeLevelGroupDetail
 ;WITH STAKE_TEMP AS (
 	SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
-	FROM StakeLevel s WITH(NOLOCK)
+	FROM Dep_StakeLevel s WITH(NOLOCK)
 	CROSS APPLY ( SELECT t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake 
 				  FROM #StakeLevel t 
 				  WHERE t.ExchangeId = s.ExchangeId
 					AND t.GameGroupID = s.GameGroupID) t
 	WHERE s.GameTypeID = 2101
 )
-MERGE StakeLevelGroupDetail as g 
+MERGE Dep_StakeLevelGroupDetail as g 
 USING STAKE_TEMP s on g.StakeLevelID = s.StakeLevelID AND g.GameTypeID = s.GameTypeID
 WHEN MATCHED THEN UPDATE SET 
 					g.MinLabel = s.MinLabel,
@@ -129,14 +136,15 @@ DROP TABLE #StakeLevel
 
 /*
 SELECT sl.*,e.code
-FROM StakeLevel SL WITH (NOLOCK)
+FROM Dep_StakeLevel SL WITH (NOLOCK)
 	inner join exchange e (NOLOCK) on sl.exchangeid = e.exchangeid
-WHERE SL.GameTypeID = 2101
-	AND sl.exchangeID  = 20
+WHERE SL.GameTypeID = 2101 AND sl.exchangeid = 20
+ORDER BY sl.gametypeID,sl.exchangeID,sl.gamegroupID
 
-SELECT sl.*
-FROM StakeLevelGroupDetail SL WITH (NOLOCK)
-	INNER JOIN StakeLevel s WITH(NOLOCK)ON sl.StakeLevelID = s.StakeLevelID
-WHERE S.GameTypeID = 2101 AND s.exchangeID  = 20
+SELECT sl.*,s.exchangeid,s.gamegroupID
+FROM Dep_StakeLevelGroupDetail SL WITH (NOLOCK)
+	INNER JOIN Dep_StakeLevel s WITH(NOLOCK)ON sl.StakeLevelID = s.StakeLevelID
+WHERE S.GameTypeID = 2101 AND s.exchangeid = 20
+ORDER BY sl.gametypeID,s.exchangeID,s.gamegroupID
 */
 

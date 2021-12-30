@@ -34,8 +34,8 @@ BEGIN
 	    OR dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 
 	   )
 		RETURN
-	DECLARE @sportType SMALLINT
-	SET @sportType = 208
+
+	DECLARE @sportType SMALLINT = 208 , @BetType SMALLINT = 2101
 	
 	CREATE TABLE #supers (custid INT)
 
@@ -46,88 +46,155 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
 		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20,72)))
-		AND Ci.currency IN (12,13,15,2,20,3,32,4,45,46,49,5,51,55,56,6,61,66,70,71,72,79,80,82,83,85,86,93,94,96,97,7,92)
-		--, GBP, RMB, IN, RM, UUS, US$, JPY, TB, Won, BND, MXN, HK$, INH, RUB, PLN, EURO, INR, YUN, MKK, KHR, YNG, KES, GHS, BRL, CLP, PEN, ARS, LAK, MK, USDT, BDT , DON,HID	
+			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20)))
+	AND Ci.currency IN (
+						 2	-- 	RM
+						,3	-- 	US$
+						,4	-- 	TB
+						,12	-- 	GBP
+						,13	-- 	RMB
+						,15	-- 	IN
+						,51	-- 	INH
+						,61	-- 	INR
+						,66	-- 	YUN
+						,70	-- 	MKK
+						,96	-- 	USDT
+						,20 --	UUS
+						)	
 	ORDER by ci.custid
 		
-	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #CustPTSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #CustPTGroupSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #CustBetSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
-	CREATE TABLE #CustBetSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #Dep_CustPTSetting3rd_Agent(CustID INT)
+	CREATE TABLE #Dep_CustPTSetting3rd_Member(CustID INT)
+	CREATE TABLE #Dep_CustPTGroupSetting3rd_Member(CustID INT)
+	CREATE TABLE #Dep_CustStakeLevel_Agent(CustID INT)
+	CREATE TABLE #Dep_CustStakeLevel_Member(CustID INT)
 
-	INSERT INTO #CustPTSetting3rd_Agent(CustID,SporttypeID,Bettype,IsLive)
-	SELECT s.Custid,SportType,BetType,IsLive 
+	INSERT INTO #Dep_CustPTSetting3rd_Agent(CustID)
+	SELECT s.Custid
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #CustPTSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT s.CustID,Sporttype,Bettype,IsLive 
+	INSERT INTO #Dep_CustPTSetting3rd_Member(CustID)
+	SELECT s.CustID
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT AgentID,SportType,BetType,IsLive 
+	INSERT INTO #Dep_CustPTGroupSetting3rd_Member(CustID)
+	SELECT AgentID
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
+	INSERT INTO #Dep_CustStakeLevel_Agent(CustID)
+	SELECT S.CustID
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
+	INSERT INTO #Dep_CustStakeLevel_Member(CustID)
+	SELECT S.CustID 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
-	BEGIN
-		DELETE cg
-		FROM Dep_CustPTSetting_Agent cg 	
-			INNER JOIN #CustPTSetting3rd_Agent t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
-	END	
-	
-	IF EXISTS(SELECT 1 FROM #CustPTSetting3rd_Member)
-	BEGIN					
-		DELETE cg
-		FROM Dep_CustPTSetting_Member cg
-			INNER JOIN #CustPTSetting3rd_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
-		OPTION(MAXDOP 1)		
-	END  
-	
-	IF EXISTS(SELECT 1 FROM #CustPTGroupSetting3rd_Member)
-	BEGIN	
-		DELETE cg
-		FROM Dep_CustPTGroupSetting_Member cg 
-			INNER JOIN #CustPTGroupSetting3rd_Member t 
-				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
-	END 		
-			
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Agent)
-	BEGIN		
-		DELETE cg
-		FROM Dep_CustStakeLevel_Agent cg
-			INNER  JOIN #CustBetSetting3rd_Agent t
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 		
-	END 
+	--SELECT * FROM #Dep_CustStakeLevel_Agent
+	--SELECT * FROM #Dep_CustStakeLevel_Member
+	--SELECT * FROM #Dep_CustPTGroupSetting3rd_Member
+	--SELECT * FROM #Dep_CustPTSetting3rd_Agent
+	--SELECT * FROM #Dep_CustPTSetting3rd_Member
 
-	IF EXISTS(SELECT 1 FROM #CustBetSetting3rd_Member)
+	DECLARE @BatchNum INT = 5000
+	CREATE TABLE #CustTempBatch (CustID INT)
+
+	WHILE 1 = 1
 	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustPTSetting3rd_Agent 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
 		DELETE cg
-		FROM Dep_CustStakeLevel_Member cg	
-			INNER JOIN #CustBetSetting3rd_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
-		OPTION(MAXDOP 1)		
-	END	
+		FROM dbo.Dep_CustPTSetting_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustPTSetting3rd_Member 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustPTSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustPTGroupSetting3rd_Member 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.AgentID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+	
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustStakeLevel_Agent 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustStakeLevel_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		DELETE TOP (@BatchNum) #Dep_CustStakeLevel_Member 
+		OUTPUT DELETED.CustID INTO #CustTempBatch(CustID)
+
+		IF @@ROWCOUNT = 0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustStakeLevel_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustTempBatch ci ON ci.custid = cg.CustID	
+		WHERE SportType = @Sporttype AND BetType = @BetType
+
+		TRUNCATE TABLE #CustTempBatch
+	END
+
+	DROP TABLE #CustTempBatch
+	DROP TABLE #Dep_CustPTGroupSetting3rd_Member
+	DROP TABLE #Dep_CustPTSetting3rd_Agent
+	DROP TABLE #Dep_CustPTSetting3rd_Member
+	DROP TABLE #Dep_CustStakeLevel_Agent
+	DROP TABLE #Dep_CustStakeLevel_Member
+	DROP TABLE #supers
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
