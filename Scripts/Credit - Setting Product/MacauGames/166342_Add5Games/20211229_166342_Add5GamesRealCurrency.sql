@@ -101,10 +101,6 @@ SELECT 4056 ,'0.1' ,'10'      ,0.1 ,10      ,64   UNION ALL	--UT	--US$, Yen, $US
 SELECT 4062 ,'0.1' ,'4'       ,0.1 ,4       ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD, UUS
 SELECT 4066 ,'0.2' ,'20'      ,0.2 ,20      ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD, UUS
 SELECT 4076 ,'0.1' ,'4'       ,0.1 ,4       ,64   UNION ALL	--UT	--US$, Yen, $US, UT, USD, UUS
-SELECT 4056 ,'0.1' ,'10'      ,0.1 ,10      ,20   UNION ALL	--UUS	--US$, Yen, $US, UT, USD, UUS
-SELECT 4062 ,'0.1' ,'4'       ,0.1 ,4       ,20   UNION ALL	--UUS	--US$, Yen, $US, UT, USD, UUS
-SELECT 4066 ,'0.2' ,'20'      ,0.2 ,20      ,20   UNION ALL	--UUS	--US$, Yen, $US, UT, USD, UUS
-SELECT 4076 ,'0.1' ,'4'       ,0.1 ,4       ,20   UNION ALL	--UUS	--US$, Yen, $US, UT, USD, UUS
 SELECT 4056 ,'0.1' ,'10'      ,0.1 ,10      ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD, UUS
 SELECT 4062 ,'0.1' ,'4'       ,0.1 ,4       ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD, UUS
 SELECT 4066 ,'0.2' ,'20'      ,0.2 ,20      ,16   UNION ALL	--Yen	--US$, Yen, $US, UT, USD, UUS
