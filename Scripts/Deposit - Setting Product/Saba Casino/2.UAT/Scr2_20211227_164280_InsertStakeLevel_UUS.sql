@@ -135,6 +135,16 @@ WHEN NOT MATCHED THEN
 DROP TABLE #StakeLevel
 
 /*
+DELETE sl
+FROM Dep_StakeLevelGroupDetail SL WITH (NOLOCK)
+	INNER JOIN Dep_StakeLevel s WITH(NOLOCK)ON sl.StakeLevelID = s.StakeLevelID
+WHERE S.GameTypeID = 2101 AND s.exchangeid = 20
+
+DELETE sl
+FROM Dep_StakeLevel SL WITH (NOLOCK)
+	inner join exchange e (NOLOCK) on sl.exchangeid = e.exchangeid
+WHERE SL.GameTypeID = 2101 AND sl.exchangeid = 20
+
 SELECT sl.*,e.code
 FROM Dep_StakeLevel SL WITH (NOLOCK)
 	inner join exchange e (NOLOCK) on sl.exchangeid = e.exchangeid
