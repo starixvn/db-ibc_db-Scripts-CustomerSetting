@@ -37,11 +37,6 @@ BEGIN
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
 	
-	INSERT INTO #CustTemp (CustID)
-	SELECT custid, roleid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend AND Enabled = 1 AND custid <= @maxcustid 
-
 	WHILE (1=1)
 	BEGIN
 		TRUNCATE TABLE #CustTempBatch

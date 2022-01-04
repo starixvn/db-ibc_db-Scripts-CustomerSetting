@@ -31,14 +31,9 @@ BEGIN
 	)
 	
 	CREATE TABLE #CustTempBatch(CustID INT)
-
-	INSERT INTO #CustTemp (CustID)
-	SELECT custid
-	FROM Custinfo WITH (NOLOCK)
-	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
 	
 	INSERT INTO #CustTemp (CustID)
-	SELECT custid, roleid
+	SELECT custid
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend = @srecommend AND Enabled = 1 AND custid <= @maxcustid 
 
