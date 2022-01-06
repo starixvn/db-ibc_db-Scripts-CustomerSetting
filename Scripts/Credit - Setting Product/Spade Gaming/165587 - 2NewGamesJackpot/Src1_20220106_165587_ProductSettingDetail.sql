@@ -65,3 +65,15 @@ INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 SELECT @sporttype, @Bettype, @BitmapOrder	
 	
 
+INSERT INTO [dbo].[ProductStatusSiteCurrency]
+           ([SportType]
+           ,[BetType]
+           ,[Currency]
+           ,[SiteID]
+           ,[IsHidden]
+           ,[IsDisabled]
+		   ,[HasSynced])
+SELECT @sporttype,@bettype, 0 AS exchangeid, s.siteid, 0 AS IsHidden, 1 AS IsDisabled, 1 AS HasSynced
+FROM dbo.[Site] s WITH(NOLOCK)
+WHERE s.isActive = 1 AND s.isLicensee = 0
+	AND s.site IN ('789y')
