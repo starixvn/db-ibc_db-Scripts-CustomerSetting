@@ -51,7 +51,7 @@ IF NOT EXISTS(	SELECT TOP 1 1
 			0,--  IsHidden
             0,--  IsDisabled
             2,--  SettingLevel
-            5,--  DisplayOrder
+            1,--  DisplayOrder
             1,--  SettingStatus (only UAT)
             NULL,--  IntervalValue
             @productID,--  RealProductId
