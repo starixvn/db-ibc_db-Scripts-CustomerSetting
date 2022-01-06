@@ -77,3 +77,12 @@ SELECT @sporttype,@bettype, 0 AS exchangeid, s.siteid, 0 AS IsHidden, 1 AS IsDis
 FROM dbo.[Site] s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 	AND s.site IN ('789y')
+	
+-- Update Macau 	
+
+UPDATE ProductSettingDetail WITH(UPDLOCK,ROWLOCK)
+SET SettingLevel = 2
+WHERE ProductID = @productID 
+		AND SettingType = @settingType 
+		AND SportType  = 212 
+		AND BetType = 4001
