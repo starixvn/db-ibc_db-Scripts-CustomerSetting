@@ -59,6 +59,8 @@ SELECT 4373 ,'0.08'   ,'220'       ,0.08   ,220.00    ,69   UNION ALL	--MMK	--Ye
 SELECT 4374 ,'0.08'   ,'220'       ,0.08   ,220.00    ,69   UNION ALL	--MMK	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4373 ,'0.08'   ,'220'       ,0.08   ,220.00    ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4374 ,'0.08'   ,'220'       ,0.08   ,220.00    ,3    UNION ALL	--US$	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4373 ,'0.08'   ,'220'       ,0.08   ,220.00    ,95   UNION ALL	--USD	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
+SELECT 4374 ,'0.08'   ,'220'       ,0.08   ,220.00    ,95   UNION ALL	--USD	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4373 ,'0.08'   ,'220'       ,0.08   ,220.00    ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4374 ,'0.08'   ,'220'       ,0.08   ,220.00    ,64   UNION ALL	--UT	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
 SELECT 4373 ,'0.08'   ,'220'       ,0.08   ,220.00    ,16   UNION ALL	--Yen	--Yen, UT, $US, US$, TH,SD$,AUD,MMK, MKK,UUS
