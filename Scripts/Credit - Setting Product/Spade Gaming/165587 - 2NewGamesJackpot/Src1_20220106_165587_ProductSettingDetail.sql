@@ -4,6 +4,7 @@
 	Date: 20220106
 	Task:  Insert new status Jackpot RedmineID:#165587
 	DB: DBCust/CustDB
+	P/s :  Step 1 Add config status jackpot
 */
 DECLARE @productID SMALLINT ,@settingType SMALLINT,@betType SMALLINT,@sportType SMALLINT, @BitmapOrder   TINYINT
 SET @settingType =  13 -- Status	
@@ -57,6 +58,8 @@ IF NOT EXISTS(	SELECT TOP 1 1
             NULL--  MaxChoice
 		)
 	END		
+
+DELETE FROM ProductStatusProfile WHERE Sporttype = @sporttype AND Bettype = @Bettype
 
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 SELECT @sporttype, @Bettype, @BitmapOrder	

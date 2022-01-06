@@ -4,7 +4,7 @@
 	Date:  20220106
 	Task:  Disable status Jackpot RedmineID:#165587
 	DB: DBCust/CustDB
-	P/s : 
+	P/s :  Step 3 Disable status for real currency
 */
 DECLARE @productID SMALLINT ,@settingType SMALLINT,@betType SMALLINT,@sportType SMALLINT
 SET @settingType =  13 -- Status	

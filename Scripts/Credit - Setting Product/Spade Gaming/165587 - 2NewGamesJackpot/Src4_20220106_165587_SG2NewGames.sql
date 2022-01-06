@@ -4,6 +4,7 @@
 	Created: Winfred 
 	Task: #165587 - Spadegaming - 2 new games Jackpot - Credit  RedmineID:#165587
 	DB: DBCUST/CUSTDB
+	P/s :  Step 4 Add Stake level group detail real currency
 */
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
