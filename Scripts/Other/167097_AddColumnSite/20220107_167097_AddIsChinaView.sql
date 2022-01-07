@@ -3,7 +3,7 @@
 	Created: Winfred
 	Date: 20220107
 	Task:  Add a new column into Site table RedmineID:#167097
-	DB: DBCust/CustDB
+	DB: DBCust/CustDB and all replicated server of table Site
 */
 
 USE CustDB
