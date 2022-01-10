@@ -136,8 +136,6 @@ WHERE ci.roleid IN (1,2,3,4)
 
 WHILE 1 = 1
 BEGIN
-	TRUNCATE TABLE #CustList_Status_Batch
-
 	DELETE TOP(@BatchSize) t
 	OUTPUT deleted.custid,deleted.IsDisabled INTO @CustStatus_TempBatch(custid,IsDisabled)
 	FROM #CustStatus_Temp t
@@ -152,6 +150,8 @@ BEGIN
 		INNER JOIN @CustStatus_TempBatch ci ON cs.CustID = ci.CustID
 		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitOrder,0) as Hid
 		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitOrder,ci.IsDisabled) as Dis
+
+	DELETE FROM @CustStatus_TempBatch
 END
 
 DROP TABLE #Dummy
