@@ -19,8 +19,8 @@ CREATE TABLE #Super_WrongPT (custid INT, Sporttype SMALLINT, Bettype SMALLINT, I
 CREATE TABLE #AgentGroupPT (AgentID INT, Sporttype SMALLINT, Bettype SMALLINT, IsLive BIT, SuperPT TINYINT, MasterPT TINYINT, AgentPT TINYINT, IsAutoMasterPT BIT, AutoMasterPT TINYINT, IsAutoSuperPT BIT, AutoSuperPT TINYINT)
 CREATE TABLE #SMAList_WL (custid INT, Sporttype SMALLINT, Bettype SMALLINT, MaxWinLimit MONEY, MaxLossLimit MONEY, IsAutoReset BIT)
 CREATE TABLE #MemberList_WL(custid INT, Sporttype SMALLINT, Bettype SMALLINT, MaxWinLimit MONEY,MaxLossLimit MONEY, IsAutoReset BIT)
-CREATE TABLE #Custlist_Status (custid INT, IsDisabled BIT, HasSynced BIT)
-CREATE TABLE #CustList_Status_Batch(custid INT, IsDisabled BIT, HasSynced BIT)
+CREATE TABLE #Custlist_Status (custid INT, IsDisabled BIT)
+CREATE TABLE #CustList_Status_Batch(custid INT, IsDisabled BIT)
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 INSERT INTO #supers(custid)
@@ -237,23 +237,22 @@ END
 
 ----------------------------------------ADJUST Status--------------------------------------------------------------
 BEGIN
-	INSERT INTO #Custlist_Status(custid,IsDisabled,HasSynced)
-	SELECT c.CustID,ci.DisableCasino,ci.SyncCasino
+	INSERT INTO #Custlist_Status(custid,IsDisabled)
+	SELECT c.CustID,ci.DisableCasino
 	FROM dbo.CustProductStatus C WITH(NOLOCK)
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsDisabled, @BitmapOrder) as isDisabled
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsHidden, @BitmapOrder) as isHidden
-		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapHasSynced, @BitmapOrder) as HasSynced
 		INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
 		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 	WHERE ci.roleid IN (1,2,3,4) AND Enabled = 1
-		AND (isDisabled.value <> ci.DisableCasino OR isHidden.value <> 0 OR HasSynced.value <> ci.SyncCasino)
+		AND (isDisabled.value <> ci.DisableCasino OR isHidden.value <> 0)
 
 	WHILE 1 = 1
 	BEGIN
 		TRUNCATE TABLE #CustList_Status_Batch
 
 		DELETE TOP(@BatchNum) t
-		OUTPUT deleted.custid,deleted.IsDisabled ,deleted.HasSynced INTO #CustList_Status_Batch(custid,IsDisabled,HasSynced)
+		OUTPUT deleted.custid,deleted.IsDisabled INTO #CustList_Status_Batch(custid,IsDisabled)
 		FROM #Custlist_Status t
 
 		IF @@ROWCOUNT = 0
@@ -261,13 +260,11 @@ BEGIN
 
 		UPDATE cs
 		SET cs.bitmapIsHidden = hid.NewBitmap,
-			bitmapIsDisabled = dis.NewBitmap,
-			bitmapHasSynced = hs.NewBitmap	
+			bitmapIsDisabled = dis.NewBitmap
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustList_Status_Batch ci ON cs.CustID = ci.CustID
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitMapOrder,0) as Hid
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitMapOrder,ci.IsDisabled) as Dis
-			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitMapOrder,ci.HasSynced) as hs
 	END
 END
 /*
