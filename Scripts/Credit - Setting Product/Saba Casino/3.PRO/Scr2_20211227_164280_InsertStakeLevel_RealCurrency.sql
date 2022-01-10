@@ -4,10 +4,6 @@
 	Task: Insert stake level for Saba Casino [#164280]
 	DB: DBCUST/CustDB
 */
-
-USE CustDB
-GO
-
 USE CustDB
 GO
 
