@@ -15,4 +15,4 @@ ALTER TABLE SystemSetting ALTER COLUMN servicename VARCHAR(100) NOT NULL
 
 GO
 -- Create Clustered Index
-ALTER TABLE SystemSetting ADD CONSTRAINT PK_SystemSetting PRIMARY KEY CLUSTERED (settingname, servicename)
+ALTER TABLE SystemSetting ADD CONSTRAINT PK_SystemSetting PRIMARY KEY CLUSTERED (servicename, settingname)
