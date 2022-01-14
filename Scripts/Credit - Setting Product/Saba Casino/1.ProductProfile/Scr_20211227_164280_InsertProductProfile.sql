@@ -94,9 +94,7 @@ VALUES	(@Sporttype, @Bettype, @BitmapOrder)
 --GameGroup
 INSERT INTO	dbo.GameGroup (GameGroupID, RefSportType, RefBetType, GroupName, IsDeposit)      
 VALUES	
-	(33, @Sporttype, @Bettype, 'Level 1', 1),
 	(34, @Sporttype, @Bettype, 'Level 1', 0),
-	(35, @Sporttype, @Bettype, 'Level 2', 1),
 	(36, @Sporttype, @Bettype, 'Level 2', 0)
 
 INSERT INTO dbo.ProductSettingSystemDisplay
@@ -128,7 +126,7 @@ SELECT * FROM ProductStatusProfile(NOLOCK) WHERE SportType = 208
 SELECT * FROM dbo.ProductStatusSiteCurrency(NOLOCK) WHERE SportType = 208
 SELECT * FROM dbo.SportNonOfferedSiteCurrency WITH (NOLOCK) WHERE SportType = 208 
 --SELECT * FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
-SELECT * FROM dbo.GameGroup WITH (NOLOCK) WHERE RefBetType = 2101 
+SELECT * FROM dbo.GameGroup WITH (NOLOCK) WHERE RefSportType = 208 AND IsDeposit = 0 
 SELECT * FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 6
 
 DELETE FROM ProductSettingDetail WHERE ProductID = 6
@@ -136,6 +134,6 @@ DELETE FROM ProductStatusProfile WHERE SportType = 208
 DELETE FROM dbo.ProductStatusSiteCurrency WHERE SportType = 208
 DELETE FROM dbo.SportNonOfferedSiteCurrency  WHERE SportType = 208 
 --DELETE FROM LossLimit_GlobalSetting WHERE ProductId = 6
-DELETE FROM dbo.GameGroup WHERE RefBetType = 2101 
+DELETE FROM dbo.GameGroup WHERE RefSportType = 208 AND IsDeposit = 0
 DELETE FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 6
 */
