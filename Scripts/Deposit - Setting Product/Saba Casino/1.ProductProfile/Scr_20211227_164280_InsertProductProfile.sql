@@ -53,8 +53,17 @@ WHERE D.SportType = @sportType
 INSERT INTO [dbo].Dep_ProductStatusProfile (Sporttype,Bettype,bitmapOrder)
 VALUES (@sportType,@betType,@bitmapOrder)
 
+DELETE 
+FROM [GameGroup] WITH (ROWLOCK) 
+WHERE RefSportType = 208 AND IsDeposit = 1
+
+INSERT INTO	dbo.GameGroup (GameGroupID, RefSportType, RefBetType, GroupName, IsDeposit)      
+VALUES	
+	(33, @Sporttype, @Bettype, 'Level 1', 1),
+	(35, @Sporttype, @Bettype, 'Level 2', 1)
 
 /*
+SELECT * FROM [GameGroup] (NOLOCK) WHERE RefSportType = 208 AND IsDeposit = 1
 SELECT * FROM [Dep_ProductSetting] (NOLOCK) WHERE productid = 6
 SELECT * FROM [Dep_ProductSettingDetail] (NOLOCK) WHERE SportType = 208
 SELECT * FROM Dep_ProductStatusProfile (NOLOCK) WHERE SportType = 208
