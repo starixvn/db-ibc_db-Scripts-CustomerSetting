@@ -1,9 +1,9 @@
-/*<info serverAlias="DBTXN-bodb02"></info>*/
+/*<info serverAlias="DBPRO-bodb02"></info>*/
 /*
 	Created: Winfred
 	Date: 20220106
 	Task:  Add dummy sport RedmineID:#165587
-	DB: DBTXN /bodb02
+	DB: DBPRO /bodb02
 	P/s :  Add dummy sport
 */
 
