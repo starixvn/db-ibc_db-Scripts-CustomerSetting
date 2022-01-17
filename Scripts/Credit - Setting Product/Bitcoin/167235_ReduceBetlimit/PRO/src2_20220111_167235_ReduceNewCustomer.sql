@@ -98,8 +98,6 @@
 	SELECT 52 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS SuperMinBet,2000 AS SuperMaxBet,6000 AS SuperMaxPerMatch  Union ALL --DKK
 	SELECT 53 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS SuperMinBet,2000 AS SuperMaxBet,6000 AS SuperMaxPerMatch  Union ALL --SEK
 	SELECT 54 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS SuperMinBet,2000 AS SuperMaxBet,6000 AS SuperMaxPerMatch  Union ALL --NOK
-	SELECT 55 AS Currency ,175 AS MinBet,18000 AS MaxBet,54000 AS MaxPerMatch,175 AS SuperMinBet,18000 AS SuperMaxBet,54000 AS SuperMaxPerMatch  Union ALL --RUB
-	SELECT 56 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS SuperMinBet,1000 AS SuperMaxBet,3000 AS SuperMaxPerMatch  Union ALL --PLN
 	SELECT 57 AS Currency ,50 AS MinBet,5000 AS MaxBet,15000 AS MaxPerMatch,50 AS SuperMinBet,5000 AS SuperMaxBet,15000 AS SuperMaxPerMatch  Union ALL --CZK
 	SELECT 58 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS SuperMinBet,1000 AS SuperMaxBet,3000 AS SuperMaxPerMatch  Union ALL --RON
 	SELECT 64 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS SuperMinBet,300 AS SuperMaxBet,900 AS SuperMaxPerMatch  Union ALL --UT
