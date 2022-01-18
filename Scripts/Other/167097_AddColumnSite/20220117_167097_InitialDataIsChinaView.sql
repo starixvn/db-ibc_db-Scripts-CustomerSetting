@@ -23,8 +23,11 @@ ORDER BY ds.site
 
 -- insert data Test
 INSERT INTO #Site(site) VALUES ('golden88')
-select * from #Site a
-inner join 	Site b with(nolock) on a.site = b.site
+
+UPDATE s
+SET s.IsChinaView = 0
+FROM dbo.Site s WITH(UPDLOCK,ROWLOCK)
+WHERE isLicensee = 1
 
 UPDATE s
 SET s.IsChinaView = 1
