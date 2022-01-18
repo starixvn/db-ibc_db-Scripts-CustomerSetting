@@ -17,7 +17,7 @@ FROM dbo.custInfo c WITH(NOLOCK)
 INNER JOIN Dep_CustSuper ds with (nolock) on ds.custid = c.CustID	
 WHERE	c.username NOT LIKE '3rdSuper%'			
 		AND c.Enabled=1
-		AND c.currency in (124,125) --RMB2,INH2
+		AND c.currency in (124,125,20) --RMB2,INH2,UUS
 		AND ds.site like '%CV'
 ORDER BY ds.site
 
