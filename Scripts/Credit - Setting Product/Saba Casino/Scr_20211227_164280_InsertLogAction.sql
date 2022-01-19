@@ -10,7 +10,7 @@ GO
 
 --Insert data
 DECLARE @Log TABLE (Level TINYINT, ProductID TINYINT, ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50))
-DECLARE @ActionTypeID INT = 5, @IsInternal BIT = 0, @ProductId TINYINT = 69
+DECLARE @ActionTypeID INT = 5, @IsInternal BIT = 0, @ProductId TINYINT = 6
 
 INSERT INTO @Log (Level, ProductID, ActionID, ActionName, SPName)
 SELECT 4, @ProductId, 60536,'Update Product Status of Saba Casino on Super by Admin','Acc_Admin_DisableNewProductStatusUpd' UNION ALL
