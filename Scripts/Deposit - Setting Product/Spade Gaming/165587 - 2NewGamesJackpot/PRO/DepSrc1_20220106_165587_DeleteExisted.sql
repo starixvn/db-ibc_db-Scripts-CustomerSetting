@@ -38,7 +38,7 @@ BEGIN
 	SELECT @ProductSettingID = p.ProductSettingID
 	FROM Dep_ProductSettingDetail ps WITH (NOLOCK)
 		INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON p.ProductSettingID = ps.ProductSettingID
-	WHERE sporttype = @Sporttype AND SettingType = 1 AND bettype = 4101
+	WHERE sporttype = @Sporttype AND SettingType = 1 AND bettype = @Bettype
 
 	INSERT INTO #supers(custid)
 	SELECT c.custid
