@@ -19,9 +19,7 @@ BEGIN
 	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN -- run at dbcust only
 	
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
-	IF dbo.f_CheckRepTable('site') = 0 RETURN
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
-	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
