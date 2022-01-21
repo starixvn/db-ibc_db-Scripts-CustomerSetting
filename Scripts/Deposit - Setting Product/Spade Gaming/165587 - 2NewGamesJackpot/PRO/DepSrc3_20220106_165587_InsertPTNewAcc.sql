@@ -42,7 +42,7 @@ BEGIN
 		SportType	SMALLINT, 
 		BetType		SMALLINT
 	)
-	INSERT INTO @SportBetType(SportType, BetType) VALUES (171, 3801)
+	INSERT INTO @SportBetType(SportType, BetType) VALUES (247, 4599)
 
 	
 	CREATE TABLE #MemberTemp (CustID INT PRIMARY KEY CLUSTERED,mrecommend INT,Currency INT,isfinished BIT DEFAULT(0))
