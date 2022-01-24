@@ -105,13 +105,13 @@ INSERT INTO dbo.ProductSettingSystemDisplay
         )
 SELECT 5,@ProductID,13,3
 UNION ALL 
-SELECT 5,@ProductID,1,3
+SELECT 5,@ProductID,18,3
 UNION ALL 
 SELECT 5,@ProductID,6,3
 UNION ALL
 SELECT 9,@ProductID,13,3
 UNION ALL 
-SELECT 9,@ProductID,1,3
+SELECT 9,@ProductID,18,3
 UNION ALL 
 SELECT 9,@ProductID,6,3
 UNION ALL
