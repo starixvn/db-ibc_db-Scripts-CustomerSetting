@@ -8,6 +8,11 @@ FROM dbo.UserLog_RunSP WITH(NOLOCK)
 WHERE ActionID in (60504,60505,65508,65509,65510,65511,70512,70513,70514,70515,70516,70517,75516,75517,75518,75519,75520,75521,75522,75523) 
 	AND  logdate >= '2022-01-06 23:12:08' 
 
+-- Update real currency
+DELETE a FROM #LogTmp a 
+	INNER JOIN bodb02.dbo.CustInfo ci WITH (NOLOCK) ON a.custid = ci.custid
+WHERE  ci.currency IN (20,72)
+
 UPDATE lgTbl
 SET lgTbl.TrackingValue = Replace(lgTbl.TrackingValue,'SportType="212"','ProductID="22"'),
 	lgTbl.TrackingValue2 = Replace(lgTbl.TrackingValue2,'SportType="212"','ProductID="22"')
