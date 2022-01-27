@@ -1,4 +1,9 @@
-
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
+	Created: 20220126@Winfred
+	Task: Correct new action status of Macau [#RM:167635]
+	DB: DBLOG/bodb_CustomerLog
+*/
 
 CREATE TABLE #LogTmp (logid	BIGINT, custid	INT,ActionID	INT,TrackingValue	nvarchar(MAX),TrackingValue2	nvarchar(MAX))
 
