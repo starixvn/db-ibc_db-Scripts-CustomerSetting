@@ -11,8 +11,8 @@ USE [bodb_CRM]
 GO
 	
 
-UPDATE m WITH(UPDLOCK,ROWLOCK)
+UPDATE m 
 SET IsProcessedUAT = 0
-FROM crmVoidingMessage m (NOLOCK)
+FROM crmVoidingMessage m WITH(UPDLOCK,ROWLOCK)
 WHERE MessageId = 1457088	
 
