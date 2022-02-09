@@ -11,7 +11,6 @@ GO
 
 DECLARE @SportBettype TABLE (SportType SMALLINT, BetType SMALLINT)
 INSERT INTO @SportBettype(SportType, BetType) VALUES (247, 4599)
-INSERT INTO @SportBettype(SportType, BetType) VALUES (247, 4600)
 
 INSERT INTO GameLaunchPerCurrency(SportType,BetType,Currency,IsLaunched,IsTest)
 SELECT t.SportType ,t.BetType,exchangeid,1,1
