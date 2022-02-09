@@ -11,6 +11,26 @@ CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVA
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 --=============================================
+SELECT 6001 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6002 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6003 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6004 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6005 ,'10'      ,'10000'       ,10      ,10000       ,10   UNION ALL	--INR1
+SELECT 6006 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6007 ,'6'       ,'1500'        ,6       ,1500        ,10   UNION ALL	--INR1
+SELECT 6008 ,'6'       ,'3000'        ,6       ,3000        ,10   UNION ALL	--INR1
+SELECT 6009 ,'5'       ,'5000'        ,5       ,5000        ,10   UNION ALL	--INR1
+SELECT 6010 ,'10'      ,'3000'        ,10      ,3000        ,10   UNION ALL	--INR1
+SELECT 6011 ,'6'       ,'1500'        ,6       ,1500        ,10   UNION ALL	--INR1
+SELECT 6012 ,'6'       ,'1500'        ,6       ,1500        ,10   UNION ALL	--INR1
+SELECT 6013 ,'10'      ,'2000'        ,10      ,2000        ,10   UNION ALL	--INR1
+SELECT 6014 ,'9'       ,'900'         ,9       ,900         ,10   UNION ALL	--INR1
+SELECT 6015 ,'6'       ,'1500'        ,6       ,1500        ,10   UNION ALL	--INR1
+SELECT 6016 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
+SELECT 6017 ,'9'       ,'1800'        ,9       ,1800        ,10   UNION ALL	--INR1
+SELECT 6018 ,'6'       ,'3000'        ,6       ,3000        ,10   UNION ALL	--INR1
+SELECT 6019 ,'10'      ,'20000'       ,10      ,20000       ,10   UNION ALL	--INR1
+SELECT 6020 ,'6'       ,'6000'        ,6       ,6000        ,10   UNION ALL	--INR1
 SELECT 6021 ,'5'       ,'900'         ,5       ,900         ,10   UNION ALL	--INR1
 SELECT 6022 ,'1'       ,'30000'       ,1       ,30000       ,10   UNION ALL	--INR1
 SELECT 6023 ,'7.5'     ,'750'         ,7.5     ,750         ,10   UNION ALL	--INR1
