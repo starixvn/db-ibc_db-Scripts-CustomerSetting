@@ -8,7 +8,7 @@
 
 CREATE TABLE #StakeLevel_Temp (GameTypeID INT,MinLabel NVARCHAR(50),MaxLabel NVARCHAR(50)
 								,MinStake DECIMAL(19,8),MaxStake DECIMAL(19,8)
-								,ExchangeId int, GameGroupID int default(12))
+								,ExchangeId INT, GameGroupID INT DEFAULT(12))
 								
 INSERT INTO #StakeLevel_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,MaxStake,ExchangeId)
 SELECT 4301 ,'25'      ,'5000'        ,25      ,5000        ,10   UNION ALL	--INR1	
