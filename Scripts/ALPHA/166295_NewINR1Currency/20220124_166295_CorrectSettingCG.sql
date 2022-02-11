@@ -97,17 +97,7 @@ SELECT 7382 ,'12.5'    ,'6250'        ,12.5    ,6250        ,10   UNION ALL	--IN
 SELECT 7383 ,'12.5'    ,'6250'        ,12.5    ,6250        ,10   UNION ALL	--INR1
 SELECT 7384 ,'62.5'    ,'7500'        ,62.5    ,7500        ,10   UNION ALL	--INR1
 SELECT 7385 ,'100'     ,'10000'       ,100     ,10000       ,10   UNION ALL	--INR1
-SELECT 7386 ,'45'      ,'7500'        ,45      ,7500        ,10	  UNION ALL --INR1
-SELECT 7387 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7388 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7389 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7390 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7391 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7392 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7393 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7394 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7395 ,'22'      ,'220'         ,22      ,220         ,10   UNION ALL	--INR1
-SELECT 7396 ,'22'      ,'220'         ,22      ,220         ,10				--INR1
+SELECT 7386 ,'45'      ,'7500'        ,45      ,7500        ,10				 --INR1
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
