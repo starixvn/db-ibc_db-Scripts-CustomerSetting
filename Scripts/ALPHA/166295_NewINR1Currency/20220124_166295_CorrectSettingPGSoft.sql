@@ -72,11 +72,13 @@ SELECT 6058 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--IN
 SELECT 6059 ,'10'      ,'4000'        ,10      ,4000        ,10   UNION ALL	--INR1
 SELECT 6060 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
 SELECT 6061 ,'3'       ,'300'         ,3       ,300         ,10   UNION ALL	--INR1
+SELECT 6062 ,'6'       ,'3000'        ,6       ,3000        ,10   UNION ALL	--INR1
 SELECT 6063 ,'6'       ,'3000'        ,6       ,3000        ,10   UNION ALL	--INR1
 SELECT 6064 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
 SELECT 6065 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
 SELECT 6066 ,'5'       ,'5000'        ,5       ,5000        ,10   UNION ALL	--INR1
 SELECT 6067 ,'10'      ,'4000'        ,10      ,4000        ,10   UNION ALL	--INR1
+SELECT 6068 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
 SELECT 6069 ,'6'       ,'600'         ,6       ,600         ,10   UNION ALL	--INR1
 SELECT 6070 ,'5'       ,'5000'        ,5       ,5000        ,10   UNION ALL	--INR1
 SELECT 6071 ,'5'       ,'5000'        ,5       ,5000        ,10   UNION ALL	--INR1
