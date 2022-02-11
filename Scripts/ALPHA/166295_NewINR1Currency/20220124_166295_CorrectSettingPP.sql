@@ -204,11 +204,11 @@ SELECT 6712 ,'1'       ,'500'         ,1       ,500         ,10   UNION ALL	--IN
 SELECT 6713 ,'1.9'     ,'570'         ,1.9     ,570         ,10   UNION ALL	--INR1
 SELECT 6714 ,'1'       ,'500'         ,1       ,500         ,10   UNION ALL	--INR1
 SELECT 6715 ,'1'       ,'500'         ,1       ,500         ,10	  UNION ALL --INR1
-SELECT 4173 ,'0.05'    ,'4500'        ,0.05    ,4500        ,10   UNION ALL	--INR1
-SELECT 4185 ,'0.01'    ,'250'         ,0.01    ,250         ,10   UNION ALL	--INR1
-SELECT 4255 ,'0.01'    ,'500'         ,0.01    ,500         ,10   UNION ALL	--INR1
-SELECT 6703 ,'0.01'    ,'500'         ,0.01    ,500         ,10   UNION ALL	--INR1
-SELECT 6711 ,'0.01'    ,'500'         ,0.01    ,500         ,10				--INR1
+SELECT 4173 ,'22.5'    ,'4500'        ,22.5    ,4500        ,10   UNION ALL	--INR1
+SELECT 4185 ,'12.5'    ,'250'         ,12.5    ,250         ,10   UNION ALL	--INR1
+SELECT 4255 ,'1'       ,'500'         ,1       ,500         ,10   UNION ALL	--INR1
+SELECT 6703 ,'1'       ,'500'         ,1       ,500         ,10   UNION ALL	--INR1
+SELECT 6711 ,'1'       ,'500'         ,1       ,500         ,10				--INR1
 	
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
