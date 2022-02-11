@@ -81,7 +81,6 @@ SELECT 7367 ,'75'      ,'10000'       ,75      ,10000       ,10   UNION ALL	--IN
 SELECT 7368 ,'62.5'    ,'7500'        ,62.5    ,7500        ,10   UNION ALL	--INR1
 SELECT 7369 ,'45'      ,'7500'        ,45      ,7500        ,10   UNION ALL	--INR1
 SELECT 7370 ,'75'      ,'10000'       ,75      ,10000       ,10   UNION ALL	--INR1
-SELECT 7370 ,'75'      ,'10000'       ,75      ,10000       ,10   UNION ALL	--INR1
 SELECT 7371 ,'37.5'    ,'7500'        ,37.5    ,7500        ,10   UNION ALL	--INR1
 SELECT 7372 ,'37.5'    ,'7500'        ,37.5    ,7500        ,10   UNION ALL	--INR1
 SELECT 7373 ,'75'      ,'10000'       ,75      ,10000       ,10   UNION ALL	--INR1
