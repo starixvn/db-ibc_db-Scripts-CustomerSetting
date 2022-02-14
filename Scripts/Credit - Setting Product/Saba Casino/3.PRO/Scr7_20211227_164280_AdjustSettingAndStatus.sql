@@ -48,7 +48,7 @@ WHERE ci.roleid = 4
 				,35	-- 	$US
 				,43	-- 	THB
 				,47	-- 	DDD
-				,61	-- 	INR
+				,10	-- 	INR1
 				,64	-- 	UT
 				,69	-- 	MMK
 				)
