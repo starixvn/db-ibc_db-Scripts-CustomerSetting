@@ -13,10 +13,10 @@ GO
 UPDATE glpc 
 SET glpc.IsTest =  0
 FROM GameLaunchPerCurrency glpc	WITH (ROWLOCK)
-WHERE SportType = 247 AND BetType IN (4599,4600)	 
+WHERE SportType = 247 AND BetType IN (4599)	 
 
 
 UPDATE glps
 SET glps.IsTest =  0
 FROM GameLaunchPerSite glps	WITH (ROWLOCK)
-WHERE SportType = 247 AND BetType IN (4599,4600)	
+WHERE SportType = 247 AND BetType IN (4599)	

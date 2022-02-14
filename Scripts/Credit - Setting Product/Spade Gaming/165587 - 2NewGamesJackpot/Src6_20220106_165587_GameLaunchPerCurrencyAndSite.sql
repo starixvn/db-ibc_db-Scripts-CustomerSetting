@@ -22,3 +22,4 @@ INSERT INTO GameLaunchPerSite(SportType,BetType,[SiteId],IsLaunched,IsTest)
 SELECT t.SportType ,t.BetType,[siteId],1,1
 FROM [Site] d WITH(NOLOCK)
 CROSS APPLY @SportBetType t
+WHERE d.site <> '789y'
