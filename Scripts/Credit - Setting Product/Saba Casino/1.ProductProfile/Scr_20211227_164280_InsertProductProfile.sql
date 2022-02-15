@@ -42,7 +42,7 @@ INSERT INTO [dbo].[ProductStatusSiteCurrency]
            ,[IsHidden]
            ,[IsDisabled]
 		   ,[HasSynced])
-SELECT @Sporttype,@Bettype, e.exchangeid, 0 AS siteid, 1 AS IsHidden, 1 AS IsDisabled, 0 AS HasSynced
+SELECT @Sporttype,@Bettype, e.exchangeid, 0 AS siteid, 1 AS IsHidden, 1 AS IsDisabled, 1 AS HasSynced
 FROM exchange e WITH(NOLOCK)
 WHERE e.ExchangeId NOT IN(
 						 2	-- 	RM
