@@ -113,6 +113,7 @@ WHERE ci.roleid = 4
 				,10	-- 	INR1
 				,64	-- 	UT
 				,69	-- 	MMK
+				,95	-- 	USD
 				)
 
 -- For deployer info

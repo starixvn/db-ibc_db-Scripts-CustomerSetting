@@ -39,6 +39,7 @@ BEGIN
 					,10	-- 	INR1
 					,64	-- 	UT
 					,69	-- 	MMK
+					,95 --  USD
 					)
 
 	DECLARE @ProductID      TINYINT      = 6, 
@@ -272,6 +273,7 @@ BEGIN
 								,(10)	-- 	INR1
 								,(64)	-- 	UT
 								,(69)	-- 	MMK
+								,(95)	-- 	USD
 						) exchange(Currency)
 						) e
 		CROSS APPLY (SELECT ',' + CAST(StakeLevelID AS VARCHAR(10))

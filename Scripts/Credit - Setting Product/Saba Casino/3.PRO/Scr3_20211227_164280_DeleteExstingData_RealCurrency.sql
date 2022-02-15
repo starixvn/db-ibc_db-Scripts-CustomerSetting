@@ -67,6 +67,7 @@ BEGIN
 					,10	-- 	INR1
 					,64	-- 	UT
 					,69	-- 	MMK
+					,95	-- 	USD
 					)
 	
 	--PT

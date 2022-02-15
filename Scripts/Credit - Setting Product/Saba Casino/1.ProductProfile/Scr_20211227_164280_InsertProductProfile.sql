@@ -34,33 +34,34 @@ VALUES
 INSERT INTO	dbo.ProductStatusProfile(Sporttype, Bettype, bitmapOrder)
 VALUES	(@Sporttype, @Bettype, @BitmapOrder)
 
---INSERT INTO [dbo].[ProductStatusSiteCurrency]
---           ([SportType]
---           ,[BetType]
---           ,[Currency]
---           ,[SiteID]
---           ,[IsHidden]
---           ,[IsDisabled]
---		   ,[HasSynced])
---SELECT @Sporttype,@Bettype, e.exchangeid, 0 AS siteid, 0 AS IsHidden, 0 AS IsDisabled, 1 AS HasSynced
---FROM exchange e WITH(NOLOCK)
---WHERE e.ExchangeId IN(
---					 2	-- 	RM
---					,3	-- 	US$
---					,13	-- 	RMB
---					,15	-- 	IN
---					,16	-- 	Yen
---					,22	-- 	IND
---					,33	-- 	IDD
---					,34	-- 	IDR
---					,35	-- 	$US
---					,43	-- 	THB
---					,47	-- 	DDD
---					,61	-- 	INR
---					,64	-- 	UT
---					,69	-- 	MMK
---					)
---		AND e.IsActive = 1
+INSERT INTO [dbo].[ProductStatusSiteCurrency]
+           ([SportType]
+           ,[BetType]
+           ,[Currency]
+           ,[SiteID]
+           ,[IsHidden]
+           ,[IsDisabled]
+		   ,[HasSynced])
+SELECT @Sporttype,@Bettype, e.exchangeid, 0 AS siteid, 1 AS IsHidden, 1 AS IsDisabled, 0 AS HasSynced
+FROM exchange e WITH(NOLOCK)
+WHERE e.ExchangeId NOT IN(
+						 2	-- 	RM
+						,3	-- 	US$
+						,13	-- 	RMB
+						,15	-- 	IN
+						,16	-- 	Yen
+						,22	-- 	IND
+						,33	-- 	IDD
+						,34	-- 	IDR
+						,35	-- 	$US
+						,43	-- 	THB
+						,47	-- 	DDD
+						,10	-- 	INR1
+						,64	-- 	UT
+						,69	-- 	MMK
+						,95	-- 	USD
+					)
+		AND e.IsActive = 1
 
 --INSERT INTO dbo.LossLimit_GlobalSetting (ProductId, ExchangeId, MinLossLimit, DefaultLossLimit)
 --SELECT @ProductID, lg.ExchangeId, MinLossLimit, DefaultLossLimit
@@ -124,7 +125,7 @@ SELECT 8,@ProductID,13,3
 SELECT * FROM ProductSettingDetail(NOLOCK) WHERE ProductID = 6
 SELECT * FROM ProductStatusProfile(NOLOCK) WHERE SportType = 208
 SELECT * FROM dbo.ProductStatusSiteCurrency(NOLOCK) WHERE SportType = 208
-SELECT * FROM dbo.SportNonOfferedSiteCurrency WITH (NOLOCK) WHERE SportType = 208 
+--SELECT * FROM dbo.SportNonOfferedSiteCurrency WITH (NOLOCK) WHERE SportType = 208 
 --SELECT * FROM LossLimit_GlobalSetting(NOLOCK) WHERE ProductId = 6
 SELECT * FROM dbo.GameGroup WITH (NOLOCK) WHERE RefSportType = 208 AND IsDeposit = 0 
 SELECT * FROM dbo.ProductSettingSystemDisplay WHERE ProductID = 6
