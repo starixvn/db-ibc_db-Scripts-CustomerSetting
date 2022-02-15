@@ -7,5 +7,5 @@
 USE CUSTDB
 GO
 CREATE NONCLUSTERED INDEX IX_Username ON Dep_Customer_Archived(Username ASC)
-INCLUDE(Recommend) WITH (DROP_EXISTING = ON, ONLINE=ON)
+INCLUDE(Recommend) WITH (DROP_EXISTING = ON, ONLINE=ON) ON [table_customer]
 GO
