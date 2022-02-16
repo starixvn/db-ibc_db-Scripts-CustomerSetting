@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20220215
-	Task: Insert PT and Betlimit for Leap Gaming Virtual Sports 3 - Deposit UUS  [Redmine: 168395]
+	Task: Insert PT and Betlimit for Leap Gaming Virtual Sports 3 - Deposit [Redmine: 168395]
 	DB: DBCUST/CustDB
 	
 	P/s : Step 2 Insert PT and Betlimit for Leap Gaming Virtual Sports 3 - Deposit
@@ -45,7 +45,7 @@ BEGIN
 	CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 	CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY ,RoleID INT)
 
-	DECLARE @SportType SMALLINT = 169
+	DECLARE @SportType SMALLINT = 231
 	DECLARE @betType SMALLINT = 5301
 	DECLARE @BitOrder INT 
 	DECLARE @batch SMALLINT = 5000
@@ -54,9 +54,9 @@ BEGIN
 	DECLARE @Currency INT 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 		
-	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY)
+	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY,ExchangeId	INT)
 
-	INSERT INTO #TempBetLimit(currency,MinBet,MaxBet)
+	INSERT INTO #TempBetLimit(currency,MinBet,MaxBet,ExchangeId)
 	VALUES	('RM',5,10000,2),
 			('US$',2,2500,3),
 			('HK$',10,20000,5),
@@ -81,7 +81,7 @@ BEGIN
 	
 	SELECT @BitOrder= bitmapOrder 
 	FROM Dep_ProductStatusProfile WITH(NOLOCK)   
-	WHERE SportType=@Sporttype
+	WHERE SportType=@Sporttype AND Bettype = @betType
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -118,7 +118,7 @@ BEGIN
 	SELECT 231 AS SportType, 5301 AS BetType, 
 		   180 AS fSportType,1201 AS fBettype,
 		   a.MinBet , a.MaxBet
-	FROM #TempBetLimit a where a.currency = @Currency
+	FROM #TempBetLimit a where a.ExchangeId = @Currency
 
 	-- SMA LEVEL
 	WHILE(1 =1)
@@ -149,7 +149,7 @@ BEGIN
 			   ,0 AS IsLive
 			   ,CASE WHEN a.RoleID = 4 THEN @PT ELSE 0 END AS SuperPT
 			   ,CASE WHEN a.RoleID IN (3,4) THEN @PT ELSE 0 END AS MasterPT
-			   ,CASE WHEN a.RoleID = 2 OR a.CustID = @srecommend  THEN @PT ELSE 0 END AS AgentPT
+			   ,CASE WHEN a.RoleID IN (2,4) THEN @PT ELSE 0 END AS AgentPT
 		FROM #tmpSMATemp a WITH(NOLOCK)
 			CROSS APPLY @SportBetType t 
 
@@ -284,19 +284,17 @@ BEGIN
 
 	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
 	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+		,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrder,0))
+		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,0))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #tmpSMA temp ON temp.CustID = c.custid
 	UNION ALL
 	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus (c.bitmapIsHidden,psp.bitmapOrder,0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus (c.bitmapIsDisabled,psp.bitmapOrder,0)
+		,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrder,0))
+		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,0))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		CROSS APPLY @SportBetType t
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON PSP.Bettype = t.BetType AND PSP.Sporttype = t.SportType
 		INNER JOIN  #tmpCust temp ON temp.CustID = c.custid
 
 	WHILE (1 = 1) 
@@ -321,8 +319,8 @@ BEGIN
 
 	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
 	SELECT	A.custid
-			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0) AS bitmapIsDisabled
-			, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)  AS bitmapIsHidden
+			, (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0)) AS bitmapIsDisabled
+			, (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitOrder,0))  AS bitmapIsHidden
 	FROM #AllUsers A WITH (NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 
@@ -361,8 +359,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('spondemo','Athena000')
-	AND ci.currency in (20) -- UUS
+	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation') 
+	OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20))) -- UUS 
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -417,8 +415,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('spondemo','Athena000')
-	AND ci.currency in (20) -- UUS			  
+	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation') 
+	OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20))) -- UUS 		  
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
