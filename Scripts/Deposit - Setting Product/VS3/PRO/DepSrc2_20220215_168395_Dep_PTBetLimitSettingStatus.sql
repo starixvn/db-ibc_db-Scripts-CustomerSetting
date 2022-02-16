@@ -65,7 +65,6 @@ BEGIN
 			('RMB',10,20000,13),
 			('IN',18,18000,15),
 			('Yen',2,2500,16),
-			('UUS',2,2500,20),
 			('IND',18,18000,22),
 			('IDD',18,18000,33),
 			('IDR',18,18000,34),
@@ -238,7 +237,7 @@ BEGIN
 		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
 			AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 		-------------------------------------Betlimit Setting----------------------------------------------
-			INSERT INTO Dep_CustBetSetting_Member(
+		INSERT INTO Dep_CustBetSetting_Member(
 			 CustID
 			,SportType
 			,BetType

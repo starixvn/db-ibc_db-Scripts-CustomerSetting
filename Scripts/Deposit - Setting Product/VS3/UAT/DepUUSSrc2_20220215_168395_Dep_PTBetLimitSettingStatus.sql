@@ -57,27 +57,7 @@ BEGIN
 	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY,ExchangeId	INT)
 
 	INSERT INTO #TempBetLimit(currency,MinBet,MaxBet,ExchangeId)
-	VALUES	('RM',5,10000,2),
-			('US$',2,2500,3),
-			('HK$',10,20000,5),
-			('EURO',2,2500,6),
-			('GBP',1,2000,12),
-			('RMB',10,20000,13),
-			('IN',18,18000,15),
-			('Yen',2,2500,16),
-			('UUS',2,2500,20),
-			('IND',18,18000,22),
-			('IDD',18,18000,33),
-			('IDR',18,18000,34),
-			('$US',2,2500,35),
-			('THB',50,50000,43),
-			('Won',2000,3000000,45),
-			('DDD',18,18000,47),
-			('CAN',2,2500,50),
-			('UT',2,2500,64),
-			('HKK',5,10000,67),
-			('MMK',2,3000,69),
-			('USD',2,2500,95)
+	VALUES	('UUS',2,2500,20)
 	
 	SELECT @BitOrder= bitmapOrder 
 	FROM Dep_ProductStatusProfile WITH(NOLOCK)   
