@@ -45,21 +45,25 @@ INSERT INTO [dbo].[ProductStatusSiteCurrency]
 SELECT @Sporttype,@Bettype, e.exchangeid, 0 AS siteid, 1 AS IsHidden, 1 AS IsDisabled, 1 AS HasSynced
 FROM exchange e WITH(NOLOCK)
 WHERE e.ExchangeId NOT IN(
-						 2	-- 	RM
-						,3	-- 	US$
-						,13	-- 	RMB
-						,15	-- 	IN
-						,16	-- 	Yen
-						,22	-- 	IND
-						,33	-- 	IDD
-						,34	-- 	IDR
-						,35	-- 	$US
-						,43	-- 	THB
-						,47	-- 	DDD
-						,10	-- 	INR1
-						,64	-- 	UT
-						,69	-- 	MMK
-						,95	-- 	USD
+							2	-- 	RM
+						,	3	-- 	US$
+						,	5	-- 	HK$
+						,	6	-- 	EURO
+						,	10	-- 	INR1
+						,	13	-- 	RMB
+						,	15	-- 	IN
+						,	16	-- 	Yen
+						,	22	-- 	IND
+						,	33	-- 	IDD
+						,	34	-- 	IDR
+						,	35	-- 	$US
+						,	43	-- 	THB
+						,	45	-- 	WON
+						,	47	-- 	DDD
+						,	64	-- 	UT
+						,	67	-- 	HKK
+						,	69	-- 	MMK
+						,	95	-- 	USD
 					)
 		AND e.IsActive = 1
 
