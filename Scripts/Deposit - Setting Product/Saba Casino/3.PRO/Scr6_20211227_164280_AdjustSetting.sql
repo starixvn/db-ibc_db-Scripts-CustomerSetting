@@ -18,18 +18,20 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1 
 	AND cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol','spondemo','Athena000')
 	AND Ci.currency IN (
-						 2	-- 	RM
-						,3	-- 	US$
-						,4	-- 	TB
-						,12	-- 	GBP
-						,13	-- 	RMB
-						,15	-- 	IN
-						,51	-- 	INH
-						,61	-- 	INR
-						,66	-- 	YUN
-						,70	-- 	MKK
-						,96	-- 	USDT
-						,20 --	UUS
+						 	2	-- 	RM
+						,	3	-- 	US$
+						,	4	-- 	TB
+						,	6	-- 	EURO
+						,	12	-- 	GBP
+						,	13	-- 	RMB
+						,	15	-- 	IN
+						,	45	-- 	WON
+						,	51	-- 	INH
+						,	61	-- 	INR
+						,	66	-- 	YUN
+						,	70	-- 	MKK
+						,	96	-- 	USDT
+						,   20  --	UUS
 						)
 ORDER BY ci.custid 
 
