@@ -64,6 +64,7 @@ WHERE e.ExchangeId NOT IN(
 						,	67	-- 	HKK
 						,	69	-- 	MMK
 						,	95	-- 	USD
+						,	20	-- 	UUS
 					)
 		AND e.IsActive = 1
 
