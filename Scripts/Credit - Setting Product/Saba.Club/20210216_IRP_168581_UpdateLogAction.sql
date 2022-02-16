@@ -1,3 +1,4 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20220216@Elodie
 	Task: Change product name from Saba.club to Saba.games [#RM:168581]
