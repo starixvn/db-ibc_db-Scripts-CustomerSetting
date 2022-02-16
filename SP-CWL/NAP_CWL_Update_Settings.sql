@@ -9,7 +9,7 @@ ALTER PROCEDURE dbo.NAP_CWL_Update_Settings
 	@Level3    MONEY, 
 	@Level101  MONEY, 
 	@Level102  MONEY, 
-	@Currency  VARCHAR(500) = '' --'INH,RMB'
+	@Currency  VARCHAR(500) = '' ---
 AS
 
 /*	
@@ -86,17 +86,17 @@ AS
 				  102 AS LevelId, 
 				  @Level102 AS Level;
 
-	   UPDATE g
-		SET 
-		    Level1 = @Level1, 
-		    Level2 = @Level2, 
-		    level3 = @Level3, 
-		    Level101 = @Level101, 
-		    Level102 = @Level102
-	   FROM Winlimit_ProductGlobalSetting g WITH (ROWLOCK, UPDLOCK)
-	   WHERE 
-		    ProductID = @ProductId
-		    AND GroupID = @GroupId;
+	 --  UPDATE g
+		--SET 
+		--    Level1 = @Level1, 
+		--    Level2 = @Level2, 
+		--    level3 = @Level3, 
+		--    Level101 = @Level101, 
+		--    Level102 = @Level102
+	 --  FROM Winlimit_ProductGlobalSetting g WITH (ROWLOCK, UPDLOCK)
+	 --  WHERE 
+		--    ProductID = @ProductId
+		--    AND GroupID = @GroupId;
 
 	   IF(@Currency = '')
 		  BEGIN
