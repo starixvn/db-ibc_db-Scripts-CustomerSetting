@@ -21,7 +21,7 @@
 	WHERE c.roleid = 4  
 		AND s.islicensee = 1
 		AND ci.Enabled = 1
-		AND c.currency IN (2,4,6,12,13,15,20,35,45,51,61,66,69,96)
+		AND c.currency IN (2,3,4,6,12,13,15,20,45,51,61,66,70,96,124,32,125,69,9,55)
 		AND s.site IN ('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
 
 	CREATE TABLE #MemberTemp

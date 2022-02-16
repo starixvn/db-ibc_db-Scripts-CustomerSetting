@@ -16,8 +16,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST','DBSPARE')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST','DBSPARE')) RETURN -- run at dbcust only
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
@@ -258,7 +258,7 @@ GO
 PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';  
 
 DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2','DBSPARE')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST','DBSPARE')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
@@ -281,8 +281,8 @@ WHERE c.roleid = 4
 	AND s.islicensee = 1
 	AND ci.Enabled = 1
 	AND c.custid <= @max_custid
-	AND c.currency IN (2,4,6,12,13,15,20,35,45,51,61,66,69,96)
-	AND s.site ('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+	AND c.currency IN (2,3,4,6,12,13,15,20,45,51,61,66,70,96,124,32,125,69,9,55)	
+	AND s.site IN ('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

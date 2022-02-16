@@ -99,3 +99,10 @@ UPDATE p
 SET p.ProductID = @ProductID
 FROM LossLimit_GlobalSetting P WITH (ROWLOCK)
 WHERE P.ProductID = 38
+
+DELETE ProductStatusSiteCurrency WHERE sportType = 176
+
+INSERT INTO ProductStatusSiteCurrency(SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
+SELECT 176,8201,exchangeid,0,1,1,1
+FROM Exchange e WITH(NOLOCK)
+WHERE exchangeid NOT IN (2,3,6,13,15,16,22,33,34,35,43,45,47,64,69,95,10,20,72,67,5,51)			
