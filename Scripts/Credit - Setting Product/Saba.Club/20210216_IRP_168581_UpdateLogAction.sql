@@ -41,7 +41,13 @@ SELECT 2, @ProductId, 75602,'Update Product Status of Saba.club on Agent','Acc_C
 SELECT 1, @ProductId, 75603,'Update Product Status of Saba.club on Member','Acc_CustSetting_DisableNewProductStatusUpd' 
 
 UPDATE l
-SET ActionNameEN = REPLACE(ActionNameEN, 'Saba.club', 'Saba.games')
+SET ActionNameEN = REPLACE(ActionNameEN, 'Saba.club', 'Saba.games'),
+	ActionNameCH = REPLACE(ActionNameCH, 'Saba.club', 'Saba.games'),
+	ActionNameCS = REPLACE(ActionNameCS, 'Saba.club', 'Saba.games'),
+	ActionNameJP = REPLACE(ActionNameJP, 'Saba.club', 'Saba.games'),
+	ActionNameTH = REPLACE(ActionNameTH, 'Saba.club', 'Saba.games'),
+	ActionNameKO = REPLACE(ActionNameKO, 'Saba.club', 'Saba.games'),
+	ActionNameVI = REPLACE(ActionNameVI, 'Saba.club', 'Saba.games')
 FROM LogAction l WITH (ROWLOCK)
 	INNER JOIN @Log t ON l.ActionID = t.ActionID
 
