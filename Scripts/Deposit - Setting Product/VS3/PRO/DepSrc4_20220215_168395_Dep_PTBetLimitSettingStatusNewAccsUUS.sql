@@ -163,15 +163,15 @@ BEGIN
 	END 	
 	-------------------------------------------------BetSetting----------------------------------------------------------------
 
-	INSERT INTO #Dep_CustBetSetting_Agent(CustID,Sporttype,Bettype)
 	SELECT S.CustID,SportType,BetType 
+	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 		INNER JOIN #supers su ON c.srecommend = su.custid
 	WHERE s.SportType =@sportType AND s.BetType = @betType
 
-	INSERT INTO #Dep_CustBetSetting_Member(CustID,Sporttype,Bettype)
 	SELECT S.CustID,SportType,BetType 
+	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 		INNER JOIN #supers su ON c.srecommend = su.custid
@@ -366,7 +366,7 @@ BEGIN
 			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
 			WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
 		0 AS MaxPerMatch
-		FROM #tmpCustTemp t WITH(NOLOCK)
+		FROM #MemberBatch t WITH(NOLOCK)
 			CROSS APPLY @SportBetType b 
 			INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
 			INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType

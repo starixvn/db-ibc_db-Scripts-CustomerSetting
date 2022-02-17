@@ -176,15 +176,16 @@ BEGIN
 	END 	
 	-------------------------------------------------BetSetting----------------------------------------------------------------
 
-	INSERT INTO #Dep_CustBetSetting_Agent(CustID,Sporttype,Bettype)
+	
 	SELECT S.CustID,SportType,BetType 
+	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 		INNER JOIN #supers su ON c.srecommend = su.custid
 	WHERE s.SportType = @sportType AND s.BetType = @betType
 
-	INSERT INTO #Dep_CustBetSetting_Member(CustID,Sporttype,Bettype)
 	SELECT S.CustID,SportType,BetType 
+	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 		INNER JOIN #supers su ON c.srecommend = su.custid
@@ -379,7 +380,7 @@ BEGIN
 			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
 			WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
 		0 AS MaxPerMatch
-		FROM #tmpCustTemp t WITH(NOLOCK)
+		FROM #MemberBatch t WITH(NOLOCK)
 			CROSS APPLY @SportBetType b 
 			INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
 			INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
@@ -450,6 +451,18 @@ BEGIN
 	FROM #AllUsers A WITH (NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 	
+	
+	DROP TABLE #MemberTemp 
+	DROP TABLE #SMATemp    
+	DROP TABLE #MemberBatch
+	DROP TABLE #SMABatch   
+	
+	DROP TABLE #Dep_CustPTSetting_AgentTemp
+	DROP TABLE #Dep_CustPTSetting_MemberTemp
+	DROP TABLE #Dep_CustPTGroupSetting_MemberTemp
+	DROP TABLE #Dep_CustBetSetting_AgentTemp
+	DROP TABLE #Dep_CustBetSetting_MemberTemp
+	DROP TABLE #Dep_LicenseeProductSettingTemp
 END		
 GO
 -- END STEP 3.1: DEPLOY THIS SP @DBCUST.CustDB --------
