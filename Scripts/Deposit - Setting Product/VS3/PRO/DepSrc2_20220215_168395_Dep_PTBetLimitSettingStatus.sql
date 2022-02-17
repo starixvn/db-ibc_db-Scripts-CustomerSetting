@@ -350,8 +350,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,50,96,2,5,13,15,4,45)  -- GBP,US$,EURO,UUS,CAN,USDT,RM,HK$,RMB,IN,TB,Won
-	OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,50,96,2,5,13,15,4,45))) -- GBP,US$,EURO,CAN,USDT,RM,HK$,RMB,IN,TB,Won
+	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,5,13,15,4,45)  -- GBP,US$,EURO,UUS,USDT,RM,HK$,RMB,IN,TB,Won
+	OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,5,13,15,4,45))) -- GBP,US$,EURO,USDT,RM,HK$,RMB,IN,TB,Won
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -406,8 +406,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation') 
-	OR  (cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20))) -- UUS 		  
+	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,5,13,15,4,45)  -- GBP,US$,EURO,UUS,USDT,RM,HK$,RMB,IN,TB,Won
+	OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,5,13,15,4,45))) -- GBP,US$,EURO,USDT,RM,HK$,RMB,IN,TB,Won 
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
