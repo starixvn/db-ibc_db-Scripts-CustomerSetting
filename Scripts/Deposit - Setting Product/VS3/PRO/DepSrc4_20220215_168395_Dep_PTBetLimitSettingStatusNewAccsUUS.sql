@@ -34,6 +34,8 @@ BEGIN
 	DECLARE @BitOrder INT 
 
 	CREATE TABLE #supers (custid int)
+	DECLARE @SportType SMALLINT = 231
+	DECLARE @betType SMALLINT = 5301
 	DECLARE @SportBetType TABLE
 	(
 		SportType	SMALLINT, 
