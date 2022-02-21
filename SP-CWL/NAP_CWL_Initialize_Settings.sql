@@ -13,6 +13,12 @@ ALTER PROC NAP_CWL_Initialize_Settings
    , @Level3                                 MONEY         = 100000
    , @Level101                               MONEY         = -10000
    , @Level102                               MONEY         = -30000
+   , @Level1_Currency                        MONEY         = 10000
+   , @Level2_Currency                        MONEY         = 30000
+   , @Level3_Currency                        MONEY         = 100000
+   , @Level101_Currency                      MONEY         = -10000
+   , @Level102_Currency                      MONEY         = -30000
+   , @Currency						     VARCHAR(500)  = ''
    , @IsBlockedPlaceBet_DepositSite_Level1   BIT           = 0
    , @IsBlockedPlaceBet_DepositSite_Level2   BIT           = 0
    , @IsBlockedPlaceBet_DepositSite_Level3   BIT           = 0
@@ -43,6 +49,7 @@ AS
 				- 20180319@Robert: Initialize CWL Settings
 				- 20181108@Elodie: Migrate bodb_Licensee to DBCUST [Redmine:#99855]
 				- 20191103@Robert: create new table WinLimit_ProductOffer [#122849]
+				- 20220220@Robert: Update setting by currency [#165590]
      Ex		 :
 
      EXEC NAP_CWL_Initialize_Settings 
@@ -449,6 +456,20 @@ BEGIN
 		    AND t.GroupID = setting.GroupID
 		    AND t.GroupName = setting.GroupName
     );
+
+    -- Update setting by currency
+    IF @Currency <> ''
+    BEGIN
+	    EXEC dbo.NAP_CWL_Update_Settings 
+	    @ProductId    = @ProductID
+	  , @GroupId      = @GroupID
+	  , @Level1       = @Level1_Currency
+	  , @Level2       = @Level102_Currency
+	  , @Level3       = @Level3_Currency
+	  , @Level101     = @Level101_Currency
+	  , @Level102     = @Level102_Currency
+	  , @Currency	   = @Currency
+    END
 
     DROP TABLE #Temp;
     DROP TABLE #Currency_Deposit;
