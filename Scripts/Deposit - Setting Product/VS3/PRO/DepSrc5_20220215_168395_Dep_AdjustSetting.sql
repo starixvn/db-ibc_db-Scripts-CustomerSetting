@@ -30,26 +30,23 @@ BEGIN
 	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY,ExchangeId	INT)
 
 	INSERT INTO #TempBetLimit(currency,MinBet,MaxBet,ExchangeId)
-	VALUES	('RM',5,10000,2),
+	VALUES	('GBP',1,2000,12),
 			('US$',2,2500,3),
-			('HK$',10,20000,5),
 			('EURO',2,2500,6),
-			('GBP',1,2000,12),
+			('UUS',2,2500,20),
+			('CAN',2,2500,50),
+			('USDT',2,2500,96),
+			('RM',5,10000,2),
+			('HK$',10,20000,5),
 			('RMB',10,20000,13),
 			('IN',18,18000,15),
-			('Yen',2,2500,16),
-			('IND',18,18000,22),
-			('IDD',18,18000,33),
-			('IDR',18,18000,34),
-			('$US',2,2500,35),
-			('THB',50,50000,43),
+			('TB',50,50000,4),
 			('Won',2000,3000000,45),
-			('DDD',18,18000,47),
-			('CAN',2,2500,50),
-			('UT',2,2500,64),
-			('HKK',5,10000,67),
-			('MMK',2,3000,69),
-			('USD',2,2500,95)
+			('BND',2,400,46),
+			('BDT',100,30000,97),
+			('PKR',250,60000,121),
+			('INR',100,30000,61),
+			('INH',30,10000,51)
 			
 	DECLARE	  @fSportType SMALLINT	= 180
 			, @fBetType SMALLINT	= 1201
@@ -62,8 +59,8 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,5,13,15,4,45)  -- GBP,US$,EURO,UUS,USDT,RM,HK$,RMB,IN,TB,Won
-	OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,5,13,15,4,45))) -- GBP,US$,EURO,USDT,RM,HK$,RMB,IN,TB,Won
+		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,13,15,4,45,46,51,61,97,121)  -- GBP,US$,EURO,UUS,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR
+		OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,13,15,4,45,46,51,61,97,121))) -- GBP,US$,EURO,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR
 	----------------------------------------Bet Setting-------------------------------------------------	
 	SELECT f.CustID, (CASE 
 					WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 

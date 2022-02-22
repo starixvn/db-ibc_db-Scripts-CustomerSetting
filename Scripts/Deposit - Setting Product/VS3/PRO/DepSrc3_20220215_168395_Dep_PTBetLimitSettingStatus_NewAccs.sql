@@ -69,8 +69,8 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,5,13,15,4,45)  -- GBP,US$,EURO,UUS,USDT,RM,HK$,RMB,IN,TB,Won
-	OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,5,13,15,4,45))) -- GBP,US$,EURO,USDT,RM,HK$,RMB,IN,TB,Won
+		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')  AND ci.currency IN (12,3,6,20,96,2,13,15,4,45,46,51,61,97,121)  -- GBP,US$,EURO,UUS,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR
+		OR  (cs.site IN('spondemo','Athena000') AND ci.currency IN (12,3,6,96,2,13,15,4,45,46,51,61,97,121))) -- GBP,US$,EURO,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
@@ -100,11 +100,15 @@ BEGIN
 			('CAN',2,2500,50),
 			('USDT',2,2500,96),
 			('RM',5,10000,2),
-			('HK$',10,20000,5),
 			('RMB',10,20000,13),
 			('IN',18,18000,15),
 			('TB',50,50000,4),
-			('Won',2000,3000000,45)
+			('Won',2000,3000000,45),
+			('BND',2,400,46),
+			('BDT',100,30000,97),
+			('PKR',250,60000,121),
+			('INR',100,30000,61),
+			('INH',30,10000,51)
 	
 --DELETE existing data
 	------------------------------------PT Setting-------------------------------------------------	
