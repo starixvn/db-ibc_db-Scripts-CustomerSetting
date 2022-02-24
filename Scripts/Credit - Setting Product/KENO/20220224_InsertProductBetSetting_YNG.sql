@@ -19,7 +19,7 @@ INSERT INTO [dbo].[ProductBetSetting]
            ,[DefaultMaxBet]
            ,[DefaultMaxPerMatch])
 SELECT 	[Sporttype]
-	   ,t.[Bettype]
+	   ,[Bettype]
 	   ,72
 	   ,[MinBet]
 	   ,[IsDep]
