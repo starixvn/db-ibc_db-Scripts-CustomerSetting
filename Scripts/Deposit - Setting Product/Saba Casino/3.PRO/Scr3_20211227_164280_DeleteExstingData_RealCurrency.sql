@@ -12,8 +12,8 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 AS
 BEGIN	
 	SET NOCOUNT ON
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0
@@ -50,7 +50,64 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
+		AND (cs.site IN ('11bet'
+						,'12Bet'
+						,'368Cash'
+						,'3star88'
+						,'88Macao'
+						,'9bet'
+						,'9Club'
+						,'9wickets'
+						,'Ae88'
+						,'AG'
+						,'AOGcasino'
+						,'Aoncash'
+						,'asiabet88'
+						--,'Athena000'
+						,'BE7'
+						,'Bolanation'
+						,'Boma365'
+						,'Dabet'
+						,'DEWA'
+						,'Fabet'
+						,'FB88'
+						,'Happy1668'
+						,'Heaven'
+						,'HonorW'
+						,'iBET'
+						,'IONclub'
+						,'ISC888'
+						,'ITCbet'
+						,'Kbet'
+						,'Liga'
+						,'LIGAWLHKB'
+						,'Lucky88'
+						,'M8bola'
+						,'Macaubet'
+						,'N88'
+						,'N8B'
+						,'N8G'
+						,'Nova88'
+						,'OLE777'
+						,'One88'
+						,'OXbet'
+						,'Q8bola'
+						,'Red88'
+						,'RICbet'
+						,'Saba789'
+						,'Senibet'
+						,'Sin88'
+						,'Sky88'
+						--,'spondemo'
+						,'TIC88'
+						,'TLC'
+						,'UN168'
+						,'Unobet'
+						,'Uwoniwin'
+						,'webet88'
+						,'XO88'
+						,'Zbet'
+						)
 			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20)))
 	AND Ci.currency IN (
 							2	-- 	RM
@@ -263,7 +320,7 @@ GO
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS AND DBCUST -----
 --------------------------------------------------------------------------------------
 DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'

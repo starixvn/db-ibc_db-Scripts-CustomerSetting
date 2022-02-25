@@ -21,8 +21,65 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1 
-	AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-			OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20)))
+	AND (cs.site IN ('11bet'
+					,'12Bet'
+					,'368Cash'
+					,'3star88'
+					,'88Macao'
+					,'9bet'
+					,'9Club'
+					,'9wickets'
+					,'Ae88'
+					,'AG'
+					,'AOGcasino'
+					,'Aoncash'
+					,'asiabet88'
+					--,'Athena000'
+					,'BE7'
+					,'Bolanation'
+					,'Boma365'
+					,'Dabet'
+					,'DEWA'
+					,'Fabet'
+					,'FB88'
+					,'Happy1668'
+					,'Heaven'
+					,'HonorW'
+					,'iBET'
+					,'IONclub'
+					,'ISC888'
+					,'ITCbet'
+					,'Kbet'
+					,'Liga'
+					,'LIGAWLHKB'
+					,'Lucky88'
+					,'M8bola'
+					,'Macaubet'
+					,'N88'
+					,'N8B'
+					,'N8G'
+					,'Nova88'
+					,'OLE777'
+					,'One88'
+					,'OXbet'
+					,'Q8bola'
+					,'Red88'
+					,'RICbet'
+					,'Saba789'
+					,'Senibet'
+					,'Sin88'
+					,'Sky88'
+					--,'spondemo'
+					,'TIC88'
+					,'TLC'
+					,'UN168'
+					,'Unobet'
+					,'Uwoniwin'
+					,'webet88'
+					,'XO88'
+					,'Zbet'
+					)
+		OR (cs.site IN('spondemo','Athena000')	AND Ci.currency NOT IN (20)))
 	AND Ci.currency IN (
 							2	-- 	RM
 						,	3	-- 	US$
@@ -41,7 +98,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 						)
 ORDER BY ci.custid 
 	
-DECLARE @SuperPT SMALLINT = 93
+DECLARE @SuperPT_OtherSite SMALLMONEY = 93, @SuperPT_Saba789 SMALLMONEY = 80.5
 DECLARE @currency INT, @BitOrder INT
 DECLARE @SportType SMALLINT = 208, @BetType SMALLINT = 2101
 DECLARE @BatchSize SMALLINT = 5000
@@ -100,18 +157,19 @@ INSERT INTO dbo.Dep_CustPTSetting_Agent
 		,[AgentPT]
 		)
 SELECT 
-		[CustID]
+		ci.[CustID]
 		,@Sporttype
 		,@BetType
 		,0
-		,@SuperPT
-		,@SuperPT
-		,@SuperPT
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
 FROM custInfo ci WITH(NOLOCK)
+	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
 	AND ci.custid>@maxcustid AND ci.Enabled=1 
-	AND RoleID=4
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.RoleID=4
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 	
 INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -124,18 +182,19 @@ INSERT INTO dbo.Dep_CustPTSetting_Agent
 		,[AgentPT]
 		)
 SELECT 
-		[CustID]
+		ci.[CustID]
 		,@Sporttype
 		,@BetType
 		,0
 		,0
-		,@SuperPT
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
 		,0	
 FROM custInfo ci WITH(NOLOCK)
+	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
 	AND ci.custid>@maxcustid AND ci.Enabled=1 
-	AND RoleID=3
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.RoleID=3
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 INSERT INTO dbo.Dep_CustPTSetting_Agent
 	(	[CustID]
@@ -147,18 +206,19 @@ INSERT INTO dbo.Dep_CustPTSetting_Agent
 		,[AgentPT]
 		)
 SELECT 
-		[CustID]
+		ci.[CustID]
 		,@Sporttype
 		,@BetType
 		,0
 		,0
 		,0
-		,@SuperPT
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
 FROM custInfo ci WITH(NOLOCK)
+	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
 	AND ci.custid>@maxcustid AND ci.Enabled=1 
-	AND RoleID=2
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.RoleID=2
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 	(	AgentID
@@ -170,18 +230,20 @@ INSERT INTO dbo.Dep_CustPTGroupSetting_Member
 		,[AgentPT]
 		)
 SELECT 
-		[CustID]
+		ci.[CustID]
 		,@Sporttype
 		,@BetType
 		,0
 		,0
 		,0
-		,@SuperPT
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
 FROM custInfo ci WITH(NOLOCK)
+	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
 	AND ci.custid>@maxcustid AND ci.Enabled=1 
-	AND RoleID=2
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.RoleID=2
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+
 --Member Level
 INSERT INTO dbo.Dep_CustPTSetting_Member
 	(	CustID
@@ -199,14 +261,15 @@ SELECT
 		,0
 		,0
 		,0
-		,@SuperPT
+		,CASE WHEN c.site = 'Saba789' THEN @SuperPT_Saba789 ELSE @SuperPT_OtherSite END
 FROM custInfo ci WITH(NOLOCK)
+	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
 	AND ci.custid>@maxcustid AND ci.Enabled=1 
-	AND RoleID=1
+	AND ci.RoleID=1
 	AND m.IsGroupedPT=0
-	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 SELECT ci.CustID,1
