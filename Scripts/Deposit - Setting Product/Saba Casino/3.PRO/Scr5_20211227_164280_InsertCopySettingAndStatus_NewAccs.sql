@@ -133,6 +133,14 @@ FROM Dep_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
 WHERE SportType =@SportType AND c.custid > @maxcustID
+
+DELETE dl
+FROM Dep_LicenseeProductSetting dl WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
+		INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
+		INNER JOIN #supers s ON ci.srecommend = s.custid
+WHERE dp.ProductID = 6
+	AND ci.custid > @maxcustID
 -------------------------------
 	 
 SELECT @BitOrder= bitmapOrder 
@@ -143,7 +151,7 @@ CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
-WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 
 -------------------------------------PT Setting-----------------------------------------------
 --Agent Level

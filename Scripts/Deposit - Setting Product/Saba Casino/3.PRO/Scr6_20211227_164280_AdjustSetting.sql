@@ -108,7 +108,7 @@ DECLARE @CustStatus_TempBatch TABLE (CustID INT, IsDisabled BIT)
 
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
-WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%')
+WHERE srecommend IN(SELECT CustID FROM #supers) AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 
 -------------Comm----------------------------------------
 INSERT INTO #CustComm_temp(CustID,recommend)

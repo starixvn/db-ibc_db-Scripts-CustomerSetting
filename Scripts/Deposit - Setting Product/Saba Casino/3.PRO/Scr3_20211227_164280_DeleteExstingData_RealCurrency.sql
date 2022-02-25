@@ -134,6 +134,23 @@ BEGIN
 	CREATE TABLE #Dep_CustStakeLevel_Member(CustID INT)
 	CREATE TABLE #Dep_CustDiscountSetting_Member(CustID INT)
 	CREATE TABLE #Dep_CustDiscountGroupSetting_Member(CustID INT)
+	CREATE TABLE #Dep_LicenseeProductSetting(CustID INT,ProductSettingID INT, PRIMARY KEY(CustID ,ProductSettingID ))
+
+	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT dl.CustID,dl.ProductSettingID
+	FROM Dep_LicenseeProductSetting dl WITH(NOLOCK)
+			INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
+			INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
+			INNER JOIN #supers s ON ci.srecommend = s.custid
+	WHERE dp.ProductID = 6
+
+	IF EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
+	BEGIN
+		DELETE cg
+		FROM Dep_LicenseeProductSetting cg WITH(ROWLOCK,UPDLOCK) 	
+			INNER JOIN #Dep_LicenseeProductSetting t 
+				ON cg.CustID=t.CustID AND cg.ProductSettingID=t.ProductSettingID 
+	END
 
 	INSERT INTO #Dep_CustPTSetting3rd_Agent(CustID)
 	SELECT s.Custid
@@ -312,6 +329,7 @@ BEGIN
 	DROP TABLE #supers
 	DROP TABLE #Dep_CustDiscountGroupSetting_Member
 	DROP TABLE #Dep_CustDiscountSetting_Member
+	DROP TABLE #Dep_LicenseeProductSetting
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
