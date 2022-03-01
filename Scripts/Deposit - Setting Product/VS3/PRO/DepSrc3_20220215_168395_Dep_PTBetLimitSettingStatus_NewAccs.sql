@@ -179,20 +179,17 @@ BEGIN
 		TRUNCATE TABLE #Dep_CustPTGroupSetting_MemberTemp			
 	END 	
 	-------------------------------------------------BetSetting----------------------------------------------------------------
-
 	
-	SELECT S.CustID,SportType,BetType 
+	SELECT S.CustID,s.SportType,s.BetType 
 	INTO #Dep_CustBetSetting_Agent
 	FROM Dep_CustBetSetting_Agent S WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-		INNER JOIN #supers su ON c.srecommend = su.custid
-	WHERE s.SportType = @sportType AND s.BetType = @betType
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON s.CustID = ci.custid
+	WHERE s.SportType =@sportType AND s.BetType = @betType
 
 	SELECT S.CustID,SportType,BetType 
 	INTO #Dep_CustBetSetting_Member
 	FROM Dep_CustBetSetting_Member S WITH(NOLOCK) 
-		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-		INNER JOIN #supers su ON c.srecommend = su.custid
+		INNER JOIN #MemberTemp ci WITH(NOLOCK) ON s.CustID = ci.custid
 	WHERE SportType =@sportType  AND s.BetType = @betType
 	
 	WHILE EXISTS(SELECT TOP 1 1 FROM #Dep_CustBetSetting_Agent)
