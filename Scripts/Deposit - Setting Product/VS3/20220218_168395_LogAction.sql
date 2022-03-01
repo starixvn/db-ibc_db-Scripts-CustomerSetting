@@ -11,9 +11,9 @@ GO
 
 USE bodb_CustomerLog
 GO
-DELETE FROM LogAction WHERE SPName IN ('Acc_Dep_CustSetting_NewBetLimitUpd') AND ActionID IN (2048,394)
+DELETE FROM LogAction WHERE SPName IN ('Acc_Dep_CustSetting_NewBetLimitUpd') AND ActionID IN (2048)
 GO
-INSERT INTO LogAction (ActionID,ActionTypeID,SPName,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI, IsInternal)
+INSERT INTO LogAction (ActionID,ActionTypeID,SPName,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,ActionNameVI, IsInternal)
 VALUES (2048,3,'Acc_Dep_CustSetting_NewBetLimitUpd'
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
@@ -21,21 +21,23 @@ VALUES (2048,3,'Acc_Dep_CustSetting_NewBetLimitUpd'
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
-		,0
 		,'Update New Bet Settings for Deposit Customers for DCS Products'
 		,0
 		)
 GO
-INSERT INTO LogAction (ActionID,ActionTypeID,SPName,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI, IsInternal)
-VALUES (220020,3,'Acc_Dep_CustSetting_NewBetLimitFullLineUpd'
+DELETE FROM LogAction WHERE SPName IN ('Acc_Dep_CustSetting_NewBetLimitFullLineUpd') AND ActionID IN (220030)
+GO
+INSERT INTO LogAction (ActionID,ActionTypeID,SPName,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,ActionNameVI, IsInternal)
+VALUES (220030,3,'Acc_Dep_CustSetting_NewBetLimitFullLineUpd'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
-		,0
 		,'Update New Bet Settings DCS Products for Deposit Customers by Admin'
 		,1
 		)
 GO
+
+
