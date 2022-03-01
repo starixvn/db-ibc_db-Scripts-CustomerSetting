@@ -12,7 +12,7 @@ GO
 DROP TABLE [dbo].[Dep_CustBetSettingGame_Member]
 GO
 
-DROP TABLE [dbo].[Dep_CustGroupBetSettingGame_Member]
+DROP TABLE [dbo].[Dep_CustBetSettingGameGroup_Member]
 GO
 
 
@@ -63,16 +63,16 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Agent](
 
 GO
 
-CREATE TABLE [dbo].[Dep_CustGroupBetSettingGame_Member](
+CREATE TABLE [dbo].[Dep_CustBetSettingGameGroup_Member](
 	[AgentID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
-	[MinBet] [money] NULL CONSTRAINT [DF_Dep_CustGroupBetSettingGame_Member_MinBet]  DEFAULT ((0)),
-	[MaxBet] [money] NULL CONSTRAINT [DF_Dep_CustGroupBetSettingGame_Member_MaxBet]  DEFAULT ((0)),
-	[MaxPerMatch] [money] NULL CONSTRAINT [DF_Dep_CustGroupBetSettingGame_Member_MPM]  DEFAULT ((0)),
-	[MaxPerNumber] [money] NULL CONSTRAINT [DF_Dep_CustGroupBetSettingGame_Member_MPN]  DEFAULT ((0)),
-	[MaxPayoutPerMatch] [money] NULL CONSTRAINT [DF_Dep_CustGroupBetSettingGame_Member_MPPM]  DEFAULT ((0))
-	CONSTRAINT [PK_Dep_CustGroupBetSettingGame_Member] PRIMARY KEY CLUSTERED 
+	[MinBet] [money] NULL CONSTRAINT [DF_Dep_CustBetSettingGameGroup_Member_MinBet]  DEFAULT ((0)),
+	[MaxBet] [money] NULL CONSTRAINT [DF_Dep_CustBetSettingGameGroup_Member_MaxBet]  DEFAULT ((0)),
+	[MaxPerMatch] [money] NULL CONSTRAINT [DF_Dep_CustBetSettingGameGroup_Member_MPM]  DEFAULT ((0)),
+	[MaxPerNumber] [money] NULL CONSTRAINT [DF_Dep_CustBetSettingGameGroup_Member_MPN]  DEFAULT ((0)),
+	[MaxPayoutPerMatch] [money] NULL CONSTRAINT [DF_Dep_CustBetSettingGameGroup_Member_MPPM]  DEFAULT ((0))
+	CONSTRAINT [PK_Dep_CustBetSettingGameGroup_Member] PRIMARY KEY CLUSTERED 
 (
 	[AgentID] ASC,
 	[SportType] ASC,
