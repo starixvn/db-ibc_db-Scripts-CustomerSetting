@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created by: Eden@20220301
 	Task: SET NULLABLE for Some column on custinfo [Redmine:#167898]		

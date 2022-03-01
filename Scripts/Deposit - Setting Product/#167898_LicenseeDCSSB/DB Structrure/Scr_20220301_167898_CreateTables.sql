@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created by: Eden@20220301
 	Task: Create New tables For SB - Deposit DCS & Number Games DCS [Redmine:#167898]		
