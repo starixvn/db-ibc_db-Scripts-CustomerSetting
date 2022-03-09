@@ -8,7 +8,7 @@ DECLARE @ErrMsg VARCHAR(100), @CustID INT
 --Cash Out --// ProductID = 25  SELECT ci.custid, 0 AS IsFinished INTO #SuperListFROM Dep_CustSuper ds WITH (NOLOCK)	INNER JOIN bodb_Licensee.dbo.Licensees l WITH (NOLOCK) on l.LicenseeName = ds.site and l.IsActive = 1	INNER JOIN custInfo ci WITH (NOLOCK) ON ds.custid = ci.custid	LEFT JOIN Dep_SupperProductSetting cs WITH (NOLOCK) ON cs.custid = ci.custidWHERE cs.CustID IS NULL 	AND ds.site IN (					'Betway'					,'GLive'					,'GoldenFCV'					,'JBO'					,'kbosportCV'					,'kgsports'					,'LEGaming'					,'SWDemo'					,'Test0112'					,'WSlots'					,'XLMEDIA'					,'YSYBO688CV'					,'yuanbaoCV'					,'ZhiFeng200')
 WHILE (1=1)
 BEGIN
-	UPDATE s
+	UPDATE TOP (1) s
 	SET IsFinished = 1, @CustID = custid
 	FROM #SuperList s
 	WHERE IsFinished = 0
