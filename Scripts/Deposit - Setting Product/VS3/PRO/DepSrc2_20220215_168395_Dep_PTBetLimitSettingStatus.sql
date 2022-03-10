@@ -178,17 +178,20 @@ BEGIN
 			,MaxBet
 			,MaxPerMatch
 		)
-		SELECT t.CustID,b.SportType,b.BetType,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
-			WHEN cs.MinBet <  b.MinBet THEN b.MinBet ELSE cs.MinBet END AS MinBet,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
-			WHEN cs.MaxBet >  b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END AS MaxBet,	
-		0 AS MaxPerMatch
-		FROM #tmpSMATemp t WITH(NOLOCK)
-			CROSS APPLY @SportBetType b 
-			INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+		SELECT CustID,SportType,BetType,MinBet, CASE WHEN MinBet > MaxBet THEN MinBet ELSE MaxBet END AS MaxBet, MaxPerMatch
+		FROM (
+			SELECT t.CustID,b.SportType,b.BetType,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
+				WHEN cs.MinBet <  b.MinBet THEN b.MinBet ELSE cs.MinBet END AS MinBet,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
+				WHEN cs.MaxBet >  b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END AS MaxBet,	
+			0 AS MaxPerMatch
+			FROM #tmpSMATemp t WITH(NOLOCK)
+				CROSS APPLY @SportBetType b 
+				INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+			) KQ
 			
 		TRUNCATE TABLE #tmpSMATemp
 	END
@@ -241,18 +244,20 @@ BEGIN
 			,MaxBet
 			,MaxPerMatch
 		)
-		SELECT t.CustID,b.SportType,b.BetType,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
-			WHEN cs.MinBet <  b.MinBet THEN b.MinBet ELSE cs.MinBet END AS MinBet,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
-			WHEN cs.MaxBet >  b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END AS MaxBet,	
-		0 AS MaxPerMatch
-		FROM #tmpCustTemp t WITH(NOLOCK)
-			CROSS APPLY @SportBetType b 
-			INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
-					
+		SELECT CustID,SportType,BetType,MinBet, CASE WHEN MinBet > MaxBet THEN MinBet ELSE MaxBet END AS MaxBet, MaxPerMatch
+		FROM (
+			SELECT t.CustID,b.SportType,b.BetType,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
+				WHEN cs.MinBet <  b.MinBet THEN b.MinBet ELSE cs.MinBet END AS MinBet,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
+				WHEN cs.MaxBet >  b.MaxBet THEN b.MaxBet ELSE cs.MaxBet END AS MaxBet,	
+			0 AS MaxPerMatch
+			FROM #tmpCustTemp t WITH(NOLOCK)
+				CROSS APPLY @SportBetType b 
+				INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+			) KQ			
 		TRUNCATE TABLE #tmpCustTemp
 	END 	
 	---------------------------------Check Licensee-----------------------------------------------------

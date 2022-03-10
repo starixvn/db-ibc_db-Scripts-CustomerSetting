@@ -65,9 +65,18 @@ BEGIN
 	SELECT f.CustID, (CASE 
 					WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
 					WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) AS MinBet, 
-					(CASE 
-					WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
-					WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END) AS MaxBet
+					( CASE WHEN (CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+										WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) >		
+							(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							THEN 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+									WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)
+							ELSE 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+									WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							END	
+					) AS MaxBet
 	INTO #CustBetSetting_Agent
 	FROM dbo.Dep_CustBetSetting_Agent f WITH (NOLOCK)
 		INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = f.CustID
@@ -80,18 +89,36 @@ BEGIN
 	AND(   t.MinBet		<> (CASE 
 							WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
 							WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)			
-		OR t.MaxBet		<> (CASE 
-								WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
-								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)		
+		OR t.MaxBet		<> ( CASE WHEN (CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+										WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) >		
+							(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							THEN 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+									WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)
+							ELSE 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+									WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							END	
+							)		
 		)
 	AND EXISTS (SELECT 1 FROM #Super_adjust WITH (NOLOCK) WHERE CustID = C.srecommend)
 	
 	SELECT f.CustID, (CASE 
 					WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
 					WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) AS MinBet, 
-					(CASE 
-					WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
-					WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END) AS MaxBet
+					( CASE WHEN (CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+										WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) >		
+							(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							THEN 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+									WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)
+							ELSE 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+									WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							END	
+							) AS MaxBet
 	INTO #CustBetSetting_Member
 	FROM dbo.Dep_CustBetSetting_Member f WITH (NOLOCK)
 		INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = f.CustID
@@ -104,9 +131,18 @@ BEGIN
 	AND(   t.MinBet		<> (CASE 
 							WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
 							WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)			
-		OR t.MaxBet		<> (CASE 
-								WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
-								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)		
+		OR t.MaxBet		<> ( CASE WHEN (CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+										WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END) >		
+							(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+								WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							THEN 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MinBet 
+									WHEN f.MinBet <  d.MinBet THEN d.MinBet ELSE f.MinBet END)
+							ELSE 
+								(CASE WHEN (f.MinBet = 0 AND (f.MaxBet = 0 OR f.MaxBet = 0.1)) THEN f.MaxBet 
+									WHEN f.MaxBet >  d.MaxBet THEN d.MaxBet ELSE f.MaxBet END)
+							END	
+							)		
 		)
 	AND EXISTS (SELECT 1 FROM #Super_adjust WITH (NOLOCK) WHERE CustID = C.srecommend)
 

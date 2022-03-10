@@ -292,18 +292,21 @@ BEGIN
 			,MaxBet
 			,MaxPerMatch
 		)
-		SELECT t.CustID,b.SportType,b.BetType,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
-			WHEN cs.MinBet <  c.MinBet THEN c.MinBet ELSE cs.MinBet END AS MinBet,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
-			WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
-		0 AS MaxPerMatch
-		FROM #SMABatch t WITH(NOLOCK)
-			CROSS APPLY @SportBetType b 
-			INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
-			INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType				
+		SELECT CustID,SportType,BetType,MinBet, CASE WHEN MinBet > MaxBet THEN MinBet ELSE MaxBet END AS MaxBet, MaxPerMatch
+		FROM (
+			SELECT t.CustID,b.SportType,b.BetType,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
+				WHEN cs.MinBet <  c.MinBet THEN c.MinBet ELSE cs.MinBet END AS MinBet,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
+				WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
+			0 AS MaxPerMatch
+			FROM #SMABatch t WITH(NOLOCK)
+				CROSS APPLY @SportBetType b 
+				INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
+				INNER JOIN Dep_CustBetSetting_Agent cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType				
+			) KQ					
 		TRUNCATE TABLE #SMABatch
 	END			
 	
@@ -356,19 +359,21 @@ BEGIN
 			,MaxBet
 			,MaxPerMatch
 		)
-		SELECT t.CustID,b.SportType,b.BetType,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
-			WHEN cs.MinBet <  c.MinBet THEN c.MinBet ELSE cs.MinBet END AS MinBet,
-		CASE 
-			WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
-			WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
-		0 AS MaxPerMatch
-		FROM #MemberBatch t WITH(NOLOCK)
-			CROSS APPLY @SportBetType b 
-			INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
-			INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
-					
+		SELECT CustID,SportType,BetType,MinBet, CASE WHEN MinBet > MaxBet THEN MinBet ELSE MaxBet END AS MaxBet, MaxPerMatch
+		FROM (
+			SELECT t.CustID,b.SportType,b.BetType,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet 
+				WHEN cs.MinBet <  c.MinBet THEN c.MinBet ELSE cs.MinBet END AS MinBet,
+			CASE 
+				WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MaxBet 
+				WHEN cs.MaxBet >  c.MaxBet THEN c.MaxBet ELSE cs.MaxBet END AS MaxBet,	
+			0 AS MaxPerMatch
+			FROM #MemberBatch t WITH(NOLOCK)
+				CROSS APPLY @SportBetType b 
+				INNER JOIN #TempBetLimit c ON t.Currency = c.ExchangeId
+				INNER JOIN Dep_CustBetSetting_Member cs WITH (NOLOCK) ON cs.CustID = t.CustID AND b.fBetType = cs.BetType AND b.fSportType = cs.SportType
+			) KQ			
 		TRUNCATE TABLE #MemberBatch
 	END 
 	
