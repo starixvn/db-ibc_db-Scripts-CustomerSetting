@@ -26,13 +26,13 @@ SELECT 6726 ,'1.76'    ,'88'          ,1.76    ,88          ,20   UNION ALL	--UU
 SELECT 6727 ,'0.4'     ,'40'          ,0.4     ,40          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 6728 ,'0.4'     ,'20'          ,0.4     ,20          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 6729 ,'0.4'     ,'8'           ,0.4     ,8           ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6730 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6731 ,'0.1'     ,'0.1'         ,0.1     ,0.1         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6732 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6733 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6734 ,'0.25'    ,'0.25'        ,0.25    ,0.25        ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6735 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6736 ,'0.1'     ,'0.1'         ,0.1     ,0.1         ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6730 ,'0.2'     ,'20'          ,0.2     ,20          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6731 ,'0.1'     ,'10'          ,0.1     ,10          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6732 ,'0.2'     ,'20'          ,0.2     ,20          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6733 ,'0.2'     ,'20'          ,0.2     ,20          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6734 ,'0.25'    ,'25'          ,0.25    ,25          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6735 ,'0.2'     ,'20'          ,0.2     ,20          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6736 ,'0.1'     ,'10'          ,0.1     ,10          ,20   UNION ALL	--UUS	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 --YNG
 SELECT 6716 ,'0.4'     ,'100'         ,0.4     ,100         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 6717 ,'0.4'     ,'50'          ,0.4     ,50          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
@@ -48,13 +48,13 @@ SELECT 6726 ,'1.76'    ,'88'          ,1.76    ,88          ,72   UNION ALL	--YN
 SELECT 6727 ,'0.4'     ,'40'          ,0.4     ,40          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 6728 ,'0.4'     ,'20'          ,0.4     ,20          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 SELECT 6729 ,'0.4'     ,'8'           ,0.4     ,8           ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6730 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6731 ,'0.1'     ,'0.1'         ,0.1     ,0.1         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6732 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6733 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6734 ,'0.25'    ,'0.25'        ,0.25    ,0.25        ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6735 ,'0.2'     ,'0.2'         ,0.2     ,0.2         ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
-SELECT 6736 ,'0.1'     ,'0.1'         ,0.1     ,0.1         ,72				--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6730 ,'0.2'     ,'20'          ,0.2     ,20          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6731 ,'0.1'     ,'10'          ,0.1     ,10          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6732 ,'0.2'     ,'20'          ,0.2     ,20          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6733 ,'0.2'     ,'20'          ,0.2     ,20          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6734 ,'0.25'    ,'25'          ,0.25    ,25          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6735 ,'0.2'     ,'20'          ,0.2     ,20          ,72   UNION ALL	--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
+SELECT 6736 ,'0.1'     ,'10'          ,0.1     ,10          ,72				--YNG	--USD , YEN , UT , $US , YNG , MMK , US$,UUS , EURO
 
 	
 ;WITH STAKE_TEMP AS (
