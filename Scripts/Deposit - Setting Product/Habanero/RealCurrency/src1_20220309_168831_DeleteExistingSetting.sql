@@ -7,8 +7,6 @@
 	
 	P/s : Step 1 Delete existing data for Habanero API Licensee
 */
-USE [CustDB]
-GO
 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------

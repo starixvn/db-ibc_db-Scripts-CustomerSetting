@@ -8,9 +8,6 @@
 	P/s : Step 3 Delete redundant and copy new setting newly created customer for Joker API Licensee
 	
 */
-USE [CustDB]
-GO
-
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
 	PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
