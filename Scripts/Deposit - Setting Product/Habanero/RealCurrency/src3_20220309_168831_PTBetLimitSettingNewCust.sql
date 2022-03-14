@@ -1,15 +1,19 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20210224@Tina
-	Task: Insert PT and Betlimit for new Customer of Habanero - Deposit - Real Currency
-	Redmine: https://nexdev.net/issues/145459
+	Created: Winfred
+	Date: 20220310
+	Task: Insert PT and Betlimit for new Customer of Habanero - Deposit - Real Currency API Licensees RedmineID:#168831
 	DB: DBCUST/CustDB
+	
+	P/s : Step 3 Delete redundant and copy new setting newly created customer for Joker API Licensee
+	
 */
 USE [CustDB]
 GO
 
 -- BEGIN STEP 1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
-	PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
+	PRINT N'Step 3: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 	DECLARE @maxcustid INT
@@ -22,33 +26,12 @@ GO
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 			AND ci.Enabled=1  
-			AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-			OR ( cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20,72)))
-			AND Ci.currency IN (13,	--CNY(RMB)
-							66,	--CNY(YUN)
-							6,	--EUR(EURO)
-							12,	--GBP(GBP)
-							92,	--HKD(HID)
-							5,	--HKD(HK$)
-							15,	--IDR(IN)
-							61,	--INR(INR)
-							32,	--JPY(JPY)
-							45,	--KRW(Won)
-							94,	--MMK(MK)
-							70,	--MMK(MKK)
-							2,	--MYR(RM)
-							55,	--RUB(RUB)
-							4,	--THB(TB)
-							3,	--USD(US$)
-							96,	--USD(USDT)
-							7,	--VND(DON)
-							51,	--VND(INH)
-							20, --UUS
-							72  --YNG
-							)
+			AND cs.site IN('368Cash','ISC888','Fabet','11bet','Liga','OXbet','Lucky88','12bet','Lode88','Zbet','Heaven','Sin88','Sky88','One88','Red88','HonorW','FB88','samplesite')	 
+			AND Ci.currency IN (2,3,4,6,12,13,15,20,32,41,42,45,46,49,50,51,52,53,54,55,56,57,58,61,70,71,73,96)
+						  --MYR,USD,THB,EUR,GBP,RMB,IDR,UUS,JAP,CHF,PHP,WON,BND,MXN,CAN,INH(VND),DKK,SEK,NOK,RUB,PLN,CZK,RON,INR,MMK(MKK),KHR,LIR,USDT
 			ORDER BY ci.custid 
 	
-	DECLARE @SuperPT SMALLINT = 90
+	DECLARE @SuperPT SMALLINT = 92
 	DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT
 	DECLARE @SportType SMALLINT = 238, @BetType SMALLINT = 7001	 ,@GameGroupID INT = 22 
 
@@ -57,31 +40,31 @@ GO
 	FROM Dep_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType =@SportType AND cg.custid > @maxcustID
+	WHERE SportType =@SportType AND BetType = @BetType AND cg.custid > @maxcustID
 						
 	DELETE cg
 	FROM Dep_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)		
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType =@SportType AND cg.custid > @maxcustID
+	WHERE SportType =@SportType AND BetType = @BetType AND cg.custid > @maxcustID
 		
 	DELETE cg
 	FROM Dep_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid		
-	WHERE SportType =@SportType AND c.custid > @maxcustID
+	WHERE SportType =@SportType AND BetType = @BetType AND c.custid > @maxcustID
 				
 	DELETE cg
 	FROM Dep_CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid		
-	WHERE SportType =@SportType AND c.custid > @maxcustID
+	WHERE SportType =@SportType AND BetType = @BetType AND c.custid > @maxcustID
 
 	DELETE cg
 	FROM Dep_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid			
-	WHERE SportType =@SportType AND c.custid > @maxcustID
+	WHERE SportType =@SportType AND BetType = @BetType AND c.custid > @maxcustID
 	-------------------------------
 	
 	DECLARE @BitOrder INT
@@ -214,8 +197,6 @@ GO
 		AND RoleID=1
 		AND m.IsGroupedPT=0
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
-
-	
 
 	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 	SELECT ci.CustID,1
@@ -360,21 +341,4 @@ GO
 	DROP TABLE #Dep_CustProductStatus
 	DROP TABLE #TempProductStatus
 	DROP TABLE #AllUsers
-	PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
-
-/*
-	SELECT TOP 10 *
-	FROM Dep_CustPTSetting_Agent A WITH (NOLOCK)
-		INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
-	WHERE A.SportType = 238 AND A.CustID > 48440011
-
-	SELECT TOP 10 *
-	FROM Dep_CustPTGroupSetting_Member  A WITH (NOLOCK)
-		INNER JOIN custInfo c WITH (NOLOCK) ON A.AgentID = C.custid AND C.currency NOT IN (20,72)
-	WHERE A.SportType = 238 AND A.AgentID > 48440011
-
-	SELECT TOP 10 *
-	FROM Dep_CustPTSetting_Member A WITH (NOLOCK)
-		INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
-	WHERE A.SportType = 238 AND A.CustID > 48440011
-*/
+	PRINT N'Step 3: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 

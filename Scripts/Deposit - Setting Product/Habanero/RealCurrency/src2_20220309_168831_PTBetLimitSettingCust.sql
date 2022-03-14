@@ -1,8 +1,11 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20210224@Tina
-	Task: Insert PT and Betlimit for Habanero - DEPOSIT - real currency
-	Redmine: https://nexdev.net/issues/145459
+	Created: Winfred
+	Date: 20220310
+	Task: Insert PT and Betlimit for Habanero - DEPOSIT - real Currency API Licensees RedmineID:#168831
 	DB: DBCUST/CustDB
+	
+	P/s : Step 2 Insert PT and Betlimit for Habanero API Licensee
 */
 
 USE CustDB
@@ -42,7 +45,7 @@ BEGIN
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)	
 	
-	DECLARE @SuperPT SMALLINT = 90
+	DECLARE @SuperPT SMALLINT = 92
 	DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT
 	DECLARE @SportType SMALLINT = 238, @BetType SMALLINT = 7001	 ,@GameGroupID INT = 22 
 
@@ -323,31 +326,9 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1 
-		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-			 OR ( cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20, 72))
-			)
-		AND Ci.currency IN (13,	--CNY(RMB)
-							66,	--CNY(YUN)
-							6,	--EUR(EURO)
-							12,	--GBP(GBP)
-							92,	--HKD(HID)
-							5,	--HKD(HK$)
-							15,	--IDR(IN)
-							61,	--INR(INR)
-							32,	--JPY(JPY)
-							45,	--KRW(Won)
-							94,	--MMK(MK)
-							70,	--MMK(MKK)
-							2,	--MYR(RM)
-							55,	--RUB(RUB)
-							4,	--THB(TB)
-							3,	--USD(US$)
-							96,	--USD(USDT)
-							7,	--VND(DON)
-							51,	--VND(INH)
-							20, --UUS
-							72  --YNG
-							)
+		AND cs.site IN('368Cash','ISC888','Fabet','11bet','Liga','OXbet','Lucky88','12bet','Lode88','Zbet','Heaven','Sin88','Sky88','One88','Red88','HonorW','FB88','samplesite')	 
+		AND Ci.currency IN (2,3,4,6,12,13,15,20,32,41,42,45,46,49,50,51,52,53,54,55,56,57,58,61,70,71,73,96)
+						  --MYR,USD,THB,EUR,GBP,RMB,IDR,UUS,JAP,CHF,PHP,WON,BND,MXN,CAN,INH(VND),DKK,SEK,NOK,RUB,PLN,CZK,RON,INR,MMK(MKK),KHR,LIR,USDT
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -399,30 +380,9 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1  
-		AND (cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','NBCbet','Unobet','Bolanation','Luckywin88','Winn69','Axiawin','Jumbo88','Lagadewa','Ratugg','Monstergol')
-		OR ( cs.site IN('spondemo','Athena000') AND ci.currency NOT IN (20, 72)))
-		AND Ci.currency IN (13,	--CNY(RMB)
-							66,	--CNY(YUN)
-							6,	--EUR(EURO)
-							12,	--GBP(GBP)
-							92,	--HKD(HID)
-							5,	--HKD(HK$)
-							15,	--IDR(IN)
-							61,	--INR(INR)
-							32,	--JPY(JPY)
-							45,	--KRW(Won)
-							94,	--MMK(MK)
-							70,	--MMK(MKK)
-							2,	--MYR(RM)
-							55,	--RUB(RUB)
-							4,	--THB(TB)
-							3,	--USD(US$)
-							96,	--USD(USDT)
-							7,	--VND(DON)
-							51,	--VND(INH)
-							20, --UUS
-							72  --YNG
-							)
+		AND cs.site IN('368Cash','ISC888','Fabet','11bet','Liga','OXbet','Lucky88','12bet','Lode88','Zbet','Heaven','Sin88','Sky88','One88','Red88','HonorW','FB88','samplesite')	 
+		AND Ci.currency IN (2,3,4,6,12,13,15,20,32,41,42,45,46,49,50,51,52,53,54,55,56,57,58,61,70,71,73,96)
+						  --MYR,USD,THB,EUR,GBP,RMB,IDR,UUS,JAP,CHF,PHP,WON,BND,MXN,CAN,INH(VND),DKK,SEK,NOK,RUB,PLN,CZK,RON,INR,MMK(MKK),KHR,LIR,USDT
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -461,24 +421,3 @@ PRINT N'Step 4: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 -- END STEP 3: Run this SP at DBCust -----
 -------------------------------------------------
-
-/*
-SELECT TOP 10 *
-FROM Dep_CustPTSetting_Agent A WITH (NOLOCK)
-	INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
-WHERE A.SportType = 238
-
-SELECT TOP 10 *
-FROM Dep_CustPTGroupSetting_Member  A WITH (NOLOCK)
-	INNER JOIN custInfo c WITH (NOLOCK) ON A.AgentID = C.custid AND C.currency NOT IN (20,72)
-WHERE A.SportType = 238
-
-SELECT TOP 10 *
-FROM Dep_CustPTSetting_Member A WITH (NOLOCK)
-	INNER JOIN custInfo c WITH (NOLOCK) ON A.CustID = C.custid AND C.currency NOT IN (20,72)
-WHERE A.SportType = 238
-
-SELECT TOP 10 *
-FROM Dep_CustSettingMode D WITH (NOLOCK)
-WHERE D.IsGroupedPT = 0
-*/

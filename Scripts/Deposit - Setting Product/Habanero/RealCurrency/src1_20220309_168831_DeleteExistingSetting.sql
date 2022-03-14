@@ -1,8 +1,11 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20210224@Tina
-	Task: Delete exitting data for Habanero - Deposit - Real Currency
-	Redmine: https://nexdev.net/issues/145459
+	Created: Winfred
+	Date: 20220310
+	Task: Delete exitting data for Habanero - Deposit - Real Currency API Licensees  RedmineID:#168831
 	DB: DBCUST/CustDB
+	
+	P/s : Step 1 Delete existing data for Habanero API Licensee
 */
 USE [CustDB]
 GO
@@ -15,8 +18,8 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 AS
 BEGIN	
 	SET NOCOUNT ON
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0
@@ -38,7 +41,7 @@ BEGIN
 	   )
 		RETURN
 	
-	DECLARE @sportType SMALLINT
+	DECLARE @sportType SMALLINT, @BetType SMALLINT = 7001
 	SET @sportType = 238
 	
 	CREATE TABLE #supers (custid INT)
@@ -75,25 +78,25 @@ BEGIN
 	SELECT s.CustID,Sporttype,Bettype,IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =@sportType AND BetType = @BetType AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustPTGroupSetting3rd_Member(CustID,SporttypeID,Bettype,IsLive)
 	SELECT AgentID,SportType,BetType,IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =@sportType AND BetType = @BetType AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Agent(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Agent S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =@sportType AND BetType = @BetType AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	INSERT INTO #CustBetSetting3rd_Member(CustID,SporttypeID,Bettype)
 	SELECT S.CustID,SportType,BetType 
 	FROM Dep_CustStakeLevel_Member S WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =@sportType AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE SportType =@sportType AND BetType = @BetType AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	WHILE EXISTS(SELECT 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
