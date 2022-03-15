@@ -26,7 +26,7 @@
 			AND ci.currency IN (2,3,4,13,15,20,45)) --RMB,IN,RM,US$,TB,WON,UUS
 			ORDER BY ci.custid 
 	
-	DECLARE @SuperPT SMALLINT = 90
+	DECLARE @SuperPT SMALLINT = 92
 	DECLARE @currency INT, @siteId INT   ,@StakeLevelID INT
 	DECLARE @SportType SMALLINT = 234, @BetType SMALLINT = 6401	 ,@GameGroupID INT = 18 
 
