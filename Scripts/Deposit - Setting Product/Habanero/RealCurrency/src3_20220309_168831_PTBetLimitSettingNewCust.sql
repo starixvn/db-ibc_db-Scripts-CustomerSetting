@@ -23,9 +23,24 @@
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 			AND ci.Enabled=1  
-			AND cs.site IN('368Cash','ISC888','Fabet','11bet','Liga','OXbet','Lucky88','12bet','Lode88','Zbet','Heaven','Sin88','Sky88','One88','Red88','HonorW','FB88','samplesite')	 
-			AND Ci.currency IN (2,3,4,6,12,13,15,20,32,41,42,45,46,49,50,51,52,53,54,55,56,57,58,61,70,71,73,96)
-						  --MYR,USD,THB,EUR,GBP,RMB,IDR,UUS,JAP,CHF,PHP,WON,BND,MXN,CAN,INH(VND),DKK,SEK,NOK,RUB,PLN,CZK,RON,INR,MMK(MKK),KHR,LIR,USDT
+			AND ((cs.site IN( '368Cash')  AND  Ci.currency IN (13,15,2,3,51,4,45,20)) OR   --RMB,IN,RM,US$,INH,TB,WON,UUS
+			(cs.site IN( 'ISC888')  AND  Ci.currency IN (4,32,51,20)) OR   --TB,JPY,INH,UUS
+			(cs.site IN( 'Fabet')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( '11bet')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Liga')  AND  Ci.currency IN (2,15,20)) OR   --RM,IN,UUS
+			(cs.site IN( 'OXbet')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Lucky88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( '12bet')  AND  Ci.currency IN (2,51,3,61,4,70,6,71,9,12,13,15,32,41,45,20)) OR   --RM,INH,US$,INR,TB,MKK,EURO,KHR,AUD,GBP,RMB,IN,JPY,CHF,WON,UUS
+			(cs.site IN( 'Lode88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Zbet')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Heaven')  AND  Ci.currency IN (13,20)) OR   --RMB,UUS
+			(cs.site IN( 'Sin88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Sky88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'One88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'Red88')  AND  Ci.currency IN (51,20)) OR   --INH,UUS
+			(cs.site IN( 'HonorW')  AND  Ci.currency IN (13,20)) OR   --RMB,UUS
+			(cs.site IN( 'FB88')  AND  Ci.currency IN (13,51,4,20)) OR   --RMB,INH,TB,UUS
+			(cs.site IN( 'samplesite')  AND  Ci.currency IN (20)))   --UUS
 			ORDER BY ci.custid 
 	
 	DECLARE @SuperPT SMALLINT = 92
