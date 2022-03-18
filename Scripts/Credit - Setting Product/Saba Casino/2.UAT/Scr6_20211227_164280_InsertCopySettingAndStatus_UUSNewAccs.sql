@@ -9,7 +9,7 @@ GO
 BEGIN
 	CREATE TABLE #supers (custid int,isfinished bit default(0))
 
-	DECLARE @maxcustid INT = xxx
+	DECLARE @maxcustid INT = 61853932 -- UAT 03/18/2022
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
