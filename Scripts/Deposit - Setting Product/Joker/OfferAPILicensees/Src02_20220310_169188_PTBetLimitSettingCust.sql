@@ -324,7 +324,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1 
-		AND (cs.site IN('368Cash','Liga','HonorW','FB88','samplesite') 
+		AND (cs.site IN('Liga','HonorW','FB88','samplesite') 
 		AND ci.currency IN (2,3,4,13,15,20,45)) --RMB,IN,RM,US$,TB,WON,UUS
 ORDER BY ci.custid 
 
@@ -379,7 +379,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1  
-		AND (cs.site IN('368Cash','Liga','HonorW','FB88','samplesite') 
+		AND (cs.site IN('Liga','HonorW','FB88','samplesite') 
 		AND ci.currency IN (2,3,4,13,15,20,45)) --RMB,IN,RM,US$,TB,WON,UUS
 ORDER BY ci.custid 
 
