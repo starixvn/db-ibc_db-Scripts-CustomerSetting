@@ -50,7 +50,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1  
 		AND (cs.site IN('Liga','HonorW','FB88','samplesite') 
-		AND ci.currency IN (2,3,4,13,15,20,45)) --RMB,IN,RM,US$,TB,WON,UUS
+		AND ci.currency IN (2,4,13,15,20)) --RMB,IN,RM,US$,UUS
 		
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
 	CREATE TABLE #CustPTSetting3rd_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
