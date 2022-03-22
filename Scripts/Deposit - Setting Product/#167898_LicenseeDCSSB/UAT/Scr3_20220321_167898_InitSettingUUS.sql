@@ -4,7 +4,7 @@
 	Task: Insert copy Data - for SB,NG,Keno DCS [Redmine:#167898]
 	DB: DBCUST/CustDB and all subscriber of CustDB_custseting Pub
 */
--- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
+-- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB -----
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend INT	
