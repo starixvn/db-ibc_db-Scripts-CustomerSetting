@@ -752,6 +752,17 @@ BEGIN
 	WHERE dc.SportType IN(1,2) AND dc.BetType = 1
 		AND ex.CustID IS NULL
 
+	--Insert Dep_LicenseeProductSetting --> Bet Setting Game
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT @srecommend,d.ProductSettingID
+	FROM Dep_ProductSetting d WITH(NOLOCK)
+		LEFT JOIN Dep_LicenseeProductSetting dl WITH(NOLOCK) 
+			ON d.ProductSettingID = dl.ProductSettingID
+			AND dl.CustID = @srecommend
+	WHERE d.ProductID IN(1,3)
+		AND d.SettingType IN(10,12)
+		AND dl.CustID IS NULL
+
 -------------------------------------Bet Setting -----------------------------------------------------------
 --SMA
 	INSERT INTO Dep_CustBetSetting_Agent(
@@ -801,6 +812,16 @@ BEGIN
 			ON t.custid = ci.custid
 	WHERE sp.HaveBetSetting = 1
 
+	--Insert Dep_LicenseeProductSetting --> Bet Setting
+	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+	SELECT @srecommend,d.ProductSettingID
+	FROM Dep_ProductSetting d WITH(NOLOCK)
+		LEFT JOIN Dep_LicenseeProductSetting dl WITH(NOLOCK) 
+			ON d.ProductSettingID = dl.ProductSettingID
+			AND dl.CustID = @srecommend
+	WHERE d.ProductID = 8
+		AND d.SettingType = 2
+		AND dl.CustID IS NULL
 --------------------------------------------Enable Status--------------------------------------------------
 	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
 	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32),isfinished BIT DEFAULT(0))
