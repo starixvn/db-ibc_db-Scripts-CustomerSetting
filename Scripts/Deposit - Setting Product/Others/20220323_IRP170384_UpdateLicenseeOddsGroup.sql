@@ -10,6 +10,7 @@ SELECT c.custid, roleid, 0 AS IsFinished INTO #CustList
 FROM Dep_CustSuper s WITH (NOLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON s.custid = c.srecommend
 WHERE c.ugroup IN ('hka','hkb','hkc','hkd')
+	AND c.roleid = 1
 
 WHILE (1=1)
 BEGIN
@@ -26,7 +27,7 @@ BEGIN
 	SET c.ugroup = CASE WHEN ugroup = 'hka' THEN 'a'
 						WHEN ugroup = 'hkb' THEN 'b'
 						WHEN ugroup = 'hkc' THEN 'c'
-						WHEN ugroup = 'hkd' THEN 'd' END
+						WHEN ugroup = 'hkd' THEN 'd' ELSE ugroup END
 	FROM Customer c WITH (ROWLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
 END
