@@ -10,6 +10,7 @@ SELECT c.custid, roleid, 0 AS IsFinished INTO #CustList
 FROM Dep_CustSuper s WITH (NOLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON s.custid = c.srecommend
 WHERE c.ugroup IN ('hka','hkb','hkc','hkd')
+	AND c.roleid = 1
 
 WHILE (1=1)
 BEGIN
