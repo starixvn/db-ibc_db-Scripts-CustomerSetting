@@ -82,7 +82,7 @@ BEGIN
 			ON c.CustID = cb.CustID
 		INNER JOIN Dep_CustDiscountGroupSetting_Member ag WITH(NOLOCK)
 			ON cb.recommend = ag.AgentID
-		LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (ROWLOCK,UPDLOCK) 
+		LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
 			ON dcs_m.CustID = c.CustID 
 			and dcs_m.SportType = ag.Sporttype
 			AND dcs_m.BetType = ag.BetType			
