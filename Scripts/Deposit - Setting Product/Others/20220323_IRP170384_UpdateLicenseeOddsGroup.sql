@@ -31,5 +31,5 @@ BEGIN
 	FROM Customer c WITH (ROWLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
 
-	DELETE FROM #CustBatch
+	DROP TABLE #CustBatch
 END
