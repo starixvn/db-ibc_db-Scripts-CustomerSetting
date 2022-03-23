@@ -32,6 +32,8 @@ BEGIN
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
 
 	DELETE FROM #CustBatch
+
+	WAITFOR DELAY '00:00:00.200'
 END
 
 DROP TABLE #CustList
