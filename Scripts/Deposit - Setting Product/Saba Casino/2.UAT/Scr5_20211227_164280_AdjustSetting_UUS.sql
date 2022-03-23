@@ -65,6 +65,29 @@ BEGIN
 			AND gr.BetType = @BetType
 	WHERE cs.IsGroupedComm = 1
 		AND co.RNGComm <> gr.PlayerDiscount
+
+	--> insert comm on private tables if not exists (get all sport offered from agent)
+	INSERT INTO Dep_CustDiscountSetting_Member (
+		CustID
+		,SportType
+		,BetType
+		,PlayerDiscount
+		,AgentDiscount
+		,MasterDiscount
+		,SuperDiscount
+	)
+	SELECT c.CustID, ag.Sporttype, ag.BetType,ag.PlayerDiscount,ag.AgentDiscount,ag.MasterDiscount,ag.SuperDiscount
+	FROM Dep_CustSettingMode c WITH (NOLOCK)
+		INNER JOIN @CustComm_TempBatch cb 
+			ON c.CustID = cb.CustID
+		INNER JOIN Dep_CustDiscountGroupSetting_Member ag WITH(NOLOCK)
+			ON cb.recommend = ag.AgentID
+		LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (ROWLOCK,UPDLOCK) 
+			ON dcs_m.CustID = c.CustID 
+			and dcs_m.SportType = ag.Sporttype
+			AND dcs_m.BetType = ag.BetType			
+	WHERE c.IsGroupedComm = 0 
+		AND dcs_m.custid IS NULL
 		
 	--> UpdatePlayer comm on private Tables (insert if not exist)
 	UPDATE dcs_m
@@ -79,25 +102,6 @@ BEGIN
 			and dcs_m.SportType = @SportType
 			AND dcs_m.BetType = @BetType			
 	WHERE c.IsGroupedComm = 0
-	
-	INSERT INTO Dep_CustDiscountSetting_Member (CustID
-						,SportType
-						,BetType
-						,PlayerDiscount
-						,AgentDiscount
-						,MasterDiscount
-						,SuperDiscount)  	
-	SELECT c.CustID, @SportType, @BetType,co.RNGComm, 0,0,0
-	FROM Dep_CustSettingMode c WITH (NOLOCK)
-		INNER JOIN @CustComm_TempBatch cb 
-			ON c.CustID = cb.CustID
-		INNER JOIN bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
-			ON c.CustID = co.CustID
-		LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
-			ON dcs_m.CustID = c.CustID 
-			and dcs_m.SportType = @SportType
-			AND dcs_m.BetType = @BetType			
-	WHERE c.IsGroupedComm = 0 AND dcs_m.custid IS NULL
 			
 	DELETE FROM @CustComm_TempBatch
 END
