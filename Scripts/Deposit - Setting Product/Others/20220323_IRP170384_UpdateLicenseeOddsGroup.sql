@@ -30,4 +30,6 @@ BEGIN
 						WHEN ugroup = 'hkd' THEN 'd' ELSE ugroup END
 	FROM Customer c WITH (ROWLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
+
+	DELETE FROM #CustBatch
 END
