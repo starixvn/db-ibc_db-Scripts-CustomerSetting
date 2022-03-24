@@ -57,6 +57,7 @@ WHERE NOT(co.SBComm = 0 AND co.Parlaycomm = 0 AND co.NGComm = 0 AND co.KenoComm 
 	AND ci.Enabled = 1
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
+--Correct Player comm
 WHILE (1=1)
 BEGIN
 	DELETE TOP (@BatchSize) c 
@@ -132,6 +133,7 @@ WHERE ci.roleid = 1
 	AND ci.Enabled = 1
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
+--Correct Licensee comm for BA members
 WHILE (1=1)
 BEGIN
 	DELETE TOP (@BatchSize) c 
@@ -146,10 +148,9 @@ BEGIN
 	FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN @CustComm_TempBatch cb 
 			ON cb.CustID = cs.CustID
-		INNER JOIN bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
+		INNER JOIN Dep_CustBAActive co WITH(NOLOCK) 
 			ON cs.CustID = co.CustID
 	WHERE cs.IsGroupedComm = 1
-		AND NOT(co.SBComm = 0 AND co.Parlaycomm = 0 AND co.NGComm = 0 AND co.KenoComm = 0)
 
 	--> insert comm on private tables if not exists (get all sport offered from agent)
 	INSERT INTO Dep_CustDiscountSetting_Member (
@@ -176,17 +177,18 @@ BEGIN
 		
 	--> UpdatePlayer comm on private Tables (insert if not exist)
 	UPDATE dcs_m
-	SET dcs_m.PlayerDiscount = CASE WHEN sp.Sporttype IN (1,2) AND sp.BetType <> 9 THEN co.SBComm
-									WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN co.Parlaycomm
-									WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN co.NGComm
-									WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN co.KenoComm
-								END
+	SET dcs_m.AgentDiscount = co.discount,
+		dcs_m.MasterDiscount = co.adiscount,
+		dcs_m.SuperDiscount = co.sdiscount
 	FROM Dep_CustSettingMode c WITH (NOLOCK)
 		INNER JOIN @CustComm_TempBatch cb 
 			ON c.CustID = cb.CustID
-		INNER JOIN bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
-			ON c.CustID = co.CustID
 		CROSS JOIN @SportBettype_tbl sp
+		INNER JOIN dbo.Dep_CustSetting co WITH(NOLOCK) 
+			ON c.CustID = co.CustID
+			AND co.sporttype = sp.Sporttype
+			AND co.bettype = sp.BetType
+			AND co.islive = 0
 		INNER JOIN Dep_CustDiscountSetting_Member dcs_m WITH (ROWLOCK,UPDLOCK) 
 			ON dcs_m.CustID = c.CustID 
 			and dcs_m.SportType = sp.Sporttype
