@@ -48,6 +48,9 @@ BEGIN
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY, recommend INT, isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
+	CREATE TABLE #tmpCust_noGroup   (CustID INT)
+	CREATE NONCLUSTERED INDEX ix_tmpCust_noGroup ON #tmpCust_noGroup(CustID)
+	CREATE TABLE #Dep_CustBetSettingGame_Member(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money, PRIMARY KEY(CustID,SportType,BetType))
 
 	DECLARE @Currency INT, @Site VARCHAR(50)
 
@@ -623,8 +626,38 @@ BEGIN
 	WHERE dc.SportType IN(1,2) AND dc.BetType = 1
 		AND ex.CustID IS NULL
 
+--Group member --> Follow by Agent
+	INSERT INTO Dep_CustBetSettingGameGroup_Member(
+			AgentID,
+			SportType,
+			BetType,
+			MinBet,
+			MaxBet,
+			MaxPerMatch,
+			MaxPerNumber,
+			MaxPayoutPerMatch
+		)
+	SELECT dc.CustID,
+			dc.SportType,
+			dc.BetType,
+			dc.MinBet,
+			dc.MaxBet,
+			dc.MaxPerMatch,
+			dc.MaxPerNumber,
+			dc.MaxPayoutPerMatch
+	FROM Dep_CustBetSettingGame_Agent dc WITH(NOLOCK)
+		INNER JOIN #tmpSMA t 
+			ON dc.CustID = t.CustID
+		LEFT JOIN Dep_CustBetSettingGameGroup_Member ex WITH(NOLOCK) 
+			ON dc.CustID = ex.AgentID 
+			AND dc.SportType = ex.SportType
+			AND dc.BetType = ex.BetType
+	WHERE ex.AgentID IS NULL
+		AND t.RoleID = 2
+
 --Member
-	INSERT INTO Dep_CustBetSettingGame_Member(
+	--get all setting for member to temp table
+	INSERT INTO #Dep_CustBetSettingGame_Member(
 		CustID,
 		SportType,
 		BetType,
@@ -723,6 +756,35 @@ BEGIN
 			ON t.custid = ci.custid
 	WHERE sp.HaveBetSettingGame = 1
 
+	--Insert invidual data for members have any bet setting <> group setting
+	INSERT INTO Dep_CustBetSettingGame_Member(
+		CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch,
+		MaxPerNumber,
+		MaxPayoutPerMatch
+	)
+	OUTPUT inserted.CustID INTO #tmpCust_noGroup(CustID)
+	SELECT  t.CustID,
+			t.SportType,
+			t.BetType,
+			t.MinBet,
+			t.MaxBet,
+			t.MaxPerMatch,
+			t.MaxPerNumber,
+			t.MaxPayoutPerMatch
+	FROM #Dep_CustBetSettingGame_Member t 
+		INNER JOIN #tmpCust ci
+			ON t.CustID = ci.custid
+		INNER JOIN Dep_CustBetSettingGameGroup_Member gr WITH(NOLOCK) 
+			ON ci.recommend = gr.AgentID
+			AND t.SportType = gr.SportType
+			AND t.BetType = gr.BetType
+	WHERE (t.MinBet <> gr.MinBet OR t.MaxBet <> gr.MaxBet OR t.MaxPerMatch <> gr.MaxPerMatch or t.MaxPerNumber <> gr.MaxPerNumber)
+
 	--Insert for Saba soccer,saba basket ball
 	INSERT INTO Dep_CustBetSettingGame_Member(
 		CustID,
@@ -751,6 +813,41 @@ BEGIN
 			AND dc.BetType = ex.BetType
 	WHERE dc.SportType IN(1,2) AND dc.BetType = 1
 		AND ex.CustID IS NULL
+
+	--insert remain setting from group setting
+	INSERT INTO Dep_CustBetSettingGame_Member(
+		CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch,
+		MaxPerNumber,
+		MaxPayoutPerMatch
+	)
+	SELECT t.custID,
+		gr.SportType,
+		gr.BetType,
+		gr.MinBet,
+		gr.MaxBet,
+		gr.MaxPerMatch,
+		gr.MaxPerNumber,
+		gr.MaxPayoutPerMatch
+	FROM Dep_CustBetSettingGameGroup_Member gr WITH(NOLOCK)
+		INNER JOIN #tmpCust t ON gr.AgentID = t.recommend
+		LEFT JOIN Dep_CustBetSettingGame_Member c WITH(NOLOCK) 
+			ON gr.SportType = c.Sporttype
+			AND gr.BetType = c.Bettype
+			AND t.custID = c.custid
+	WHERE c.CustID IS NULL
+		AND t.custID IN (SELECT custID FROM #tmpCust_noGroup)
+
+	--Update Dep_CustSettingMode
+	UPDATE c 
+	SET IsGroupedBetLimit = CASE WHEN no_gr.CustID IS NULL THEN 0 ELSE 1 END
+	FROM Dep_CustSettingMode c WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #tmpCust t ON c.CustID = t.CustID
+		OUTER APPLY( SELECT DISTINCT CustID FROM #tmpCust_noGroup WHERE custid = c.custid) no_gr
 
 	--Insert Dep_LicenseeProductSetting --> Bet Setting Game
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
@@ -900,6 +997,8 @@ BEGIN
 	DROP TABLE #Dep_CustProductStatus
 	DROP TABLE #TempProductStatus
 	DROP TABLE #AllUsers
+	DROP TABLE #Dep_CustBetSettingGame_Member
+	DROP TABLE #tmpCust_noGroup
 END
 GO
 -- END STEP 5.1: DEPLOY THIS SP @ DBCUST.CustDB -------
