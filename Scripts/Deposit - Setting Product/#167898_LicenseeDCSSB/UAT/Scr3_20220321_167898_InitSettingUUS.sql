@@ -844,7 +844,7 @@ BEGIN
 
 	--Update Dep_CustSettingMode
 	UPDATE c 
-	SET IsGroupedBetLimit = CASE WHEN no_gr.CustID IS NULL THEN 0 ELSE 1 END
+	SET IsGroupedBetLimit = CASE WHEN no_gr.CustID IS NOT NULL THEN 0 ELSE 1 END
 	FROM Dep_CustSettingMode c WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #tmpCust t ON c.CustID = t.CustID
 		OUTER APPLY( SELECT DISTINCT CustID FROM #tmpCust_noGroup WHERE custid = c.custid) no_gr
