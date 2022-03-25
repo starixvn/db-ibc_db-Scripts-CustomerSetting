@@ -185,20 +185,20 @@ BEGIN
 		INNER JOIN @SportBettype_tbl t ON s.SportType = t.Sporttype AND s.BetType = t.BetType AND t.HaveComm = 1
 	WHERE c.srecommend IN(SELECT CustID FROM #supers)
 	
-	SELECT * FROM #Dep_CustPTSetting3rd_Agent
-	SELECT * FROM #Dep_CustPTSetting3rd_Member
-	SELECT * FROM #Dep_CustPTGroupSetting3rd_Member
+	--SELECT * FROM #Dep_CustPTSetting3rd_Agent
+	--SELECT * FROM #Dep_CustPTSetting3rd_Member
+	--SELECT * FROM #Dep_CustPTGroupSetting3rd_Member
 
-	SELECT * FROM #Dep_CustBetSetting_Agent
-	SELECT * FROM #Dep_CustBetSetting_Member
+	--SELECT * FROM #Dep_CustBetSetting_Agent
+	--SELECT * FROM #Dep_CustBetSetting_Member
 
-	SELECT * FROM #Dep_CustBetSettingGame_Agent
-	SELECT * FROM #Dep_CustBetSettingGame_Member
-	SELECT * FROM #Dep_CustBetSettingGameGroup_Member
+	--SELECT * FROM #Dep_CustBetSettingGame_Agent
+	--SELECT * FROM #Dep_CustBetSettingGame_Member
+	--SELECT * FROM #Dep_CustBetSettingGameGroup_Member
 
-	SELECT * FROM #Dep_CustDiscountSetting_Agent
-	SELECT * FROM #Dep_CustDiscountSetting_Member
-	SELECT * FROM #Dep_CustDiscountGroupSetting_Member
+	--SELECT * FROM #Dep_CustDiscountSetting_Agent
+	--SELECT * FROM #Dep_CustDiscountSetting_Member
+	--SELECT * FROM #Dep_CustDiscountGroupSetting_Member
 
 	DECLARE @BatchNum INT = 350 
 	CREATE TABLE #CustTempBatch (CustID INT)
