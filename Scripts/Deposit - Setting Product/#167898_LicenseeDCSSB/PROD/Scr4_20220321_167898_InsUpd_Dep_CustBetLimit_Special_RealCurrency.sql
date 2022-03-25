@@ -10,9 +10,10 @@
 USE CustDB
 GO
 --Delete redudant data
---DELETE c
---FROM Dep_CustBetLimit_Special c WITH(ROWLOCK,UPDLOCK)
---WHERE sporttype IN(9901,9902)
+DELETE c
+FROM Dep_CustBetLimit_Special c WITH(ROWLOCK,UPDLOCK)
+WHERE sporttype IN(9901,9902,202)
+	AND c.CurrencyID = 20
 
 --For SB
 UPDATE c
