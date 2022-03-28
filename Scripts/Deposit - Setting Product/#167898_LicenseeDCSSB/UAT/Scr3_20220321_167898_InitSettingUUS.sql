@@ -174,7 +174,8 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,dc.apositiontaking
+		  ,CASE WHEN  NOT (@site = 'asiabet88' AND @currency IN(3,6)) AND sp.sporttype = 1 AND sp.bettype = 1
+				THEN 0 ELSE dc.apositiontaking END
 	FROM #tmpCust t
 		CROSS JOIN @SportBettype_tbl sp
 		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)

@@ -401,5 +401,7 @@ DROP TABLE #CustComm_temp
 DROP TABLE #CustStatus_Temp
 DROP TABLE #Dep_CustPTSetting_Agent
 DROP TABLE #Dep_CustPTSetting_Agent_Batch
+DROP TABLE #Dep_CustPTSetting_Member
+DROP TABLE #Dep_CustPTSetting_Member_Batch
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
