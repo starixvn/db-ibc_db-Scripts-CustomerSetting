@@ -272,7 +272,12 @@ BEGIN
 	DELETE FROM @CustStatus_TempBatch
 END
 ----------------------------------Adjust PT--------------------------------------------
+SET @BatchSize = 5000
+
 CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
+CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
+CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
+CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,Site VARCHAR(50),Currency INT)
 
 INSERT INTO #Dep_CustPTSetting_Agent(CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,RoleID,Site,Currency)
 SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
@@ -321,10 +326,79 @@ WHERE sp.HavePT = 1
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	AND ci.Enabled = 1
 
+--Adjust SMA PT and Group Member PT
+WHILE 1 = 1
+BEGIN
+	UPDATE TOP(@BatchSize) t
+	SET t.Isfinished = 1
+	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.AgentPT,deleted.MasterPT,deleted.SuperPT,deleted.Site,deleted.Currency,deleted.RoleID
+	INTO #Dep_CustPTSetting_Agent_Batch(custid,SportType,BetType,AgentPT,MasterPT,SuperPT,Site,Currency,RoleID)
+	FROM #Dep_CustPTSetting_Agent t
+	WHERE t.Isfinished = 0
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE cs
+	SET cs.AgentPT = ci.AgentPT,
+		cs.MasterPT = ci.MasterPT,
+		cs.SuperPT = ci.SuperPT
+	FROM [dbo].Dep_CustPTSetting_Agent cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #Dep_CustPTSetting_Agent_Batch ci 
+			ON cs.CustID = ci.CustID 
+			AND cs.SportType = ci.SportType 
+			AND cs.BetType = ci.BetType
+
+	UPDATE cs
+	SET cs.AgentPT = ci.AgentPT 
+	FROM [dbo].Dep_CustPTGroupSetting_Member cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN #Dep_CustPTSetting_Agent_Batch ci 
+			ON cs.AgentID = ci.CustID 
+			AND cs.SportType = ci.SportType 
+			AND cs.BetType = ci.BetType
+			AND ci.RoleID = 2
+			AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 )
+	
+	INSERT INTO #Dep_CustPTSetting_Member (CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,Site,Currency)
+	SELECT ci.custid,t.SportType,t.BetType,t.SuperPT,t.MasterPT,t.AgentPT,t.Site,t.Currency
+	FROM #Dep_CustPTSetting_Agent_Batch t
+		INNER JOIN custInfo ci ON ci.recommend = t.CustID AND ci.Enabled = 1
+		INNER JOIN Dep_CustSettingMode dc WITH(NOLOCK) ON dc.CustID = ci.custid AND dc.IsGroupedPT = 0
+	WHERE t.RoleID = 2
+
+	--Loop Member
+	WHILE 1 = 1
+	BEGIN
+		UPDATE TOP(@BatchSize) t
+		SET t.Isfinished = 1
+		OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.AgentPT,deleted.MasterPT,deleted.SuperPT,deleted.Site,deleted.Currency
+		INTO #Dep_CustPTSetting_Member_Batch(custid,SportType,BetType,AgentPT,MasterPT,SuperPT,Site,Currency)
+		FROM #Dep_CustPTSetting_Member t
+		WHERE t.Isfinished = 0
+
+		IF @@ROWCOUNT = 0
+			BREAK
+
+		UPDATE cs
+		SET cs.AgentPT = ci.AgentPT
+		FROM [dbo].Dep_CustPTSetting_Member cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #Dep_CustPTSetting_Member_Batch ci 
+				ON cs.CustID = ci.CustID 
+				AND cs.SportType = ci.SportType 
+				AND cs.BetType = ci.BetType
+				AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 )
+
+		TRUNCATE TABLE #Dep_CustPTSetting_Member_Batch
+	END
+
+	TRUNCATE TABLE #Dep_CustPTSetting_Agent_Batch
+END
+
 DROP TABLE #Dummy
 DROP TABLE #supers
 DROP TABLE #CustComm_temp
 DROP TABLE #CustStatus_Temp
 DROP TABLE #Dep_CustPTSetting_Agent
+DROP TABLE #Dep_CustPTSetting_Agent_Batch
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
