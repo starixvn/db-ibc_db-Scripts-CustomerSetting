@@ -276,8 +276,8 @@ SET @BatchSize = 5000
 
 CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
 CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
-CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
-CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,Site VARCHAR(50),Currency INT)
+CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
+CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
 
 INSERT INTO #Dep_CustPTSetting_Agent(CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,RoleID,Site,Currency)
 SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
@@ -359,20 +359,23 @@ BEGIN
 			AND ci.RoleID = 2
 			AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 )
 	
-	INSERT INTO #Dep_CustPTSetting_Member (CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,Site,Currency)
-	SELECT ci.custid,t.SportType,t.BetType,t.SuperPT,t.MasterPT,t.AgentPT,t.Site,t.Currency
+	INSERT INTO #Dep_CustPTSetting_Member (CustID,SportType,BetType,AgentPT)
+	SELECT ci.custid,t.SportType,t.BetType,t.AgentPT
 	FROM #Dep_CustPTSetting_Agent_Batch t
 		INNER JOIN custInfo ci ON ci.recommend = t.CustID AND ci.Enabled = 1
 		INNER JOIN Dep_CustSettingMode dc WITH(NOLOCK) ON dc.CustID = ci.custid AND dc.IsGroupedPT = 0
 	WHERE t.RoleID = 2
+		AND ( NOT (t.sporttype = 1 AND t.bettype = 1) 
+				OR (t.Site = 'asiabet88' AND t.currency IN(3,6)) 
+			)
 
 	--Loop Member
 	WHILE 1 = 1
 	BEGIN
 		UPDATE TOP(@BatchSize) t
 		SET t.Isfinished = 1
-		OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.AgentPT,deleted.MasterPT,deleted.SuperPT,deleted.Site,deleted.Currency
-		INTO #Dep_CustPTSetting_Member_Batch(custid,SportType,BetType,AgentPT,MasterPT,SuperPT,Site,Currency)
+		OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.AgentPT
+		INTO #Dep_CustPTSetting_Member_Batch(custid,SportType,BetType,AgentPT)
 		FROM #Dep_CustPTSetting_Member t
 		WHERE t.Isfinished = 0
 
@@ -386,7 +389,6 @@ BEGIN
 				ON cs.CustID = ci.CustID 
 				AND cs.SportType = ci.SportType 
 				AND cs.BetType = ci.BetType
-				AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 )
 
 		TRUNCATE TABLE #Dep_CustPTSetting_Member_Batch
 	END
