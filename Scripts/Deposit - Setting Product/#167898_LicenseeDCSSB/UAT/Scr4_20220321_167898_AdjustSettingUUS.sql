@@ -8,12 +8,13 @@ USE [CustDB]
 GO
 -----------------------------------------------------
 PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int,Site VARCHAR(50),Currency INT,isfinished bit default(0))
 
-INSERT INTO #supers(custid)
-SELECT ci.custid
+INSERT INTO #supers(custid,Site,Currency)
+SELECT ci.custid,cu.site,ci.currency
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN customer cu WITH(NOLOCK) ON cu.custid = ci.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1 
 	AND cs.site IN('spondemo','Athena000')	
@@ -48,6 +49,8 @@ WHERE b.ProductID IN(1,3,8)
 GROUP BY a.SportType,a.BetType
 
 -------------Comm----------------------------------------
+SET @BatchSize = 700 
+
 --> get all customers apply player comm for SB/Keno/NG
 INSERT INTO #CustComm_temp(CustID,recommend)
 SELECT co.custid,ci.recommend
@@ -268,10 +271,60 @@ BEGIN
 
 	DELETE FROM @CustStatus_TempBatch
 END
+----------------------------------Adjust PT--------------------------------------------
+CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
+
+INSERT INTO #Dep_CustPTSetting_Agent(CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,RoleID,Site,Currency)
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
+	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
+	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_custsetting dc WITH(NOLOCK)
+		ON c.CustID = dc.custid
+		AND c.SportType = dc.sporttype
+		AND c.BetType = dc.bettype
+		AND dc.islive = 0
+WHERE sp.HavePT = 1
+	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.Enabled = 1
+--NG
+UNION ALL
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
+	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
+	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_custsetting3rd dc WITH(NOLOCK)
+		ON c.CustID = dc.custid
+		AND c.SportType = dc.sporttype
+		AND c.BetType = dc.bettype
+		AND dc.islive = 0
+WHERE sp.HavePT = 1
+	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.Enabled = 1
+--Keno
+UNION ALL
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
+	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
+	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN CustSettingGame dc WITH(NOLOCK)
+		ON c.CustID = dc.custid
+		AND c.SportType = dc.sporttype
+		AND c.BetType = dc.bettype
+WHERE sp.HavePT = 1
+	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND ci.Enabled = 1
 
 DROP TABLE #Dummy
 DROP TABLE #supers
 DROP TABLE #CustComm_temp
 DROP TABLE #CustStatus_Temp
+DROP TABLE #Dep_CustPTSetting_Agent
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 

@@ -299,18 +299,20 @@ BEGIN
 	IF @site = 'asiabet88' AND @currency IN(3,6)
 	BEGIN
 		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT t.CustID,1
+		SELECT t.CustID,
+			CASE WHEN m.IsBA = 1 THEN 1 ELSE 0 END
 		FROM #tmpCust t WITH(NOLOCK)
+			OUTER APPLY (SELECT 1 AS IsBA FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID) m
 		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-			AND EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 	END
 	ELSE
 	BEGIN
 		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT t.CustID,1
+		SELECT t.CustID,
+			CASE WHEN m.IsBA = 1 THEN 0 ELSE 1 END
 		FROM #tmpCust t WITH(NOLOCK)
+			OUTER APPLY (SELECT 1 AS IsBA FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID) m
 		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=t.CustID)
-			AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 	END
 
 	--Insert Dep_LicenseeProductSetting --> PT
