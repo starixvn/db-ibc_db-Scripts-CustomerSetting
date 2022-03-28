@@ -29,6 +29,10 @@ CREATE TABLE #CustComm_temp (CustID INT, recommend INT)
 DECLARE @CustComm_TempBatch TABLE (CustID INT, recommend INT)
 CREATE TABLE #CustStatus_Temp  (CustID INT, IsDisabled BIT)	
 DECLARE @CustStatus_TempBatch TABLE (CustID INT, IsDisabled BIT)
+CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
+CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
+CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
+CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
 
 
 INSERT INTO #Dummy(CustID)
@@ -273,11 +277,6 @@ BEGIN
 END
 ----------------------------------Adjust PT--------------------------------------------
 SET @BatchSize = 5000
-
-CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT,Isfinished BIT DEFAULT 0)
-CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
-CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
-CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
 
 INSERT INTO #Dep_CustPTSetting_Agent(CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,RoleID,Site,Currency)
 SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
