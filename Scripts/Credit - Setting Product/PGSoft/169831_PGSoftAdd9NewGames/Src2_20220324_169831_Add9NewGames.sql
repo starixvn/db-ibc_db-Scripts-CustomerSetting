@@ -57,16 +57,6 @@ SELECT 6092 ,'0.5'     ,'100'         ,0.5     ,100         ,22   UNION ALL	--IN
 SELECT 6093 ,'0.2'     ,'2000'        ,0.2     ,2000        ,22   UNION ALL	--IND	--IN,IND,DDD,IDR,IDD
 SELECT 6094 ,'0.2'     ,'1000'        ,0.2     ,1000        ,22   UNION ALL	--IND	--IN,IND,DDD,IDR,IDD
 SELECT 6095 ,'0.2'     ,'1000'        ,0.2     ,1000        ,22   UNION ALL	--IND	--IN,IND,DDD,IDR,IDD
---INH
-SELECT 6087 ,'2'       ,'200'         ,2       ,200         ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6088 ,'2.5'     ,'1000'        ,2.5     ,1000        ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6089 ,'2'       ,'2000'        ,2       ,2000        ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6090 ,'2'       ,'200'         ,2       ,200         ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6091 ,'2'       ,'200'         ,2       ,200         ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6092 ,'2'       ,'200'         ,2       ,200         ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6093 ,'5'       ,'5000'        ,5       ,5000        ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6094 ,'2'       ,'1000'        ,2       ,1000        ,51   UNION ALL	--INH	--INH,UUS,YNG
-SELECT 6095 ,'2'       ,'1000'        ,2       ,1000        ,51   UNION ALL	--INH	--INH,UUS,YNG
 --MMK
 SELECT 6087 ,'0.2'     ,'20'          ,0.2     ,20          ,69   UNION ALL	--MMK	--MMK
 SELECT 6088 ,'0.25'    ,'100'         ,0.25    ,100         ,69   UNION ALL	--MMK	--MMK  
