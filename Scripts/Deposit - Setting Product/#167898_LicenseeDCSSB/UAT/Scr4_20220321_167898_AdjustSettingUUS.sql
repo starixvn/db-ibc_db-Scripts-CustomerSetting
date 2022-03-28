@@ -20,13 +20,15 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND Ci.currency  IN (20)
 ORDER BY ci.custid 
 
-DECLARE @currency INT, @BitOrder INT
-DECLARE @SportType SMALLINT = 208, @BetType SMALLINT = 2101
+DECLARE @currency INT, @BitOrderNG TINYINT = 12, @BitOrderKN TINYINT = 13
 DECLARE @BatchSize SMALLINT = 700
 
 CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 CREATE TABLE #CustComm_temp (CustID INT, recommend INT)	
 DECLARE @CustComm_TempBatch TABLE (CustID INT, recommend INT)
+CREATE TABLE #CustStatus_Temp  (CustID INT, IsDisabled BIT)	
+DECLARE @CustStatus_TempBatch TABLE (CustID INT, IsDisabled BIT)
+
 
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -198,9 +200,78 @@ BEGIN
 			
 	DELETE FROM @CustComm_TempBatch
 END
+--------------------------------------------Adjust Status--------------------------------------------------
+SET @BatchSize = 5000
+--Correct NG Status
+INSERT INTO #CustStatus_Temp(custid,IsDisabled)
+SELECT c.CustID,ci.DisableNumber
+FROM dbo.Dep_CustProductStatus C WITH(NOLOCK)
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsDisabled, @BitOrderNG) as isDisabled
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsHidden, @BitOrderNG) as isHidden
+	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+WHERE ci.roleid IN (1,2,3,4) 
+	AND Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND (isDisabled.value <> ci.DisableNumber OR isHidden.value <> 0)
+
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.IsDisabled INTO @CustStatus_TempBatch(custid,IsDisabled)
+	FROM #CustStatus_Temp t
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE cs
+	SET cs.bitmapIsHidden = hid.NewBitmap,
+		bitmapIsDisabled = dis.NewBitmap
+	FROM [dbo].[Dep_CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN @CustStatus_TempBatch ci ON cs.CustID = ci.CustID
+		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitOrderNG,0) as Hid
+		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitOrderNG,ci.IsDisabled) as Dis
+
+	DELETE FROM @CustStatus_TempBatch
+END
+
+--Correct Keno Status
+INSERT INTO #CustStatus_Temp(custid,IsDisabled)
+SELECT c.CustID,cg.IsDisabled
+FROM dbo.Dep_CustProductStatus C WITH(NOLOCK)
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsDisabled, @BitOrderKN) as isDisabled
+	CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsHidden, @BitOrderKN) as isHidden
+	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
+	INNER JOIN CustGameType cg WITH(NOLOCK) ON c.CustID = cg.CustID AND cg.GameTypeID = 1
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+WHERE ci.roleid IN (1,2,3,4) 
+	AND Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND (isDisabled.value <> cg.IsDisabled OR isHidden.value <> 0)
+
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.IsDisabled INTO @CustStatus_TempBatch(custid,IsDisabled)
+	FROM #CustStatus_Temp t
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE cs
+	SET cs.bitmapIsHidden = hid.NewBitmap,
+		bitmapIsDisabled = dis.NewBitmap
+	FROM [dbo].[Dep_CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN @CustStatus_TempBatch ci ON cs.CustID = ci.CustID
+		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitOrderKN,0) as Hid
+		CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitOrderKN,ci.IsDisabled) as Dis
+
+	DELETE FROM @CustStatus_TempBatch
+END
 
 DROP TABLE #Dummy
 DROP TABLE #supers
 DROP TABLE #CustComm_temp
+DROP TABLE #CustStatus_Temp
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
