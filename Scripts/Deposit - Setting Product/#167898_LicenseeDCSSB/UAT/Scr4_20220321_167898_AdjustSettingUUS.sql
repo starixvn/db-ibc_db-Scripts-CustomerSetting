@@ -357,7 +357,7 @@ BEGIN
 			AND cs.SportType = ci.SportType 
 			AND cs.BetType = ci.BetType
 			AND ci.RoleID = 2
-			AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 )
+			AND NOT ( ci.Site = 'asiabet88' AND ci.currency IN(3,6) AND cs.sporttype = 1 AND cs.bettype = 1 ) -- Default BA on this site/currencies
 	
 	INSERT INTO #Dep_CustPTSetting_Member (CustID,SportType,BetType,AgentPT)
 	SELECT ci.custid,t.SportType,t.BetType,t.AgentPT
