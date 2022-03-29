@@ -481,6 +481,92 @@ BEGIN
 
 	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
 END
+----------Adjust Bet setting Game----------
+SET @BatchSize = 5000
+
+--SMA level
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+SELECT ci.[CustID]
+		,sp.Sporttype
+		,sp.BetType
+		,dc.minbet
+		,dc.maxbet
+		,dc.MaxPerGameType
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN CustGameType dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSetting_Agent old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+WHERE ci.roleid IN(2,3,4)
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSetting = 1
+	AND (old.MinBet <> dc.MinBet OR old.MaxBet <> dc.MaxBet OR old.MaxPerMatch <> dc.MaxPerGameType)
+
+--Adjust Dep_CustBetSetting_Agent
+UPDATE c
+SET c.MinBet = t.MinBet,
+	c.MaxBet = t.MaxBet,
+	c.MaxPerMatch = t.MaxPerMatch
+FROM Dep_CustBetSetting_Agent c WITH(ROWLOCK,UPDLOCK)
+INNER JOIN #Dep_CustBetSetting_TmpDiff t 
+	ON c.CustID = t.CustID 
+	AND c.SportType = t.SportType
+	AND c.BetType = t.BetType
+
+TRUNCATE TABLE #Dep_CustBetSetting_TmpDiff
+--Member level
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+SELECT ci.[CustID]
+		,sp.Sporttype
+		,sp.BetType
+		,dc.minbet
+		,dc.maxbet
+		,dc.MaxPerGameType
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN CustGameType dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSetting_Member old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSetting = 1
+	AND (old.MinBet <> dc.MinBet OR old.MaxBet <> dc.MaxBet OR old.MaxPerMatch <> dc.MaxPerGameType)
+
+--Adjust Dep_CustBetSetting_Member
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.MinBet,deleted.MaxBet,deleted.MaxPerMatch
+	INTO #Dep_CustBetSetting_TmpDiffbatch(custid,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+	FROM #Dep_CustBetSetting_TmpDiff t
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE c
+	SET c.MinBet = t.MinBet,
+		c.MaxBet = t.MaxBet,
+		c.MaxPerMatch = t.MaxPerMatch
+	FROM Dep_CustBetSetting_Member c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustBetSetting_TmpDiffbatch t 
+		ON c.CustID = t.CustID 
+		AND c.SportType = t.SportType
+		AND c.BetType = t.BetType
+
+	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
+END
 
 DROP TABLE #Dummy
 DROP TABLE #supers
