@@ -33,7 +33,8 @@ CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smal
 CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
 CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
 CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
-
+CREATE TABLE #Dep_CustBetSetting_TmpDiff(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money)
+CREATE TABLE #Dep_CustBetSetting_TmpDiffbatch(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money)
 
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -394,6 +395,92 @@ BEGIN
 
 	TRUNCATE TABLE #Dep_CustPTSetting_Agent_Batch
 END
+----------Adjust Bet setting----------
+SET @BatchSize = 5000
+
+--SMA level
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+SELECT ci.[CustID]
+		,sp.Sporttype
+		,sp.BetType
+		,dc.minbet
+		,dc.maxbet
+		,dc.MaxPerGameType
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN CustGameType dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSetting_Agent old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+WHERE ci.roleid IN(2,3,4)
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSetting = 1
+	AND (old.MinBet <> dc.MinBet OR old.MaxBet <> dc.MaxBet OR old.MaxPerMatch <> dc.MaxPerGameType)
+
+--Adjust Dep_CustBetSetting_Agent
+UPDATE c
+SET c.MinBet = t.MinBet,
+	c.MaxBet = t.MaxBet,
+	c.MaxPerMatch = t.MaxPerMatch
+FROM Dep_CustBetSetting_Agent c WITH(ROWLOCK,UPDLOCK)
+INNER JOIN #Dep_CustBetSetting_TmpDiff t 
+	ON c.CustID = t.CustID 
+	AND c.SportType = t.SportType
+	AND c.BetType = t.BetType
+
+TRUNCATE TABLE #Dep_CustBetSetting_TmpDiff
+--Member level
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+SELECT ci.[CustID]
+		,sp.Sporttype
+		,sp.BetType
+		,dc.minbet
+		,dc.maxbet
+		,dc.MaxPerGameType
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN CustGameType dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSetting_Member old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSetting = 1
+	AND (old.MinBet <> dc.MinBet OR old.MaxBet <> dc.MaxBet OR old.MaxPerMatch <> dc.MaxPerGameType)
+
+--Adjust Dep_CustBetSetting_Member
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.MinBet,deleted.MaxBet,deleted.MaxPerMatch
+	INTO #Dep_CustBetSetting_TmpDiffbatch(custid,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+	FROM #Dep_CustBetSetting_TmpDiff t
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE c
+	SET c.MinBet = t.MinBet,
+		c.MaxBet = t.MaxBet,
+		c.MaxPerMatch = t.MaxPerMatch
+	FROM Dep_CustBetSetting_Member c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustBetSetting_TmpDiffbatch t 
+		ON c.CustID = t.CustID 
+		AND c.SportType = t.SportType
+		AND c.BetType = t.BetType
+
+	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
+END
 
 DROP TABLE #Dummy
 DROP TABLE #supers
@@ -403,5 +490,7 @@ DROP TABLE #Dep_CustPTSetting_Agent
 DROP TABLE #Dep_CustPTSetting_Agent_Batch
 DROP TABLE #Dep_CustPTSetting_Member
 DROP TABLE #Dep_CustPTSetting_Member_Batch
+DROP TABLE #Dep_CustBetSetting_TmpDiff
+DROP TABLE #Dep_CustBetSetting_TmpDiffbatch
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
