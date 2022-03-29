@@ -50,7 +50,7 @@ BEGIN
 		SET @mincustID_batch = 0
 
 	IF @maxcustID_batch IS NULL
-		SET @maxcustID_batch = @maxcustID_batch
+		SET @maxcustID_batch = @max_custid
 
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY, recommend INT, isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
