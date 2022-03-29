@@ -1,8 +1,8 @@
 /*<info serverAlias=”DBLOG-bodb_CustomerLog” ></info>*/
 /*
     Created: Winfred
-    Date: 20200623
-    Task: Manage ProductLaunchSiteCurrency / Can See : #131241
+    Date: 20221803
+    Task: Manage Stakelevel: #167128
     DB: DBLOG/bodb_CustomerLog
 */ 
 USE bodb_CustomerLog
