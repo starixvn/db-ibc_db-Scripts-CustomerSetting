@@ -777,6 +777,15 @@ SELECT 2207, 45, '500', '150,000', 500, 150000 UNION ALL -- WON
 SELECT 2208, 45, '20', '30,000', 20, 30000 UNION ALL -- WON
 SELECT 2208, 45, '20', '75,000', 20, 75000 -- WON
 
+/*
+remove 4 games bellow:
+	2155 Chinese Zodiac
+	2162 Football Fans
+	2111 Roulette Pro (Fast)
+	2178 Baccarat(Progressive JP)
+*/
+DELETE FROM #StakeLevel WHERE GameTypeID IN(2155,2162,2111,2178)
+
 DECLARE @Max_StakeLevelID INT
 
 SELECT @Max_StakeLevelID = MAX(StakeLevelID) FROM Dep_StakeLevel WITH(NOLOCK)
