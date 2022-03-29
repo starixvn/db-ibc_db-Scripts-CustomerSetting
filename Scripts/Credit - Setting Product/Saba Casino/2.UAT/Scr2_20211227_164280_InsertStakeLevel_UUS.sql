@@ -80,6 +80,15 @@ SELECT 2207, 20, '0.1', '500', 0.1, 500 UNION ALL -- UUS
 SELECT 2208, 20, '0.1', '50', 0.1, 50 UNION ALL -- UUS
 SELECT 2208, 20, '0.1', '100', 0.1, 100  -- UUS
 
+/*
+remove 4 games bellow:
+	2155 Chinese Zodiac
+	2162 Football Fans
+	2111 Roulette Pro (Fast)
+	2178 Baccarat(Progressive JP)
+*/
+DELETE FROM #StakeLevel WHERE GameTypeID IN(2155,2162,2111,2178)
+
 ;WITH TMP AS(
 	SELECT s.*,
 	ROW_NUMBER() OVER( PARTITION BY GameTypeID,ExchangeID ORDER BY MaxStake,MinStake) AS Level
