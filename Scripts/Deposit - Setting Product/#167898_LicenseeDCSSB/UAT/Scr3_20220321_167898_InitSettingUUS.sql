@@ -10,7 +10,8 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend INT	
 	, @max_custid INT
 	, @target VARCHAR(20)
-	
+	, @mincustID_batch INT = NULL
+	, @maxcustID_batch INT = NULL
 AS
 BEGIN	
 	SET NOCOUNT ON
@@ -45,6 +46,12 @@ BEGIN
 	   )
 		RETURN
 
+	IF @mincustID_batch IS NULL
+		SET @mincustID_batch = 0
+
+	IF @maxcustID_batch IS NULL
+		SET @maxcustID_batch = @maxcustID_batch
+
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY, recommend INT, isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
@@ -69,14 +76,20 @@ BEGIN
 		AND roleid = 1 
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+		--> Init by batch for member
+		AND ci.custid > @mincustID_batch
+		AND ci.custid <= @maxcustID_batch
 	
-	INSERT INTO #tmpSMA(CustID,RoleID)
-	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
-		AND roleid IN(2,3,4)
-		AND ci.Enabled=1
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
+	IF @mincustID_batch = 0  -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO #tmpSMA(CustID,RoleID)
+		SELECT CustID,RoleID
+		FROM custInfo ci WITH(NOLOCK)
+		WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
+			AND roleid IN(2,3,4)
+			AND ci.Enabled=1
+			AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
+	END
 		
 	------------
 	DECLARE @SportBettype_tbl Table(Sporttype SMALLINT, BetType SMALLINT, HavePT BIT, HaveComm BIT, HaveBetSetting BIT, HaveBetSettingGame BIT,ProductID TINYINT)
@@ -93,68 +106,137 @@ BEGIN
 	GROUP BY a.SportType,a.BetType
 
 -------------------------------------PT Setting-----------------------------------------------
---SMA Level
+--SMA Level AND Group Member Level
 	--SB
-	INSERT INTO dbo.Dep_CustPTSetting_Agent
-		(	[CustID]
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		 )
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,dc.spositiontaking
-		   ,dc.mpositiontaking
-		   ,dc.apositiontaking
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND dc.islive = 0
-	WHERE sp.HavePT = 1
-	--NG
-	UNION ALL
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,dc.spositiontaking
-		   ,dc.mpositiontaking
-		   ,dc.apositiontaking
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-	WHERE sp.HavePT = 1
-	--Keno
-	UNION ALL
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,dc.spositiontaking
-		   ,dc.mpositiontaking
-		   ,dc.apositiontaking
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN CustSettingGame dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-	WHERE sp.HavePT = 1
+	IF @mincustID_batch = 0 -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO dbo.Dep_CustPTSetting_Agent
+			(	[CustID]
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			 )
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,dc.spositiontaking
+			   ,dc.mpositiontaking
+			   ,dc.apositiontaking
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND dc.islive = 0
+		WHERE sp.HavePT = 1
+		--NG
+		UNION ALL
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,dc.spositiontaking
+			   ,dc.mpositiontaking
+			   ,dc.apositiontaking
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+		WHERE sp.HavePT = 1
+		--Keno
+		UNION ALL
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,dc.spositiontaking
+			   ,dc.mpositiontaking
+			   ,dc.apositiontaking
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN CustSettingGame dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+		WHERE sp.HavePT = 1
+
+		--SB
+		INSERT INTO dbo.Dep_CustPTGroupSetting_Member
+			(	AgentID
+			   ,[SportType]
+			   ,[BetType]
+			   ,[IsLive]
+			   ,[SuperPT]
+			   ,[MasterPT]
+			   ,[AgentPT]
+			 )
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,0
+			   ,0
+			   ,CASE WHEN  @site = 'asiabet88' AND @currency IN(3,6) AND sp.sporttype = 1 AND sp.bettype = 1
+					THEN 0 ELSE dc.apositiontaking END
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND dc.islive = 0
+		WHERE sp.HavePT = 1
+			AND t.RoleID = 2
+		--NG
+		UNION ALL
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,0
+			   ,0
+			   ,dc.apositiontaking
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+		WHERE sp.HavePT = 1
+			AND t.RoleID = 2
+		--Keno
+		UNION ALL
+		SELECT 
+				t.[CustID]
+			   ,sp.Sporttype
+			   ,sp.BetType
+			   ,0
+			   ,0
+			   ,0
+			   ,dc.apositiontaking
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN CustSettingGame dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+		WHERE sp.HavePT = 1
+			AND t.RoleID = 2
+	END
 	
 --Member Level
 	--SB
@@ -229,73 +311,6 @@ BEGIN
 			AND m.IsGroupedPT = 0
 	WHERE sp.HavePT = 1
 
---Group Member Level
-	--SB
-	INSERT INTO dbo.Dep_CustPTGroupSetting_Member
-		(	AgentID
-		   ,[SportType]
-		   ,[BetType]
-		   ,[IsLive]
-		   ,[SuperPT]
-		   ,[MasterPT]
-		   ,[AgentPT]
-		 )
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,0
-		   ,0
-		   ,CASE WHEN  @site = 'asiabet88' AND @currency IN(3,6) AND sp.sporttype = 1 AND sp.bettype = 1
-				THEN 0 ELSE dc.apositiontaking END
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND dc.islive = 0
-	WHERE sp.HavePT = 1
-		AND t.RoleID = 2
-	--NG
-	UNION ALL
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,0
-		   ,0
-		   ,dc.apositiontaking
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-	WHERE sp.HavePT = 1
-		AND t.RoleID = 2
-	--Keno
-	UNION ALL
-	SELECT 
-			t.[CustID]
-		   ,sp.Sporttype
-		   ,sp.BetType
-		   ,0
-		   ,0
-		   ,0
-		   ,dc.apositiontaking
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN CustSettingGame dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-	WHERE sp.HavePT = 1
-		AND t.RoleID = 2
-
 	----------------
 	IF @site = 'asiabet88' AND @currency IN(3,6)
 	BEGIN
@@ -330,6 +345,7 @@ BEGIN
 ---------------Comm--------------------------
 	--insert Dep_CustDiscountSetting_Agent
 	IF @site IN ('Saba789','Athena000') --> Init Licensee comm for SB
+		AND @mincustID_batch = 0 -- Init data for SMA on the first batch only
 	BEGIN
 		INSERT INTO dbo.Dep_CustDiscountSetting_Agent
 		(
@@ -356,84 +372,87 @@ BEGIN
 	END
 
 	--insert group comm setting
-	INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member 
-		(AgentID
-		,SportType
-		,BetType
-		,PlayerDiscount
-		,AgentDiscount
-		,MasterDiscount
-		,SuperDiscount		
-		)
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,0 AS PlayerDiscount
-			,ISNULL(a.discount,0) AS discount
-			,ISNULL(a.discount,0) AS adiscount
-			,ISNULL(a.discount,0) AS sdiscount
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
-		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-		LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
-			ON dcs.AgentID = t.CustID 
-			and dcs.SportType = sp.sporttype
-			AND dcs.BetType = sp.bettype
-	WHERE sp.HaveComm = 1
-		AND t.roleid = 2
-		AND dcs.AgentID IS NULL
-	--NG
-	UNION ALL
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,0 AS PlayerDiscount
-			,ISNULL(a.discount,0) AS discount
-			,ISNULL(a.discount,0) AS adiscount
-			,ISNULL(a.discount,0) AS sdiscount
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
-		INNER JOIN Dep_custsetting3rd dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-		LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
-			ON dcs.AgentID = t.CustID 
-			and dcs.SportType = sp.sporttype
-			AND dcs.BetType = sp.bettype
-	WHERE sp.HaveComm = 1
-		AND t.roleid = 2
-		AND dcs.AgentID IS NULL
-	--Keno
-	UNION ALL
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,0 AS PlayerDiscount
-			,ISNULL(a.discount,0) AS discount
-			,ISNULL(a.discount,0) AS adiscount
-			,ISNULL(a.discount,0) AS sdiscount
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
-		INNER JOIN CustSettingGame dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-		LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
-			ON dcs.AgentID = t.CustID 
-			and dcs.SportType = sp.sporttype
-			AND dcs.BetType = sp.bettype
-	WHERE sp.HaveComm = 1
-		AND t.roleid = 2
-		AND dcs.AgentID IS NULL
+	IF @mincustID_batch = 0 -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member 
+			(AgentID
+			,SportType
+			,BetType
+			,PlayerDiscount
+			,AgentDiscount
+			,MasterDiscount
+			,SuperDiscount		
+			)
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,0 AS PlayerDiscount
+				,ISNULL(a.discount,0) AS discount
+				,ISNULL(a.discount,0) AS adiscount
+				,ISNULL(a.discount,0) AS sdiscount
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
+			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+			LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
+				ON dcs.AgentID = t.CustID 
+				and dcs.SportType = sp.sporttype
+				AND dcs.BetType = sp.bettype
+		WHERE sp.HaveComm = 1
+			AND t.roleid = 2
+			AND dcs.AgentID IS NULL
+		--NG
+		UNION ALL
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,0 AS PlayerDiscount
+				,ISNULL(a.discount,0) AS discount
+				,ISNULL(a.discount,0) AS adiscount
+				,ISNULL(a.discount,0) AS sdiscount
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
+			INNER JOIN Dep_custsetting3rd dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+			LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
+				ON dcs.AgentID = t.CustID 
+				and dcs.SportType = sp.sporttype
+				AND dcs.BetType = sp.bettype
+		WHERE sp.HaveComm = 1
+			AND t.roleid = 2
+			AND dcs.AgentID IS NULL
+		--Keno
+		UNION ALL
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,0 AS PlayerDiscount
+				,ISNULL(a.discount,0) AS discount
+				,ISNULL(a.discount,0) AS adiscount
+				,ISNULL(a.discount,0) AS sdiscount
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK) ON a.custid = t.custid AND sp.Sporttype = a.SportType AND sp.BetType = a.BetType
+			INNER JOIN CustSettingGame dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+			LEFT JOIN Dep_CustDiscountGroupSetting_Member dcs WITH (NOLOCK) 
+				ON dcs.AgentID = t.CustID 
+				and dcs.SportType = sp.sporttype
+				AND dcs.BetType = sp.bettype
+		WHERE sp.HaveComm = 1
+			AND t.roleid = 2
+			AND dcs.AgentID IS NULL
+	END
 
 	UPDATE #tmpCust SET isfinished = 0
 	DECLARE @Cust_Temp TABLE(CustID INT)
@@ -501,137 +520,10 @@ BEGIN
 		AND dl.CustID IS NULL
 -------------------------------------Bet Setting Game-----------------------------------------------------------
 --SMA
-	INSERT INTO Dep_CustBetSettingGame_Agent(
-		CustID,
-		SportType,
-		BetType,
-		MinBet,
-		MaxBet,
-		MaxPerMatch,
-		MaxPerNumber,
-		MaxPayoutPerMatch
-	)
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,dc.minbet
-			,dc.maxbet
-			,Maxpermatch = CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
-								WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
-								WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
-								WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
-								WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
-								WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
-								WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
-								WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
-								WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
-								WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
-							END
-			,MaxPerBall = NULL
-			,MaxPayoutPermatch = CASE	WHEN sp.sporttype = 1 AND sp.bettype = 1 AND ci.maxpermatch >= 1 THEN ci.maxpermatch*8
-								WHEN sp.sporttype = 1 AND sp.bettype = 9 AND ci.MaxPerMatch1MP >= 1 THEN ci.MaxPerMatch1MP*8
-								WHEN sp.sporttype = 2 AND sp.bettype = 1 AND ci.maxpermatch2 >= 1 THEN ci.maxpermatch2*8
-								WHEN sp.sporttype = 3 AND sp.bettype = 1 AND ci.maxpermatch3 >= 1 THEN ci.maxpermatch3*8
-								WHEN sp.sporttype = 5 AND sp.bettype = 1 AND ci.maxpermatch5 >= 1 THEN ci.maxpermatch5*8
-								WHEN sp.sporttype = 8 AND sp.bettype = 1 AND ci.maxpermatch8 >= 1 THEN ci.maxpermatch8*8
-								WHEN sp.sporttype = 10 AND sp.bettype = 1 AND ci.maxpermatch10 >= 1 THEN ci.maxpermatch10*8
-								WHEN sp.sporttype = 11 AND sp.bettype = 1 AND ci.maxpermatch11 >= 1 THEN ci.maxpermatch11*8
-								WHEN sp.sporttype = 99 AND sp.bettype = 1 AND ci.maxpermatch99 >= 1 THEN ci.maxpermatch99*8
-								WHEN sp.sporttype = 99 AND sp.bettype = 9 AND ci.MaxPerMatch99MP >= 1 THEN ci.MaxPerMatch99MP*8
-								----------------Special value-----------------
-								WHEN sp.sporttype = 1 AND sp.bettype = 1 AND ci.maxpermatch < 1 THEN ci.maxpermatch
-								WHEN sp.sporttype = 1 AND sp.bettype = 9 AND ci.MaxPerMatch1MP < 1 THEN ci.MaxPerMatch1MP
-								WHEN sp.sporttype = 2 AND sp.bettype = 1 AND ci.maxpermatch2 < 1 THEN ci.maxpermatch2
-								WHEN sp.sporttype = 3 AND sp.bettype = 1 AND ci.maxpermatch3 < 1 THEN ci.maxpermatch3
-								WHEN sp.sporttype = 5 AND sp.bettype = 1 AND ci.maxpermatch5 < 1 THEN ci.maxpermatch5
-								WHEN sp.sporttype = 8 AND sp.bettype = 1 AND ci.maxpermatch8 < 1 THEN ci.maxpermatch8
-								WHEN sp.sporttype = 10 AND sp.bettype = 1 AND ci.maxpermatch10 < 1 THEN ci.maxpermatch10
-								WHEN sp.sporttype = 11 AND sp.bettype = 1 AND ci.maxpermatch11 < 1 THEN ci.maxpermatch11
-								WHEN sp.sporttype = 99 AND sp.bettype = 1 AND ci.maxpermatch99 < 1 THEN ci.maxpermatch99
-								WHEN sp.sporttype = 99 AND sp.bettype = 9 AND ci.MaxPerMatch99MP < 1 THEN ci.MaxPerMatch99MP
-						END
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
-	WHERE sp.HaveBetSettingGame = 1
-	--E-Sport
-	UNION ALL
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,dc.minbet
-			,dc.maxbet
-			,dc.Maxpermatch
-			,MaxperBall = NULL
-			,MaxPayoutPermatch = CASE WHEN dc.Maxpermatch > = 1 THEN dc.MaxPerMatch*8 ELSE dc.MaxPerMatch END
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
-	WHERE sp.HaveBetSettingGame = 1
-	--NG
-	UNION ALL
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,dc.minbet
-			,dc.maxbet
-			,Maxpermatch = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
-			,MaxperBall = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
-			,MaxPayoutPermatch = NULL
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND sp.Sporttype = dc.sporttype
-			AND sp.BetType = dc.bettype
-			AND islive = 0
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
-	WHERE sp.HaveBetSettingGame = 1
-
-	--Insert for Saba soccer,saba basket ball
-	INSERT INTO Dep_CustBetSettingGame_Agent(
-		CustID,
-		SportType,
-		BetType,
-		MinBet,
-		MaxBet,
-		MaxPerMatch,
-		MaxPerNumber,
-		MaxPayoutPerMatch
-	)
-	SELECT dc.CustID,
-		dc.SportType + 9900,
-		dc.BetType,
-		dc.MinBet,
-		dc.MaxBet,
-		dc.MaxPerMatch,
-		dc.MaxPerNumber,
-		dc.MaxPayoutPerMatch
-	FROM Dep_CustBetSettingGame_Agent dc WITH(NOLOCK)
-		INNER JOIN #tmpSMA t 
-			ON dc.CustID = t.CustID
-		LEFT JOIN Dep_CustBetSettingGame_Agent ex WITH(NOLOCK) 
-			ON dc.CustID = ex.CustID 
-			AND dc.SportType + 9900 = ex.SportType
-			AND dc.BetType = ex.BetType
-	WHERE dc.SportType IN(1,2) AND dc.BetType = 1
-		AND ex.CustID IS NULL
-
---Group member --> Follow by Agent
-	INSERT INTO Dep_CustBetSettingGameGroup_Member(
-			AgentID,
+	IF @mincustID_batch = 0 -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO Dep_CustBetSettingGame_Agent(
+			CustID,
 			SportType,
 			BetType,
 			MinBet,
@@ -640,23 +532,153 @@ BEGIN
 			MaxPerNumber,
 			MaxPayoutPerMatch
 		)
-	SELECT dc.CustID,
-			dc.SportType,
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,dc.minbet
+				,dc.maxbet
+				,Maxpermatch = CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
+									WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
+									WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
+									WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
+									WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
+									WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
+									WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
+									WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
+									WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
+									WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
+								END
+				,MaxPerBall = NULL
+				,MaxPayoutPermatch = CASE	WHEN sp.sporttype = 1 AND sp.bettype = 1 AND ci.maxpermatch >= 1 THEN ci.maxpermatch*8
+									WHEN sp.sporttype = 1 AND sp.bettype = 9 AND ci.MaxPerMatch1MP >= 1 THEN ci.MaxPerMatch1MP*8
+									WHEN sp.sporttype = 2 AND sp.bettype = 1 AND ci.maxpermatch2 >= 1 THEN ci.maxpermatch2*8
+									WHEN sp.sporttype = 3 AND sp.bettype = 1 AND ci.maxpermatch3 >= 1 THEN ci.maxpermatch3*8
+									WHEN sp.sporttype = 5 AND sp.bettype = 1 AND ci.maxpermatch5 >= 1 THEN ci.maxpermatch5*8
+									WHEN sp.sporttype = 8 AND sp.bettype = 1 AND ci.maxpermatch8 >= 1 THEN ci.maxpermatch8*8
+									WHEN sp.sporttype = 10 AND sp.bettype = 1 AND ci.maxpermatch10 >= 1 THEN ci.maxpermatch10*8
+									WHEN sp.sporttype = 11 AND sp.bettype = 1 AND ci.maxpermatch11 >= 1 THEN ci.maxpermatch11*8
+									WHEN sp.sporttype = 99 AND sp.bettype = 1 AND ci.maxpermatch99 >= 1 THEN ci.maxpermatch99*8
+									WHEN sp.sporttype = 99 AND sp.bettype = 9 AND ci.MaxPerMatch99MP >= 1 THEN ci.MaxPerMatch99MP*8
+									----------------Special value-----------------
+									WHEN sp.sporttype = 1 AND sp.bettype = 1 AND ci.maxpermatch < 1 THEN ci.maxpermatch
+									WHEN sp.sporttype = 1 AND sp.bettype = 9 AND ci.MaxPerMatch1MP < 1 THEN ci.MaxPerMatch1MP
+									WHEN sp.sporttype = 2 AND sp.bettype = 1 AND ci.maxpermatch2 < 1 THEN ci.maxpermatch2
+									WHEN sp.sporttype = 3 AND sp.bettype = 1 AND ci.maxpermatch3 < 1 THEN ci.maxpermatch3
+									WHEN sp.sporttype = 5 AND sp.bettype = 1 AND ci.maxpermatch5 < 1 THEN ci.maxpermatch5
+									WHEN sp.sporttype = 8 AND sp.bettype = 1 AND ci.maxpermatch8 < 1 THEN ci.maxpermatch8
+									WHEN sp.sporttype = 10 AND sp.bettype = 1 AND ci.maxpermatch10 < 1 THEN ci.maxpermatch10
+									WHEN sp.sporttype = 11 AND sp.bettype = 1 AND ci.maxpermatch11 < 1 THEN ci.maxpermatch11
+									WHEN sp.sporttype = 99 AND sp.bettype = 1 AND ci.maxpermatch99 < 1 THEN ci.maxpermatch99
+									WHEN sp.sporttype = 99 AND sp.bettype = 9 AND ci.MaxPerMatch99MP < 1 THEN ci.MaxPerMatch99MP
+							END
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+			INNER JOIN custInfo ci WITH(NOLOCK)
+				ON t.custid = ci.custid
+		WHERE sp.HaveBetSettingGame = 1
+		--E-Sport
+		UNION ALL
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,dc.minbet
+				,dc.maxbet
+				,dc.Maxpermatch
+				,MaxperBall = NULL
+				,MaxPayoutPermatch = CASE WHEN dc.Maxpermatch > = 1 THEN dc.MaxPerMatch*8 ELSE dc.MaxPerMatch END
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+			INNER JOIN custInfo ci WITH(NOLOCK)
+				ON t.custid = ci.custid
+		WHERE sp.HaveBetSettingGame = 1
+		--NG
+		UNION ALL
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,dc.minbet
+				,dc.maxbet
+				,Maxpermatch = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
+				,MaxperBall = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+				,MaxPayoutPermatch = NULL
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND sp.Sporttype = dc.sporttype
+				AND sp.BetType = dc.bettype
+				AND islive = 0
+			INNER JOIN custInfo ci WITH(NOLOCK)
+				ON t.custid = ci.custid
+		WHERE sp.HaveBetSettingGame = 1
+
+		--Insert for Saba soccer,saba basket ball
+		INSERT INTO Dep_CustBetSettingGame_Agent(
+			CustID,
+			SportType,
+			BetType,
+			MinBet,
+			MaxBet,
+			MaxPerMatch,
+			MaxPerNumber,
+			MaxPayoutPerMatch
+		)
+		SELECT dc.CustID,
+			dc.SportType + 9900,
 			dc.BetType,
 			dc.MinBet,
 			dc.MaxBet,
 			dc.MaxPerMatch,
 			dc.MaxPerNumber,
 			dc.MaxPayoutPerMatch
-	FROM Dep_CustBetSettingGame_Agent dc WITH(NOLOCK)
-		INNER JOIN #tmpSMA t 
-			ON dc.CustID = t.CustID
-		LEFT JOIN Dep_CustBetSettingGameGroup_Member ex WITH(NOLOCK) 
-			ON dc.CustID = ex.AgentID 
-			AND dc.SportType = ex.SportType
-			AND dc.BetType = ex.BetType
-	WHERE ex.AgentID IS NULL
-		AND t.RoleID = 2
+		FROM Dep_CustBetSettingGame_Agent dc WITH(NOLOCK)
+			INNER JOIN #tmpSMA t 
+				ON dc.CustID = t.CustID
+			LEFT JOIN Dep_CustBetSettingGame_Agent ex WITH(NOLOCK) 
+				ON dc.CustID = ex.CustID 
+				AND dc.SportType + 9900 = ex.SportType
+				AND dc.BetType = ex.BetType
+		WHERE dc.SportType IN(1,2) AND dc.BetType = 1
+			AND ex.CustID IS NULL
+
+	--Group member --> Follow by Agent
+		INSERT INTO Dep_CustBetSettingGameGroup_Member(
+				AgentID,
+				SportType,
+				BetType,
+				MinBet,
+				MaxBet,
+				MaxPerMatch,
+				MaxPerNumber,
+				MaxPayoutPerMatch
+			)
+		SELECT dc.CustID,
+				dc.SportType,
+				dc.BetType,
+				dc.MinBet,
+				dc.MaxBet,
+				dc.MaxPerMatch,
+				dc.MaxPerNumber,
+				dc.MaxPayoutPerMatch
+		FROM Dep_CustBetSettingGame_Agent dc WITH(NOLOCK)
+			INNER JOIN #tmpSMA t 
+				ON dc.CustID = t.CustID
+			LEFT JOIN Dep_CustBetSettingGameGroup_Member ex WITH(NOLOCK) 
+				ON dc.CustID = ex.AgentID 
+				AND dc.SportType = ex.SportType
+				AND dc.BetType = ex.BetType
+		WHERE ex.AgentID IS NULL
+			AND t.RoleID = 2
+	END
 
 --Member
 	--get all setting for member to temp table
@@ -865,28 +887,31 @@ BEGIN
 
 -------------------------------------Bet Setting -----------------------------------------------------------
 --SMA
-	INSERT INTO Dep_CustBetSetting_Agent(
-		CustID,
-		SportType,
-		BetType,
-		MinBet,
-		MaxBet,
-		MaxPerMatch
-	)
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,dc.minbet
-			,dc.maxbet
-			,dc.MaxPerGameType
-	FROM #tmpSMA t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN CustGameType dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
-	WHERE sp.HaveBetSetting = 1
+	IF @mincustID_batch = 0 -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO Dep_CustBetSetting_Agent(
+			CustID,
+			SportType,
+			BetType,
+			MinBet,
+			MaxBet,
+			MaxPerMatch
+		)
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,dc.minbet
+				,dc.maxbet
+				,dc.MaxPerGameType
+		FROM #tmpSMA t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN CustGameType dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+			INNER JOIN custInfo ci WITH(NOLOCK)
+				ON t.custid = ci.custid
+		WHERE sp.HaveBetSetting = 1
+	END
 
 --Member
 	INSERT INTO Dep_CustBetSetting_Member(
@@ -930,7 +955,7 @@ BEGIN
 	DECLARE @BitOrder_KN TINYINT = 13
 
 	INSERT INTO #AllUsers (CustID) -- Get distinct custID
-	SELECT SMA.CustID FROM #tmpSMA SMA WITH (NOLOCK)
+	SELECT SMA.CustID FROM #tmpSMA SMA WITH (NOLOCK) WHERE @mincustID_batch = 0 -- Init data for SMA on the first batch only
 	UNION 
 	SELECT M.CustID FROM #tmpCust M WITH (NOLOCK)
 
@@ -1009,6 +1034,7 @@ GO
 ------------------------------------------------------	
 -- BEGIN STEP 5.2: Run this SP at replicated DB: DB06, DBTP -----
 --------------------------------------------------------------------------------------
+SET NOCOUNT ON
 PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 DECLARE @target VARCHAR(20)
@@ -1021,26 +1047,36 @@ Print 'Server Name : ' + @target
 
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 		DROP TABLE	#supers;
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, LineCnt INT, isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+IF	OBJECT_ID('tempdb..#Tmp_Custbatch') IS NOT NULL
+		DROP TABLE	#Tmp_Custbatch;
+CREATE TABLE #Tmp_Custbatch (custid int, RN INT, isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT, @LineCnt INT
+, @BatchNum INT = 100000 -- execute by batch to void SP timeout error
+, @maxcustID_batch INT -- max custid of current batch
+, @mincustID_batch INT  --min custid of currenct batch
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
-SELECT ci.custid
+INSERT INTO #supers(custid,LineCnt)
+SELECT ci.srecommend, COUNT(1) AS Cnt
 FROM custInfo ci WITH (NOLOCK) 	
-	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
 		AND cs.site IN('spondemo','Athena000')	
 		AND Ci.currency  IN (20)
-ORDER BY ci.custid 
+GROUP BY ci.srecommend
+ORDER BY ci.srecommend
 
 DECLARE @super_cnt INT, @index INT = 0
 
 SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg_batch nvarchar(200) = 'SuperID: %d, MinCustID: %d, MaxCustID: %d.'
 
 DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.'
 
@@ -1050,11 +1086,10 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	
-	
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@srecommend = custid			
+		,@srecommend = custid
+		,@LineCnt = LineCnt		
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -1062,12 +1097,60 @@ BEGIN
 	SET @index = @index + 1
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+
+	IF @LineCnt > @BatchNum -- execute by batch to void SP timeout error
+	BEGIN
+		;WITH TMP AS(
+			SELECT ci.custid, ROW_NUMBER() OVER( ORDER BY ci.custid) AS RN
+			FROM custInfo ci WITH (NOLOCK) 
+			WHERE ci.srecommend = @srecommend
+				AND ci.CustID <= @max_custid
+				AND ci.Enabled=1
+		)
+		INSERT INTO #Tmp_Custbatch(custid,RN)
+		SELECT custid,RN
+		FROM TMP 
+		WHERE (RN%@BatchNum) = 0
+		UNION
+		SELECT MAX(custID),MAX(RN)
+		FROM TMP 
+
+		--Reset @mincustID_batch
+		SELECT @mincustID_batch = 0 ,@maxcustID_batch = 0
+
+		WHILE (1 = 1)
+		BEGIN
+			-- Set @mincustID_batch = previous @maxcustID_batch
+			SET @mincustID_batch = @maxcustID_batch
+
+			UPDATE TOP (1) #Tmp_Custbatch
+			SET isfinished = 1
+				,@maxcustID_batch = custid
+			WHERE isfinished = 0
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target
-				
+			IF @@ROWCOUNT = 0 BREAK
+
+			RAISERROR (@msg_batch, 0, 1, @srecommend,@mincustID_batch,@maxcustID_batch) WITH NOWAIT
+			EXEC dbo.[Acc_Dep_DynamicCustSetting_09] 
+				@srecommend = @srecommend, 
+				@max_custid=@max_custid,
+				@target = @target,
+				@mincustID_batch = @mincustID_batch,
+				@maxcustID_batch = @maxcustID_batch
+		END
+
+		TRUNCATE TABLE #Tmp_Custbatch	
+	END
+	ELSE
+	BEGIN
+		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target
+	END
+
 	WAITFOR DELAY '00:00:00.280'			
 END	
 
-DROP TABLE #supers		
+DROP TABLE #supers	
+DROP TABLE #Tmp_Custbatch	
 GO
 PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+SET NOCOUNT OFF
