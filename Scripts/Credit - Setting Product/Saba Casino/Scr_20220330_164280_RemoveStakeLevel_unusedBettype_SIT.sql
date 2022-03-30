@@ -14,7 +14,7 @@ USE CustDB
 GO
 
 DELETE sl
-FROM StakeLevelGroupDetail SL WITH (NOLOCK)
+FROM StakeLevelGroupDetail SL WITH (ROWLOCK)
 	INNER JOIN StakeLevel s WITH(NOLOCK)ON sl.StakeLevelID = s.StakeLevelID
 WHERE S.GameTypeID = 2101
 AND sl.GameTypeID IN(2155,2162,2111,2178,2151)
