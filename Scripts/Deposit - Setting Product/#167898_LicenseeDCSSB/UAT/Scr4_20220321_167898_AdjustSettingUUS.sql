@@ -33,8 +33,9 @@ CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smal
 CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
 CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
 CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
-CREATE TABLE #Dep_CustBetSetting_TmpDiff(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money,RoleID TINYINT)
-CREATE TABLE #Dep_CustBetSetting_TmpDiffbatch(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money)
+CREATE TABLE #Dep_CustBetSetting_TmpDiff(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,RoleID TINYINT,IsGroupedBetLimit BIT)
+CREATE TABLE #Dep_CustBetSetting_TmpDiffbatch(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money)
+CREATE TABLE #tmpCust_WillOutGroupBetlimit( CustID INT, Recommend INT)
 
 INSERT INTO #Dummy(CustID)
 SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -602,14 +603,16 @@ INSERT INTO #Dep_CustBetSetting_TmpDiff(
 		BetType,
 		MinBet,
 		MaxBet,
-		MaxPerMatch
+		MaxPerMatch,
+		RoleID
 	)
 SELECT dc.CustID,
 	dc.SportType + 9900,
 	dc.BetType,
 	dc.MinBet,
 	dc.MaxBet,
-	dc.MaxPerMatch
+	dc.MaxPerMatch,
+	dc.RoleID
 FROM #Dep_CustBetSetting_TmpDiff dc WITH(NOLOCK)
 WHERE dc.SportType IN(1,2) AND dc.BetType = 1
 
@@ -619,7 +622,9 @@ SET c.MinBet = t.MinBet,
 	c.MaxBet = t.MaxBet,
 	c.MaxPerMatch = t.MaxPerMatch,
 	c.MaxPerNumber = t.MaxPerNumber,
-	c.MaxPayoutPerMatch = CASE WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 ELSE t.MaxPerMatch END
+	c.MaxPayoutPerMatch = CASE	WHEN t.SportType = 161 THEN NULL
+								WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 
+								ELSE t.MaxPerMatch END
 FROM Dep_CustBetSettingGame_Agent c WITH(ROWLOCK,UPDLOCK)
 INNER JOIN #Dep_CustBetSetting_TmpDiff t 
 	ON c.CustID = t.CustID 
@@ -632,7 +637,9 @@ SET c.MinBet = t.MinBet,
 	c.MaxBet = t.MaxBet,
 	c.MaxPerMatch = t.MaxPerMatch,
 	c.MaxPerNumber = t.MaxPerNumber,
-	c.MaxPayoutPerMatch = CASE WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 ELSE t.MaxPerMatch END
+	c.MaxPayoutPerMatch = CASE	WHEN t.SportType = 161 THEN NULL
+								WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 
+								ELSE t.MaxPerMatch END
 FROM Dep_CustBetSettingGameGroup_Member c WITH(ROWLOCK,UPDLOCK)
 INNER JOIN #Dep_CustBetSetting_TmpDiff t 
 	ON c.AgentID = t.CustID 
@@ -640,54 +647,371 @@ INNER JOIN #Dep_CustBetSetting_TmpDiff t
 	AND c.BetType = t.BetType
 WHERE t.RoleID = 2
 
---TRUNCATE TABLE #Dep_CustBetSetting_TmpDiff
+TRUNCATE TABLE #Dep_CustBetSetting_TmpDiff
 ----Member level
---INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
---SELECT ci.[CustID]
---		,sp.Sporttype
---		,sp.BetType
---		,dc.minbet
---		,dc.maxbet
---		,dc.MaxPerGameType
---FROM custinfo ci WITH(NOLOCK)
---	CROSS JOIN @SportBettype_tbl sp
---	INNER JOIN CustGameType dc WITH(NOLOCK)
---		ON ci.CustID = dc.custid
---		AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
---	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
---	INNER JOIN Dep_CustBetSetting_Member old WITH(NOLOCK) 
---		ON ci.custid = old.CustID
---		AND sp.Sporttype = old.SportType
---		AND sp.BetType = old.BetType
---WHERE ci.roleid = 1
---	AND ci.Enabled = 1
---	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
---	AND sp.HaveBetSetting = 1
---	AND (old.MinBet <> dc.MinBet OR old.MaxBet <> dc.MaxBet OR old.MaxPerMatch <> dc.MaxPerGameType)
 
-----Adjust Dep_CustBetSetting_Member
---WHILE 1 = 1
---BEGIN
---	DELETE TOP(@BatchSize) t
---	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.MinBet,deleted.MaxBet,deleted.MaxPerMatch
---	INTO #Dep_CustBetSetting_TmpDiffbatch(custid,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
---	FROM #Dep_CustBetSetting_TmpDiff t
+--> Get difference setting from member is group betlimit = 0
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber,IsGroupedBetLimit)
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,Maxpermatch = CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
+						WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
+						WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
+						WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
+						WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
+						WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
+						WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
+						WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
+						WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
+						WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
+					END
+	,MaxPerNumber = NULL
+	,0
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+		AND dc.islive = 0
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGame_Member old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 0
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
+							WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
+							WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
+							WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
+							WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
+							WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
+							WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
+							WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
+							WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
+							WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
+						END
+		)
+--E-Sport
+UNION ALL
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,dc.MaxPerMatch
+	,MaxPerNumber = NULL
+	,0
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGame_Member old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 0
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> dc.MaxPerMatch
+		)
+--NG
+UNION ALL
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,Maxpermatch = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
+	,MaxperBall = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+	,0
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+		AND dc.islive = 0
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGame_Member old WITH(NOLOCK) 
+		ON ci.custid = old.CustID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 0
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
+			OR old.MaxPerNumber <> CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+		)
 
---	IF @@ROWCOUNT = 0
---		BREAK
+--> Get difference setting from member is group betlimit = 1
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber,IsGroupedBetLimit)
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,Maxpermatch = CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
+						WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
+						WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
+						WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
+						WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
+						WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
+						WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
+						WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
+						WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
+						WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
+					END
+	,MaxPerNumber = NULL
+	,1
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+		AND dc.islive = 0
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGameGroup_Member old WITH(NOLOCK) 
+		ON ci.recommend = old.AgentID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 1
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> CASE WHEN sp.Sporttype = 1 AND sp.BetType = 1 THEN ci.maxpermatch 
+							WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ci.MaxPerMatch1MP 
+							WHEN sp.Sporttype = 2 AND sp.BetType = 1 THEN ci.maxpermatch2 
+							WHEN sp.Sporttype = 3 AND sp.BetType = 1 THEN ci.maxpermatch3 
+							WHEN sp.Sporttype = 5 AND sp.BetType = 1 THEN ci.maxpermatch5 
+							WHEN sp.Sporttype = 8 AND sp.BetType = 1 THEN ci.maxpermatch8 
+							WHEN sp.Sporttype = 10 AND sp.BetType = 1 THEN ci.maxpermatch10 
+							WHEN sp.Sporttype = 11 AND sp.BetType = 1 THEN ci.maxpermatch11 
+							WHEN sp.Sporttype = 99 AND sp.BetType = 1 THEN ci.maxpermatch99 
+							WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
+						END
+		)
+--E-Sport
+UNION ALL
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,dc.MaxPerMatch
+	,MaxPerNumber = NULL
+	,1
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGameGroup_Member old WITH(NOLOCK) 
+		ON ci.recommend = old.AgentID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 1
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> dc.MaxPerMatch
+		)
+--NG
+UNION ALL
+SELECT ci.[CustID]
+	,sp.Sporttype
+	,sp.BetType
+	,dc.minbet
+	,dc.maxbet
+	,Maxpermatch = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
+	,MaxperBall = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+	,1
+FROM custinfo ci WITH(NOLOCK)
+	CROSS JOIN @SportBettype_tbl sp
+	INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
+		ON ci.CustID = dc.custid
+		AND dc.sporttype = sp.Sporttype
+		AND dc.bettype = sp.BetType
+		AND dc.islive = 0
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	INNER JOIN Dep_CustBetSettingGameGroup_Member old WITH(NOLOCK) 
+		ON ci.recommend = old.AgentID
+		AND sp.Sporttype = old.SportType
+		AND sp.BetType = old.BetType
+	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK)
+		ON ci.custid = m.CustID AND m.IsGroupedBetLimit = 1
+WHERE ci.roleid = 1
+	AND ci.Enabled = 1
+	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+	AND sp.HaveBetSettingGame = 1
+	AND (	old.MinBet <> dc.MinBet 
+			OR old.MaxBet <> dc.MaxBet 
+			OR old.MaxPerMatch <> CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
+			OR old.MaxPerNumber <> CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+		)
 
---	UPDATE c
---	SET c.MinBet = t.MinBet,
---		c.MaxBet = t.MaxBet,
---		c.MaxPerMatch = t.MaxPerMatch
---	FROM Dep_CustBetSetting_Member c WITH(ROWLOCK,UPDLOCK)
---	INNER JOIN #Dep_CustBetSetting_TmpDiffbatch t 
---		ON c.CustID = t.CustID 
---		AND c.SportType = t.SportType
---		AND c.BetType = t.BetType
+--Saba sport
+INSERT INTO #Dep_CustBetSetting_TmpDiff(
+		CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch,
+		MaxPerNumber,
+		IsGroupedBetLimit
+	)
+SELECT dc.CustID,
+	dc.SportType + 9900,
+	dc.BetType,
+	dc.MinBet,
+	dc.MaxBet,
+	dc.MaxPerMatch,
+	dc.MaxPerNumber,
+	dc.IsGroupedBetLimit
+FROM #Dep_CustBetSetting_TmpDiff dc WITH(NOLOCK)
+WHERE dc.SportType IN(1,2) AND dc.BetType = 1
 
---	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
---END
+INSERT INTO #tmpCust_WillOutGroupBetlimit(CustID,Recommend)
+SELECT DISTINCT t.CustID,ci.recommend
+FROM #Dep_CustBetSetting_TmpDiff t
+	INNER JOIN custInfo ci WITH(NOLOCK) 
+		ON t.CustID = ci.custid
+WHERE t.IsGroupedBetLimit = 1
+
+--remain setting get from group setting
+INSERT INTO #Dep_CustBetSetting_TmpDiff(
+	CustID,
+	SportType,
+	BetType,
+	MinBet,
+	MaxBet,
+	MaxPerMatch,
+	MaxPerNumber,
+	IsGroupedBetLimit
+)
+SELECT t.custID,
+	gr.SportType,
+	gr.BetType,
+	gr.MinBet,
+	gr.MaxBet,
+	gr.MaxPerMatch,
+	gr.MaxPerNumber,
+	1
+FROM Dep_CustBetSettingGameGroup_Member gr WITH(NOLOCK)
+	INNER JOIN #tmpCust_WillOutGroupBetlimit t 
+		ON gr.AgentID = t.recommend
+	LEFT JOIN #Dep_CustBetSetting_TmpDiff c
+		ON gr.SportType = c.Sporttype
+		AND gr.BetType = c.Bettype
+		AND t.custID = c.custid
+WHERE c.CustID IS NULL
+
+--Adjust Dep_CustBetSettingGame_Member
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.MinBet,deleted.MaxBet,deleted.MaxPerMatch,deleted.MaxPerNumber
+	INTO #Dep_CustBetSetting_TmpDiffbatch(custid,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber)
+	FROM #Dep_CustBetSetting_TmpDiff t
+	WHERE t.IsGroupedBetLimit = 0
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	UPDATE c
+	SET c.MinBet = t.MinBet,
+		c.MaxBet = t.MaxBet,
+		c.MaxPerMatch = t.MaxPerMatch,
+		c.MaxPerNumber = t.MaxPerNumber,
+		c.MaxPayoutPerMatch = CASE	WHEN t.SportType = 161 THEN NULL
+								WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 
+								ELSE t.MaxPerMatch END
+	FROM Dep_CustBetSettingGame_Member c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #Dep_CustBetSetting_TmpDiffbatch t 
+		ON c.CustID = t.CustID 
+		AND c.SportType = t.SportType
+		AND c.BetType = t.BetType
+
+	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
+END
+
+--Insert Dep_CustBetSettingGame_Member for member whole is grouping betlimit
+WHILE 1 = 1
+BEGIN
+	DELETE TOP(@BatchSize) t
+	OUTPUT deleted.custid,deleted.SportType,deleted.BetType,deleted.MinBet,deleted.MaxBet,deleted.MaxPerMatch,deleted.MaxPerNumber
+	INTO #Dep_CustBetSetting_TmpDiffbatch(custid,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber)
+	FROM #Dep_CustBetSetting_TmpDiff t
+	WHERE t.IsGroupedBetLimit = 1
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	INSERT INTO Dep_CustBetSettingGame_Member(
+		CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch,
+		MaxPerNumber,
+		MaxPayoutPerMatch
+	)
+	SELECT CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch,
+		MaxPerNumber,
+		MaxPayoutPerMatch =  CASE	WHEN t.SportType = 161 THEN NULL
+								WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 
+								ELSE t.MaxPerMatch END
+	FROM #Dep_CustBetSetting_TmpDiffbatch t 
+
+	TRUNCATE TABLE #Dep_CustBetSetting_TmpDiffbatch
+END
+
+--Update Dep_CustSettingMode.IsGroupedBetLimit = 0 for member with bet setting <> group bet setting
+UPDATE c
+SET c.IsGroupedBetLimit = 0
+FROM Dep_CustSettingMode c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN #tmpCust_WillOutGroupBetlimit t ON c.CustID = t.CustID
 
 DROP TABLE #Dummy
 DROP TABLE #supers
@@ -699,5 +1023,6 @@ DROP TABLE #Dep_CustPTSetting_Member
 DROP TABLE #Dep_CustPTSetting_Member_Batch
 DROP TABLE #Dep_CustBetSetting_TmpDiff
 DROP TABLE #Dep_CustBetSetting_TmpDiffbatch
+DROP TABLE #tmpCust_WillOutGroupBetlimit
 PRINT N'Step 6: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 
