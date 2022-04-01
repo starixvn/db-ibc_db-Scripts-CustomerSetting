@@ -33,7 +33,7 @@ CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SportType smallint,BetType smal
 CREATE TABLE #Dep_CustPTSetting_Agent_Batch(CustID INT,SportType smallint,BetType smallint,SuperPT smallmoney,MasterPT smallmoney,AgentPT smallmoney,RoleID TINYINT,Site VARCHAR(50),Currency INT)
 CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney,Isfinished BIT DEFAULT 0)
 CREATE TABLE #Dep_CustPTSetting_Member_Batch(CustID INT,SportType smallint,BetType smallint,AgentPT smallmoney)
-CREATE TABLE #Dep_CustBetSetting_TmpDiff(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money)
+CREATE TABLE #Dep_CustBetSetting_TmpDiff(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money,RoleID TINYINT)
 CREATE TABLE #Dep_CustBetSetting_TmpDiffbatch(CustID int,SportType smallint,BetType smallint,MinBet money,MaxBet money,MaxPerMatch money,MaxPerNumber money,MaxPayoutPerMatch money)
 
 INSERT INTO #Dummy(CustID)
@@ -485,7 +485,7 @@ END
 SET @BatchSize = 5000
 
 --SMA level
-INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber)
+INSERT INTO #Dep_CustBetSetting_TmpDiff(CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch,MaxPerNumber,RoleID)
 SELECT ci.[CustID]
 	,sp.Sporttype
 	,sp.BetType
@@ -503,6 +503,7 @@ SELECT ci.[CustID]
 						WHEN sp.Sporttype = 99 AND sp.BetType = 9 THEN ci.MaxPerMatch99MP
 					END
 	,MaxPerNumber = NULL
+	,ci.roleid
 FROM custinfo ci WITH(NOLOCK)
 	CROSS JOIN @SportBettype_tbl sp
 	INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
@@ -542,6 +543,7 @@ SELECT ci.[CustID]
 	,dc.maxbet
 	,dc.MaxPerMatch
 	,MaxPerNumber = NULL
+	,ci.roleid
 FROM custinfo ci WITH(NOLOCK)
 	CROSS JOIN @SportBettype_tbl sp
 	INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
@@ -570,6 +572,7 @@ SELECT ci.[CustID]
 	,dc.maxbet
 	,Maxpermatch = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.maxpermatch161 END
 	,MaxperBall = CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
+	,ci.roleid
 FROM custinfo ci WITH(NOLOCK)
 	CROSS JOIN @SportBettype_tbl sp
 	INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
@@ -592,6 +595,24 @@ WHERE ci.roleid IN(2,3,4)
 			OR old.MaxPerNumber <> CASE WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ci.MaxPerBall161 END
 		)
 
+--Update Saba sport
+INSERT INTO #Dep_CustBetSetting_TmpDiff(
+		CustID,
+		SportType,
+		BetType,
+		MinBet,
+		MaxBet,
+		MaxPerMatch
+	)
+SELECT dc.CustID,
+	dc.SportType + 9900,
+	dc.BetType,
+	dc.MinBet,
+	dc.MaxBet,
+	dc.MaxPerMatch
+FROM #Dep_CustBetSetting_TmpDiff dc WITH(NOLOCK)
+WHERE dc.SportType IN(1,2) AND dc.BetType = 1
+
 --Adjust Dep_CustBetSettingGame_Agent
 UPDATE c
 SET c.MinBet = t.MinBet,
@@ -604,6 +625,20 @@ INNER JOIN #Dep_CustBetSetting_TmpDiff t
 	ON c.CustID = t.CustID 
 	AND c.SportType = t.SportType
 	AND c.BetType = t.BetType
+
+--Dep_CustBetSettingGameGroup_Member
+UPDATE c
+SET c.MinBet = t.MinBet,
+	c.MaxBet = t.MaxBet,
+	c.MaxPerMatch = t.MaxPerMatch,
+	c.MaxPerNumber = t.MaxPerNumber,
+	c.MaxPayoutPerMatch = CASE WHEN t.MaxPerMatch >= 1 THEN t.MaxPerMatch*8 ELSE t.MaxPerMatch END
+FROM Dep_CustBetSettingGameGroup_Member c WITH(ROWLOCK,UPDLOCK)
+INNER JOIN #Dep_CustBetSetting_TmpDiff t 
+	ON c.AgentID = t.CustID 
+	AND c.SportType = t.SportType
+	AND c.BetType = t.BetType
+WHERE t.RoleID = 2
 
 --TRUNCATE TABLE #Dep_CustBetSetting_TmpDiff
 ----Member level
