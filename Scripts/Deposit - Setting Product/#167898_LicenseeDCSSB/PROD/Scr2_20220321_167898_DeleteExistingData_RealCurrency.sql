@@ -67,7 +67,7 @@ BEGIN
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
 		AND ci.roleid = 4
-		AND Ci.currency != 20
+		AND NOT( cs.site IN('spondemo','Athena000')	AND Ci.currency IN (20) )
 	ORDER by ci.custid
 		
 	CREATE TABLE #Dep_CustPTSetting3rd_Agent(CustID INT)
