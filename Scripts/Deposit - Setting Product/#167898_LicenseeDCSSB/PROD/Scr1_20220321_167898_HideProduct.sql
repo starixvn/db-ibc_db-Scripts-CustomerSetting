@@ -2,6 +2,7 @@
 /*
 	Created: 20220401@Eden
 	Task: Hide SB,NG,Keno [#167898]
+		  Hide Esport ProductID = 16
 	DB: DBCUST/CustDB
 */
 USE CustDB
@@ -10,11 +11,11 @@ UPDATE t
 SET SettingStatus = 2
 FROM [Dep_ProductSettingDetail] t WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN [Dep_ProductSetting] s WITH(NOLOCK) ON t.ProductSettingID = s.ProductSettingID
-WHERE s.ProductID IN(1,3,8)
+WHERE s.ProductID IN(1,3,8,16)
 
 /*
 SELECT *
 FROM [Dep_ProductSettingDetail] t WITH(NOLOCK)
 	INNER JOIN [Dep_ProductSetting] s WITH(NOLOCK) ON t.ProductSettingID = s.ProductSettingID
-WHERE s.ProductID IN(1,3,8)
+WHERE s.ProductID IN(1,3,8,16)
 /
