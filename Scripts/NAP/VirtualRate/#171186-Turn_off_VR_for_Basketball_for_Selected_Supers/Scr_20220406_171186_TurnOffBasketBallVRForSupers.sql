@@ -131,7 +131,7 @@ BEGIN
 			ON vr.CustID = t.CustID
 			AND vr.LevelID = t.LevelID
 
-	WAITFOR DELAY '00:00:10.010'
+	WAITFOR DELAY '00:00:00.010'
 END
 
 IF EXISTS(
