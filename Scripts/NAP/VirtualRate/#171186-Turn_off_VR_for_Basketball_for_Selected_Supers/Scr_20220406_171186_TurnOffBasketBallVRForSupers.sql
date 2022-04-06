@@ -108,7 +108,7 @@ DeletePrivateVR: --Step Delete all private VR of Master/Agent/Member
 
 INSERT INTO @VRCustSetting(CustID,LevelID)
 SELECT vr.CustID,vr.LevelID
-FROM VRCustSetting vr WITH(ROWLOCK,UPDLOCK)
+FROM VRCustSetting vr WITH(NOLOCK)
 	INNER JOIN VRSettingHierarchy h WITH(NOLOCK) ON vr.LevelID = h.LevelID
 	INNER JOIN #tmpCust t ON vr.CustID = t.CustID
 WHERE h.SportType = 2
