@@ -57,7 +57,7 @@ BEGIN
 			  @CustID = @CustID
 			, @SportType = 2
 			, @VirtualMultiplier = @VirtualMultiplier
-			, @UserID  = 0
+			, @UserID  = 10278938 --starixIT
 			, @IP  = ''
 			, @ErrCode = @ErrCode OUT
 			, @ErrMsg = @ErrMsg OUT
