@@ -58,7 +58,7 @@ BEGIN
 			, @SportType = 2
 			, @VirtualMultiplier = @VirtualMultiplier
 			, @UserID  = 0
-			, @IP  = '0.0.0.0'
+			, @IP  = ''
 			, @ErrCode = @ErrCode OUT
 			, @ErrMsg = @ErrMsg OUT
 
