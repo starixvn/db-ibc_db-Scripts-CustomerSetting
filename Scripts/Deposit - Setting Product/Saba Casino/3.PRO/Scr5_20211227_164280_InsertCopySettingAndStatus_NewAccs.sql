@@ -12,9 +12,6 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 
 DECLARE @maxcustid INT= xxx
 
---DECLARE @maxcustid2 INT 
---SELECT TOP(1) @maxcustid2 = custid FROM custinfo ci WITH(NOLOCK) ORDER BY custID DESC
-
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM custInfo ci WITH (NOLOCK) 	
@@ -97,6 +94,9 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 						,   20  --	UUS
 						)
 ORDER BY ci.custid 
+
+DECLARE @maxCustID2 INT 
+SELECT @maxCustID2 = MAX(custid) FROM custinfo WITH(NOLOCK)
 	
 DECLARE @SuperPT_OtherSite SMALLMONEY = 93, @SuperPT_Saba789 SMALLMONEY = 80.5
 DECLARE @currency INT, @BitOrder INT
@@ -108,31 +108,31 @@ DELETE cg
 FROM Dep_CustPTSetting_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid	
-WHERE SportType =@SportType AND cg.custid > @maxcustID
+WHERE SportType =@SportType AND c.custid > @maxcustID AND c.custid <= @maxCustID2
 						
 DELETE cg
 FROM Dep_CustPTSetting_Member cg WITH(UPDLOCK,ROWLOCK)		
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid	
-WHERE SportType =@SportType AND cg.custid > @maxcustID
+WHERE SportType =@SportType AND c.custid > @maxcustID AND c.custid <= @maxCustID2
 		
 DELETE cg
 FROM Dep_CustPTGroupSetting_Member cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType =@SportType AND c.custid > @maxcustID
+WHERE SportType =@SportType AND c.custid > @maxcustID AND c.custid <= @maxCustID2
 				
 DELETE cg
 FROM Dep_CustStakeLevel_Agent cg WITH(UPDLOCK,ROWLOCK)	
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid		
-WHERE SportType =@SportType AND c.custid > @maxcustID
+WHERE SportType =@SportType AND c.custid > @maxcustID AND c.custid <= @maxCustID2
 
 DELETE cg
 FROM Dep_CustStakeLevel_Member cg WITH(UPDLOCK,ROWLOCK)
 	INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 	INNER JOIN #supers s ON c.srecommend = s.custid			
-WHERE SportType =@SportType AND c.custid > @maxcustID
+WHERE SportType =@SportType AND c.custid > @maxcustID AND c.custid <= @maxCustID2
 
 DELETE dl
 FROM Dep_LicenseeProductSetting dl WITH(ROWLOCK,UPDLOCK)
@@ -140,7 +140,7 @@ FROM Dep_LicenseeProductSetting dl WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 		INNER JOIN #supers s ON ci.srecommend = s.custid
 WHERE dp.ProductID = 6
-	AND ci.custid > @maxcustID
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2
 -------------------------------
 	 
 SELECT @BitOrder= bitmapOrder 
@@ -175,7 +175,7 @@ SELECT
 FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND ci.RoleID=4
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -200,7 +200,7 @@ SELECT
 FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND ci.RoleID=3
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -224,7 +224,7 @@ SELECT
 FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND ci.RoleID=2
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -248,7 +248,7 @@ SELECT
 FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND ci.RoleID=2
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
@@ -274,7 +274,7 @@ FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer c WITH(NOLOCK) ON ci.custid = c.custid
 	INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON ci.CustID=m.CustID
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND ci.RoleID=1
 	AND m.IsGroupedPT=0
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
@@ -283,7 +283,7 @@ INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
 SELECT ci.CustID,1
 FROM custInfo ci WITH(NOLOCK)
 WHERE ci.srecommend IN(SELECT custid FROM #supers)
-	AND ci.custid>@maxcustid AND ci.Enabled=1 
+	AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 AND ci.Enabled=1 
 	AND RoleID=1
 	AND NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE CustID=ci.CustID)
 	AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=ci.CustID)
@@ -292,7 +292,7 @@ WHERE ci.srecommend IN(SELECT custid FROM #supers)
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid,117
 FROM #supers t
-WHERE t.custid>@maxcustid	
+WHERE t.custid > @maxcustID AND t.custid <= @maxCustID2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=117)
 
 -------------------------------------Betlimit Setting-----------------------------------------------
@@ -343,7 +343,7 @@ FROM Custinfo CI WITH (NOLOCK)
 	INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
 	INNER JOIN #StakeLevelList sl ON c.currency= sl.Currency
 WHERE ci.srecommend IN(SELECT CustID FROM #supers) 
-	AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND ci.roleid IN (2,3,4) AND Enabled = 1 AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 INSERT INTO dbo.Dep_CustStakeLevel_Agent  ([CustID],[SportType],[BetType],[StakeLevelList]) 
@@ -357,7 +357,7 @@ FROM Custinfo CI WITH (NOLOCK)
 	INNER JOIN Customer C WITH (NOLOCK) ON C.custid = CI.custid
 	INNER JOIN #StakeLevelList sl ON c.currency= sl.Currency
 WHERE ci.srecommend IN(SELECT CustID FROM #supers) AND ci.roleid IN (1) 
-	AND Enabled = 1 AND ci.custid > @maxcustid 
+	AND Enabled = 1 AND ci.custid > @maxcustID AND ci.custid <= @maxCustID2 
 	AND CI.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 DECLARE @Cust_Temp TABLE(CustID INT,StakeLevelID VARCHAR(100))
@@ -389,7 +389,7 @@ END
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid,118
 FROM #supers t
-WHERE t.custid>@maxcustid	
+WHERE t.custid > @maxcustID AND t.custid <= @maxCustID2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=118)
 --------------------------------------------Enable Status--------------------------------------------------
 CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
@@ -450,7 +450,7 @@ WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid,116
 FROM #supers t
-WHERE t.custid>@maxcustid	
+WHERE t.custid > @maxcustID AND t.custid <= @maxCustID2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=116)
 
 ----------Commm--------------------------
@@ -520,7 +520,7 @@ END
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid,119
 FROM #supers t
-WHERE t.custid>@maxcustid	
+WHERE t.custid > @maxcustID AND t.custid <= @maxCustID2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=119)
 
 DROP TABLE #Dummy
