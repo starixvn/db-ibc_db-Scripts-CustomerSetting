@@ -112,6 +112,7 @@ FROM VRCustSetting vr WITH(NOLOCK)
 	INNER JOIN VRSettingHierarchy h WITH(NOLOCK) ON vr.LevelID = h.LevelID
 	INNER JOIN #tmpCust t ON vr.CustID = t.CustID
 WHERE h.SportType = 2
+ORDER by vr.CustID,VR.LevelID
 
 --Delete all private VR of Master/Agent/Member( VR will follow  their Super)
 WHILE 1 = 1
