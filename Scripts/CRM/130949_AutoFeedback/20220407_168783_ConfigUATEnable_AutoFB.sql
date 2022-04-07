@@ -1,8 +1,12 @@
+/*<info serverAlias="DBCRM-bodb_CRM"></info>*/
 /*
 	Created: 20220407@@Winfred
 	Task : Update config UAT auto feedback [redmine:#168783]
 	DB: DBCRM/bodb_CRM	
 */
+
+USE [bodb_CRM]
+GO
 
 UPDATE SystemSetting WITH(UPDLOCK,ROWLOCK)
 SET Value = 1
