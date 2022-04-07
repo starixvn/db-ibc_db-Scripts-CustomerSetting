@@ -713,7 +713,7 @@ SELECT ci.[CustID]
 	,0
 FROM custinfo ci WITH(NOLOCK)
 	CROSS JOIN @SportBettype_tbl sp
-	INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
+	INNER JOIN Dep_CustBetSetting_Member dc WITH(NOLOCK)
 		ON ci.CustID = dc.custid
 		AND dc.sporttype = sp.Sporttype
 		AND dc.bettype = sp.BetType
@@ -830,7 +830,7 @@ SELECT ci.[CustID]
 	,1
 FROM custinfo ci WITH(NOLOCK)
 	CROSS JOIN @SportBettype_tbl sp
-	INNER JOIN Dep_CustBetSetting_Agent dc WITH(NOLOCK)
+	INNER JOIN Dep_CustBetSetting_Member dc WITH(NOLOCK)
 		ON ci.CustID = dc.custid
 		AND dc.sporttype = sp.Sporttype
 		AND dc.bettype = sp.BetType
