@@ -17,4 +17,4 @@ SELECT *
 FROM [Dep_ProductSettingDetail] t WITH(NOLOCK)
 	INNER JOIN [Dep_ProductSetting] s WITH(NOLOCK) ON t.ProductSettingID = s.ProductSettingID
 WHERE s.ProductID IN(16)
-/
+*/
