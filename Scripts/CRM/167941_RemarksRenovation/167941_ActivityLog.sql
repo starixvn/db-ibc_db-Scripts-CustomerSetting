@@ -7,8 +7,8 @@
 
 USE [bodb_CRM]
 GO
-
+--DELETE FROM dbo.crmLogAction WHERE ActionID IN (601,602,603)
 INSERT INTO dbo.crmLogAction(ActionID,SPName,ActionNameEN,IsInternal)
-VALUES(601, 'Acc_CRM_CustomerRemarkNew_Ins','Create new Remark',0)
-	,(602,'Acc_CRM_CustomerRemarkNew_Upd','Update Remark',0)
-	,(603	,'Acc_CRM_CustomerRemarkNew_Del','Delete Remark',0)
+VALUES(601, 'Acc_CRM_CustomerRemarkNewIns','Create new Remark',0)
+	,(602,'Acc_CRM_CustomerRemarkNewUpd','Update Remark',0)
+	,(603	,'Acc_CRM_CustomerRemarkNewDel','Delete Remark',0)
