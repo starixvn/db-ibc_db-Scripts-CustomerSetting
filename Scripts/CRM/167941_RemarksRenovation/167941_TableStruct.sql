@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[crmCustomerRemarkNew](
 	[ApproverID] [INT] NULL,
 	[AcknowledgerID] [INT] NULL,
 	[Requester] [NVARCHAR](500) NULL,
-	[UpdaterID] [INT] NULL,
+	[ModifierID] [INT] NULL,
 	[LastUpdate] [DATETIME] NULL,
 	[CreatedDate] [DATETIME] NULL,
 	[CreatorID] [INT] NULL

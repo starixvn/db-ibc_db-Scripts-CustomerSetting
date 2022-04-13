@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[crmCustomerRemarkHistory](
 	[RemarkID] [INT],
 	[CustID] [INT] NOT NULL,
 	[Logdata] [NVARCHAR](MAX) NULL,
-	[UpdaterID] [INT] NULL,
+	[ModifierID] [INT] NULL,
 	[LastUpdate] [DATETIME] NULL
 ) ON [DATA]
 GO
