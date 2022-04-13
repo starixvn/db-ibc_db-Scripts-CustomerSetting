@@ -22,7 +22,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
-	
+	IF dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN	
@@ -51,6 +52,8 @@ BEGIN
 	CREATE TABLE #Dep_CustPTGroupSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustStakeLevel_Agent(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 	CREATE TABLE #Dep_CustStakeLevel_Member(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_CustDiscountGroupSetting_Member(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_CustDiscountSetting_Member(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 	CREATE TABLE #Dep_LicenseeProductSetting(CustID INT,ProductSettingID INT, PRIMARY KEY(CustID ,ProductSettingID ))
 
 	CREATE TABLE #Dep_CustPTSetting_AgentTemp(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
@@ -58,6 +61,8 @@ BEGIN
 	CREATE TABLE #Dep_CustPTGroupSetting_MemberTemp(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustStakeLevel_AgentTemp(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 	CREATE TABLE #Dep_CustStakeLevel_MemberTemp(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_CustDiscountGroupSetting_MemberTemp(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_CustDiscountSetting_MemberTemp(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 	CREATE TABLE #Dep_LicenseeProductSettingTemp(CustID INT,ProductSettingID INT, PRIMARY KEY(CustID ,ProductSettingID ))
 
 	INSERT INTO #Dep_CustPTSetting_Agent(CustID,Sporttype,Bettype,IsLive)
@@ -94,6 +99,20 @@ BEGIN
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 		INNER JOIN #supers su ON c.srecommend = su.custid
 	WHERE SportType =@sportType AND BetType = @BetType 
+
+	INSERT INTO #Dep_CustDiscountGroupSetting_Member(CustID,Sporttype,Bettype)
+	SELECT s.AgentID AS CustID,Sporttype,Bettype 
+	FROM Dep_CustDiscountGroupSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
+		INNER JOIN #supers su ON c.srecommend = su.custid
+	WHERE SportType =@sportType AND BetType = @BetType
+
+	INSERT INTO #Dep_CustDiscountSetting_Member(CustID,Sporttype,Bettype)
+	SELECT s.CustID,Sporttype,Bettype 
+	FROM Dep_CustDiscountSetting_Member s WITH(NOLOCK) 
+		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
+		INNER JOIN #supers su ON c.srecommend = su.custid
+	WHERE SportType =@sportType AND BetType = @BetType
 
 	INSERT INTO #Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT dl.CustID,dl.ProductSettingID
@@ -186,6 +205,40 @@ BEGIN
 			
 	END	
 	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #Dep_CustDiscountGroupSetting_Member)
+	BEGIN		
+			
+		DELETE TOP (@batch) #Dep_CustDiscountGroupSetting_Member OUTPUT DELETED.CustID,DELETED.Sporttype,DELETED.Bettype INTO #Dep_CustDiscountGroupSetting_MemberTemp(CustID,Sporttype,Bettype)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustDiscountGroupSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #Dep_CustDiscountGroupSetting_MemberTemp  t 
+				ON cg.AgentID=t.CustID AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype
+
+		TRUNCATE TABLE #Dep_CustDiscountGroupSetting_MemberTemp				
+	END 
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #Dep_CustDiscountSetting_Member)
+	BEGIN
+		DELETE TOP (@batch) #Dep_CustDiscountSetting_Member OUTPUT DELETED.CustID,DELETED.Sporttype,DELETED.Bettype INTO #Dep_CustDiscountSetting_MemberTemp(CustID,Sporttype,Bettype)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.Dep_CustDiscountSetting_Member cg WITH(ROWLOCK)		
+			INNER JOIN #Dep_CustDiscountSetting_MemberTemp  t 
+				ON cg.CustID=t.CustID AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype
+		OPTION(MAXDOP 1)	
+		
+		TRUNCATE TABLE #Dep_CustDiscountSetting_MemberTemp
+			
+	END	
+
+
 	WHILE EXISTS(SELECT TOP 1 1 FROM #Dep_LicenseeProductSetting)
 	BEGIN	
 		DELETE TOP (@batch) #Dep_LicenseeProductSetting OUTPUT DELETED.CustID,DELETED.ProductSettingID INTO #Dep_LicenseeProductSettingTemp(CustID,ProductSettingID)
@@ -206,6 +259,8 @@ BEGIN
 	DROP TABLE #Dep_CustPTGroupSetting_Member
 	DROP TABLE #Dep_CustStakeLevel_Agent
 	DROP TABLE #Dep_CustStakeLevel_Member
+	DROP TABLE #Dep_CustDiscountGroupSetting_Member
+	DROP TABLE #Dep_CustDiscountSetting_Member
 	DROP TABLE #Dep_LicenseeProductSetting
 END	
 GO

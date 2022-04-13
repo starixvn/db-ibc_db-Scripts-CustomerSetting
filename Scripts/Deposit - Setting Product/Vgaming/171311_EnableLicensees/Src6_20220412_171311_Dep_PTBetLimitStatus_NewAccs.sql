@@ -27,6 +27,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_ProductSettingDetail') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('site') = 0 RETURN
 	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
 
@@ -263,25 +265,48 @@ BEGIN
 				CROSS APPLY @SportBetType t
 
 		INSERT INTO dbo.Dep_CustPTGroupSetting_Member
-				(	AgentID
-				   ,[SportType]
-				   ,[BetType]
-				   ,[IsLive]
-				   ,[SuperPT]
-				   ,[MasterPT]
-				   ,[AgentPT]
-				 )
-			SELECT 
-					a.CustID
-				   ,t.SportType
-				   ,t.BetType
-				   ,0 AS IsLive
-				   ,0 AS SuperPT
-				   ,0 AS MasterPT
-				   ,93.00 AS AgentPT
-			FROM #SMABatch a WITH(NOLOCK)
-					CROSS APPLY @SportBetType t	
-			WHERE a.RoleID=2
+			(	AgentID
+				,[SportType]
+				,[BetType]
+				,[IsLive]
+				,[SuperPT]
+				,[MasterPT]
+				,[AgentPT]
+				)
+		SELECT 
+				a.CustID
+				,t.SportType
+				,t.BetType
+				,0 AS IsLive
+				,0 AS SuperPT
+				,0 AS MasterPT
+				,93.00 AS AgentPT
+		FROM #SMABatch a WITH(NOLOCK)
+				CROSS APPLY @SportBetType t	
+		WHERE a.RoleID=2
+		-------------------------------------Comm Setting----------------------------------------------
+
+		INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member
+			(	 [AgentID]
+				,[SportType]
+				,[BetType]
+				,[PlayerDiscount]
+				,[AgentDiscount]
+				,[MasterDiscount]
+				,[SuperDiscount]
+				)
+		SELECT 
+				a.CustID
+				,t.SportType
+				,t.BetType
+				,0 AS PlayerDiscount
+				,0 AS AgentDiscount
+				,0 AS MasterDiscount
+				,0 AS SuperDiscount	
+		FROM #SMABatch a WITH(NOLOCK)
+			CROSS APPLY @SportBetType t
+		WHERE a.RoleID=2
+
 		-------------------------------------Betlimit Setting----------------------------------------------
 		INSERT INTO [dbo].[Dep_CustStakeLevel_Agent]
            ([CustID]
@@ -329,13 +354,35 @@ BEGIN
 				CROSS APPLY @SportBetType t
 			WHERE m.IsGroupedPT=0
 
-		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-		SELECT t.CustID,1
+		INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT,isGroupedComm)
+		SELECT t.CustID,1,1
 		FROM #MemberBatch t WITH(NOLOCK) 
 		WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
 			AND (( Site='asiabet88' AND Currency IN(3,6) AND EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID))
 			OR ( NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID))
 			)
+		-------------------------------------Comm Setting----------------------------------------------
+		INSERT INTO dbo.Dep_CustDiscountSetting_Member
+				(	 [CustID]
+					,[SportType]
+					,[BetType]
+					,[PlayerDiscount]
+					,[AgentDiscount]
+					,[MasterDiscount]
+					,[SuperDiscount]
+					)
+			SELECT 
+					a.CustID
+					,t.SportType
+					,t.BetType
+					,0 AS PlayerDiscount
+					,0 AS AgentDiscount
+					,0 AS MasterDiscount
+					,0 AS SuperDiscount	
+			FROM #MemberBatch a WITH(NOLOCK)
+				INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON m.CustID=a.CustID
+				CROSS APPLY @SportBetType t
+		WHERE m.IsGroupedComm=0
 		-------------------------------------Betlimit Setting----------------------------------------------
 		-----
 		INSERT INTO [dbo].[Dep_CustStakeLevel_Member]
@@ -360,7 +407,7 @@ BEGIN
 		 CROSS APPLY (	SELECT ProductSettingID 
 						FROM Dep_ProductSetting dp WITH(NOLOCK) 
 						WHERE dp.ProductID = 66
-							AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
+							AND dp.SettingType IN (4,1,8,9) -- Product Status, PT, StakeLevel, Comm
 						) st
 	WHERE temp.RoleID = 4
 

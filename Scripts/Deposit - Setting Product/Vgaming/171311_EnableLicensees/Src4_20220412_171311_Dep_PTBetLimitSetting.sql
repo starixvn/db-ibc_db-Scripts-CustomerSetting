@@ -29,6 +29,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustDiscountGroupSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN	
@@ -105,6 +107,28 @@ BEGIN
 					   ,@PT AS AgentPT
 				FROM #CustListTemp a WITH(NOLOCK)
 					CROSS APPLY @SportBetType t
+				
+				-------------------------------------Comm Setting----------------------------------------------
+
+				INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member
+					(	 [AgentID]
+						,[SportType]
+						,[BetType]
+						,[PlayerDiscount]
+						,[AgentDiscount]
+						,[MasterDiscount]
+						,[SuperDiscount]
+					 )
+				SELECT 
+						a.CustID
+					   ,t.SportType
+					   ,t.BetType
+					   ,0 AS PlayerDiscount
+					   ,0 AS AgentDiscount
+					   ,0 AS MasterDiscount
+					   ,0 AS SuperDiscount	
+				FROM #CustListTemp a WITH(NOLOCK)
+					CROSS APPLY @SportBetType t
 
 			END 
 			-------------------------------------Betlimit Setting----------------------------------------------
@@ -159,20 +183,42 @@ BEGIN
 
 			IF(@Site='asiabet88' AND @Currency IN(3,6))
 			BEGIN
-				INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-				SELECT t.CustID,1
+				INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT,isGroupedComm)
+				SELECT t.CustID,1,1
 				FROM #CustListTemp t WITH(NOLOCK) 
 				WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
 					AND EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 			END
 			ELSE
 			BEGIN
-				INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT)
-				SELECT t.CustID,1
+				INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT,isGroupedComm)
+				SELECT t.CustID,1,1
 				FROM #CustListTemp t WITH(NOLOCK) 
 				WHERE NOT EXISTS (SELECT 1 FROM Dep_CustSettingMode D WITH(NOLOCK) WHERE D.CustID=t.CustID)
 					AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=t.CustID)
 			END
+			-------------------------------------Comm Setting----------------------------------------------
+			INSERT INTO dbo.Dep_CustDiscountSetting_Member
+					(	 [CustID]
+						,[SportType]
+						,[BetType]
+						,[PlayerDiscount]
+						,[AgentDiscount]
+						,[MasterDiscount]
+						,[SuperDiscount]
+					 )
+				SELECT 
+						a.CustID
+					   ,t.SportType
+					   ,t.BetType
+					   ,0 AS PlayerDiscount
+					   ,0 AS AgentDiscount
+					   ,0 AS MasterDiscount
+					   ,0 AS SuperDiscount	
+				FROM #CustListTemp a WITH(NOLOCK)
+					INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON m.CustID=a.CustID
+					CROSS APPLY @SportBetType t
+			WHERE m.IsGroupedComm=0
 			-------------------------------------Betlimit Setting----------------------------------------------
 			INSERT INTO [dbo].[Dep_CustStakeLevel_Member]
 				   ([CustID]
@@ -294,7 +340,7 @@ BEGIN
 		SELECT @srecommend, ProductSettingID 
 		FROM Dep_ProductSetting dp WITH(NOLOCK) 
 		WHERE dp.ProductID = 66
-			AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
+			AND dp.SettingType IN (4,1,8,9) -- Product Status, PT, StakeLevel, Comm
 			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
 	END
 	ELSE
@@ -457,7 +503,7 @@ BEGIN
 		SELECT @srecommend, ProductSettingID 
 		FROM Dep_ProductSetting dp WITH(NOLOCK) 
 		WHERE dp.ProductID = 66
-			AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
+			AND dp.SettingType IN (4,1,8,9) -- Product Status, PT, StakeLevel, Comm
 			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
 	END
 	ELSE
