@@ -2,10 +2,10 @@
 /*
 	Created: Winfred
 	Date: 20220413
-	Task: Reduce min bet for Leap Gaming Virtual Sports 3 - Deposit UUS  [Redmine: 171312]
+	Task: Reduce min bet for Leap Gaming Virtual Sports 3 - Deposit[Redmine: 171312]
 	DB: DBCUST/CustDB
 	
-	P/s : Step 1 Reduce min bet for Leap Gaming Virtual Sports 3 - Deposit UUS
+	P/s : Step 1 Reduce min bet for Leap Gaming Virtual Sports 3 - Deposit
 */
 -- BEGIN STEP 2.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 -----------------------------------------------------
@@ -48,7 +48,10 @@ BEGIN
 	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY,ExchangeId	INT)
 
 	INSERT INTO #TempBetLimit(currency,MinBet,ExchangeId)
-	VALUES	('UUS',1,20)
+	VALUES	('GBP',0.5,12),('US$',1,3),('EURO',1,6),('UUS',1,20),
+		('CAN',1,50),('USDT',1,96),('RM',2.5,2),('RMB',5,13),
+		('IN',9,15),('TB',25,4),('Won',1000,45),('BND',1,46),
+		('BDT',50,97),('PKR',125,121),('INR',50,61),('INH',15,51)
 	
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -138,8 +141,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('spondemo','Athena000')
-	AND ci.currency in (20) -- UUS
+	AND cs.site IN('spondemo','Athena000','Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+	AND ci.currency in (12,3,6,20,96,2,13,15,4,45,46,51,61,97,121)  -- GBP,US$,EURO,UUS,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
@@ -194,8 +197,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled=1
-	AND cs.site IN('spondemo','Athena000')
-	AND ci.currency in (20) -- UUS			  
+	AND cs.site IN('spondemo','Athena000','Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+	AND ci.currency in (12,3,6,20,96,2,13,15,4,45,46,51,61,97,121)  -- GBP,US$,EURO,UUS,USDT,RM,RMB,IN,TB,Won,BND,INH,INR,BDT,PKR	  
 ORDER BY ci.custid 
 
 DECLARE @super_cnt INT, @index INT = 0
