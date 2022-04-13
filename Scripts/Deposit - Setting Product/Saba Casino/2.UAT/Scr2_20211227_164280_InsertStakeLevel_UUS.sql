@@ -92,7 +92,7 @@ remove 5 games bellow:
 DELETE FROM #StakeLevel WHERE GameTypeID IN(2155,2162,2111,2178,2151)
 
 /*
-	Update maxlabel = MaxStake*5 for 5 game bellow :
+	Update maxlabel = MaxStake*2.5 for 5 game bellow :
 	2103  Blackjack
 	2181 Fast Blackjack
 	2203 (Mini) Blackjack
@@ -100,27 +100,34 @@ DELETE FROM #StakeLevel WHERE GameTypeID IN(2155,2162,2111,2178,2151)
 	2121   Face Up 21
 */
 UPDATE st
-SET st.Maxlabel = CONVERT(VARCHAR(20),CONVERT(DECIMAL(20,0),MaxStake*5))
+SET st.Maxlabel = CONVERT(VARCHAR(20),CONVERT(DECIMAL(20,0),MaxStake*2.5))
 FROM #StakeLevel st
 WHERE GameTypeID IN(2103,2181,2203,2112,2121)
+AND (MaxStake*2.5)% 1 = 0
+
+UPDATE st
+SET st.Maxlabel = CONVERT(VARCHAR(20),CONVERT(DECIMAL(20,1),MaxStake*2.5))
+FROM #StakeLevel st
+WHERE GameTypeID IN(2103,2181,2203,2112,2121)
+AND (MaxStake*2.5)% 1 <> 0
 
 --ADD ',' to stake label
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
 FROM #StakeLevel t
-WHERE MaxStake*5 > 999
+WHERE MaxStake*2.5 > 999
 	AND GameTypeID IN(2103,2181,2203,2112,2121)
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
 FROM #StakeLevel t
-WHERE MaxStake*5 > 999999
+WHERE MaxStake*2.5 > 999999
 	AND GameTypeID IN(2103,2181,2203,2112,2121)
 
 UPDATE t
 SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),12,0,','))
 FROM #StakeLevel t
-WHERE MaxStake*5 > 999999999
+WHERE MaxStake*2.5 > 999999999
 	AND GameTypeID IN(2103,2181,2203,2112,2121)
 ------------------------------------------------
 
