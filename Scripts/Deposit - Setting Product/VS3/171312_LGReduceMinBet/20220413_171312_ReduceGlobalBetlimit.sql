@@ -18,10 +18,10 @@
 			('IN',9,15),('TB',25,4),('Won',1000,45),('BND',1,46),
 			('BDT',50,97),('PKR',125,121),('INR',50,61),('INH',15,51)
 	
-	--UPDATE c 
-	--SET  c.MinBet = tmp.MinBet
-	--FROM Dep_ProductBetSetting c WITH(ROWLOCK, UPDLOCK)
-	--	INNER JOIN #TempBetLimit tmp ON c.Sporttype = @sportType AND c.Bettype = @betType AND c.Currency = tmp.currency
+	UPDATE c 
+	SET  c.MinBet = tmp.MinBet
+	FROM Dep_ProductBetSetting c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN #TempBetLimit tmp ON c.Sporttype = @sportType AND c.Bettype = @betType AND c.Currency = tmp.ExchangeId
 
 	SELECT * FROM Dep_ProductBetSetting WITH(NOLOCK) WHERE Sporttype = @sportType AND Bettype = @betType
 	
