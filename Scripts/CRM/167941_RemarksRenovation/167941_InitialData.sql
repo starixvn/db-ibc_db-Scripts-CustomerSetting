@@ -30,7 +30,7 @@ BEGIN
 	SELECT c.CustID,Remark 
 	FROM crmCustomerRemark c WITH(NOLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
-	WHERE c.Remark	IS NOT NULL OR c.Remark <> ''
+	WHERE c.Remark	IS NOT NULL AND c.Remark <> ''
 
 	DELETE FROM #CustBatch
 
