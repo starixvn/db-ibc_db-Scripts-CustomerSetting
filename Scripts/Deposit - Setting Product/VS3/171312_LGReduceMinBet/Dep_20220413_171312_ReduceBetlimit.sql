@@ -45,14 +45,6 @@ BEGIN
 	DECLARE @Currency INT 
 	SELECT @currency = ci.currency FROM dbo.custInfo ci WITH (NOLOCK) WHERE ci.custid = @srecommend
 		
-	CREATE TABLE #TempBetLimit (currency NVARCHAR(50), MinBet MONEY,MaxBet MONEY,ExchangeId	INT)
-
-	INSERT INTO #TempBetLimit(currency,MinBet,ExchangeId)
-	VALUES	('GBP',0.5,12),('US$',1,3),('EURO',1,6),('UUS',1,20),
-		('CAN',1,50),('USDT',1,96),('RM',2.5,2),('RMB',5,13),
-		('IN',9,15),('TB',25,4),('Won',1000,45),('BND',1,46),
-		('BDT',50,97),('PKR',125,121),('INR',50,61),('INH',15,51)
-	
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
 	WHERE srecommend=@srecommend AND roleid=3 
@@ -91,7 +83,7 @@ BEGIN
 		SET  cs.MinBet = CASE WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet  ELSE tmp.MinBet END
 		FROM Dep_CustBetSetting_Agent cs WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #tmpSMATemp t WITH(NOLOCK) ON cs.CustID = t.CustID AND cs.SportType = @SportType AND cs.BetType = @betType
-			INNER JOIN #TempBetLimit tmp ON tmp.ExchangeId = @currency
+			INNER JOIN Dep_ProductBetSetting tmp  WITH(NOLOCK) ON tmp.Currency = @currency AND tmp.SportType = @SportType AND tmp.BetType = @betType
 		
 		TRUNCATE TABLE #tmpSMATemp
 	END
@@ -111,7 +103,7 @@ BEGIN
 		SET  cs.MinBet = CASE WHEN (cs.MinBet = 0 AND (cs.MaxBet = 0 OR cs.MaxBet = 0.1)) THEN cs.MinBet  ELSE tmp.MinBet END
 		FROM Dep_CustBetSetting_Member cs WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #tmpCustTemp t WITH(NOLOCK) ON cs.CustID = t.CustID AND cs.SportType = @SportType AND cs.BetType = @betType
-			INNER JOIN #TempBetLimit tmp ON tmp.ExchangeId = @currency
+			INNER JOIN Dep_ProductBetSetting tmp  WITH(NOLOCK) ON tmp.Currency = @currency AND tmp.SportType = @SportType AND tmp.BetType = @betType
 					
 		TRUNCATE TABLE #tmpCustTemp
 	END 	
