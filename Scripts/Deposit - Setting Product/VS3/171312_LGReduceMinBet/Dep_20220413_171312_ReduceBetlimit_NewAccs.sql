@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20220413
-	Task: Reduce min bet for Leap Gaming Virtual Sports 3 - deposit RedmineID:#168395
+	Task: Reduce min bet for Leap Gaming Virtual Sports 3 - deposit RedmineID:#171312
 	DB: DBCUST/CustDB
 	
 	P/s : Step 3 Delete redundant and copy new setting newly created customer Leap Gaming Virtual Sports 3 Deposit
@@ -23,7 +23,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('site') = 0 RETURN
-	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
 
 	DECLARE @batch int = 3000
 	DECLARE @BitOrder INT 
