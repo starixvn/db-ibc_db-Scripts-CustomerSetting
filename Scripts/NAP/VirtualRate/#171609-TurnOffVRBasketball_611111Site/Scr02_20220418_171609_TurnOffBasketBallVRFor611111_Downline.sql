@@ -45,8 +45,6 @@ BEGIN
 
 		IF @@ROWCOUNT = 0
 			BREAK;
-
-		WAITFOR DELAY '00:00:00.010'
 	END
 
 	DECLARE @VRCustSetting TABLE (CustID int, LevelID int)
@@ -79,8 +77,6 @@ BEGIN
 			INNER JOIN @VRCustSettingBatch t 
 				ON vr.CustID = t.CustID
 				AND vr.LevelID = t.LevelID
-
-		WAITFOR DELAY '00:00:00.010'
 	END
 
 	IF EXISTS(
