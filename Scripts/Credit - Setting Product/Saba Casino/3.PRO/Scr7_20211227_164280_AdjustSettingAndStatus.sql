@@ -8,8 +8,8 @@ USE CustDB
 GO
 DECLARE @Sporttype      INT          = 208, 
 		@Bettype        INT          = 2101, 
-		@fSportType     SMALLINT = 212, 
-		@fBetType       SMALLINT = 4001, 
+		@fSportType     SMALLINT = 245, 
+		@fBetType       SMALLINT = 4601, 
 		@BatchNum		INT = 5000,
 		@BitmapOrder	TINYINT = 37
 
