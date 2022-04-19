@@ -128,7 +128,7 @@ FROM Customer ci with(nolock)
 INNER JOIN custInfo c WITH(NOLOCK) ON ci.custid=c.custid
 WHERE  EXISTS (SELECT 1 FROM #OfferedSite WHERE site = ci.site)
 	AND  EXISTS (SELECT custid from dbo.CustDirectAccount WITH(NOLOCK) WHERE CustID = ci.custid)
-	AND ci.roleid IN (3,2,2) AND ci.srecommend IN (SELECT srecommend FROM #DummyAcc)
+	AND ci.roleid IN (3,2) AND ci.srecommend IN (SELECT srecommend FROM #DummyAcc)
 	AND c.Enabled=1
 
 
