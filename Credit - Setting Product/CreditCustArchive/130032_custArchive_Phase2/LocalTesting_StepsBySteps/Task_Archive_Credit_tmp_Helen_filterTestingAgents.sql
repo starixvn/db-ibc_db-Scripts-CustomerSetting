@@ -5,7 +5,7 @@
 */
 USE CUSTDB
 GO
-IF @@SERVERNAME NOT IN ('DB230\SQLSERVER2008R2','DB233')
+IF @@SERVERNAME NOT IN ('TESTDBCUST','DB-60\DevDBcust')
 	RETURN
 -- Please put your agents in the line 31	
 ALTER PROCEDURE dbo.Task_Archive_Credit_tmp_Helen 

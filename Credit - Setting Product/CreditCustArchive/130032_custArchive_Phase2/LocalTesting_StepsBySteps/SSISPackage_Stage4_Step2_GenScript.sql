@@ -5,7 +5,7 @@
 */
 USE bodb02
 GO
-IF @@SERVERNAME NOT IN ('DB234','DB232')
+IF @@SERVERNAME NOT IN ('TESTDB061','DB232')
 	RETURN
 	
 --EXEC DBA_ArchiveAccount4_DelCustInfo_GenScript
