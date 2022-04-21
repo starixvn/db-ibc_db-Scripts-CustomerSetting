@@ -116,60 +116,61 @@ BEGIN
 		GOTO DeletePrivateVR --Delete Again
 	END
 
-	--Set OverrideAS = 1 ( Esport Level) for all members
-	IF @roleid = 1
+	IF @Sporttype = 43 --Set OverrideAS = 1 ( Esport Level) for all members
 	BEGIN
-		INSERT INTO #tmpCust(CustID,roleid)
-		SELECT @custid, 1
+		IF @roleid = 1
+		BEGIN
+			INSERT INTO #tmpCust(CustID,roleid)
+			SELECT @custid, 1
+		END
+
+		DECLARE @OverrideAS_True varbinary(30)  = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+
+		WHILE 1 = 1
+		BEGIN
+			UPDATE TOP (5000) v
+			SET v.AutoSuspendLive = @OverrideAS_True
+				,AutoSuspendNonLive = @OverrideAS_True
+				,OverrideASLive = @OverrideAS_True
+				,OverrideASNonLive = @OverrideAS_True
+			FROM #tmpCust t
+				INNER JOIN CustSettingAutoSuspend v WITH(NOLOCK)
+					ON t.CustID = v.CustID 
+					AND v.SportType = @Sporttype
+			WHERE t.roleid = 1
+			AND NOT(  
+					v.AutoSuspendLive = @OverrideAS_True
+					AND AutoSuspendNonLive = @OverrideAS_True
+					AND OverrideASLive = @OverrideAS_True
+					AND OverrideASNonLive = @OverrideAS_True
+				)
+
+			IF @@ROWCOUNT = 0
+				BREAK;
+		END
+
+		WHILE 1 = 1
+		BEGIN
+			INSERT INTO CustSettingAutoSuspend(CustID,SportType,AutoSuspendLive,AutoSuspendNonLive,OverrideASLive,OverrideASNonLive)
+			SELECT TOP (5000) t.CustID, @Sporttype AS SportType, @OverrideAS_True, @OverrideAS_True, @OverrideAS_True, @OverrideAS_True
+			FROM #tmpCust t
+				LEFT JOIN CustSettingAutoSuspend v WITH(NOLOCK)
+					ON t.CustID = v.CustID 
+					AND v.SportType = @Sporttype
+			WHERE v.CustID IS NULL
+				AND t.roleid = 1
+
+			IF @@ROWCOUNT = 0
+				BREAK;
+		END
 	END
-
-	DECLARE @OverrideAS_True varbinary(30)  = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-
-	WHILE 1 = 1
-	BEGIN
-		UPDATE TOP (5000) v
-		SET v.AutoSuspendLive = @OverrideAS_True
-			,AutoSuspendNonLive = @OverrideAS_True
-			,OverrideASLive = @OverrideAS_True
-			,OverrideASNonLive = @OverrideAS_True
-		FROM #tmpCust t
-			INNER JOIN CustSettingAutoSuspend v WITH(NOLOCK)
-				ON t.CustID = v.CustID 
-				AND v.SportType = @Sporttype
-		WHERE t.roleid = 1
-		AND NOT(  
-				v.AutoSuspendLive = @OverrideAS_True
-				AND AutoSuspendNonLive = @OverrideAS_True
-				AND OverrideASLive = @OverrideAS_True
-				AND OverrideASNonLive = @OverrideAS_True
-			)
-
-		IF @@ROWCOUNT = 0
-			BREAK;
-	END
-
-	WHILE 1 = 1
-	BEGIN
-		INSERT INTO CustSettingAutoSuspend(CustID,SportType,AutoSuspendLive,AutoSuspendNonLive,OverrideASLive,OverrideASNonLive)
-		SELECT TOP (5000) t.CustID, @Sporttype AS SportType, @OverrideAS_True, @OverrideAS_True, @OverrideAS_True, @OverrideAS_True
-		FROM #tmpCust t
-			LEFT JOIN CustSettingAutoSuspend v WITH(NOLOCK)
-				ON t.CustID = v.CustID 
-				AND v.SportType = @Sporttype
-		WHERE v.CustID IS NULL
-			AND t.roleid = 1
-
-		IF @@ROWCOUNT = 0
-			BREAK;
-	END
-
 
 	DROP TABLE #tmpCust
 END
 GO
 
 DECLARE @DirectCustID INT, @index INT = 0, @roleid TINYINT
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, DirectCustID: %d.'
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, DirectCustID: %d, Sporttype: %d.'
 
 CREATE TABLE #OfferedSite (site VARCHAR(10))
 INSERT INTO #OfferedSite (site)
@@ -197,9 +198,13 @@ BEGIN
 	IF @@ROWCOUNT = 0 BREAK
 	
 	SET @index = @index + 1
-	RAISERROR (@msg, 0, 1, @index, @DirectCustID) WITH NOWAIT
+	RAISERROR (@msg, 0, 1, @index, @DirectCustID, 43) WITH NOWAIT
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_09 @CustId = @DirectCustID, @roleid = @roleid,@sporttype = 43 -- Esport
+	waitfor delay '00:00:0.200'
+
+	RAISERROR (@msg, 0, 1, @index, @DirectCustID, 2) WITH NOWAIT
+	EXEC dbo.Acc_DynamicCustSetting3rd_09 @CustId = @DirectCustID, @roleid = @roleid,@sporttype = 2 -- BasketBall
 	waitfor delay '00:00:0.200'
 END
 
