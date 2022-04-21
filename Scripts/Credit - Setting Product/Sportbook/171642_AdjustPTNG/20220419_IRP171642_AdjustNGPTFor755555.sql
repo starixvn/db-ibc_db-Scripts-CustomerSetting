@@ -880,11 +880,11 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.site = '755555'
 	AND c.Enabled = 1
-	AND ci.custid NOT IN (SELECT custid FROM CustAccount WITH(NOLOCK)
-						WHERE GroupID IN (SELECT GroupID FROM CustGroupHeadline WITH(NOLOCK)
-										WHERE custid = (SELECT custid FROM customer (NOLOCK) WHERE username = 'TT0')
-										)
-						)
+	--AND ci.custid NOT IN (SELECT custid FROM CustAccount WITH(NOLOCK)
+	--					WHERE GroupID IN (SELECT GroupID FROM CustGroupHeadline WITH(NOLOCK)
+	--									WHERE custid = (SELECT custid FROM customer (NOLOCK) WHERE username = 'TT0')
+	--									)
+	--					)
 		
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
