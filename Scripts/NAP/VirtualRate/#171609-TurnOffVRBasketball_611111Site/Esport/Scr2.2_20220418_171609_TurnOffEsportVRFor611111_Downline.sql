@@ -129,9 +129,7 @@ BEGIN
 		WHILE 1 = 1
 		BEGIN
 			UPDATE TOP (5000) v
-			SET v.AutoSuspendLive = @OverrideAS_True
-				,AutoSuspendNonLive = @OverrideAS_True
-				,OverrideASLive = @OverrideAS_True
+			SET OverrideASLive = @OverrideAS_True
 				,OverrideASNonLive = @OverrideAS_True
 			FROM #tmpCust t
 				INNER JOIN CustSettingAutoSuspend v WITH(NOLOCK)
@@ -139,9 +137,7 @@ BEGIN
 					AND v.SportType = @Sporttype
 			WHERE t.roleid = 1
 			AND NOT(  
-					v.AutoSuspendLive = @OverrideAS_True
-					AND AutoSuspendNonLive = @OverrideAS_True
-					AND OverrideASLive = @OverrideAS_True
+					OverrideASLive = @OverrideAS_True
 					AND OverrideASNonLive = @OverrideAS_True
 				)
 
