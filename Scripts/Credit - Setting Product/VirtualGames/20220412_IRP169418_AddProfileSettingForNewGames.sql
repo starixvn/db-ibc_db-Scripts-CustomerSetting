@@ -22,4 +22,4 @@ INSERT INTO [dbo].[ProductSettingDetail]
            ,[IntervalValue]
            ,[RealProductId]
            ,[MaxChoice])
-SELECT 7,245,4605,0,64,NULL,NULL,NULL,NULL,NULL,4,4,0,NULL,38,NULL      
+SELECT 7,245,4605,0,64,NULL,NULL,NULL,NULL,NULL,4,4,1,NULL,38,NULL      

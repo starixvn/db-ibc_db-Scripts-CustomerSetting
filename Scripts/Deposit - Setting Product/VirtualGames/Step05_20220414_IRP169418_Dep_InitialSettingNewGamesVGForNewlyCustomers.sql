@@ -23,7 +23,7 @@ WHERE c.roleid = 4
 	AND c.currency IN (SELECT ExchangeId FROM exchange WITH(NOLOCK)
 						WHERE currency IN ('RM','KHR','PLN','USDT','US$','AUD','MMK','MKK','CHF','UUS','BND','YUN','RMB','DKK','NOK', 'SEK', 'IN', 'TB', 'Won','INH','Euro'
 						,'INR','RUB','GBP','JPY'))
-	AND s.Site <> 'Athena000'
+	AND s.Site NOT IN ('Athena000')
 	AND EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting l WITH(NOLOCK)
 				WHERE productSettingID = 34
 				AND c.custid = l.custid)
