@@ -6,12 +6,13 @@
 */
 USE Bodb_Archive_Customer_Licensee 
 GO
+DROP TABLE [Dep_CustBetSettingGame_Member]
+GO
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 SET ANSI_PADDING ON
 GO
 
@@ -26,4 +27,6 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Member](
 	[MaxPayoutPerMatch] [money] NULL
 ) ON Dep_CustBetSetting_Table
 
+GO
+ALTER TABLE [Dep_CustBetSettingGame_Member] ADD CONSTRAINT PK_Dep_CustBetSettingGame_Member PRIMARY KEY ([CustID],[SportType],[BetType])
 GO
