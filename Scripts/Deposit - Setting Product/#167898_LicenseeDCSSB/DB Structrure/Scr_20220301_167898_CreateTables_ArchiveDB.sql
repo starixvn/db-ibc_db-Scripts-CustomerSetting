@@ -24,6 +24,6 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Member](
 	[MaxPerMatch] [money] NULL,
 	[MaxPerNumber] [money] NULL,
 	[MaxPayoutPerMatch] [money] NULL
-) ON [Dep_Custsetting_table]
+) ON Dep_CustBetSetting_Table
 
 GO

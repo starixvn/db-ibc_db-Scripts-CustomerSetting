@@ -43,8 +43,8 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Member_History](
 	[CustID] ASC,
 	[SportType] ASC,
 	[BetType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustBetSetting_table
-) ON Dep_CustBetSetting_table
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustSetting_table
+) ON Dep_CustSetting_table
 
 GO
 
@@ -65,8 +65,8 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGame_Agent_History](
 	[CustID] ASC,
 	[SportType] ASC,
 	[BetType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustBetSetting_table
-) ON Dep_CustBetSetting_table
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustSetting_table
+) ON Dep_CustSetting_table
 
 GO
 
@@ -87,7 +87,7 @@ CREATE TABLE [dbo].[Dep_CustBetSettingGameGroup_Member_History](
 	[AgentID] ASC,
 	[SportType] ASC,
 	[BetType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustBetSetting_table
-) ON Dep_CustBetSetting_table
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Dep_CustSetting_table
+) ON Dep_CustSetting_table
 
 GO
