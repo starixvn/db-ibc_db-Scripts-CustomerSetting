@@ -10,12 +10,13 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @srecommend INT	
 	, @max_custid INT
 	, @target VARCHAR(20)
-	
+	, @mincustID_batch INT = NULL
+	, @maxcustID_batch INT = NULL
 AS
 BEGIN	
 	SET NOCOUNT ON
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF (dbo.f_CheckRepTable('Dep_CustSettingMode') = 0
 		OR dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0
@@ -38,6 +39,14 @@ BEGIN
 		OR dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 0	
 	   )
 		RETURN
+
+	IF @mincustID_batch IS NULL
+		SET @mincustID_batch = 0
+
+	IF @maxcustID_batch IS NULL
+		SET @maxcustID_batch = @max_custid
+
+
 	CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT)
 	CREATE TABLE #Dummy				(CustID INT PRIMARY KEY)
@@ -65,22 +74,27 @@ BEGIN
 	WHERE srecommend=@srecommend AND roleid=3 AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 
 	INSERT INTO #tmpCust(CustID)
-	SELECT CustID
+	SELECT ci.CustID
 	FROM custInfo ci WITH(NOLOCK)
 	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
 		AND roleid = 1 
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+		--> Init by batch for member
+		AND ci.custid > @mincustID_batch
+		AND ci.custid <= @maxcustID_batch
 	
-	INSERT INTO #tmpSMA(CustID,RoleID)
-	SELECT CustID,RoleID
-	FROM custInfo ci WITH(NOLOCK)
-	WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
-		AND roleid IN(2,3,4)
-		AND ci.Enabled=1
-		AND mrecommend NOT IN (SELECT custid FROM #Dummy)						   
-	
-
+	IF @mincustID_batch = 0  -- Init data for SMA on the first batch only
+	BEGIN
+		INSERT INTO #tmpSMA(CustID,RoleID)
+		SELECT CustID,RoleID
+		FROM custInfo ci WITH(NOLOCK)
+		WHERE ci.srecommend = @srecommend AND ci.custid<=@max_custid 
+			AND roleid IN(2,3,4)
+			AND ci.Enabled=1
+			AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
+	END
+						   
 	-------------------------------------PT Setting-----------------------------------------------
 	--Agent Level
 	INSERT INTO dbo.Dep_CustPTSetting_Agent
@@ -398,10 +412,11 @@ GO
 ------------------------------------------------------	
 -- BEGIN STEP 5.2: Run this SP at replicated DB: DB06, DBTP -----
 --------------------------------------------------------------------------------------
+SET NOCOUNT ON
 PRINT N'Step 5: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB-60\DEVDBCUST')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','TESTDBCUST','DB-60\DEVDBCUST')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
@@ -410,16 +425,23 @@ Print 'Server Name : ' + @target
 
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 		DROP TABLE	#supers;
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int, LineCnt INT, isfinished bit default(0))
 
-DECLARE @max_custid INT, @srecommend INT
+IF	OBJECT_ID('tempdb..#Tmp_Custbatch') IS NOT NULL
+		DROP TABLE	#Tmp_Custbatch;
+CREATE TABLE #Tmp_Custbatch (custid int, RN INT, isfinished bit default(0))
+
+DECLARE @max_custid INT, @srecommend INT, @LineCnt INT
+, @BatchNum INT = 200000 -- execute by batch to void SP timeout error
+, @maxcustID_batch INT -- max custid of current batch
+, @mincustID_batch INT  --min custid of currenct batch
 
 SELECT @max_custid = xxx
 
-INSERT INTO #supers(custid)
-SELECT ci.custid
+INSERT INTO #supers(custid,LineCnt)
+SELECT ci.srecommend, COUNT(1) AS Cnt
 FROM custInfo ci WITH (NOLOCK) 	
-	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.srecommend = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
@@ -498,11 +520,14 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 							,	96	-- 	USDT
 							,	20	--	UUS
 							)
-		ORDER BY ci.custid 
+GROUP BY ci.srecommend
+ORDER BY ci.srecommend
 
 DECLARE @super_cnt INT, @index INT = 0
 
 SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+
+DECLARE @msg_batch nvarchar(200) = 'SuperID: %d, MinCustID: %d, MaxCustID: %d.'
 
 DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.'
 
@@ -512,11 +537,10 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	
-	
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
-		,@srecommend = custid			
+		,@srecommend = custid
+		,@LineCnt = LineCnt		
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
@@ -524,12 +548,61 @@ BEGIN
 	SET @index = @index + 1
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+
+	IF @LineCnt > @BatchNum -- execute by batch to void SP timeout error
+	BEGIN
+		;WITH TMP AS(
+			SELECT ci.custid, ROW_NUMBER() OVER( ORDER BY ci.custid) AS RN
+			FROM custInfo ci WITH (NOLOCK) 
+			WHERE ci.srecommend = @srecommend
+				AND ci.CustID <= @max_custid
+				AND ci.Enabled=1
+		)
+		INSERT INTO #Tmp_Custbatch(custid,RN)
+		SELECT custid,RN
+		FROM TMP 
+		WHERE (RN%@BatchNum) = 0
+		UNION
+		SELECT MAX(custID),MAX(RN)
+		FROM TMP 
+
+		--Reset @mincustID_batch
+		SELECT @mincustID_batch = 0 ,@maxcustID_batch = 0
+
+		WHILE (1 = 1)
+		BEGIN
+			-- Set @mincustID_batch = previous @maxcustID_batch
+			SET @mincustID_batch = @maxcustID_batch
+
+			UPDATE TOP (1) #Tmp_Custbatch
+			SET isfinished = 1
+				,@maxcustID_batch = custid
+			WHERE isfinished = 0
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target
-				
+			IF @@ROWCOUNT = 0 BREAK
+
+			RAISERROR (@msg_batch, 0, 1, @srecommend,@mincustID_batch,@maxcustID_batch) WITH NOWAIT
+			EXEC dbo.[Acc_Dep_DynamicCustSetting_09] 
+				@srecommend = @srecommend, 
+				@max_custid=@max_custid,
+				@target = @target,
+				@mincustID_batch = @mincustID_batch,
+				@maxcustID_batch = @maxcustID_batch
+		END
+
+		TRUNCATE TABLE #Tmp_Custbatch	
+	END
+	ELSE
+	BEGIN
+		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target
+	END
+
 	WAITFOR DELAY '00:00:00.280'			
 END	
 
-DROP TABLE #supers		
+DROP TABLE #supers	
+DROP TABLE #Tmp_Custbatch	
 GO
 PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
+SET NOCOUNT OFF
+
