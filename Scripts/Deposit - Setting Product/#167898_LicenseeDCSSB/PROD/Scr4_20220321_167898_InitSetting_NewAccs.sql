@@ -44,7 +44,7 @@ WHERE ci.srecommend IN( SELECT custid FROM #supers)
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
 INSERT INTO #tmpSMA(CustID,RoleID,Currency,Site)
-SELECT  ci.CustID,ci.recommend,ci.currency,cu.site
+SELECT  ci.CustID,ci.roleid,ci.currency,cu.site
 FROM custInfo ci WITH(NOLOCK)
 	INNER JOIN customer cu WITH(NOLOCK) ON ci.custid = cu.custid
 WHERE ci.srecommend IN( SELECT custid FROM #supers)
