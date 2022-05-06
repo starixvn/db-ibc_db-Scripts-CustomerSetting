@@ -124,9 +124,9 @@ BEGIN
 			   ,sp.Sporttype
 			   ,sp.BetType
 			   ,0
-			   ,dc.spositiontaking
-			   ,dc.mpositiontaking
-			   ,dc.apositiontaking
+			   ,dc.spositiontaking * 100
+			   ,dc.mpositiontaking * 100
+			   ,dc.apositiontaking * 100
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
@@ -142,9 +142,9 @@ BEGIN
 			   ,sp.Sporttype
 			   ,sp.BetType
 			   ,0
-			   ,dc.spositiontaking
-			   ,dc.mpositiontaking
-			   ,dc.apositiontaking
+			   ,dc.spositiontaking * 100
+			   ,dc.mpositiontaking * 100
+			   ,dc.apositiontaking * 100
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
@@ -160,9 +160,9 @@ BEGIN
 			   ,sp.Sporttype
 			   ,sp.BetType
 			   ,0
-			   ,dc.spositiontaking
-			   ,dc.mpositiontaking
-			   ,dc.apositiontaking
+			   ,dc.spositiontaking * 100
+			   ,dc.mpositiontaking * 100
+			   ,dc.apositiontaking * 100
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN CustSettingGame dc WITH(NOLOCK)
@@ -189,7 +189,7 @@ BEGIN
 			   ,0
 			   ,0
 			   ,CASE WHEN  @site = 'asiabet88' AND @currency IN(3,6) AND sp.sporttype = 1 AND sp.bettype = 1
-					THEN 0 ELSE dc.apositiontaking END
+					THEN 0 ELSE dc.apositiontaking * 100 END
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
@@ -208,7 +208,7 @@ BEGIN
 			   ,0
 			   ,0
 			   ,0
-			   ,dc.apositiontaking
+			   ,dc.apositiontaking * 100
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
@@ -227,7 +227,7 @@ BEGIN
 			   ,0
 			   ,0
 			   ,0
-			   ,dc.apositiontaking
+			   ,dc.apositiontaking * 100
 		FROM #tmpSMA t
 			CROSS JOIN @SportBettype_tbl sp
 			INNER JOIN CustSettingGame dc WITH(NOLOCK)
@@ -257,7 +257,7 @@ BEGIN
 		   ,0
 		   ,0
 		  ,CASE WHEN  NOT (@site = 'asiabet88' AND @currency IN(3,6)) AND sp.sporttype = 1 AND sp.bettype = 1
-				THEN 0 ELSE dc.apositiontaking END
+				THEN 0 ELSE dc.apositiontaking * 100 END
 	FROM #tmpCust t
 		CROSS JOIN @SportBettype_tbl sp
 		INNER JOIN Dep_CustSetting dc WITH(NOLOCK)
@@ -278,7 +278,7 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,dc.apositiontaking
+		   ,dc.apositiontaking * 100
 	FROM #tmpCust t
 		CROSS JOIN @SportBettype_tbl sp
 		INNER JOIN Dep_CustSetting3rd dc WITH(NOLOCK)
@@ -299,7 +299,7 @@ BEGIN
 		   ,0
 		   ,0
 		   ,0
-		   ,dc.apositiontaking
+		   ,dc.apositiontaking * 100
 	FROM #tmpCust t
 		CROSS JOIN @SportBettype_tbl sp
 		INNER JOIN CustSettingGame dc WITH(NOLOCK)
