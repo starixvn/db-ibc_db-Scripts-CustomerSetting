@@ -280,7 +280,7 @@ END
 SET @BatchSize = 5000
 
 INSERT INTO #Dep_CustPTSetting_Agent(CustID,SportType,BetType,SuperPT,MasterPT,AgentPT,RoleID,Site,Currency)
-SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking * 100,dc.mpositiontaking * 100,dc.apositiontaking * 100,ci.roleid,s.Site,s.Currency
 FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
 	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
@@ -291,12 +291,12 @@ FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 		AND c.BetType = dc.bettype
 		AND dc.islive = 0
 WHERE sp.HavePT = 1
-	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND (c.AgentPT <> dc.apositiontaking * 100 OR c.MasterPT<> dc.mpositiontaking * 100 OR c.SuperPT <> dc.spositiontaking * 100)
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	AND ci.Enabled = 1
 --NG
 UNION ALL
-SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking * 100,dc.mpositiontaking * 100,dc.apositiontaking * 100,ci.roleid,s.Site,s.Currency
 FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
 	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
@@ -307,12 +307,12 @@ FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 		AND c.BetType = dc.bettype
 		AND dc.islive = 0
 WHERE sp.HavePT = 1
-	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND (c.AgentPT <> dc.apositiontaking * 100 OR c.MasterPT<> dc.mpositiontaking * 100 OR c.SuperPT <> dc.spositiontaking * 100)
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	AND ci.Enabled = 1
 --Keno
 UNION ALL
-SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking,dc.mpositiontaking,dc.apositiontaking,ci.roleid,s.Site,s.Currency
+SELECT dc.custid,dc.sporttype,dc.bettype,dc.spositiontaking * 100,dc.mpositiontaking * 100,dc.apositiontaking * 100,ci.roleid,s.Site,s.Currency
 FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 	INNER JOIN @SportBettype_tbl sp ON c.SportType = sp.Sporttype AND c.BetType = sp.BetType
 	INNER JOIN custInfo ci WITH(NOLOCK) ON C.CustID = ci.custid
@@ -322,7 +322,7 @@ FROM Dep_CustPTSetting_Agent c WITH(NOLOCK)
 		AND c.SportType = dc.sporttype
 		AND c.BetType = dc.bettype
 WHERE sp.HavePT = 1
-	AND (c.AgentPT <> dc.apositiontaking OR c.MasterPT<> dc.mpositiontaking OR c.SuperPT <> dc.spositiontaking)
+	AND (c.AgentPT <> dc.apositiontaking * 100 OR c.MasterPT<> dc.mpositiontaking * 100 OR c.SuperPT <> dc.spositiontaking * 100)
 	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
 	AND ci.Enabled = 1
 
