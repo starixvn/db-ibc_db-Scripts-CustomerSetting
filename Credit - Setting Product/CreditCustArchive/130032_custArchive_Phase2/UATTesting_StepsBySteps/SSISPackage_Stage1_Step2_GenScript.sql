@@ -21,25 +21,6 @@ BEGIN
 
 END
 
-CREATE TABLE #Super_Exception (srecommend INT PRIMARY KEY)
-
-INSERT INTO #Super_Exception (srecommend)
-SELECT ci.srecommend		
-FROM CustGroupHeadline gl (nolock)		
-	INNER JOIN Customer ci (nolock) ON gl.CustID = ci.custid		
-WHERE GroupID > 0 and ci.roleid in (1,2,3,4)
-UNION
-SELECT ag.custid
-FROM phonebettingCustomerList p WITH(NOLOCK)
-	INNER JOIN custinfo c WITH(NOLOCK) ON p.username = c.username
-	INNER JOIN custinfo ag WITH(NOLOCK) ON ag.custid = c.srecommend
-
---Exclude SuperID: 44671646
-INSERT INTO #Super_Exception(srecommend)
-SELECT t.custid
-FROM (VALUES(44671646),(45937167),(58561925),(46195971),(46379016)) AS t(custID)
-WHERE NOT EXISTS( SELECT 1 FROM #Super_Exception WHERE srecommend = t.custID)
-
 INSERT INTO bodb_report.dbo.tempCustID
 SELECT custid
 FROM bodb02.dbo.transfer with (NOLOCK)
@@ -75,7 +56,6 @@ FROM customer ag WITH (NOLOCK)
 		WHERE roleid = 1
 		GROUP BY recommend
 		) mem ON mem.recommend = agci.custid
-	LEFT JOIN #Super_Exception se ON se.srecommend = ag.srecommend
 WHERE ag.roleid = 2
 	--AND isnull(MemCount, 0) > 0
 	AND (ag.creatdate < DATEADD(mm, -3, @currentDate))
@@ -83,6 +63,8 @@ WHERE ag.roleid = 2
 	--AND agci.enabled = 1
 	AND ca.isInternal = 0
 	AND ag.srecommend NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
+	AND ag.srecommend NOT IN (SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
+	AND ag.mrecommend NOT IN (SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND ag.custid NOT IN(SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
 	AND agci.custid NOT IN (
 		SELECT DISTINCT recommend
@@ -96,8 +78,6 @@ WHERE ag.roleid = 2
 		WHERE --roleid = 1 AND
 			creatdate >= DATEADD(mm, -3, @currentDate)
 		)
-	AND se.srecommend IS NULL
-	
 
 DECLARE @xmlData NVARCHAR(MAX) = ''
 
@@ -126,7 +106,5 @@ FROM @xml.nodes('/r') AS x(v)
 
 
 DROP TABLE #tmpAg
-DROP TABLE #Super_Exception
-
 
 
