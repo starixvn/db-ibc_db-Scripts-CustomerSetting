@@ -12,7 +12,10 @@
 	68			174			7801	AdvantPlay Mini
 */
 	DECLARE @max_custid BIGINT = xxx
-	
+	DECLARE @Max_Custid2 INT
+
+	SELECT TOP(1) @Max_Custid2 = custid FROM custinfo WITH(NOLOCK) ORDER BY custid DESC
+
 	CREATE TABLE #tblCust(CustID INT PRIMARY KEY, roleid TINYINT)
 	DECLARE @BatchCust TABLE (CustID INT)
 	
@@ -47,7 +50,7 @@
 									AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%' )
 									AND roleid=3
 							)
-		AND custid > @max_custid
+		AND custid > @max_custid AND custid < @Max_Custid2
 						
 	--insert group comm setting
 	INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member 
