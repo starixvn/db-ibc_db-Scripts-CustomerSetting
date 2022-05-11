@@ -51,7 +51,7 @@
 									AND roleid=3
 							)
 		AND custid > @max_custid AND custid < @Max_Custid2
-						
+	WAITFOR DELAY '00:00:30'					
 	--insert group comm setting
 	INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member 
 		(AgentID
