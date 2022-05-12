@@ -29,9 +29,3 @@ CREATE TABLE [dbo].[Dep_CustMaxBetSetting_History](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
 GO
-
-ALTER TABLE [dbo].[Dep_CustMaxBetSetting_History] ADD  CONSTRAINT [DF_Dep_CustMaxBetSetting_History_MPM]  DEFAULT ((NULL)) FOR [OldMaxPerMatch]
-GO
-
-ALTER TABLE [dbo].[Dep_CustMaxBetSetting_History] ADD  CONSTRAINT [DF_Dep_CustMaxBetSetting_History_SLL]  DEFAULT ((NULL)) FOR [OldStakeLevelList]
-GO

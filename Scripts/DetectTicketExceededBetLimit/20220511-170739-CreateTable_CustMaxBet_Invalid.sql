@@ -15,7 +15,6 @@ GO
 CREATE TABLE [dbo].[CustMaxBet_Invalid](
 	[TransID] [bigint],
 	[CustID] [int],
-	[Username] [nvarchar](100),
 	[SportType] [smallint],
 	[BetType] [int],
 	[MaxBet] [money],
