@@ -66,6 +66,9 @@ BEGIN
 		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,1))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		INNER JOIN  #tmpSMA temp ON temp.CustID = c.custid
+		CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (c.bitmapIsDisabled,@BitOrder)) isDisabled
+		CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (c.bitmapIsHidden,@BitOrder)) isHidden
+	WHERE NOT(isDisabled.value = 1 AND isHidden.value = 0)
 
 	UPDATE c 
 	SET  c.bitmapIsHidden = tmp.bitmapIsHidden
@@ -82,6 +85,9 @@ BEGIN
 		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrder,1))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		INNER JOIN  #tmpCust temp ON temp.CustID = c.custid
+		CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (c.bitmapIsDisabled,@BitOrder)) isDisabled
+		CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (c.bitmapIsHidden,@BitOrder)) isHidden
+	WHERE NOT(isDisabled.value = 1 AND isHidden.value = 0)
 
 	WHILE 1 = 1 
 	BEGIN
@@ -131,13 +137,13 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 DECLARE @srecommend INT
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
+SELECT top 1 ci.custid
 FROM Dep_CustProductStatus cps WITH (NOLOCK)
 	INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid = cps.CustID
     CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (cps.bitmapIsDisabled,31)) isDisabled
     CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (cps.bitmapIsHidden,31)) isHidden
-WHERE 1=1
-    AND (isDisabled.value= 1 and isHidden.value=0) 
+WHERE isDisabled.value = 1 
+	AND isHidden.value =0
     AND ci.roleid = 4
 
 DECLARE @super_cnt INT, @index INT = 0
