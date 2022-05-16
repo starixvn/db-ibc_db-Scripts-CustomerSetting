@@ -137,7 +137,7 @@ CREATE TABLE #supers (custid int, isfinished bit default(0))
 DECLARE @srecommend INT
 
 INSERT INTO #supers(custid)
-SELECT top 1 ci.custid
+SELECT ci.custid
 FROM Dep_CustProductStatus cps WITH (NOLOCK)
 	INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid = cps.CustID
     CROSS APPLY (SELECT VALUE FROM f_CustSetting_ProductStatusSel (cps.bitmapIsDisabled,31)) isDisabled
