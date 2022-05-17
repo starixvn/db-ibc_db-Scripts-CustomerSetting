@@ -26,8 +26,8 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		BREAK
 	
-	INSERT INTO crmCustomerRemarkNew(CustID,Remark)
-	SELECT c.CustID,Remark 
+	INSERT INTO crmCustomerRemarkNew(CustID,Remark,CreatedDate)
+	SELECT c.CustID,Remark , GETDATE() AS CreatedDate
 	FROM crmCustomerRemark c WITH(NOLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
 	WHERE c.Remark	IS NOT NULL AND c.Remark <> '' AND c.Remark <> '<br>'
