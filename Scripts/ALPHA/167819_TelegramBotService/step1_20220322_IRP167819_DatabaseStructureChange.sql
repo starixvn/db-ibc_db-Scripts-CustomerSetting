@@ -91,8 +91,7 @@ CREATE TABLE [dbo].[BotAction](
 	[FunctionID] SMALLINT,
 	[ParentID] SMALLINT,
 	[Status] [TINYINT] NULL,
-	[IsEndAction] [BIT],
-	[BackToActionId] SMALLINT,
+	[IsEndAction] [BIT],	
  CONSTRAINT [PK_BotAction] PRIMARY KEY CLUSTERED 
 (
 	[ActionID] ASC
@@ -153,6 +152,14 @@ CREATE TABLE [dbo].[CustBotMessage](
 ) ON [DATA]
 GO
 
+CREATE CLUSTERED INDEX [CIX_CreatedDate] ON [dbo].[CustBotMessage]
+(
+	[CreatedDate] ASC,
+	[FunctionId] ASC
+)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+GO
+
 ----------------------------------------------------------------------------------
 ---BotResource
 
@@ -206,3 +213,6 @@ CREATE TABLE [dbo].[CustBotNotification](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
 ) ON [DATA]
 GO
+
+
+
