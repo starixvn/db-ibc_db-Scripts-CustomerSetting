@@ -6,7 +6,7 @@
 */
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
+ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
 	@srecommend INT	
 	,@target VARCHAR(20)
 AS
@@ -141,7 +141,7 @@ BEGIN
 	SET @index = @index + 1
 	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 
-	EXEC dbo.[Acc_DynamicCustomerInfo_09] 
+	EXEC dbo.[Acc_ExecRep_Cust_09] 
 			 @srecommend = @srecommend
 			,@target = @target
 			
