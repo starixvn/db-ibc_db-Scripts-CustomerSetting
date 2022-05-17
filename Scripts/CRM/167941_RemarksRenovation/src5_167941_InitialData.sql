@@ -31,7 +31,7 @@ BEGIN
 	FROM crmCustomerRemark c WITH(NOLOCK)
 		INNER JOIN #CustBatch t ON c.custid = t.CustId
 	WHERE c.Remark	IS NOT NULL AND c.Remark <> '' AND c.Remark <> '<br>'
-	ORDER BY c.RemarkID 
+	ORDER BY c.CustID,c.RemarkID 
 
 	DELETE FROM #CustBatch
 
