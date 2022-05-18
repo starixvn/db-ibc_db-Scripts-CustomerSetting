@@ -7,6 +7,9 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.bodb_Licensee --------
 ------------------------------------------------------	
+
+USE bodb_Licensee
+GO
 ALTER PROCEDURE [dbo].[Lrf_ExecRep_09] 	 
 	@target VARCHAR(20)	
 AS
