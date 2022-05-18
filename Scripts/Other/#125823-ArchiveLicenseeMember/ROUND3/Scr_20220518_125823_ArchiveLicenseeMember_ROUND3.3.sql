@@ -96,7 +96,7 @@ BEGIN
 		@KenoList=@KenoListDummy,@IP=@IP,@ErrCode=@ErrCode OUTPUT,@ErrMsg=@ErrMsg OUTPUT
 
 	IF @ErrMsg <> ''
-		PRINT 'AgentID' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
+		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
 	ELSE 
 	BEGIN
 		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
