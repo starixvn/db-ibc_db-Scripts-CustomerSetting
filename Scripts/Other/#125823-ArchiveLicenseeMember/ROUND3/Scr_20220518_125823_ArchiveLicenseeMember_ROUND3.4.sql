@@ -91,6 +91,8 @@ FROM custInfo c WITH(NOLOCK)
 WHERE c.srecommend IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND c.custid IN ( SELECT custid FROM #TempAgents)
 
+CREATE CLUSTERED INDEX ix_TmpDep_Customer_Archived_Config_recommend ON #Dep_Customer_Archived_Config(recommend)
+
 --> Insert new dummy clearbal if not exists yet
 WHILE 1 = 1
 BEGIN
