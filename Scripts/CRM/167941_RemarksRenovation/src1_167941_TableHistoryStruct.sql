@@ -17,8 +17,8 @@ CREATE TABLE [dbo].[crmCustomerRemarkHistory](
 	[LastUpdate] [DATETIME] NULL
 ) ON [DATA]
 GO
-
-CREATE CLUSTERED INDEX [PK_crmCustomerRemarkHistory] ON [dbo].[crmCustomerRemarkHistory] 
+--DROP INDEX crmCustomerRemarkHistory.CIX_crmCustomerRemarkHistory;
+CREATE CLUSTERED INDEX [CIX_crmCustomerRemarkHistory] ON [dbo].[crmCustomerRemarkHistory] 
 (
 	[RemarkID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
