@@ -171,7 +171,7 @@ WHILE 1 = 1
 BEGIN
 	SELECT @AgentID = null, @tmpClearBalCustID = null, @tmpDumUserName = null, @ErrMsg = '',@ErrCode = 0
 
-	SELECT @AgentID = Recommend, @tmpDumUserName = Agent + 'ClearBal'
+	SELECT TOP(1) @AgentID = Recommend, @tmpDumUserName = Agent + 'ClearBal'
 	FROM #Dep_Customer_Archived_Config
 	WHERE CustIDBalanceDummy IS NULL
 
