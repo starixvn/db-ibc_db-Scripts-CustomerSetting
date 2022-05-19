@@ -223,8 +223,14 @@ BEGIN
 		@KenoList=@KenoListDummy,@IP=@IP,@ErrCode=@ErrCode OUTPUT,@ErrMsg=@ErrMsg OUTPUT
 
 	IF @ErrMsg <> ''
+	BEGIN
 		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
-	ELSE 
+
+		UPDATE #Dep_Customer_Archived_Config
+		SET CustIDBalanceDummy = 0
+		WHERE Recommend = @AgentID
+	END
+	ELSE
 	BEGIN
 		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
 
@@ -234,17 +240,28 @@ BEGIN
 	END
 END
 
-IF EXISTS (	SELECT TOP 1 1
-			FROM #Dep_Customer_Archived_Config
-			WHERE CustIDBalanceDummy IS NULL
-)
-BEGIN
-	SELECT c.Recommend,c.Agent, 'This Agent have not ClearBal account' ERROR
-	FROM #Dep_Customer_Archived_Config c (NOLOCK)
-	WHERE c.CustIDBalanceDummy IS NULL
+--IF EXISTS (	SELECT TOP 1 1
+--			FROM #Dep_Customer_Archived_Config
+--			WHERE CustIDBalanceDummy IS NULL
+--)
+--BEGIN
+--	SELECT c.Recommend,c.Agent, 'This Agent have not ClearBal account' ERROR
+--	FROM #Dep_Customer_Archived_Config c
+--	WHERE c.CustIDBalanceDummy IS NULL
 	
-	RETURN
-END
+--	RETURN
+--END
+
+--> Set Status = 2 (pending - do not scan now) for Agent can not create CustIDBalanceDummy
+UPDATE cf 
+SET cf.Status = 2 --Pending
+FROM #Dep_Customer_Archived_Config cf
+WHERE cf.CustIDBalanceDummy = 0
+
+IF @@ROWCOUNT > 0
+	SELECT cf.Agent, 'Adding CustIDBalanceDummy failed'
+	FROM #Dep_Customer_Archived_Config cf
+	WHERE cf.CustIDBalanceDummy = 0
 
 --> Update another agents to pending (do not scan now)
 UPDATE cf 
@@ -273,5 +290,5 @@ DROP TABLE #Dep_Customer_Archived_Config
 DROP TABLE #TempDeleted
 
 /*
-SELECT * FROM Dep_Customer_Archived_Config WITH(NOLOCK) WHERE Status = 0
+SELECT * FROM Dep_Customer_Archived_Config WITH(NOLOCK) WHERE Status = 0 AND CustIDBalanceDummy = 0
 */
