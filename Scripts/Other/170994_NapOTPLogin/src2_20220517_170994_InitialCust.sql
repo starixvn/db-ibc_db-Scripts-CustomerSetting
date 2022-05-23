@@ -8,18 +8,17 @@
 USE Nap_UserControl
 GO
 
-CREATE TABLE #CustBatch (CustId INT, Creator INT, CreatedDate DATETIME)
-SELECT DISTINCT a.CustID,b.creator,b.creatdate, 0 AS IsFinished
+CREATE TABLE #CustBatch (CustId INT)
+SELECT DISTINCT a.CustID, 0 AS IsFinished
 INTO  #CustList
 FROM CustDB.dbo.custInfo a WITH(NOLOCK)
-INNER JOIN CustDB.dbo.Customer b WITH(NOLOCK) ON a.custid = b.custid
-WHERE a.roleid > 4 AND a.Enabled=1
+WHERE a.roleid > 4 AND a.Enabled=1 AND a.username LIKE 'STARIX' + '%'
 
 WHILE (1=1)
 BEGIN
 	UPDATE TOP (4000) t
 	SET IsFinished = 1
-	OUTPUT deleted.custid,deleted.Creator ,deleted.creatdate  INTO #CustBatch(CustId,Creator,CreatedDate)
+	OUTPUT deleted.custid  INTO #CustBatch(CustId)
 	FROM #CustList t
 	WHERE IsFinished = 0
 
@@ -27,7 +26,7 @@ BEGIN
 		BREAK
 	
 	INSERT INTO AdminOTP(CustID,System,Modifier, ModifiedDate, Creator,CreatedDate)
-	SELECT CustID, 'NAP' AS System, Creator AS Modifier, CreatedDate AS ModifiedDate, Creator, CreatedDate
+	SELECT CustID, 'NAP' AS System, NULL AS Modifier, NULL AS ModifiedDate, 8 AS Creator, GETDATE() AS CreatedDate
 	FROM #CustBatch c WITH(NOLOCK)
 
 	DELETE FROM #CustBatch
