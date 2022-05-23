@@ -26,7 +26,7 @@ BEGIN
 		BREAK
 	
 	INSERT INTO AdminOTP(CustID,System,Modifier, ModifiedDate, Creator,CreatedDate)
-	SELECT CustID, 'NAP' AS System, NULL AS Modifier, NULL AS ModifiedDate, 8 AS Creator, GETDATE() AS CreatedDate
+	SELECT CustID, 'NAP' AS System, NULL AS Modifier, NULL AS ModifiedDate, 10278938 AS Creator, GETDATE() AS CreatedDate  --starixIT
 	FROM #CustBatch c WITH(NOLOCK)
 
 	DELETE FROM #CustBatch
