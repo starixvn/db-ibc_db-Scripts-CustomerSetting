@@ -121,7 +121,7 @@ BEGIN
 	)
 	INSERT INTO #tblCustDangerInfo(custid,Soccer,Basketball,WinlossSoccer,WinlossBasketball,UpdateSoccer,UpdateBasketball)
 	SELECT t.custid,
-			CASE WHEN newLs.custid IS NOT NULL THEN --4 Licensees: IG128/SM88/SL88SW/LIVV88SW
+			CASE WHEN s.custid IS NOT NULL AND s.site IN ('IG128','SM88','SL88SW','LIVV88SW') THEN --4 Licensees: IG128/SM88/SL88SW/LIVV88SW
 					CASE WHEN soccer + soccerParlay < 50000 OR isSoccerParlay = 0 THEN
 						CASE WHEN soccer < -250000 THEN 1
 							WHEN soccer <-200000 AND soccer >= -250000 THEN 2
@@ -213,7 +213,6 @@ BEGIN
 	FROM T
 		INNER JOIN custinfo ci WITH(NOLOCK) ON t.custid = ci.custid
 		LEFT JOIN Dep_custsuper s WITH(NOLOCK) ON ci.srecommend = s.custid
-		LEFT JOIN Dep_custsuper newLs WITH(NOLOCK) ON ci.srecommend = newLs.custid AND newLs.site IN ('IG128','SM88','SL88SW','LIVV88SW')
 	
 	INSERT INTO #tblCustDangerOld(custid,DangerLevel,Soccer,Basketball,IsManualSoccer,IsManualBasketball)
 	SELECT custid, ISNULL(DangerLevel,0), soccer, basketball, IsManualSoccer, IsManualBasketball
