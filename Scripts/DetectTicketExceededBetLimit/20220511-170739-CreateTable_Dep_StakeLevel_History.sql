@@ -17,6 +17,7 @@ CREATE TABLE [dbo].[Dep_StakeLevel_History](
 	[GameTypeID] [smallint] NOT NULL,
 	[MaxLabel] [nvarchar](50) NULL,
 	[MaxStake] [decimal](19, 8) NULL,
+	[SiteID] [int] NULL,
 	[UpdateTime] [datetime] NOT NULL,
  CONSTRAINT [PK_Dep_StakeLevel_History] PRIMARY KEY CLUSTERED 
 (
