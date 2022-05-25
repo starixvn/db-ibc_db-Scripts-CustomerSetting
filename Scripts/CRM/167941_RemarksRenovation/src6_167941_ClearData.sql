@@ -8,10 +8,10 @@
 USE [bodb_CRM]
 GO
 
-DELETE FROM crmCustomerRemarkNew
+TRUNCATE TABLE crmCustomerRemarkNew
 GO
 
-DELETE FROM crmCustomerRemarkHistory
+TRUNCATE TABLE crmCustomerRemarkHistory
 GO
 
 DBCC CHECKIDENT ('crmCustomerRemarkNew', RESEED, 0);
