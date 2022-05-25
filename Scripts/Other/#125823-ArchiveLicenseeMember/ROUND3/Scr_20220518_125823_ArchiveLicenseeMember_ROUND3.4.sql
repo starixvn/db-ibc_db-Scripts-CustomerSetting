@@ -30,7 +30,7 @@ FROM customer c(NOLOCK)
 WHERE c.site IN ('Macaubet'
 				,'Aoncash'
 				,'ITCBet'
-				,'Athena000'
+				--,'Athena000'
 				,'W88'
 				,'9bet'
 				,'3star88'

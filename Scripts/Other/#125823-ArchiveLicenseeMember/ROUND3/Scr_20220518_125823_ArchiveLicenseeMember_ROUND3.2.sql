@@ -88,7 +88,7 @@ WHERE c.site IN ('MAX88'
 				,'MTech'
 				,'mansion88'
 				,'alog'
-				,'spondemo'
+				--,'spondemo'
 				,'TLC'
 				,'HAIFA'
 				)
