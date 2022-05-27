@@ -19,8 +19,8 @@ ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 AS
 BEGIN
 	SET NOCOUNT ON
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
@@ -275,7 +275,6 @@ SELECT CustID,RoleID,srecommend
 FROM custInfo ci WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT CustID FROM #supers) AND ci.custid<=@max_custid 
 	AND roleid IN(2,3,4) AND ci.Enabled=1 AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
-
 DECLARE @BitOrder INT 
 SELECT @BitOrder= bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHERE SportType = 237 -- SportType
 
@@ -291,7 +290,7 @@ SELECT @srecommend = 0 ,@DoneSM = 0 , @DoneAgent = 0
 WHILE (1 = 1)
 BEGIN
 	SELECT @CustIDs = ''
-	IF NOT EXISTS(SELECT TOP 1 1 
+	IF EXISTS(SELECT TOP 1 1 
 				FROM #tmpSMA
 				WHERE isfinished = 0 AND srecommend = @srecommend
 				UNION 
@@ -300,36 +299,7 @@ BEGIN
 				WHERE isfinished = 0 AND srecommend = @srecommend
 			)
 	BEGIN
-		UPDATE TOP (1) #supers
-		SET isfinished = 1
-			,@srecommend = custid
-			,@currency = currency
-			,@DoneSM = 0
-			,@DoneAgent = 0	
-			,@Role  = 0		
-		WHERE isfinished = 0
-		
-		IF @@ROWCOUNT = 0 BREAK
-		SET @index = @index + 1
-		RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
-		
-		SELECT @StakeLevelID = StakeLevelID	
-		FROM dbo.Dep_StakeLevel WITH(NOLOCK)
-		WHERE ExchangeID = @currency AND GameTypeID = 5401 AND GameGroupID = 37
-		
-		SET @PT = 90.00	
-		
-		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-		SELECT @srecommend, ProductSettingID 
-		FROM Dep_ProductSetting dp WITH(NOLOCK) 
-		WHERE dp.ProductID = 60
-			AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
-			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
-	END
-	ELSE
-	BEGIN
-	
-	    UPDATE TOP (@batch) a
+		 UPDATE TOP (@batch) a
 		SET a.isfinished = 1
 		OUTPUT INSERTED.CustID INTO #tmpSMATemp(CustID)	
 		FROM #tmpSMA a	
@@ -367,14 +337,40 @@ BEGIN
 			END
 		END
 
-		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @CustIDs = @CustIDs, @RoleID = @Role, @StakeLevelID = @StakeLevelID, @PT = @PT,@BitOrder = @BitOrder,@srecommend = @srecommend,@target = @target	
-	
+		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @CustIDs = @CustIDs, @RoleID = @Role, @StakeLevelID = @StakeLevelID, @PT = @PT,@BitOrder = @BitOrder,@srecommend = @srecommend,@target = @target
+		
 		TRUNCATE TABLE #tmpCustTemp
 		TRUNCATE TABLE #tmpSMATemp
-		WAITFOR DELAY '00:00:00.280'
-		
+		WAITFOR DELAY '00:00:00.280'	
 	END
-
+	ELSE
+	BEGIN
+		UPDATE TOP (1) #supers
+		SET isfinished = 1
+			,@srecommend = custid
+			,@currency = currency
+			,@DoneSM = 0
+			,@DoneAgent = 0	
+			,@Role  = 0		
+		WHERE isfinished = 0
+		
+		IF @@ROWCOUNT = 0 BREAK
+		SET @index = @index + 1
+		RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+		
+		SELECT @StakeLevelID = StakeLevelID	
+		FROM dbo.Dep_StakeLevel WITH(NOLOCK)
+		WHERE ExchangeID = @currency AND GameTypeID = 5401 AND GameGroupID = 37
+		
+		SET @PT = 90.00	
+		
+		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
+		SELECT @srecommend, ProductSettingID 
+		FROM Dep_ProductSetting dp WITH(NOLOCK) 
+		WHERE dp.ProductID = 60
+			AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
+			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
+	   END
 END	
 
 DROP TABLE #supers	

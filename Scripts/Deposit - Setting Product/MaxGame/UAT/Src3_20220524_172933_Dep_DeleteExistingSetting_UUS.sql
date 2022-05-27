@@ -15,7 +15,7 @@ BEGIN
 	SET NOCOUNT ON
 
 	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN -- run at dbtrans only
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN

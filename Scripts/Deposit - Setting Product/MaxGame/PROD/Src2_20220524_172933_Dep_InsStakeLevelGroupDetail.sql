@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date: 20220524
-	Task:  Insert Setting StakeLevelGroupDetail [MaxGame]currency real - deposit RedmineID:#172933
+	Task:  Insert Setting StakeLevelGroupDetail [MaxGame] currency real - deposit RedmineID:#172933
 	DB: DBCust/CustDB
 	P/s : Step 2 Insert Setting StakeLevelGroupDetail
 */

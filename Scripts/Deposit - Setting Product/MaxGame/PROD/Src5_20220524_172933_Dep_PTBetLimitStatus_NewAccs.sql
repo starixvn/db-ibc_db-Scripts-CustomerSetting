@@ -1,34 +1,19 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210712
-	Task: Delete redundant and copy new setting newly created customer [Vgaming] currency INH - deposit RedmineID:#158105
+	Date: 20220524
+	Task: Delete redundant and copy new setting newly created customer MaxGame real currency - deposit RedmineID:#172933
 	DB: DBCUST/CustDB
 	
-	P/s : Step 5 Delete redundant and copy new setting newly created customer Vgaming Deposit
+	P/s : Step 5 Delete redundant and copy new setting newly created customer MaxGame Deposit
 */
 -- BEGIN STEP 5.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 USE CustDB
 GO
-ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
-(@maxcustID INT)
-AS
-BEGIN			
+
+	DECLARE @MaxCustID INT
 	
-	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductSettingDetail') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Agent') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('site') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
+	SELECT @MaxCustID = xxx
 
 	DECLARE @batch int = 3000
 	DECLARE @BitOrder INT 
@@ -39,7 +24,7 @@ BEGIN
 		SportType	SMALLINT, 
 		BetType		SMALLINT
 	)
-	INSERT INTO @SportBetType(SportType, BetType) VALUES (171, 3801)
+	INSERT INTO @SportBetType(SportType, BetType) VALUES (237, 5401)
 	
 	SELECT @BitOrder= st.bitmapOrder 
 	FROM Dep_ProductStatusProfile st WITH(NOLOCK) 
@@ -64,9 +49,9 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-			AND ((cs.site IN('11bet','12Bet','24AVIA','365online','368Cash','396Club','88Macao','9Club','ab6688','Abcasino','Ae88','AEUG','Barcelo9','BBIN3','bdtt','Comebet','Datang','Dawoo','Debet','DEWA','ECLBET','erhaozhan','Fabet','FB88','Five88','GGBOOK','GPIGAME','Hecbet','HL8','iBET','IBO','IGPTech','INSERTGAME','IONclub','KOKVN','loc','Lode88','Lucky88','mansion88','N8B','N8G','Nbet','OCMS','One88','OXbet','Red88','Saba789','Sin88','Sky88','Sunwin','SV88','Tripleone','V03','VN88','win365','wmcasino','XTDGT','Xtu168','YongBao','Zbet','Zowin','zt828','Aonslot','BananaTech','Bigwiner','K8VN','LLgaming','MSbet','OBGM','OBline','RICbet','XO88','ALPHA88','B24VN','FHLMSABA','Gaobet','Kzing2','ManCity','Mayayule','PKbet','TT128','Yunji')
-		AND ci.currency IN (20,51))--UUS,INH
-		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (51) )) --INH
+		AND ((cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+		AND ci.currency IN (20,2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,72))--RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,UUS,YNG
+		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96) )) --RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)
@@ -207,7 +192,7 @@ BEGIN
 			INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 			INNER JOIN #SMATemp s ON ci.srecommend = s.custid
-	WHERE dp.ProductID = 66 AND s.RoleID = 4
+	WHERE dp.ProductID = 60 AND s.RoleID = 4
 	
 		WHILE EXISTS(SELECT TOP 1 1 FROM #Dep_LicenseeProductSetting)
 	BEGIN	
@@ -250,9 +235,9 @@ BEGIN
 				   ,t.SportType
 				   ,t.BetType
 				   ,0 AS IsLive
-				   ,CASE WHEN a.RoleID = 4 THEN 93.00 ELSE 0 END AS SuperPT
-				   ,CASE WHEN a.RoleID IN (4,3) THEN 93.00 ELSE 0 END AS MasterPT
-				   ,CASE WHEN a.RoleID IN (4,2) THEN 93.00 ELSE 0 END AS AgentPT
+				   ,CASE WHEN a.RoleID = 4 THEN 90.00 ELSE 0 END AS SuperPT
+				   ,CASE WHEN a.RoleID IN (4,3) THEN 90.00 ELSE 0 END AS MasterPT
+				   ,CASE WHEN a.RoleID IN (4,2) THEN 90.00 ELSE 0 END AS AgentPT
 			FROM #SMABatch a WITH(NOLOCK)
 				CROSS APPLY @SportBetType t
 
@@ -272,7 +257,7 @@ BEGIN
 				   ,0 AS IsLive
 				   ,0 AS SuperPT
 				   ,0 AS MasterPT
-				   ,93.00 AS AgentPT
+				   ,90.00 AS AgentPT
 			FROM #SMABatch a WITH(NOLOCK)
 					CROSS APPLY @SportBetType t	
 			WHERE a.RoleID=2
@@ -317,7 +302,7 @@ BEGIN
 			   ,0 AS IsLive
 			   ,0 AS SuperPT
 			   ,0 AS MasterPT
-			   ,93.00 AS AgentPT
+			   ,90.00 AS AgentPT
 		FROM #MemberBatch a WITH(NOLOCK)
 				INNER JOIN Dep_CustSettingMode m WITH(NOLOCK) ON m.CustID=a.CustID
 				CROSS APPLY @SportBetType t
@@ -351,7 +336,7 @@ BEGIN
 	FROM #SMATemp temp 
 		 CROSS APPLY (	SELECT ProductSettingID 
 						FROM Dep_ProductSetting dp WITH(NOLOCK) 
-						WHERE dp.ProductID = 66
+						WHERE dp.ProductID = 60
 							AND dp.SettingType IN (4,1,8) -- Product Status, PT, StakeLevel
 						) st
 	WHERE temp.RoleID = 4
@@ -407,14 +392,14 @@ BEGIN
 	FROM #AllUsers A WITH (NOLOCK)
 	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID = A.CustID)
 	
-END		
-GO
--- END STEP 5.1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
-
--- BEGIN STEP 5.2: RUN THIS SCRIPT AT DBCUST SERVERS -----
---------------------------------------------------------------------------------------
-DECLARE @MaxCustID INT
-	
-SELECT @MaxCustID = xxx
-EXEC dbo.Acc_Dep_DynamicCustSetting_09 @MaxCustID=@MaxCustID
+	DROP TABLE #MemberTemp
+	DROP TABLE #SMATemp    
+	DROP TABLE #MemberBatch 
+	DROP TABLE #SMABatch    
+	DROP TABLE #Dep_CustPTSetting_AgentTemp
+	DROP TABLE #Dep_CustPTSetting_MemberTemp
+	DROP TABLE #Dep_CustPTGroupSetting_MemberTemp
+	DROP TABLE #Dep_CustStakeLevel_AgentTemp
+	DROP TABLE #Dep_CustStakeLevel_MemberTemp
+	DROP TABLE #Dep_LicenseeProductSettingTemp
+	DROP TABLE #supers

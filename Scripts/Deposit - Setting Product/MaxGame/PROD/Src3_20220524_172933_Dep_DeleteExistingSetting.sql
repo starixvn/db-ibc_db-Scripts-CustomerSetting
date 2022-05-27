@@ -1,11 +1,11 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date: 20210712
-	Task:  Insert Setting StakeLevelGroupDetail [Vgaming] currency INH - deposit RedmineID:#158105
+	Date: 20220524
+	Task:  Insert Setting StakeLevelGroupDetail [MaxGame] real currency - deposit RedmineID:#172933
 	DB: DBCUST/CustDB
 	
-	P/s : Step 3 Delete existing data saba.Club for all currency
+	P/s : Step 3 Delete existing data MaxGame for all currency
 */
 -- BEGIN STEP 3.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
@@ -14,8 +14,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DevDBcust')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
@@ -38,9 +38,9 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND ((cs.site IN('11bet','12Bet','24AVIA','365online','368Cash','396Club','88Macao','9Club','ab6688','Abcasino','Ae88','AEUG','Barcelo9','BBIN3','bdtt','Comebet','Datang','Dawoo','Debet','DEWA','ECLBET','erhaozhan','Fabet','FB88','Five88','GGBOOK','GPIGAME','Hecbet','HL8','iBET','IBO','IGPTech','INSERTGAME','IONclub','KOKVN','loc','Lode88','Lucky88','mansion88','N8B','N8G','Nbet','OCMS','One88','OXbet','Red88','Saba789','Sin88','Sky88','Sunwin','SV88','Tripleone','V03','VN88','win365','wmcasino','XTDGT','Xtu168','YongBao','Zbet','Zowin','zt828','Aonslot','BananaTech','Bigwiner','K8VN','LLgaming','MSbet','OBGM','OBline','RICbet','XO88','ALPHA88','B24VN','FHLMSABA','Gaobet','Kzing2','ManCity','Mayayule','PKbet','TT128','Yunji')
-		AND ci.currency IN (20,51))--UUS,INH
-		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (51) )) --INH
+		AND ((cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+		AND ci.currency IN (20,2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,72))--RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,UUS,YNG
+		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96) )) --RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT
 	ORDER BY ci.custid 
 	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
@@ -97,7 +97,7 @@ BEGIN
 			INNER JOIN Dep_ProductSetting dp WITH(NOLOCK) ON dl.ProductSettingID = dp.ProductSettingID
 			INNER JOIN CustInfo ci WITH(NOLOCK) ON dl.CustID = ci.custid
 			INNER JOIN #supers s ON ci.srecommend = s.custid
-	WHERE dp.ProductID = 66
+	WHERE dp.ProductID = 60
 
 	DECLARE @batch int = 3000
 	
