@@ -4,7 +4,7 @@
 	Task: UPDATE global SettingStatus = 0 (PROD) [Redmine: 172933]
 	DB: DBCUST/CustDB
 	
-	P/s : Step 7 UPDATE global SettingStatus MaxGame
+	P/s : Step 6 UPDATE global SettingStatus MaxGame
 */ 
 USE [CustDB]
 Go
