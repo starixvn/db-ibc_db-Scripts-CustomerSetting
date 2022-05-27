@@ -30,7 +30,7 @@ CREATE TABLE #tmpBuyBonus_Batch (
 INSERT INTO #tmpBuyBonus(StakeLevelID, GameTypeID)
 SELECT slg.StakeLevelID, slg.GameTypeID
 FROM StakeLevelGroupDetail slg WITH (NOLOCK)
-	INNER JOIN dbtxn.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=slg.GameTypeID
+	INNER JOIN dbacc.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=slg.GameTypeID
 WHERE bt.typedesc='BuyBonus'
 AND ((GameTypeID BETWEEN 6401 AND 6700)	OR
 	 (GameTypeID BETWEEN 4001 AND 4100) OR
@@ -76,7 +76,7 @@ TRUNCATE TABLE #tmpBuyBonus
 INSERT INTO #tmpBuyBonus(StakeLevelID, GameTypeID)
 SELECT dslg.StakeLevelID, dslg.GameTypeID
 FROM Dep_StakeLevelGroupDetail dslg WITH (NOLOCK)
-	INNER JOIN dbtxn.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=dslg.GameTypeID
+	INNER JOIN dbacc.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=dslg.GameTypeID
 WHERE bt.typedesc='BuyBonus'
 AND ((GameTypeID BETWEEN 6401 AND 6700)	OR
 	 (GameTypeID BETWEEN 4001 AND 4100) OR
