@@ -17,7 +17,7 @@ SELECT 5401 ,'1'      ,'1000'       ,1       ,1000       ,46   UNION ALL	--BND	-
 SELECT 5401 ,'2'      ,'20000'      ,2       ,20000      ,15   UNION ALL	--IN	--DDD, IDD, IDR, IN, IND
 SELECT 5401 ,'1'      ,'1000'       ,1       ,1000       ,12   UNION ALL	--GBP	--GBP
 SELECT 5401 ,'2'      ,'50000'      ,2       ,50000      ,51   UNION ALL	--INH	--INH
-SELECT 5401 ,'50'     ,'50000'      ,50      ,50000      ,61   UNION ALL	--INR	--INR
+SELECT 5401 ,'10'     ,'50000'      ,10      ,50000      ,61   UNION ALL	--INR	--INR
 SELECT 5401 ,'1'      ,'5000'       ,1       ,5000       ,56   UNION ALL	--PLN	--PLN
 SELECT 5401 ,'1'      ,'5000'       ,1       ,5000       ,2    UNION ALL	--RM	--RM
 SELECT 5401 ,'2'      ,'10000'      ,2       ,10000      ,13   UNION ALL	--RMB	--RMB
