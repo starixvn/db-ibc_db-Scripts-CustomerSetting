@@ -12,7 +12,7 @@ CREATE TABLE #Dep_StakeLevel_Temp ( GameTypeID INT,
 								
 INSERT INTO #Dep_StakeLevel_Temp(GameTypeID,ExchangeId)
 SELECT 5401,20 UNION ALL  -- UUS
-SELECT 5401,37 		      -- YNG
+SELECT 5401,72 		      -- YNG
 
 DELETE a
 FROM #Dep_StakeLevel_Temp a
