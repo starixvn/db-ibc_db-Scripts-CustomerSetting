@@ -24,6 +24,9 @@ SELECT 5401 ,'2'      ,'10000'      ,2       ,10000      ,13   UNION ALL	--RMB	-
 SELECT 5401 ,'10'     ,'50000'      ,10      ,50000      ,4    UNION ALL	--TB	--TB, THB
 SELECT 5401 ,'1'      ,'2000'       ,1       ,2000       ,3    UNION ALL	--US$	--US$, USDT, UT, YEN
 SELECT 5401 ,'1'      ,'2000'       ,1       ,2000       ,96   UNION ALL	--USDT	--US$, USDT, UT, YEN
+SELECT 5401 ,'1'      ,'1000'       ,1       ,1000       ,6    UNION ALL	--EURO	--EUR
+SELECT 5401 ,'1'      ,'2000'       ,1       ,2000       ,70   UNION ALL	--MKK	--MMK
+SELECT 5401 ,'1'      ,'2000'       ,1       ,2000       ,94   UNION ALL	--MK	--MMK
 SELECT 5401 ,'1000'   ,'1000000'    ,1000    ,1000000    ,45   				--Won	--WON
 
 UPDATE t
