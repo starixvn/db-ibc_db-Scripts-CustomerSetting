@@ -32,11 +32,13 @@ SELECT slg.StakeLevelID, slg.GameTypeID
 FROM StakeLevelGroupDetail slg WITH (NOLOCK)
 	INNER JOIN dbage.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=slg.GameTypeID
 WHERE bt.typedesc='BuyBonus'
-AND ((GameTypeID BETWEEN 6401 AND 6700)	OR
-		(GameTypeID BETWEEN 4001 AND 4100) OR
-		(GameTypeID BETWEEN 4101 AND 4300) OR
-		(GameTypeID BETWEEN 6701 AND 7000) OR
-		(GameTypeID BETWEEN 4301 AND 4600))
+AND ((GameTypeID BETWEEN 5800 AND 5999) OR	
+	 (GameTypeID BETWEEN 4001 AND 4100) OR 
+	 (GameTypeID BETWEEN 6401 AND 6700) OR
+	 (GameTypeID BETWEEN 4101 AND 4300) OR
+	 (GameTypeID BETWEEN 6701 AND 7000) OR
+	 (GameTypeID BETWEEN 4301 AND 4600))
+
 
 WHILE (1=1)
 BEGIN
@@ -57,7 +59,8 @@ BEGIN
 							  WHEN	(slg.GameTypeID BETWEEN 4001 AND 4100) OR
 									(slg.GameTypeID BETWEEN 4101 AND 4300) OR 
 									(slg.GameTypeID BETWEEN 6701 AND 7000) OR
-									(slg.GameTypeID BETWEEN 4301 AND 4600)
+									(slg.GameTypeID BETWEEN 4301 AND 4600) OR
+									(slg.GameTypeID BETWEEN 5800 AND 5999)
 																			THEN 100*MaxStake	--Macau Games, PP, SG
 																			ELSE MaxStake
 						END
@@ -78,11 +81,12 @@ SELECT dslg.StakeLevelID, dslg.GameTypeID
 FROM Dep_StakeLevelGroupDetail dslg WITH (NOLOCK)
 	INNER JOIN dbage.bodb02.dbo.bettype bt WITH (NOLOCK) ON bt.typeid=dslg.GameTypeID
 WHERE bt.typedesc='BuyBonus'
-AND ((GameTypeID BETWEEN 6401 AND 6700)	OR
-		(GameTypeID BETWEEN 4001 AND 4100) OR
-		(GameTypeID BETWEEN 4101 AND 4300) OR
-		(GameTypeID BETWEEN 6701 AND 7000) OR
-		(GameTypeID BETWEEN 4301 AND 4600))
+AND ((GameTypeID BETWEEN 5800 AND 5999) OR	
+	 (GameTypeID BETWEEN 4001 AND 4100) OR 
+	 (GameTypeID BETWEEN 6401 AND 6700) OR
+	 (GameTypeID BETWEEN 4101 AND 4300) OR
+	 (GameTypeID BETWEEN 6701 AND 7000) OR
+	 (GameTypeID BETWEEN 4301 AND 4600))
 
 WHILE (1=1)
 BEGIN
@@ -103,7 +107,8 @@ BEGIN
 							   WHEN	(dslg.GameTypeID BETWEEN 4001 AND 4100) OR
 									(dslg.GameTypeID BETWEEN 4101 AND 4300) OR 
 									(dslg.GameTypeID BETWEEN 6701 AND 7000) OR
-									(dslg.GameTypeID BETWEEN 4301 AND 4600)
+									(dslg.GameTypeID BETWEEN 4301 AND 4600) OR
+									(dslg.GameTypeID BETWEEN 5800 AND 5999)
 																			THEN 100*MaxStake	--Macau Games, PP, SG
 																			ELSE MaxStake
 						END
