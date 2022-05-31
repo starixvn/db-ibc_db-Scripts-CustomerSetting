@@ -30,7 +30,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -51,7 +51,7 @@ AS
 */
 RETURN
 	 SELECT value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 GO
 ------------
 /*
@@ -71,7 +71,7 @@ AS
 */
 RETURN
 	 SELECT DISTINCT value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 GO
 */
 ------------
@@ -98,7 +98,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -123,7 +123,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -152,7 +152,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -180,7 +180,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(@String,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
