@@ -49,9 +49,9 @@ GO
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.Enabled=1
-		AND ((cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
-		AND ci.currency IN (20,2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,72,6,70,94))--RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,UUS,YNG,EURO,MKK,MK
-		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,6,70,94) )) --RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,EURO,MKK,MK
+		AND ((cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+		AND ci.currency IN (2,3,4,6,12,13,15,20,45,46,51,56,61,70,72,94,96))--RM,US$,TB,EURO,GBP,RMB,IN,UUS,Won,BND,INH,PLN,INR,MKK,YNG,MK,USDT
+		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2,3,4,6,12,13,15,45,46,51,56,61,70,94,96))) --RM,US$,TB,EURO,GBP,RMB,IN,Won,BND,INH,PLN,INR,MKK,MK,USDT
 
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 	INSERT INTO #Dummy(CustID)

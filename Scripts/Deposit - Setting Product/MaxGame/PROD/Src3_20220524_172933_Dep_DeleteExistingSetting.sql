@@ -28,8 +28,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
 
-	DECLARE @sportType SMALLINT , @BetType SMALLINT
-	SELECT @sportType = 171 , @BetType = 3801
+	DECLARE @sportType SMALLINT , @BetType  SMALLINT
+	SELECT @sportType = 237 , @BetType = 5401
 	CREATE TABLE #supers (custid INT)
 
 	INSERT INTO #supers(custid)
@@ -38,9 +38,9 @@ BEGIN
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
-		AND ((cs.site IN('spondemo','Macaubet','Aoncash','ITCBet','Athena000','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
-		AND ci.currency IN (20,2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,72,6,70,94))--RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,UUS,YNG,EURO,MKK,MK
-		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2 ,3 ,4  ,12  ,13  ,155  ,46  ,51  ,56 ,61, 78 ,96,6,70,94) )) --RM, US$, TB, GBP, RMB, IN,Won, BND, INH, PLN,INR,EUR, USDT,EURO,MKK,MK
+		AND ((cs.site IN('Macaubet','Aoncash','ITCBet','9bet','M8bola','Q8bola','BE7','Unobet','Bolanation')
+		AND ci.currency IN (2,3,4,6,12,13,15,20,45,46,51,56,61,70,72,94,96))--RM,US$,TB,EURO,GBP,RMB,IN,UUS,Won,BND,INH,PLN,INR,MKK,YNG,MK,USDT
+		OR (cs.site IN('spondemo','Athena000')	AND ci.currency in (2,3,4,6,12,13,15,45,46,51,56,61,70,94,96))) --RM,US$,TB,EURO,GBP,RMB,IN,Won,BND,INH,PLN,INR,MKK,MK,USDT
 	ORDER BY ci.custid 
 	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
