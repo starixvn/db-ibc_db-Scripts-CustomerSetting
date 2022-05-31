@@ -36,8 +36,9 @@ BEGIN
 	CREATE TABLE #CustListTemp (CustID INT PRIMARY KEY)
 			    
 	INSERT INTO #CustList(custid)	
-	SELECT val
-	FROM dbo.strSplit(@CustIDs,',')
+	SELECT value
+	FROM STRING_SPLIT(@CustIDs,',')
+	WHERE value <> ''
 	
 	DECLARE @batch SMALLINT = 2500
 	DECLARE @SportBetType TABLE

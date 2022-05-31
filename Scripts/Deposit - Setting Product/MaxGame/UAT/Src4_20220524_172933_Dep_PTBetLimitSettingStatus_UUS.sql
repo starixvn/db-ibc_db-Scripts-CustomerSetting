@@ -38,6 +38,7 @@ BEGIN
 	INSERT INTO #CustList(custid)	
 	SELECT value
 	FROM STRING_SPLIT(@CustIDs,',')
+	WHERE value <> ''
 	
 	DECLARE @batch SMALLINT = 2500
 	DECLARE @SportBetType TABLE
