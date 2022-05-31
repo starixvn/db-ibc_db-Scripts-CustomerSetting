@@ -11,6 +11,6 @@ Go
 
 UPDATE [Dep_ProductSettingDetail] WITH(ROWLOCK,UPDLOCK)
 	SET SettingStatus=0
-WHERE SportType=5401
+WHERE SportType=237 AND BetType = 5401
 
---SELECT * FROM Dep_ProductSettingDetail S WITH (NOLOCK) where SportType = 5401
+--SELECT * FROM Dep_ProductSettingDetail S WITH (NOLOCK) where SportType=237 AND BetType = 5401
