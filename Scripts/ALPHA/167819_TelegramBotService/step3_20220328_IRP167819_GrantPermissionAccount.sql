@@ -11,4 +11,6 @@ GO
 GRANT SELECT ON custSub TO bodbDownlineNet
 GO
 
+USE bodb_Chatbot
+GO
 CREATE USER bodbAdminNet FOR LOGIN bodbAdminNet

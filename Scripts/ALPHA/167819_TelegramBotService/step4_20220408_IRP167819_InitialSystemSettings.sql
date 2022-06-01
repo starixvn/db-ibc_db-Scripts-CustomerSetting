@@ -5,19 +5,24 @@
 	DB: DBBOT/bodb_Chatbot
 */
 
-WITH T as (
-SELECT 1 FunctionID,'Outstanding' FunctionName,'Outstanding' FunctionKey,1 Type,'/os' Command,0 Status,1 [Order]
-UNION SELECT 2,'Balance Info','BalanceInfo',1,'/bal',0,2
-UNION SELECT 3,'Today Win Loss','TodayWinLoss',1,'/wl',0,3
-UNION SELECT 4,'Yesterday Win Loss','YesterdayWinLossReport',1,'/ywl',0,4
-UNION SELECT 5,'Yesterday Win Loss','YesterdayWinLoss',2,NULL,0,100
-UNION SELECT 6,'Personal Message','PersonalMessage',2,NULL,0, 101
-UNION SELECT 7,'Problem Account','ProblemAccount',2,NULL,0, 102
-UNION SELECT 8,'Member Win Loss Limit','MemberWinLossLimit',2,NULL,0,103
-UNION SELECT 9,'Change Password Alert','ChangePasswordAlert',2,NULL,0,104
-UNION SELECT 10,'Change Security Code Alert','ChangeSecurityCodeAlert',2,NULL,0,105
-UNION SELECT 11,'Abnormal Login Alert','AbnormalLoginAlert',2,NULL,0,106
-UNION SELECT 12,'Settings','Settings',3,'/settings',0,200)
+/*
+select 'UNION ALL SELECT ' FunctionID,',',''''+FunctionName+'''',',',''''+FunctionKey+'''',',',Type,',',''''+Command+'''',',',Status,',',[Order],',',Priority 
+from BotFunction
+*/
+;WITH T as (
+SELECT 	1	FunctionID,	'Outstanding'	FunctionName,	'Outstanding'	FunctionKey,	1	Type,	'/os'	Command,	0	Status,	1	[Order],	NULL Priority
+UNION ALL SELECT 	2	,	'Balance Info'	,	'BalanceInfo'	,	1	,	'/bal'	,	0	,	2	,	NULL
+UNION ALL SELECT 	3	,	'Today Win Loss'	,	'TodayWinLoss'	,	1	,	'/wl'	,	0	,	3	,	NULL
+UNION ALL SELECT 	4	,	'Yesterday Win Loss'	,	'YesterdayWinLossReport'	,	1	,	'/ywl'	,	0	,	4	,	NULL
+UNION ALL SELECT 	5	,	'Yesterday Win Loss'	,	'YesterdayWinLoss'	,	2	,	NULL	,	0	,	100	,	5
+UNION ALL SELECT 	6	,	'Personal Message'	,	'PersonalMessage'	,	2	,	NULL	,	0	,	101	,	4
+UNION ALL SELECT 	7	,	'Problem Account'	,	'ProblemAccount'	,	2	,	NULL	,	0	,	102	,	3
+UNION ALL SELECT 	8	,	'Member Win Loss Limit'	,	'MemberWinLossLimit'	,	2	,	NULL	,	0	,	103	,	1
+UNION ALL SELECT 	9	,	'Change Password Alert'	,	'ChangePasswordAlert'	,	2	,	NULL	,	0	,	104	,	NULL
+UNION ALL SELECT 	10	,	'Change Security Code Alert'	,	'ChangeSecurityCodeAlert'	,	2	,	NULL	,	0	,	105	,	NULL
+UNION ALL SELECT 	11	,	'Abnormal Login Alert'	,	'AbnormalLoginAlert'	,	2	,	NULL	,	0	,	106	,	2
+UNION ALL SELECT 	12	,	'Settings'	,	'Settings'	,	3	,	'/settings'	,	0	,	200	,	NULL
+)
 INSERT INTO [dbo].[BotFunction]
            ([FunctionID]
 		   ,[FunctionName]
@@ -25,7 +30,8 @@ INSERT INTO [dbo].[BotFunction]
            ,[Type]
            ,[Command]
            ,[Status]
-		   ,[Order])
+		   ,[Order]
+		   ,[Priority])
 SELECT [FunctionID]
 		,[FunctionName]
 	   ,[FunctionKey]
@@ -33,49 +39,55 @@ SELECT [FunctionID]
 	   ,[Command]
 	   ,[Status]
 	   ,[Order]
+	   ,[Priority]
 FROM T
 GO
 
 /*
-select 'UNINON SELECT ', ActionID, ',', ''''+ ActionName +''',', Type,',', ''''+Command+'''',',',FunctionID,',',ParentID,',',Status,',',IsEndAction
+select 'UNION ALL SELECT ', ActionID, ',', ''''+ REPLACE(ActionName,'''','''''') +''',', Type,',', ''''+Command+'''',',',FunctionID,',',ParentID,',',Status,',',IsEndAction
 from BotAction
 */
 ;WITH T AS (	
-SELECT 	1	ActionID,	'Outstanding' ActionName,	1	Type,	'/os' Command,	1	FunctionID,	0	ParentID,	0	Status,	0 IsEndAction
-UNION ALL SELECT 	2	,	'Balance Info',	1	,	'/bal',	2	,	0	,	0	,	0
-UNION ALL SELECT 	3	,	'Today Win Loss',	1	,	'/wl',	3	,	0	,	0	,	0
-UNION ALL SELECT 	4	,	'Yesterday Win Loss',	1	,	'/ywl',	4	,	0	,	0	,	0
-UNION ALL SELECT 	5	,	'Top 50 Outstanding',	1	,	'50',	1	,	1	,	0	,	1
-UNION ALL SELECT 	6	,	'Enter downline username',	1	,	'&lt;Username&gt;',	1	,	1	,	0	,	0
-UNION ALL SELECT 	7	,	'Top Downlines',	3	,	NULL,	1	,	1	,	0	,	1
-UNION ALL SELECT 	8	,	'Top X Outstanding',	1	,	'&lt;#&gt;',	1	,	1	,	0	,	0
-UNION ALL SELECT 	9	,	'Please enter your downline username to view Outstanding',	2	,	NULL,	1	,	6	,	0	,	1
-UNION ALL SELECT 	10	,	'How many Downlines you''d like to view Outstanding.\nChatbot supports listing up to 100 Downlines',	2	,	NULL,	1	,	8	,	0	,	1
-UNION ALL SELECT 	11	,	'Settings',	1	,	'/settings',	12	,	0	,	0	,	0
-UNION ALL SELECT 	12	,	'My Balance',	1	,	'm',	2	,	2	,	0	,	1
-UNION ALL SELECT 	13	,	'Enter downline username',	1	,	'&lt;Username&gt;',	2	,	2	,	0	,	0
-UNION ALL SELECT 	14	,	'Top Downlines',	3	,	NULL,	2	,	2	,	0	,	1
-UNION ALL SELECT 	15	,	'Top X Balance',	1	,	'&lt;#&gt;',	2	,	2	,	0	,	0
-UNION ALL SELECT 	16	,	'Please enter your downline username to view Balance',	2	,	NULL,	2	,	13	,	0	,	1
+SELECT 	1	ActionID,	'Outstanding' ActionName,	1	Type,	'/os'	Command,	1	FunctionID,	0	ParentID,	0	Status,	0 IsEndAction
+UNION ALL SELECT 	2	,	'Balance Info',	1	,	'/bal'	,	2	,	0	,	0	,	0
+UNION ALL SELECT 	3	,	'Today Win Loss',	1	,	'/wl'	,	3	,	0	,	0	,	0
+UNION ALL SELECT 	4	,	'Yesterday Win Loss',	1	,	'/ywl'	,	4	,	0	,	0	,	0
+UNION ALL SELECT 	5	,	'Top 50 Outstanding',	1	,	'50'	,	1	,	1	,	0	,	1
+UNION ALL SELECT 	6	,	'Enter downline username',	1	,	'&lt;Username&gt;'	,	1	,	1	,	0	,	0
+UNION ALL SELECT 	7	,	'Top Downlines',	3	,	NULL	,	1	,	1	,	0	,	1
+UNION ALL SELECT 	8	,	'Top X Outstanding',	1	,	'&lt;#&gt;'	,	1	,	1	,	0	,	0
+UNION ALL SELECT 	9	,	'Please enter your downline username to view Outstanding',	2	,	NULL	,	1	,	6	,	0	,	1
+UNION ALL SELECT 	10	,	'How many Downlines you''d like to view Outstanding.\nChatbot supports listing up to 100 Downlines',	2	,	NULL	,	1	,	8	,	0	,	1
+UNION ALL SELECT 	11	,	'Settings',	1	,	'/settings'	,	12	,	0	,	0	,	0
+UNION ALL SELECT 	12	,	'My Balance',	1	,	'm'	,	2	,	2	,	0	,	1
+UNION ALL SELECT 	13	,	'Enter downline username',	1	,	'&lt;Username&gt;'	,	2	,	2	,	0	,	0
+UNION ALL SELECT 	14	,	'Top Downlines',	3	,	NULL	,	2	,	2	,	0	,	1
+UNION ALL SELECT 	15	,	'Top X Balance',	1	,	'&lt;#&gt;'	,	2	,	2	,	0	,	0
+UNION ALL SELECT 	16	,	'Please enter your downline username to view Balance',	2	,	NULL	,	2	,	13	,	0	,	1
 UNION ALL SELECT 	17	,	'How many Downlines you''d like to view Balance.
-Chatbot supports listing up to 100 Downlines',	2	,	NULL,	2	,	15	,	0	,	1
-UNION ALL SELECT 	18	,	'My Today Win Loss',	1	,	'm',	3	,	3	,	0	,	1
-UNION ALL SELECT 	19	,	'Enter downline username',	1	,	'&lt;Username&gt;',	3	,	3	,	0	,	0
-UNION ALL SELECT 	20	,	'Top Downlines',	3	,	NULL,	3	,	3	,	0	,	1
-UNION ALL SELECT 	21	,	'Please enter your downline username to view Today Win Loss',	2	,	NULL,	3	,	19	,	0	,	1
-UNION ALL SELECT 	22	,	'My Yesterday Win Loss',	1	,	'm',	4	,	4	,	0	,	1
-UNION ALL SELECT 	23	,	'Enter downline username',	1	,	'&lt;Username&gt;',	4	,	4	,	0	,	0
-UNION ALL SELECT 	24	,	'Top Downlines',	3	,	NULL,	4	,	4	,	0	,	1
-UNION ALL SELECT 	25	,	'Please enter your downline username to view Yesterday Win Loss',	2	,	NULL,	4	,	23	,	0	,	1
-UNION ALL SELECT 	26	,	'Notifications',	1	,	NULL,	12	,	11	,	0	,	0
-UNION ALL SELECT 	27	,	'Yesterday Win Loss',	1	,	'5',	12	,	26	,	0	,	1
-UNION ALL SELECT 	28	,	'Personal Message',	1	,	'6',	12	,	26	,	0	,	1
-UNION ALL SELECT 	29	,	'Problem Account',	1	,	'7',	12	,	26	,	0	,	1
-UNION ALL SELECT 	30	,	'Member Win Loss Limit',	1	,	'8',	12	,	26	,	0	,	1
-UNION ALL SELECT 	31	,	'Change Password Alert',	1	,	'9',	12	,	26	,	0	,	1
-UNION ALL SELECT 	32	,	'Change Security Code Alert',	1	,	'10',	12	,	26	,	0	,	1
-UNION ALL SELECT 	33	,	'Abnormal Login Alert',	1	,	'11',	12	,	26	,	0	,	1
-UNION ALL SELECT 	34	,	'Stop Using Chatbot',	1	,	'stop',	12	,	11	,	0	,	1
+Chatbot supports listing up to 100 Downlines',	2	,	NULL	,	2	,	15	,	0	,	1
+UNION ALL SELECT 	18	,	'My Today Win Loss',	1	,	'm'	,	3	,	3	,	0	,	1
+UNION ALL SELECT 	19	,	'Enter downline username',	1	,	'&lt;Username&gt;'	,	3	,	3	,	0	,	0
+UNION ALL SELECT 	20	,	'Top Downlines',	3	,	NULL	,	3	,	3	,	0	,	1
+UNION ALL SELECT 	21	,	'Please enter your downline username to view Today Win Loss',	2	,	NULL	,	3	,	19	,	0	,	1
+UNION ALL SELECT 	22	,	'My Yesterday Win Loss',	1	,	'm'	,	4	,	4	,	0	,	1
+UNION ALL SELECT 	23	,	'Enter downline username',	1	,	'&lt;Username&gt;'	,	4	,	4	,	0	,	0
+UNION ALL SELECT 	24	,	'Top Downlines',	3	,	NULL	,	4	,	4	,	0	,	1
+UNION ALL SELECT 	25	,	'Please enter your downline username to view Yesterday Win Loss',	2	,	NULL	,	4	,	23	,	0	,	1
+UNION ALL SELECT 	26	,	'Notifications',	1	,	NULL	,	12	,	11	,	0	,	0
+UNION ALL SELECT 	27	,	'Yesterday Win Loss',	1	,	'5'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	28	,	'Personal Message',	1	,	'6'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	29	,	'Problem Account',	1	,	'7'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	30	,	'Member Win Loss Limit',	1	,	'8'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	31	,	'Change Password Alert',	1	,	'9'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	32	,	'Change Security Code Alert',	1	,	'10'	,	12	,	26	,	0	,	1
+UNION ALL SELECT 	34	,	'Language',	1	,	NULL	,	12	,	11	,	0	,	0
+UNION ALL SELECT 	35	,	'English',	1	,	'en-US'	,	12	,	34	,	0	,	1
+UNION ALL SELECT 	36	,	'ChineseTraditional',	1	,	'zh-TW'	,	12	,	34	,	0	,	1
+UNION ALL SELECT 	37	,	'ChineseSimplified',	1	,	'zh-CN'	,	12	,	34	,	0	,	1
+UNION ALL SELECT 	38	,	'Thai',	1	,	'th-TH'	,	12	,	34	,	0	,	1
+UNION ALL SELECT 	39	,	'Vietnamese',	1	,	'vi-VN'	,	12	,	34	,	0	,	1
+UNION ALL SELECT 	40	,	'Stop Using Chatbot',	1	,	'stop'	,	12	,	11	,	0	,	1
 )
 INSERT INTO [dbo].[BotAction]
            ([ActionID]
@@ -96,7 +108,10 @@ SELECT [ActionID]
            ,[IsEndAction]
 FROM T
 GO
-
+ 
+/*
+select 'UNION ALL SELECT ',''''+ResourceName+'''',',',''''+ResourceKey+'''',',',''''+Language+'''',',',''''+REPLACE(Value,'''','''''')+'''' from BotResource
+*/ 
 ;WITH T AS (
 	SELECT 	'Action_Description'	ResourceName,	'1'	ResourceKey,	'en-US'	Language,	'Open Outstanding Menu' Value
 UNION ALL SELECT 	'Action_Description'	,	'12'	,	'en-US'	,	' Get your Balance Info Report'
@@ -138,8 +153,14 @@ UNION ALL SELECT 	'Action_Name'	,	'30'	,	'en-US'	,	'Member Win Loss Limit'
 UNION ALL SELECT 	'Action_Name'	,	'31'	,	'en-US'	,	'Change Password Alert'
 UNION ALL SELECT 	'Action_Name'	,	'32'	,	'en-US'	,	'Change Security Code Alert'
 UNION ALL SELECT 	'Action_Name'	,	'33'	,	'en-US'	,	'Abnormal Login Alert'
-UNION ALL SELECT 	'Action_Name'	,	'34'	,	'en-US'	,	'Stop Using Chatbot'
+UNION ALL SELECT 	'Action_Name'	,	'34'	,	'en-US'	,	'Language'
+UNION ALL SELECT 	'Action_Name'	,	'35'	,	'en-US'	,	'English'
+UNION ALL SELECT 	'Action_Name'	,	'36'	,	'en-US'	,	'繁體中文'
+UNION ALL SELECT 	'Action_Name'	,	'37'	,	'en-US'	,	'简体中文'
+UNION ALL SELECT 	'Action_Name'	,	'38'	,	'en-US'	,	'ภาษาไทย'
+UNION ALL SELECT 	'Action_Name'	,	'39'	,	'en-US'	,	'Tiếng Việt'
 UNION ALL SELECT 	'Action_Name'	,	'4'	,	'en-US'	,	'Yesterday Win Loss'
+UNION ALL SELECT 	'Action_Name'	,	'40'	,	'en-US'	,	'Stop Using Chatbot'
 UNION ALL SELECT 	'Action_Name'	,	'5'	,	'en-US'	,	'Top 50 Outstanding'
 UNION ALL SELECT 	'Action_Name'	,	'6'	,	'en-US'	,	'Enter downline username'
 UNION ALL SELECT 	'Action_Name'	,	'8'	,	'en-US'	,	'Top X Outstanding'
@@ -172,4 +193,14 @@ UNION ALL SELECT 	'Function_Name'	,	'9'	,	'en-US'	,	'Change Password Alert'
 INSERT INTO BotResource(ResourceName,ResourceKey,Language,Value)
 SELECT ResourceName,ResourceKey,Language,Value
 FROM T
+GO
 
+INSERT INTO [dbo].[Bot]
+           ([Name]
+           ,[System]
+           ,[Accesstoken]
+           ,[Status]
+           ,[IsTest])
+SELECT 'AlphaUATBot', 'IBCBET', '5553798743:AAHhsEvP9pJ1knjpLvPeR5815wrpyscMmck',1,1
+UNION SELECT 'AlphaUATBot', 'IBCIndo', '5553798743:AAHhsEvP9pJ1knjpLvPeR5815wrpyscMmck',1,1
+UNION SELECT 'AlphaUATBot', '789Y', '5553798743:AAHhsEvP9pJ1knjpLvPeR5815wrpyscMmck',1,1

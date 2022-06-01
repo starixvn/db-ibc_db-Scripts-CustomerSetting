@@ -73,6 +73,7 @@ CREATE TABLE [dbo].[BotFunction](
 	[Command] [VARCHAR](50),	
 	[Status] [TINYINT] NULL,
 	[Order] [SMALLINT],
+	[Priority] [TINYINT],
  CONSTRAINT [PK_BotFunction] PRIMARY KEY CLUSTERED 
 (
 	[FunctionID] ASC
@@ -127,7 +128,7 @@ CREATE TABLE [dbo].[CustBotAction](
 	[Status] TINYINT
  CONSTRAINT [PK_CustBotAction] PRIMARY KEY CLUSTERED 
 (
-	[LogID] ASC
+	[LogActionID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
 ) ON [DATA]
 GO
@@ -167,7 +168,7 @@ CREATE TABLE [dbo].[BotResource](
 	[ResourceName] [VARCHAR](100),
 	[ResourceKey] [VARCHAR](100),
 	[Language]  [VARCHAR](10),	
-	[Value] [VARCHAR](1000)) ON DATA
+	[Value] [NVARCHAR](1000)) ON DATA
 GO
 	
 CREATE CLUSTERED INDEX [CIX_BotResource] ON BotResource

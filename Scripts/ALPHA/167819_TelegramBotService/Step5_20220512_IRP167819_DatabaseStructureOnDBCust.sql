@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20220512@Johnson
-	Task: Database structure change for Member Win Loss Limit notification service [#RedmineID:#165682]
+	Task: Database structure change for Member Win Loss Limit notification service [#RedmineID:#167819]
 	DB: DBCUST/CustDB
 */
 
