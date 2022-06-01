@@ -30,7 +30,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -51,29 +51,8 @@ AS
 */
 RETURN
 	 SELECT value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 GO
-------------
-/*
-EXEC sp_rename 'strSplit_Key','strSplit_Key_BU171831'
-GO
-CREATE FUNCTION [dbo].[strSplit_Key]( @string nvarchar( 4000), @splitter char( 1) )
-RETURNS TABLE
-AS
-/*
-		Created: 20220517@Eden
-		Task: strSplit_Key
-		DB: DBCUST-CustDB
-		
-		Revisions:
-			- 20220517@Eden: DBCUST - modify sp syntax to adapt with the SQL Server upgrade to 2019 [Redmine: #171831]  
-		Parameter's Explanation:
-*/
-RETURN
-	 SELECT DISTINCT value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
-GO
-*/
 ------------
 USE bodb_Licensee
 GO
@@ -98,7 +77,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -123,7 +102,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -152,7 +131,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
@@ -180,7 +159,7 @@ RETURN
 	WITH TMP AS(
 	 SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS id, 
 		value AS val 
-	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter) 
+	 FROM string_split(CASE WHEN CHARINDEX(@splitter, @string, LEN(@string)) = LEN(@string) AND @string <> '' THEN   SUBSTRING(@string, 1, LEN(@string) - 1) ELSE @string END,@splitter)
 	 )
 	 SELECT id, id as [rank],val FROM tmp
 GO
