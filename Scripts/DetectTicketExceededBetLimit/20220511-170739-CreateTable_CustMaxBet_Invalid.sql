@@ -21,6 +21,8 @@ CREATE TABLE [dbo].[CustMaxBet_Invalid](
 	[Currency] [tinyint],
 	[Stake] [money],
 	[Remark] [varchar](100),
+	[IsSendLettalkTest] [bit],
+	[IsSendEmailTest] [bit],
 	[IsSendLettalk] [bit],
 	[IsSendEmail] [bit]
  CONSTRAINT [PK_CustMaxBet_Invalid] PRIMARY KEY CLUSTERED 
