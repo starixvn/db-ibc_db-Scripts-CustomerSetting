@@ -8,11 +8,13 @@
 USE Nap_UserControl
 GO
 
+DELETE FROM AdminOTP WHERE Creator = 10278938
+
 CREATE TABLE #CustBatch (CustId INT)
 SELECT DISTINCT a.CustID, 0 AS IsFinished
 INTO  #CustList
 FROM CustDB.dbo.custInfo a WITH(NOLOCK)
-WHERE a.roleid > 4 AND a.Enabled=1 AND a.username LIKE 'STARIX' + '%'
+WHERE a.roleid > 4 AND a.Enabled=1 AND a.username LIKE '%' + 'STARIX' + '%'
 
 WHILE (1=1)
 BEGIN
