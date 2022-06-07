@@ -15,8 +15,8 @@ CREATE TABLE [dbo].[CustWinLossReachLimit_History](
 	[Credit] [MONEY],			
 	[MaxLossLimit] [MONEY],
 	[MaxWinLimit] [MONEY],
-	[WinPercent] [SMALLMONEY],
-	[LossPercent] [SMALLMONEY],
+	[WinPercent] [MONEY],
+	[LossPercent] [MONEY],
 	[CreatedDate] [DATETIME],
  CONSTRAINT [PK_CustWinLossReachLimit_History] PRIMARY KEY CLUSTERED 
 (

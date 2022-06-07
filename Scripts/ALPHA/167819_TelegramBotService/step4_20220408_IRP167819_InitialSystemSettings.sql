@@ -110,7 +110,7 @@ FROM T
 GO
  
 /*
-select 'UNION ALL SELECT ',''''+ResourceName+'''',',',''''+ResourceKey+'''',',',''''+Language+'''',',',''''+REPLACE(Value,'''','''''')+'''' from BotResource
+select 'UNION ALL SELECT ',''''+ResourceName+'''',',',''''+ResourceKey+'''',',',''''+Language+'''',',','''N'+REPLACE(Value,'''','''''')+'''' from BotResource
 */ 
 ;WITH T AS (
 	SELECT 	'Action_Description'	ResourceName,	'1'	ResourceKey,	'en-US'	Language,	'Open Outstanding Menu' Value
