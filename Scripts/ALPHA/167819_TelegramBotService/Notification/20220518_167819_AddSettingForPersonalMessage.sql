@@ -10,7 +10,7 @@ INSERT INTO BotSystemSetting (ServiceName, SettingName, Value)
 SELECT ServiceName, SettingName, Value
 FROM (
 	VALUES 
-		('PersonalMessage','BatchSize','1000')
+		('PersonalMessage','BatchSize','5000')
 		,('PersonalMessage','JobStatus','Completed')
 		,('PersonalMessage','JobStatusUAT','Completed')
 		,('PersonalMessage','LastRuntime','2022-05-01')
@@ -23,9 +23,9 @@ FROM (
 		,('PersonalMessage','SendLastNotificationId','0')
 		,('PersonalMessage','SendLastNotificationIdUAT','0')
 		,('PersonalMessage','SyncSettingPRO','0')
-		,('SendNotification','BatchSize','1000')
-		,('SendNotification','ServiceFlag','0')
-		,('SendNotification','ServiceFlagUAT','0')
+		,('SendNotification','BatchSize','100')
+		,('SendNotification','ServiceFlag','1')
+		,('SendNotification','ServiceFlagUAT','1')
 		,('SendNotification','SyncSettingPRO','0')
 		
 		,('YesterdayWinLoss','BatchSize','1000')
