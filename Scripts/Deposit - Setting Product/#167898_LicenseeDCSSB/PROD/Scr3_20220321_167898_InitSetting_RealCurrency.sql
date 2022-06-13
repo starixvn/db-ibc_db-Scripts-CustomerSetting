@@ -1071,13 +1071,14 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 GROUP BY ci.srecommend
 ORDER BY ci.srecommend
 
-DECLARE @super_cnt INT, @index INT = 0
+DECLARE @super_cnt INT, @index INT = 0, @msgtmp nvarchar(200)
+DECLARE @startRun DATETIME, @endRun DATETIME, @duration	INT
 
 SET @super_cnt = (SELECT COUNT(*) FROM #supers )
 
 DECLARE @msg_batch nvarchar(200) = 'SuperID: %d, MinCustID: %d, MaxCustID: %d.'
 
-DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d, duration = '
 
 DECLARE @msg_total nvarchar(200) = 'Total of supers: %d.'
 
@@ -1085,17 +1086,15 @@ RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
+	SELECT @startRun = GETDATE()
+
 	UPDATE TOP (1) #supers
 	SET isfinished = 1
 		,@srecommend = custid
 		,@LineCnt = LineCnt		
 	WHERE isfinished = 0
 	
-	IF @@ROWCOUNT = 0 BREAK
-
-	SET @index = @index + 1
-	
-	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
+	IF @@ROWCOUNT = 0 BREAK	
 
 	IF @LineCnt > @BatchNum -- execute by batch to void SP timeout error
 	BEGIN
@@ -1144,6 +1143,13 @@ BEGIN
 	BEGIN
 		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target
 	END
+
+	SET @index = @index + 1
+	SELECT @endRun = GETDATE()
+		, @duration = DATEDIFF(MILLISECOND, @startRun, @endRun)
+
+	SELECT @msgtmp = @msg  + CAST(@duration AS VARCHAR(20))
+	RAISERROR (@msgtmp, 0, 1,@index, @srecommend) WITH NOWAIT
 
 	WAITFOR DELAY '00:00:00.280'			
 END	
