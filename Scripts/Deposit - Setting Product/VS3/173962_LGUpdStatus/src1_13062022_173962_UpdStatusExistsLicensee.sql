@@ -4,7 +4,6 @@
 	Date: 20220613
 	Task: Enable and disable product Leap Gaming Virtual Sports 3 for EXISTS licensees [Redmine: 173962]
 	DB: DBCUST/CustDB
-	
 	P/s : Step 1 Enable and disable product Leap Gaming Virtual Sports 3 for EXISTS licensees
 */
 -- BEGIN STEP 1.1: Deploy this SP at DBCUST.CustDB, Run only in the FIRST running
