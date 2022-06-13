@@ -24,17 +24,24 @@ CREATE TABLE dbo.CustBotNotification (
 	,UserID			INT	NOT NULL
 	,FunctionID		SMALLINT NOT NULL
 	,Message		NVARCHAR(MAX) NULL
-	,Status			VARCHAR(20) NULL
+	,Status			VARCHAR(20) NOT NULL
 	,Description	NVARCHAR(1000) NULL
 	,CreatedDate	DATETIME NULL
 	,UpdatedTime	DATETIME NULL
 	,Retry			TINYINT NULL
 	,ReferenceId	BIGINT NULL
-	 CONSTRAINT PK_Notification PRIMARY KEY NONCLUSTERED 
+	 CONSTRAINT PK_Notification PRIMARY KEY CLUSTERED 
 	(
 		NotificationID ASC
+		,FunctionID ASC
+		,Status ASC
 	) ON [DATA]
 ) ON [DATA] 
 GO
 
-CREATE CLUSTERED INDEX CIX_NotificationID_Status_FunctionID ON CustBotNotification (NotificationID, Status, FunctionID)
+CREATE NONCLUSTERED INDEX [IX_UpdatedTime] ON [dbo].[CustBotNotification]
+(	
+	[UpdatedTime] ASC	
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
+GO
+

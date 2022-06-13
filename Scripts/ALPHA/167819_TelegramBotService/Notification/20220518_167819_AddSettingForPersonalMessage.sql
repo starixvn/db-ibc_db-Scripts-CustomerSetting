@@ -57,5 +57,20 @@ FROM (
 		,('ProblemAccount','SendLastNotificationId','0')
 		,('ProblemAccount','SendLastNotificationIdUAT','0')
 		,('ProblemAccount','SyncSettingPRO','0')
+		
+		
+		,('MemberWinLossLimit','BatchSize','1000')
+		,('MemberWinLossLimit','JobStatus','Completed')
+		,('MemberWinLossLimit','JobStatusUAT','Completed')
+		,('MemberWinLossLimit','LastRuntime','2022-06-19 23:05:00')
+		,('MemberWinLossLimit','LastRuntimeUAT','2022-06-19 23:05:00')
+		,('MemberWinLossLimit','ServiceFlag','1')
+		,('MemberWinLossLimit','ServiceFlagUAT','1')
+		,('MemberWinLossLimit','MaxLogID','0')
+		,('MemberWinLossLimit','MaxLogIDUAT','100033')
+		,('MemberWinLossLimit','IncludeRealCurrencyUAT','0')
+		,('MemberWinLossLimit','SendLastNotificationId','0')
+		,('MemberWinLossLimit','SendLastNotificationIdUAT','3476275')
+		,('MemberWinLossLimit','SyncSettingPRO','0')
 ) n (ServiceName, SettingName, Value)
 
