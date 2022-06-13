@@ -80,14 +80,7 @@ BEGIN
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 
-	IF @site = 'SKY1688'
-	BEGIN
-		SET @Disable = 0
-	END
-	ELSE
-	BEGIN
-		SET @Disable = 1
-	END
+	SET @Disable = 1
 	--------------------------------------------Enable Status--------------------------------------------------
 	CREATE TABLE #AllUsers (CustID int PRIMARY KEY)
 	CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary(32), bitmapIsDisabled binary(32))
@@ -175,7 +168,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1
 	AND cs.site IN('11bet','368Cash','568Win','9wickets','AG','ALPHA88','BOG22','Boma365','BSSB168','DF88','directapi','FLC','GLive','GMASTER','GPIgame','ID88',
 	'Kzing2','KZO41','LEGaming','MANBETX','MARS','MAX88','mtegames','NFBI','NLDSports','Ole777','One88','OneSports','OSUSDT','Royal','ROYAL88','SBObet',
-	'shengboyun','TGXI','TH3','V03','VN88','W88','Xtu168','Zbet','ZFRT132','ZFRT186','SKY1688')   
+	'shengboyun','TGXI','TH3','V03','VN88','W88','Xtu168','Zbet','ZFRT132','ZFRT186')   
 	AND ci.currency IN (2,3,4,5,6,12,13,15,20,45,46,50,51,61,70,92,94,96,97,121)  -- RM,US$,TB,HK$,EURO,GBP,RMB,IN,UUS,Won,BND,CAN,INH,INR,MKK,HID,MK,USDT,BDT,PKR
 ORDER BY ci.custid 
 
@@ -234,7 +227,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1
 	AND cs.site IN('11bet','368Cash','568Win','9wickets','AG','ALPHA88','BOG22','Boma365','BSSB168','DF88','directapi','FLC','GLive','GMASTER','GPIgame','ID88',
 	'Kzing2','KZO41','LEGaming','MANBETX','MARS','MAX88','mtegames','NFBI','NLDSports','Ole777','One88','OneSports','OSUSDT','Royal','ROYAL88','SBObet',
-	'shengboyun','TGXI','TH3','V03','VN88','W88','Xtu168','Zbet','ZFRT132','ZFRT186','SKY1688')    
+	'shengboyun','TGXI','TH3','V03','VN88','W88','Xtu168','Zbet','ZFRT132','ZFRT186')    
 	AND ci.currency IN (2,3,4,5,6,12,13,15,20,45,46,50,51,61,70,92,94,96,97,121)  -- RM,US$,TB,HK$,EURO,GBP,RMB,IN,UUS,Won,BND,CAN,INH,INR,MKK,HID,MK,USDT,BDT,PKR
 ORDER BY ci.custid 
 
