@@ -29,8 +29,8 @@ BEGIN
 	RETURN
 	
 	CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
-	CREATE TABLE #CustComm_temp (CustID INT, recommend INT)	
-	DECLARE @CustComm_TempBatch TABLE (CustID INT, recommend INT)
+	CREATE TABLE #CustComm_temp (CustID INT, recommend INT,CGComm DECIMAL(9,8),AdvantComm DECIMAL(9,8),AdvantMiniComm DECIMAL(9,8),VS3Comm DECIMAL(9,8))	
+	DECLARE @CustComm_TempBatch TABLE (CustID INT, recommend INT,CGComm DECIMAL(9,8),AdvantComm DECIMAL(9,8),AdvantMiniComm DECIMAL(9,8),VS3Comm DECIMAL(9,8))
 
 	DECLARE @BatchCust TABLE (CustID INT)
 
@@ -53,8 +53,8 @@ BEGIN
 	AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
 	AND roleid=3
 
-	INSERT INTO #CustComm_temp(CustID,recommend)
-	SELECT co.custid,ci.recommend
+	INSERT INTO #CustComm_temp(CustID,recommend,CGComm,AdvantComm,AdvantMiniComm,VS3Comm)
+	SELECT co.custid,ci.recommend,co.CGComm,co.AdvantComm,co.AdvantMiniComm,co.VS3Comm
 	FROM bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
 		INNER JOIN Custinfo ci WITH(NOLOCK) ON co.CustID = ci.custid
 	WHERE LicenseeID = 19    -- Macau
@@ -62,12 +62,12 @@ BEGIN
 		AND ci.roleid = 1
 		AND ci.Enabled = 1
 		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
-
-	
+		
 WHILE (1=1)
 BEGIN
 	DELETE TOP (5000) c 
-	OUTPUT DELETED.CustID,deleted.recommend INTO @CustComm_TempBatch(CustID,recommend)
+	OUTPUT DELETED.CustID,deleted.recommend,deleted.CGComm,deleted.AdvantComm,deleted.AdvantMiniComm,deleted.VS3Comm 
+	INTO @CustComm_TempBatch(CustID,recommend,CGComm,AdvantComm,AdvantMiniComm,VS3Comm)
 	FROM #CustComm_temp c 
 		
 	IF @@ROWCOUNT = 0
@@ -78,8 +78,6 @@ BEGIN
 	FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN @CustComm_TempBatch cb 
 			ON cb.CustID = cs.CustID
-		INNER JOIN bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
-			ON cs.CustID = co.CustID
 		CROSS APPLY (SELECT Sporttype, Bettype
 						FROM #SporttypeBettype				
 						) AS tmp
@@ -88,10 +86,10 @@ BEGIN
 			AND gr.SportType = tmp.Sporttype
 			AND gr.BetType = tmp.Sporttype
 	WHERE cs.IsGroupedComm = 1
-		AND ((co.CGComm <> gr.PlayerDiscount AND gr.SportType = 167 and gr.BetType = 7301) -- CG Comm
-			OR (co.AdvantComm <> gr.PlayerDiscount AND gr.SportType = 172 and gr.BetType = 7701) -- Advant Comm
-			OR (co.AdvantMiniComm <> gr.PlayerDiscount AND gr.SportType = 174 and gr.BetType = 7801) -- AdvantMini Comm
-			OR (co.VS3Comm  <> gr.PlayerDiscount AND gr.SportType = 231 and gr.BetType = 5301 )) -- VS3 Comm
+		AND ((cb.CGComm <> gr.PlayerDiscount AND gr.SportType = 167 and gr.BetType = 7301) -- CG Comm
+			OR (cb.AdvantComm <> gr.PlayerDiscount AND gr.SportType = 172 and gr.BetType = 7701) -- Advant Comm
+			OR (cb.AdvantMiniComm <> gr.PlayerDiscount AND gr.SportType = 174 and gr.BetType = 7801) -- AdvantMini Comm
+			OR (cb.VS3Comm  <> gr.PlayerDiscount AND gr.SportType = 231 and gr.BetType = 5301 )) -- VS3 Comm
 
 	--> insert comm on private tables if not exists (get all sport offered from agent)
 	INSERT INTO Dep_CustDiscountSetting_Member (
@@ -121,15 +119,14 @@ BEGIN
 	
 	--> UpdatePlayer comm on private Tables (insert if not exist)
 	UPDATE dcs_m
-	SET dcs_m.PlayerDiscount = CASE WHEN dcs_m.SportType = 167 and dcs_m.BetType = 7301  THEN co.CGComm
-									WHEN dcs_m.SportType = 172 and dcs_m.BetType = 7701  THEN co.AdvantComm
-									WHEN dcs_m.SportType = 174 and dcs_m.BetType = 7801  THEN co.AdvantMiniComm
-								ELSE VS3Comm END
+	SET dcs_m.PlayerDiscount = CASE WHEN dcs_m.SportType = 167 and dcs_m.BetType = 7301  THEN cb.CGComm
+									WHEN dcs_m.SportType = 172 and dcs_m.BetType = 7701  THEN cb.AdvantComm
+									WHEN dcs_m.SportType = 174 and dcs_m.BetType = 7801  THEN cb.AdvantMiniComm
+									WHEN dcs_m.SportType = 231 and dcs_m.BetType = 5301  THEN cb.VS3Comm
+								ELSE dcs_m.PlayerDiscount END
 	FROM Dep_CustSettingMode c WITH (NOLOCK)
 		INNER JOIN @CustComm_TempBatch cb 
 			ON c.CustID = cb.CustID
-		INNER JOIN bodb_Licensee.dbo.licenseeCustComm co WITH(NOLOCK) 
-			ON c.CustID = co.CustID
 		CROSS APPLY (SELECT Sporttype, Bettype
 						FROM #SporttypeBettype				
 						) AS tmp
