@@ -6,7 +6,7 @@
 */
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
-ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
+ALTER PROCEDURE [dbo].[Acc_ExecRep_Cust_09]
  	 @srecommend INT	
 	, @target VARCHAR(20)
 	
@@ -194,7 +194,7 @@ BEGIN
 	
 	RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 	
-	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @target = @target
+	EXEC dbo.[Acc_ExecRep_Cust_09] @srecommend = @srecommend, @target = @target
 				
 	WAITFOR DELAY '00:00:00.280'			
 END	
