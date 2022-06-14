@@ -62,82 +62,83 @@ BEGIN
 		AND ci.roleid = 1
 		AND ci.Enabled = 1
 		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
+		AND ci.custid <= @max_custid
 		
-WHILE (1=1)
-BEGIN
-	DELETE TOP (5000) c 
-	OUTPUT DELETED.CustID,deleted.recommend,deleted.CGComm,deleted.AdvantComm,deleted.AdvantMiniComm,deleted.VS3Comm 
-	INTO @CustComm_TempBatch(CustID,recommend,CGComm,AdvantComm,AdvantMiniComm,VS3Comm)
-	FROM #CustComm_temp c 
+	WHILE (1=1)
+	BEGIN
+		DELETE TOP (5000) c 
+		OUTPUT DELETED.CustID,deleted.recommend,deleted.CGComm,deleted.AdvantComm,deleted.AdvantMiniComm,deleted.VS3Comm 
+		INTO @CustComm_TempBatch(CustID,recommend,CGComm,AdvantComm,AdvantMiniComm,VS3Comm)
+		FROM #CustComm_temp c 
 		
-	IF @@ROWCOUNT = 0
-		BREAK;
+		IF @@ROWCOUNT = 0
+			BREAK;
 		
-	UPDATE cs
-	SET isGroupedComm = 0
-	FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
-		INNER JOIN @CustComm_TempBatch cb 
-			ON cb.CustID = cs.CustID
-		CROSS APPLY (SELECT Sporttype, Bettype
-						FROM #SporttypeBettype				
-						) AS tmp
-		INNER JOIN Dep_CustDiscountGroupSetting_Member gr WITH(NOLOCK)
-			ON cb.recommend = gr.AgentID
-			AND gr.SportType = tmp.Sporttype
-			AND gr.BetType = tmp.Sporttype
-	WHERE cs.IsGroupedComm = 1
-		AND ((cb.CGComm <> gr.PlayerDiscount AND gr.SportType = 167 and gr.BetType = 7301) -- CG Comm
-			OR (cb.AdvantComm <> gr.PlayerDiscount AND gr.SportType = 172 and gr.BetType = 7701) -- Advant Comm
-			OR (cb.AdvantMiniComm <> gr.PlayerDiscount AND gr.SportType = 174 and gr.BetType = 7801) -- AdvantMini Comm
-			OR (cb.VS3Comm  <> gr.PlayerDiscount AND gr.SportType = 231 and gr.BetType = 5301 )) -- VS3 Comm
+		UPDATE cs
+		SET isGroupedComm = 0
+		FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
+			INNER JOIN @CustComm_TempBatch cb 
+				ON cb.CustID = cs.CustID
+			CROSS APPLY (SELECT Sporttype, Bettype
+							FROM #SporttypeBettype				
+							) AS tmp
+			INNER JOIN Dep_CustDiscountGroupSetting_Member gr WITH(NOLOCK)
+				ON cb.recommend = gr.AgentID
+				AND gr.SportType = tmp.Sporttype
+				AND gr.BetType = tmp.Sporttype
+		WHERE cs.IsGroupedComm = 1
+			AND ((cb.CGComm <> gr.PlayerDiscount AND gr.SportType = 167 and gr.BetType = 7301) -- CG Comm
+				OR (cb.AdvantComm <> gr.PlayerDiscount AND gr.SportType = 172 and gr.BetType = 7701) -- Advant Comm
+				OR (cb.AdvantMiniComm <> gr.PlayerDiscount AND gr.SportType = 174 and gr.BetType = 7801) -- AdvantMini Comm
+				OR (cb.VS3Comm  <> gr.PlayerDiscount AND gr.SportType = 231 and gr.BetType = 5301 )) -- VS3 Comm
 
-	--> insert comm on private tables if not exists (get all sport offered from agent)
-	INSERT INTO Dep_CustDiscountSetting_Member (
-		CustID
-		,SportType
-		,BetType
-		,PlayerDiscount
-		,AgentDiscount
-		,MasterDiscount
-		,SuperDiscount
-	)
-	SELECT c.CustID, ag.Sporttype, ag.BetType,ag.PlayerDiscount,ag.AgentDiscount,ag.MasterDiscount,ag.SuperDiscount
-	FROM Dep_CustSettingMode c WITH (NOLOCK)
-		INNER JOIN @CustComm_TempBatch cb 
-			ON c.CustID = cb.CustID
-		CROSS APPLY (SELECT Sporttype, Bettype
-						FROM #SporttypeBettype				
-						) AS tmp
-		INNER JOIN Dep_CustDiscountGroupSetting_Member ag WITH(NOLOCK)
-			ON cb.recommend = ag.AgentID AND ag.SportType = tmp.Sporttype AND ag.BetType = tmp.Bettype
-		LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
-			ON dcs_m.CustID = c.CustID 
-			and dcs_m.SportType = ag.Sporttype
-			AND dcs_m.BetType = ag.BetType			
-	WHERE c.IsGroupedComm = 0 
-		AND dcs_m.custid IS NULL
+		--> insert comm on private tables if not exists (get all sport offered from agent)
+		INSERT INTO Dep_CustDiscountSetting_Member (
+			CustID
+			,SportType
+			,BetType
+			,PlayerDiscount
+			,AgentDiscount
+			,MasterDiscount
+			,SuperDiscount
+		)
+		SELECT c.CustID, ag.Sporttype, ag.BetType,ag.PlayerDiscount,ag.AgentDiscount,ag.MasterDiscount,ag.SuperDiscount
+		FROM Dep_CustSettingMode c WITH (NOLOCK)
+			INNER JOIN @CustComm_TempBatch cb 
+				ON c.CustID = cb.CustID
+			CROSS APPLY (SELECT Sporttype, Bettype
+							FROM #SporttypeBettype				
+							) AS tmp
+			INNER JOIN Dep_CustDiscountGroupSetting_Member ag WITH(NOLOCK)
+				ON cb.recommend = ag.AgentID AND ag.SportType = tmp.Sporttype AND ag.BetType = tmp.Bettype
+			LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
+				ON dcs_m.CustID = c.CustID 
+				and dcs_m.SportType = ag.Sporttype
+				AND dcs_m.BetType = ag.BetType			
+		WHERE c.IsGroupedComm = 0 
+			AND dcs_m.custid IS NULL
 	
-	--> UpdatePlayer comm on private Tables (insert if not exist)
-	UPDATE dcs_m
-	SET dcs_m.PlayerDiscount = CASE WHEN dcs_m.SportType = 167 and dcs_m.BetType = 7301  THEN cb.CGComm
-									WHEN dcs_m.SportType = 172 and dcs_m.BetType = 7701  THEN cb.AdvantComm
-									WHEN dcs_m.SportType = 174 and dcs_m.BetType = 7801  THEN cb.AdvantMiniComm
-									WHEN dcs_m.SportType = 231 and dcs_m.BetType = 5301  THEN cb.VS3Comm
-								ELSE dcs_m.PlayerDiscount END
-	FROM Dep_CustSettingMode c WITH (NOLOCK)
-		INNER JOIN @CustComm_TempBatch cb 
-			ON c.CustID = cb.CustID
-		CROSS APPLY (SELECT Sporttype, Bettype
-						FROM #SporttypeBettype				
-						) AS tmp
-		INNER JOIN Dep_CustDiscountSetting_Member dcs_m WITH (ROWLOCK,UPDLOCK) 
-			ON dcs_m.CustID = c.CustID 
-			and dcs_m.SportType = tmp.Sporttype
-			AND dcs_m.BetType = tmp.Bettype			
-	WHERE c.IsGroupedComm = 0
+		--> UpdatePlayer comm on private Tables (insert if not exist)
+		UPDATE dcs_m
+		SET dcs_m.PlayerDiscount = CASE WHEN dcs_m.SportType = 167 and dcs_m.BetType = 7301  THEN cb.CGComm
+										WHEN dcs_m.SportType = 172 and dcs_m.BetType = 7701  THEN cb.AdvantComm
+										WHEN dcs_m.SportType = 174 and dcs_m.BetType = 7801  THEN cb.AdvantMiniComm
+										WHEN dcs_m.SportType = 231 and dcs_m.BetType = 5301  THEN cb.VS3Comm
+									ELSE dcs_m.PlayerDiscount END
+		FROM Dep_CustSettingMode c WITH (NOLOCK)
+			INNER JOIN @CustComm_TempBatch cb 
+				ON c.CustID = cb.CustID
+			CROSS APPLY (SELECT Sporttype, Bettype
+							FROM #SporttypeBettype				
+							) AS tmp
+			INNER JOIN Dep_CustDiscountSetting_Member dcs_m WITH (ROWLOCK,UPDLOCK) 
+				ON dcs_m.CustID = c.CustID 
+				and dcs_m.SportType = tmp.Sporttype
+				AND dcs_m.BetType = tmp.Bettype			
+		WHERE c.IsGroupedComm = 0
 			
-	DELETE FROM @CustComm_TempBatch
-END
+		DELETE FROM @CustComm_TempBatch
+	END
 	
 	DROP TABLE #Dummy
 	DROP TABLE #CustComm_temp
