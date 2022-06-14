@@ -102,15 +102,18 @@
 			,MasterDiscount
 			,SuperDiscount
 		)
-		SELECT c.CustID, ag.Sporttype, ag.BetType,ag.PlayerDiscount,ag.AgentDiscount,ag.MasterDiscount,ag.SuperDiscount
+		SELECT c.CustID, ag.Sporttype, ag.BetType,
+		CASE WHEN ag.SportType = 167 and ag.BetType = 7301  THEN cb.CGComm
+				WHEN ag.SportType = 172 and ag.BetType = 7701  THEN cb.AdvantComm
+				WHEN ag.SportType = 174 and ag.BetType = 7801  THEN cb.AdvantMiniComm
+				WHEN ag.SportType = 231 and ag.BetType = 5301  THEN cb.VS3Comm
+			ELSE ag.PlayerDiscount END AS PlayerDiscount,
+		ag.AgentDiscount,ag.MasterDiscount,ag.SuperDiscount
 		FROM Dep_CustSettingMode c WITH (NOLOCK)
 			INNER JOIN @CustComm_TempBatch cb 
 				ON c.CustID = cb.CustID
-			CROSS APPLY (SELECT Sporttype, Bettype
-							FROM #SporttypeBettype				
-							) AS tmp
 			INNER JOIN Dep_CustDiscountGroupSetting_Member ag WITH(NOLOCK)
-				ON cb.recommend = ag.AgentID AND ag.SportType = tmp.Sporttype AND ag.BetType = tmp.Bettype
+				ON cb.recommend = ag.AgentID
 			LEFT JOIN Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
 				ON dcs_m.CustID = c.CustID 
 				and dcs_m.SportType = ag.Sporttype
