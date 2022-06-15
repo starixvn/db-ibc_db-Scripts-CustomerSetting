@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20220614@Johnson 
+	Created: 20220615@Tacy
 	Task: Insert CanSee Cash Out basketball for All credit sites on UAT
 	DB: DBCUST/CustDB	
 */ 
