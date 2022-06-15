@@ -17,15 +17,9 @@ FROM dbo.Site s WITH(NOLOCK)
 WHERE s.isActive = 1 AND s.isLicensee = 0
 AND siteid IN (487,11,35)
 
-DELETE FROM ProductLaunchedSiteCurrency WHERE SportType = @Sporttype
-
-INSERT INTO ProductLaunchedSiteCurrency (SportType, Currency, SiteID, IsLaunched, IsTest, BetType, LaunchedLevel)
-SELECT @Sporttype AS SportType, 0 AS Currency, s.siteid AS SiteID, 0 AS IsLaunched, 0 AS IsTest, 1, 0
-FROM dbo.Site s WITH(NOLOCK)
-WHERE s.isActive = 1 AND s.isLicensee = 0
-
 UPDATE ps
-SET ps.IsLaunched = 1
+SET ps.IsLaunched = 1,
+	currency = 0
 FROM dbo.ProductLaunchedSiteCurrency ps WITH (ROWLOCK,UPDLOCK)
 	INNER JOIN #OfferedSites s ON s.siteid = ps.SiteID
 WHERE SportType = @Sporttype
