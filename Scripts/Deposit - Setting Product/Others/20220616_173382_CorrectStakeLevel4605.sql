@@ -26,8 +26,7 @@ BEGIN
 		AND s.islicensee = 1
 		AND ci.Enabled = 1
 		AND c.currency IN (SELECT ExchangeId FROM exchange WITH(NOLOCK)
-							WHERE currency IN ('RM','KHR','PLN','USDT','US$','AUD','MMK','MKK','CHF','UUS','BND','YUN','RMB','DKK','NOK', 'SEK', 'IN', 'TB', 'Won','INH','Euro'
-							,'INR','RUB','GBP','JPY'))
+							WHERE currency IN ('RM','KHR','PLN','USDT','US$','AUD','MMK','MKK','CHF','UUS','BND','YUN','RMB','DKK','NOK', 'SEK', 'IN', 'TB', 'Won','INH','Euro','INR','RUB','GBP','JPY','BDT', 'BRL', 'PKR'))
 		--AND s.Site NOT IN ('Athena000')
 		AND EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting l WITH(NOLOCK)
 					WHERE productSettingID = 34
