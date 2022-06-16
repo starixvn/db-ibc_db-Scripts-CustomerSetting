@@ -5,7 +5,6 @@
 		DB: DBCUST/CustDB
 	*/
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
-	@target VARCHAR(20)
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -13,10 +12,7 @@ BEGIN
 	CREATE TABLE #InitialStake (StakeLevelID int,siteid int,currency tinyint,isfinished bit default(0))
 	CREATE TABLE #StakeTemp (StakeLevelID int)
 
-	DECLARE @srecommend INT , @max_custid INT , @Bettype  INT 
-
-	SELECT @max_custid = xxx
-
+	DECLARE @srecommend INT , @Bettype  INT 
 	SET  @Bettype = 4605
 	-- licensee exists Soccer Mines
 	INSERT INTO #SiteOffer(siteid,currency )
@@ -24,11 +20,11 @@ BEGIN
 	FROM customer c WITH (NOLOCK) 
 		INNER JOIN site s WITH (NOLOCK) ON c.site = s.site
 		INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
-		INNER JOIN Dep_CustStakeLevel_Agent csa WITH (NOLOCK) ON c.custid = ci.custid AND csa.SportType = 245 AND csa.BetType = @Bettype
+		INNER JOIN Dep_CustStakeLevel_Agent csa WITH (NOLOCK) ON c.custid = ci.custid 
+								AND csa.SportType = 245 AND csa.BetType = @Bettype
 	WHERE c.roleid = 4  
 		AND s.islicensee = 1
 		AND ci.Enabled = 1
-		AND c.custid <= @max_custid
 		AND c.currency IN (SELECT ExchangeId FROM exchange WITH(NOLOCK)
 							WHERE currency IN ('RM','KHR','PLN','USDT','US$','AUD','MMK','MKK','CHF','UUS','BND','YUN','RMB','DKK','NOK', 'SEK', 'IN', 'TB', 'Won','INH','Euro'
 							,'INR','RUB','GBP','JPY'))
@@ -78,13 +74,9 @@ GO
 -- END STEP 1.1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 1.2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
+-- BEGIN STEP 1.1: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-EXEC Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
-
--- BEGIN STEP 1.3: RUN THIS SCRIPT AT DBCUST -----
---------------------------------------------------------------------------------------
-EXEC Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'
+EXEC Acc_Dep_DynamicCustSetting_09
 
 
 
