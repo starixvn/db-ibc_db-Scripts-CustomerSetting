@@ -4,7 +4,11 @@
 		Task: Correct data stakelevel from Soccer Mines [Redmine: #172671]
 		DB: DBCUST/CustDB
 	*/
-
+ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
+	@target VARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON
 	CREATE TABLE #SiteOffer (siteid int,currency tinyint)
 	CREATE TABLE #InitialStake (StakeLevelID int,siteid int,currency tinyint,isfinished bit default(0))
 	CREATE TABLE #StakeTemp (StakeLevelID int)
@@ -43,9 +47,9 @@
 	LEFT JOIN #SiteOffer so ON a.siteid = so.siteid AND a.currency = so.currency
 	WHERE so.siteid IS NOT NULL
 
-	SELECT * FROM #InitialStake a
-	LEFT JOIN #SiteOffer so ON a.siteid = so.siteid AND a.currency = so.currency
-	WHERE so.siteid IS NULL
+	--SELECT * FROM #InitialStake a
+	--LEFT JOIN #SiteOffer so ON a.siteid = so.siteid AND a.currency = so.currency
+	--WHERE so.siteid IS NULL
 
 	DECLARE @batch int = 3000
 	
@@ -69,6 +73,18 @@
 	DROP TABLE #InitialStake
 	DROP TABLE #SiteOffer
 	DROP TABLE #StakeTemp
+END	
+GO
+-- END STEP 1.1: DEPLOY THIS SP @DBCUST.CustDB --------
+------------------------------------------------------	
+
+-- BEGIN STEP 1.2: RUN THIS SCRIPT AT REPLICATED SERVERS -----
+--------------------------------------------------------------------------------------
+EXEC Acc_Dep_DynamicCustSetting_09 @target = 'REPLICATED'
+
+-- BEGIN STEP 1.3: RUN THIS SCRIPT AT DBCUST -----
+--------------------------------------------------------------------------------------
+EXEC Acc_Dep_DynamicCustSetting_09 @target = 'DBCUST'
 
 
 
