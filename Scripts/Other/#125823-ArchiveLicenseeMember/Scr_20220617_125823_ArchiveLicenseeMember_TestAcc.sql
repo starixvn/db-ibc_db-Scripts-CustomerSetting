@@ -2,26 +2,29 @@
 /*
     Created: Eden@20220617
     Task: archive some UUS members : [#125823]
-		SampleSite$webtest01	65163073
-		SampleSite$webtest02	65163080
-		SampleSite$webtest03	65163095
-		SampleSite$webtest04	65163098
-		SampleSite$webtest05	65163103
-		SampleSite$webtest06	65163107
-		SampleSite$webtest07	65163113
-		SampleSite$webtest08	65163116
-		SampleSite$webtest09	65163120
-		SampleSite$webtest10	65163124
-		SampleSite$webtest11	65163126
-		SampleSite$webtest12	65163129
-		SampleSite$webtest13	65163134
-		SampleSite$webtest14	65163136
-		SampleSite$webtest15	65163139
-		SampleSite$webtest16	65163143
-		SampleSite$webtest17	65163147
-		SampleSite$webtest18	65163150
-		SampleSite$webtest19	65163156
-		SampleSite$webtest20	65163161
+		CustID		Username			Username2
+		60101581	SampleSiteUUS01149	SampleSite$autotest01
+		60101582	SampleSiteUUS01150	SampleSite$autotest02
+		60101583	SampleSiteUUS01151	SampleSite$autotest03
+		60101584	SampleSiteUUS01152	SampleSite$autotest04
+		60101585	SampleSiteUUS01153	SampleSite$autotest05
+		35195578	SampleSiteUUS01001	SampleSite$qatest01
+		35195579	SampleSiteUUS01002	SampleSite$qatest02
+		35195580	SampleSiteUUS01003	SampleSite$qatest03
+		35195581	SampleSiteUUS01004	SampleSite$qatest04
+		35195582	SampleSiteUUS01005	SampleSite$qatest05
+		35195583	SampleSiteUUS01006	SampleSite$qatest06
+		35195584	SampleSiteUUS01007	SampleSite$qatest07
+		35195585	SampleSiteUUS01008	SampleSite$qatest08
+		35195586	SampleSiteUUS01009	SampleSite$qatest09
+		35195587	SampleSiteUUS01010	SampleSite$qatest10
+		35195588	SampleSiteUUS01011	SampleSite$qatest11
+		35195589	SampleSiteUUS01012	SampleSite$qatest12
+		35195590	SampleSiteUUS01013	SampleSite$qatest13
+		35195591	SampleSiteUUS01014	SampleSite$qatest14
+		35195592	SampleSiteUUS01015	SampleSite$qatest15
+
+
 
 
 
@@ -47,26 +50,26 @@ FROM Customer c WITH(NOLOCK)
 		ON bal.recommend = c.recommend
 		AND bal.username like '%ClearBal'
 WHERE c.custid IN (
-	 65163073	--SampleSite$webtest01
-	,65163080	--SampleSite$webtest02
-	,65163095	--SampleSite$webtest03
-	,65163098	--SampleSite$webtest04
-	,65163103	--SampleSite$webtest05
-	,65163107	--SampleSite$webtest06
-	,65163113	--SampleSite$webtest07
-	,65163116	--SampleSite$webtest08
-	,65163120	--SampleSite$webtest09
-	,65163124	--SampleSite$webtest10
-	,65163126	--SampleSite$webtest11
-	,65163129	--SampleSite$webtest12
-	,65163134	--SampleSite$webtest13
-	,65163136	--SampleSite$webtest14
-	,65163139	--SampleSite$webtest15
-	,65163143	--SampleSite$webtest16
-	,65163147	--SampleSite$webtest17
-	,65163150	--SampleSite$webtest18
-	,65163156	--SampleSite$webtest19
-	,65163161	--SampleSite$webtest20
+		60101581	--SampleSiteUUS01149	SampleSite$autotest01
+		,60101582	--SampleSiteUUS01150	SampleSite$autotest02
+		,60101583	--SampleSiteUUS01151	SampleSite$autotest03
+		,60101584	--SampleSiteUUS01152	SampleSite$autotest04
+		,60101585	--SampleSiteUUS01153	SampleSite$autotest05
+		,35195578	--SampleSiteUUS01001	SampleSite$qatest01
+		,35195579	--SampleSiteUUS01002	SampleSite$qatest02
+		,35195580	--SampleSiteUUS01003	SampleSite$qatest03
+		,35195581	--SampleSiteUUS01004	SampleSite$qatest04
+		,35195582	--SampleSiteUUS01005	SampleSite$qatest05
+		,35195583	--SampleSiteUUS01006	SampleSite$qatest06
+		,35195584	--SampleSiteUUS01007	SampleSite$qatest07
+		,35195585	--SampleSiteUUS01008	SampleSite$qatest08
+		,35195586	--SampleSiteUUS01009	SampleSite$qatest09
+		,35195587	--SampleSiteUUS01010	SampleSite$qatest10
+		,35195588	--SampleSiteUUS01011	SampleSite$qatest11
+		,35195589	--SampleSiteUUS01012	SampleSite$qatest12
+		,35195590	--SampleSiteUUS01013	SampleSite$qatest13
+		,35195591	--SampleSiteUUS01014	SampleSite$qatest14
+		,35195592	--SampleSiteUUS01015	SampleSite$qatest15
 )
 AND c.currency = 20
 
