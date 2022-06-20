@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
     Created: Eden@20220617
-    Task: archive UUS members of SampleSite: [#125823]
+    Task: archive UUS members of Test1607: [#125823]
 		custid		username			username2
 		53553810	Test1607UUS01001	Test1607$qatest01
 		53553811	Test1607UUS01002	Test1607$qatest02
