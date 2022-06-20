@@ -2,6 +2,28 @@
 /*
     Created: Eden@20220617
     Task: archive UUS members of SampleSite: [#125823]
+		custid		username			username2
+		53553810	Test1607UUS01001	Test1607$qatest01
+		53553811	Test1607UUS01002	Test1607$qatest02
+		53553813	Test1607UUS01003	Test1607$qatest03
+		53553815	Test1607UUS01004	Test1607$qatest04
+		53553817	Test1607UUS01005	Test1607$qatest05
+		53553818	Test1607UUS01006	Test1607$qatest06
+		53553819	Test1607UUS01007	Test1607$qatest07
+		53553820	Test1607UUS01008	Test1607$qatest08
+		53553822	Test1607UUS01009	Test1607$qatest09
+		53553823	Test1607UUS01010	Test1607$qatest10
+		53553824	Test1607UUS01011	Test1607$qatest11
+		53553825	Test1607UUS01012	Test1607$qatest12
+		53553826	Test1607UUS01013	Test1607$qatest13
+		53553827	Test1607UUS01014	Test1607$qatest14
+		53553828	Test1607UUS01015	Test1607$qatest15
+		60105845	Test1607UUS01026	Test1607$autotest01
+		60105846	Test1607UUS01027	Test1607$autotest02
+		60105847	Test1607UUS01028	Test1607$autotest03
+		60105849	Test1607UUS01029	Test1607$autotest04
+		60105850	Test1607UUS01030	Test1607$autotest05
+
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
 		Step 2 : Archive Deposit Member - Step 2: Clear Balance and CustInfo (DBTXN) - job
 		Step 3 : Archive Deposit Member - Step 3: Archive CustSetting (DB05) - job
@@ -10,152 +32,62 @@
 
 ---------------------------Step 1 (DBCUST/CUSTDB) : Insert members to waiting list -------------------------------
 USE CustDB
+SELECT   c.[CustID]
+		,[ArchivedDate] = GETDATE()
+		,[Username] =  c.username
+		,[Username2] = c.username2
+		,[Recommend] = c.recommend
+		,[ClosingBalance] = CAST(0 AS MONEY)
+		,[CustIDBalanceDummy] = bal.custid
+		,[Status] = 'waiting'
+INTO #Member
+FROM Customer c WITH(NOLOCK)
+	INNER JOIN Customer bal WITH(NOLOCK) 
+		ON bal.recommend = c.recommend
+		AND bal.username like '%ClearBal'
+WHERE c.custid IN (
+		 53553810	--Test1607UUS01001	Test1607$qatest01
+		,53553811	--Test1607UUS01002	Test1607$qatest02
+		,53553813	--Test1607UUS01003	Test1607$qatest03
+		,53553815	--Test1607UUS01004	Test1607$qatest04
+		,53553817	--Test1607UUS01005	Test1607$qatest05
+		,53553818	--Test1607UUS01006	Test1607$qatest06
+		,53553819	--Test1607UUS01007	Test1607$qatest07
+		,53553820	--Test1607UUS01008	Test1607$qatest08
+		,53553822	--Test1607UUS01009	Test1607$qatest09
+		,53553823	--Test1607UUS01010	Test1607$qatest10
+		,53553824	--Test1607UUS01011	Test1607$qatest11
+		,53553825	--Test1607UUS01012	Test1607$qatest12
+		,53553826	--Test1607UUS01013	Test1607$qatest13
+		,53553827	--Test1607UUS01014	Test1607$qatest14
+		,53553828	--Test1607UUS01015	Test1607$qatest15
+		,60105845	--Test1607UUS01026	Test1607$autotest01
+		,60105846	--Test1607UUS01027	Test1607$autotest02
+		,60105847	--Test1607UUS01028	Test1607$autotest03
+		,60105849	--Test1607UUS01029	Test1607$autotest04
+		,60105850	--Test1607UUS01030	Test1607$autotest05
+)
+AND c.currency = 20
+
+--Update ClosingBalance
+UPDATE #Member 
+SET [ClosingBalance] = b.MemberBalance
+FROM #Member
+INNER JOIN (
+	SELECT custid, ISNULL(SUM(winlost-actual_stake+playercomm),0) as MemberBalance
+	FROM DBACC.bodb02.dbo.transfer WITH(NOLOCK)
+	WHERE custid IN (SELECT custid FROM #Member)
+	GROUP BY custid
+	) b ON #Member.custid = b.custid
+
+INSERT INTO [dbo].[Dep_Customer_Archived]([CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status])
+SELECT [CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status]
+FROM #Member
+
+--SELECT * FROM [Dep_Customer_Archived](NOLOCK) WHERE status = 'waiting'
+
+DROP TABLE #Member
 GO
---> Delete waiting agents before new scan
-SELECT CustID
-INTO #TempDeleted
-FROM Dep_Customer_Archived WITH(NOLOCK) 
-WHERE status = 'waiting'
-
-DELETE d
-FROM #TempDeleted t
-	INNER JOIN  Dep_Customer_Archived d WITH(ROWLOCK)  
-		ON t.CustID = d.CustID
--------------------------------------
-
-DECLARE @MinBalance money = 1000000000
-		,@Mindays INT = 0
-
-CREATE TABLE #TempAgents (CustID INT PRIMARY KEY)
-
-INSERT INTO #TempAgents
-SELECT c.custid
-FROM customer c(NOLOCK) 
-WHERE c.site IN ('SampleSite')
-	AND c.roleid = 2
-	AND c.currency = 20
-	AND c.username NOT LIKE '%ACC%'
-	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
-
-DECLARE @tmpClearBalCustID INT, 
-        @ErrCode           INT           = 0, 
-        @ErrMsg            NVARCHAR(200) = '', 
-        @CreatorID         INT           = 10278938, 
-        @IP                VARCHAR(50)   = '0.0.0.0', 
-        @Pass              VARCHAR(100)  = '8058095B7DDB08A608811097E5DB8D', 
-        @KenoListDummy     VARCHAR(MAX)  = '<products><product Bettype="1501" MaxBet="0" MinBet="0" MaxPerMatch="0" IsDisable="1" sPositionTaking="0" mPositionTaking="0" aPositionTaking="0"></product></products>', 
-        @tmpDumUserName    VARCHAR(30), 
-        @AgentID      INT
-
-SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status,c.username AS Agent
-INTO #Dep_Customer_Archived_Config
-FROM custInfo c WITH(NOLOCK)
-	INNER JOIN Customer cu WITH(NOLOCK) ON c.custid = cu.custid
-	OUTER APPLY (	SELECT TOP 1 Custid 
-					FROM custInfo ClearBal WITH(NOLOCK) 
-					WHERE ClearBal.recommend = c.recommend
-						AND ClearBal.roleid = 1
-						AND ClearBal.username LIKE '%ClearBal'
-						) ClearBal
-WHERE c.srecommend IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.custid IN ( SELECT custid FROM #TempAgents)
-
-CREATE CLUSTERED INDEX ix_TmpDep_Customer_Archived_Config_recommend ON #Dep_Customer_Archived_Config(recommend)
-
---> Insert new dummy clearbal if not exists yet
-WHILE 1 = 1
-BEGIN
-	SELECT @AgentID = null, @tmpClearBalCustID = null, @tmpDumUserName = null, @ErrMsg = '',@ErrCode = 0
-
-	SELECT TOP(1) @AgentID = Recommend, @tmpDumUserName = Agent + 'ClearBal'
-	FROM #Dep_Customer_Archived_Config
-	WHERE CustIDBalanceDummy IS NULL
-
-	IF @@ROWCOUNT = 0
-		BREAK
-
-	
-	EXEC Acc_Dep_CustomerInsMember_Ag @custid=@tmpClearBalCustID OUTPUT,
-		@creator=@creatorID,@username=@tmpDumUserName,@userpwd=@Pass,@recommend=@AgentID,@DisableNumber=1,
-		@MinBetv1=0,@MaxBetv1=0,@MaxPerMatchv1=0,
-		@MinBetv2=0,@MaxBetv2=0,@MaxPerMatchv2=0,
-		@MinBetv3=0,@MaxBetv3=0,@MaxPerMatchv3=0,
-		@MinBetv5=0,@MaxBetv5=0,@MaxPerMatchv5=0,
-		@MinBetv8=0,@MaxBetv8=0,@MaxPerMatchv8=0,
-		@MinBetv10=0,@MaxBetv10=0,@MaxPerMatchv10=0,
-		@MinBetv11=0,@MaxBetv11=0,@MaxPerMatchv11=0,					
-		@MinBetv99=0,@MaxBetv99=0,@MaxPerMatchv99=0,
-		@MinBetv1MP= 0,@MaxBetv1MP=0,@MaxPerMatchv1MP=0,
-		@MinBetv99mp=0,@MaxBetv99mp=0,@MaxPerMatchv99mp=0,
-		@MinBetv161=0,@MaxBetv161=0,@MaxPerMatchv161=0,@MaxPerBallv161=0,
-		@v1apositiontaking_1=0,@v1apositiontaking_2=0,@v1apositiontaking_3=0,@v1apositiontaking_4=0,@v1apositiontaking_5=0,@v1apositiontaking_6=0,
-		@v1apositiontaking_7=0,@v1apositiontaking_8=0,@v1apositiontaking_9=0,@v1apositiontaking_10=0,@v1alivepositiontaking_1=0,@v1alivepositiontaking_3=0,
-		@v1alivepositiontaking_7=0,@v1alivepositiontaking_8=0,
-		@v2apositiontaking_1=0,@v2apositiontaking_2=0,@v2apositiontaking_3=0,@v2apositiontaking_7=0,@v2apositiontaking_8=0,@v2apositiontaking_20=0,
-		@v3apositiontaking_1=0,@v3apositiontaking_2=0,@v3apositiontaking_3=0,@v3apositiontaking_20=0,
-		@v5apositiontaking_1=0,@v5apositiontaking_2=0,@v5apositiontaking_3=0,@v5apositiontaking_20=0,
-		@v8apositiontaking_1=0,@v8apositiontaking_3=0,@v8apositiontaking_20=0,
-		@v10apositiontaking_1=0,@v10apositiontaking_2=0,@v10apositiontaking_3=0,@v10apositiontaking_20=0,
-		@v11apositiontaking_1=0,@v11apositiontaking_20=0,					
-		@v99apositiontaking_1=0,@v99apositiontaking_2=0,@v99apositiontaking_3=0,@v99apositiontaking_20=0,@v99apositiontaking_9=0,
-		@v161apositiontaking_81=0,@v161apositiontaking_83=0,@v161apositiontaking_86=0,@v161apositiontaking_88=0,@v161alivepositiontaking_85=0,
-		@v161alivepositiontaking_86=0,@v161alivepositiontaking_87=0,@v161alivepositiontaking_89=0,@v161alivepositiontaking_90=0,
-		@KenoList=@KenoListDummy,@IP=@IP,@ErrCode=@ErrCode OUTPUT,@ErrMsg=@ErrMsg OUTPUT
-
-	IF @ErrMsg <> ''
-	BEGIN
-		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': ' + @ErrMsg
-
-		UPDATE #Dep_Customer_Archived_Config
-		SET CustIDBalanceDummy = 0
-		WHERE Recommend = @AgentID
-	END
-	ELSE
-	BEGIN
-		PRINT 'AgentID ' + CAST(@AgentID AS VARCHAR) + ': Create ClearBal dummy successfully'
-
-		UPDATE #Dep_Customer_Archived_Config
-		SET CustIDBalanceDummy = @tmpClearBalCustID
-		WHERE Recommend = @AgentID
-	END
-END
-
---> Set Status = 2 (pending - do not scan now) for Agent can not create CustIDBalanceDummy
-UPDATE cf 
-SET cf.Status = 2 --Pending
-FROM #Dep_Customer_Archived_Config cf
-WHERE cf.CustIDBalanceDummy = 0
-
-IF @@ROWCOUNT > 0
-	SELECT cf.Agent, 'Adding CustIDBalanceDummy failed'
-	FROM #Dep_Customer_Archived_Config cf
-	WHERE cf.CustIDBalanceDummy = 0
-
---> Update another agents to pending (do not scan now)
-UPDATE cf 
-SET cf.Status = 2 --Pending
-FROM Dep_Customer_Archived_Config cf WITH(ROWLOCK)
-WHERE cf.Status = 0
-
---> INSERT/UPDATE agents ready to scan
-INSERT INTO Dep_Customer_Archived_Config (Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status)
-SELECT Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status
-FROM #Dep_Customer_Archived_Config 
-WHERE CustIDBalanceDummy IS NOT NULL
-	AND Recommend NOT IN( SELECT Recommend FROM Dep_Customer_Archived_Config WITH(NOLOCK))
-
-UPDATE cf
-SET cf.MinDays = c.MinDays,
-	cf.MinBalance = c.MinBalance,
-	cf.CustIDBalanceDummy = c.CustIDBalanceDummy,
-	cf.Status = c.Status
-FROM #Dep_Customer_Archived_Config 	c
-		 INNER JOIN Dep_Customer_Archived_Config cf WITH(ROWLOCK) ON c.Recommend = cf.Recommend
-WHERE c.CustIDBalanceDummy IS NOT NULL
-
-DROP TABLE #TempAgents
-DROP TABLE #Dep_Customer_Archived_Config
-DROP TABLE #TempDeleted
 
 /*
 SELECT * FROM Dep_Customer_Archived_Config WITH(NOLOCK) WHERE Status = 0 AND CustIDBalanceDummy = 0
