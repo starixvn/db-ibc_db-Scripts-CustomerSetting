@@ -55,7 +55,7 @@ CREATE TABLE [dbo].[WLMonitored_PersonalPreset](
 	[ID] [int] NOT NULL IDENTITY(1,1) NOT FOR REPLICATION,
 	[AgentID] [int] NOT NULL,
 	[Sporttype] [smallint] NOT NULL,
-	[PresetTitle] [varchar](50) NOT NULL,
+	[PresetTitle] [nvarchar](200) NOT NULL,
 	[WinningThreshold] [money] NULL,
 	[LosingThreshold] [money] NULL
 	CONSTRAINT [PK_WLMonitored_PersonalPreset] PRIMARY KEY CLUSTERED 
