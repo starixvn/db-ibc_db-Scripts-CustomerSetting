@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[Dep_WLMonitored_Player](
 	[Sporttype] [smallint] NOT NULL,
 	[WinningThreshold] [money] NULL,
 	[WinningUpdateTime] [datetime] NULL,
-	[WinningUpdateType] [tinyint] NULL
+	[InitSettingTime] [datetime] NULL
 	CONSTRAINT [PK_Dep_WLMonitored_Player] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
