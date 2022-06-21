@@ -6,8 +6,6 @@
 */
 USE CustDB
 GO
-DROP TABLE [dbo].[Dep_WLMonitored_Player]
-GO
 DROP TABLE [dbo].[WLMonitored_Player]
 GO
 DROP TABLE [dbo].[WLMonitored_PersonalPreset]
@@ -19,31 +17,17 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 SET ANSI_PADDING ON
--------Deposit
-GO
-CREATE TABLE [dbo].[Dep_WLMonitored_Player](
-	[CustID] [int] NOT NULL,
-	[Sporttype] [smallint] NOT NULL,
-	[WinningThreshold] [money] NULL,
-	[UpdateTime] [datetime] NULL,
-	[UpdateType] [tinyint] NULL
-	CONSTRAINT [PK_Dep_WLMonitored_Player] PRIMARY KEY CLUSTERED 
-(
-	[CustID] ASC,
-	[Sporttype] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DATA]
-) ON [DATA]
-
---------Credit
 GO
 CREATE TABLE [dbo].[WLMonitored_Player](
 	[CustID] [int] NOT NULL,
 	[Sporttype] [smallint] NOT NULL,
 	[AgentID] [int] NOT NULL,
 	[WinningThreshold] [money] NULL,
+	[WinningUpdateTime] [datetime] NULL,
+	[WinningUpdateType] [tinyint] NULL,
 	[LosingThreshold] [money] NULL,
-	[UpdateTime] [datetime] NULL,
-	[UpdateType] [tinyint] NULL
+	[LosingUpdateTime] [datetime] NULL,
+	[LosingUpdateType] [tinyint] NULL
 	CONSTRAINT [PK_WLMonitored_Player] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
@@ -56,9 +40,11 @@ CREATE TABLE [dbo].[WLMonitored_Global](
 	[AgentID] [int] NOT NULL,
 	[Sporttype] [smallint] NOT NULL,
 	[WinningThreshold] [money] NULL,
+	[WinningUpdateTime] [datetime] NULL,
+	[WinningUpdateType] [tinyint] NULL,
 	[LosingThreshold] [money] NULL,
-	[UpdateTime] [datetime] NULL,
-	[UpdateType] [tinyint] NULL
+	[LosingUpdateTime] [datetime] NULL,
+	[LosingUpdateType] [tinyint] NULL
 	CONSTRAINT [PK_WLMonitored_Global] PRIMARY KEY CLUSTERED 
 (
 	[AgentID] ASC,
