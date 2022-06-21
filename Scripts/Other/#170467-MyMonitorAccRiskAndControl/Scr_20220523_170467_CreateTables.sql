@@ -24,10 +24,9 @@ CREATE TABLE [dbo].[WLMonitored_Player](
 	[AgentID] [int] NOT NULL,
 	[WinningThreshold] [money] NULL,
 	[WinningUpdateTime] [datetime] NULL,
-	[WinningUpdateType] [tinyint] NULL,
 	[LosingThreshold] [money] NULL,
 	[LosingUpdateTime] [datetime] NULL,
-	[LosingUpdateType] [tinyint] NULL
+	[InitSettingTime] [datetime] NULL
 	CONSTRAINT [PK_WLMonitored_Player] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
@@ -41,10 +40,9 @@ CREATE TABLE [dbo].[WLMonitored_Global](
 	[Sporttype] [smallint] NOT NULL,
 	[WinningThreshold] [money] NULL,
 	[WinningUpdateTime] [datetime] NULL,
-	[WinningUpdateType] [tinyint] NULL,
 	[LosingThreshold] [money] NULL,
 	[LosingUpdateTime] [datetime] NULL,
-	[LosingUpdateType] [tinyint] NULL
+	[InitSettingTime] [datetime] NULL
 	CONSTRAINT [PK_WLMonitored_Global] PRIMARY KEY CLUSTERED 
 (
 	[AgentID] ASC,
