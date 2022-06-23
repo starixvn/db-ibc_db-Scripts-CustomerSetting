@@ -13,7 +13,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[Dep_StakeLevel_History](
-	[ID] [int] identity,
 	[StakeLevelID] [int] NOT NULL,
 	[GameTypeID] [smallint] NOT NULL,
 	[MaxLabel] [nvarchar](50) NULL,

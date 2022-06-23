@@ -13,7 +13,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[CustMaxBetSetting_History](
-	[ID] [int] identity,
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [int] NOT NULL,
