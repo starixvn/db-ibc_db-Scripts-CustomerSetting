@@ -4,9 +4,40 @@
 	Task: Initial system setting for telegram bot service [#RedmineID:#167819]
 	DB: DBBOT/bodb_Chatbot
 */
+--20220624: update bot system
+;WITH T AS (
+	SELECT 'Elsa9Bot' as OldName, 'ElsaBot' as NewName
+	UNION SELECT 'Eva88Bot', 'EvaBot'
+	UNION SELECT 'Eden9Bot', 'EdenBot'
+)
+UPDATE b
+SET Name = t.NewName
+FROM Bot b WITH(ROWLOCK)
+	INNER JOIN T ON b.Name = t.OldName
 
+/*
+--20220615: Disable function Abnormal Login Alert
+DELETE BotFunction WITH(ROWLOCK)
+WHERE FunctionID = 11
+*/
+
+/*
+--20220614: add bot PRO
+INSERT INTO [dbo].[Bot]
+           ([Name]
+           ,[System]
+           ,[Accesstoken]
+           ,[Status]
+           ,[IsTest])
+SELECT 'Eva88Bot', 'IBCBET', '5512753935:AAEvl5a32XL-KfCPRXV_3qOSw7GxJ-O6RPM',1,0
+UNION SELECT 'Eden9Bot', 'IBCIndo', '5470791209:AAE9RXlvpswPrRfrbAsxotVPHY8El3C3zNY',1,0
+UNION SELECT 'Elsa9Bot', '789Y', '5529668803:AAEKD7BE7UIkuSBMkgqQMGcIQow7OxlOui8',1,0
+*/
+
+/*
 --20220610: delete wrong data on UAT
 DELETE CustBotMessenger WITH(ROWLOCK) WHERE botid = 1
+*/
 
 /*
 ;WITH T AS
