@@ -80,9 +80,14 @@ INNER JOIN (
 	GROUP BY custid
 	) b ON #Member.custid = b.custid
 
+DELETE c
+FROM #Member t
+INNER JOIN [Dep_Customer_Archived] c WITH(ROWLOCK,UPDLOCK)
+	ON t.custid = c.CustID
+
 INSERT INTO [dbo].[Dep_Customer_Archived]([CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status])
 SELECT [CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status]
-FROM #Member
+FROM #Member t
 
 --SELECT * FROM [Dep_Customer_Archived](NOLOCK) WHERE status = 'waiting'
 
