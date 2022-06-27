@@ -4,7 +4,23 @@
 	Task: Insert log action for telegram bot service [#RedmineID:#165682]
 	DB: DBLOG/bodb_CustomerLog
 */
+--20220701: add log action
+;WITH T AS
+(
+	SELECT 95073 as ActionID, 1 as IsInternal, 'NAP_Chatbot_BotSystemSettingUpd' spName, N'Update Bot System Setting' ActionEn	
+)
+INSERT INTO [dbo].[LogAction]
+	([ActionID],[ActionTypeID],[SPName],
+	[ActionNameEN],
+	[ActionNameCH],
+	[ActionNameCS],
+	[ActionNameJP],
+	[ActionNameIT]
+	,[ActionNameTH],[ActionNameKO],[XsltContent],[IsInternal],[ActionNameVI],[ActionNameCN])
+SELECT ActionID, 4, spName, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, NULL, IsInternal, ActionEn, ActionEn
+FROM T
 
+/*
 --20220622: update translation
 ;WITH T AS
 (
@@ -43,6 +59,7 @@ INSERT INTO [dbo].[LogAction]
 	,[ActionNameTH],[ActionNameKO],[XsltContent],[IsInternal],[ActionNameVI],[ActionNameCN])
 SELECT ActionID, 4, spName, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, ActionEn, NULL, IsInternal, ActionEn, ActionEn
 FROM T
+*/
 
 /*
 DELETE LogAction 

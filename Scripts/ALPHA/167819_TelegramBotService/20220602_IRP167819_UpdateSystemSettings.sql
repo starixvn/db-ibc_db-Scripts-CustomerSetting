@@ -6,9 +6,9 @@
 */
 --20220624: update bot system
 ;WITH T AS (
-	SELECT 'Elsa9Bot' as OldName, 'ElsaBot' as NewName
-	UNION SELECT 'Eva88Bot', 'EvaBot'
-	UNION SELECT 'Eden9Bot', 'EdenBot'
+	SELECT 'ElsaBot' as OldName, 'Elsa9Bot' as NewName
+	UNION SELECT 'EvaBot', 'Eva88Bot'
+	UNION SELECT 'EdenBot', 'Eden9Bot'
 )
 UPDATE b
 SET Name = t.NewName
