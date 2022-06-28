@@ -2,12 +2,12 @@
 /*
     Created: Eden@20220617
     Task: archive UUS members of Test1607: [#125823]
-		custid		username			username2
-		53553835	Test1607UUS01016	Test1607$twqa01
-		53553836	Test1607UUS01017	Test1607$twqa02
-		53553838	Test1607UUS01018	Test1607$twqa03
-		53553839	Test1607UUS01019	Test1607$twqa04
-		53553840	Test1607UUS01020	Test1607$twqa05
+		custid		username2
+		53553841	Test1607$twqa06
+		53553843	Test1607$twqa07
+		53553846	Test1607$twqa08
+		53553847	Test1607$twqa09
+		53553849	Test1607$twqa10
 
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
 		Step 2 : Archive Deposit Member - Step 2: Clear Balance and CustInfo (DBTXN) - job
@@ -31,11 +31,11 @@ FROM Customer c WITH(NOLOCK)
 		ON bal.recommend = c.recommend
 		AND bal.username like '%ClearBal'
 WHERE c.custid IN (
-		 53553835	--Test1607UUS01016	Test1607$twqa01
-		,53553836	--Test1607UUS01017	Test1607$twqa02
-		,53553838	--Test1607UUS01018	Test1607$twqa03
-		,53553839	--Test1607UUS01019	Test1607$twqa04
-		,53553840	--Test1607UUS01020	Test1607$twqa05	
+		 53553841	--Test1607$twqa06
+		,53553843	--Test1607$twqa07
+		,53553846	--Test1607$twqa08
+		,53553847	--Test1607$twqa09
+		,53553849	--Test1607$twqa10
 )
 AND c.currency = 20
 
