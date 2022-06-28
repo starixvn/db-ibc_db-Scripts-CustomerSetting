@@ -104,10 +104,10 @@ BEGIN
 		
 	--> UpdatePlayer comm on private Tables (insert if not exist)
 	UPDATE dcs_m
-	SET dcs_m.PlayerDiscount = CASE WHEN sp.Sporttype IN (1,2) AND sp.BetType <> 9 THEN co.SBComm
-									WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN co.Parlaycomm
-									WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN co.NGComm
-									WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN co.KenoComm
+	SET dcs_m.PlayerDiscount = CASE WHEN sp.Sporttype IN (1,2) AND sp.BetType <> 9 THEN ISNULL(co.SBComm,0)
+									WHEN sp.Sporttype = 1 AND sp.BetType = 9 THEN ISNULL(co.Parlaycomm,0)
+									WHEN sp.Sporttype = 161 AND sp.BetType = 81 THEN ISNULL(co.NGComm,0)
+									WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN ISNULL(co.KenoComm,0)
 								END
 	FROM Dep_CustSettingMode c WITH (NOLOCK)
 		INNER JOIN @CustComm_TempBatch cb 
