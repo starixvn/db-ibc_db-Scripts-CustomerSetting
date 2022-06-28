@@ -1,0 +1,46 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
+	Created: 20220126@Winfred
+	Task: Correct new action status of Macau [#RM:167635]
+	DB: DBLOG/bodb_CustomerLog
+*/
+
+USE bodb_CustomerLog
+GO
+
+CREATE TABLE #LogTmp (logid	BIGINT, custid	INT,ActionID	INT)
+
+INSERT INTO #LogTmp (logid,custid,ActionID)
+SELECT logid,custid,ActionID
+FROM dbo.UserLog_RunSP WITH(NOLOCK)
+WHERE ActionID in (60504,60505,65508,65509,65510,65511,70512,70513,70514,70515,70516,70517,75516,75517,75518,75519,75520,75521,75522,75523) 
+	AND  logdate >= '2022-01-06 23:12:08' 
+	
+UPDATE 	#LogTmp
+SET ActionID = CASE ActionID WHEN 60504 THEN 60538
+				  WHEN 60505 THEN 60539 
+				  WHEN 65508 THEN 65576 
+				  WHEN 65509 THEN 65577 
+				  WHEN 65510 THEN 65578 
+				  WHEN 65511 THEN 65579 
+				  WHEN 70512 THEN 70618 
+				  WHEN 70513 THEN 70619 
+				  WHEN 70514 THEN 70620 
+				  WHEN 70515 THEN 70621 
+				  WHEN 70516 THEN 70622 
+				  WHEN 70517 THEN 70623 
+				  WHEN 75516 THEN 75652 
+				  WHEN 75517 THEN 75653 
+				  WHEN 75518 THEN 75654 
+				  WHEN 75519 THEN 75655 
+				  WHEN 75520 THEN 75656 
+				  WHEN 75521 THEN 75657 
+				  WHEN 75522 THEN 75658 
+				  WHEN 75523 THEN 75659 END
+
+UPDATE lgTbl
+SET lgTbl.ActionID = lg.ActionID
+FROM dbo.UserLog_RunSP lgTbl WITH (ROWLOCK, UPDLOCK)
+	INNER JOIN #LogTmp lg ON lg.LogID = lgTbl.logid AND lg.CustID = lgTbl.custid
+	
+DROP TABLE 	#LogTmp
