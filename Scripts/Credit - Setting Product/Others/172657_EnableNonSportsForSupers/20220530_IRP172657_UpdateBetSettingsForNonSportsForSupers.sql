@@ -824,15 +824,15 @@ BEGIN
 		LEFT JOIN CustProductStatus a WITH(NOLOCK) ON t.recommend = a.custid
 		WHERE stt.Sporttype IN (SELECT sporttype FROM @tmpSports)
 	)
-	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend)
-	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend
+	INSERT INTO #tblCustSport(custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent)
+	SELECT custid,sporttype,bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
 	FROM stt
 	WHERE 1 = CASE WHEN isHidden = 1 THEN 0
 					WHEN roleid = 1 AND isDisabledSuper = 0 AND isDisabledMaster = 0 AND isDisabledAgent = 0 THEN 0
 					WHEN isDisabled = 1 THEN 1 ELSE 0 END
 		AND sporttype = 176 --FGG
 	UNION ALL 	
-	SELECT custid,sporttype,b.bettype,roleid,srecommend,mrecommend,recommend
+	SELECT custid,sporttype,b.bettype,roleid,srecommend,mrecommend,recommend, isDisabledSuper, isDisabledMaster, isDisabledAgent
 	FROM stt
 		CROSS APPLY (SELECT BetType from ProductSettingDetail WITH(NOLOCK)
 					WHERE SportType = 245 and SettingType = 7 and SettingStatus = 0) b
