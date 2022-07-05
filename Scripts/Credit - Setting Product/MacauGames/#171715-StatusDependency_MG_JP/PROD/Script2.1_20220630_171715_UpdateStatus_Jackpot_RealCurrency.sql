@@ -2,7 +2,7 @@
 /*
 	Created: 20220630@Eden
 	Task: Update jackpot Status - Real currency [#171715]
-	DB: DBCUST/CustDB AND CustDB_Customer_info Pub
+	DB: DBCUST/CustDB AND CustDB_Customer_info, CustDB_DBTrans_CustInfo Pub
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	 @srecommend INT	
