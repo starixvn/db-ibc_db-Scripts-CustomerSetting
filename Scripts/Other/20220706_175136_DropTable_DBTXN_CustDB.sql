@@ -7,17 +7,17 @@
 */
 USE CustDB
 
-DROP TABLE __Temp_customer_syncUpd_xtest_20191042
-DROP TABLE __Temp_ExchangeDailyOanda_syncUpd_xtest_20191041
-DROP TABLE Acc_ClearBalanceList
-DROP TABLE cust_followBet_bk
-DROP TABLE Cust_FollowBet_xtest
-DROP TABLE Cust12Bet
-DROP TABLE custsettingGame_AccYen668
-DROP TABLE ExchangeDailyOanda_xtest
-DROP TABLE tmp_binary3
-DROP TABLE tmpConstraint
-DROP TABLE tmpCust_BUHead_test_20210407
-DROP TABLE tmpCustArchived_DisabledAgents_NoBal_xtest
-DROP TABLE __Temp_custinfo_syncUpd_xtest
-DROP TABLE Cache_DummyAccount3rd_Joe_Test
+DROP TABLE DEL___Temp_customer_syncUpd_xtest_20191042
+DROP TABLE DEL___Temp_ExchangeDailyOanda_syncUpd_xtest_20191041
+DROP TABLE DEL_Acc_ClearBalanceList
+DROP TABLE DEL_cust_followBet_bk
+DROP TABLE DEL_Cust_FollowBet_xtest
+DROP TABLE DEL_Cust12Bet
+DROP TABLE DEL_custsettingGame_AccYen668
+DROP TABLE DEL_ExchangeDailyOanda_xtest
+DROP TABLE DEL_tmp_binary3
+DROP TABLE DEL_tmpConstraint
+DROP TABLE DEL_tmpCust_BUHead_test_20210407
+DROP TABLE DEL_tmpCustArchived_DisabledAgents_NoBal_xtest
+DROP TABLE DEL___Temp_custinfo_syncUpd_xtest
+DROP TABLE DEL_Cache_DummyAccount3rd_Joe_Test
