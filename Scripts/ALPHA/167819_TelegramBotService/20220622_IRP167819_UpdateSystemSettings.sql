@@ -5,7 +5,90 @@
 	DB: DBBOT/bodb_Chatbot
 */
 
+--20220713: update BotResource
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'32'	ResourceKey,	'th-TH'	Language,	N'รหัสความปลอดภัยถูกเปลี่ยน' Value
+UNION ALL SELECT 	'Function_Name'	,	'10'	,	'th-TH'	,	N'รหัสความปลอดภัยถูกเปลี่ยน'
+UNION ALL SELECT 	'Action_Name'	,	'30'	,	'vi-VN'	,	N'Giới Hạn Thắng Thua'
+UNION ALL SELECT 	'Action_Name'	,	'31'	,	'vi-VN'	,	N'Đổi Mật Khẩu'
+UNION ALL SELECT 	'Action_Name'	,	'32'	,	'vi-VN'	,	N'Đổi Mã Bảo Mật'
+UNION ALL SELECT 	'Function_Name'	,	'8'	,	'vi-VN'	,	N'Giới Hạn Thắng Thua'
+UNION ALL SELECT 	'Function_Name'	,	'9'	,	'vi-VN'	,	N'Đổi Mật Khẩu'
+UNION ALL SELECT 	'Function_Name'	,	'10'	,	'vi-VN'	,	N'Đổi Mã Bảo Mật'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
 
+
+/*
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'30'	ResourceKey,	'th-TH'	Language,	N'ยอดแพ้/ชนะสมาชิกถึงลิมิต' Value
+UNION ALL SELECT 	'Function_Name'	,	'8'	,	'th-TH'	,	N'ยอดแพ้/ชนะสมาชิกถึงลิมิต'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
+*/
+
+/*
+--20220711: update BotResource
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'5'	ResourceKey,	'vi-VN'	Language,	N'Top 50 Tiền Chưa Xử Lý' Value
+UNION ALL SELECT 	'Action_Name'	,	'8'	,	'vi-VN'	,	N'Top X Tiền Chưa Xử Lý'
+UNION ALL SELECT 	'Action_Name'	,	'6'	,	'vi-VN'	,	N'Nhập tên cấp dưới'
+UNION ALL SELECT 	'Action_Name'	,	'13'	,	'vi-VN'	,	N'Nhập tên cấp dưới'
+UNION ALL SELECT 	'Action_Name'	,	'19'	,	'vi-VN'	,	N'Nhập tên cấp dưới'
+UNION ALL SELECT 	'Action_Name'	,	'23'	,	'vi-VN'	,	N'Nhập tên cấp dưới'
+UNION ALL SELECT 	'Action_Name'	,	'18'	,	'vi-VN'	,	N'Thắng Thua Của Tôi'
+UNION ALL SELECT 	'Action_Name'	,	'22'	,	'vi-VN'	,	N'Thắng Thua Của Tôi'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
+*/
+					
+/*
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'22'	ResourceKey,	'zh-Hans'	Language,	N'我的昨日输赢' Value
+UNION ALL SELECT 	'Action_Name'	,	'22'	,	'zh-Hant'	,	N'我的昨日輸贏'
+UNION ALL SELECT 	'Action_Name'	,	'22'	,	'th-TH'	,	N'ยอดได้เสียเมื่อวานของฉัน'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
+*/
+
+/*
+--20220708: update BotResource
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'5'	ResourceKey,	'vi-VN'	Language,	N'50 Khoản Tiền Chưa Xử Lý Hàng Đầu' Value
+UNION ALL SELECT 	'Action_Name'	,	'8'	,	'vi-VN'	,	N'X Khoản Tiền Chưa Xử Lý Hàng Đầu'
+UNION ALL SELECT 	'Action_Name'	,	'9'	,	'vi-VN'	,	N'Vui lòng nhập tên người dùng cấp dưới để xem Báo Cáo Tiền Chưa Xử Lý.'
+UNION ALL SELECT 	'Function_Description'	,	'1'	,	'vi-VN'	,	N'Xem giá trị <b>"Tổng"</b> trong Báo Cáo Tiền Chưa Xử Lý của bạn và cấp dưới trực thuộc ở ngày hiện tại.'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
+*/
+					
+/*
+--20220622: update BotResource
 DELETE BotResource
 
 ;WITH T AS(
@@ -443,3 +526,4 @@ SELECT [ActionID]
            ,[IsEndAction]
 FROM T
 GO
+*/
