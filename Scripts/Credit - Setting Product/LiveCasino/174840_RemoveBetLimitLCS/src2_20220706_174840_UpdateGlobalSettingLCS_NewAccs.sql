@@ -20,7 +20,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Agent') = 0 RETURN
 
-	DECLARE @SportType SMALLINT = 169
 	DECLARE @batch int = 3000
 	DECLARE @tmpStakeExcluded TABLE (StakeLevelID INT, GameTypeID INT,ExchangeId	INT)
 	
