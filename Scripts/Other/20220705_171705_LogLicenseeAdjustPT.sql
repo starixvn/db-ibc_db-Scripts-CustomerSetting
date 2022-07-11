@@ -7,10 +7,13 @@
 */
 USE [bodb_CustomerLog]
 GO
+
+--DELETE FROM LogAction where ActionID = 472
+
 DECLARE @tmpAction TABLE (ActionID INT, ActionName NVARCHAR(256), SPName VARCHAR(50), IsInternal BIT, ActionTypeId INT)
 
 INSERT INTO @tmpAction (ActionID, ActionName, SPName, IsInternal, ActionTypeId)
-SELECT 472,'Update Position Taking DCS Products for Licensee Customers by LA', 'Acc_Dep_LicenseeSetting_PTSettingUpd',0,1
+SELECT 472,'Update Position Taking Triggered by LA', 'Acc_Dep_LicenseeSetting_PTSettingUpd',0,1
 
 
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
