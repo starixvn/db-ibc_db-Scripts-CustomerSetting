@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
     Created: Eden@20220617
-    Task: archive UUS members of Test1607: [#175312]
+    Task: archive UUS members of SampleSiteUUS: [#175312]
 
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
 		Step 2 : Archive Deposit Member - Step 2: Clear Balance and CustInfo (DBTXN) - job
