@@ -217,7 +217,7 @@ BEGIN
 						CASE WHEN isbasketballParlay = 1 AND basketball + basketballParlay < 25000 THEN 14 ELSE 15 END
 					END
 			ELSE
-				CASE WHEN s.custid IS NOT NULL AND (basketball + basketballParlay < 50000 OR isbasketballParlay = 0) THEN 
+				CASE WHEN basketball + basketballParlay < 50000 OR isbasketballParlay = 0) THEN 
 						CASE 
 							WHEN basketball <-140000								THEN 1
 							WHEN basketball <-120000	AND basketball >=-140000	THEN 2
