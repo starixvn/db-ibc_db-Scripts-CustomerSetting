@@ -9,7 +9,7 @@
 
 UPDATE ref
 SET isActive=1
-FROM Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
+FROM Sport_Bettype_Reference_Setting ref WITH (ROWLOCK, UPDLOCK)
 WHERE ref.SportType=6 
 AND ( ref.BetType BETWEEN 3900 AND 3917
 	OR ref.BetType IN (154,219,220,701,704,705,706,401,402)
