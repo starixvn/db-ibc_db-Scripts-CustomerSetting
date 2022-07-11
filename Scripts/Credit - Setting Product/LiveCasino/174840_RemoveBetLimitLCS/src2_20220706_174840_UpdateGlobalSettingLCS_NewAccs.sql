@@ -217,5 +217,5 @@ GO
 --------------------------------------------------------------------------------------
 DECLARE @max_custid INT
 	
-SELECT @max_custid = 999
+SELECT @max_custid = xxx
 EXEC dbo.Acc_Dep_DynamicCustSetting_09 @max_custid=@max_custid
