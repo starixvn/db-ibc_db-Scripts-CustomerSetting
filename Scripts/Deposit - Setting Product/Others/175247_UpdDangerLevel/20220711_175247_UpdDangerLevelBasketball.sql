@@ -86,7 +86,10 @@ DELETE t
 FROM #tblCust t
 	INNER JOIN custinfo c WITH(NOLOCK) ON t.custid = c.custid
 WHERE c.Enabled = 0
-	OR c.srecommend NOT IN (SELECT custid FROM Dep_custsuper WITH(NOLOCK) WHERE site IN ('haifa','789y') OR currency=96)
+	OR c.srecommend NOT IN (SELECT custid FROM Dep_custsuper WITH(NOLOCK) WHERE site IN ('haifa','789y') OR currency=96
+							UNION ALL 
+							SELECT custid FROM Customer WITH(NOLOCK) WHERE site IN ('789y') AND roleid = 4
+	)
 
 SELECT @Cust_CNT = COUNT(1) FROM #tblCust
 
@@ -197,7 +200,9 @@ BEGIN
 						END 
 				END	
 			END	SoccerLevel,
-		CASE WHEN s.custid IS NOT NULL AND (s.site IN ('haifa','789y') OR s.currency=96) THEN -- Flow B : Haifa, 789y site and USDT currency
+		CASE WHEN (s.custid IS NOT NULL AND s.site='haifa')
+				OR (s.custid IS NULL AND c.site='789y')		
+				OR c.currency=96															 THEN -- Flow B : Haifa, 789y site and USDT currency
 					CASE WHEN basketball + basketballParlay < 8000 OR isbasketballParlay = 0 THEN
 						CASE 
 							WHEN basketball <-140000								THEN 1
@@ -243,6 +248,7 @@ BEGIN
 	FROM T
 		INNER JOIN custinfo ci WITH(NOLOCK) ON t.custid = ci.custid
 		LEFT JOIN Dep_custsuper s WITH(NOLOCK) ON ci.srecommend = s.custid
+		INNER JOIN Customer c WITH(NOLOCK) ON ci.srecommend = c.custid
 	
 	INSERT INTO #tblCustDangerOld(custid,DangerLevel,Soccer,Basketball,IsManualSoccer,IsManualBasketball)
 	SELECT custid, ISNULL(DangerLevel,0), soccer, basketball, IsManualSoccer, IsManualBasketball
