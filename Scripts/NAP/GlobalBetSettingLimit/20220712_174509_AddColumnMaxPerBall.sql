@@ -1,12 +1,9 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02"></info>*/
 /*
 	Created: 20220712@Tacy
 	Task: Add new column MaxPerBall for tables ProductBetSetting, Dep_ProductBetSetting [redmine:#174509]
-	DB: DBCust/CustDB
+	DB: DBCust/CustDB, DBTP/bodb02
 */
-
-USE CustDB
-GO
 
 ALTER TABLE ProductBetSetting ADD MaxPerBall [decimal](19, 8) NULL
 GO
