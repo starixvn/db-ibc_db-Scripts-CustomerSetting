@@ -31,7 +31,7 @@ BEGIN
 	
 	INSERT INTO #CustTemp_Upd(CustID)
 	SELECT c.CustID
-	FROM [dbo].[CustProductStatus] c WITH(ROWLOCK,UPDLOCK)
+	FROM [dbo].[CustProductStatus] c WITH(NOLOCK)
 		INNER JOIN custInfo ci WITH(NOLOCK) 
 			ON ci.CustID = c.CustID
 		CROSS APPLY dbo.f_CustSetting_ProductStatusSel(C.bitmapIsDisabled, @BitmapOrder_MG) as isDisabledMG
