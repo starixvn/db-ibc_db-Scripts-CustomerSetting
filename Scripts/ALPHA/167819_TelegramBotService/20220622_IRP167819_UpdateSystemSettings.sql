@@ -4,7 +4,20 @@
 	Task: update system setting for telegram bot service [#RedmineID:#167819]
 	DB: DBBOT/bodb_Chatbot
 */
-
+--20220714: update BotResource
+;WITH T AS(
+SELECT 	'Action_Name'	ResourceName,	'30'	ResourceKey,	'th-TH'	Language,	N'แพ้/ชนะสมาชิกถึงยอด' Value
+UNION ALL SELECT 	'Action_Name'	,	'31'	,	'th-TH'	,	N'แก้รหัสผ่าน'
+UNION ALL SELECT 	'Action_Name'	,	'32'	,	'th-TH'	,	N'แก้รหัสความปลอดภัย'
+)
+UPDATE b
+SET b.Value = t.Value
+FROM BotResource b WITH(ROWLOCK)
+	INNER JOIN T ON b.ResourceName = t.ResourceName
+					AND b.ResourceKey = t.ResourceKey
+					AND b.Language = t.Language
+					
+/*
 --20220713: update BotResource
 ;WITH T AS(
 SELECT 	'Action_Name'	ResourceName,	'32'	ResourceKey,	'th-TH'	Language,	N'รหัสความปลอดภัยถูกเปลี่ยน' Value
@@ -22,7 +35,7 @@ FROM BotResource b WITH(ROWLOCK)
 	INNER JOIN T ON b.ResourceName = t.ResourceName
 					AND b.ResourceKey = t.ResourceKey
 					AND b.Language = t.Language
-
+*/
 
 /*
 ;WITH T AS(
