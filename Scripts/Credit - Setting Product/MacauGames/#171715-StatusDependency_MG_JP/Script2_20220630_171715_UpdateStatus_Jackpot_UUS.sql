@@ -4,9 +4,8 @@
 	Task: Update jackpot Status - UUS [#171715]
 	DB: DBCUST/CustDB
 */
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
-AS
-BEGIN
+USE CUSTDB
+GO
 	DECLARE @BitmapOrder_MG TINYINT = 5
 	DECLARE @BitmapOrder_JP TINYINT = 39
 
@@ -65,8 +64,4 @@ BEGIN
 	DROP TABLE #CustTempBatch
 	DROP TABLE #CustTemp_Upd
 	DROP TABLE #supers
-END
-GO
---Run SP
-EXEC [Acc_DynamicCustomerInfo_09]
-GO
+
