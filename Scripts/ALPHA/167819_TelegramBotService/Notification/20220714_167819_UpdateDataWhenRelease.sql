@@ -6,33 +6,28 @@
 	Task: Initialize Data
 */
 
-TRUNCATE TABLE CustBotNotification
-GO
-
-TRUNCATE TABLE  NotificationReferenceLog
-GO
 -- PersonalMessage
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = ''
+	SET Value = '' -- Will update on release date
 WHERE ServiceName = 'PersonalMessage' AND SettingName = 'MaxMsgTargetId'
 
 -- YesterdayWinLoss
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '2022-05-01'
+	SET Value = '2022-07-19'
 WHERE ServiceName = 'YesterdayWinLoss' AND SettingName = 'WinlostDate'
 
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '0'
+	SET Value = '0' 
 WHERE ServiceName = 'YesterdayWinLoss' AND SettingName = 'MaxUserId'
 
 -- ProblemAccount
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '0'
+	SET Value = '' -- Will update on release date
 WHERE ServiceName = 'ProblemAccount' AND SettingName = 'MaxLogId'
 
 -- MemberWinLossLimit
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '0'
+	SET Value = '' -- Will update on release date
 WHERE ServiceName = 'MemberWinLossLimit' AND SettingName = 'MaxLogID'
 
 -- Update Send Notiftication
