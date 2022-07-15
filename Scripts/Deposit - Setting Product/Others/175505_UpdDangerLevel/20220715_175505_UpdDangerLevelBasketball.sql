@@ -88,7 +88,7 @@ FROM #tblCust t
 WHERE c.Enabled = 0
 	OR (c.srecommend NOT IN (SELECT custid FROM Dep_custsuper WITH(NOLOCK) 
 							 WHERE (site IN ('Happy8','SM88','AEUG','368cash','365online') AND currency=51) --INH currency
-								OR (site IN ('WINCLUB88 ') AND currency=15)))	--IN currency
+								OR (site IN ('WINCLUB88') AND currency=15)))	--IN currency
 
 SELECT @Cust_CNT = COUNT(1) FROM #tblCust
 
