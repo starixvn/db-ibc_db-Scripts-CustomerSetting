@@ -81,7 +81,7 @@ SELECT DISTINCT custid
 FROM CustDangerWinlossInfo WITH(NOLOCK)
 WHERE batchNo = @batchNo
 
---the table contains only data (Haifa, 789y site or USDT currency) or (INH currency and Happy8/SM88/AEUG/368cash/365online site) or (IN currency and WINCLUB88 site)
+--the table contains only data (INH currency and Happy8/SM88/AEUG/368cash/365online site) or (IN currency and WINCLUB88 site)
 DELETE t
 FROM #tblCust t
 	INNER JOIN custinfo c WITH(NOLOCK) ON t.custid = c.custid
