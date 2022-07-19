@@ -8,7 +8,7 @@
 
 -- PersonalMessage
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '' -- Will update on release date
+	SET Value = '28335575' -- Will update on release date
 WHERE ServiceName = 'PersonalMessage' AND SettingName = 'MaxMsgTargetId'
 
 -- YesterdayWinLoss
@@ -22,12 +22,12 @@ WHERE ServiceName = 'YesterdayWinLoss' AND SettingName = 'MaxUserId'
 
 -- ProblemAccount
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '' -- Will update on release date
+	SET Value = '1868679' -- Will update on release date
 WHERE ServiceName = 'ProblemAccount' AND SettingName = 'MaxLogId'
 
 -- MemberWinLossLimit
 UPDATE BotSystemSetting WITH(ROWLOCK, UPDLOCK)
-	SET Value = '' -- Will update on release date
+	SET Value = '3196' -- Will update on release date
 WHERE ServiceName = 'MemberWinLossLimit' AND SettingName = 'MaxLogID'
 
 -- Update Send Notiftication
