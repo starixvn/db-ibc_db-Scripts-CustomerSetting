@@ -16,10 +16,23 @@ SELECT [GameTypeID], [GameGroupID], [MinLabel], [MaxLabel], [MinStake], [MaxStak
 FROM Dep_StakeLevel WITH (NOLOCK)
 WHERE ExchangeID = 2  AND  GameTypeID=2101
 
+
+;WITH tmp AS (
+	SELECT MIN([StakeLevelID]) [StakeLevelID]
+	FROM Dep_StakeLevelGroupDetail slg WITH (NOLOCK)
+	WHERE ((slg.GameTypeID between 2101 and 2199) or (slg.GameTypeID between 2201 and 2299))
+	AND EXISTS (SELECT 1 FROM Dep_StakeLevel sl WITH (NOLOCK) WHERE GameTypeID=2101 AND ExchangeID=2 AND slg.StakeLevelID=sl.StakeLevelID)
+)
 INSERT INTO Dep_StakeLevelGroupDetail([StakeLevelID], [GameTypeID], [MinLabel], [MaxLabel], [MinStake], [MaxStake], [ParentTypeID], [MaxGameStake])
 SELECT DISTINCT sl.[StakeLevelID], slg.[GameTypeID], slg.[MinLabel], slg.[MaxLabel], slg.[MinStake], slg.[MaxStake], slg.[ParentTypeID], slg.[MaxGameStake]
 FROM Dep_StakeLevelGroupDetail slg WITH (NOLOCK)
-	CROSS APPLY (SELECT StakeLevelID FROM Dep_StakeLevel sl WITH (NOLOCK) WHERE sl.GameTypeID=2101 AND sl.ExchangeID=71) sl
+	INNER JOIN tmp t ON t.StakeLevelID=slg.StakeLevelID
+	CROSS APPLY (SELECT MIN(StakeLevelID) StakeLevelID FROM Dep_StakeLevel sl WITH (NOLOCK) WHERE sl.GameTypeID=2101 AND sl.ExchangeID=71) sl
+WHERE ((slg.GameTypeID between 2101 and 2199) or (slg.GameTypeID between 2201 and 2299))
+UNION
+SELECT DISTINCT sl.[StakeLevelID], slg.[GameTypeID], slg.[MinLabel], slg.[MaxLabel], slg.[MinStake], slg.[MaxStake], slg.[ParentTypeID], slg.[MaxGameStake]
+FROM Dep_StakeLevelGroupDetail slg WITH (NOLOCK)
+	CROSS APPLY (SELECT MAX(StakeLevelID) StakeLevelID FROM Dep_StakeLevel sl WITH (NOLOCK) WHERE sl.GameTypeID=2101 AND sl.ExchangeID=71) sl
 WHERE ((slg.GameTypeID between 2101 and 2199) or (slg.GameTypeID between 2201 and 2299))
 AND EXISTS (SELECT 1 FROM Dep_StakeLevel sl WITH (NOLOCK) WHERE GameTypeID=2101 AND ExchangeID=2 AND slg.StakeLevelID=sl.StakeLevelID)
-AND ((slg.StakeLevelID=18700 AND sl.StakeLevelID=43591) OR (slg.StakeLevelID=18701 AND sl.StakeLevelID=43592))
+AND slg.StakeLevelID NOT IN (SELECT StakeLevelID FROM tmp)
