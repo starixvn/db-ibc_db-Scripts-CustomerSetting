@@ -19,7 +19,7 @@ CREATE TABLE #tmp (
 
 INSERT INTO #tmp (CustID, SportType, BetType, UpdateTime)
 SELECT a.CustID, a.SportType, a.BetType, a.UpdateTime
-FROM DBTP.bodb02.dbo.CustMaxBetSetting_History a WITH (ROWLOCK)
+FROM DBTP.bodb02.dbo.CustMaxBetSetting_History a WITH (NOLOCK)
 	INNER JOIN CustMaxBetSetting_History b WITH (NOLOCK)
 		ON a.CustID=b.CustID
 		AND a.SportType=b.SportType
@@ -27,7 +27,7 @@ FROM DBTP.bodb02.dbo.CustMaxBetSetting_History a WITH (ROWLOCK)
 		AND a.UpdateTime=b.UpdateTime
 
 DELETE a
-FROM CustMaxBetSetting_History a
+FROM CustMaxBetSetting_History a WITH (ROWLOCK)
 	INNER JOIN #tmp b
 	ON a.CustID=b.CustID
 		AND a.SportType=b.SportType
