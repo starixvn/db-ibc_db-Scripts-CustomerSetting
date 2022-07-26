@@ -52,16 +52,38 @@ SELECT * FROM Dep_CustStakeLevel_Member WITH(NOLOCK) WHERE CustID IN (51180940) 
 */
 ---------
 --Dep_CustSettingMode : GET FROM DB061
-INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel)
-SELECT CustID,IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel
-FROM DBACC.bodb02.dbo.Dep_CustSettingMode WITH(NOLOCK) WHERE CustID = @CustID
+IF NOT EXISTS( SELECT 1 FROM Dep_CustSettingMode WITH(NOLOCK) WHERE custid = @CustID)
+	INSERT INTO Dep_CustSettingMode(CustID,IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel)
+	SELECT CustID,IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel
+	FROM DBACC.bodb02.dbo.Dep_CustSettingMode WITH(NOLOCK) WHERE CustID = @CustID
+ELSE
+	UPDATE cs
+	SET cs.IsGroupedPT = csa.IsGroupedPT,
+		cs.IsGroupedComm = csa.IsGroupedComm,
+		cs.IsGroupedBetLimit = csa.IsGroupedBetLimit,
+		cs.IsGroupedStakeLevel = csa.IsGroupedStakeLevel
+	FROM [dbo].Dep_CustSettingMode cs WITH (NOLOCK)
+		CROSS APPLY(	SELECT IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel
+						FROM DBACC.bodb02.dbo.Dep_CustSettingMode  WITH (NOLOCK)  
+						WHERE cs.CustID = @CustID) csa
+	WHERE cs.CustID = @CustID
 
 ------------------------Get From Upline---------------------------
 --Product Status
-INSERT INTO [dbo].[Dep_CustProductStatus]([CustID],bitmapIsDisabled,bitmapIsHidden)  
-SELECT @CustID, cs.bitmapIsDisabled,cs.bitmapIsHidden  
-FROM [dbo].[Dep_CustProductStatus] cs WITH (NOLOCK)  
-WHERE cs.CustID = @AgentID  
+IF NOT EXISTS( SELECT 1 FROM [Dep_CustProductStatus] WITH(NOLOCK) WHERE custid = @CustID)
+	INSERT INTO [dbo].[Dep_CustProductStatus]([CustID],bitmapIsDisabled,bitmapIsHidden)  
+	SELECT @CustID, cs.bitmapIsDisabled,cs.bitmapIsHidden  
+	FROM [dbo].[Dep_CustProductStatus] cs WITH (NOLOCK)  
+	WHERE cs.CustID = @AgentID  
+ELSE
+	UPDATE cs
+	SET cs.bitmapIsDisabled = csa.bitmapIsDisabled,
+		cs.bitmapIsHidden = csa.bitmapIsHidden
+	FROM [dbo].[Dep_CustProductStatus] cs WITH (NOLOCK)
+		CROSS APPLY(	SELECT bitmapIsDisabled,bitmapIsHidden  
+						FROM [dbo].[Dep_CustProductStatus]  WITH (NOLOCK)  
+						WHERE cs.CustID = @AgentID) csa
+	WHERE cs.CustID = @CustID  
 
 --bet setting
 CREATE TABLE #tmpDep_CustBetLimit_Special(Sporttype SMALLINT,Bettype SMALLINT,MaxBet MONEY,MaxPerMatch MONEY)  
@@ -93,7 +115,7 @@ FROM Dep_CustBetLimit_Special smcs WITH(NOLOCK)
     INNER JOIN #ProductSettingDetail s ON s.SportType = smcs.SportType AND ((CASE WHEN S.SportType IN (180,181,182,183,184,185,186) THEN 1 ELSE S.Bettype END)  = smcs.BetType) AND S.SettingType = 2  
 WHERE AgentID IS NULL AND NOT EXISTS(SELECT 1 FROM #tmpDep_CustBetLimit_Special a WITH(NOLOCK) WHERE a.SportType=smcs.SportType AND ((CASE WHEN a.SportType IN (180,181,182,183,184,185,186) THEN 1 ELSE a.Bettype END)  = smcs.BetType))  
     AND Site=@site AND CurrencyID=@currency  
-      
+
 INSERT INTO [dbo].[Dep_CustBetSetting_Member]  
     ([CustID]  
     ,[SportType]  
@@ -110,6 +132,7 @@ FROM dbo.Dep_CustBetSetting_Agent smcs WITH (NOLOCK)
     INNER JOIN #ProductSettingDetail s ON s.SportType = smcs.SportType AND s.Bettype = smcs.BetType AND S.SettingType = 2  
     LEFT JOIN #tmpDep_CustBetLimit_Special t ON smcs.SportType=t.Sporttype AND smcs.BetType=t.Bettype  
 WHERE smcs.custid = @AgentID  
+	AND NOT EXISTS( SELECT 1 FROM [Dep_CustBetSetting_Member] WITH(NOLOCK) WHERE custid = @CustID AND SportType = smcs.SportType and bettype = smcs.BetType)
 
 ---------------------
 INSERT INTO #tmpDep_CustNewBetLimit_Special(Sporttype ,Bettype ,MaxBet )  
@@ -139,7 +162,7 @@ FROM dbo.Dep_CustBetSetting_Agent smcs WITH (NOLOCK)
     INNER JOIN #ProductSettingDetail s ON s.SportType = smcs.SportType AND s.Bettype = smcs.BetType AND S.SettingType = 11  
     LEFT JOIN #tmpDep_CustNewBetLimit_Special t ON smcs.SportType=t.Sporttype AND smcs.BetType=t.Bettype  
 WHERE smcs.custid = @AgentID   
-
+	AND NOT EXISTS( SELECT 1 FROM [Dep_CustBetSetting_Member] WITH(NOLOCK) WHERE custid = @CustID AND SportType = smcs.SportType and bettype = smcs.BetType)
 
 ----Stake level
 INSERT INTO Dep_CustStakeLevel_member (CustID,SportType,BetType,StakeLevelList)  
@@ -155,6 +178,7 @@ FROM #ProductSettingDetail T
     ORDER BY sl.MaxStake, sl.MinStake, SL.GameGroupID   
     ) AS Temp  
 WHERE t.SettingType = 8  
+	AND NOT EXISTS( SELECT 1 FROM Dep_CustStakeLevel_member WITH(NOLOCK) WHERE custid = @CustID AND SportType = t.SportType and bettype = t.BetType)
 
 INSERT INTO Dep_CustStakeLevel_member (CustID,SportType,BetType,StakeLevelList)  
 SELECT @CustID,T.SportType,T.BetType,temp.list  
@@ -168,6 +192,7 @@ FROM #ProductSettingDetail T
     ORDER BY sl.MaxStake, sl.MinStake  
     ) AS Temp  
 WHERE t.SettingType = 7  
+	AND NOT EXISTS( SELECT 1 FROM Dep_CustStakeLevel_member WITH(NOLOCK) WHERE custid = @CustID AND SportType = t.SportType and bettype = t.BetType)
 
 ---------------------DELETE Dep_Customer_Archived----------------------
 DELETE
