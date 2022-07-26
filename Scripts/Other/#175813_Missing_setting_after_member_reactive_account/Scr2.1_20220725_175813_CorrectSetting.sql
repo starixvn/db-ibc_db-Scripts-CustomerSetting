@@ -65,7 +65,7 @@ ELSE
 	FROM [dbo].Dep_CustSettingMode cs WITH (NOLOCK)
 		CROSS APPLY(	SELECT IsGroupedPT,IsGroupedComm,IsGroupedBetLimit,IsGroupedStakeLevel
 						FROM DBACC.bodb02.dbo.Dep_CustSettingMode  WITH (NOLOCK)  
-						WHERE cs.CustID = @CustID) csa
+						WHERE CustID = @CustID) csa
 	WHERE cs.CustID = @CustID
 
 ------------------------Get From Upline---------------------------
@@ -82,7 +82,7 @@ ELSE
 	FROM [dbo].[Dep_CustProductStatus] cs WITH (NOLOCK)
 		CROSS APPLY(	SELECT bitmapIsDisabled,bitmapIsHidden  
 						FROM [dbo].[Dep_CustProductStatus]  WITH (NOLOCK)  
-						WHERE cs.CustID = @AgentID) csa
+						WHERE CustID = @AgentID) csa
 	WHERE cs.CustID = @CustID  
 
 --bet setting
