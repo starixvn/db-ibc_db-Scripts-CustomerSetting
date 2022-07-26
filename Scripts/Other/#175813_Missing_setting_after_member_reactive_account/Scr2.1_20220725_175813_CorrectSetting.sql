@@ -27,7 +27,7 @@ USE CUSTDB
 GO
 DECLARE @CustID INT = 51180940
 DECLARE @AgentID INT, @SuperID INT, @site varchar(10), @currency int
-SELECT @AgentID= recommend, @SuperID = srecommend, @site = site, @currency = currency FROM customer WITH(NOLOCK) WHERE CustID IN (51180940)
+SELECT @AgentID= recommend, @SuperID = srecommend, @site = site, @currency = currency FROM customer WITH(NOLOCK) WHERE CustID = @CustID
 
 /*
 SELECT * FROM custinfo								WITH(NOLOCK) WHERE CustID IN (51180940)
