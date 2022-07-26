@@ -14,10 +14,7 @@
 		50529438,
 		51824964,
 		51883489,
-		52157851,
-		66263379,
-		66263270,
-		66263271
+		52157851
 
 		Step 1 : Insert members to waiting list (DBCUST/CUSTDB)
 		Step 2 : Archive Deposit Member - Step 2: Clear Balance and CustInfo (DBTXN) - job
@@ -53,10 +50,7 @@ WHERE c.custid IN (
 		50529438,
 		51824964,
 		51883489,
-		52157851,
-		66263379,
-		66263270,
-		66263271
+		52157851
 )
 
 --Update ClosingBalance
