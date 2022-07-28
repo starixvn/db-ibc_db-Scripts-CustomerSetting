@@ -8,7 +8,7 @@
 */
 
 INSERT INTO Sport_Bettype_Reference_VirtualRate ([SportType], [BetType], [SportTypeRefVirtualRate], [BetTypeRefVirtualRate], [isActive])
-VALUES	 ('6','154','6','20','0')
+VALUES	 ('6','3918','6','20','0')
 		,('6','219','6','1','0')
 		,('6','220','6','3','0')
 		,('6','701','6','1','0')
