@@ -70,6 +70,17 @@ SELECT MsgID = 60037
 	,IsActive	= 1
 	,MsgNameCN	= @MsgNameEN
 
+-------ProductSettingSystemDisplay
+DELETE t
+FROM dbo.ProductSettingSystemDisplay t WITH(ROWLOCK)
+WHERE ProductID = 22
+	AND SettingType = 21
+
+INSERT INTO ProductSettingSystemDisplay (SystemID,ProductID,SettingType,DisplayMode)
+SELECT SystemID,ProductID,SettingType = 21,DisplayMode 
+FROM dbo.ProductSettingSystemDisplay WITH(NOLOCK)
+WHERE ProductID = 22
+	AND SettingType = 13
 /*
 SELECT *
 FROM ProductSettingType WITH(NOLOCK) 
@@ -89,4 +100,9 @@ SET t.settingstatus = 0
 FROM ProductSettingDetail t WITH(NOLOCK) 
 WHERE ProductID = 22 
 	AND SettingType = 21
+
+SELECT *
+FROM dbo.ProductSettingSystemDisplay t WITH(NOLOCK)
+WHERE ProductID = 22
+	AND SettingType IN(13,21)
 */
