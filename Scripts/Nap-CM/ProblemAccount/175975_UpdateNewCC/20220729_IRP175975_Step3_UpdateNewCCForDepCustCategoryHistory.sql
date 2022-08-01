@@ -1,0 +1,123 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20220729@Johnson
+	Task: Update New customer class for Dep_CustCategoryHistory [redmine:#175975]
+	DB: DBCUST/CustDB
+*/
+
+ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]	
+	@target VARCHAR(20)	
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbcust only
+		
+	IF dbo.f_CheckRepTable('Dep_CustCategoryHistory') = 0 RETURN	
+	
+	DECLARE @MinID BIGINT, @MaxID BIGINT, @FromID BIGINT, @ToID BIGINT
+	DECLARE @tmpCC TABLE (OldCustomerClass SMALLINT, NewCustomerClass SMALLINT)
+	
+	INSERT INTO @tmpCC(OldCustomerClass, NewCustomerClass)	
+	SELECT 	1	,	201
+	UNION SELECT 	111	,	2101
+	UNION SELECT 	112	,	2201
+	UNION SELECT 	113	,	2001
+	UNION SELECT 	2	,	202
+	UNION SELECT 	121	,	2102
+	UNION SELECT 	122	,	2202
+	UNION SELECT 	123	,	2002
+	UNION SELECT 	3	,	200
+	UNION SELECT 	31	,	2100
+	UNION SELECT 	32	,	2200
+	UNION SELECT 	33	,	2000
+	UNION SELECT 	43	,	2500
+	UNION SELECT 	45	,	2503
+	UNION SELECT 	46	,	2504
+	UNION SELECT 	47	,	2505
+	UNION SELECT 	5	,	203
+	UNION SELECT 	51	,	2103
+	UNION SELECT 	52	,	2203
+	UNION SELECT 	53	,	2003
+	UNION SELECT 	57	,	2303
+	UNION SELECT 	58	,	2403
+	UNION SELECT 	6	,	204
+	UNION SELECT 	61	,	2104
+	UNION SELECT 	62	,	2204
+	UNION SELECT 	63	,	2004
+	UNION SELECT 	67	,	2304
+	UNION SELECT 	68	,	2404
+	UNION SELECT 	7	,	205
+	UNION SELECT 	71	,	2105
+	UNION SELECT 	72	,	2205
+	UNION SELECT 	73	,	2005
+	UNION SELECT 	77	,	2305
+	UNION SELECT 	78	,	2405
+	UNION SELECT 	8	,	301
+	UNION SELECT 	86	,	3001
+	UNION SELECT 	9	,	302
+	UNION SELECT 	96	,	3002
+	UNION SELECT 	9	,	302
+	UNION SELECT 	96	,	3002
+	UNION SELECT 	10	,	303
+	UNION SELECT 	106	,	3003
+	UNION SELECT 	10	,	303
+	UNION SELECT 	106	,	3003
+	UNION SELECT 	10	,	303
+	UNION SELECT 	106	,	3003
+	UNION SELECT 	12	,	304
+	UNION SELECT 	126	,	3004
+	UNION SELECT 	131	,	300
+	UNION SELECT 	132	,	3000
+	UNION SELECT 	14	,	401
+	UNION SELECT 	99	,	400
+	UNION SELECT 	101	,	4000
+	UNION SELECT 	100	,	999
+	UNION SELECT 	1001	,	901
+	UNION SELECT 	1002	,	902
+	
+	SELECT @MinID = MIN(LogID),
+			@MaxID = MAX(LogID)
+	FROM Dep_CustCategoryHistory WITH(NOLOCK)
+	
+	SELECT @FromID = @MinID, @ToID = @MinID + 4999
+	
+	WHILE(1=1)
+	BEGIN
+		UPDATE cs
+		SET cs.CustomerClass = ISNULL((SELECT NewCustomerClass FROM @tmpCC t WHERE t.OldCustomerClass = cs.CustomerClass), CustomerClass),
+			cs.OldCustomerClass = ISNULL((SELECT NewCustomerClass FROM @tmpCC t WHERE t.OldCustomerClass = cs.OldCustomerClass), OldCustomerClass)
+		FROM Dep_CustCategoryHistory cs WITH(ROWLOCK)
+		WHERE LogID BETWEEN @FromID AND @ToID
+		
+		SELECT @FromID = @ToID + 1,
+				@ToID = @ToID + 5000
+				
+		IF @FromID > @MaxID 
+			BREAK;
+		
+		WAITFOR DELAY '0:0:0.1'
+	END
+END	
+GO
+-- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+
+
+
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS & DBCUST -----
+--------------------------------------------------------------------------------------
+
+DECLARE @target VARCHAR(20)
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
+	SET @target = 'DBCUST'
+ELSE 
+	SET @target = 'REPLICATED'
+
+Print 'Server Name : ' + @target
+
+EXEC dbo.Acc_CustSetting3rd_19 @target = @target	
+
+
+-- END STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS & DBCUST -----
+--------------------------------------------------------------------------------------
