@@ -7,9 +7,25 @@
 */
 USE CustDB
 GO
-TRUNCATE TABLE SiteDBConfig
+DELETE FROM SiteDBConfig
 
 GO
+--Local
+IF @@SERVERNAME = 'TESTDBCUST'
+	INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
+	SELECT 0, 'DBTXN', 'DBTRANS', '10.18.200.55'
+	UNION ALL 
+	SELECT 1, 'DBSite1', 'DBGRP01L', '10.18.200.58\testsitedb'
+
+--SIT
+IF @@SERVERNAME = 'SITDBCUST'
+INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
+SELECT 0, 'DBTXN', 'SITDBTRANS', '172.16.40.17'
+UNION ALL 
+SELECT 1, 'DBSite1', 'SITDBGRP01L', '172.16.40.28'
+
+--PRO
+IF @@SERVERNAME = 'DBCUST'
 INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
 SELECT 0, 'DBTXN', 'DBTRANS', '10.18.200.55'
 UNION ALL 
