@@ -598,8 +598,6 @@ BEGIN
 				ON t.CustID = dc.custid
 				AND sp.Sporttype = dc.sporttype
 				AND sp.BetType = dc.bettype
-			INNER JOIN custInfo ci WITH(NOLOCK)
-				ON t.custid = ci.custid
 		WHERE sp.HaveBetSettingGame = 1
 		--NG
 		UNION ALL
@@ -758,8 +756,6 @@ BEGIN
 			ON t.CustID = dc.custid
 			AND sp.Sporttype = dc.sporttype
 			AND sp.BetType = dc.bettype
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
 	WHERE sp.HaveBetSettingGame = 1
 	--NG
 	UNION ALL
@@ -909,8 +905,6 @@ BEGIN
 			INNER JOIN CustGameType dc WITH(NOLOCK)
 				ON t.CustID = dc.custid
 				AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
-			INNER JOIN custInfo ci WITH(NOLOCK)
-				ON t.custid = ci.custid
 		WHERE sp.HaveBetSetting = 1
 	END
 
@@ -949,8 +943,6 @@ BEGIN
 			INNER JOIN CustGameType dc WITH(NOLOCK)
 				ON t.CustID = dc.custid
 				AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
-			INNER JOIN custInfo ci WITH(NOLOCK)
-				ON t.custid = ci.custid
 		WHERE sp.HaveBetSetting = 1
 	END
 	
