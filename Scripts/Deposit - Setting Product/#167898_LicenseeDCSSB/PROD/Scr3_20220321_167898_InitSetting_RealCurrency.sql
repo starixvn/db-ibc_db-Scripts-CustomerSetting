@@ -106,6 +106,8 @@ BEGIN
 	GROUP BY a.SportType,a.BetType
 
 -------------------------------------PT Setting-----------------------------------------------
+	DECLARE @Cust_Temp TABLE(CustID INT, recommend INT)
+
 --SMA Level AND Group Member Level
 	--SB
 	IF @mincustID_batch = 0 -- Init data for SMA on the first batch only
@@ -455,13 +457,14 @@ BEGIN
 	END
 
 	UPDATE #tmpCust SET isfinished = 0
-	DECLARE @Cust_Temp TABLE(CustID INT)
 
 	WHILE (1=1)
 	BEGIN
+		DELETE FROM @Cust_Temp
+
 		UPDATE TOP (@BatchSize) c WITH (ROWLOCK)
 		SET c.isfinished = 1
-		OUTPUT DELETED.CustID INTO @Cust_Temp(CustID)
+		OUTPUT DELETED.CustID,deleted.recommend INTO @Cust_Temp(CustID,recommend)
 		FROM #tmpCust c 
 		WHERE isfinished = 0
 		
@@ -492,7 +495,7 @@ BEGIN
 			,ISNULL(a.discount,0) AS adiscount
 			,ISNULL(a.discount,0) AS sdiscount
 		FROM Dep_CustSettingMode c WITH (NOLOCK)
-			INNER JOIN #tmpCust t ON c.CustID = t.CustID
+			INNER JOIN @Cust_Temp t ON c.CustID = t.CustID
 			CROSS JOIN @SportBettype_tbl sp
 			LEFT JOIN Dep_CustDiscountSetting_Agent a WITH(NOLOCK,FORCESEEK) 
 				ON a.custid = t.recommend 
@@ -504,8 +507,6 @@ BEGIN
 		WHERE c.IsGroupedComm = 0 
 			AND dcs_m.custid IS NULL
 			AND sp.HaveComm = 1
-			
-		DELETE FROM @Cust_Temp
 	END
 
 	--Insert Dep_LicenseeProductSetting --> Comm
@@ -913,30 +914,46 @@ BEGIN
 		WHERE sp.HaveBetSetting = 1
 	END
 
---Member
-	INSERT INTO Dep_CustBetSetting_Member(
-		CustID,
-		SportType,
-		BetType,
-		MinBet,
-		MaxBet,
-		MaxPerMatch
-	)
-	SELECT t.[CustID]
-			,sp.Sporttype
-			,sp.BetType
-			,dc.minbet
-			,dc.maxbet
-			,dc.MaxPerGameType
-	FROM #tmpCust t
-		CROSS JOIN @SportBettype_tbl sp
-		INNER JOIN CustGameType dc WITH(NOLOCK)
-			ON t.CustID = dc.custid
-			AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
-		INNER JOIN custInfo ci WITH(NOLOCK)
-			ON t.custid = ci.custid
-	WHERE sp.HaveBetSetting = 1
+	--Member
+	UPDATE #tmpCust SET isfinished = 0
 
+	WHILE (1=1)
+	BEGIN
+		DELETE FROM @Cust_Temp
+
+		UPDATE TOP (@BatchSize) c WITH (ROWLOCK)
+		SET c.isfinished = 1
+		OUTPUT DELETED.CustID INTO @Cust_Temp(CustID)
+		FROM #tmpCust c 
+		WHERE isfinished = 0
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+		
+		INSERT INTO Dep_CustBetSetting_Member(
+			CustID,
+			SportType,
+			BetType,
+			MinBet,
+			MaxBet,
+			MaxPerMatch
+		)
+		SELECT t.[CustID]
+				,sp.Sporttype
+				,sp.BetType
+				,dc.minbet
+				,dc.maxbet
+				,dc.MaxPerGameType
+		FROM @Cust_Temp t
+			CROSS JOIN @SportBettype_tbl sp
+			INNER JOIN CustGameType dc WITH(NOLOCK)
+				ON t.CustID = dc.custid
+				AND dc.GameTypeID = CASE WHEN sp.Sporttype = 202 AND sp.BetType = 1501 THEN 1 END
+			INNER JOIN custInfo ci WITH(NOLOCK)
+				ON t.custid = ci.custid
+		WHERE sp.HaveBetSetting = 1
+	END
+	
 	--Insert Dep_LicenseeProductSetting --> Bet Setting
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 	SELECT @srecommend,d.ProductSettingID
