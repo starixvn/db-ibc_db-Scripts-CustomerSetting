@@ -63,7 +63,7 @@ BEGIN
 
 	SELECT @Site = site, @Currency = currency FROM Customer WITH(NOLOCK) WHERE custid = @srecommend
 
-	DECLARE @BatchSize SMALLINT = 5000
+	DECLARE @BatchSize SMALLINT = 2000
 
 	INSERT INTO #Dummy(CustID)
 	SELECT CustID FROM Customer WITH(NOLOCK) 
@@ -993,7 +993,7 @@ BEGIN
 			ON c.CustID = cg.CustID
 	WHERE cg.GameTypeID = 1
 		
-	SET @BatchSize = 5000
+	SET @BatchSize = 2000
 
 	WHILE 1 = 1 
 	BEGIN
@@ -1014,7 +1014,7 @@ BEGIN
 		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
 
-		WAITFOR DELAY '00:00:00.050'
+		WAITFOR DELAY '00:00:00.020'
 	END
 
 	--Insert Dep_LicenseeProductSetting --> Status
@@ -1160,7 +1160,7 @@ BEGIN
 	SELECT @msgtmp = @msg  + CAST(@duration AS VARCHAR(20))
 	RAISERROR (@msgtmp, 0, 1,@index, @srecommend) WITH NOWAIT
 
-	WAITFOR DELAY '00:00:00.280'			
+	WAITFOR DELAY '00:00:00.100'			
 END	
 
 DROP TABLE #supers	
