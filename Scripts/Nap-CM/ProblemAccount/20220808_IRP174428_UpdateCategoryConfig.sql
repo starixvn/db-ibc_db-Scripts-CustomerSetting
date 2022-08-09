@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20220504@Johnson
-	Task: Update category config [redmine:#172297]
+	Created: 20220808@Elodie
+	Task: Update category config [redmine:#174428]
 	DB: DBCUST/CustDB
 */
 
