@@ -35,7 +35,7 @@ BEGIN
 	FROM STRING_SPLIT(@CustIDs,',')
 	WHERE value <> ''
 	
-	DECLARE @batch SMALLINT = 2500
+	DECLARE @batch SMALLINT = 5000
 	DECLARE @SportBetType TABLE
 	(
 		SportType SMALLINT, 
