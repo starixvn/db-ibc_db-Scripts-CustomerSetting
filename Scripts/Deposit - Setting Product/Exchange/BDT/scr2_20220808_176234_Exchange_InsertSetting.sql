@@ -227,7 +227,7 @@ BEGIN
 	
 	EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @srecommend = @srecommend, @max_custid=@max_custid,@target = @target	
 				
-	WAITFOR DELAY '00:00:00.280'			
+	WAITFOR DELAY '00:00:00.100'			
 END	
 
 DROP TABLE #supers		
