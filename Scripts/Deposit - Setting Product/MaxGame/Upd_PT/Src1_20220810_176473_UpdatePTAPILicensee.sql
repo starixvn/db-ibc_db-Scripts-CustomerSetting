@@ -248,8 +248,8 @@ BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT @srecommend, ProductSettingID 
 		FROM Dep_ProductSetting dp WITH(NOLOCK) 
-		WHERE dp.ProductID = 60
-			AND dp.SettingType IN (1) -- Product Status, PT, StakeLevel
+		WHERE dp.ProductID = 31
+			AND dp.SettingType IN (1) -- Product  PT
 			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
 	END
 
