@@ -16,7 +16,7 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1
-	AND NOT( cs.site IN('spondemo','Athena000')	AND Ci.currency IN (20) )
+	AND NOT( cs.site IN('spondemo','Athena000','SampleSite')	AND Ci.currency IN (20) )
 
 CREATE TABLE #tmpCust			(CustID INT PRIMARY KEY, recommend INT, isfinished BIT DEFAULT(0), Currency INT, Site VARCHAR(50))
 CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY,RoleID INT, Currency INT, Site VARCHAR(50))

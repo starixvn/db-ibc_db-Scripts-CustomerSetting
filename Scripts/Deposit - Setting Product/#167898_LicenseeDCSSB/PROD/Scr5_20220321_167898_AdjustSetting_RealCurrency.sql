@@ -17,7 +17,7 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN customer cu WITH(NOLOCK) ON cu.custid = ci.custid
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.Enabled=1 
-	AND NOT( cs.site IN('spondemo','Athena000')	AND Ci.currency IN (20) )
+	AND NOT( cs.site IN('spondemo','Athena000','SampleSite') AND Ci.currency IN (20) )
 ORDER BY ci.custid 
 
 DECLARE @currency INT, @BitOrderNG TINYINT = 12, @BitOrderKN TINYINT = 13

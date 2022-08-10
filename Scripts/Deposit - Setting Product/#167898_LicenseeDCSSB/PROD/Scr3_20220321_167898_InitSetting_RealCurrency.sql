@@ -1076,7 +1076,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND NOT( cs.site IN('spondemo','Athena000')	AND Ci.currency IN (20) )
+		AND NOT( cs.site IN('spondemo','Athena000','SampleSite')	AND Ci.currency IN (20) )
 GROUP BY ci.srecommend
 ORDER BY ci.srecommend
 
