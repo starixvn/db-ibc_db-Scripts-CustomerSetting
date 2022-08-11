@@ -33,7 +33,12 @@ SELECT 1, 'DBSite1', 'DBGRP01L', '10.18.200.58\testsitedb'
 
 UPDATE s
 SET s.SiteDBGroupID = 1
-FROM Site s 
+FROM Site s WITH (ROWLOCK)
+WHERE site IN ('12Bet','Athena000')
+
+UPDATE cs
+SET cs.SiteDBGroupID = 1
+FROM Dep_CustSuper cs WITH (ROWLOCK)
 WHERE site IN ('12Bet','Athena000')
 
 
