@@ -72,7 +72,7 @@
 			BREAK		
 
 		DELETE cg
-		FROM dbo.Dep_CustPTSetting_Agent cg WITH(ROWLOCK)		
+		FROM dbo.Dep_CustDiscountSetting_Agent cg WITH(ROWLOCK)		
 			INNER JOIN #Dep_CustDiscountSetting_AgentTemp  t 
 				ON cg.CustID=t.CustID AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype
 
