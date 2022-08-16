@@ -52,5 +52,8 @@ BEGIN
 		   ,[winlostdate]
 		   ,[Winlost]
 		   ,[bettype]
-	FROM Winlimit_DebitGame_Old20220825 WITH(NOLOCK)		
+	FROM Winlimit_DebitGame_Old20220825 WITH(NOLOCK)	
+
+	DROP TABLE Winlimit_CreditGame_Old20220825
+	DROP TABLE Winlimit_DebitGame_Old20220825
 END		   
