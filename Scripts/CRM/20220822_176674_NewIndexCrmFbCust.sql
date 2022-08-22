@@ -10,7 +10,7 @@
 USE [bodb_CRM]
 GO
 	
-DROP INDEX [IX_CRM_FeedbackCustomer_CustID] ON [dbo].[crmFeedbackCustomer]
-GO
-CREATE NONCLUSTERED INDEX IX_CRM_FeedbackCustomer_CustID ON crmFeedbackCustomer(CustID) INCLUDE (IsRelated) 
+--DROP INDEX [IX_CRM_FeedbackCustomer_CustID] ON [dbo].[crmFeedbackCustomer]
+--GO
+CREATE NONCLUSTERED INDEX IX_CRM_FeedbackCustomer_CustID ON crmFeedbackCustomer(CustID) INCLUDE (IsRelated) WITH(DROP_EXISTING = ON);
 GO
