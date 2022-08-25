@@ -14,7 +14,7 @@ GO
 IF OBJECT_ID('Dep_CustBetSettingGame_Agent_Insert_update') IS NOT NULL
 	DROP TRIGGER Dep_CustBetSettingGame_Agent_Insert_update
 go
-CREATE TRIGGER [dbo].[Dep_CustBetSettingGame_Agent_Insert_update] ON [dbo].Dep_CustBetSettingGame_Agent
+CREATE TRIGGER [dbo].[Dep_CustBetSettingGame_Agent_update] ON [dbo].Dep_CustBetSettingGame_Agent
 AFTER UPDATE
 AS
 /*
@@ -58,7 +58,7 @@ GO
 IF OBJECT_ID('Dep_CustBetSettingGame_Member_Insert_update') IS NOT NULL
 	DROP TRIGGER Dep_CustBetSettingGame_Member_Insert_update
 go
-CREATE TRIGGER [dbo].[Dep_CustBetSettingGame_Member_Insert_update] ON [dbo].[Dep_CustBetSettingGame_Member]
+CREATE TRIGGER [dbo].[Dep_CustBetSettingGame_Member_update] ON [dbo].[Dep_CustBetSettingGame_Member]
 AFTER UPDATE
 AS
 /*
@@ -102,7 +102,7 @@ GO
 IF OBJECT_ID('Dep_CustBetSettingGameGroup_Member_Insert_update') IS NOT NULL
 	DROP TRIGGER Dep_CustBetSettingGameGroup_Member_Insert_update
 go
-CREATE TRIGGER [dbo].[Dep_CustBetSettingGameGroup_Member_Insert_update] ON [dbo].[Dep_CustBetSettingGameGroup_Member]
+CREATE TRIGGER [dbo].[Dep_CustBetSettingGameGroup_Member_update] ON [dbo].[Dep_CustBetSettingGameGroup_Member]
 AFTER UPDATE
 AS
 /*
