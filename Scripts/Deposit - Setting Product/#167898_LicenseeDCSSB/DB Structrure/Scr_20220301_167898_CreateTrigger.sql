@@ -52,18 +52,6 @@ BEGIN
 		,MaxPayoutPerMatch
 		,0
 	FROM [DELETED]
-	UNION ALL
-	SELECT CustID
-		,SportType
-		,BetType
-		,MinBet
-		,MaxBet
-		,MaxPerMatch
-		,MaxPerNumber
-		,MaxPayoutPerMatch
-		,1
-	FROM [INSERTED]
-
 END 
 
 GO
@@ -108,17 +96,6 @@ BEGIN
 		,MaxPayoutPerMatch
 		,0
 	FROM [DELETED]
-	UNION ALL
-	SELECT CustID
-		,SportType
-		,BetType
-		,MinBet
-		,MaxBet
-		,MaxPerMatch
-		,MaxPerNumber
-		,MaxPayoutPerMatch
-		,1
-	FROM [INSERTED]
 END
 
 GO
@@ -163,15 +140,4 @@ BEGIN
 		,MaxPayoutPerMatch
 		,0
 	FROM [DELETED]
-	UNION ALL
-	SELECT AgentID
-		,SportType
-		,BetType
-		,MinBet
-		,MaxBet
-		,MaxPerMatch
-		,MaxPerNumber
-		,MaxPayoutPerMatch
-		,1
-	FROM [INSERTED]
 END
