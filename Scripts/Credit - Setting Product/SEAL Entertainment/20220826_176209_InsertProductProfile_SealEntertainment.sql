@@ -94,3 +94,8 @@ UNION ALL
 SELECT 7,@ProductID,21,3
 UNION ALL
 SELECT 8,@ProductID,21,3
+
+
+--GameGroup
+INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
+VALUES (39,156,8900,'Level 1',0)
