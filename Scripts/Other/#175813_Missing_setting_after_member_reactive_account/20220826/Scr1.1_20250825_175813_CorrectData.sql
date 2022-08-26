@@ -1,26 +1,13 @@
   /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-    Created: Eden@20220823
-    Task: Correct Data custid = 51251040,25419466,51868814,53341257,25544810 : [#175813]
-	Corrected:
-		custinfo					
-		vw_customer				
-		[CustSettingGame]		
-		CustVirtualSetting		
-		Dep_CustProductSetting	
-		Dep_CustSetting			
-		Dep_CustSetting3rd		
-		CustGameType	
-		Dep_CustDiscountSetting_Member --Group
-		Dep_CustPTSetting_Member --Group
-		Dep_CustCommRate -- not offer
-		Dep_CustSetting_AGCasino -- not offer
-		Dep_CustSpecialLevel -- not offer
-
+    Created: Eden@20220825
+    Task: Correct Data custid = (49392241,50323695,52752449,51300157,51101183,52949554,53912640) : [#175813]
 	need correct:
+		Dep_CustSettingMode
 		Dep_CustProductStatus
 		Dep_CustBetSetting_Member
 		Dep_CustStakeLevel_Member
+		Dep_CustBetSettingGame_Member
     DB: DBCUST/CustDB
 */ 
 USE CUSTDB
@@ -41,7 +28,7 @@ CREATE TABLE #ProductSettingDetail(
 
 INSERT INTO #tempCust(custid,recommend, srecommend, site, currency)
 SELECT custid, recommend, srecommend, site, currency 
-FROM customer WITH(NOLOCK) WHERE CustID IN(51251040,25419466,51868814,53341257,25544810)
+FROM customer WITH(NOLOCK) WHERE CustID IN (49392241,50323695,52752449,51300157,51101183,52949554,53912640)
 
 SELECT * FROM #tempCust
 
