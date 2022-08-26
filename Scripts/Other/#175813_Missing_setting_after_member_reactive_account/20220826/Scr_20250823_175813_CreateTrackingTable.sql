@@ -1,7 +1,7 @@
   /*<info serverAlias="DBCUST-CustDB,DBACC-bodb02"></info>*/
 /*
     Created: Eden@20220823
-    Task: Correct Data custid = 51251040,25419466,51868814,53341257,25544810 : [#175813]
+    Task: Create temp table Temp_TrackingReactiveFailed to tracking reactive issue [#175813]
     DB: DBCUST/CustDB, DB061/bodb02, DB06/bodb02
 */ 
 --DROP TABLE [Temp_TrackingReactiveFailed]
