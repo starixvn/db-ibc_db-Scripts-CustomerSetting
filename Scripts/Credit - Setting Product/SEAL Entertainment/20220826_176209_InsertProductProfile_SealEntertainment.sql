@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20220826@Tacy
-	Task: Insert new Product profile for SEAL Entertainment [redmine:#176078]
+	Task: Insert new Product profile for SEAL Entertainment [redmine:#176209]
 	DB: DBCust/CustDB
 */
 

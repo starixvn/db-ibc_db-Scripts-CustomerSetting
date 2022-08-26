@@ -1,7 +1,7 @@
 /*<info serverAlias="dbtxn-bodb02"></info>*/
 /*
 	Created: 20220826@Tacy
-	Task: Insert new Product profile for SEAL Entertainment [redmine:#176078]
+	Task: Insert new Product profile for SEAL Entertainment [redmine:#176209]
 	DB: dbtxn/bodb02
 */
 
