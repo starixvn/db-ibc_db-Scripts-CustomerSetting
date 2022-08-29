@@ -8,9 +8,9 @@
 DECLARE @productID SMALLINT ,@betType SMALLINT,
 		@sportType SMALLINT,@RealProductID SMALLINT,@SettingStatus TINYINT,
 		@MaxDiscount DECIMAL(9,8), @IsSync BIT, @IsHidden BIT,@MaxPT TINYINT,		
-		@IsDisabled BIT, @BitmapOrder TINYINT
+		@IsDisabled BIT, @ProductSettingID INT
 		
-SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide	
+SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide	
 	 , @productID = 22
 	 , @sportType = 155
 	 , @betType = 8400 
@@ -20,6 +20,7 @@ SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide
 	 , @IsDisabled = 0
 	 , @MaxPT = 90
 	 , @MaxDiscount = 0
+	 , @ProductSettingID = 227
 
 -- [ProductSettingDetail]
 DELETE FROM dbo.ProductSettingDetail WITH(ROWLOCK)
@@ -42,10 +43,11 @@ INSERT INTO [ProductSettingDetail]
     ,[DisplayOrder]
     ,[SettingStatus]
     ,[IntervalValue]
-    ,[RealProductId])
+    ,[RealProductId]
+	,[ProductSettingID])
 VALUES	
 	--GroupStakeLevel																																				
-	(8, @Sporttype, @Bettype, 0, @ProductID, NULL, NULL, NULL, NULL, NULL, 2, 5, @SettingStatus, NULL, @RealProductId)
+	(8, @Sporttype, @Bettype, 0, @ProductID, NULL, NULL, NULL, NULL, NULL, 2, 5, @SettingStatus, NULL, @RealProductId, @ProductSettingID)
 
 --GameGroup
 INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
