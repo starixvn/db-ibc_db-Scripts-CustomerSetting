@@ -11,7 +11,7 @@ DECLARE @productID SMALLINT ,@betType SMALLINT,
 		@IsDisabled BIT, @BitmapOrder TINYINT
 		
 SELECT @SettingStatus = 0 --0: Production, 1: UAT, 2: Hide	
-	 , @productID = 22 -- Microgaming
+	 , @productID = 22
 	 , @sportType = 155
 	 , @betType = 8400 
 	 , @RealProductID = 22 

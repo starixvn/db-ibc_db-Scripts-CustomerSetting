@@ -7,7 +7,7 @@
 
 -- [Products]
 INSERT INTO [Products] ([ProductID], [ProductName], [Description], [ProductPrefix], [Enabled], [BalanceType], [SubProductBalanceType], [GroupType], [CasinoType], [IsOfferPlayForFun], [EndOfSupportDate], [VendorID])
-VALUES (73,'MG','Microgaming ','MGRNG',1,3,NULL,0,1,0,NULL,73)
+VALUES (73,'MG','Microgaming','MGRNG',1,3,NULL,0,1,0,NULL,73)
 
 
 -- [WinLimit_ProductOffer]
