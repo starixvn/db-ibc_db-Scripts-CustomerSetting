@@ -2,7 +2,7 @@
 /*	
 	Created: 20220811@Eden
 	Task: Rename unsused tables and columns
-	Redmine: https://nexdev.net/issues/167898
+	Redmine: https://nexdev.net/issues/167898 
 	DB: DBCUST/CUSTDB and ALL REPLICATIONS
 */
 --Rename unused Tables

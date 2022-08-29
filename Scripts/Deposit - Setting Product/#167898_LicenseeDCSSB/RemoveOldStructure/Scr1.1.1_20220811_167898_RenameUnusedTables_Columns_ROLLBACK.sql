@@ -3,7 +3,7 @@
 	Created: 20220811@Eden
 	Task: Rename unsused tables and columns - ROLLBACK
 	Redmine: https://nexdev.net/issues/167898
-	DB: DBCUST/CUSTDB and ALL REPLICATIONS
+	DB: DBCUST/CUSTDB and ALL REPLICATIONS 
 */
 
 --Rename unused Tables
