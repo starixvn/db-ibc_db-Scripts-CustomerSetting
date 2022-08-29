@@ -6,20 +6,14 @@
 */
 
 DECLARE @productID SMALLINT ,@betType SMALLINT,
-		@sportType SMALLINT,@RealProductID SMALLINT,@SettingStatus TINYINT,
-		@MaxDiscount DECIMAL(9,8), @IsSync BIT, @IsHidden BIT,@MaxPT TINYINT,		
-		@IsDisabled BIT, @ProductSettingID INT
+		@sportType SMALLINT,@RealProductID SMALLINT,
+		@SettingStatus TINYINT, @ProductSettingID INT
 		
 SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide	
 	 , @productID = 22
 	 , @sportType = 155
 	 , @betType = 8400 
 	 , @RealProductID = 22 
-	 , @IsSync = 1
-	 , @IsHidden = 0
-	 , @IsDisabled = 0
-	 , @MaxPT = 90
-	 , @MaxDiscount = 0
 	 , @ProductSettingID = 227
 
 -- [ProductSettingDetail]
