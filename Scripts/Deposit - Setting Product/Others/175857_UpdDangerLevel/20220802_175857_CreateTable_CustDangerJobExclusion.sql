@@ -22,5 +22,5 @@ CREATE TABLE [dbo].[CustDangerJobExclusion](
 ) ON [DATA]
 GO
 
-CREATE NONCLUSTERED INDEX IX_CreateDate ON CustDangerJobExclusion(CreateDate)
+CREATE NONCLUSTERED INDEX IX_CustDangerJobExclusion_CreateDate ON CustDangerJobExclusion(CreateDate)
 GO
