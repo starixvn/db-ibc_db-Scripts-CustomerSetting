@@ -1,0 +1,1 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*//*	Created by: Elodie@20220829	Task: Correct data on SiteDB [Redmine:#175297]		DB: DBCUST-CustDB*/USE CustDBUPDATE s  SET SiteDBGroupID = 1FROM custdb.dbo.Dep_custSuper s WITH (ROWLOCK)WHERE custid = 67670495
