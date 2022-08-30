@@ -8,11 +8,18 @@ USE bodb02
 GO
 GRANT EXECUTE ON [dbo].Dot_BalanceInsCredit TO [Dot_Member]
 GO
+GRANT EXECUTE ON [dbo].Dot_BalanceInsCredit TO bodbAdminNet
+GO
 GRANT EXECUTE ON [dbo].Dot_BalanceInsDebit TO [Dot_Member]
 GO
-GRANT EXECUTE ON [dbo].Task_Cust_CheckBalance_Exception_Ins TO [Dot_Member]
--------------------------------
+GRANT EXECUTE ON [dbo].Dot_BalanceInsDebit TO bodbAdminNet
 GO
+GRANT EXECUTE ON [dbo].Task_Cust_CheckBalance_Exception_Ins TO [Dot_Member]
+GO
+GRANT EXECUTE ON [dbo].Task_Cust_CheckBalance_Exception_Ins TO bodbAdminNet
+GO
+-------------------------------
+
 GRANT EXECUTE ON [dbo].Dot_BalanceCreditInitialize TO [Dot_Member]
 GO
 GRANT EXECUTE ON [dbo].Dot_BalanceCreditInitialize TO [Dot_Evolution] 
@@ -39,4 +46,7 @@ GRANT EXECUTE ON [dbo].Dot_Int_BettransInsTransactionWithoutLog_Cust TO [Dot_Mem
 GO
 GRANT EXECUTE ON [dbo].Dot_Int_BettransInsTransactionWithoutLog_Cust TO [Dot_Evolution] 
 GO
-
+---------------
+GRANT EXECUTE ON [dbo].Acc_CustomerUpdUserName_Bettrans TO bodbAdminNet 
+GO
+ 
