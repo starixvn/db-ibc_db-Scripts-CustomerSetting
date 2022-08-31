@@ -33,7 +33,7 @@ BEGIN
 
 		DELETE TOP(@BatchNum) a
 		OUTPUT deleted.CustID,deleted.sporttype,deleted.bettype INTO #TmpCust_Batch(CustID,sporttype,bettype)
-		FROM #TmpWrongBetlimit_Cust a WITH(ROWLOCK, UPDLOCK)
+		FROM #TmpWrongBetlimit_Cust a
 
 		IF @@ROWCOUNT = 0
 			BREAK
