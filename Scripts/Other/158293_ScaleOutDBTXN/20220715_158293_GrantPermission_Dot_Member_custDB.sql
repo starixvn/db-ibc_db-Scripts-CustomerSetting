@@ -1,0 +1,1 @@
+/*<info serverAlias="DBTXN-CustDB"></info>*//*	Created by: Eden@20220825	Task: Grant permission for some sp on DBTXN + SiteDB [Redmine:#175297]		DB: DBTXN-CustDB*/USE CustDBGRANT EXECUTE ON [dbo].Acc_SiteDBConfigSel TO [Dot_Member]GRANT EXECUTE ON [dbo].Acc_SiteDBConfigSel TO Dot_Evolution
