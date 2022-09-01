@@ -1,6 +1,6 @@
 /*<info serverAlias="DBARCCUST-Bodb_Archive_Customer_Licensee"></info>*/
 /*
-    Created: Eden@20220825
+    Created: Eden@20220901
     Task: delete archived data of members: [#175813]
 			49270221,
 			49337414,
