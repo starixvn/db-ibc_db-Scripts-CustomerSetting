@@ -4,7 +4,7 @@
 	Created: 20220907@Tacy
 	Task: Copy data from Sport_Bettype_Reference_Setting to SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 RedmineID: #170739
-	Database: DBTP-bodb02
+	Database: DBTXN-bodb02
 */
 DECLARE @Batch_size INT;
 
@@ -93,3 +93,18 @@ BEGIN
 
 	WAITFOR DELAY '00:00:0.002'
 END
+
+--Update SportTypeRefBetSetting , BetTypeRefBetSetting for Keno:
+UPDATE rm
+SET 
+	rm.SportTypeRefBetSetting=ref.SportType,
+	rm.BetTypeRefBetSetting=ref.BetType,
+	rm.TableBetSetting=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustBetSetting_Member' ELSE 'GameType' END
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+	INNER JOIN SportBettypeSettingMatrix ref WITH (NOLOCK)
+			ON ref.SportType=rm.SportType
+			AND ref.BetType=rm.BetType
+			AND ref.isLicensee=rm.isLicensee
+			AND ref.isLive=rm.isLive
+			AND ref.Site=rm.Site
+WHERE rm.Site='All'
