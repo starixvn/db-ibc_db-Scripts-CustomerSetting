@@ -107,4 +107,4 @@ FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
 			AND ref.isLicensee=rm.isLicensee
 			AND ref.isLive=rm.isLive
 			AND ref.Site=rm.Site
-WHERE rm.Site='All'
+WHERE rm.Site='All' AND rm.SportType=202
