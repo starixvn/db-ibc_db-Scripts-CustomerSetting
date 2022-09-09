@@ -392,13 +392,13 @@ GO
 	SELECT DISTINCT M.CustID FROM #MemberTemp M WITH (NOLOCK)
 
 	INSERT INTO #Dep_CustProductStatus(CustID,bitmapIsHidden,bitmapIsDisabled)
-	SELECT c.CustID
+	SELECT DISTINCT c.CustID
 		,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrderMini,0))
 		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrderMini,0))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
 		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 	UNION ALL
-	SELECT c.CustID
+	SELECT DISTINCT c.CustID
 		,bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsHidden,@BitOrderMini,0))
 		,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@BitOrderMini,0))
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
@@ -465,11 +465,13 @@ GO
 	WHERE t.custid>@maxcustid	
 		AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID=t.custid AND a.ProductSettingID=104)
 
+	DROP TABLE #supers
 	DROP TABLE #Dummy
 	DROP TABLE #MemberTemp
 	DROP TABLE #SMATemp
 	DROP TABLE #Dep_CustProductStatus
 	DROP TABLE #TempProductStatus
+	DROP TABLE #Dep_NotExistsStatus
 	DROP TABLE #AllUsers
 	PRINT N'Step 5: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'; 
 

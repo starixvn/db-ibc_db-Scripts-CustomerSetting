@@ -273,7 +273,7 @@ SELECT @BitOrder= bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHERE S
 
 DECLARE @super_cnt INT, @index INT = 0 , @DoneSM BIT, @DoneAgent BIT 
 SET @super_cnt = (SELECT COUNT(*) FROM #supers )
-DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.' 
 DECLARE @msg_total nvarchar(200) = 'Total of supers: %d.'
 RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 

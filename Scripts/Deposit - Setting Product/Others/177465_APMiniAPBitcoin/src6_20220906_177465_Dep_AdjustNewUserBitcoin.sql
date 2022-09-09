@@ -11,7 +11,7 @@ GO
 -----------------------------------------------------
 	PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 	DECLARE @maxcustid INT
-	SELECT @maxcustid = 9999
+	SELECT @maxcustid = xxx
 	DECLARE @SportType SMALLINT = 175,@betType SMALLINT = 7901
 	DECLARE @BitOrder INT 
 
