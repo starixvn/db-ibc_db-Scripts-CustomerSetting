@@ -94,12 +94,36 @@ BEGIN
 	WAITFOR DELAY '00:00:0.002'
 END
 
+--Update reference setting for NG product - CREDIT only:
+UPDATE rm
+SET 
+	rm.SportTypeRefComm=NULL,
+	rm.BetTypeRefComm=NULL,
+	rm.TableComm=NULL,
+	rm.BetTypeRefBetSetting=CASE WHEN rm.SportType=161 THEN 81 ELSE rm.BetTypeRefBetSetting END,
+	rm.TableBetSetting='CustBetSetting_Member'
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+WHERE SportType IN (161,164,168) AND isLicensee=0 AND  Site='All'
+
+
+--Update reference setting for NG product - Deposit only:
+UPDATE rm
+SET 
+	rm.SportTypeRefPT=161,
+	rm.BetTypeRefPT=81,
+	rm.SportTypeRefComm=161,
+	rm.BetTypeRefComm=81,
+	rm.SportTypeRefBetSetting=161,
+	rm.BetTypeRefBetSetting=81
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+WHERE SportType IN (161,164,168) AND isLicensee=1
+
 --Update SportTypeRefBetSetting , BetTypeRefBetSetting for Keno:
 UPDATE rm
 SET 
 	rm.SportTypeRefBetSetting=ref.SportType,
 	rm.BetTypeRefBetSetting=CASE WHEN rm.isLicensee=1 THEN 1501 ELSE ref.BetType END,
-	rm.TableBetSetting=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustBetSetting_Member' ELSE 'GameType' END
+	rm.TableBetSetting=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustBetSetting_Member' ELSE 'CustGameType' END
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
 	INNER JOIN SportBettypeSettingMatrix ref WITH (NOLOCK)
 			ON ref.SportType=rm.SportType
