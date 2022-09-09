@@ -100,6 +100,7 @@ SET
 	rm.SportTypeRefComm=NULL,
 	rm.BetTypeRefComm=NULL,
 	rm.TableComm=NULL,
+	rm.StructureVerPT=NULL,
 	rm.BetTypeRefBetSetting=CASE WHEN rm.SportType=161 THEN 81 ELSE rm.BetTypeRefBetSetting END,
 	rm.TableBetSetting='CustBetSetting_Member'
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
