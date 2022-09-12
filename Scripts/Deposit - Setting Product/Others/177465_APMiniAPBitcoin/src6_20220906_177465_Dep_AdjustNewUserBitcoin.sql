@@ -258,6 +258,7 @@ GO
 						FROM Dep_LicenseeProductSetting D WITH(NOLOCK) 
 						WHERE D.CustID=s.CustID AND d.ProductSettingID = 113)
 
+	DROP TABLE #supers
 	DROP TABLE #Dummy
 	DROP TABLE #MemberTemp
 	DROP TABLE #SMATemp
