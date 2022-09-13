@@ -67,20 +67,10 @@ INSERT INTO #Dep_StakeLevelGroupMini_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,
 SELECT 7801  ,'1'      ,'150'     ,1      ,150      ,9   UNION ALL	--AUD	--AUD
 SELECT 7802  ,'1'      ,'150'     ,1      ,150      ,9   UNION ALL	--AUD	--AUD
 --LAK
-SELECT 7802  ,'2000'   ,'1000000' ,2000   ,1000000  ,93  UNION ALL	--LAK	--LAK
+SELECT 7802  ,'2,000'  ,'1,000,000' ,2000   ,1000000  ,93  UNION ALL	--LAK	--LAK
 -- CHF
 SELECT 7801  ,'1'      ,'100'     ,1      ,100      ,41  UNION ALL	--CHF	--CHF
 SELECT 7802  ,'1'      ,'100'     ,1      ,100      ,41				--CHF	--CHF
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
-FROM #Dep_StakeLevelGroupMini_Temp t
-WHERE MaxStake > 999
-
-UPDATE t
-SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
-FROM #Dep_StakeLevelGroupMini_Temp t
-WHERE MaxStake > 999999
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
