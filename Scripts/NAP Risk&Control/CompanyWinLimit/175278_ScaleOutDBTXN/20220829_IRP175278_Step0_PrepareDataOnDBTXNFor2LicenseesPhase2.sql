@@ -16,7 +16,7 @@ BEGIN
 	INSERT INTO #tmp_cust (custid)
 	SELECT DISTINCT custid
 	FROM CustDB.dbo.Customer WITH (NOLOCK)
-	WHERE site IN ('Heaven','Bobo88')
+	WHERE site IN ('Heaven','Bobo88','khmerA2')
 		and roleid = 1
 		
 	SELECT [custid],[winlostdate],[Winlost],[bettype]

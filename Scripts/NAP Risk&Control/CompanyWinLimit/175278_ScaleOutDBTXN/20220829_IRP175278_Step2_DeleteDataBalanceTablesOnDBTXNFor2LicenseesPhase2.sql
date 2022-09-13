@@ -11,7 +11,7 @@ BEGIN
 	WHERE custid IN (SELECT custid 
 					FROM custdb.dbo.custinfo ci WITH(NOLOCK)
 					WHERE srecommend IN (SELECT custid FROM custdb.dbo.Dep_custsuper WITH(NOLOCK)
-										WHERE site IN ('Heaven','Bobo88')
+										WHERE site IN ('Heaven','Bobo88','khmerA2')
 										)
 						AND roleid = 1				
 					)	
@@ -20,7 +20,7 @@ BEGIN
 	WHERE custid IN (SELECT custid 
 					FROM custdb.dbo.custinfo ci WITH(NOLOCK)
 					WHERE srecommend IN (SELECT custid FROM custdb.dbo.Dep_custsuper WITH(NOLOCK)
-										WHERE site IN ('Heaven','Bobo88')
+										WHERE site IN ('Heaven','Bobo88','khmerA2')
 										)
 						AND roleid = 1				
 					)				
