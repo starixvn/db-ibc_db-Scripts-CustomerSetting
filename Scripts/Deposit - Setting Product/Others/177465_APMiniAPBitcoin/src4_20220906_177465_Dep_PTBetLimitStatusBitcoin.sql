@@ -71,7 +71,6 @@ BEGIN
 	SELECT 42 AS Currency ,120 AS MinBet,12000 AS MaxBet,36000 AS MaxPerMatch,120 AS DefaultMinBet,12000 AS DefaultMaxBet,36000 AS DefaultMaxPerMatch  Union ALL --PE
 	SELECT 45 AS Currency ,2500 AS MinBet,300000 AS MaxBet,900000 AS MaxPerMatch,2500 AS DefaultMinBet,300000 AS DefaultMaxBet,900000 AS DefaultMaxPerMatch  Union ALL --Won
 	SELECT 46 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --BND
-	SELECT 47 AS Currency ,25 AS MinBet,4000 AS MaxBet,12000 AS MaxPerMatch,25 AS SuperMinBet,4000 AS SuperMaxBet,12000 AS SuperMaxPerMatch  Union ALL --DDD
 	SELECT 49 AS Currency ,45 AS MinBet,4000 AS MaxBet,12000 AS MaxPerMatch,45 AS DefaultMinBet,4000 AS DefaultMaxBet,12000 AS DefaultMaxPerMatch  Union ALL --MXN
 	SELECT 50 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --CAN
 	SELECT 51 AS Currency ,25 AS MinBet,5000 AS MaxBet,15000 AS MaxPerMatch,25 AS DefaultMinBet,5000 AS DefaultMaxBet,15000 AS DefaultMaxPerMatch  Union ALL --INH
