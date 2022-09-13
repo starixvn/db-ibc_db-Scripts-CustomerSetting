@@ -66,9 +66,21 @@ INSERT INTO #Dep_StakeLevelGroupMini_Temp(GameTypeID,MinLabel,MaxLabel,MinStake,
 --AUD
 SELECT 7801  ,'1'      ,'150'     ,1      ,150      ,9   UNION ALL	--AUD	--AUD
 SELECT 7802  ,'1'      ,'150'     ,1      ,150      ,9   UNION ALL	--AUD	--AUD
+--LAK
+SELECT 7802  ,'2000'   ,'1000000' ,2000   ,1000000  ,93  UNION ALL	--LAK	--LAK
 -- CHF
-SELECT 7801  ,'1'      ,'100'     ,1      ,100      ,41   UNION ALL	--CHF	--CHF
+SELECT 7801  ,'1'      ,'100'     ,1      ,100      ,41  UNION ALL	--CHF	--CHF
 SELECT 7802  ,'1'      ,'100'     ,1      ,100      ,41				--CHF	--CHF
+
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),4,0,','))
+FROM #Dep_StakeLevelGroupMini_Temp t
+WHERE MaxStake > 999
+
+UPDATE t
+SET MaxLabel = REVERSE(STUFF (REVERSE(t.MaxLabel),8,0,','))
+FROM #Dep_StakeLevelGroupMini_Temp t
+WHERE MaxStake > 999999
 
 ;WITH STAKE_TEMP AS (
 SELECT s.StakeLevelID,t.GameTypeID,t.MinLabel,t.MaxLabel,t.MinStake,t.MaxStake,s.ExchangeId,s.GameGroupID
@@ -645,6 +657,58 @@ SELECT 7722 ,'0.25'    ,'85'     ,0.25    ,85     ,9    UNION ALL	--AUD
 SELECT 7723 ,'0.25'    ,'85'     ,0.25    ,85     ,9    UNION ALL	--AUD
 SELECT 7724 ,'0.25'    ,'85'     ,0.25    ,85     ,9    UNION ALL	--AUD
 SELECT 7725 ,'0.25'    ,'85'     ,0.25    ,85     ,9    UNION ALL	--AUD
+-- UUS
+SELECT 7701 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7702 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7703 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7704 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7705 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7706 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7707 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7708 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7709 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7710 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7711 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7712 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7713 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7714 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7715 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7716 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7717 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7718 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7719 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7720 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7721 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7722 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7723 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7724 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+SELECT 7725 ,'5'	   ,'1500'    ,5      ,1500    ,20   UNION ALL	--UUS
+-- YNG
+SELECT 7701 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7702 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7703 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7704 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7705 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7706 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7707 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7708 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7709 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7710 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7711 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7712 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7713 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7714 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7715 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7716 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7717 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7718 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7719 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7720 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7721 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7722 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7723 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7724 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
+SELECT 7725 ,'5'	   ,'1500'    ,5      ,1500    ,72   UNION ALL	--YNG
 -- AUD		
 SELECT 7701 ,'0.25'    ,'50'     ,0.25    ,50     ,41   UNION ALL	--CHF
 SELECT 7702 ,'0.25'    ,'50'     ,0.25    ,50     ,41   UNION ALL	--CHF
