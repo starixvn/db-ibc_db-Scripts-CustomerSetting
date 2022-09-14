@@ -8,7 +8,7 @@
 -------------------------------------------
 --add new botAction	
 ;WITH T AS (
-SELECT 41 ActionID,	'System Announcement' ActionName, 1 Type, 13 Command, 13 FunctionID, 26 ParentID, 1 Status, 1 IsEndAction, 5008 Order
+SELECT 41 ActionID,	'System Announcement' ActionName, 1 Type, 13 Command, 13 FunctionID, 26 ParentID, 1 Status, 1 IsEndAction, 5008 [Order]
 UNION SELECT 42, 'My Watchlist', 1, 14, 14, 26, 1, 1, 5009
 UNION SELECT 33, 'Wrong Password Alert', 1,	11,	11, 26,	1, 1, 5006
 )
@@ -38,7 +38,7 @@ GO
 --add new functions
 
 ;WITH T AS (
-SELECT  11 FunctionID, 'Wrong Password Alert' FunctionName, 'WrongPasswordAlert' FunctionKey, 2 Type, NULL Command,	1 Status, 106 Order, NULL Priority
+SELECT  11 FunctionID, 'Wrong Password Alert' FunctionName, 'WrongPasswordAlert' FunctionKey, 2 Type, NULL Command,	1 Status, 106 [Order], NULL Priority
 UNION SELECT 13, 'System Announcement',	'SystemAnnouncement', 2, NULL, 1, 107, NULL
 UNION SELECT 14, 'My Watchlist', 'MyWatchlist',	2, NULL, 1, 108, NULL
 )
@@ -130,7 +130,7 @@ UNION SELECT	41	,	5008	--	System Announcement
 UNION SELECT	42	,	5009	--	My Watchlist
 )
 UPDATE b
-SET b.Order = t.Order
+SET b.[Order] = t.[Order]
 FROM BotAction b WITH(ROWLOCK)
 	INNER JOIN T ON b.ActionID = t.ActionID
 GO
@@ -148,14 +148,16 @@ UNION SELECT 	'SystemAnnouncement'	,	'LastRuntimeUAT'	,	 CONVERT(varchar(20), GE
 UNION SELECT 	'SystemAnnouncement'	,	'LastRuntime'	,	 CONVERT(varchar(20), GETDATE(), 120)
 UNION SELECT 	'SystemAnnouncement'	,	'JobStatus'	,	 'Completed'
 UNION SELECT 	'SystemAnnouncement'	,	'JobStatusUAT'	,	 'Completed'
-UNION SELECT 	'SystemAnnouncement'	,	'SendLastNotificationId',	0
-UNION SELECT 	'SystemAnnouncement'	,	'SendLastNotificationIdUAT',	0
+UNION SELECT 	'SystemAnnouncement'	,	'SendLastNotificationId',	'0'
+UNION SELECT 	'SystemAnnouncement'	,	'SendLastNotificationIdUAT',	'0'
 )
 INSERT INTO [dbo].[BotSystemSetting]
            ([ServiceName]
            ,[SettingName]
            ,[Value])
-SELECT
+SELECT [ServiceName]
+	   ,[SettingName]
+	   ,[Value]
 FROM T		   
 GO
 
@@ -203,23 +205,23 @@ UNION SELECT 	'Function_Description'	,	'13'	,	'zh-Hant'	,	N'將系統公告轉�
 UNION SELECT 	'Function_Description'	,	'13'	,	'th-TH'	,	N'ส่งต่อประกาศระบบไปยังเทเลแกรมของคุณ'
 UNION SELECT 	'Function_Description'	,	'13'	,	'vi-VN'	,	N'Chuyển Thông báo hệ thống qua Telegram của bạn.'
 UNION SELECT 	'Function_Description'	,	'14'	,	'en-US'	,	N'Notify via your Telegram when a Member reaches their Winning / Losing threshold.'
-UNION SELECT 	'Function_Description'	,	'14'	,	'zh-Hans'	,	NULL
-UNION SELECT 	'Function_Description'	,	'14'	,	'zh-Hant'	,	NULL
-UNION SELECT 	'Function_Description'	,	'14'	,	'th-TH'	,	NULL
-UNION SELECT 	'Function_Description'	,	'14'	,	'vi-VN'	,	NULL
+UNION SELECT 	'Function_Description'	,	'14'	,	'zh-Hans'	,	N'当会员达到输赢限额时，将通过Telegram通知您。'
+UNION SELECT 	'Function_Description'	,	'14'	,	'zh-Hant'	,	N'當會員達到輸贏限額時，將通過Telegram通知您。'
+UNION SELECT 	'Function_Description'	,	'14'	,	'th-TH'	,	N'แจ้งเตือนผ่านเทเลแกรมของคุณเมื่อสมาชิกถึงขีดจำกัดการชนะ/แพ้'
+UNION SELECT 	'Function_Description'	,	'14'	,	'vi-VN'	,	N'Thông báo trên Telegram khi Member đạt Giới Hạn Thắng Thua.'
 )
 MERGE BotResource as Target
-USING (SELECT * FROM T WHERE Language <> 'vi-VN') as Source 
+USING (SELECT * FROM T) as Source 
 ON Target.ResourceName = Source.ResourceName
 	AND Target.ResourceKey = Source.ResourceKey
 	AND Target.Language = Source.Language
-WHEN MATCHED THEN UPDATE Target.VALUE = Source.Value	
+WHEN MATCHED THEN UPDATE SET Target.VALUE = Source.Value	
 WHEN NOT MATCHED THEN 
 	INSERT ([ResourceName]
 		   ,[ResourceKey]
 		   ,[Language]
 		   ,[Value])
-	VALUES(Source.ResourceName,Source.ResourceKey,Source.Language,Source.Value)
+	VALUES(Source.ResourceName,Source.ResourceKey,Source.Language,Source.Value);
 GO
 
 --initial setting for linked accounts
