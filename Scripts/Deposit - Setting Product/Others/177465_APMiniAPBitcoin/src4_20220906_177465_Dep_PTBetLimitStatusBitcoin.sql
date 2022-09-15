@@ -56,6 +56,7 @@ BEGIN
 									SMAMinBet	MONEY,SMAMaxBet	MONEY,SMAMaxPerMatch	MONEY, Sporttype INT DEFAULT(175), Bettype INT DEFAULT(7901))
 					
 	INSERT INTO #ProductBetSetting(Currency,MinBet,MaxBet,MaxPerMatch,SMAMinBet,SMAMaxBet,SMAMaxPerMatch)
+	SELECT Currency,MinBet,MaxBet,MaxPerMatch,DefaultMinBet,DefaultMaxBet,DefaultMaxPerMatch  FROM(
 	SELECT 2 AS Currency ,5 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,5 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --RM
 	SELECT 3 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --US$
 	SELECT 4 AS Currency ,100 AS MinBet,8000 AS MaxBet,24000 AS MaxPerMatch,100 AS DefaultMinBet,8000 AS DefaultMaxBet,24000 AS DefaultMaxPerMatch  Union ALL --TB
@@ -101,8 +102,8 @@ BEGIN
 	SELECT 122 AS Currency ,1000 AS MinBet,100000 AS MaxBet,300000 AS MaxPerMatch,1000 AS DefaultMinBet,100000 AS DefaultMaxBet,300000 AS DefaultMaxPerMatch  Union ALL --KZT
 	SELECT 123 AS Currency ,250 AS MinBet,25000 AS MaxBet,75000 AS MaxPerMatch,250 AS DefaultMinBet,25000 AS DefaultMaxBet,75000 AS DefaultMaxPerMatch  Union ALL --NPR
 	SELECT 20 AS Currency ,3 AS MinBet,600 AS MaxBet,1800 AS MaxPerMatch,3 AS DefaultMinBet,600 AS DefaultMaxBet,1800 AS DefaultMaxPerMatch  Union ALL --UUS
-	SELECT 72 AS Currency ,50 AS MinBet,10000 AS MaxBet,30000 AS MaxPerMatch,50 AS DefaultMinBet,10000 AS DefaultMaxBet,30000 AS DefaultMaxPerMatch    --YNG
-		
+	SELECT 72 AS Currency ,50 AS MinBet,10000 AS MaxBet,30000 AS MaxPerMatch,50 AS DefaultMinBet,10000 AS DefaultMaxBet,30000 AS DefaultMaxPerMatch) KQ   --YNG 
+	WHERE Currency = @Currency
 	-------------------------------------Betlimit Setting----------------------------------------------
 	-- SMA LEVEL
 	IF @RoleID <>1
@@ -128,7 +129,6 @@ BEGIN
 			SELECT t.CustID,b.SportType,b.BetType,b.SMAMinBet,b.SMAMaxBet,b.SMAMaxPerMatch
 			FROM #CustListTemp t WITH(NOLOCK)
 				CROSS APPLY #ProductBetSetting b
-			WHERE b.Currency = @Currency
 
 			TRUNCATE TABLE #CustListTemp
 		END
@@ -158,8 +158,7 @@ BEGIN
 			)
 			SELECT t.CustID,b.SportType,b.BetType,b.MinBet,b.MaxBet,b.MaxPerMatch
 			FROM #CustListTemp t WITH(NOLOCK)
-				CROSS APPLY #ProductBetSetting b
-			WHERE b.Currency = @Currency		
+				CROSS APPLY #ProductBetSetting b	
 			TRUNCATE TABLE #CustListTemp
 		END 	
 	END
