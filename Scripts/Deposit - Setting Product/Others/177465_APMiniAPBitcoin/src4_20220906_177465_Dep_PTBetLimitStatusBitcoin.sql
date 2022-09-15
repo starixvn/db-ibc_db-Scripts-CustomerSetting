@@ -191,8 +191,6 @@ CREATE TABLE #Dep_CustProductStatus(CustID int PRIMARY KEY,bitmapIsHidden binary
 			,c.bitmapIsDisabled = tmp.bitmapIsDisabled
 		FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
 			INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
-
-		WAITFOR DELAY '00:00:00.100'
 	END
 
 	INSERT INTO Dep_CustProductStatus (CustID,bitmapIsDisabled,bitmapIsHidden)
@@ -234,7 +232,7 @@ CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID I
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
-DECLARE @batch SMALLINT = 5000
+DECLARE @batch SMALLINT = 200000
 DECLARE @CustIDs VARCHAR(MAX)
 DECLARE @max_custid INT, @srecommend INT, @currency INT , @Role SMALLINT = 0
 SELECT @max_custid = xxx
@@ -332,7 +330,7 @@ BEGIN
 		
 		TRUNCATE TABLE #tmpCustTemp
 		TRUNCATE TABLE #tmpSMATemp
-		WAITFOR DELAY '00:00:00.280'	
+		WAITFOR DELAY '00:00:00.100'	
 	END
 	ELSE
 	BEGIN
