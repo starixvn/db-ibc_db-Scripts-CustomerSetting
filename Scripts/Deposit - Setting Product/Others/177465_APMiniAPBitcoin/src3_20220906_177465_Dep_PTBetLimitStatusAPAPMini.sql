@@ -307,7 +307,7 @@ SELECT @BitOrderMini= bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHE
 
 DECLARE @super_cnt INT, @index INT = 0 , @DoneSM BIT, @DoneAgent BIT 
 DECLARE @StakeLevelID INT, @StakeLevelMiniID INT
-
+DECLARE @startRun DATETIME, @endRun DATETIME, @duration	INT, @msgtmp nvarchar(200), @indexDetail INT = 0
 SET @super_cnt = (SELECT COUNT(*) FROM #supers )
 DECLARE @msg nvarchar(200) = 'Currently at order %d, SuperID: %d.'
 DECLARE @msg_total nvarchar(200) = 'Total of supers: %d.'
@@ -318,6 +318,7 @@ SELECT @srecommend = 0 ,@DoneSM = 0 , @DoneAgent = 0
 WHILE (1 = 1)
 BEGIN
 	SELECT @CustIDs = ''
+	SELECT @startRun = GETDATE()
 	IF EXISTS(SELECT TOP 1 1 
 				FROM #tmpSMA
 				WHERE isfinished = 0 AND srecommend = @srecommend
@@ -364,10 +365,15 @@ BEGIN
 				SELECT @Role = 1
 			END
 		END
-
+		SET @indexDetail = @indexDetail + 1
 		EXEC dbo.[Acc_Dep_DynamicCustSetting_09] @CustIDs = @CustIDs, @RoleID = @Role, @StakeLevelID = @StakeLevelID, @StakeLevelMiniID = @StakeLevelMiniID, @PT = @PT, @BitOrder = @BitOrder,
 				 @BitOrderMini = @BitOrderMini, @srecommend = @srecommend,@target = @target
-		
+
+		SELECT @endRun = GETDATE()
+			, @duration = DATEDIFF(MILLISECOND, @startRun, @endRun)
+		SELECT @msgtmp = @msg  + CAST(@duration AS VARCHAR(20))
+		RAISERROR (@msgtmp, 0, 1,@indexDetail, @srecommend) WITH NOWAIT
+
 		TRUNCATE TABLE #tmpCustTemp
 		TRUNCATE TABLE #tmpSMATemp
 		WAITFOR DELAY '00:00:00.100'	
@@ -385,6 +391,7 @@ BEGIN
 		
 		IF @@ROWCOUNT = 0 BREAK
 		SET @index = @index + 1
+		SET @indexDetail = 0
 		RAISERROR (@msg, 0, 1,@index, @srecommend) WITH NOWAIT
 		
 		SELECT @StakeLevelID = StakeLevelID	
