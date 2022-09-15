@@ -42,7 +42,7 @@ BEGIN
 	FROM STRING_SPLIT(@CustIDs,',')
 	WHERE value <> ''
 	
-	DECLARE @batch SMALLINT = 2500
+	DECLARE @batch SMALLINT = 5000
 	DECLARE @SportBetType TABLE
 	(
 		SportType SMALLINT, 
@@ -231,7 +231,7 @@ CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID I
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
-DECLARE @batch SMALLINT = 200000
+DECLARE @batch INT = 200000
 DECLARE @CustIDs VARCHAR(MAX)
 DECLARE @max_custid INT, @srecommend INT, @currency INT , @Role SMALLINT = 0
 SELECT @max_custid = xxx
