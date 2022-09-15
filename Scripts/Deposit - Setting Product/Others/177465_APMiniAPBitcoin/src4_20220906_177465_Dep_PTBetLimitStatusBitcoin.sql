@@ -264,6 +264,9 @@ FROM custInfo ci WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT CustID FROM #supers) AND ci.custid<=@max_custid 
 	AND roleid IN(2,3,4) AND ci.Enabled=1 AND mrecommend NOT IN (SELECT custid FROM #Dummy)		
 
+CREATE NONCLUSTERED INDEX IDX_tempCust ON #tmpCust(srecommend, isfinished)
+CREATE NONCLUSTERED INDEX IDX_tempSMA ON #tmpSMA(srecommend, isfinished)
+
 DECLARE @BitOrder INT 
 SELECT @BitOrder= bitmapOrder FROM Dep_ProductStatusProfile WITH(NOLOCK) WHERE SportType = 175 AND Bettype = 7901 -- SportType
 DECLARE @startRun DATETIME, @endRun DATETIME, @duration	INT, @msgtmp nvarchar(200), @indexDetail INT = 0
@@ -282,7 +285,7 @@ BEGIN
 	IF EXISTS(SELECT TOP 1 1 
 				FROM #tmpSMA
 				WHERE isfinished = 0 AND srecommend = @srecommend
-				UNION 
+				UNION ALL
 				SELECT TOP 1 1 
 				FROM #tmpCust
 				WHERE isfinished = 0 AND srecommend = @srecommend
@@ -339,6 +342,7 @@ BEGIN
 	END
 	ELSE
 	BEGIN
+
 		UPDATE TOP (1) #supers
 		SET isfinished = 1
 			,@srecommend = custid
