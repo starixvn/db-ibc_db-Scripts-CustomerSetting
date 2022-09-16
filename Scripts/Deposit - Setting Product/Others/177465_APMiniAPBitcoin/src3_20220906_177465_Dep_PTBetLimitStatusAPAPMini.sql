@@ -266,7 +266,7 @@ CREATE TABLE #tmpSMA			(CustID INT PRIMARY KEY CLUSTERED,srecommend INT,RoleID I
 CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
 CREATE TABLE #tmpSMATemp		(CustID INT PRIMARY KEY)
 
-DECLARE @batch INT = 200000
+DECLARE @batch INT = 20000
 DECLARE @CustIDs VARCHAR(MAX)
 DECLARE @max_custid INT, @srecommend INT ,@PT smallmoney = 93.00 , @currency INT , @Role SMALLINT = 0
 SELECT @max_custid = xxx
@@ -340,7 +340,7 @@ BEGIN
 		IF @@ROWCOUNT = 0 SET @DoneSM = 1
 		IF @DoneSM = 0
 		BEGIN
-		  SELECT @CustIDs = @CustIDs + cast(custid AS VARCHAR(10)) + ',' FROM #tmpSMATemp
+		  SET @CustIDs = @CustIDs + (SELECT string_agg(convert(varchar(max),custid),',')  FROM #tmpSMATemp)
 		END
 		ELSE
 		BEGIN
@@ -353,7 +353,7 @@ BEGIN
 			IF @@ROWCOUNT = 0 SET @DoneAgent = 1
 			IF @DoneAgent = 0
 			BEGIN
-				SELECT @CustIDs = @CustIDs + cast(custid AS VARCHAR(10)) + ',' FROM #tmpSMATemp
+				SET @CustIDs = @CustIDs + (SELECT string_agg(convert(varchar(max),custid),',')  FROM #tmpSMATemp)
 				SELECT @Role = 2
 			END
 			ELSE
@@ -364,7 +364,7 @@ BEGIN
 				FROM #tmpCust a	
 				WHERE isfinished = 0 AND srecommend = @srecommend
 				IF @@ROWCOUNT = 0 BREAK
-				SELECT @CustIDs = @CustIDs + cast(custid AS VARCHAR(10)) + ','	FROM #tmpCustTemp
+				SET @CustIDs = @CustIDs + (SELECT string_agg(convert(varchar(max),custid),',')  FROM #tmpCustTemp)
 				SELECT @Role = 1
 			END
 		END
@@ -379,7 +379,7 @@ BEGIN
 
 		TRUNCATE TABLE #tmpCustTemp
 		TRUNCATE TABLE #tmpSMATemp
-		WAITFOR DELAY '00:00:00.100'	
+		WAITFOR DELAY '00:00:00.050'	
 	END
 	ELSE
 	BEGIN
