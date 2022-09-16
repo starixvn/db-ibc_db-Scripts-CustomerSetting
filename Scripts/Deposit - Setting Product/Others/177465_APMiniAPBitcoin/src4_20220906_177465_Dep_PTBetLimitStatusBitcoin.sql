@@ -360,7 +360,7 @@ BEGIN
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT @srecommend, ProductSettingID 
 		FROM Dep_ProductSetting dp WITH(NOLOCK) 
-		WHERE dp.ProductID IN ( 113, 114 )
+		WHERE dp.productsettingID IN ( 113, 114 )
 			AND dp.SettingType IN (4,2) -- Product Status, BetLimit
 			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting WITH (NOLOCK) WHERE CustID = @srecommend AND ProductSettingID = dp.ProductSettingID)
 	   END
