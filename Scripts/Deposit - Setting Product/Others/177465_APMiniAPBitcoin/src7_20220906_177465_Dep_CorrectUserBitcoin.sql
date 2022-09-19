@@ -4,12 +4,12 @@
 	Date:	 20220907
 	Task:	 Delete redundant and add new setting newly created customer for Bitcoin RedmineID:#159039
 	DB:		 DBCUST/CustDB
-	P/s : Step 6 Delete redundant and add new setting newly created customer Bitcoin
+	P/s : Step 7 Correct setting newly created customer Bitcoin
 */
 USE [CustDB]
 GO
 -----------------------------------------------------
-	PRINT N'Step 6: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
+	PRINT N'Step 7: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 	DECLARE @SportType SMALLINT = 175,@betType SMALLINT = 7901
 	DECLARE @BitOrder INT 
