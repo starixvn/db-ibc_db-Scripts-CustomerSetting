@@ -59,55 +59,9 @@ GO
 									SMAMinBet	MONEY,SMAMaxBet	MONEY,SMAMaxPerMatch	MONEY, Sporttype INT DEFAULT(175), Bettype INT DEFAULT(7901))
 					
 	INSERT INTO #ProductBetSetting(Currency,MinBet,MaxBet,MaxPerMatch,SMAMinBet,SMAMaxBet,SMAMaxPerMatch)
-	SELECT 2 AS Currency ,5 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,5 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --RM
-	SELECT 3 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --US$
-	SELECT 4 AS Currency ,100 AS MinBet,8000 AS MaxBet,24000 AS MaxPerMatch,100 AS DefaultMinBet,8000 AS DefaultMaxBet,24000 AS DefaultMaxPerMatch  Union ALL --TB
-	SELECT 5 AS Currency ,10 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,10 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --HK$
-	SELECT 6 AS Currency ,2 AS MinBet,200 AS MaxBet,600 AS MaxPerMatch,2 AS DefaultMinBet,200 AS DefaultMaxBet,600 AS DefaultMaxPerMatch  Union ALL --EURO
-	SELECT 7 AS Currency ,25000 AS MinBet,5000000 AS MaxBet,15000000 AS MaxPerMatch,25000 AS DefaultMinBet,5000000 AS DefaultMaxBet,15000000 AS DefaultMaxPerMatch  Union ALL --DON
-	SELECT 9 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --AUD
-	SELECT 12 AS Currency ,2 AS MinBet,200 AS MaxBet,600 AS MaxPerMatch,2 AS DefaultMinBet,200 AS DefaultMaxBet,600 AS DefaultMaxPerMatch  Union ALL --GBP
-	SELECT 13 AS Currency ,10 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,10 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --RMB
-	SELECT 15 AS Currency ,25 AS MinBet,4000 AS MaxBet,12000 AS MaxPerMatch,25 AS DefaultMinBet,4000 AS DefaultMaxBet,12000 AS DefaultMaxPerMatch  Union ALL --IN
-	SELECT 32 AS Currency ,250 AS MinBet,25000 AS MaxBet,75000 AS MaxPerMatch,250 AS DefaultMinBet,25000 AS DefaultMaxBet,75000 AS DefaultMaxPerMatch  Union ALL --JPY
-	SELECT 41 AS Currency ,2 AS MinBet,200 AS MaxBet,600 AS MaxPerMatch,2 AS DefaultMinBet,200 AS DefaultMaxBet,600 AS DefaultMaxPerMatch  Union ALL --CHF
-	SELECT 42 AS Currency ,120 AS MinBet,12000 AS MaxBet,36000 AS MaxPerMatch,120 AS DefaultMinBet,12000 AS DefaultMaxBet,36000 AS DefaultMaxPerMatch  Union ALL --PE
-	SELECT 45 AS Currency ,2500 AS MinBet,300000 AS MaxBet,900000 AS MaxPerMatch,2500 AS DefaultMinBet,300000 AS DefaultMaxBet,900000 AS DefaultMaxPerMatch  Union ALL --Won
-	SELECT 46 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --BND
-	SELECT 49 AS Currency ,45 AS MinBet,4000 AS MaxBet,12000 AS MaxPerMatch,45 AS DefaultMinBet,4000 AS DefaultMaxBet,12000 AS DefaultMaxPerMatch  Union ALL --MXN
-	SELECT 50 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --CAN
-	SELECT 51 AS Currency ,25 AS MinBet,5000 AS MaxBet,15000 AS MaxPerMatch,25 AS DefaultMinBet,5000 AS DefaultMaxBet,15000 AS DefaultMaxPerMatch  Union ALL --INH
-	SELECT 52 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --DKK
-	SELECT 53 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --SEK
-	SELECT 54 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --NOK
-	SELECT 55 AS Currency ,175 AS MinBet,18000 AS MaxBet,54000 AS MaxPerMatch,175 AS DefaultMinBet,18000 AS DefaultMaxBet,54000 AS DefaultMaxPerMatch  Union ALL --RUB
-	SELECT 56 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --PLN
-	SELECT 57 AS Currency ,50 AS MinBet,5000 AS MaxBet,15000 AS MaxPerMatch,50 AS DefaultMinBet,5000 AS DefaultMaxBet,15000 AS DefaultMaxPerMatch  Union ALL --CZK
-	SELECT 58 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --RON
-	SELECT 61 AS Currency ,100 AS MinBet,18000 AS MaxBet,54000 AS MaxPerMatch,100 AS DefaultMinBet,18000 AS DefaultMaxBet,54000 AS DefaultMaxPerMatch  Union ALL --INR
-	SELECT 66 AS Currency ,10 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,10 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --YUN
-	SELECT 70 AS Currency ,4 AS MinBet,360 AS MaxBet,1080 AS MaxPerMatch,4 AS DefaultMinBet,360 AS DefaultMaxBet,1080 AS DefaultMaxPerMatch  Union ALL --MKK
-	SELECT 71 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --KHR
-	SELECT 73 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --LIR
-	SELECT 79 AS Currency ,250 AS MinBet,25000 AS MaxBet,75000 AS MaxPerMatch,250 AS DefaultMinBet,25000 AS DefaultMaxBet,75000 AS DefaultMaxPerMatch  Union ALL --KES
-	SELECT 80 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --GHS
-	SELECT 82 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --BRL
-	SELECT 83 AS Currency ,1700 AS MinBet,170000 AS MaxBet,510000 AS MaxPerMatch,1700 AS DefaultMinBet,170000 AS DefaultMaxBet,510000 AS DefaultMaxPerMatch  Union ALL --CLP
-	SELECT 85 AS Currency ,10 AS MinBet,1000 AS MaxBet,3000 AS MaxPerMatch,10 AS DefaultMinBet,1000 AS DefaultMaxBet,3000 AS DefaultMaxPerMatch  Union ALL --PEN
-	SELECT 86 AS Currency ,200 AS MinBet,20000 AS MaxBet,60000 AS MaxPerMatch,200 AS DefaultMinBet,20000 AS DefaultMaxBet,60000 AS DefaultMaxPerMatch  Union ALL --ARS
-	SELECT 92 AS Currency ,10 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,10 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --HID
-	SELECT 93 AS Currency ,15 AS MinBet,2000 AS MaxBet,6000 AS MaxPerMatch,15 AS DefaultMinBet,2000 AS DefaultMaxBet,6000 AS DefaultMaxPerMatch  Union ALL --LAK
-	SELECT 94 AS Currency ,4 AS MinBet,360 AS MaxBet,1080 AS MaxPerMatch,4 AS DefaultMinBet,360 AS DefaultMaxBet,1080 AS DefaultMaxPerMatch  Union ALL --MK
-	SELECT 96 AS Currency ,3 AS MinBet,300 AS MaxBet,900 AS MaxPerMatch,3 AS DefaultMinBet,300 AS DefaultMaxBet,900 AS DefaultMaxPerMatch  Union ALL --USDT
-	SELECT 97 AS Currency ,200 AS MinBet,20000 AS MaxBet,60000 AS MaxPerMatch,200 AS DefaultMinBet,20000 AS DefaultMaxBet,60000 AS DefaultMaxPerMatch  Union ALL --BDT
-	SELECT 121 AS Currency ,350 AS MinBet,38000 AS MaxBet,114000 AS MaxPerMatch,350 AS DefaultMinBet,38000 AS DefaultMaxBet,114000 AS DefaultMaxPerMatch  Union ALL --PKR
-	SELECT 122 AS Currency ,1000 AS MinBet,100000 AS MaxBet,300000 AS MaxPerMatch,1000 AS DefaultMinBet,100000 AS DefaultMaxBet,300000 AS DefaultMaxPerMatch  Union ALL --KZT
-	SELECT 123 AS Currency ,250 AS MinBet,25000 AS MaxBet,75000 AS MaxPerMatch,250 AS DefaultMinBet,25000 AS DefaultMaxBet,75000 AS DefaultMaxPerMatch  Union ALL --NPR
-	SELECT 20 AS Currency ,3 AS MinBet,600 AS MaxBet,1800 AS MaxPerMatch,3 AS DefaultMinBet,600 AS DefaultMaxBet,1800 AS DefaultMaxPerMatch  Union ALL --UUS
-	SELECT 72 AS Currency ,50 AS MinBet,10000 AS MaxBet,30000 AS MaxPerMatch,50 AS DefaultMinBet,10000 AS DefaultMaxBet,30000 AS DefaultMaxPerMatch	  --YNG
+	SELECT 97 AS Currency ,200 AS MinBet,20000 AS MaxBet,60000 AS MaxPerMatch,200 AS DefaultMinBet,20000 AS DefaultMaxBet,60000 AS DefaultMaxPerMatch   --BDT
 		
 	-------------------------------------------------BetSetting----------------------------------------------------------------
-
 
 	SELECT a.CustID,a.SportType,a.BetType
 	INTO #Dep_CustBetSetting_Member 
@@ -121,7 +75,6 @@ GO
 			ON cg.CustID=t.CustID AND cg.SportType=t.SportType AND cg.BetType=t.Bettype 
 
 -------------------------------------------------Add new Betlimit Setting----------------------------------------------------------------
-
 	--Member Level
 	WHILE (1=1)
 	BEGIN
