@@ -36,7 +36,9 @@ EXEC sp_add_jobstep
     @step_name = N'Step1: Sync history data',  
     @subsystem = N'TSQL',  
     @command = N'EXEC dbo.Task_DetectBet_SyncBetSettingHistory',
-	@on_success_action=3;
+	@database_name = 'bodb02',
+	@on_success_action=4,
+	@on_success_step_id=2;
 
 EXEC sp_add_jobstep  
     @job_name = N'DBA: Task_DetectBet_TicketExceededBetLimit',  
@@ -44,7 +46,9 @@ EXEC sp_add_jobstep
     @subsystem = N'TSQL',  
     @command = N'EXEC dbo.Task_DBTP_Control_Job  @Jobname = ''DBA: Task_DetectBet_TicketExceededBetLimit''
 						,@Waitfordelay = NULL',
-	@on_success_action=3;
+	@database_name = 'bodb02',
+	@on_success_action=4,
+	@on_success_step_id=3;
 
 EXEC sp_add_jobstep  
     @job_name = N'DBA: Task_DetectBet_TicketExceededBetLimit',  
@@ -53,6 +57,7 @@ EXEC sp_add_jobstep
     @command = N'DECLARE @Delay VARCHAR(100) = ''''
 				 SET @Delay = dbo.f_Job_SetWaitforDelay () 
 				 WAITFOR DELAY @Delay',
+	@database_name = 'bodb02',
 	@on_success_action=4,
 	@on_success_step_id=1;
 
