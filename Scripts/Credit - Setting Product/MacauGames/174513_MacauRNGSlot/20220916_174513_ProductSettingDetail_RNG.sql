@@ -17,7 +17,7 @@ SET a.ProductID = 53,
 						WHEN SettingType = 8 AND SportType = 167 THEN 62 --CG
 						WHEN SettingType = 8 AND SportType = 172 THEN 67 --AdvantPlay
 						WHEN SettingType = 8 AND SportType = 174 THEN 68 --AdvantPlay Mini
-						WHEN SettingType = 8 AND SportType = 212 THEN 18 --Macau Games 
+						WHEN SettingType = 8 AND SportType = 212 THEN 22 --Macau Games 
 						WHEN SettingType = 8 AND SportType = 232 THEN 55 --PG Soft
 						WHEN SettingType = 8 AND SportType = 234 THEN 56 --Joker 
 						WHEN SettingType = 8 AND SportType = 237 THEN 60 --MaxGame  
