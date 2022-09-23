@@ -1,10 +1,10 @@
-/*<info serverAlias="DBTXN-bodb02"></info>*/
+/*<info serverAlias="DBTXN-bodb02, DBTP-bodb02"></info>*/
 
 /*
 	Created: 20220907@Tacy
 	Task: Copy data from Sport_Bettype_Reference_Setting to SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 RedmineID: #170739
-	Database: DBTXN-bodb02
+	Database: DBTXN-bodb02, DBTP-bodb02
 */
 DECLARE @Batch_size INT;
 
