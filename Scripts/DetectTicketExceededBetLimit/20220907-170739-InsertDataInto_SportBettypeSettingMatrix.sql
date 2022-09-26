@@ -128,7 +128,7 @@ SET
 	rm.SportTypeRefBetSetting=ref.SportType,
 	rm.BetTypeRefBetSetting=CASE WHEN rm.isLicensee=1 THEN 1501 ELSE ref.BetType END,
 	rm.TableBetSetting=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustBetSetting_Member' ELSE 'CustGameType' END,
-	rm.TablePT=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustPTGroupSetting_Member' ELSE rm.TableBetSetting END
+	rm.TablePT=CASE WHEN rm.isLicensee=1 THEN 'Dep_CustPTGroupSetting_Member' ELSE rm.TablePT END
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
 	INNER JOIN SportBettypeSettingMatrix ref WITH (NOLOCK)
 			ON ref.SportType=rm.SportType
