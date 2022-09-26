@@ -12,12 +12,12 @@ IF @@SERVERNAME <> 'SITDBCUST'
 	RETURN
 
 UPDATE s
-SET s.SiteDBGroupID = 1
+SET s.SiteDBGroupID = 2
 FROM Site s WITH (ROWLOCK)
 WHERE site IN ('Bobo88')
 
 UPDATE cs
-SET cs.SiteDBGroupID = 1
+SET cs.SiteDBGroupID = 2
 FROM Dep_CustSuper cs WITH (ROWLOCK)
 WHERE site IN ('Bobo88')
 
