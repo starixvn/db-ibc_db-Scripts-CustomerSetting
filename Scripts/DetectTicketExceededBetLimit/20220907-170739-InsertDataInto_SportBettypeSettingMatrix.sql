@@ -112,10 +112,13 @@ UPDATE rm
 SET 
 	rm.SportTypeRefPT=161,
 	rm.BetTypeRefPT=81,
+	rm.TablePT='Dep_CustPTGroupSetting_Member',
 	rm.SportTypeRefComm=161,
 	rm.BetTypeRefComm=81,
+	rm.TableComm='Dep_CustDiscountGroupSetting_Member',
 	rm.SportTypeRefBetSetting=161,
-	rm.BetTypeRefBetSetting=81
+	rm.BetTypeRefBetSetting=81,
+	rm.TableBetSetting='Dep_CustBetSettingGameGroup_Member'
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
 WHERE SportType IN (161,164,168) AND isLicensee=1
 
