@@ -7,6 +7,7 @@
 
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09]	
+			@CustList VARCHAR(MAX)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,13 +17,15 @@ BEGIN
 	CREATE TABLE #tblCustDanger (custid INT PRIMARY KEY, danger BIGINT)
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, danger BIGINT)
 
+	IF @CustList IS NULL OR @CustList='' RETURN
+
+	DECLARE @xml XML = CAST (@CustList as XML)
 	
 	INSERT INTO #tblCustDanger (custid, danger)
-	SELECT ba.CustId, ag.danger
-	FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
-		INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ba.CustId=ci.custid
-		INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
-	
+	SELECT	t.c.value('@custid[1]','int'),
+			t.c.value('@danger[1]','bigint')
+	FROM @xml.nodes('Root/r')as t(c)
+
 	WHILE(1=1)
 	BEGIN
 		DELETE TOP(5000) t
@@ -48,5 +51,22 @@ END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 
---Exec SP:
-EXEC [dbo].[Acc_CustomerInfo_Execrep_09]
+--Update:
+DECLARE @CustList VARCHAR (MAX)=NULL;
+
+CREATE TABLE #tblCustDanger (custid INT PRIMARY KEY, danger BIGINT)
+	
+INSERT INTO #tblCustDanger (custid, danger)
+SELECT ba.CustId, ag.danger
+FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+	INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ba.CustId=ci.custid
+	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
+
+SET @CustList = CAST((
+						SELECT	custid as '@custid',
+								danger as '@danger'
+						FROM #tblCustDanger
+						FOR XML PATH('r'),ROOT('Root')
+					) AS VARCHAR(MAX))
+
+EXEC [dbo].[Acc_CustomerInfo_Execrep_09] @CustList=@CustList
