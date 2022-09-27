@@ -71,7 +71,7 @@ SELECT ci.CustID,ci.recommend
 FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN #tmpSMA c WITH (NOLOCK) ON ci.recommend = c.custid AND c.RoleID = 2
 WHERE NOT EXISTS(SELECT TOP 1 1 FROM #tmpCust WITH(NOLOCK) WHERE Custid=ci.CustID)
-
+AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_CustBetSettingGame_Member WITH(NOLOCK) WHERE Custid=ci.CustID)
 -- delete EXISTS invidual data
 DECLARE @batch int = 1000
 	
