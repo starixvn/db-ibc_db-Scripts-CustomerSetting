@@ -89,14 +89,14 @@ DECLARE @tmpCust TABLE (
 -- BA Member:
 INSERT INTO #tblCustDanger (custid, danger, danger2, danger3, Danger4, Danger5, isBA)
 SELECT ba.CustId, ag.danger, ag.danger2, ag.danger3, ag.Danger4, ag.Danger5,1
-FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ba.CustId=ci.custid
 	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
 
 -- Deposit Member:
 INSERT INTO #tblCustDanger (custid, danger, danger2, danger3, Danger4, Danger5)
 SELECT ci.CustId, ag.danger, ag.danger2, ag.danger3, ag.Danger4, ag.Danger5
-FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.CustId=ci.srecommend
 	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
 WHERE NOT EXISTS (SELECT 1 FROM #tblCustDanger t WHERE t.custid=ci.custid)
