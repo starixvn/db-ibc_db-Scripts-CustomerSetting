@@ -40,6 +40,7 @@ CREATE TABLE #tmpRefSetting_Batch (
 INSERT INTO #tmpRefSetting (SportType, BetType, isLicensee, isLive, Site)
 SELECT SportType, BetType, isLicensee, isLive, Site
 FROM Sport_Bettype_Reference_Setting WITH (NOLOCK)
+WHERE Site<>'CN88'
 
 WHILE (1=1)
 BEGIN
