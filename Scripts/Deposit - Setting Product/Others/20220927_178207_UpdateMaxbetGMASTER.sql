@@ -62,15 +62,6 @@ AND Enabled = 1
 AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 AND custid IN (SELECT DISTINCT mrecommend FROM #tmpCust UNION ALL  SELECT DISTINCT recommend FROM #tmpCust)
 
-SELECT ci.CustID, ci.srecommend, ci.mrecommend, ci.recommend, ci.username2
-FROM Customer ci WITH (NOLOCK)
-	INNER JOIN custInfo c WITH (NOLOCK) ON ci.custid = c.custid
-WHERE ci.srecommend IN (SELECT custid FROM #tmpSMA) 
-	AND ci.roleid = 1  
-	AND c.Enabled = 1 
-	AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy)
-	AND ci.username2 LIKE '%' + 'aag' + '%' + '_gmgm'
-
 UPDATE a 
 SET  a.MaxBet = @MaxBet
 FROM Dep_CustBetSettingGame_Agent a WITH(ROWLOCK, UPDLOCK)
