@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02"></info>*/
 
 /*
 	Created: 20220907@Tacy

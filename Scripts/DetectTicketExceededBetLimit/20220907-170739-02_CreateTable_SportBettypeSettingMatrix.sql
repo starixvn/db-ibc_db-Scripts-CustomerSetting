@@ -1,10 +1,10 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBACC-bodb02"></info>*/
 
 /*
 	Created: 20220907@Tacy
 	Task: 02. Clone table [Sport_Bettype_Reference_Setting] to table [SportBettypeSettingMatrix]
 		 https://nexdev.net/issues/170739 [RedmineID: #170739]
-	Database: DBCUST-CustDB
+	Database: DBCUST-CustDB, DBACC-bodb02
 */
 SET ANSI_NULLS ON
 GO
