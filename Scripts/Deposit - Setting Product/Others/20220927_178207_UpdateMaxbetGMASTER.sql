@@ -73,7 +73,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE NOT EXISTS(SELECT TOP 1 1 FROM #tmpCust WITH(NOLOCK) WHERE Custid=ci.CustID)
 
 -- delete EXISTS invidual data
-DECLARE @batch int = 3000
+DECLARE @batch int = 1000
 	
 WHILE EXISTS(SELECT TOP 1 1 FROM #tmpCustInvid WHERE isfinished = 0)
 BEGIN
