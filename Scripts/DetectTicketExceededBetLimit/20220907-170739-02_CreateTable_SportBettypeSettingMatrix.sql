@@ -1,15 +1,11 @@
-/*<info serverAlias="DBTXN-bodb02, DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 
 /*
 	Created: 20220907@Tacy
-	Task: Clone table [Sport_Bettype_Reference_Setting] to table [SportBettypeSettingMatrix]
+	Task: 02. Clone table [Sport_Bettype_Reference_Setting] to table [SportBettypeSettingMatrix]
 		 https://nexdev.net/issues/170739 [RedmineID: #170739]
-	Database: DBTXN-bodb02, DBTP-bodb02
+	Database: DBCUST-CustDB
 */
-
-USE [bodb02]
-GO
-
 SET ANSI_NULLS ON
 GO
 

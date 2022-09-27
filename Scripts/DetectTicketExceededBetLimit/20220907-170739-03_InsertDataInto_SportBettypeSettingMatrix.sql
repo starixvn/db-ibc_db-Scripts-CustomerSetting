@@ -1,10 +1,10 @@
-/*<info serverAlias="DBTXN-bodb02, DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02"></info>*/
 
 /*
 	Created: 20220907@Tacy
-	Task: Copy data from Sport_Bettype_Reference_Setting to SportBettypeSettingMatrix
+	Task: 03. Copy data from Sport_Bettype_Reference_Setting to SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 RedmineID: #170739
-	Database: DBTXN-bodb02, DBTP-bodb02
+	Database: DBCUST-CustDB, DBTP-bodb02
 */
 DECLARE @Batch_size INT;
 
@@ -39,7 +39,7 @@ CREATE TABLE #tmpRefSetting_Batch (
 
 INSERT INTO #tmpRefSetting (SportType, BetType, isLicensee, isLive, Site)
 SELECT SportType, BetType, isLicensee, isLive, Site
-FROM Sport_Bettype_Reference_Setting WITH (NOLOCK)
+FROM dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting WITH (NOLOCK)
 WHERE Site<>'CN88'
 
 WHILE (1=1)
@@ -85,7 +85,7 @@ BEGIN
 			AND tmp.isLicensee=rm.isLicensee
 			AND tmp.isLive=rm.isLive
 			AND tmp.Site=rm.Site
-		INNER JOIN Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
+		INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
 			ON ref.SportType=rm.SportType
 			AND ref.BetType=rm.BetType
 			AND ref.isLicensee=rm.isLicensee
