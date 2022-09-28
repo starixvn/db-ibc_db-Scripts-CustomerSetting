@@ -266,7 +266,12 @@ BEGIN
 														'ZF215aTR',
 														'AKYL99',
 														'Lucklotter',
-														'Niu8gaming'
+														'Niu8gaming',
+														
+														--sitedb2
+														'9Club',
+														'X2Dynamic',
+														'OneSports'
 													)	
 									)						
 						AND roleid = 1				
@@ -531,7 +536,12 @@ BEGIN
 														'ZF215aTR',
 														'AKYL99',
 														'Lucklotter',
-														'Niu8gaming'
+														'Niu8gaming',
+														
+														--sitedb2
+														'9Club',
+														'X2Dynamic',
+														'OneSports'
 													)	
 										)			
 						AND roleid = 1				

@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCTG-bodb02"></info>*/
 /*
 	Created: 20220927@Johnson
-	Task: Prepare data for licensees migrate to sitedb1 phase 3 [#RedmineID:#175278]
+	Task: Prepare data for 253 licensees migrate to sitedb1 & 3 licensees to sitedb2 phase 3 [#RedmineID:#175278]
 	DB: DBCTG/bodb02
 */
 IF NOT EXISTS (SELECT TOP (1) 1 FROM dbo.BalancePendingCreditGame WITH(NOLOCK))
@@ -38,7 +38,6 @@ BEGIN
 					'Diamond',
 					'ig128s',
 					'442ball',
-					'Bobo88',
 					'Omni88',
 					'e8casino',
 					'e8casinoCV',
@@ -214,7 +213,6 @@ BEGIN
 					'Xinbo',
 					'HonorW',
 					'M8Credit',
-					'Heaven',
 					'Ae88',
 					'FLC',
 					'OCMS',
@@ -233,7 +231,6 @@ BEGIN
 					'88Macao',
 					'9wickets',
 					'LSM99',
-					'khmerA2',
 					'Leng4D',
 					'Bonanza88',
 					'Senibet',
@@ -271,7 +268,13 @@ BEGIN
 					'ZF215aTR',
 					'AKYL99',
 					'Lucklotter',
-					'Niu8gaming')
+					'Niu8gaming',
+
+					--sitedb2
+					'9Club',
+					'X2Dynamic',
+					'OneSports'
+					)
 		and roleid = 1
 		
 	SELECT [custid],[winlostdate],[Winlost],[bettype]

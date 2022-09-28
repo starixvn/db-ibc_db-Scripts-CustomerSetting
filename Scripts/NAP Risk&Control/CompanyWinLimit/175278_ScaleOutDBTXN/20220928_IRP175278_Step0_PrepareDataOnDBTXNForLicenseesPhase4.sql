@@ -179,11 +179,8 @@ BEGIN
 					'V9betSW',
 					'PKKing',
 					'ug396',
-					'9Club',
 					'Baji',
 					'NLDSports',
-					'X2Dynamic',
-					'OneSports',
 					'998bet',
 					'hjccasino',
 					'ITCbet',
@@ -232,7 +229,8 @@ BEGIN
 					'0sServices',
 					'YSYBO688CV',
 					'TXJT',
-					'OBGM')
+					'OBGM'
+				)
 		and roleid = 1
 		
 	SELECT [custid],[winlostdate],[Winlost],[bettype]
