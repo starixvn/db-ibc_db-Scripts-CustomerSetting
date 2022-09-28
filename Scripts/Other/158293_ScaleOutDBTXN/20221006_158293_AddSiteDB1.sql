@@ -44,7 +44,15 @@ WHERE site IN	('24Tech', 'MRCATSB', '24AVIA', 'allwincity', 'allwinCV', 'bdtt', 
 					'WLSTAR', 'ZFRT198', 'F88IN1SW', 'ZhiFeng084', 'GoldenF2CV', 'WGAMING', 'DMsports', '12B', 'Riverich', 'ZF215aTR', 'AKYL99', 'Lucklotter', 'Niu8gaming'
 					)
 
+UPDATE s
+SET s.SiteDBGroupID = 2
+FROM Site s WITH (ROWLOCK)
+WHERE site IN ('9Club','X2Dynamic','OneSports')
 
+UPDATE cs
+SET cs.SiteDBGroupID = 2
+FROM Dep_CustSuper cs WITH (ROWLOCK)
+WHERE site IN ('9Club','X2Dynamic','OneSports')
 
 
 
