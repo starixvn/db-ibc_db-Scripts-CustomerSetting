@@ -162,8 +162,8 @@ BEGIN
 							 WHEN soccer <-80000	AND soccer >= -100000			THEN 5
 							 WHEN soccer <-60000	AND soccer >= -80000			THEN 6
 							 WHEN soccer <-40000	AND soccer >= -60000			THEN 7
-							 WHEN soccer < 150000	AND soccer >= -40000		THEN
-								CASE WHEN s.custid IS NULL THEN	-- Credit
+							 WHEN soccer < 100000	AND soccer >= -40000		THEN
+								 CASE WHEN s.custid IS NULL THEN	-- Credit
 									CASE WHEN soccer <-20000  AND soccer >= -40000	THEN 8
 										 WHEN soccer < 0	  AND soccer >= -20000	THEN 9
 										 WHEN soccer < 60000  AND soccer >=  0		THEN 10
@@ -171,9 +171,9 @@ BEGIN
 								 ELSE
 									CASE WHEN soccer < 0	  AND soccer >= -40000	THEN 8
 										 WHEN soccer < 60000  AND soccer >=	0		THEN 9 
-										 WHEN soccer < 100000 AND soccer >= 60000	THEN 10 
-																					ELSE 11 END
+																					ELSE 10 END
 								 END
+							 WHEN soccer < 150000 AND soccer >= 100000				THEN 11
 							 WHEN soccer < 250000 AND soccer >= 150000				THEN 12
 							 WHEN soccer >=250000									THEN 13 END
 					END	
