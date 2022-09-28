@@ -24,6 +24,16 @@ BEGIN
 				isBA	BIT
 		)
 
+	DECLARE @tmpCust TABLE (
+		custid INT PRIMARY KEY,
+		danger	BIGINT,
+		danger2 BIGINT, 
+		danger3 BIGINT, 
+		Danger4 BIGINT, 
+		Danger5 BIGINT,
+		isBA	BIT
+	)
+
 	IF @CustList IS NULL OR @CustList='' RETURN
 
 	DECLARE @xml XML = CAST (@CustList as XML)
@@ -37,26 +47,41 @@ BEGIN
 			t.c.value('@danger5[1]','bigint'),
 			t.c.value('@isBA[1]','bit')
 	FROM @xml.nodes('Root/r')as t(c)
-		
-	UPDATE ci
-	SET ci.danger=t.danger,
-		ci.danger2=t.danger2,
-		ci.danger3=t.danger3,
-		ci.danger4=t.danger4,
-		ci.danger5=t.danger5
-	FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
-		INNER JOIN #tblCustDanger t ON ci.custid = t.custid
-	WHERE isBA=1
+	
+	WHILE(1=1)
+	BEGIN
+		DELETE @tmpCust
 
-	UPDATE ci
-	SET ci.danger=CASE WHEN ci.danger=0 THEN t.danger ELSE ci.danger END,
-		ci.danger2=CASE WHEN ci.danger2=0 THEN t.danger2 ELSE ci.danger2 END,
-		ci.danger3=CASE WHEN ci.danger3=0 THEN t.danger3 ELSE ci.danger3 END,
-		ci.danger4=CASE WHEN ci.danger4=0 THEN t.danger4 ELSE ci.danger4 END,
-		ci.danger5=CASE WHEN ci.danger5=0 THEN t.danger5 ELSE ci.danger5 END
-	FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
-		INNER JOIN #tblCustDanger t ON ci.custid = t.custid
-	WHERE isBA=0
+		DELETE TOP(5000) t
+		OUTPUT deleted.custid, deleted.danger, deleted.danger2, deleted.danger3, deleted.danger4, deleted.danger5, deleted.isBA
+		INTO @tmpCust(custid, danger, danger2, danger3, Danger4, Danger5, isBA)
+		FROM #tblCustDanger t
+
+		IF @@ROWCOUNT = 0
+			BREAK;
+
+		UPDATE ci
+		SET ci.danger=t.danger,
+			ci.danger2=t.danger2,
+			ci.danger3=t.danger3,
+			ci.danger4=t.danger4,
+			ci.danger5=t.danger5
+		FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+			INNER JOIN @tmpCust t ON ci.custid = t.custid
+		WHERE isBA=1
+
+		UPDATE ci
+		SET ci.danger=CASE WHEN ci.danger=0 THEN t.danger ELSE ci.danger END,
+			ci.danger2=CASE WHEN ci.danger2=0 THEN t.danger2 ELSE ci.danger2 END,
+			ci.danger3=CASE WHEN ci.danger3=0 THEN t.danger3 ELSE ci.danger3 END,
+			ci.danger4=CASE WHEN ci.danger4=0 THEN t.danger4 ELSE ci.danger4 END,
+			ci.danger5=CASE WHEN ci.danger5=0 THEN t.danger5 ELSE ci.danger5 END
+		FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+			INNER JOIN @tmpCust t ON ci.custid = t.custid
+		WHERE isBA=0
+
+		WAITFOR DELAY '0:0:0.1'
+	END
 
 	DROP TABLE #tblCustDanger
 END
@@ -107,7 +132,7 @@ WHILE(1=1)
 BEGIN
 	DELETE @tmpCust
 
-	DELETE TOP(5000) t
+	DELETE TOP(20000) t
 	OUTPUT deleted.custid, deleted.danger, deleted.danger2, deleted.danger3, deleted.danger4, deleted.danger5, deleted.isBA
 	INTO @tmpCust(custid, danger, danger2, danger3, Danger4, Danger5, isBA)
 	FROM #tblCustDanger t
@@ -128,8 +153,6 @@ BEGIN
 						) AS VARCHAR(MAX))
 
 	EXEC [dbo].[Acc_CustomerInfo_Execrep_09] @CustList=@CustList
-	
-	WAITFOR DELAY '0:0:0.1'
 END
 
 DROP TABLE #tblCustDanger
