@@ -106,6 +106,7 @@ SELECT ba.CustId, ag.danger, ag.danger2, ag.danger3, ag.Danger4, ag.Danger5,1
 FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_CustBAActive ba WITH (NOLOCK) ON ba.CustId=ci.custid
 	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
+WHERE ci.roleid=1
 
 -- Deposit Member:
 INSERT INTO #tblCustDanger (custid, danger, danger2, danger3, Danger4, Danger5)
