@@ -113,7 +113,8 @@ SELECT ci.CustId, ag.danger, ag.danger2, ag.danger3, ag.Danger4, ag.Danger5
 FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_CustSuper s WITH (NOLOCK) ON s.CustId=ci.srecommend
 	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
-WHERE NOT EXISTS (SELECT 1 FROM #tblCustDanger t WHERE t.custid=ci.custid)
+WHERE ci.roleid=1
+AND NOT EXISTS (SELECT 1 FROM #tblCustDanger t WHERE t.custid=ci.custid)
 AND (ci.danger=0 OR ci.danger2=0 OR ci.danger3=0 OR ci.Danger4=0 OR ci.Danger5=0)
 
 -- Call sp execrep to update:
