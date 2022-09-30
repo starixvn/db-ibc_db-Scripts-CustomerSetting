@@ -137,13 +137,13 @@ BEGIN
 		BREAK;
 
 	SET @CustList = CAST((
-							SELECT	custid	as	'@custid',
-									danger	as	'@danger',
-									danger2 as	'@danger2',
-									danger3 as	'@danger3',
-									danger4 as	'@danger4',
-									danger5 as	'@danger5',
-									isBA	as	'@isBA'
+							SELECT	custid				as	'@custid',
+									ISNULL(danger,0)	as	'@danger',
+									ISNULL(danger2,0)	as	'@danger2',
+									ISNULL(danger3,0)	as	'@danger3',
+									ISNULL(danger4,0)	as	'@danger4',
+									ISNULL(danger5,0)	as	'@danger5',
+									isBA				as	'@isBA'
 							FROM @tmpCust
 							FOR XML PATH('r'),ROOT('Root')
 						) AS VARCHAR(MAX))
