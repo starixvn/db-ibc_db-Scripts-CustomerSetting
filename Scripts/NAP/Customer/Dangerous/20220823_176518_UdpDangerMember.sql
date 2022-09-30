@@ -61,11 +61,12 @@ BEGIN
 			BREAK;
 
 		UPDATE ci
-		SET ci.danger=CASE WHEN ci.danger=0 OR (ci.danger<>0 AND isBA=1)THEN t.danger ELSE ci.danger END,
-			ci.danger2=CASE WHEN ci.danger2=0 THEN t.danger2 ELSE ci.danger2 END,
-			ci.danger3=CASE WHEN ci.danger3=0 THEN t.danger3 ELSE ci.danger3 END,
-			ci.danger4=CASE WHEN ci.danger4=0 THEN t.danger4 ELSE ci.danger4 END,
-			ci.danger5=CASE WHEN ci.danger5=0 THEN t.danger5 ELSE ci.danger5 END
+		SET ci.danger =CASE WHEN ISNULL(ci.danger,0)=0 OR 
+								(ci.danger<>0 AND isBA=1)	THEN t.danger  ELSE ci.danger  END,
+			ci.danger2=CASE WHEN ISNULL(ci.danger2,0)=0		THEN t.danger2 ELSE ci.danger2 END,
+			ci.danger3=CASE WHEN ISNULL(ci.danger3,0)=0		THEN t.danger3 ELSE ci.danger3 END,
+			ci.danger4=CASE WHEN ISNULL(ci.danger4,0)=0		THEN t.danger4 ELSE ci.danger4 END,
+			ci.danger5=CASE WHEN ISNULL(ci.danger5,0)=0		THEN t.danger5 ELSE ci.danger5 END
 		FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
 			INNER JOIN @tmpCust t ON ci.custid = t.custid
 
@@ -116,7 +117,11 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN custInfo ag WITH (NOLOCK) ON ag.custid=ci.recommend
 WHERE ci.roleid=1
 AND NOT EXISTS (SELECT 1 FROM #tblCustDanger t WHERE t.custid=ci.custid)
-AND (ci.danger=0 OR ci.danger2=0 OR ci.danger3=0 OR ci.Danger4=0 OR ci.Danger5=0)
+AND (ISNULL(ci.danger, 0)=0 OR 
+	 ISNULL(ci.danger2,0)=0 OR 
+	 ISNULL(ci.danger3,0)=0 OR 
+	 ISNULL(ci.danger4,0)=0 OR 
+	 ISNULL(ci.danger5,0)=0)
 
 -- Call sp execrep to update:
 WHILE(1=1)
