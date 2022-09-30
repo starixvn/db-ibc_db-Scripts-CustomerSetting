@@ -23,18 +23,6 @@ CREATE TABLE #tmpRefSetting (
 								Site ASC)
 		)
 
-CREATE TABLE #tmpRefSetting_Batch (
-		SportType	smallint,
-		BetType		int,
-		isLicensee	bit,
-		isLive		bit,
-		Site		varchar(50),
-		PRIMARY KEY CLUSTERED ( BetType ASC,
-								SportType ASC,
-								isLicensee ASC,
-								Site ASC)
-		)
-
 --CREDIT:
 INSERT INTO #tmpRefSetting (SportType, BetType, isLicensee, Site)
 SELECT DISTINCT a.SportType, a.BetType, a.isLicensee, Site
@@ -60,64 +48,94 @@ WHERE NOT EXISTS (SELECT 1 FROM dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting
 				)
 	AND a.isLicensee=1
 
-select count(1)
-from #tmpRefSetting
+--Insert into SportBettypeSettingMatrix:
+INSERT INTO SportBettypeSettingMatrix (SportType, BetType, isLicensee, isLive, Site)
+SELECT SportType, BetType, isLicensee, isLive, Site
+FROM #tmpRefSetting_Batch
 
-select [Bettype], [Sporttype], [isLicensee], [BettypeRef], [SporttypeRef], [isActive], [Site], [RefTableName]
-from dbtxn.bodb02.dbo.Sport_Bettype_Reference with (nolock)
-where Sporttype=1
-order by bettype
+UPDATE rm
+SET 
+	rm.isActive=1,
+	rm.SportTypeRefPT=ref.SporttypeRef,
+	rm.BetTypeRefPT=ref.BettypeRef,
+	rm.TablePT='Dep_CustPTGroupSetting_Member',
+	rm.SportTypeRefComm=ref.SporttypeRef,
+	rm.BetTypeRefComm=ref.BettypeRef,
+	rm.TableComm='Dep_CustDiscountGroupSetting_Member',
+	rm.SportTypeRefBetSetting=ref.SporttypeRef,
+	rm.BetTypeRefBetSetting=ref.BettypeRef,
+	rm.TableBetSetting=CASE WHEN ref.SporttypeRef=202 THEN 'Dep_CustBetSetting_Member' ELSE 'Dep_CustBetSettingGameGroup_Member' END
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+	INNER JOIN #tmpRefSetting_Batch tmp 
+		ON tmp.SportType=rm.SportType
+		AND tmp.BetType=rm.BetType
+		AND tmp.isLicensee=rm.isLicensee
+		AND tmp.Site=rm.Site
+	INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference ref WITH (NOLOCK)
+		ON ref.SportType=rm.SportType
+		AND ref.BetType=rm.BetType
+		AND ref.isLicensee=rm.isLicensee
+		AND ref.Site=rm.Site
+WHERE rm.isLicensee=1
+		
+UPDATE rm
+SET 
+	rm.isActive=1,
+	rm.SportTypeRefPT=ref.SporttypeRef,
+	rm.BetTypeRefPT=ref.BettypeRef,
+	rm.TablePT=CASE WHEN ref.SporttypeRef IN (1,2,3,5,8,10,11,99)	THEN 'CustSetting'
+					WHEN ref.SporttypeRef IN (161,164)				THEN 'CustSetting3rd'
+					WHEN ref.SporttypeRef IN (202,255)				THEN 'CustSettingGame'
+																	ELSE 'CustPTsetting3rd_Member' END,
+	rm.SportTypeRefComm=ref.SporttypeRef,
+	rm.BetTypeRefComm=ref.BettypeRef,
+	rm.TableComm=CASE WHEN ref.SporttypeRef IN (1,2,3,5,8,10,11,99)	THEN 'CustSetting'
+					WHEN ref.SporttypeRef IN (202,255)				THEN 'CustSettingGame'
+																	ELSE 'CustDiscount3rd_Member' END,
+	rm.SportTypeRefBetSetting=ref.SporttypeRef,
+	rm.BetTypeRefBetSetting=ref.BettypeRef,
+	rm.TableBetSetting=CASE WHEN ref.SporttypeRef=202										THEN 'CustGameType' 
+							WHEN ref.SporttypeRef IN (1,2,3,5,8,10,11,99,161,164,9901,9902) THEN 'CustBetSetting_Member' 
+																							ELSE 'CustBetSetting3rd_Member' END
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+	INNER JOIN #tmpRefSetting_Batch tmp 
+		ON tmp.SportType=rm.SportType
+		AND tmp.BetType=rm.BetType
+		AND tmp.isLicensee=rm.isLicensee
+		AND tmp.Site=rm.Site
+	INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference ref WITH (NOLOCK)
+		ON ref.SportType=rm.SportType
+		AND ref.BetType=rm.BetType
+		AND ref.isLicensee=rm.isLicensee
+		AND ref.Site=rm.Site
+WHERE rm.isLicensee=0
 
-WHILE (1=1)
-BEGIN
-	TRUNCATE TABLE #tmpRefSetting_Batch
+--Update TableRef: isLicensee=1
+UPDATE rm
+SET rm.TablePT='Dep_CustPTGroupSetting_Member',
+	rm.TableComm='Dep_CustDiscountGroupSetting_Member',
+	rm.TableBetSetting=CASE WHEN rm.SportTypeRefBetSetting IN (1,2,3,5,8,10,11,43,99,161,9901,9902) THEN 'Dep_CustBetSettingGameGroup_Member' ELSE 'Dep_CustBetSetting_Member' END
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+WHERE isLicensee=1
 
-	UPDATE TOP (@Batch_size) T
-	SET IsFinshed=1
-	OUTPUT inserted.SportType, inserted.BetType, inserted.isLicensee, inserted.isLive, inserted.Site 
-		INTO #tmpRefSetting_Batch(SportType, BetType, isLicensee, isLive, Site)
-	FROM #tmpRefSetting T WITH(NOLOCK)
-	WHERE IsFinshed=0
+--Update TableRef: isLicensee=0
+UPDATE rm
+SET rm.TablePT=CASE WHEN rm.TablePT='CustPTsetting3rd' THEN 'CustPTsetting3rd_Member' ELSE rm.TablePT END,
+	rm.TableComm=CASE WHEN rm.TableComm='CustDiscount3rd' THEN 'CustDiscount3rd_Member' ELSE rm.TableComm END,
+	rm.TableBetSetting=CASE WHEN rm.TableBetSetting='CustBetSetting3rd' THEN 'CustBetSetting3rd_Member' 
+							WHEN rm.TableBetSetting='CustSetting'		THEN 'CustBetSetting_Member'
+																		ELSE rm.TableBetSetting END
+FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
+WHERE isLicensee=0
 
-	IF @@ROWCOUNT=0
-		BREAK;
-
-	INSERT INTO SportBettypeSettingMatrix (SportType, BetType, isLicensee, isLive, Site)
-	SELECT SportType, BetType, isLicensee, isLive, Site
-	FROM #tmpRefSetting_Batch
-
-	UPDATE rm
-	SET 
-		rm.isActive=1,
-		rm.SportTypeRefPT=ref.SporttypeRef,
-		rm.BetTypeRefPT=ref.BettypeRef,
-		rm.TablePT=rs1.TablePT,
-		rm.SportTypeRefComm=ref.SporttypeRef,
-		rm.BetTypeRefComm=ref.BettypeRef,
-		rm.TableComm=rs2.TableComm,
-		rm.SportTypeRefBetSetting=ref.SporttypeRef,
-		rm.BetTypeRefBetSetting=ref.BettypeRef,
-		rm.TableBetSetting=rs3.TableBetSetting
-	FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
-		INNER JOIN #tmpRefSetting_Batch tmp 
-			ON tmp.SportType=rm.SportType
-			AND tmp.BetType=rm.BetType
-			AND tmp.isLicensee=rm.isLicensee
-			AND tmp.Site=rm.Site
-		INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference ref WITH (NOLOCK)
-			ON ref.SportType=rm.SportType
-			AND ref.BetType=rm.BetType
-			AND ref.isLicensee=rm.isLicensee
-			AND ref.Site=rm.Site
-		LEFT JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting rs1 WITH (NOLOCK)
-			ON rs1.SportTypeRefPT=ref.BettypeRef AND rs1.BetTypeRefPT=ref.SporttypeRef
-			AND rs1.isLicensee=ref.isLicensee
-		LEFT JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting rs2 WITH (NOLOCK)
-			ON rs2.SportTypeRefComm=ref.BettypeRef AND rs2.BetTypeRefComm=ref.SporttypeRef
-			AND rs2.isLicensee=ref.isLicensee
-		LEFT JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting rs3 WITH (NOLOCK)
-			ON rs3.SportTypeRefBetSetting=ref.BettypeRef AND rs3.BetTypeRefBetSetting=ref.SporttypeRef
-			AND rs3.isLicensee=ref.isLicensee
-
-	WAITFOR DELAY '00:00:0.002'
-END
+INSERT INTO SportBettypeSettingMatrix ([SportType], [BetType], [isLicensee], [isLive], [Site], [isActive], [SportTypeRefPT], [BetTypeRefPT], [isLivePT], [TablePT], [StructureVerPT], [SportTypeRefComm], [BetTypeRefComm], [TableComm], [StructureVerComm], [SportTypeRefBetSetting], [BetTypeRefBetSetting], [TableBetSetting], [StructureVerBetSetting], [IsLiveComm], [IsLiveBetSetting])
+		  SELECT 5, 5, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,5,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 5, 15, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,5,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 6, 5, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 6, 15, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 7, 5, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 7, 15, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 7, 21, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,4,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 8, 5, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,8,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 8, 15, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,8,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
+UNION ALL SELECT 27, 5, 1, 0, 'All', 1, 1, 1, 0, 'Dep_CustPTGroupSetting_Member',NULL,5,1,'Dep_CustDiscountGroupSetting_Member',NULL,1,99,'Dep_CustBetSettingGameGroup_Member',NULL,0,0
