@@ -140,7 +140,7 @@ BEGIN
 		   ,[winlostdate]
 		   ,[Winlost]
 		   ,[bettype]
-	FROM bodb02_tmp.dbo.Winlimit_DebitGame_20221006 WITH(NOLOCK)
+	FROM bodb02_tmp.dbo.Winlimit_DebitGame WITH(NOLOCK)
 	WHERE custid IN (SELECT custid FROM #tmp_cust)
 END		   
 
