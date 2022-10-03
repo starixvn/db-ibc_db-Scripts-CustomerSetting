@@ -1,10 +1,10 @@
-/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 
 /*
 	Created: 20220929@Tacy
 	Task: Insert new games's reference setting into SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 RedmineID: #170739
-	Database: DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02
+	Database: DBCUST-CustDB
 */
 
 CREATE TABLE #tmpRefSetting (
