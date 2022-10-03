@@ -1,3 +1,9 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20221003@Elodie
+	Task: Add Acc_Dep_DynamicCustSetting_1x
+	DB: DBCUST/CustDB and all replicated server of CustDB_CustSetting publication
+*/
 USE [CustDB]
 GO
 CREATE PROCEDURE Acc_Dep_DynamicCustSetting_10
