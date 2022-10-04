@@ -1,3 +1,4 @@
+/*<info serverAlias="DBTP-bodb_CustHistory"></info>*/
 /*
 	Created: 20221004Elodie
 	Task: Change PT Datatype
