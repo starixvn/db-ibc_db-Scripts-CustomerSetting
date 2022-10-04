@@ -32,7 +32,9 @@ WHERE Site<>'CN88'
 
 INSERT INTO SportBettypeSettingMatrix (SportType, BetType, isLicensee, isLive, Site)
 SELECT SportType, BetType, isLicensee, isLive, Site
-FROM #tmpRefSetting
+FROM #tmpRefSetting t
+WHERE NOT EXISTS (SELECT 1 FROM SportBettypeSettingMatrix rm WITH (NOLOCK)
+					WHERE t.BetType=rm.BetType)
 
 UPDATE rm
 SET 
