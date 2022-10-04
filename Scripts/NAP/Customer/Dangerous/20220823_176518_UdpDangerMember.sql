@@ -46,13 +46,13 @@ BEGIN
 			t.c.value('@danger4[1]','bigint'),
 			t.c.value('@danger5[1]','bigint'),
 			t.c.value('@isBA[1]','bit')
-	FROM @xml.nodes('Root/r')as t(c)
+	FROM @xml.nodes('Root/r')as t(c) OPTION (OPTIMIZE FOR (@xml=NULL))
 	
 	WHILE(1=1)
 	BEGIN
 		DELETE @tmpCust
 
-		DELETE TOP(5000) t
+		DELETE TOP(2000) t
 		OUTPUT deleted.custid, deleted.danger, deleted.danger2, deleted.danger3, deleted.danger4, deleted.danger5, deleted.isBA
 		INTO @tmpCust(custid, danger, danger2, danger3, Danger4, Danger5, isBA)
 		FROM #tblCustDanger t
@@ -67,10 +67,10 @@ BEGIN
 			ci.danger3=CASE WHEN ISNULL(ci.danger3,0)=0		THEN t.danger3 ELSE ci.danger3 END,
 			ci.danger4=CASE WHEN ISNULL(ci.danger4,0)=0		THEN t.danger4 ELSE ci.danger4 END,
 			ci.danger5=CASE WHEN ISNULL(ci.danger5,0)=0		THEN t.danger5 ELSE ci.danger5 END
-		FROM custInfo ci WITH (UPDLOCK, ROWLOCK)
+		FROM custInfo ci WITH (UPDLOCK, ROWLOCK) 
 			INNER JOIN @tmpCust t ON ci.custid = t.custid
 
-		WAITFOR DELAY '0:0:0.1'
+		WAITFOR DELAY '0:0:1'
 	END
 
 	DROP TABLE #tblCustDanger
