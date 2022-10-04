@@ -30,6 +30,10 @@ WHERE Site<>'CN88'
 		OR BetType BETWEEN 6757 AND 6778			--#177397
 		)
 
+INSERT INTO SportBettypeSettingMatrix (SportType, BetType, isLicensee, isLive, Site)
+SELECT SportType, BetType, isLicensee, isLive, Site
+FROM #tmpRefSetting
+
 UPDATE rm
 SET 
 	rm.isActive=ref.isActive,
