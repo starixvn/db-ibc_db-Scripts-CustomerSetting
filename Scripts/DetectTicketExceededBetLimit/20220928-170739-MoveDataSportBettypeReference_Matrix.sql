@@ -51,7 +51,7 @@ WHERE NOT EXISTS (SELECT 1 FROM dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting
 --Insert into SportBettypeSettingMatrix:
 INSERT INTO SportBettypeSettingMatrix (SportType, BetType, isLicensee, isLive, Site)
 SELECT SportType, BetType, isLicensee, isLive, Site
-FROM #tmpRefSetting_Batch
+FROM #tmpRefSetting
 
 UPDATE rm
 SET 
@@ -66,7 +66,7 @@ SET
 	rm.BetTypeRefBetSetting=ref.BettypeRef,
 	rm.TableBetSetting=CASE WHEN ref.SporttypeRef=202 THEN 'Dep_CustBetSetting_Member' ELSE 'Dep_CustBetSettingGameGroup_Member' END
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
-	INNER JOIN #tmpRefSetting_Batch tmp 
+	INNER JOIN #tmpRefSetting tmp 
 		ON tmp.SportType=rm.SportType
 		AND tmp.BetType=rm.BetType
 		AND tmp.isLicensee=rm.isLicensee
@@ -98,7 +98,7 @@ SET
 							WHEN ref.SporttypeRef IN (1,2,3,5,8,10,11,99,161,164,9901,9902) THEN 'CustBetSetting_Member' 
 																							ELSE 'CustBetSetting3rd_Member' END
 FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
-	INNER JOIN #tmpRefSetting_Batch tmp 
+	INNER JOIN #tmpRefSetting tmp 
 		ON tmp.SportType=rm.SportType
 		AND tmp.BetType=rm.BetType
 		AND tmp.isLicensee=rm.isLicensee
