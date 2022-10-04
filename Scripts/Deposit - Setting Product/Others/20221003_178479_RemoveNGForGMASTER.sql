@@ -30,7 +30,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 		ORDER BY ci.custid 
 
 INSERT INTO #Dummy(CustID)
-SELECT CustID FROM  vw_Customer WITH(NOLOCK) 
+SELECT CustID FROM  Customer WITH(NOLOCK) 
 WHERE srecommend IN (SELECT CustID FROM #tmpSMA)
 AND roleid=3 
 	AND (username LIKE '%Acc%' OR username LIKE '%LocalBank%' OR username LIKE '%AFF%' OR username LIKE 'AB88'+'CAS%')
