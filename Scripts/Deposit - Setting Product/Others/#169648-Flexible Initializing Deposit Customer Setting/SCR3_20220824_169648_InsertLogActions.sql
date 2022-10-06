@@ -1,4 +1,4 @@
-﻿﻿/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/ 
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20220824@Eden
 	Task: Insert LogAction for Flexible Init custsetting Deposit [Redmine: #169648]   
