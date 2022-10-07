@@ -36,15 +36,6 @@ WHERE site IN ('allwincity','allwinCV','bdtt','bdtt2','GB888CV','Bobbet','Tianbo
 			'ZF026','starsoccer','24AVIASL','H1royal','HFYX','ZhiFeng142','ZFRT218','KSTECH','WLSTAR','ZFRT198','F88IN1SW','ZhiFeng084','GoldenF2CV','WGAMING','DMsports','12B',
 			'Riverich','ZF215aTR','AKYL99','Lucklotter','Niu8gaming')
 
-UPDATE s
-SET s.SiteDBGroupID = 2
-FROM Site s WITH (ROWLOCK)
-WHERE site IN ('9Club','X2Dynamic','OneSports','Macaubet')
-
-UPDATE cs
-SET cs.SiteDBGroupID = 2
-FROM Dep_CustSuper cs WITH (ROWLOCK)
-WHERE site IN ('9Club','X2Dynamic','OneSports','Macaubet')
 
 
 
