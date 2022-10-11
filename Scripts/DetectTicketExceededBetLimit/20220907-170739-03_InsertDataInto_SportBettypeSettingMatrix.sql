@@ -1,10 +1,10 @@
-/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 
 /*
 	Created: 20220907@Tacy
 	Task: 03. Copy data from Sport_Bettype_Reference_Setting to SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 RedmineID: #170739
-	Database: DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02
+	Database: DBCUST-CustDB,
 */
 DECLARE @Batch_size INT;
 
