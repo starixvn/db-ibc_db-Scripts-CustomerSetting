@@ -9,7 +9,7 @@
 USE CustDB
 GO
 
---INSERT INTO SportNonOfferedSiteCurrency (SportType,BetType,Currency,SiteID)
+INSERT INTO SportNonOfferedSiteCurrency (SportType,BetType,Currency,SiteID)
 SELECT SportType,BetType,Currency,SiteID
 FROM (
 	  SELECT 212 AS SportType, 4001 AS BetType, 42 AS Currency ,1 AS SiteID --Macau Games  PE  BEST-ODDS
