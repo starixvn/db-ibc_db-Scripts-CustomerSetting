@@ -9,12 +9,14 @@ SELECT ci.CustID, RoleId,  Sporttype, Bettype, MaxBet, cs.MaxPerMatch
 FROM CustInfo ci WITH (NOLOCK)
 	INNER JOIn CustBetSetting_Agent cs WITH (NOLOCK) ON ci.custid = cs.CustID 
 WHERE ci.srecommend = @SuperID
+	AND SportType <> 161
 	
 INSERT INTO #MemberList (CustID, RoleId, Sporttype, Bettype, MaxBet, MaxPerMatch)
 SELECT ci.CustID, RoleId,  Sporttype, Bettype, MaxBet, cs.MaxPerMatch
 FROM CustInfo ci WITH (NOLOCK)
 	INNER JOIn CustBetSetting_Member cs WITH (NOLOCK) ON ci.custid = cs.CustID 
 WHERE ci.srecommend = @SuperID
+	AND SportType <> 161
 
 UPDATE d
 SET d.MaxBet = b.MaxBet,
@@ -23,7 +25,8 @@ SET d.MaxBet = b.MaxBet,
 FROM #SMAList d
 	CROSS APPLY (SELECT TOP 1 CustId, Sporttype, bettype, MinBet, MaxBet, MaxPerMatch, MaxPayoutPerMatch
 				FROM DBTP.bodb_CustHistory.dbo.CustBetSetting_Agent_History a WITH (NOLOCK) 
-				WHERE Updatetime > '2022-10-12 03:48:21'
+				WHERE UpdateTime>='10/11/2022 3:35:21 AM'
+					AND UpdateTime<='2022-10-12 03:49:20.300'
 					AND d.CustID = a.CustId AND d.Sporttype = a.Sporttype AND d.Bettype = a.Bettype
 				ORDER BY Updatetime) b
 WHERE RoleId IN (2,3,4)
@@ -36,7 +39,8 @@ SET d.MaxBet = b.MaxBet,
 FROM #MemberList d
 	CROSS APPLY (SELECT TOP 1 CustId, Sporttype, bettype, MinBet, MaxBet, MaxPerMatch, MaxPayoutPerMatch
 				FROM DBTP.bodb_CustHistory.dbo.CustBetSetting_Member_History a WITH (NOLOCK) 
-				WHERE Updatetime > '2022-10-12 03:48:21'
+				WHERE UpdateTime>='10/11/2022 3:35:21 AM'
+					AND UpdateTime<='2022-10-12 03:49:20.300'	
 					AND d.CustID = a.CustId AND d.Sporttype = a.Sporttype AND d.Bettype = a.Bettype
 				ORDER BY Updatetime) b
 WHERE RoleId = 1
