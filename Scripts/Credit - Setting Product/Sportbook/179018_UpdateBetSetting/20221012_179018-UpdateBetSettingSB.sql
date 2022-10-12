@@ -6,11 +6,12 @@
 	Task: Adjust BetSetting SB for WP11
 	DB: DBCust/CustDB
 */
+
 DECLARE @SuperID INT = 36428160
 
 CREATE TABLE #SMAList  (CustID INT, RoleId TINYINT, Sporttype SMALLINT, Bettype INT, MaxBet MONEY, MaxPerMatch MONEY, IsUpdated BIT DEFAULT(0))
 
-CREATE TABLE #MemberList  (CustID INT, RoleId TINYINT, Sporttype SMALLINT, Bettype INT, MaxBet MONEY, MaxPerMatch MONEY, IsUpdated BIT DEFAULT(0))
+CREATE TABLE #MemberList  (ID INT IDENTITY, CustID INT, RoleId TINYINT, Sporttype SMALLINT, Bettype INT, MaxBet MONEY, MaxPerMatch MONEY, IsUpdated BIT DEFAULT(0))
 
 INSERT INTO #SMAList (CustID, RoleId, Sporttype, Bettype, MaxBet, MaxPerMatch)
 SELECT ci.CustID, RoleId,  Sporttype, Bettype, MaxBet, cs.MaxPerMatch
@@ -60,14 +61,23 @@ SET	cs.MaxBet = s.MaxBet,
 	cs.MaxPerMatch = s.MaxPerMatch
 FROM CustBetSetting_Agent cs WITH (ROWLOCK)
 	INNER JOIN #SMAList s ON cs.custid = s.custid AND cs.sporttype = s.sporttype AND cs.bettype = s.bettype
-WHERE s.IsUpdated = 1 
+WHERE s.IsUpdated = 1 	
 
 UPDATE cs 
 SET	cs.MaxBet = s.MaxBet,
 	cs.MaxPerMatch = s.MaxPerMatch
 FROM CustBetSetting_Member cs WITH (ROWLOCK)
 	INNER JOIN #MemberList s ON cs.custid = s.custid AND cs.sporttype = s.sporttype AND cs.bettype = s.bettype
-WHERE s.IsUpdated = 1 
+WHERE s.IsUpdated = 1 AND ID < 5000
+
+UPDATE cs 
+SET	cs.MaxBet = s.MaxBet,
+	cs.MaxPerMatch = s.MaxPerMatch
+FROM CustBetSetting_Member cs WITH (ROWLOCK)
+	INNER JOIN #MemberList s ON cs.custid = s.custid AND cs.sporttype = s.sporttype AND cs.bettype = s.bettype
+WHERE s.IsUpdated = 1 AND ID >= 5000
 
 DROP TABLE #SMAList
 DROP TABLE #MemberList
+
+
