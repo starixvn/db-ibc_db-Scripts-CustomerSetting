@@ -1,3 +1,4 @@
+
 DECLARE @SuperID INT = 36428160
 
 CREATE TABLE #SMAList  (CustID INT, RoleId TINYINT, Sporttype SMALLINT, Bettype INT, MaxBet MONEY, MaxPerMatch MONEY, IsUpdated BIT DEFAULT(0))
@@ -9,6 +10,7 @@ SELECT ci.CustID, RoleId,  Sporttype, Bettype, MaxBet, cs.MaxPerMatch
 FROM CustInfo ci WITH (NOLOCK)
 	INNER JOIn CustBetSetting_Agent cs WITH (NOLOCK) ON ci.custid = cs.CustID 
 WHERE ci.srecommend = @SuperID
+	AND roleid <> 4
 	AND SportType <> 161
 	
 INSERT INTO #MemberList (CustID, RoleId, Sporttype, Bettype, MaxBet, MaxPerMatch)
