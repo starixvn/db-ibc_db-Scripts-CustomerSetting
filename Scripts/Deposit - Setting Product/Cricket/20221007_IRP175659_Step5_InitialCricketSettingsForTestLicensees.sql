@@ -185,6 +185,7 @@ WHERE c.roleid = 4
 	AND c.custid <= @max_custid
 	AND c.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.site IN ('spondemo','Athena000','SampleSite')	
+	AND c.currency <> 20
 	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0

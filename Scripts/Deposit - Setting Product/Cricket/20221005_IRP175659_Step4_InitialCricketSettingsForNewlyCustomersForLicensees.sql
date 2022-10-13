@@ -52,7 +52,9 @@
 		AND s.islicensee = 1
 		AND ci.Enabled = 1	
 		AND c.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-		AND s.site NOT IN ('spondemo','Athena000','SampleSite')	
+		AND (s.site NOT IN ('spondemo','Athena000','SampleSite') 
+			OR (s.site IN ('spondemo','Athena000','SampleSite') AND c.currency <> 20)
+			)
 
 	CREATE TABLE #tmpCust (CustID INT PRIMARY KEY, isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA (CustID INT PRIMARY KEY,RoleID INT)
