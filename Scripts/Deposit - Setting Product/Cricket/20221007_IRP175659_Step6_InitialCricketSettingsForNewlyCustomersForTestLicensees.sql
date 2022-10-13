@@ -52,7 +52,7 @@
 		AND ci.Enabled = 1	
 		AND c.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.site IN ('spondemo','Athena000','SampleSite')
-		AND c.currency <> 20
+		AND c.currency = 20
 
 	CREATE TABLE #tmpCust (CustID INT PRIMARY KEY, isfinished BIT DEFAULT(0))
 	CREATE TABLE #tmpSMA (CustID INT PRIMARY KEY,RoleID INT)
@@ -89,7 +89,7 @@
 		INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 		SELECT custid, ProductSettingID
 		FROM #tmpSMA c
-			CROSS APPLY (SELECT SELECT 154 ProductSettingID
+			CROSS APPLY (SELECT 154 ProductSettingID
 						UNION SELECT 155 ProductSettingID) t
 		WHERE roleid = 4
 			AND NOT EXISTS (SELECT 1 FROM Dep_LicenseeProductSetting l WITH(NOLOCK)
