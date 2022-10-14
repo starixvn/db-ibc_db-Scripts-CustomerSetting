@@ -28,7 +28,7 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
 SELECT 154, 50, 1, 0, 0, 1, NULL, 0		   
 UNION SELECT 155, 9907, 1, 0, 0, 1, NULL, 0
 GO
-
+/*
 DELETE SportBettypeSettingMatrix WITH(ROWLOCK)
 WHERE SportType = 50 and isLicensee = 1
 
@@ -71,4 +71,5 @@ SELECT t.SportType, s.Bettype, 1 as isLicensee, s.isLive, 'ALL' Site, 1 as isAct
 FROM DBTXN.bodb02.dbo.SportBettypeMatrix s WITH(NOLOCK)
 	CROSS APPLY (SELECT 50 as SportType
 				UNION SELECT 9907) t
-WHERE s.SportType = 50				   
+WHERE s.SportType = 50	
+*/			   
