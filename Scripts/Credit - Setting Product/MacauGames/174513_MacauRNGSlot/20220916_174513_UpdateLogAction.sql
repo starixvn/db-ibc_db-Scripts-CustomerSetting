@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date:	 202209152
-	Task: Macau Games - Prepare for log status [#RM:17453]
+	Task: Macau Games - Prepare for log status [#RM:174513]
 	DB: DBCUST/CustDB 
 */
 
