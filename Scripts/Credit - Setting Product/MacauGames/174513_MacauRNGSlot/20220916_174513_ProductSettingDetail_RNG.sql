@@ -57,6 +57,11 @@ SET a.Sporttype = 9906
 FROM dbo.ProductStatusProfile a WITH(ROWLOCK,UPDLOCK)
 WHERE a.Sporttype = 212 AND Bettype = 4001 
 
+UPDATE a
+SET  a.ProductID = 53
+FROM dbo.LossLimit_GlobalSetting a WITH(ROWLOCK,UPDLOCK)
+WHERE a.ProductID = 22 
+
 --SELECT * FROM ProductStatusProfile WITH (ROWLOCK) ORDER BY bitmapOrder
 --SELECT * FROM ProductSettingDetail WITH (ROWLOCK) where ProductID  IN (22,53) ORDER BY ProductID
 --SELECT * FROM ProductSettingSystemDisplay WITH (ROWLOCK) where ProductID  IN (22,53) ORDER BY ProductID

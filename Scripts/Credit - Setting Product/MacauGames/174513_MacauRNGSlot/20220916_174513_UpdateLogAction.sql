@@ -1,9 +1,9 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBLOG/bodb_CustomerLog"></info>*/
 /*
 	Created: Winfred
 	Date:	 202209152
 	Task: Macau Games - Prepare for log status [#RM:174513]
-	DB: DBCUST/CustDB 
+	DB: DBLOG/bodb_CustomerLog 
 */
 
 USE bodb_CustomerLog
