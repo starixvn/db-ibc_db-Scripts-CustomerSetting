@@ -107,7 +107,12 @@ WHERE site IN ('NLDSports',
 				'ZhiFeng266',
 				'ZhiFeng267',
 				'ZhiFeng271',
-				'ZhiFeng030'
+				'ZhiFeng030',
+				'M18SW',
+				'ZFRT264',
+				'LG777',
+				'ZF138USD',
+				'ZhiFeng282'
 				)
 	and roleid = 1
 	

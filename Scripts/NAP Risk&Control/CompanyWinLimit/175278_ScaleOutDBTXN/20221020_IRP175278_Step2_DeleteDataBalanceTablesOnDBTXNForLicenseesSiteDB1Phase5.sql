@@ -105,17 +105,23 @@ BEGIN
 														'ZhiFeng266',
 														'ZhiFeng267',
 														'ZhiFeng271',
-														'ZhiFeng030'
-															)
+														'ZhiFeng030',
+														'M18SW',
+														'ZFRT264',
+														'LG777',
+														'ZF138USD',
+														'ZhiFeng282'
+													)
 						AND roleid = 1				
-					)	
+					)
+				)		
 
 	DELETE Winlimit_DebitGame WITH(ROWLOCK)
 	WHERE custid IN (SELECT custid 
 					FROM custdb.dbo.custinfo ci WITH(NOLOCK)
 					WHERE srecommend IN (SELECT custid FROM custdb.dbo.Dep_custsuper WITH(NOLOCK)
 										WHERE site IN ('NLDSports',
-														'XmenSW',													'XmenSW',
+														'XmenSW',
 														'OCMSS',
 														'LIGAWLHKB',
 														'DTGJZ',
@@ -208,8 +214,14 @@ BEGIN
 														'ZhiFeng266',
 														'ZhiFeng267',
 														'ZhiFeng271',
-														'ZhiFeng030'
+														'ZhiFeng030',
+														'M18SW',
+														'ZFRT264',
+														'LG777',
+														'ZF138USD',
+														'ZhiFeng282'
 													)										
 						AND roleid = 1				
-					)				
+					)		
+				)			
 END		   
