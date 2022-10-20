@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCTG-bodb02"></info>*/
 /*
 	Created: 20221012@Johnson
-	Task: delete data for balance game tables after migrate data for SITEDB1 phase 5 [#RedmineID:#167819]
+	Task: delete data for balance game tables after migrate data for SITEDB2 phase 5 [#RedmineID:#167819]
 	DB: DBCTG/bodb02 
 */
 IF NOT EXISTS (SELECT TOP (1) 1 FROM dbo.BalancePendingCreditGame WITH(NOLOCK))
