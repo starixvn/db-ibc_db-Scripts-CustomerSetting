@@ -2,7 +2,7 @@
 
 /*
 	Created: 20221021@Tacy
-	Task: Update SB's reference setting & Insert Saba soccer, basketball's reference setting
+	Task: Update SB's reference setting & Insert Saba soccer, basketball's reference setting [RedmineID: #170739]
 	Database: DBCUST-CustDB
 */
 CREATE TABLE #tmpRefSetting (
@@ -73,8 +73,12 @@ INSERT INTO SportBettypeSettingMatrix
 	(SportType, BetType, isLicensee, isLive, Site, isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting) 
 SELECT	CASE WHEN SportType=1 THEN 9901 ELSE 9902 END AS SportType, 
 		BetType, isLicensee, isLive, Site, isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, 
-		CASE WHEN SportType=1 THEN 9901 ELSE 9902 END AS SportTypeRefBetSetting, 
-		BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting
+		CASE WHEN SportType=1 AND BetType NOT IN (9,29,38) THEN 9901 
+			 WHEN SportType=2 AND BetType NOT IN (9,29,38) THEN 9902  
+			 ELSE SportType 
+		END AS SportTypeRefBetSetting, 
+		BetTypeRefBetSetting, 
+		TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting
 FROM SportBettypeSettingMatrix ref WITH (NOLOCK)
 WHERE ref.SportType IN (1,2)
 
