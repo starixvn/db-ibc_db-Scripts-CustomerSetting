@@ -1,9 +1,9 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02"></info>*/
 
 /*
 	Created: 20221021@Tacy
 	Task: Update SB's reference setting & Insert Saba soccer, basketball's reference setting [RedmineID: #170739]
-	Database: DBCUST-CustDB
+	Database: DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02
 */
 CREATE TABLE #tmpRefSetting (
 		SportType	smallint,

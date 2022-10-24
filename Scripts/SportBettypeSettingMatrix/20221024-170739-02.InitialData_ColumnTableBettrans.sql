@@ -1,10 +1,10 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB, DBTP-bodb02, DBACC-bodb02"></info>*/
 
 /*
-	Created: 20220525@Tacy
+	Created: 20221024@Tacy
 	Task: Initial data into column TableBettrans on table SportBettypeSettingMatrix
 		 https://nexdev.net/issues/170739 [RedmineID: #170739]
-	Database: DBCUST/CustDB
+	Database: DBCUST/CustDB, DBTP-bodb02, DBACC-bodb02
 */
 
 USE CustDB
