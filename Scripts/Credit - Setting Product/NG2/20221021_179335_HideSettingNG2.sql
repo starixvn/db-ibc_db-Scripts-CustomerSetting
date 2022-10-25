@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 202121021@Elodie
+	Created: 20221026@Elodie
 	Task : Update ProductSettingDetail [Redmine:#179335]
 	DB:  DBCUST/CustDB 
 */
