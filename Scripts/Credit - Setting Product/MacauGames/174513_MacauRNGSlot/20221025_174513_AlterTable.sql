@@ -8,5 +8,5 @@
 
 USE CUSTDB
 GO
-ALTER TABLE ProductSettingDetail ADD Child_DisplayOrder INT
+ALTER TABLE ProductSettingDetail ADD ChildDisplayOrder INT
 GO
