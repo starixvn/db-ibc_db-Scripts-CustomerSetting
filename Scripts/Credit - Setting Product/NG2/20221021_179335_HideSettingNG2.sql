@@ -11,3 +11,4 @@ UPDATE p
 SET SettingStatus = 2
 FROM PRoductSettingDetail p WITH (ROWLOCK)
 WHERE SportType IN (214,215,216,217,218)
+	OR (SportType = 213 AND bettype BETWEEN 2506 AND 2511)
