@@ -30,9 +30,9 @@ FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
 WHERE ProductID  = 22
 
 UPDATE a
-SET a.ChildDisplayOrder = CASE WHEN a.ProductID  = 53 AND a.SettingType = 21 AND a.SportType = 9906 THEN 1 
+SET a.Child_DisplayOrder = CASE WHEN a.ProductID  = 53 AND a.SettingType = 21 AND a.SportType = 9906 THEN 1 
 								WHEN a.ProductID  = 53 AND a.SettingType = 21 AND a.SportType = 9904 THEN 2 
-								WHEN a.ProductID  <> 53 THEN b.STT ELSE ChildDisplayOrder END
+								WHEN a.ProductID  <> 53 THEN b.STT ELSE Child_DisplayOrder END
 FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
 LEFT JOIN (
 	SELECT SettingType, ProductID, SportType, BetType , ROW_NUMBER() OVER(PARTITION BY ProductID ORDER BY SportType)  AS STT 
@@ -80,6 +80,6 @@ SET  a.ProductID = 53
 FROM dbo.LossLimit_GlobalSetting a WITH(ROWLOCK,UPDLOCK)
 WHERE a.ProductID = 22 
 
---SELECT * FROM ProductStatusProfile WITH (ROWLOCK) ORDER BY bitmapOrder
---SELECT * FROM ProductSettingDetail WITH (ROWLOCK) where ProductID  IN (22,53) ORDER BY ProductID
---SELECT * FROM ProductSettingSystemDisplay WITH (ROWLOCK) where ProductID  IN (22,53) ORDER BY ProductID
+--SELECT * FROM ProductStatusProfile WITH (NOLOCK) ORDER BY bitmapOrder
+--SELECT * FROM ProductSettingDetail WITH (NOLOCK) where ProductID  IN (22,53) ORDER BY ProductID
+--SELECT * FROM ProductSettingSystemDisplay WITH (NOLOCK) where ProductID  IN (22,53) ORDER BY ProductID
