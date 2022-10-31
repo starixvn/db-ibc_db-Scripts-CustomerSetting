@@ -439,23 +439,29 @@
 			((a.SiteID = b.SiteID AND a.Currency = 0) OR (a.currency = b.currency AND a.SiteID = 0))
 	WHERE a.IsHidden = 0
 
+	select * from #AllOfferedSiteCurency
+
 	-- Create record non offer 
 	INSERT INTO #NonOfferedSiteCurency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
-	SELECT a.SportType, a.BetType, e.ExchangeId AS Currency, a.SiteID, a.IsHidden, a.IsDisabled, a.HasSynced
-	FROM #AllOfferedSiteCurency a
-	CROSS JOIN dbo.exchange e WITH (NOLOCK) 
-	WHERE e.IsActive = 1 AND e.OfferSite IN (0,1) AND a.currency = 0
-	UNION ALL
-	SELECT a.SportType, a.BetType, a.Currency,s.SiteID, a.IsHidden, a.IsDisabled, a.HasSynced
-	FROM #AllOfferedSiteCurency a
-	CROSS JOIN dbo.Site s WITH (NOLOCK) 
-	WHERE a.SiteID = 0 AND s.isActive = 1 AND s.isLicensee = 0
+	SELECT SportType,BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
+	FROM (
+		SELECT a.SportType, a.BetType, e.ExchangeId AS Currency, a.SiteID, a.IsHidden, a.IsDisabled, a.HasSynced
+		FROM #AllOfferedSiteCurency a
+		CROSS JOIN dbo.exchange e WITH (NOLOCK) 
+		WHERE e.IsActive = 1 AND e.OfferSite IN (0,1) AND a.currency = 0
+		UNION ALL
+		SELECT a.SportType, a.BetType, a.Currency,s.SiteID, a.IsHidden, a.IsDisabled, a.HasSynced
+		FROM #AllOfferedSiteCurency a
+		CROSS JOIN dbo.Site s WITH (NOLOCK) 
+		WHERE a.SiteID = 0 AND s.isActive = 1 AND s.isLicensee = 0) KQ
+	WHERE NOT EXISTS(SELECT TOP 1 1 FROM #NonOfferedSiteCurency WITH(NOLOCK) 
+						WHERE SportType=KQ.SportType AND BetType=KQ.BetType 
+						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
+	DELETE b 
+	FROM ProductStatusSiteCurrency a
+	INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID
 
-	--DELETE b 
-	--FROM ProductStatusSiteCurrency a
-	--INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID
-
-	--INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
+	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
 	SELECT SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
 	FROM #NonOfferedSiteCurency KQ
 	WHERE NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
