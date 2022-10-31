@@ -2,7 +2,7 @@
 /*
 	Created: Winfred
 	Date:	 20221020
-	Task: Macau Games - Update value ProductStatusSiteCurrency [#RM:174744]
+	Task: Non Offer - Update value Status [#RM:174744]
 	DB: DBCUST/CustDB 
 */
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
