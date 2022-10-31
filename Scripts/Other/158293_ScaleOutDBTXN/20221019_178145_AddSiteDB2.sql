@@ -1,0 +1,47 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: Elodie
+	Date: 20220610
+	Task: Update data table Site, Dep_CustSuper [RedmineID:#178142]
+	DB: DBCust/CustDB
+*/
+USE CustDB
+GO
+
+UPDATE s
+SET s.SiteDBGroupID = 2
+FROM Site s WITH (ROWLOCK)
+WHERE site IN ('18Luck','TGAA0813','XinliCV','Xinli2CV','YSYBO688','SKY1688','vnggame','368Cash','TT128','368CashSW','568Win','568WinSW','ab6688','ABEMT','Abcasino','Million','AG','AMG','PKbet',
+			'PanguGame','BETSUN','HuangMa','BigGaming','818Bet','HongChow','TangChao','CGame','SSSGaming','HCVIP','WinWin','BWGaming','CGame4','7kplatform','BGCV','SEAGaming','Aoncash','M8bola',
+			'Q8bola','NBCbet','Unobet','Winn69','Axiawin','Ratugg','Lagadewa','Monstergol','B24VN','Rio66','HAIFA','BBIN2','BBIN3','BE7','Luckywin88','beplay','beplayCV','DBP','Monaco','RBCV','3star88',
+			'ECLBET','Mybet88','WINCLUB88','INSERTGAME','Alphalota','Barcelo9','Aladdin99','BVCLLC','Jiuyou','Yintai','Letian','WRServices','Xiaoxiang','YakaGaming','5ATech','IGSW','HBPT','TSLA',
+			'WRSeamless','TYgaming','Dawoo','pinbo','QUBO','DawooCV','Dawooxin','YYHbet','FB88','FB88CV','Happy1668','YAYOU','US8YAYOU','HC6YAYOU','J9YAYOU','Hejiyongle','Boma365','Hengcai88','GESAB',
+			'mansion88','Happy8','THECLUB','THEDEN','Mayayule','Dachen','MayFair','Vwin','MrCat','Fugui','TitanOne','VWIN66','WKCUR','WKPHIL','TitanCraft','Saibo','Titanbet','Mayibet','MayibetCV',
+			'OLE777','OLE777CV','UNOGAMING','ZTech','XLMEDIA','Soon88','Soon88CV','TGO','365online','YBTech','BOSSB','YTX','Yunji','GAMEBee','SDY','dfbetCV','SDYSW','Entaplay','Tripleone','MICL','laba360',
+			'TSEnter','BSSB168','MYGAME','IgameTech','ARYA','MYGAMECV','BSSB168CV','TSXJCV','W88','GPIGAME','MAX88','ALPHA88','VN88','Win88','DF88','Asian88','ID88','BOG22','W88CV','ROYAL88','alog','zt828',
+			'Macaubet','Winbox','JDYGaming','V9betSW','PKKing','ug396','Baji','NLDSports','998bet','hjccasino','ITCbet','Callmeboss','HL8','9bet','WABET','VCBA','GMASTER','Gampag','LIGAWLHKB','bigbet',
+			'Peakk','Bolanation','Comebet','N8BK','3ge888','C7YOUXI','Gaobet','OSUSDT','VCBACV','Uwoniwin','383sport','USSBET','X33Asia','9w','LUCKYBET','XmenSW','kbosportCV','KSTECH2','GoToWin','kbosports',
+			'OCMSS','ANGbet','De365','TGXICV','mbxusdt','Winsplay','GoldenF2','ZhiFeng019','GmasterS','DTGJZ','UGaming','ZhiFeng173','AEUGSW','0sServices','YSYBO688CV','TXJT','OBGM')
+
+UPDATE cs
+SET cs.SiteDBGroupID = 2
+FROM Dep_CustSuper cs WITH (ROWLOCK)
+WHERE site IN ('18Luck','TGAA0813','XinliCV','Xinli2CV','YSYBO688','SKY1688','vnggame','368Cash','TT128','368CashSW','568Win','568WinSW','ab6688','ABEMT','Abcasino','Million','AG','AMG','PKbet',
+			'PanguGame','BETSUN','HuangMa','BigGaming','818Bet','HongChow','TangChao','CGame','SSSGaming','HCVIP','WinWin','BWGaming','CGame4','7kplatform','BGCV','SEAGaming','Aoncash','M8bola',
+			'Q8bola','NBCbet','Unobet','Winn69','Axiawin','Ratugg','Lagadewa','Monstergol','B24VN','Rio66','HAIFA','BBIN2','BBIN3','BE7','Luckywin88','beplay','beplayCV','DBP','Monaco','RBCV','3star88',
+			'ECLBET','Mybet88','WINCLUB88','INSERTGAME','Alphalota','Barcelo9','Aladdin99','BVCLLC','Jiuyou','Yintai','Letian','WRServices','Xiaoxiang','YakaGaming','5ATech','IGSW','HBPT','TSLA',
+			'WRSeamless','TYgaming','Dawoo','pinbo','QUBO','DawooCV','Dawooxin','YYHbet','FB88','FB88CV','Happy1668','YAYOU','US8YAYOU','HC6YAYOU','J9YAYOU','Hejiyongle','Boma365','Hengcai88','GESAB',
+			'mansion88','Happy8','THECLUB','THEDEN','Mayayule','Dachen','MayFair','Vwin','MrCat','Fugui','TitanOne','VWIN66','WKCUR','WKPHIL','TitanCraft','Saibo','Titanbet','Mayibet','MayibetCV',
+			'OLE777','OLE777CV','UNOGAMING','ZTech','XLMEDIA','Soon88','Soon88CV','TGO','365online','YBTech','BOSSB','YTX','Yunji','GAMEBee','SDY','dfbetCV','SDYSW','Entaplay','Tripleone','MICL','laba360',
+			'TSEnter','BSSB168','MYGAME','IgameTech','ARYA','MYGAMECV','BSSB168CV','TSXJCV','W88','GPIGAME','MAX88','ALPHA88','VN88','Win88','DF88','Asian88','ID88','BOG22','W88CV','ROYAL88','alog','zt828',
+			'Macaubet','Winbox','JDYGaming','V9betSW','PKKing','ug396','Baji','NLDSports','998bet','hjccasino','ITCbet','Callmeboss','HL8','9bet','WABET','VCBA','GMASTER','Gampag','LIGAWLHKB','bigbet',
+			'Peakk','Bolanation','Comebet','N8BK','3ge888','C7YOUXI','Gaobet','OSUSDT','VCBACV','Uwoniwin','383sport','USSBET','X33Asia','9w','LUCKYBET','XmenSW','kbosportCV','KSTECH2','GoToWin','kbosports',
+			'OCMSS','ANGbet','De365','TGXICV','mbxusdt','Winsplay','GoldenF2','ZhiFeng019','GmasterS','DTGJZ','UGaming','ZhiFeng173','AEUGSW','0sServices','YSYBO688CV','TXJT','OBGM')
+
+
+
+
+
+
+
+

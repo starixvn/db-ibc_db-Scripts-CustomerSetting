@@ -1,0 +1,44 @@
+/*<info serverAlias="DBTP-bodb_CustHistory"></info>*/
+/*
+	Created: 20221004Elodie
+	Task: Change PT Datatype
+	
+	DB: DBTP/bodb_CustHistory
+	
+	Dep_CustPTSetting_Agent: 0 ROWS ; Dep_CustPTSetting_Member: 15881 ROWS; Dep_CustPTGroupSetting_Member: 80553 ROWS
+*/
+USE bodb_CustHistory
+GO
+
+-- Step 1: Drop default constraints ---------
+ALTER TABLE Dep_CustPTSetting_Agent_history
+DROP CONSTRAINT DF__Dep_CustP__Super__395884C4
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+DROP CONSTRAINT DF__Dep_CustP__Maste__3A4CA8FD
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+DROP CONSTRAINT DF__Dep_CustP__Agent__3B40CD36
+
+GO
+-- Step 2: change datatype ---------
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ALTER COLUMN SuperPT SMALLMONEY 
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ALTER COLUMN MasterPT SMALLMONEY 
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ALTER COLUMN AgentPT SMALLMONEY 
+
+GO
+-- Step 3: Add default constraints ---------
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ADD CONSTRAINT DF_Dep_CustPTSetting_Agent_history_SuperPT DEFAULT 0 FOR SuperPT
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ADD CONSTRAINT DF_Dep_CustPTSetting_Agent_history_MasterPT DEFAULT 0 FOR MasterPT
+
+ALTER TABLE Dep_CustPTSetting_Agent_history
+ADD CONSTRAINT DF_Dep_CustPTSetting_Agent_history_AgentPT DEFAULT 0 FOR AgentPT
+
