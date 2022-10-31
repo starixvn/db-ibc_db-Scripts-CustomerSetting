@@ -456,7 +456,7 @@
 	-- delete record all offer
 	DELETE a 
 	FROM ProductStatusSiteCurrency a WITH(ROWLOCK,UPDLOCK) 
-	INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID
+	INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID AND a.IsHidden = b.IsHidden
 	-- delete config exists non offer
 	DELETE a 
 	FROM #NonOfferedSiteCurency a WITH(ROWLOCK,UPDLOCK) 
