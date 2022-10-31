@@ -10,7 +10,7 @@
 	GO
 
 	CREATE TABLE #NonOfferedSiteCurency(SiteID INT,	currency INT, SportType	SMALLINT, BetType SMALLINT, 
-					IsHidden BIT DEFAULT(1), IsDisabled	BIT DEFAULT(1), HasSynced BIT DEFAULT(0) )
+					IsHidden BIT DEFAULT(1), IsDisabled	BIT DEFAULT(1), HasSynced BIT DEFAULT(1) )
 
 	INSERT INTO #NonOfferedSiteCurency (SportType,BetType,Currency,SiteID)
 	SELECT SportType,BetType,Currency,SiteID
