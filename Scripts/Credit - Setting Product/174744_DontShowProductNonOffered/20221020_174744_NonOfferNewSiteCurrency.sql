@@ -453,14 +453,10 @@
 	WHERE NOT EXISTS(SELECT TOP 1 1 FROM #NonOfferedSiteCurency WITH(NOLOCK) 
 						WHERE SportType=KQ.SportType AND BetType=KQ.BetType 
 						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
-	-- delete record all offer
-	DELETE a 
-	FROM ProductStatusSiteCurrency a WITH(ROWLOCK,UPDLOCK) 
-	INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID AND a.IsHidden = b.IsHidden
 	-- delete config exists non offer
 	DELETE a 
 	FROM #NonOfferedSiteCurency a WITH(ROWLOCK,UPDLOCK) 
-	INNER JOIN ProductStatusSiteCurrency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND 
+	INNER JOIN ProductStatusSiteCurrency b  WITH (NOLOCK) ON a.SportType = b.SportType AND a.BetType = b.BetType AND 
 			((a.SiteID = b.SiteID AND b.Currency = 0) OR (a.currency = b.currency AND b.SiteID = 0))
 	WHERE b.IsHidden = 1
 
@@ -470,6 +466,10 @@
 	WHERE NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
 						WHERE SportType=KQ.SportType AND BetType=KQ.BetType 
 						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
+	-- delete record all offer
+	DELETE a 
+	FROM ProductStatusSiteCurrency a WITH(ROWLOCK,UPDLOCK) 
+	INNER JOIN #AllOfferedSiteCurency b ON a.SportType = b.SportType AND a.BetType = b.BetType AND a.Currency = b.currency AND a.SiteID = b.SiteID AND a.IsHidden = b.IsHidden
 
 	DROP TABLE #NonOfferedSiteCurency
 	DROP TABLE #AllOfferedSiteCurency

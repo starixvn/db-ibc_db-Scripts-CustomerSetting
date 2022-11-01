@@ -10,9 +10,9 @@ CREATE TABLE #supers (custid INT PRIMARY KEY CLUSTERED, site VARCHAR(10), curren
 CREATE TABLE #TempSite(site nvarchar(50),	currency nvarchar(50),	bitmapOrder	varchar(100),	ProductID VARCHAR(100), isRNGKeno	INT)
 
 CREATE TABLE #ProductSettingDetail (SettingType SMALLINT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, ProductID TINYINT, RealProductId TINYINT)
-CREATE TABLE #Member (CustID INT PRIMARY KEY CLUSTERED , isRNGKeno INT, ProductID VARCHAR(100),isfinished BIT DEFAULT(0) )
+CREATE TABLE #Member (CustID INT PRIMARY KEY CLUSTERED , isRNGKeno INT, ProductID VARCHAR(100),isfinished BIT DEFAULT(0) , bitmapOrder	VARCHAR(100))
 CREATE TABLE #MemberTemp (CustID INT PRIMARY KEY)
-CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT , isRNGKeno INT, ProductID VARCHAR(100),isfinished BIT DEFAULT(0) )
+CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT , isRNGKeno INT, ProductID VARCHAR(100),isfinished BIT DEFAULT(0),	bitmapOrder	VARCHAR(100))
 CREATE TABLE #SMATempNew (CustID INT PRIMARY KEY)
 
 INSERT INTO #TempSite(site , currency ,	bitmapOrder , ProductID , isRNGKeno )
@@ -111,21 +111,22 @@ WHERE ci.roleid = 4
 			OR ( ci.Site IN ('KORIBC') AND ci.currency IN (45))
 			OR ( ci.Site IN ('XYZBET') AND ci.currency IN (12,13,15,2,5,6)))
 
-INSERT INTO #Member (CustID , isRNGKeno , ProductID)
-SELECT c.custid , t.isRNGKeno, t.ProductID
+INSERT INTO #Member (CustID , isRNGKeno , ProductID , bitmapOrder)
+SELECT c.custid , t.isRNGKeno, t.ProductID, t.bitmapOrder
 FROM Custinfo c WITH (NOLOCK)
 	INNER JOIN #supers s ON c.srecommend = s.custid
 	INNER JOIN #TempSite t ON t.site = s.site AND t.currency = s.currency
 WHERE roleid = 1  AND Enabled = 1 AND c.custid > @max_custid
 	
-INSERT INTO #SMATemp (CustID, roleid , isRNGKeno , ProductID)
-SELECT c.custid, roleid , t.isRNGKeno, t.ProductID
+INSERT INTO #SMATemp (CustID, roleid , isRNGKeno , ProductID, bitmapOrder)
+SELECT c.custid, roleid , t.isRNGKeno, t.ProductID, t.bitmapOrder
 FROM Custinfo c WITH (NOLOCK)
 	INNER JOIN #supers s ON c.srecommend = s.custid
 	INNER JOIN #TempSite t ON t.site = s.site AND t.currency = s.currency
 WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
 
 DECLARE @batch int = 3000
+
 --PositionTaking
 IF EXISTS(SELECT TOP 1 1 FROM #ProductSettingDetail WHERE SettingType IN (1,18))
 BEGIN
@@ -480,6 +481,7 @@ BEGIN
 	DROP TABLE #CustStakeLevel_MemberTemp
 END
 
+-- Disable keno 
 WHILE EXISTS(SELECT TOP 1 1 FROM #SMATemp WHERE isfinished = 0 AND isRNGKeno = 1)
 BEGIN
 	UPDATE TOP (@batch) #SMATemp 
@@ -514,12 +516,68 @@ BEGIN
 	SET HideKeno = 1
 	FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #MemberTemp b ON g.CustID = b.CustID 
-		
+	
 	TRUNCATE TABLE #MemberTemp
 END
-	
+
+-- Update Status 
+CREATE TABLE #AllUsers (CustID INT PRIMARY KEY, XmlDisable VARCHAR(MAX))
+CREATE TABLE #CustProductStatus(CustID INT PRIMARY KEY,bitmapIsHidden BINARY(32),isfinished BIT DEFAULT(0))
+CREATE TABLE #TempProductStatus(CustID INT PRIMARY KEY,bitmapIsHidden BINARY(32))
+
+INSERT INTO #AllUsers (CustID,XmlDisable)
+SELECT DISTINCT SMA.CustID , c.zxml FROM #SMATemp SMA WITH (NOLOCK)
+CROSS APPLY ( SELECT DISTINCT
+					bitmap AS '@b', 
+					1 AS '@s'
+				FROM (SELECT value AS bitmap
+					FROM STRING_SPLIT(SMA.bitmapOrder,',')
+					WHERE value <> '') vh 
+				FOR XML PATH ('r'), ROOT ('root')) c (zxml)
+UNION 
+SELECT DISTINCT M.CustID , c.zxml FROM #Member M WITH (NOLOCK)
+CROSS APPLY ( SELECT DISTINCT
+					bitmap AS '@b', 
+					1 AS '@s'
+				FROM (SELECT value AS bitmap
+					FROM STRING_SPLIT(M.bitmapOrder,',')
+					WHERE value <> '') vh 
+				FOR XML PATH ('r'), ROOT ('root')) c (zxml)
+
+INSERT INTO #CustProductStatus(CustID,bitmapIsHidden)
+SELECT cs.CustID
+	,bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),a.XmlDisable)))
+FROM CustProductStatus cs WITH(NOLOCK)
+	INNER JOIN  #AllUsers a ON a.CustID = cs.custid
+
+WHILE 1 = 1 
+BEGIN
+	TRUNCATE TABLE #TempProductStatus
+
+	UPDATE TOP (@batch) a WITH (ROWLOCK)
+	SET a.isfinished = 1
+	OUTPUT DELETED.CustID,DELETED.bitmapIsHidden INTO #TempProductStatus(CustID,bitmapIsHidden)
+	FROM #CustProductStatus a 
+	WHERE a.isfinished = 0
+		 
+	IF @@ROWCOUNT = 0 
+		BREAK;
+
+	UPDATE c 
+	SET  c.bitmapIsHidden = tmp.bitmapIsHidden
+	FROM CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN #TempProductStatus tmp ON c.CustID = tmp.CustID
+
+	WAITFOR DELAY '00:00:00.100'
+END
+
 DROP TABLE #ProductSettingDetail	
 DROP TABLE #Member
 DROP TABLE #SMATemp
 DROP TABLE #supers
 DROP TABLE #TempSite
+DROP TABLE #MemberTemp
+DROP TABLE #SMATempNew
+DROP TABLE #TempProductStatus
+DROP TABLE #CustProductStatus
+DROP TABLE #AllUsers
