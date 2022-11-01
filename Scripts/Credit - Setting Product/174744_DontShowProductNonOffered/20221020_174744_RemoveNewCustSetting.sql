@@ -107,7 +107,7 @@ WHERE ci.roleid = 4
 			OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (10,12,13,15,16,2,22,3,33,34,35,41,42,43,45,5,6,9))
 			OR ( ci.Site IN ('IBCIndo') AND ci.currency IN (22,33,34))
 			OR ( ci.Site IN ('IMBC') AND ci.currency IN (13))
-			OR ( ci.Site IN ('indo') AND ci.currency IN (15,22,33,34,47))
+			OR ( ci.Site IN ('INDO') AND ci.currency IN (15,22,33,34,47))
 			OR ( ci.Site IN ('KORIBC') AND ci.currency IN (45))
 			OR ( ci.Site IN ('XYZBET') AND ci.currency IN (12,13,15,2,5,6)))
 

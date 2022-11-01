@@ -92,6 +92,7 @@
 	UNION SELECT 180      ,1201     ,42       ,1           --Virtual Sports--PE--BEST-ODDS
 	UNION SELECT 208      ,2101     ,42       ,1           --Saba Casino--PE--BEST-ODDS
 	UNION SELECT 211      ,2401     ,42       ,1           --Allbet--PE--BEST-ODDS
+	UNION SELECT 212      ,4001     ,42       ,1           --Macau Games--PE--BEST-ODDS
 	UNION SELECT 213      ,2501     ,42       ,1           --NG2--PE--BEST-ODDS
 	UNION SELECT 219      ,1011     ,42       ,1           --Fishing World--PE--BEST-ODDS
 	UNION SELECT 220      ,1021     ,42       ,1           --Lottery--PE--BEST-ODDS
@@ -146,6 +147,7 @@
 	UNION SELECT 180      ,1201     ,6        ,3           --Virtual Sports--EURO--789y
 	UNION SELECT 208      ,2101     ,6        ,3           --Saba Casino--EURO--789y
 	UNION SELECT 211      ,2401     ,6        ,3           --Allbet--EURO--789y
+	UNION SELECT 212      ,4001     ,6        ,3           --Macau Games--EURO--789y
 	UNION SELECT 213      ,2501     ,6        ,3           --NG2--EURO--789y
 	UNION SELECT 219      ,1011     ,6        ,3           --Fishing World--EURO--789y
 	UNION SELECT 220      ,1021     ,6        ,3           --Lottery--EURO--789y
@@ -169,6 +171,7 @@
 	UNION SELECT 180      ,1201     ,2        ,3           --Virtual Sports--RM--789y
 	UNION SELECT 208      ,2101     ,2        ,3           --Saba Casino--RM--789y
 	UNION SELECT 211      ,2401     ,2        ,3           --Allbet--RM--789y
+	UNION SELECT 212      ,4001     ,2        ,3           --Macau Games--RM--789y
 	UNION SELECT 213      ,2501     ,2        ,3           --NG2--RM--789y
 	UNION SELECT 219      ,1011     ,2        ,3           --Fishing World--RM--789y
 	UNION SELECT 220      ,1021     ,2        ,3           --Lottery--RM--789y
@@ -248,6 +251,7 @@
 	UNION SELECT 180      ,1201     ,42       ,16          --Virtual Sports--PE--611111
 	UNION SELECT 208      ,2101     ,42       ,16          --Saba Casino--PE--611111
 	UNION SELECT 211      ,2401     ,42       ,16          --Allbet--PE--611111
+	UNION SELECT 212      ,4001     ,42       ,16          --Macau Games--PE--611111
 	UNION SELECT 213      ,2501     ,42       ,16          --NG2--PE--611111
 	UNION SELECT 219      ,1011     ,42       ,16          --Fishing World--PE--611111
 	UNION SELECT 220      ,1021     ,42       ,16          --Lottery--PE--611111
@@ -271,6 +275,7 @@
 	UNION SELECT 180      ,1201     ,2        ,16          --Virtual Sports--RM--611111
 	UNION SELECT 208      ,2101     ,2        ,16          --Saba Casino--RM--611111
 	UNION SELECT 211      ,2401     ,2        ,16          --Allbet--RM--611111
+	UNION SELECT 212      ,4001     ,2        ,16          --Macau Games--RM--611111
 	UNION SELECT 213      ,2501     ,2        ,16          --NG2--RM--611111
 	UNION SELECT 219      ,1011     ,2        ,16          --Fishing World--RM--611111
 	UNION SELECT 220      ,1021     ,2        ,16          --Lottery--RM--611111
@@ -308,6 +313,7 @@
 	UNION SELECT 180      ,1201     ,13       ,20          --Virtual Sports--RMB--722222
 	UNION SELECT 208      ,2101     ,13       ,20          --Saba Casino--RMB--722222
 	UNION SELECT 211      ,2401     ,13       ,20          --Allbet--RMB--722222
+	UNION SELECT 212      ,4001     ,13       ,20          --Macau Games--RMB--722222
 	UNION SELECT 213      ,2501     ,13       ,20          --NG2--RMB--722222
 	UNION SELECT 219      ,1011     ,13       ,20          --Fishing World--RMB--722222
 	UNION SELECT 220      ,1021     ,13       ,20          --Lottery--RMB--722222
@@ -341,6 +347,7 @@
 	UNION SELECT 180      ,1201     ,13       ,21          --Virtual Sports--RMB--733333
 	UNION SELECT 208      ,2101     ,13       ,21          --Saba Casino--RMB--733333
 	UNION SELECT 211      ,2401     ,13       ,21          --Allbet--RMB--733333
+	UNION SELECT 212      ,4001     ,13       ,21          --Macau Games--RMB--733333
 	UNION SELECT 213      ,2501     ,13       ,21          --NG2--RMB--733333
 	UNION SELECT 219      ,1011     ,13       ,21          --Fishing World--RMB--733333
 	UNION SELECT 220      ,1021     ,13       ,21          --Lottery--RMB--733333
@@ -392,6 +399,7 @@
 	UNION SELECT 180      ,1201     ,2        ,188         --Virtual Sports--RM--7aa666
 	UNION SELECT 208      ,2101     ,2        ,188         --Saba Casino--RM--7aa666
 	UNION SELECT 211      ,2401     ,2        ,188         --Allbet--RM--7aa666
+	UNION SELECT 212      ,4001     ,2        ,188         --Macau Games--RM--7aa666
 	UNION SELECT 213      ,2501     ,2        ,188         --NG2--RM--7aa666
 	UNION SELECT 219      ,1011     ,2        ,188         --Fishing World--RM--7aa666
 	UNION SELECT 220      ,1021     ,2        ,188         --Lottery--RM--7aa666
