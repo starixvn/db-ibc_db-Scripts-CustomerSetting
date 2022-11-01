@@ -38,8 +38,10 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustStakeLevel_Member') = 0 RETURN
 
 	CREATE TABLE #ProductSettingDetail (SettingType SMALLINT, SportType SMALLINT, BetType SMALLINT, IsLive bit, ProductID TINYINT, RealProductId TINYINT)
-	CREATE TABLE #Member (CustID INT PRIMARY KEY CLUSTERED )
-	CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT)
+	CREATE TABLE #Member (CustID INT PRIMARY KEY CLUSTERED, isfinished BIT DEFAULT(0) )
+	CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT, isfinished BIT DEFAULT(0))
+	CREATE TABLE #MemberTemp (CustID INT PRIMARY KEY)
+	CREATE TABLE #SMATempNew (CustID INT PRIMARY KEY)
 
 	INSERT INTO #ProductSettingDetail(SettingType, SportType, BetType, IsLive, ProductID, RealProductId)
 	SELECT SettingType, SportType, BetType, IsLive, ProductID, RealProductId
@@ -401,9 +403,72 @@ BEGIN
 		DROP TABLE #CustStakeLevel_MemberTemp
 	END
 	
+	IF	(@isRNGKeno = 1)
+	BEGIN
+		WHILE(1=1)
+		BEGIN
+			TRUNCATE TABLE #SMATempNew
+
+			UPDATE TOP (@batch) a WITH (ROWLOCK)
+			SET a.isfinished = 1
+			OUTPUT deleted.CustID INTO #SMATempNew(CustID)
+			FROM #SMATemp a
+			WHERE a.isfinished = 0
+		
+			IF @@ROWCOUNT = 0
+				BREAK;
+		
+			DELETE a
+			FROM CustOverrideGame a WITH(ROWLOCK) 
+				INNER JOIN #SMATempNew temp ON a.CustId = temp.CustID 
+			WHERE  a.Sporttype = 202 AND a.Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+		
+			DELETE a
+			FROM CustSettingGame a WITH(ROWLOCK) 
+				INNER JOIN #SMATempNew temp ON a.CustId = temp.CustID 
+			WHERE  a.sporttype = 202 AND a.BetType IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+			DELETE a
+			FROM CustGameType a WITH(ROWLOCK) 
+				INNER JOIN #SMATempNew temp ON a.CustId = temp.CustID 
+			WHERE a.GameTypeID IN (1,15,16,17,19,20,21,22,24,25,26,27,28,29,30,31)
+		END
+
+		WHILE(1=1)
+		BEGIN
+			TRUNCATE TABLE #MemberTemp
+
+			UPDATE TOP (@batch) a WITH (ROWLOCK)
+			SET a.isfinished = 1
+			OUTPUT deleted.CustID INTO #MemberTemp(CustID)
+			FROM #Member a
+			WHERE a.isfinished = 0
+		
+			IF @@ROWCOUNT = 0
+				BREAK;
+		
+			DELETE a
+			FROM CustOverrideGame a WITH(ROWLOCK) 
+				INNER JOIN #MemberTemp temp ON a.CustId = temp.CustID 
+			WHERE  a.Sporttype = 202 AND a.Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+		
+			DELETE a
+			FROM CustSettingGame a WITH(ROWLOCK) 
+				INNER JOIN #MemberTemp temp ON a.CustId = temp.CustID 
+			WHERE  a.sporttype = 202 AND a.BetType IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+			DELETE a
+			FROM CustGameType a WITH(ROWLOCK) 
+				INNER JOIN #MemberTemp temp ON a.CustId = temp.CustID 
+			WHERE a.GameTypeID IN (1,15,16,17,19,20,21,22,24,25,26,27,28,29,30,31)
+		END
+	END
+
 	DROP TABLE #ProductSettingDetail	
 	DROP TABLE #Member
 	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
+	DROP TABLE #SMATempNew
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

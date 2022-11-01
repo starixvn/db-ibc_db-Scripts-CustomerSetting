@@ -497,6 +497,21 @@ BEGIN
 	SET HideKeno = 1
 	FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #SMATempNew b ON g.CustID = b.CustID 
+	
+	DELETE cg
+	FROM dbo.CustOverrideGame cg WITH(ROWLOCK)		
+		INNER JOIN #SMATempNew b ON cg.CustID = b.CustID 
+	WHERE cg.Sporttype = 202 AND Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+	DELETE cg
+	FROM dbo.CustSettingGame cg WITH(ROWLOCK)		
+		INNER JOIN #SMATempNew b ON cg.CustID = b.CustID 
+	WHERE cg.Sporttype = 202 AND Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+	DELETE cg
+	FROM dbo.CustGameType cg WITH(ROWLOCK)		
+		INNER JOIN #SMATempNew b ON cg.CustID = b.CustID 
+	WHERE cg.GameTypeID IN (1,15,16,17,19,20,21,22,24,25,26,27,28,29,30,31)
 		
 	TRUNCATE TABLE #SMATempNew
 END
@@ -517,6 +532,21 @@ BEGIN
 	FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 		INNER JOIN #MemberTemp b ON g.CustID = b.CustID 
 	
+	DELETE cg
+	FROM dbo.CustOverrideGame cg WITH(ROWLOCK)		
+		INNER JOIN #MemberTemp b ON cg.CustID = b.CustID 
+	WHERE cg.Sporttype = 202 AND Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+	DELETE cg
+	FROM dbo.CustSettingGame cg WITH(ROWLOCK)		
+		INNER JOIN #MemberTemp b ON cg.CustID = b.CustID 
+	WHERE cg.Sporttype = 202 AND Bettype IN (1501,1515,1516,1517,1519,1520,1521,1522,1524,1525,1526,1527,1528,1529,1530,1531)
+
+	DELETE cg
+	FROM dbo.CustGameType cg WITH(ROWLOCK)		
+		INNER JOIN #MemberTemp b ON cg.CustID = b.CustID 
+	WHERE cg.GameTypeID IN (1,15,16,17,19,20,21,22,24,25,26,27,28,29,30,31)
+
 	TRUNCATE TABLE #MemberTemp
 END
 
