@@ -3,7 +3,7 @@
 /*
 	Created: 20221102@Tacy
 	Task: Update Keno's Bettype on table [CustMaxBetSetting_History]
-		 https://nexdev.net/issues/1780040 RedmineID: #180040
+		 https://nexdev.net/issues/180040 RedmineID: #180040
 	Database: DBTP-bodb02
 */
 DECLARE @BATCH_SIZE INT = 5000;
