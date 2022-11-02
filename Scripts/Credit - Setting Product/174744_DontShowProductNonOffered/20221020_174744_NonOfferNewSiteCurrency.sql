@@ -453,7 +453,7 @@
 		FROM #AllOfferedSiteCurency a
 		CROSS JOIN dbo.exchange e WITH (NOLOCK) 
 		WHERE e.IsActive = 1 AND e.OfferSite IN (0,1) AND a.currency = 0
-		UNION ALL
+		UNION
 		SELECT a.SportType, a.BetType, a.Currency,s.SiteID, a.IsHidden, a.IsDisabled, a.HasSynced
 		FROM #AllOfferedSiteCurency a
 		CROSS JOIN dbo.Site s WITH (NOLOCK) 
@@ -469,7 +469,7 @@
 	WHERE b.IsHidden = 1
 
 	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
-	SELECT SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
+	SELECT DISTINCT SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
 	FROM #NonOfferedSiteCurency KQ
 	WHERE NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
 						WHERE SportType=KQ.SportType AND BetType=KQ.BetType 
