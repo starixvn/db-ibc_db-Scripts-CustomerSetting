@@ -12,13 +12,13 @@ DECLARE @tmp_GameType TABLE (GameTypeID INT, IBCBettypeID INT)
 
 BEGIN TRY		
 	INSERT INTO @tmp_GameType (GameTypeID, IBCBettypeID)
-	SELECT GameTypeID, GameTypeName, IsDisabled, IBCBettypeID 
+	SELECT GameTypeID, IBCBettypeID 
 	FROM DBAGE.bodb02.dbo.GameType WITH (NOLOCK)
 	WHERE IBCBetTypeID BETWEEN 1501 AND 1599	--Keno
 END TRY
 BEGIN CATCH		
 	INSERT INTO @tmp_GameType (GameTypeID, IBCBettypeID)
-	SELECT GameTypeID, GameTypeName, IsDisabled, IBCBettypeID 
+	SELECT GameTypeID, IBCBettypeID 
 	FROM DBTXN.bodb02.dbo.GameType WITH (NOLOCK)
 	WHERE IBCBetTypeID BETWEEN 1501 AND 1599	--Keno
 END CATCH
