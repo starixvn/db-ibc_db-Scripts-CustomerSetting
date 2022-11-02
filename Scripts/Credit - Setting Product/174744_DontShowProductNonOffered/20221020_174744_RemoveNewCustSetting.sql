@@ -78,7 +78,7 @@ UNION ALL SELECT 'XYZBET'    , 15 ,'21,25,34,4,8'                               
 
 DECLARE @max_custid INT, @ProductID varchar(200)
 SELECT @max_custid = xxx
-SET @ProductID = '21,23,24,28,38,39,40,42,45,46,47,5,50,51,52,57,59,6,63,65,66,69,70'
+SET @ProductID = '21,22,23,24,28,38,39,40,42,45,46,47,5,50,51,52,57,59,6,63,65,66,69,70'
 
 INSERT INTO #ProductSettingDetail(SettingType, SportType, BetType, IsLive, ProductID, RealProductId)
 SELECT SettingType, SportType, BetType, IsLive, ProductID, RealProductId
