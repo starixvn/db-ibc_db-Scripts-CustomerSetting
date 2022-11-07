@@ -19,6 +19,14 @@
 										 (SiteID = 188 AND Currency = 2)))
 		 )
 
+	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
+	SELECT 9904 AS SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
+	FROM ProductStatusSiteCurrency KQ
+	WHERE NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
+						WHERE SportType=9904 AND BetType=KQ.BetType 
+						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
+	AND IsHidden = 1 AND SportType = 212
+
 	--SELECT a.* 
 	--FROM ProductStatusSiteCurrency a WITH(ROWLOCK,UPDLOCK) 
 	--WHERE ((SportType  = 171 AND (SiteID = 13 AND Currency = 15))
