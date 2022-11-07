@@ -21,7 +21,7 @@
 
 	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced)
 	SELECT 9904 AS SportType, BetType, Currency, SiteID, IsHidden, IsDisabled, HasSynced
-	FROM ProductStatusSiteCurrency KQ
+	FROM ProductStatusSiteCurrency KQ  WITH(NOLOCK)
 	WHERE NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
 						WHERE SportType=9904 AND BetType=KQ.BetType 
 						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
