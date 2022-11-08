@@ -14,7 +14,7 @@ SELECT [custid]
 	   ,[winlostdate]
 	   ,[Winlost]
 	   ,[bettype]
-FROM DBSIG.SiteDB01tmp.dbo.Winlimit_CreditGame_20221115 WITH(NOLOCK)
+FROM DBSIG01.SiteDB01tmp.dbo.Winlimit_CreditGame_20221115 WITH(NOLOCK)
 
 INSERT INTO [dbo].[Winlimit_DebitGame]
 		   ([custid]
@@ -25,5 +25,5 @@ SELECT [custid]
 	   ,[winlostdate]
 	   ,[Winlost]
 	   ,[bettype]
-FROM DBSIG.SiteDB01tmp.dbo.Winlimit_DebitGame_20221115 WITH(NOLOCK)
+FROM DBSIG01.SiteDB01tmp.dbo.Winlimit_DebitGame_20221115 WITH(NOLOCK)
 	   
