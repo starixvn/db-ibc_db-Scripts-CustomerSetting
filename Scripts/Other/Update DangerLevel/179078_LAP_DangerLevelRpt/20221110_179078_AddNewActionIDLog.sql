@@ -1,0 +1,11 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
+	Created: 20221110@Tacy
+	Task: insert into table LogAction [redmine:#179078]
+	DB: DBLOG.bodb_CustomerLog
+*/
+INSERT INTO LogAction ([ActionID], [ActionTypeID], [SPName], [ActionNameEN], [ActionNameCH], [ActionNameCS], [ActionNameJP], [ActionNameIT], [ActionNameTH], [ActionNameKO], [IsInternal], [ActionNameVI], [ActionNameCN])
+VALUES	 (1191,NULL,'Acc_CustomerUpdDangerLevel','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level',1,'Auto Update Saba Soccer Danger Level','Auto Update Saba Soccer Danger Level')
+		,(1192,NULL,'Acc_CustomerUpdDangerLevel','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level',1,'Auto Update Saba Basketball Danger Level','Auto Update Saba Basketball Danger Level')
+		,(1193,NULL,NULL,'Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level',1,'Manual Update Saba Soccer Danger Level','Manual Update Saba Soccer Danger Level')
+		,(1194,NULL,NULL,'Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level',1,'Manual Update Saba Basketball Danger Level','Manual Update Saba Basketball Danger Level')
