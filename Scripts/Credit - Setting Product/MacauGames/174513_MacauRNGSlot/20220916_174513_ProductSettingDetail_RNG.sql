@@ -12,7 +12,7 @@ UPDATE a
 SET a.ProductID = 18,
 	a.RealProductId = 18,
 	a.SportType = CASE	
-					WHEN SettingType IN ( 1, 6, 21 ) AND SportType = 212 THEN 9906 
+					WHEN SettingType IN (21 ) AND SportType = 212 THEN 9906 
 					ELSE SportType END
 FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
 WHERE ProductID  = 22
@@ -28,6 +28,19 @@ LEFT JOIN (
 	WHERE c.SettingType in (13,21) 
 ) b ON a.ProductID = b.ProductID and a.SettingType = b.SettingType AND a.SportType = b.SportType and a.BetType = b.BetType
 WHERE a.SettingType in (13,21)  
+
+-- Insert PT
+INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
+SELECT SettingType, 9906 AS SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
+	,SettingStatus = 1,IntervalValue,RealProductId,MaxChoice ,ProductSettingID = 230,Parent_ProductSettingID 
+FROM ProductSettingDetail WITH(NOLOCK) 
+WHERE ProductID = 22 AND SettingType = 1 AND sporttype = 212 AND bettype = 4001
+
+INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
+SELECT SettingType, 9906 AS SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
+	,SettingStatus = 1,IntervalValue,RealProductId,MaxChoice ,ProductSettingID = 231,Parent_ProductSettingID 
+FROM ProductSettingDetail WITH(NOLOCK) 
+WHERE ProductID = 22 AND SettingType = 6 AND sporttype = 212 AND bettype = 4001
 
 UPDATE a
 SET a.ProductID = 18
