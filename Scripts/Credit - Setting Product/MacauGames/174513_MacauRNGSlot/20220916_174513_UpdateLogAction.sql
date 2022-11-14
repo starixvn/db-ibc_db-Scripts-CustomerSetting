@@ -13,10 +13,10 @@ DECLARE @tmpLogAction TABLE (ActionID INT)
 
 
 UPDATE a
-SET  a.ProductID = 53
+SET  a.ProductID = 18
 OUTPUT DELETED.ActionID INTO @tmpLogAction(ActionID)
 FROM dbo.LogActionDetail a WITH(ROWLOCK,UPDLOCK)
-WHERE a.ProductID = 22 
+WHERE a.ProductID = 53 
 
 UPDATE l 
 SET  l.ActionNameEN = REPLACE(l.ActionNameEN,N'Macau Games',N'RNG Slot')
