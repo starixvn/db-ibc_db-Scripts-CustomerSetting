@@ -26,7 +26,7 @@ FROM dbtxn.bodb02.dbo.Sport_Bettype_Reference ref WITH (NOLOCK)
 INNER JOIN dbtxn.bodb02.dbo.SportBettypeMatrix sbm WITH (NOLOCK)
 	ON sbm.SportType=ref.SporttypeRef
 	AND sbm.BetType=ref.BettypeRef
-WHERE NOT EXISTS (SELECT 1 FROM dbcust.custdb.dbo.SportBettypeSettingMatrix rm WITH (NOLOCK)
+WHERE NOT EXISTS (SELECT 1 FROM SportBettypeSettingMatrix rm WITH (NOLOCK)
 					WHERE rm.SportType=ref.SporttypeRef
 					AND rm.BetType=ref.BettypeRef)
 
@@ -92,16 +92,22 @@ FROM SportBettypeSettingMatrix rm WITH (ROWLOCK, UPDLOCK)
 
 -- update TableBettrans:
 UPDATE ref
-SET TableBettrans=CASE	WHEN SportType BETWEEN 1 AND 66
-							OR SportType IN (99,161,164,175,9901,9902)
-							OR SportType BETWEEN 180 AND 186
-							OR SportType BETWEEN 190 AND 197
-							OR SportType BETWEEN 213 AND 218					THEN 'bettrans'
-						WHEN SportType IN (241,244)								THEN 'bettransG'
-						WHEN SportType IN (170,176,211,225,233,236,239,242,243)	THEN 'bettransLC'
-						WHEN SportType IN (155,156,165,167,200,208,209,212,219,
+SET TableBettrans=CASE	WHEN ref.SportType BETWEEN 1 AND 66
+							OR ref.SportType IN (99,161,164,175,9901,9902)
+							OR ref.SportType BETWEEN 180 AND 186
+							OR ref.SportType BETWEEN 190 AND 197
+							OR ref.SportType BETWEEN 213 AND 218					THEN 'bettrans'
+						WHEN ref.SportType IN (241,244)								THEN 'bettransG'
+						WHEN ref.SportType IN (170,176,211,225,233,236,239,242,243)	THEN 'bettransLC'
+						WHEN ref.SportType IN (155,156,165,167,200,208,209,212,219,
 										   224,232,234,237,238,247,248)
-							OR SportType BETWEEN 171 AND 174					THEN 'bettransRNG'
-						WHEN SportType IN (168,169,202,220,222,223,231,245)		THEN 'translog'
+							OR ref.SportType BETWEEN 171 AND 174					THEN 'bettransRNG'
+						WHEN ref.SportType IN (168,169,202,220,222,223,231,245)		THEN 'translog'
 					END
 FROM SportBettypeSettingMatrix ref WITH (ROWLOCK, UPDLOCK)
+INNER JOIN #tmpRefSetting tmp 
+		ON tmp.SportType=ref.SportType
+		AND tmp.BetType=ref.BetType
+		AND tmp.isLicensee=ref.isLicensee
+		AND tmp.isLive=ref.isLive
+		AND tmp.Site=ref.Site
