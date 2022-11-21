@@ -6,7 +6,6 @@
 */
 USE bodb02
 GO
-SELECT * FROM [CustWLMonitored_Setting]
 
 INSERT INTO dbo.[CustWLMonitored_Setting](custid,recommend)
 SELECT s.custid, ci.recommend
