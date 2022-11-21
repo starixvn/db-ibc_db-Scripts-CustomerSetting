@@ -13,3 +13,11 @@ WHERE NOT EXISTS(SELECT 1
 				WHERE ServiceName = 'WLMonitored_Setting_Sync' 
 					AND SettingName = 'LastID'
 		)
+
+
+INSERT INTO SystemSettings(VName,VValue)
+SELECT 'SettingJobDeploymentDate',''
+WHERE NOT EXISTS(SELECT 1 
+				FROM SystemSettings WITH(NOLOCK) 
+				WHERE VName = 'SettingJobDeploymentDate'
+				)
