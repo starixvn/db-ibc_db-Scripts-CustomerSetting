@@ -44,12 +44,12 @@ WHERE productid = 44
 
 /*
 SELECT *
-FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+FROM ProductSettingDetail p WITH(NOLOCK) 
 WHERE productid = 5 
 	AND SportType = 180 
 
 SELECT *
-FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+FROM ProductSettingDetail p WITH(NOLOCK) 
 WHERE productid = 44 
 	AND SportType = 220 
 	AND bettype <> 1024
