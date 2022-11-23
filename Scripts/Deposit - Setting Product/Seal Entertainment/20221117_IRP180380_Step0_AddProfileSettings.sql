@@ -52,29 +52,27 @@ INSERT INTO [dbo].[GameGroup]
 SELECT 42, 156, 8900, 'Level 1', 1
 GO
 
-SELECT 	97	exchangeid,	2	minbet,	5000	maxbet,	'2'	minlabel,	'5000'	maxlabel--	BDT
+SELECT 	97	exchangeid,	2	minbet,	5000	maxbet,	'2'	minlabel,	'5,000'	maxlabel--	BDT
 INTO #tmpSetting
 UNION SELECT 	46	,	0.2	,	100	,	'0.2'	,	'100'	--	BND
 UNION SELECT 	82	,	0.2	,	200	,	'0.2'	,	'200'	--	BRL
 UNION SELECT 	6	,	0.2	,	50	,	'0.2'	,	'50'	--	EURO
 UNION SELECT 	12	,	0.2	,	50	,	'0.2'	,	'50'	--	GBP
-UNION SELECT 	5	,	0.2	,	200	,	'0.2'	,	'200'	--	HK$
-UNION SELECT 	67	,	0.2	,	200	,	'0.2'	,	'200'	--	HKK
-UNION SELECT 	15	,	0.2	,	1000	,	'0.2'	,	'1000'	--	IN
-UNION SELECT 	51	,	1	,	1000	,	'1'	,	'1000'	--	INH
-UNION SELECT 	61	,	2	,	5000	,	'2'	,	'5000'	--	INR
-UNION SELECT 	32	,	2	,	10000	,	'2'	,	'10000'	--	JPY
+UNION SELECT 	15	,	0.2	,	1000	,	'0.2'	,	'1,000'	--	IN
+UNION SELECT 	51	,	1	,	1000	,	'1'	,	'1,000'	--	INH
+UNION SELECT 	61	,	2	,	5000	,	'2'	,	'5,000'	--	INR
+UNION SELECT 	32	,	2	,	10000	,	'2'	,	'10,000'	--	JPY
 UNION SELECT 	70	,	0.2	,	100	,	'0.2'	,	'100'	--	MKK
-UNION SELECT 	49	,	0.2	,	1000	,	'0.2'	,	'1000'	--	MXN
-UNION SELECT 	123	,	2	,	5000	,	'2'	,	'5000'	--	NPR
-UNION SELECT 	121	,	2	,	5000	,	'2'	,	'5000'	--	PKR
+UNION SELECT 	49	,	0.2	,	1000	,	'0.2'	,	'1,000'	--	MXN
+UNION SELECT 	123	,	2	,	5000	,	'2'	,	'5,000'	--	NPR
+UNION SELECT 	121	,	2	,	5000	,	'2'	,	'5,000'	--	PKR
 UNION SELECT 	2	,	0.2	,	200	,	'0.2'	,	'200'	--	RM
 UNION SELECT 	13	,	0.2	,	200	,	'0.2'	,	'200'	--	RMB
-UNION SELECT 	4	,	0.2	,	2000	,	'0.2'	,	'2000'	--	TB
+UNION SELECT 	4	,	0.2	,	2000	,	'0.2'	,	'2,000'	--	TB
 UNION SELECT 	3	,	0.2	,	100	,	'0.2'	,	'100'	--	US$
 UNION SELECT 	96	,	0.2	,	100	,	'0.2'	,	'100'	--	USDT
 UNION SELECT 	20	,	0.2	,	100	,	'0.2'	,	'100'	--	UUS
-UNION SELECT 	45	,	20	,	100000	,	'20'	,	'100000'	--	Won
+UNION SELECT 	45	,	20	,	100000	,	'20'	,	'100,000'	--	Won
 
 DECLARE @maxStakeLevelID INT 
 

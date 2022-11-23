@@ -18,8 +18,7 @@ FROM customer c WITH (NOLOCK)
 	INNER JOIN custinfo ci  WITH (NOLOCK) ON c.custid = ci.custid
 WHERE c.roleid = 4  
 	AND s.islicensee = 1
-	AND ci.Enabled = 1
-	AND c.custid <= @max_custid
+	AND ci.Enabled = 1	
 	AND c.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.site IN ('spondemo','Athena000','SampleSite')	
 	AND c.currency = 20
