@@ -4,7 +4,22 @@
 	Task: Initial system settings for chatbot [#RedmineID:#179253]
 	DB: DBBOT/bodb_Chatbot
 */
+--Add new column ParentID into BotFunction
+ALTER TABLE BotFunction ADD ParentID SMALLINT
+GO
 
+INSERT INTO [dbo].[BotFunction]
+           ([FunctionID]
+           ,[FunctionName]
+           ,[FunctionKey]
+           ,[Type]
+           ,[Command]
+           ,[Status]
+           ,[Order]
+           ,[Priority]
+		   ,[ParentID])
+SELECT 16, 'Yesterday Non-entered', 'YesterdayNonEntered', 2, NULL, 1, 0, 41, 5
+GO
 
 -------------------------------------------
 --add new botAction	
@@ -37,6 +52,7 @@ GO
 --add botResource
 ;WITH T AS(
 SELECT 	'Action_Name'	ResourceName,	'44'	ResourceKey,	'en-US'	Language,	N'Non-Entered Matches' Value
+UNION SELECT 'Action_Description', '44', 'en-US', N'Get Yesterday Non-Entered Matches number'
 )	
 INSERT INTO [dbo].[BotResource]
            ([ResourceName]

@@ -10,3 +10,9 @@ SET Status = 0
 FROM BotAction b WITH(ROWLOCK)
 WHERE ActionID IN (44)
 GO
+
+UPDATE b
+SET Status = 0
+FROM BotFunction b WITH(ROWLOCK)
+WHERE FunctionID IN (16)
+GO
