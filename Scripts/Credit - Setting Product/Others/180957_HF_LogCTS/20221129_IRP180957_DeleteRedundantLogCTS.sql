@@ -1,0 +1,79 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
+	Created: 20221129@Johnson
+	Task: delete redundant log CTS [#RedmineID:#179500]
+	DB: DBLOG/bodb_CustomerLog
+*/
+DECLARE @Log TABLE (Doing NVARCHAR(1000), IsDeleted BIT DEFAULT(0))
+DECLARE @Doing NVARCHAR(1000)
+CREATE TABLE #tblLog (LogID BIGINT PRIMARY KEY, CustID INT)
+DECLARE @tmpLog TABLE (LogID BIGINT PRIMARY KEY, CustID INT)
+
+INSERT INTO @Log(Doing)
+SELECT 	'38 - 200 - 200'
+UNION SELECT 	'38 - 203 - 203'
+UNION SELECT 	'38 - 202 - 202'
+UNION SELECT 	'38 - 201 - 201'
+UNION SELECT 	'38 - 2303 - 2303'
+UNION SELECT 	'38 - 4000 - 4000'
+UNION SELECT 	'38 - 3000 - 3000'
+UNION SELECT 	'38 - 303 - 303'
+UNION SELECT 	'38 - 300 - 300'
+UNION SELECT 	'38 - 2200 - 2200'
+UNION SELECT 	'38 - 2100 - 2100'
+UNION SELECT 	'38 - 3201 - 3201'
+UNION SELECT 	'38 - 400 - 400'
+UNION SELECT 	'38 - 2500 - 2500'
+UNION SELECT 	'38 - 301 - 301'
+UNION SELECT 	'38 - 205 - 205'
+UNION SELECT 	'38 - 2403 - 2403'
+UNION SELECT 	'38 - 3101 - 3101'
+UNION SELECT 	'38 - 2000 - 2000'
+UNION SELECT 	'38 - 2103 - 2103'
+UNION SELECT 	'38 - 2202 - 2202'
+UNION SELECT 	'38 - 901 - 901'
+UNION SELECT 	'38 - 3001 - 3001'
+UNION SELECT 	'38 - 3003 - 3003'
+UNION SELECT 	'38 - 2102 - 2102' 
+
+WHILE (1=1)
+BEGIN
+	UPDATE TOP (1) t
+	SET isDeleted = 1,
+		@Doing = Doing
+	FROM @Log t
+	WHERE isDeleted = 0 
+	
+	IF @@ROWCOUNT = 0 
+		BREAK;
+		
+	INSERT INTO #tblLog(LogID,CustID)
+	SELECT LogID, CustID
+	FROM UserLog_UserControl WITH(NOLOCK)
+	where ActionID = 5566
+		and Doing = @Doing
+		
+	WHILE(1=1)
+	BEGIN
+		DELETE TOP (5000) t
+		OUTPUT DELETED.LogID, DELETED.CustID 
+		INTO @tmpLog(LogID,CustID)
+		FROM #tblLog t
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+			
+		DELETE u
+		FROM UserLog_UserControl u WITH(ROWLOCK)
+			INNER JOIN @tmpLog t ON u.LogID = t.LogID AND u.CustID = t.CustID
+		WHERE ActionID = 5566
+			AND Doing = @Doing
+			
+		DELETE @tmpLog
+		
+		WAITFOR DELAY '0:0:0.1'	
+	END
+		
+END
+
+DROP TABLE #tblLog
