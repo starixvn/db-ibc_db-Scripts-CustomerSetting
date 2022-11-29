@@ -11,3 +11,4 @@ SET ci.HideKeno = 0
 FROM custinfo ci WITH(ROWLOCK,UPDLOCK) 
 WHERE HideKeno = 1
 	AND srecommend = 5395806
+	AND enabled = 1
