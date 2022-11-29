@@ -59,6 +59,17 @@ WHERE SettingStatus <> 2
 			AND SportType = 169 
 			AND settingtype = 6
 
+		INSERT INTO ProductSettingDetail_UAT(SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+							,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,ProductSettingID)
+		SELECT SettingType,SportType = 220, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+				,DisplayOrder,SettingStatus = 0 ,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
+				,ProductSettingID = 233
+		FROM ProductSettingDetail_UAT p WITH(ROWLOCK,UPDLOCK) 
+		WHERE productid = 44 
+			AND SportType = 220 
+			AND bettype = 1021
+			AND settingtype = 13
+
 		--> Delete unused Winloss limit setting
 		DELETE p
 		FROM ProductSettingDetail_UAT p WITH(ROWLOCK,UPDLOCK) 
@@ -81,12 +92,12 @@ WHERE SettingStatus <> 2
 			AND settingtype IN(2,18)
 
 		--> Update ProductStatus of Lottery bettype from 1021 --> 1024
-		UPDATE p
-		SET bettype = 1024
+		DELETE p
 		FROM ProductSettingDetail_UAT p WITH(ROWLOCK,UPDLOCK) 
 		WHERE productid = 44 
 			AND settingtype = 13
 			AND SportType = 220
+			AND bettype = 2021
 
 		--Insert temp bitmap order to test Status ( will be delete when remove)
 		IF NOT EXISTS( 

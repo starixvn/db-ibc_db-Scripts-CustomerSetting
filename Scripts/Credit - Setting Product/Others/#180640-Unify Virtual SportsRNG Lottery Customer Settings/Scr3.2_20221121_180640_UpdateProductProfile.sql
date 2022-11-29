@@ -10,6 +10,10 @@ DELETE p
 FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
 WHERE SportType IN(9908,9909)
 
+DELETE p
+FROM ProductSettingDetail p WITH(NOLOCK) 
+WHERE sporttype = 220 and bettype = 1024  AND settingtype = 13
+
 --> Config new for ProductSettingDetail
 	--VS
 	--> clone setting to dummy sport
@@ -37,6 +41,17 @@ WHERE SportType IN(9908,9909)
 	WHERE productid = 44 
 		AND SportType = 169 
 		AND settingtype = 6
+
+	INSERT INTO ProductSettingDetail(SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+						,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,ProductSettingID)
+	SELECT SettingType,SportType = 220, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+			,DisplayOrder,SettingStatus = 2 ,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
+			,ProductSettingID = 233
+	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+	WHERE productid = 44 
+		AND SportType = 220 
+		AND bettype = 1021
+		AND settingtype = 13
 
 /*
 SELECT *
