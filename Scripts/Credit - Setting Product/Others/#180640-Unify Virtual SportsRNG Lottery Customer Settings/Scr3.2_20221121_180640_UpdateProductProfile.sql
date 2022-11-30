@@ -34,7 +34,7 @@ WHERE sporttype = 220 and bettype = 1024  AND settingtype = 13
 	--> Clone Winloss limit to new dummy sport
 	INSERT INTO ProductSettingDetail(SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
 						,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,ProductSettingID)
-	SELECT SettingType = 22,SportType = 9909,BetType = 3700,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel = 1
+	SELECT SettingType = 6,SportType = 9909,BetType = 3700,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel = 1
 			,DisplayOrder,SettingStatus = 2,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
 			,ProductSettingID = 232
 	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
