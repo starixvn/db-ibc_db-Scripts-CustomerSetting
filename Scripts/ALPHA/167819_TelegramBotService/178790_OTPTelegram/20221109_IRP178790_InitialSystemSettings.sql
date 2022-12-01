@@ -64,7 +64,7 @@ GO
 ;WITH T AS(
 SELECT 	'Function_Name'	ResourceName,	'15'	ResourceKey,	'en-US'	Language,	N'OTP' Value
 UNION SELECT 	'Function_Description'	,	'15'	,	'en-US'	,	N'Receive OTP via your Telegram chatbot'
-UNION SELECT 	'Action_Name'	,	'15'	,	'en-US'	,	N'OTP'
+UNION SELECT 	'Action_Name'	,	'43'	,	'en-US'	,	N'OTP'
 )
 MERGE BotResource as Target
 USING (SELECT * FROM T) as Source 
