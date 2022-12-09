@@ -64,3 +64,116 @@ FROM ProductSettingDetail p WITH(NOLOCK)
 WHERE productid = 44 
 AND settingstatus = 2
 */
+---> Insert update SportBettypeSettingMatrix
+	INSERT INTO SportBettypeSettingMatrix (
+		SportType
+		,BetType
+		,isLicensee
+		,isLive
+		,Site
+		,isActive
+		,SportTypeRefPT
+		,BetTypeRefPT
+		,isLivePT
+		,TablePT
+		,StructureVerPT
+		,SportTypeRefComm
+		,BetTypeRefComm
+		,TableComm
+		,StructureVerComm
+		,SportTypeRefBetSetting
+		,BetTypeRefBetSetting
+		,TableBetSetting
+		,StructureVerBetSetting
+		,IsLiveComm
+		,IsLiveBetSetting
+		,TableBettrans
+		,SporttypeRefWinlossLimit
+		,BettypeRefWinlossLimit
+	)
+	SELECT SportType = 169
+		,BetType = 3611
+		,isLicensee
+		,isLive
+		,Site
+		,isActive
+		,SportTypeRefPT
+		,BetTypeRefPT
+		,isLivePT
+		,TablePT
+		,StructureVerPT
+		,SportTypeRefComm
+		,BetTypeRefComm
+		,TableComm
+		,StructureVerComm
+		,SportTypeRefBetSetting
+		,BetTypeRefBetSetting
+		,TableBetSetting
+		,StructureVerBetSetting
+		,IsLiveComm
+		,IsLiveBetSetting
+		,TableBettrans
+		,SporttypeRefWinlossLimit
+		,BettypeRefWinlossLimit
+	FROM SportBettypeSettingMatrix WITH(NOLOCK)
+	WHERE SportType  = 169 
+		AND bettype = 3612
+		AND isLicensee = 0
+		AND NOT EXISTS( SELECT 1 
+						FROM SportBettypeSettingMatrix WITH(NOLOCK) 
+						WHERE SportType  = 169 
+						AND bettype = 3611 
+						AND isLicensee = 0
+					)
+	UNION ALL
+	SELECT SportType = 220
+		,BetType = 1021
+		,isLicensee
+		,isLive
+		,Site
+		,isActive
+		,SportTypeRefPT
+		,BetTypeRefPT
+		,isLivePT
+		,TablePT
+		,StructureVerPT
+		,SportTypeRefComm
+		,BetTypeRefComm
+		,TableComm
+		,StructureVerComm
+		,SportTypeRefBetSetting
+		,BetTypeRefBetSetting
+		,TableBetSetting
+		,StructureVerBetSetting
+		,IsLiveComm
+		,IsLiveBetSetting
+		,TableBettrans
+		,SporttypeRefWinlossLimit
+		,BettypeRefWinlossLimit
+	FROM SportBettypeSettingMatrix WITH(NOLOCK)
+	WHERE SportType  = 220 
+		AND bettype = 1031
+		AND isLicensee = 0
+		AND NOT EXISTS( SELECT 1 
+						FROM SportBettypeSettingMatrix WITH(NOLOCK) 
+						WHERE SportType  = 220 
+						AND bettype = 1021 
+						AND isLicensee = 0
+					)
+
+	--> Update ref winloss limit setting
+	UPDATE t 
+	SET t.SporttypeRefWinlossLimit = 9909
+		, t.BettypeRefWinlossLimit = 3700
+	FROM SportBettypeSettingMatrix t WITH(ROWLOCK) 
+	WHERE SportType IN (169,220,222,224) 
+		AND bettype in(3611,1021,4901,5500) 
+		AND isLicensee = 0
+
+	/*
+	SELECT * 
+	FROM SportBettypeSettingMatrix WITH(NOLOCK) 
+	WHERE SportType IN (169,220,222,224) 
+		AND bettype in(3611,1021,4901,5500) 
+		AND isLicensee = 0
+	*/
