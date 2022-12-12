@@ -61,8 +61,8 @@ WHERE SettingStatus <> 2
 
 		INSERT INTO ProductSettingDetail_UAT(SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
 							,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,ProductSettingID)
-		SELECT SettingType,SportType = 220, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
-				,DisplayOrder,SettingStatus = 0 ,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
+		SELECT SettingType,SportType, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+				,DisplayOrder,SettingStatus = 0 ,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
 				,ProductSettingID = 233
 		FROM ProductSettingDetail_UAT p WITH(ROWLOCK,UPDLOCK) 
 		WHERE productid = 44 
@@ -97,7 +97,7 @@ WHERE SettingStatus <> 2
 		WHERE productid = 44 
 			AND settingtype = 13
 			AND SportType = 220
-			AND bettype = 2021
+			AND bettype = 1021
 
 		--Insert temp bitmap order to test Status ( will be delete when remove)
 		IF NOT EXISTS( 

@@ -44,8 +44,8 @@ WHERE sporttype = 220 and bettype = 1024  AND settingtype = 13
 
 	INSERT INTO ProductSettingDetail(SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
 						,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,ProductSettingID)
-	SELECT SettingType,SportType = 220, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
-			,DisplayOrder,SettingStatus = 2 ,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
+	SELECT SettingType,SportType, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
+			,DisplayOrder,SettingStatus = 2 ,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder
 			,ProductSettingID = 233
 	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
 	WHERE productid = 44 
