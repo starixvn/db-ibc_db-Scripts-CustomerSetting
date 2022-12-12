@@ -10,6 +10,18 @@
 	PP: [4101 - 4300]
 	    [6701 - 7000]
 */
+DECLARE @temp TABLE (Sporttype SMALLINT, bettype INT IDENTITY(6799,1), IsLive BIT)
+DECLARE @i INT = 1
+
+WHILE (@i < 203)
+BEGIN
+	INSERT INTO @temp( Sporttype, IsLive)
+	SELECT 248, 0
+
+	SELECT @i = @i + 1
+END
+
+--SELECT * FROM @temp WHERE bettype IN ( 6798, 6799,6999,7000)
 
 --PP:
 INSERT INTO SportBettypeSettingMatrix ([SportType], [BetType], [isLicensee], IsLive, [Site], [isActive], [SportTypeRefPT], [BetTypeRefPT], [isLivePT], [TablePT], [StructureVerPT], [SportTypeRefComm], [BetTypeRefComm], [TableComm], [StructureVerComm], [SportTypeRefBetSetting], [BetTypeRefBetSetting], [TableBetSetting], [StructureVerBetSetting], [IsLiveComm], [IsLiveBetSetting], [TableBettrans])
@@ -24,7 +36,7 @@ AND NOT EXISTS (SELECT 1 FROM SportBettypeSettingMatrix t WITH (NOLOCK) WHERE t.
 
 INSERT INTO SportBettypeSettingMatrix ([SportType], [BetType], [isLicensee], IsLive, [Site], [isActive], [SportTypeRefPT], [BetTypeRefPT], [isLivePT], [TablePT], [StructureVerPT], [SportTypeRefComm], [BetTypeRefComm], [TableComm], [StructureVerComm], [SportTypeRefBetSetting], [BetTypeRefBetSetting], [TableBetSetting], [StructureVerBetSetting], [IsLiveComm], [IsLiveBetSetting], [TableBettrans])
 SELECT sbm.[SportType], sbm.[BetType], [isLicensee], sbm.IsLive, [Site], [isActive], [SportTypeRefPT], [BetTypeRefPT], [isLivePT], [TablePT], [StructureVerPT], [SportTypeRefComm], [BetTypeRefComm], [TableComm], [StructureVerComm], [SportTypeRefBetSetting], [BetTypeRefBetSetting], [TableBetSetting], [StructureVerBetSetting], [IsLiveComm], [IsLiveBetSetting], [TableBettrans]
-FROM dbtxn.bodb02.dbo.SportBettypeMatrix sbm WITH (NOLOCK)
+FROM @temp sbm 
 INNER JOIN SportBettypeSettingMatrix sm WITH (NOLOCK)
 	ON sbm.SportType=sm.SportType
 	AND sbm.IsLive=sm.isLive
