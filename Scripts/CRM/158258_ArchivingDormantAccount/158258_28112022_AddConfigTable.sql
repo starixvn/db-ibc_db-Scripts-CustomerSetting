@@ -16,7 +16,7 @@ INSERT INTO SystemSetting(SettingName, Value, ServiceName,DataType)
 SELECT 'JobStatusUAT','Completed',@ServiceName,'String'
 UNION SELECT 'BatchSize','10',@ServiceName,'Int32' 
 UNION SELECT 'BatchSizeAccount','3000',@ServiceName,'Int32' 
-UNION SELECT 'IsSyncArchivedAccount','1',@ServiceName,'Boolean'
+UNION SELECT 'IsSyncArchivedAccount','0',@ServiceName,'Boolean'
 UNION SELECT 'ConfigUAT','1',@ServiceName,'Boolean'
 UNION SELECT 'ConfigPRO','0',@ServiceName,'Boolean'
 UNION SELECT 'IsCredit','1',@ServiceName,'Boolean'
