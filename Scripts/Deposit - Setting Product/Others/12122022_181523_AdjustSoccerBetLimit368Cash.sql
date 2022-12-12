@@ -8,7 +8,7 @@
 
 DECLARE
 	  @SuperID				INT = 13682916 -- 368CashSuperIN
-	, @BetLimit				VARCHAR(MAX)
+	, @BetLimit				VARCHAR(MAX) = '<ROOT><BetLimit SportType="1" BetType="1" MinBet="1" MaxBet="300000" MaxPerMatch="300000" MaxPayoutPerMatch="2400000"/></ROOT>'
 	, @AgentID				INT = 13682919  -- 368CashIN01
 	, @IsAgentOnly			BIT = 0
 	, @ApplyExistedMem		BIT= 1	
