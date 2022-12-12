@@ -26,4 +26,4 @@ UNION SELECT 'LastRuntimeUAT',CONVERT( VARCHAR(20),GETDATE(),20),@ServiceName,'D
 UNION SELECT 'LastRuntime',CONVERT( VARCHAR(20),GETDATE(),20),@ServiceName,'DateTime'
 UNION SELECT 'ServiceFlag','1',@ServiceName,'Boolean'
 UNION SELECT 'ServiceID','1',@ServiceName,'Int32' 
-UNION SELECT 'MaxLogFBId','100',@ServiceName,'Int32' 
+UNION SELECT 'MaxLogFBId','0',@ServiceName,'Int32' 
