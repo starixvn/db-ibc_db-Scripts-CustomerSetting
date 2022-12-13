@@ -19,26 +19,22 @@ WHERE ProductID  = 22 AND SettingType NOT IN (1,6)
 
 UPDATE a
 SET a.Child_DisplayOrder = CASE WHEN a.ProductID  = 18 AND a.SettingType = 21 AND a.SportType = 9906 THEN 1 
-								WHEN a.ProductID  = 18 AND a.SettingType = 21 AND a.SportType = 9904 THEN 2 
-								WHEN a.ProductID  <> 18 THEN b.STT ELSE Child_DisplayOrder END
+								WHEN a.ProductID  = 18 AND a.SettingType = 21 AND a.SportType = 9904 THEN 2 ELSE Child_DisplayOrder END
 FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
-LEFT JOIN (
-	SELECT SettingType, ProductID, SportType, BetType , ROW_NUMBER() OVER(PARTITION BY ProductID ORDER BY SportType)  AS STT 
-	FROM ProductSettingDetail c WITH(NOLOCK) 
-	WHERE c.SettingType in (13,21) 
-) b ON a.ProductID = b.ProductID and a.SettingType = b.SettingType AND a.SportType = b.SportType and a.BetType = b.BetType
-WHERE a.SettingType in (13,21)  
+WHERE a.SettingType in (21)  AND a.ProductID  = 18
 
+DECLARE @MaxProductSettingID INT
+SELECT @MaxProductSettingID = (SELECT MAX(ProductSettingID) FROM ProductSettingDetail WITH(NOLOCK))
 -- Insert PT
 INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
 SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = 230,Parent_ProductSettingID 
+	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = @MaxProductSettingID +1,Parent_ProductSettingID 
 FROM ProductSettingDetail WITH(NOLOCK) 
 WHERE ProductID = 22 AND SettingType = 1 AND sporttype = 212 AND bettype = 4001
 
 INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
 SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = 231,Parent_ProductSettingID 
+	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = @MaxProductSettingID +2,Parent_ProductSettingID 
 FROM ProductSettingDetail WITH(NOLOCK) 
 WHERE ProductID = 22 AND SettingType = 6 AND sporttype = 212 AND bettype = 4001
 
