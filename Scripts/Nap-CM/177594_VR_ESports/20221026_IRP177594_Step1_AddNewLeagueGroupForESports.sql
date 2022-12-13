@@ -27,6 +27,10 @@ WHERE VRLeagueGroupID IN ( SELECT GroupID
 						WHERE GroupName IN (SELECT GroupName FROM @LeagueGroup_Tbl)
 							AND sporttype = 43
 						)
+	OR LeagueGroupID IN (SELECT GroupID from DBPRO.bodb02.dbo.LeagueGroup lg WITH(NOLOCK)
+						WHERE sporttype = 43
+							AND groupname in (select GroupName from @LeagueGroup_Tbl)
+						)						
 						
 DELETE VRSettingHierarchy WITH(ROWLOCK)
 WHERE VRLeagueGroupID IN ( SELECT GroupID 
@@ -55,12 +59,16 @@ DECLARE @VRBettypeGroup_Tbl TABLE(
 	 GroupID INT
 	,GroupName NVARCHAR(200)
 	,SportType INT
+	,BettypeGroupOrder TINYINT
 	)
 DECLARE @VRBetTypeGroupID INT
 SELECT @VRBetTypeGroupID = MAX(GroupID) FROM VRBettypeGroup WITH(NOLOCK)
 
-INSERT INTO @VRBettypeGroup_Tbl(GroupID,GroupName,SportType) 
-SELECT *
+INSERT INTO @VRBettypeGroup_Tbl(GroupID,GroupName,SportType,BettypeGroupOrder) 
+SELECT GroupID,GroupName,SportType, 
+	CASE WHEN GroupName = 'Moneyline' THEN 1
+		WHEN GroupName = 'Handicap' THEN 2
+		WHEN GroupName = 'Over/Under' THEN 3 END
 FROM VRBettypeGroup
 WHERE SportType IN (43)
 	AND GroupName IN ('Handicap','Over/Under','Moneyline')
@@ -101,23 +109,27 @@ DECLARE  @VRSettingHierarchy_Tbl TABLE(
 	RecordID INT IDENTITY (1,1)
 )
 
-INSERT INTO @VRSettingHierarchy_Tbl(VRLeagueGroupID,VRBetTypeGroupID,BetType)
-SELECT VRLeagueGroupID,gbt.GroupID AS BettypeGroupID,-1 AS Bettype 
+;WITH T AS (
+SELECT VRLeagueGroupID,gbt.GroupID AS BettypeGroupID,-1 AS Bettype,BettypeGroupOrder 
 FROM @LeagueGroup_Tbl a
-	CROSS APPLY (	SELECT vb.GroupID,vb.GroupName
+	CROSS APPLY (	SELECT vb.GroupID,vb.GroupName,BettypeGroupOrder
 					FROM @VRBettypeGroup_Tbl vb 
 					UNION ALL
-					SELECT -1 ,'All'					
+					SELECT -1 ,'All', 0					
 				)  Gbt
 	
 UNION ALL 
-SELECT a.VRLeagueGroupID,gbt.GroupID AS BettypeGroupID,bt.bettype AS Bettype 
+SELECT a.VRLeagueGroupID,gbt.GroupID AS BettypeGroupID,bt.bettype AS Bettype ,BettypeGroupOrder
 FROM @LeagueGroup_Tbl a 
-	CROSS APPLY (	SELECT vb.GroupID,vb.GroupName
+	CROSS APPLY (	SELECT vb.GroupID,vb.GroupName,BettypeGroupOrder
 					FROM @VRBettypeGroup_Tbl vb 
 				)  Gbt
 	INNER JOIN @BettypeRef_Tbl bt ON bt.VRBettypeGroupID = gbt.GroupID
-ORDER BY 1,2,3
+)
+INSERT INTO @VRSettingHierarchy_Tbl(VRLeagueGroupID,VRBetTypeGroupID,BetType)
+SELECT VRLeagueGroupID,BettypeGroupID,Bettype 
+FROM T
+ORDER BY VRLeagueGroupID,BettypeGroupOrder,Bettype
 
 DECLARE @CurrentLevelID INT, @CurrentSortOrder INT, @CurrentBitmapAutoSuspend INT 
 
