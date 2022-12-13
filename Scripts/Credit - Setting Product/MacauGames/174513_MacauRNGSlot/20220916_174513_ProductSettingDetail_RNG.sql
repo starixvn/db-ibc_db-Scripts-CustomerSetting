@@ -15,7 +15,7 @@ SET a.ProductID = 18,
 					WHEN SettingType IN (21 ) AND SportType = 212 THEN 9906 
 					ELSE SportType END
 FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
-WHERE ProductID  = 22
+WHERE ProductID  = 22 AND SettingType NOT IN (1,6)
 
 UPDATE a
 SET a.Child_DisplayOrder = CASE WHEN a.ProductID  = 18 AND a.SettingType = 21 AND a.SportType = 9906 THEN 1 
@@ -31,14 +31,14 @@ WHERE a.SettingType in (13,21)
 
 -- Insert PT
 INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
-SELECT SettingType, 9906 AS SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 1,IntervalValue,RealProductId,MaxChoice ,ProductSettingID = 230,Parent_ProductSettingID 
+SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
+	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = 230,Parent_ProductSettingID 
 FROM ProductSettingDetail WITH(NOLOCK) 
 WHERE ProductID = 22 AND SettingType = 1 AND sporttype = 212 AND bettype = 4001
 
 INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
-SELECT SettingType, 9906 AS SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 1,IntervalValue,RealProductId,MaxChoice ,ProductSettingID = 231,Parent_ProductSettingID 
+SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
+	,SettingStatus = 1,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = 231,Parent_ProductSettingID 
 FROM ProductSettingDetail WITH(NOLOCK) 
 WHERE ProductID = 22 AND SettingType = 6 AND sporttype = 212 AND bettype = 4001
 
