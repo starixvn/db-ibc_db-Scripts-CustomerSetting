@@ -165,6 +165,11 @@ AND settingstatus = 2
 	UPDATE t 
 	SET t.SporttypeRefWinlossLimit = 9909
 		, t.BettypeRefWinlossLimit = 3700
+		, t.RealProductID = CASE WHEN t.SportType = 169 THEN 63
+								WHEN t.SportType = 220 THEN 28
+								WHEN t.SportType = 222 THEN 40
+								WHEN t.SportType = 224 THEN 50
+							END
 	FROM SportBettypeSettingMatrix t WITH(ROWLOCK) 
 	WHERE SportType IN (169,220,222,224) 
 		AND bettype in(3611,1021,4901,5500) 
