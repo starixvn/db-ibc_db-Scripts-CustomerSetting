@@ -23,20 +23,10 @@ SET a.Child_DisplayOrder = CASE WHEN a.ProductID  = 18 AND a.SettingType = 21 AN
 FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
 WHERE a.SettingType in (21)  AND a.ProductID  = 18
 
-DECLARE @MaxProductSettingID INT
-SELECT @MaxProductSettingID = (SELECT MAX(ProductSettingID) FROM ProductSettingDetail WITH(NOLOCK))
--- Insert PT
-INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
-SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 0,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = @MaxProductSettingID +1,Parent_ProductSettingID 
-FROM ProductSettingDetail WITH(NOLOCK) 
-WHERE ProductID = 22 AND SettingType = 1 AND sporttype = 212 AND bettype = 4001
-
-INSERT INTO ProductSettingDetail (SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID)
-SELECT SettingType, 9906 AS SportType,BetType,IsLive,18 AS ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-	,SettingStatus = 0,IntervalValue,18 AS RealProductId,MaxChoice ,ProductSettingID = @MaxProductSettingID +2,Parent_ProductSettingID 
-FROM ProductSettingDetail WITH(NOLOCK) 
-WHERE ProductID = 22 AND SettingType = 6 AND sporttype = 212 AND bettype = 4001
+UPDATE a
+SET a.SettingStatus = CASE WHEN ProductID = 22 THEN 2 ELSE 0 END
+FROM dbo.ProductSettingDetail a WITH(ROWLOCK,UPDLOCK)
+WHERE ProductID IN (18, 22) AND SettingType IN (1,6)
 
 UPDATE a
 SET a.ProductID = 18
