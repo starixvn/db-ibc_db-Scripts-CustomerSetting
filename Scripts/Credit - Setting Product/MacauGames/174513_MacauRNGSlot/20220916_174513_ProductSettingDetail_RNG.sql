@@ -77,6 +77,21 @@ SET  a.ProductID = 18
 FROM dbo.LossLimit_GlobalSetting a WITH(ROWLOCK,UPDLOCK)
 WHERE a.ProductID = 22 
 
+INSERT INTO ProductStatusSiteCurrency(SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
+SELECT 9906 AS SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced
+FROM ProductStatusSiteCurrency KQ WITH(NOLOCK) 
+WHERE SportType = 212 AND NOT EXISTS(SELECT TOP 1 1 FROM ProductStatusSiteCurrency WITH(NOLOCK) 
+						WHERE SportType= 9906 AND BetType=KQ.BetType 
+						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
+
+INSERT INTO SportNonOfferedSiteCurrency(SportType,BetType,Currency,SiteID)
+SELECT 9906 AS SportType,BetType,Currency,SiteID
+FROM SportNonOfferedSiteCurrency KQ WITH(NOLOCK) 
+WHERE SportType = 212 AND NOT EXISTS(SELECT TOP 1 1 FROM SportNonOfferedSiteCurrency WITH(NOLOCK) 
+						WHERE SportType= 9906 AND BetType=KQ.BetType 
+						AND Currency=KQ.Currency AND SiteID=KQ.SiteID)
+
+
 --SELECT * FROM ProductStatusProfile WITH (NOLOCK) ORDER BY bitmapOrder
 --SELECT * FROM ProductSettingDetail WITH (NOLOCK) where ProductID  IN (22,53) ORDER BY ProductID
 --SELECT * FROM ProductSettingSystemDisplay WITH (NOLOCK) where ProductID  IN (22,53) ORDER BY ProductID
