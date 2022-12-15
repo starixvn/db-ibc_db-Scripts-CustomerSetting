@@ -54,8 +54,7 @@ BEGIN
 		BREAK;
 
 	UPDATE ref
-	SET RealProductId = CASE WHEN ref.SportType=9901				 THEN 1
-							 WHEN ref.SportType=9902				 THEN 2
+	SET RealProductId = CASE WHEN ref.SportType IN (9901, 9902)			 THEN 1
 							 WHEN ref.SportType=231 AND ref.isLicensee=0 THEN 5
 							 WHEN ref.SportType=231 AND ref.isLicensee=1 THEN 49
 																	 ELSE sm.ProductID
