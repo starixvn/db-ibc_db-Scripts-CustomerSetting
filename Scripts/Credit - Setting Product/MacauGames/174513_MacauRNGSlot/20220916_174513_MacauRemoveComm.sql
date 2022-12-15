@@ -25,7 +25,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN			
 
-	DECLARE @Sporttype SMALLINT = 171,@bettype SMALLINT = 4001
+	DECLARE @Sporttype SMALLINT = 212,@bettype SMALLINT = 4001
 	CREATE TABLE #supers (custid INT)
 	CREATE TABLE #CustDiscount3rd_AgentTemp(custid INT)
 	CREATE TABLE #CustDiscount3rd_MemberTemp(custid INT)
@@ -36,7 +36,7 @@ BEGIN
 		INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
 		INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
 		INNER JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-		INNER JOIN dbo.CustDiscount3rd_Agent cdis WITH (NOLOCK) ON cdis.CustID = c.custid AND cdis.sporttype = 212 AND cdis.bettype = 4001
+		INNER JOIN dbo.CustDiscount3rd_Agent cdis WITH (NOLOCK) ON cdis.CustID = c.custid AND cdis.sporttype = @Sporttype AND cdis.bettype = @bettype
 	WHERE ci.roleid = 4
 		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
 		AND cs.isinternal = 0 	
