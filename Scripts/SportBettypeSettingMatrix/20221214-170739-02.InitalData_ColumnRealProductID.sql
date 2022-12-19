@@ -54,10 +54,9 @@ BEGIN
 		BREAK;
 
 	UPDATE ref
-	SET RealProductId = CASE WHEN ref.SportType IN (9901, 9902)			 THEN 1
-							 WHEN ref.SportType=231 AND ref.isLicensee=0 THEN 5
+	SET RealProductId = CASE WHEN ref.SportType=231 AND ref.isLicensee=0 THEN 5
 							 WHEN ref.SportType=231 AND ref.isLicensee=1 THEN 49
-																	 ELSE sm.ProductID
+																		 ELSE sm.ProductID
 						END
 	FROM SportBettypeSettingMatrix ref WITH (ROWLOCK, UPDLOCK)
 		INNER JOIN #tmpRefSetting_Batch tmp 
@@ -67,8 +66,14 @@ BEGIN
 			AND tmp.isLive=ref.isLive
 			AND tmp.Site=ref.Site
 		LEFT JOIN DBACC.bodb02.dbo.SportBettypeMatrix sm WITH (NOLOCK) 
-			ON ref.SportType=sm.SportType
+			ON ref.SportType=sm.SportType 
 	WHERE sm.ProductID NOT IN (25)
 
 	WAITFOR DELAY '00:00:0.002'
 END
+
+-- Saba soccer/basketball
+UPDATE ref
+SET RealProductId = 1
+FROM SportBettypeSettingMatrix ref WITH (ROWLOCK, UPDLOCK)
+WHERE SportType IN (9901, 9902)
