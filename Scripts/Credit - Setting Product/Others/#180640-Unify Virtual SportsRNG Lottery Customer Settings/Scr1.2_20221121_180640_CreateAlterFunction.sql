@@ -43,7 +43,7 @@ IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[f_Cus
 	DROP FUNCTION [dbo].f_CustSetting_SportBetTypeSettingSelect
 GO
 CREATE FUNCTION dbo.f_CustSetting_SportBetTypeSettingSelect(@ProductID TINYINT, @SettingType SMALLINT, @SettingStatus TINYINT) 
-RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Bettype SMALLINT, IsLive BIT, SettingType SMALLINT, RealProductId TINYINT, SubType TINYINT)
+RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Bettype SMALLINT, IsLive BIT, SettingType SMALLINT, RealProductId TINYINT, SubType TINYINT, Child_DisplayOrder int)
 /*
 	Created by: Elodie
 	Date: 20170317
@@ -63,16 +63,16 @@ RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Betty
 BEGIN 
 	IF @SettingStatus IN (1,0)
 	BEGIN
-		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType)
-		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType
+		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType, Child_DisplayOrder)
+		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType, Child_DisplayOrder
 		FROM dbo.ProductSettingDetail WITH(NOLOCK)
 		WHERE (@ProductID IS NULL OR ProductID = @ProductID ) AND (@SettingType IS NULL OR SettingType = @SettingType) 
 				AND SettingStatus <= CASE WHEN @SettingStatus = 1 THEN 1 ELSE 0 END
 	END
 	ELSE IF @SettingStatus = 3
 	BEGIN
-		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType)
-		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId , SubType
+		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType, Child_DisplayOrder)
+		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType, Child_DisplayOrder
 		FROM dbo.ProductSettingDetail_UAT WITH(NOLOCK)
 		WHERE (@ProductID IS NULL OR ProductID = @ProductID ) AND (@SettingType IS NULL OR SettingType = @SettingType) 
 			AND SettingStatus <> 2
