@@ -25,7 +25,7 @@ AS
 */
 RETURN
 	SELECT SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-				,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID,Child_DisplayOrder
+				,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID,Child_DisplayOrder, SubType
 	FROM dbo.ProductSettingDetail WITH(NOLOCK)
 	WHERE SettingStatus <= CASE WHEN @SettingStatus = 1 THEN 1
 								WHEN @SettingStatus = 0 THEN 0
@@ -33,7 +33,7 @@ RETURN
 		AND SettingStatus <> 2
 	UNION ALL
 	SELECT SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder
-				,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID,Child_DisplayOrder
+				,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID,Child_DisplayOrder, SubType
 	FROM dbo.ProductSettingDetail_UAT WITH(NOLOCK)
 	WHERE @SettingStatus = 3
 		AND SettingStatus <> 2
@@ -43,7 +43,7 @@ IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[f_Cus
 	DROP FUNCTION [dbo].f_CustSetting_SportBetTypeSettingSelect
 GO
 CREATE FUNCTION dbo.f_CustSetting_SportBetTypeSettingSelect(@ProductID TINYINT, @SettingType SMALLINT, @SettingStatus TINYINT) 
-RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Bettype SMALLINT, IsLive BIT, SettingType SMALLINT, RealProductId TINYINT)
+RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Bettype SMALLINT, IsLive BIT, SettingType SMALLINT, RealProductId TINYINT, SubType TINYINT)
 /*
 	Created by: Elodie
 	Date: 20170317
@@ -63,16 +63,16 @@ RETURNS @SportBetTypeSetting TABLE (ProductID TINYINT, SportType SMALLINT, Betty
 BEGIN 
 	IF @SettingStatus IN (1,0)
 	BEGIN
-		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId)
-		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId 
+		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType)
+		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType
 		FROM dbo.ProductSettingDetail WITH(NOLOCK)
 		WHERE (@ProductID IS NULL OR ProductID = @ProductID ) AND (@SettingType IS NULL OR SettingType = @SettingType) 
 				AND SettingStatus <= CASE WHEN @SettingStatus = 1 THEN 1 ELSE 0 END
 	END
 	ELSE IF @SettingStatus = 3
 	BEGIN
-		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId)
-		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId 
+		INSERT @SportBetTypeSetting(ProductID, SportType,Bettype,IsLive, SettingType, RealProductId, SubType)
+		SELECT DISTINCT ProductID, SportType,Bettype,IsLive, SettingType, RealProductId , SubType
 		FROM dbo.ProductSettingDetail_UAT WITH(NOLOCK)
 		WHERE (@ProductID IS NULL OR ProductID = @ProductID ) AND (@SettingType IS NULL OR SettingType = @SettingType) 
 			AND SettingStatus <> 2
