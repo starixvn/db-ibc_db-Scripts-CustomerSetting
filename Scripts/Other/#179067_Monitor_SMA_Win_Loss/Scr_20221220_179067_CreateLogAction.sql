@@ -20,9 +20,9 @@ DECLARE @Log TABLE (
 DECLARE @ActionTypeID INT = NULL, @IsInternal BIT = 0
 
 INSERT INTO @Log (ActionID, SPName, ActionNameEN,ActionNameCS,ActionNameCH,ActionNameTH)
-SELECT 31808,'Acc_WLMonitored_SMA_Adjust','Update Super Threshold',N'',N'',N'' UNION ALL
-SELECT 31809,'Acc_WLMonitored_SMA_Adjust','Update Master Threshold',N'',N'',N'' UNION ALL
-SELECT 31810,'Acc_WLMonitored_SMA_Adjust','Update Agent Threshold',N'',N'',N'' 
+SELECT 31808,'Acc_WLMonitored_SMA_Adjust','Update Super Threshold',N'更新超级代理额度',N'更新超級代理額度',N'อัพเดตเกณฑ์ของซุปเปอร์' UNION ALL
+SELECT 31809,'Acc_WLMonitored_SMA_Adjust','Update Master Threshold',N'更新总代理额度',N'更新總代理額度',N'อัพเดตเกณฑ์ของมาสเตอร์' UNION ALL
+SELECT 31810,'Acc_WLMonitored_SMA_Adjust','Update Agent Threshold',N'更新代理额度',N'更新代理額度',N'อัพเดตเกณฑ์ของเอเจนต์' 
  
 INSERT INTO dbo.LogAction (ActionID,SPName,ActionTypeID,ActionNameEN,ActionNameCH,ActionNameCS,ActionNameJP,ActionNameTH,ActionNameKO,IsInternal,ActionNameVI)
 SELECT ActionID, SPName, @ActionTypeID, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameEN,  ActionNameTH,ActionNameEN, @IsInternal, ActionNameEN
