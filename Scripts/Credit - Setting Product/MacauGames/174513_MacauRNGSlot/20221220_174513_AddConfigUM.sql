@@ -10,18 +10,18 @@ GO
 
 INSERT [dbo].[UMConfig] ([ProductID], [SportType], [BetType], [IsLive], [SettingType], [FunctionType], [SiteID], [Currency], [SuperID], [BeginTime], [EndTime], [ShowTime], [LockAddingNew]) 
 SELECT 18 AS ProductID,
-SportType,
-BetType,
-IsLive,
-SettingType,
-FunctionType,
-SiteID,
-Currency,
-SuperID,
-BeginTime,
-EndTime,
-ShowTime,
-LockAddingNew
+		SportType,
+		BetType,
+		IsLive,
+		SettingType,
+		FunctionType,
+		SiteID,
+		Currency,
+		SuperID,
+		BeginTime,
+		EndTime,
+		BeginTime AS ShowTime,
+		LockAddingNew
 FROM UMConfig WITH(NOLOCK)
 WHERE ProductID = 22
 
