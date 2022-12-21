@@ -10,7 +10,7 @@ GO
 
 INSERT [dbo].[UMConfig] ([ProductID], [SportType], [BetType], [IsLive], [SettingType], [FunctionType], [SiteID], [Currency], [SuperID], [BeginTime], [EndTime], [ShowTime], [LockAddingNew]) 
 SELECT 18 AS ProductID,
-		SportType,
+	   9906 AS SportType,
 		BetType,
 		IsLive,
 		SettingType,
