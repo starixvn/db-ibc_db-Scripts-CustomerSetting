@@ -35,7 +35,7 @@ CREATE TABLE [dbo].[ProductSettingDetail_UAT](
 	[ProductSettingID] [int] NOT NULL,
 	[Parent_ProductSettingID] [int] NULL,
 	[Child_DisplayOrder] [int] NULL,
-	[SubType] [int] NULL,
+	[SubType] [tinyint] NULL,
  CONSTRAINT [PK_ProductSettingDetail_UAT] PRIMARY KEY CLUSTERED 
 (
 	[SettingType] ASC,
