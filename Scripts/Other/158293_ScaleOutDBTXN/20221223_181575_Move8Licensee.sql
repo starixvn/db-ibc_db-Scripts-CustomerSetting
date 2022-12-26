@@ -9,13 +9,13 @@ USE CustDB
 GO
 
 UPDATE s
-SET s.SiteDBGroupID = 0
+SET s.SiteDBGroupID = 1
 FROM Site s WITH (ROWLOCK)
 WHERE site IN ('ZFRT152','ZFRT166SW','4300','aws03','MTechCV','Fabbet','GSCFTWCV','Betway')
 
 
 UPDATE cs
-SET cs.SiteDBGroupID = 0
+SET cs.SiteDBGroupID = 1
 FROM Dep_CustSuper cs WITH (ROWLOCK)
 WHERE site IN ('ZFRT152','ZFRT166SW','4300','aws03','MTechCV','Fabbet','GSCFTWCV','Betway')
 
