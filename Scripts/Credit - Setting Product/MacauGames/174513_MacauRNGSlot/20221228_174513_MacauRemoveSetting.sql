@@ -88,7 +88,8 @@ BEGIN
 		DELETE TOP (@batch) #CustPTSetting3rd_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType,DELETED.IsLive
 		INTO #CustPTSetting3rd_AgentTemp(CustID, SportType, BetType, IsLive)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
@@ -102,7 +103,8 @@ BEGIN
 		DELETE TOP (@batch) #CustPTSetting3rd_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType,DELETED.IsLive
 		INTO #CustPTSetting3rd_MemberTemp(CustID, SportType, BetType, IsLive)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
@@ -116,7 +118,8 @@ BEGIN
 		DELETE TOP (@batch) #CustPTGroupSetting3rd_Member OUTPUT DELETED.AgentID, DELETED.SportType,DELETED.BetType,DELETED.IsLive 
 		INTO #CustPTGroupSetting3rd_MemberTemp(AgentID, SportType, BetType, IsLive)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
@@ -153,7 +156,8 @@ BEGIN
 		DELETE TOP (@batch) #CustDiscount3rd_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
 		INTO #CustDiscount3rd_AgentTemp(CustID, SportType, BetType)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
@@ -167,7 +171,8 @@ BEGIN
 		DELETE TOP (@batch) #CustDiscount3rd_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
 		INTO #CustDiscount3rd_MemberTemp(CustID, SportType, BetType)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
@@ -204,7 +209,8 @@ BEGIN
 		DELETE TOP (@batch) #CustWinLossLimit_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
 		INTO #CustWinLossLimit_AgentTemp(CustID, SportType, BetType)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
@@ -218,7 +224,8 @@ BEGIN
 		DELETE TOP (@batch) #CustWinLossLimit_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
 		INTO #CustWinLossLimit_MemberTemp(CustID, SportType, BetType)
 
-		IF @@ROWCOUNT=0 BREAK		
+		IF @@ROWCOUNT=0 
+			BREAK		
 
 		DELETE cg
 		FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
