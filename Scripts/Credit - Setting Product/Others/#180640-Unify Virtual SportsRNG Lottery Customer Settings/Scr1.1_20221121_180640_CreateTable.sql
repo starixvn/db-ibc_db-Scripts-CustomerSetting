@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20221121@Eden
-	Task: Add new table ProductSettingDetail_UAT [#180640]
+	Task: Add new table ProductSettingDetail_UAT and add to replications [#180640]
 	DB: DBCust/CustDB and all replicated server of pub: CustDB_Customer_Info, CustDB_DBTrans_CustInfo
 */
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ProductSettingDetail_UAT]') AND type in (N'U'))
