@@ -1,4 +1,5 @@
 /*<info serverAlias="DBTP-bodb02"></info>*/
+
 ALTER TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
 AFTER UPDATE
 AS
@@ -84,7 +85,6 @@ AS
 	- 20200901@Johnson: add CustomerClass [redmine:#140809]
 	- 20210806@Johnson: Add Danger4,Danger5 [redmine:#159551]
 	- 20220901@Johnson: Add CCSoccer,CCBasketball,CCEsports,CCOtherSports [redmine:#176992]
-	- 20221013@Eden: Remove unused columns [redmine:#179014]
 	- 20221124@Johnson: Add CCNonSports [redmine: #179500]
 */
 BEGIN
@@ -105,22 +105,40 @@ BEGIN
 		,closed
 		,MatchLimit
 		,VirtualMultiplier
+		,maxpermatch
+		,maxpermatch2
+		,maxpermatch3
+		,maxpermatch5
+		,maxpermatch8
+		,maxpermatch10
+		,maxpermatch11
+		,maxpermatch12
+		,maxpermatch99
 		,[Enabled]
 		,danger		
+		,DisableCasino
+		,SyncCasino
 		,danger2
 		,danger3
 		,DisableOutright		
-		,[DisableNumber]		
+		,[DisableNumber]
+		,[MaxPerMatch161]
+		,[MaxPerMatch99MP]
+		,[MaxPerBall161]		
 		,Abnormal
 		,DoubleCommLosing		
 		,autosuspend2
 		,HideKeno		
 		,DisableEsports
+		,HideGoldDeluxe
+		,DisableGoldDeluxe
 		,DisableSuperLive
 		,DisableColossusBet
 		,HideColossusBet		
 		,LockUpd
+		,MaxPerMatch1MP
 		,BonusWalletFlag
+		,MaxPerMatch164
 		,DangerLevel
 		,CustomerClass
 		,danger4
@@ -145,22 +163,40 @@ BEGIN
 		,closed
 		,MatchLimit
 		,VirtualMultiplier
+		,maxpermatch
+		,maxpermatch2
+		,maxpermatch3
+		,maxpermatch5
+		,maxpermatch8
+		,maxpermatch10
+		,maxpermatch11
+		,maxpermatch12
+		,maxpermatch99
 		,[Enabled]
 		,danger	
+		,DisableCasino
+		,SyncCasino
 		,danger2
 		,danger3
 		,DisableOutright
 		,[DisableNumber]
+		,[MaxPerMatch161]
+		,[MaxPerMatch99MP]
+		,[MaxPerBall161]
 		,Abnormal
 		,DoubleCommLosing
 		,autosuspend2
 		,HideKeno
 		,DisableEsports
+		,HideGoldDeluxe
+		,DisableGoldDeluxe
 		,DisableSuperLive
 		,DisableColossusBet
 		,HideColossusBet
 		,LockUpd
+		,MaxPerMatch1MP
 		,BonusWalletFlag
+		,MaxPerMatch164
 		,DangerLevel
 		,CustomerClass
 		,danger4
@@ -172,5 +208,3 @@ BEGIN
 		,CCNonSports
 	FROM [DELETED]
 END
-    
-
