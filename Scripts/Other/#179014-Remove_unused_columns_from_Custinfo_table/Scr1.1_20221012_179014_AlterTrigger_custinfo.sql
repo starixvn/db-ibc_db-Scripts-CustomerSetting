@@ -95,6 +95,7 @@ AS
 	- 20200901@Johnson: add CustomerClass [redmine:#140809]
 	- 20210806@Johnson: Add Danger4,Danger5 [redmine:#159551]
 	- 20220901@Johnson: Add CCSoccer,CCBasketball,CCEsports,CCOtherSports [redmine:#176992]
+	- 20221124@Johnson: Add CCNonSports [redmine: #179500]
 	- 20221013@Eden: Remove unused columns [redmine:#179014]
 */
 BEGIN
@@ -139,6 +140,7 @@ BEGIN
 		,CCBasketball
 		,CCEsports
 		,CCOtherSports
+		,CCNonSports
 		)
 	SELECT username
 		,custid
@@ -178,6 +180,7 @@ BEGIN
 		,CCBasketball
 		,CCEsports
 		,CCOtherSports
+		,CCNonSports
 	FROM [DELETED]
 END
     
