@@ -45,7 +45,7 @@ CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, currency INT, isF
 DECLARE @tmpCustHistory TABLE(custid INT, sporttype SMALLINT, bettype SMALLINT, MaxBet MONEY, MPM MONEY PRIMARY KEY(custid,sporttype,bettype))
 DECLARE @tmpCust TABLE(custid INT PRIMARY KEY, currency INT)
 DECLARE @tmpGameType TABLE (GameTypeID INT, Bettype SMALLINT)	
-DECLARE @NewMaxBet MONEY,@NewMPM MONEY
+DECLARE @NewMinBet MONEY,@NewMaxBet MONEY,@NewMPM MONEY
 
 INSERT INTO #tblCust(custid,roleid,currency)
 SELECT custid,roleid,currency
@@ -85,11 +85,12 @@ BEGIN
 		BREAK;
 		
 	UPDATE cs
-	SET @NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
+	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
+		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerGameType > s.MPM THEN s.MPM ELSE cs.MaxPerGameType END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > s.MinBet THEN @NewMaxBet ELSE s.MinBet END,
+		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
 		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
-		cs.MinBet = s.MinBet,
+		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerGameType = @NewMPM
 	FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)	
@@ -97,14 +98,15 @@ BEGIN
 		INNER JOIN @tmpBetSetting s ON t.currency = s.currency
 	WHERE cs.GameTypeID BETWEEN 1 AND 31
 		AND cs.MaxBet >= 1 AND cs.MaxPerGameType >= 1
-		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerGameType > s.MPM OR cs.MinBet <> s.MinBet)
+		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerGameType > s.MPM OR cs.MinBet < s.MinBet)
 	
 	UPDATE cs
-	SET @NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
+	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
+		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerMatch > s.MPM THEN s.MPM ELSE cs.MaxPerMatch END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > s.MinBet THEN @NewMaxBet ELSE s.MinBet END,
+		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
 		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
-		cs.MinBet = s.MinBet,
+		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerMatch = @NewMPM
 	FROM CustBetSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
@@ -112,7 +114,7 @@ BEGIN
 		INNER JOIN @tmpBetSetting s ON t.currency = s.currency
 	WHERE cs.SportType in (169,220,222)
 		AND cs.MaxBet >= 1 AND cs.MaxPerMatch >= 1
-		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerMatch > s.MPM OR cs.MinBet <> s.MinBet)
+		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerMatch > s.MPM OR cs.MinBet < s.MinBet)
 				
 	DELETE @tmpCust			
 END	
@@ -131,11 +133,12 @@ BEGIN
 	
 	--RnG Keno
 	UPDATE cs
-	SET @NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
+	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
+		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerGameType > s.MPM THEN s.MPM ELSE cs.MaxPerGameType END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > s.MinBet THEN @NewMaxBet ELSE s.MinBet END,
+		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
 		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
-		cs.MinBet = s.MinBet,
+		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerGameType = @NewMPM
 	OUTPUT DELETED.custid, 202, DELETED.GameTypeID, DELETED.MaxBet, DELETED.MaxPerGameType
@@ -145,7 +148,7 @@ BEGIN
 		INNER JOIN @tmpBetSetting s ON t.currency = s.currency
 	WHERE cs.GameTypeID BETWEEN 1 AND 31
 		AND cs.MaxBet >= 1 AND cs.MaxPerGameType >= 1
-		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerGameType > s.MPM OR cs.MinBet <> s.MinBet)
+		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerGameType > s.MPM OR cs.MinBet < s.MinBet)
 	
 	DELETE cs
 	FROM @tmpCustHistory cs
@@ -163,11 +166,12 @@ BEGIN
 	
 	--Lottery
 	UPDATE cs
-	SET @NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
+	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
+		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerMatch > s.MPM THEN s.MPM ELSE cs.MaxPerMatch END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > s.MinBet THEN @NewMaxBet ELSE s.MinBet END,
+		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
 		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
-		cs.MinBet = s.MinBet,
+		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerMatch = @NewMPM
 	OUTPUT DELETED.custid, DELETED.sporttype, DELETED.bettype, DELETED.MaxBet, DELETED.MaxPerMatch
@@ -177,7 +181,7 @@ BEGIN
 		INNER JOIN @tmpBetSetting s ON t.currency = s.currency
 	WHERE cs.SportType in (169,220,222)
 		AND cs.MaxBet >= 1 AND cs.MaxPerMatch >= 1
-		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerMatch > s.MPM OR cs.MinBet <> s.MinBet)
+		AND (cs.MaxBet > s.MaxBet OR cs.MaxPerMatch > s.MPM OR cs.MinBet < s.MinBet)
 			
 	DELETE cs
 	FROM @tmpCustHistory cs
@@ -194,6 +198,7 @@ BEGIN
 	
 	DELETE @tmpCust			
 END	
+
 
 DROP TABLE #tblCust
 DROP TABLE #supers
