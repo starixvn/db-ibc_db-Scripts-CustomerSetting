@@ -101,21 +101,52 @@ CREATE TABLE #Cust_Headline (
 		IsGroupHeadLine BIT,
 		isfinished		BIT DEFAULT(0))
 
-CREATE TABLE #Headline_list (headline VARCHAR(100))
+DECLARE @Headlines TABLE (headline VARCHAR(100))
 
-DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT, @Headline VARCHAR(500)
+DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT, @Headline_List VARCHAR(500)
 
-SELECT @Headline = xxx
+/*
+	- @site='yUT', @Headline_List='ZU01'
+	- @site='y789', @Headline_List='ET789HL'
+	- @site='y889', @Headline_List='BC1,SD67,DTF233,8U01,V3901,8K01,DTE113,DTE131,ET889HL,DTE249,XU1,9S'
+	- @site='yOther', @Headline_List=NULL
+*/
+
+SELECT @Headline_List = xxx
 	, @site = xxx
 
-INSERT INTO #Headline_list (headline)
-SELECT VALUE
-FROM STRING_SPLIT(@Headline,',') 
+IF @Headline_List IS NOT NULL
+BEGIN
+	INSERT INTO @Headlines (headline)
+	SELECT VALUE
+	FROM STRING_SPLIT(@Headline_List,',') 
 
-INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine)
-SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine					FROM custAccount ca WITH (NOLOCK)						INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid					INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid					LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID					LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID				WHERE c.site='789y'						AND c.currency<>20					AND cu.enabled=1				
-	AND ch.username IN (SELECT headline FROM #Headline_list)
+	INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine)
+	SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine						FROM custAccount ca WITH (NOLOCK)							INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid						INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid						LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID						LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID					WHERE c.site='789y'							AND c.currency<>20						AND cu.enabled=1				
+		AND ch.username IN (SELECT headline FROM @Headlines)
+END
+ELSE
+BEGIN
+	INSERT INTO @Headlines (headline)
+	SELECT 'ZU01'		UNION
+	SELECT 'ET789HL'	UNION
+	SELECT 'BC1'		UNION
+	SELECT 'SD67'		UNION
+	SELECT 'DTF233'		UNION
+	SELECT '8U01'		UNION
+	SELECT 'V3901'		UNION
+	SELECT '8K01'		UNION
+	SELECT 'DTE113'		UNION
+	SELECT 'DTE131'		UNION
+	SELECT 'ET889HL'	UNION
+	SELECT 'DTE249'		UNION
+	SELECT 'XU1'		UNION
+	SELECT '9S'		
 
+	INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine)
+	SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine						FROM custAccount ca WITH (NOLOCK)							INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid						INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid						LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID						LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID					WHERE c.site='789y'							AND c.currency<>20						AND cu.enabled=1				
+		AND ch.username NOT IN (SELECT headline FROM @Headlines)
+END
 -- For DEPLOYER info
 DECLARE @headline_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, HeadlineID: %d.'
@@ -145,5 +176,5 @@ BEGIN
 	WAITFOR DELAY '00:00:0.100'
 END
 
-DROP TABLE #Cust_Headline, #Headline_list
+DROP TABLE #Cust_Headline
 GO
