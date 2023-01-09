@@ -8,11 +8,7 @@
 USE CustDB
 GO
 
-DECLARE @SiteDBGroupID TINYINT
-
-SET @SiteDBGroupID = xxx
-
 UPDATE s
-SET s.SiteDBGroupID = CASE WHEN siteid<>3 THEN @SiteDBGroupID ELSE SiteDBGroupID END
+SET s.SiteDBGroupID = CASE WHEN siteid<>3 THEN 3 ELSE SiteDBGroupID END
 FROM Site s WITH(UPDLOCK, ROWLOCK)
 WHERE isLicensee=0
