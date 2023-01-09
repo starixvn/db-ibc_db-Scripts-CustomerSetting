@@ -70,8 +70,8 @@ BEGIN
 		SET @NewMinBet = CASE WHEN cs.MinBet < @MinBet THEN @MinBet ELSE cs.MinBet END,
 			@NewMaxBet = CASE WHEN cs.MaxBet > @MaxBet THEN @MaxBet ELSE cs.MaxBet END,
 			@NewMPM = CASE WHEN cs.MaxPerGameType > @MPM THEN @MPM ELSE cs.MaxPerGameType END,
-			@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-			@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+			@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+			@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,					
 			cs.MinBet = @NewMinBet,
 			cs.MaxBet = @NewMaxBet,
 			cs.MaxPerGameType = @NewMPM
@@ -85,8 +85,8 @@ BEGIN
 		SET @NewMinBet = CASE WHEN cs.MinBet < @MinBet THEN @MinBet ELSE cs.MinBet END,
 			@NewMaxBet = CASE WHEN cs.MaxBet > @MaxBet THEN @MaxBet ELSE cs.MaxBet END,
 			@NewMPM = CASE WHEN cs.MaxPerMatch > @MPM THEN @MPM ELSE cs.MaxPerMatch END,
-			@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-			@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+			@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+			@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 			cs.MinBet = @NewMinBet,
 			cs.MaxBet = @NewMaxBet,
 			cs.MaxPerMatch = @NewMPM
@@ -116,8 +116,8 @@ BEGIN
 		SET @NewMinBet = CASE WHEN cs.MinBet < @MinBet THEN @MinBet ELSE cs.MinBet END,
 			@NewMaxBet = CASE WHEN cs.MaxBet > @MaxBet THEN @MaxBet ELSE cs.MaxBet END,
 			@NewMPM = CASE WHEN cs.MaxPerGameType > @MPM THEN @MPM ELSE cs.MaxPerGameType END,
-			@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-			@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+			@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+			@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 			cs.MinBet = @NewMinBet,
 			cs.MaxBet = @NewMaxBet,
 			cs.MaxPerGameType = @NewMPM
@@ -127,7 +127,7 @@ BEGIN
 		WHERE cs.custid IN (SELECT custid FROM @tmpCust)
 			AND cs.GameTypeID BETWEEN 1 AND 31
 			AND cs.MaxBet >= 1 AND cs.MaxPerGameType >= 1
-			AND (cs.MaxBet > @MaxBet OR cs.MaxPerGameType > @MPM OR cs.MinBet <> @MinBet)
+			AND (cs.MaxBet > @MaxBet OR cs.MaxPerGameType > @MPM OR cs.MinBet < @MinBet)
 		
 		DELETE @tmpCustHistory 
 		WHERE MaxBet = @MaxBet AND MPM = @MPM
@@ -148,8 +148,8 @@ BEGIN
 		SET @NewMinBet = CASE WHEN cs.MinBet < @MinBet THEN @MinBet ELSE cs.MinBet END,
 			@NewMaxBet = CASE WHEN cs.MaxBet > @MaxBet THEN @MaxBet ELSE cs.MaxBet END,
 			@NewMPM = CASE WHEN cs.MaxPerMatch > @MPM THEN @MPM ELSE cs.MaxPerMatch END,
-			@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-			@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+			@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+			@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 			cs.MinBet = @NewMinBet,
 			cs.MaxBet = @NewMaxBet,
 			cs.MaxPerMatch = @NewMPM
@@ -159,7 +159,7 @@ BEGIN
 		WHERE cs.custid IN (SELECT custid FROM @tmpCust)
 			AND cs.SportType in (169,220,222)
 			AND cs.MaxBet >= 1 AND cs.MaxPerMatch >= 1
-			AND (cs.MaxBet > @MaxBet OR cs.MaxPerMatch > @MPM OR cs.MinBet <> @MinBet)
+			AND (cs.MaxBet > @MaxBet OR cs.MaxPerMatch > @MPM OR cs.MinBet < @MinBet)
 		
 		DELETE @tmpCustHistory 
 		WHERE MaxBet = @MaxBet AND MPM = @MPM
@@ -274,7 +274,7 @@ BEGIN
 			@target = @target,
 			@MaxCustID = @MaxCustID			
 				
-	WAITFOR DELAY '00:00:00.280'			
+	--WAITFOR DELAY '00:00:00.280'			
 END		
 GO	
 -- END STEP 2: Run this SP at replicated DB & DBCUST -----

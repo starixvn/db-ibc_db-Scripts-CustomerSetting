@@ -88,8 +88,8 @@ BEGIN
 	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
 		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerGameType > s.MPM THEN s.MPM ELSE cs.MaxPerGameType END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+		@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+		@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerGameType = @NewMPM
@@ -104,8 +104,8 @@ BEGIN
 	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
 		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerMatch > s.MPM THEN s.MPM ELSE cs.MaxPerMatch END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+		@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+		@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerMatch = @NewMPM
@@ -136,8 +136,8 @@ BEGIN
 	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
 		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerGameType > s.MPM THEN s.MPM ELSE cs.MaxPerGameType END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+		@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+		@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerGameType = @NewMPM
@@ -169,8 +169,8 @@ BEGIN
 	SET @NewMinBet = CASE WHEN cs.MinBet < s.MinBet THEN s.MinBet ELSE cs.MinBet END,
 		@NewMaxBet = CASE WHEN cs.MaxBet > s.MaxBet THEN s.MaxBet ELSE cs.MaxBet END,
 		@NewMPM = CASE WHEN cs.MaxPerMatch > s.MPM THEN s.MPM ELSE cs.MaxPerMatch END,
-		@NewMaxBet = CASE WHEN @NewMaxBet > @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,
-		@NewMPM = CASE WHEN @NewMPM > @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,
+		@NewMaxBet = CASE WHEN @NewMPM < @NewMaxBet THEN @NewMPM ELSE @NewMaxBet END,	
+		@NewMinBet = CASE WHEN @NewMaxBet < @NewMinBet THEN @NewMaxBet ELSE @NewMinBet END,	
 		cs.MinBet = @NewMinBet,
 		cs.MaxBet = @NewMaxBet,
 		cs.MaxPerMatch = @NewMPM
