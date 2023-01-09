@@ -9,24 +9,20 @@
 USE CustDB
 GO
 
-DECLARE @SiteDBGroupID TINYINT
-
-SET @SiteDBGroupID = xxx
-
 -- Add 4 new sites:
-INSERT INTO Site ([site], [ServerID], [isLicensee], [isActive], [isDeposit], [SpecialGroup], [BlockNewCust], [SiteDBGroupID], [SiteLabel])
-SELECT 'yUT', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], @SiteDBGroupID, '789y'
+INSERT INTO Site ([site], [ServerID], [isLicensee], [isActive], [isDeposit], [SpecialGroup], [BlockNewCust], [SiteLabel])
+SELECT 'yUT', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], '789y'
 FROM Site WITH (NOLOCK)
 WHERE siteid=3
 UNION ALL 
-SELECT 'y789', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], @SiteDBGroupID, '789y'
+SELECT 'y789', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], '789y'
 FROM Site WITH (NOLOCK)
 WHERE siteid=3
 UNION ALL 
-SELECT 'y889', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], @SiteDBGroupID, '789y'
+SELECT 'y889', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], '789y'
 FROM Site WITH (NOLOCK)
 WHERE siteid=3
 UNION ALL 
-SELECT 'yOther', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], @SiteDBGroupID, '789y'
+SELECT 'yOther', [ServerID], [isLicensee], 1, [isDeposit], [SpecialGroup], [BlockNewCust], '789y'
 FROM Site WITH (NOLOCK)
 WHERE siteid=3
