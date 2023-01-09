@@ -97,8 +97,6 @@ CREATE TABLE #Cust_Headline (
 		custid			INT, 
 		roleid			TINYINT, 
 		headline		VARCHAR(100),
-		groupID			SMALLINT,
-		IsGroupHeadLine BIT,
 		newSite			VARCHAR(50),
 		isfinished		BIT DEFAULT(0))
 
@@ -108,11 +106,11 @@ DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT
 	- @site='yUT', @Headline_List='ZU01'
 	- @site='y789', @Headline_List='ET789HL'
 	- @site='y889', @Headline_List='BC1,SD67,DTF233,8U01,V3901,8K01,DTE113,DTE131,ET889HL,DTE249,XU1,9S'
-	- @site='yOther', @Headline_List=NULL
+	- @site='yOther'
 */
 
-INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine, newSite)
-SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine,		CASE WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
+INSERT INTO #Cust_Headline (custid, roleid, headline, newSite)
+SELECT  ca.custid, cu.roleid, ch.username headline,		CASE WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
            WHEN ch.username='ET789HL'				THEN 'y789'             --Group  3
            WHEN ch.username IN ('BC1','SD67','DTF233','8U01','V3901','8K01','DTE113','DTE131','ET889HL','DTE249','XU1','9S')
                                                     THEN 'y889'             --Group 2
