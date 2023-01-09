@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20221221@Tacy
-	Task: 03. Deactive: Site='789y' 
+	Task: 04. Deactive: Site='789y' 
 		 https://nexdev.net/issues/181596 [RedmineID: #181596]
 	Database: DBCUST/CustDB
 */

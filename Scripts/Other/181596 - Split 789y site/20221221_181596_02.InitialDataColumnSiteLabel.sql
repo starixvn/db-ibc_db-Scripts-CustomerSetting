@@ -14,14 +14,14 @@ DECLARE @SiteLabel VARCHAR(50)
 
 /*
 	on UAT: @SiteLabel='789b'
-	on PRO: @SiteLabel='789y'
+	on SIT/PRO: @SiteLabel='789y'
 */
 SET @SiteLabel = xxx
 
 UPDATE s
 SET s.SiteLabel = CASE  WHEN siteid=3	THEN @SiteLabel
 						WHEN siteid=487	THEN 'IBCIndo'
-						ELSE 'MBC'
+						ELSE 'Nova88'
 					END
 FROM Site s WITH(UPDLOCK, ROWLOCK)
 WHERE isLicensee=0

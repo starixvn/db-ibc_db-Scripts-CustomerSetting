@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20221221@Tacy
-	Task: 04. Insert 4 new sites (YUT, Y789, Y889, YOther) 
+	Task: 03. Insert 4 new sites (YUT, Y789, Y889, YOther) 
 		 https://nexdev.net/issues/181596 [RedmineID: #181596]
 	Database: DBCUST/CustDB
 */

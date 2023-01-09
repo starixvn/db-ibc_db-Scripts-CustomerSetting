@@ -99,12 +99,11 @@ CREATE TABLE #Cust_Headline (
 		headline		VARCHAR(100),
 		groupID			SMALLINT,
 		IsGroupHeadLine BIT,
+		newSite			VARCHAR(50),
 		isfinished		BIT DEFAULT(0))
 
-DECLARE @Headlines TABLE (headline VARCHAR(100))
 
-DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT, @Headline_List VARCHAR(500)
-
+DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT
 /*
 	- @site='yUT', @Headline_List='ZU01'
 	- @site='y789', @Headline_List='ET789HL'
@@ -112,41 +111,14 @@ DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT, @Headline_List VARC
 	- @site='yOther', @Headline_List=NULL
 */
 
-SELECT @Headline_List = xxx
-	, @site = xxx
+INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine, newSite)
+SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine,		CASE WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
+           WHEN ch.username='ET789HL'				THEN 'y789'             --Group  3
+           WHEN ch.username IN ('BC1','SD67','DTF233','8U01','V3901','8K01','DTE113','DTE131','ET889HL','DTE249','XU1','9S')
+                                                    THEN 'y889'             --Group 2
+                                                    ELSE 'yOther'			--Group 4
+		END AS newSiteFROM custAccount ca WITH (NOLOCK)						INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid					INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid					LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID					LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID				WHERE c.site='789y'						AND c.currency<>20					AND cu.enabled=1				
 
-IF @Headline_List IS NOT NULL
-BEGIN
-	INSERT INTO @Headlines (headline)
-	SELECT VALUE
-	FROM STRING_SPLIT(@Headline_List,',') 
-
-	INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine)
-	SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine						FROM custAccount ca WITH (NOLOCK)							INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid						INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid						LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID						LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID					WHERE c.site='789y'							AND c.currency<>20						AND cu.enabled=1				
-		AND ch.username IN (SELECT headline FROM @Headlines)
-END
-ELSE
-BEGIN
-	INSERT INTO @Headlines (headline)
-	SELECT 'ZU01'		UNION
-	SELECT 'ET789HL'	UNION
-	SELECT 'BC1'		UNION
-	SELECT 'SD67'		UNION
-	SELECT 'DTF233'		UNION
-	SELECT '8U01'		UNION
-	SELECT 'V3901'		UNION
-	SELECT '8K01'		UNION
-	SELECT 'DTE113'		UNION
-	SELECT 'DTE131'		UNION
-	SELECT 'ET889HL'	UNION
-	SELECT 'DTE249'		UNION
-	SELECT 'XU1'		UNION
-	SELECT '9S'		
-
-	INSERT INTO #Cust_Headline (custid, roleid, headline, groupID, IsGroupHeadLine)
-	SELECT  ca.custid, cu.roleid, ch.username headline, ca.groupID, ca.IsGroupHeadLine						FROM custAccount ca WITH (NOLOCK)							INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid						INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid						LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID						LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID					WHERE c.site='789y'							AND c.currency<>20						AND cu.enabled=1				
-		AND ch.username NOT IN (SELECT headline FROM @Headlines)
-END
 -- For DEPLOYER info
 DECLARE @headline_cnt INT, @index INT = 0
 DECLARE @msg NVARCHAR(200) = 'Currently at order %d, HeadlineID: %d.'
@@ -161,6 +133,7 @@ BEGIN
 	SET isfinished = 1
 		,@HeadlineID = custid
 		,@roleid=roleid
+		,@site=newSite
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
