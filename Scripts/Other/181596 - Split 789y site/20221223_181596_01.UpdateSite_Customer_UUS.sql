@@ -8,7 +8,6 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ALTER PROCEDURE [dbo].[Acc_CustomerInfo_Execrep_09]
 	@CustID INT,
-	@roleid		TINYINT,
 	@site		VARCHAR(50)
 AS
 BEGIN
@@ -21,50 +20,12 @@ BEGIN
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT(0))
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT)
 
-	IF @roleid=4
-	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
-		FROM custinfo c WITH(NOLOCK)				
-		WHERE c.srecommend = @CustID
-			AND c.enabled = 1
-	END
-	ELSE IF @roleid=3
-	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
-		FROM custinfo c WITH(NOLOCK)				
-		WHERE c.mrecommend = @CustID
-			AND c.enabled = 1
-		UNION ALL
-		SELECT custid, roleid		--Headline
-		FROM custinfo c WITH(NOLOCK)				
-		WHERE c.custid IN (SELECT srecommend FROM custInfo t WITH (NOLOCK)
-							WHERE c.custid = @CustID)
-			AND c.enabled = 1 
-	END
-	ELSE IF @roleid=2
-	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
-		FROM custinfo c WITH(NOLOCK)				
-		WHERE c.recommend = @CustID
-			AND c.enabled = 1
-		UNION ALL
-		SELECT custid, roleid		--Headline
-		FROM custinfo c WITH(NOLOCK)				
-		WHERE c.custid IN (SELECT srecommend FROM custInfo t WITH (NOLOCK)
-							WHERE c.custid = @CustID)
-			OR c.custid IN (SELECT mrecommend FROM custInfo t WITH (NOLOCK)
-							WHERE c.custid = @CustID)
-			AND c.enabled = 1 
-	END
-	ELSE IF @roleid=1
-	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT @CustID, @roleid
-	END 
-
+	INSERT INTO #tblCust(custid, roleid)
+	SELECT custid, roleid
+	FROM custinfo c WITH(NOLOCK)				
+	WHERE c.srecommend = @CustID
+		AND c.enabled = 1
+	
 	WHILE(1=1)
 	BEGIN
 		DELETE TOP (5000) t
@@ -90,62 +51,66 @@ END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
-IF	OBJECT_ID('tempdb..#Cust_Headline') IS NOT NULL
-	DROP TABLE	#Cust_Headline;
+IF	OBJECT_ID('tempdb..#Supers') IS NOT NULL
+	DROP TABLE	#Supers;
 
-CREATE TABLE #Cust_Headline (
-		custid			INT, 
-		roleid			TINYINT, 
-		headline		VARCHAR(100),
-		newSite			VARCHAR(50),
-		isfinished		BIT DEFAULT(0))
+CREATE TABLE #Supers (custid INT, newSite VARCHAR(50), isfinished BIT DEFAULT(0))
 
-DECLARE @Headlines TABLE (headline VARCHAR(100))
+DECLARE @CustID INT, @site VARCHAR(50)
 
-DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT
+;WITH tmp AS (
+	SELECT c.srecommend as custid, COUNT(ci.custid) cnt
+	FROM Customer c WITH (NOLOCK)
+	INNER JOIN custInfo ci WITH (NOLOCK) ON c.custid=ci.custid
+	INNER JOIN CustSuper cs WITH (NOLOCK) ON cs.custid=c.srecommend
+	WHERE ci.currency=20 AND ci.Enabled=1 AND C.site='789y'
+	GROUP BY c.srecommend
+)
+INSERT INTO #Supers (custid)
+SELECT TOP 20 custid
+FROM tmp
+ORDER BY cnt DESC
 
-/*
-	- @site='yUT', @Headline_List='ZU01'
-	- @site='y789', @Headline_List='ET789HL'
-	- @site='y889', @Headline_List='BC1,SD67,DTF233,8U01,V3901,8K01,DTE113,DTE131,ET889HL,DTE249,XU1,9S'
-	- @site='yOther', @Headline_List=NULL
-*/
-INSERT INTO #Cust_Headline (custid, roleid, headline, newSite)
-SELECT  ca.custid, cu.roleid, ch.username headline, 		CASE WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
-           WHEN ch.username='ET789HL'				THEN 'y789'             --Group  3
-           WHEN ch.username IN ('BC1','SD67','DTF233','8U01','V3901','8K01','DTE113','DTE131','ET889HL','DTE249','XU1','9S')
-                                                    THEN 'y889'             --Group 2
-                                                    ELSE 'yOther'			--Group 4		END AS newSite FROM custAccount ca WITH (NOLOCK)						INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid					INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid					LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID					LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID				WHERE c.site='789y'						AND c.currency=20					AND cu.enabled=1
+;WITH cte AS (
+	SELECT custid, 
+		ROW_NUMBER() OVER(ORDER BY custid) rn
+	FROM #Supers 
+)
+UPDATE s
+SET s.newSite = CASE WHEN rn BETWEEN 1 AND 5	THEN 'yUT'
+					 WHEN rn BETWEEN 6 AND 10	THEN 'y789'
+					 WHEN rn BETWEEN 11 AND 15	THEN 'y889'
+												ELSE 'yOther' END
+FROM #Supers s 
+INNER JOIN cte c ON c.custid=s.custid
 
 -- For DEPLOYER info
-DECLARE @headline_cnt INT, @index INT = 0
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, HeadlineID: %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of Headlines: %d.'
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 
-SET @headline_cnt = (SELECT COUNT(*) FROM #Cust_Headline)
-RAISERROR (@msg_total, 0, 1, @headline_cnt) WITH NOWAIT
+SET @super_cnt = (SELECT COUNT(*) FROM #Supers)
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Cust_Headline
+	UPDATE TOP (1) #Supers
 	SET isfinished = 1
-		,@HeadlineID = custid
-		,@roleid=roleid
+		,@CustID = custid
 		,@site=newSite
 	WHERE isfinished = 0
 	
 	IF @@ROWCOUNT = 0 BREAK
 
 	SET @index = @index + 1
-	RAISERROR (@msg, 0, 1, @index, @HeadlineID) WITH NOWAIT
+	RAISERROR (@msg, 0, 1, @index, @CustID) WITH NOWAIT
 
 	EXEC dbo.Acc_CustomerInfo_Execrep_09
-			 @CustID=@HeadlineID,
-			 @roleid=@roleid,
+			 @CustID=@CustID,
 			 @site=@site
 			
 	WAITFOR DELAY '00:00:0.100'
 END
 
-DROP TABLE #Cust_Headline
+DROP TABLE #Supers
 GO
