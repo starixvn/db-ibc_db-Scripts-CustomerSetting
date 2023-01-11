@@ -10,9 +10,9 @@ USE CustDB
 GO
 
 UPDATE s
-SET s.SiteLabel = CASE  WHEN site='789y'	THEN '789b'
-						WHEN site='IBCIndo'	THEN 'IBCIndo'
-						ELSE 'Nova88'
+SET s.SiteLabel = CASE  WHEN site='789y'					THEN '789b'
+						WHEN site IN ('IBCIndo','76666B')	THEN 'IBCIndo'
+															ELSE 'Nova88'
 					END
 FROM Site s WITH(UPDLOCK, ROWLOCK)
 WHERE isLicensee=0
