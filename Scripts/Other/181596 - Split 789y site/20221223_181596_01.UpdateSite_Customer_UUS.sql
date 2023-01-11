@@ -54,7 +54,7 @@ GO
 IF	OBJECT_ID('tempdb..#Supers') IS NOT NULL
 	DROP TABLE	#Supers;
 
-CREATE TABLE #Supers (custid INT, newSite VARCHAR(50), isfinished BIT DEFAULT(0))
+CREATE TABLE #Supers (rowID INT IDENTITY(1,1), custid INT, newSite VARCHAR(50), isfinished BIT DEFAULT(0))
 
 DECLARE @CustID INT, @site VARCHAR(50)
 
@@ -67,22 +67,16 @@ DECLARE @CustID INT, @site VARCHAR(50)
 	GROUP BY c.srecommend
 )
 INSERT INTO #Supers (custid)
-SELECT TOP 20 custid
+SELECT custid
 FROM tmp
 ORDER BY cnt DESC
 
-;WITH cte AS (
-	SELECT custid, 
-		ROW_NUMBER() OVER(ORDER BY custid) rn
-	FROM #Supers 
-)
 UPDATE s
-SET s.newSite = CASE WHEN rn BETWEEN 1 AND 5	THEN 'yUT'
-					 WHEN rn BETWEEN 6 AND 10	THEN 'y789'
-					 WHEN rn BETWEEN 11 AND 15	THEN 'y889'
-												ELSE 'yOther' END
+SET s.newSite = CASE WHEN rowID BETWEEN 1 AND 5		THEN 'yUT'
+					 WHEN rowID BETWEEN 6 AND 10	THEN 'y789'
+					 WHEN rowID BETWEEN 11 AND 15	THEN 'y889'
+													ELSE 'yOther' END
 FROM #Supers s 
-INNER JOIN cte c ON c.custid=s.custid
 
 -- For DEPLOYER info
 DECLARE @super_cnt INT, @index INT = 0
