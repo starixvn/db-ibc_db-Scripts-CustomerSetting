@@ -67,7 +67,7 @@ DECLARE @CustID INT, @site VARCHAR(50)
 	GROUP BY ci.srecommend
 )
 INSERT INTO #Supers (custid)
-SELECT custid
+SELECT TOP 20 custid
 FROM tmp
 ORDER BY cnt DESC
 
