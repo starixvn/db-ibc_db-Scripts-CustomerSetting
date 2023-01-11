@@ -59,12 +59,12 @@ CREATE TABLE #Supers (rowID INT IDENTITY(1,1), custid INT, newSite VARCHAR(50), 
 DECLARE @CustID INT, @site VARCHAR(50)
 
 ;WITH tmp AS (
-	SELECT c.srecommend as custid, COUNT(ci.custid) cnt
-	FROM Customer c WITH (NOLOCK)
-	INNER JOIN custInfo ci WITH (NOLOCK) ON c.custid=ci.custid
-	INNER JOIN CustSuper cs WITH (NOLOCK) ON cs.custid=c.srecommend
-	WHERE ci.currency=20 AND ci.Enabled=1 AND C.site='789y'
-	GROUP BY c.srecommend
+	SELECT ci.srecommend as custid, COUNT(ci.custid) cnt
+	FROM custInfo ci WITH (NOLOCK)
+	INNER JOIN CustSuper cs WITH (NOLOCK) ON cs.custid=ci.srecommend
+	INNER JOIN Customer ccs WITH (NOLOCK) ON cs.custid=ccs.custid
+	WHERE ci.currency=20 AND ci.Enabled=1 AND ccs.site='789y'
+	GROUP BY ci.srecommend
 )
 INSERT INTO #Supers (custid)
 SELECT custid
