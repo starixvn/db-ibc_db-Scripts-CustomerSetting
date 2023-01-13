@@ -41,6 +41,7 @@ BEGIN
 		FROM custinfo c WITH(NOLOCK)				
 		WHERE c.custid IN (SELECT srecommend FROM custInfo t WITH (NOLOCK)
 							WHERE c.custid = @CustID)
+			AND C.roleid=4
 			AND c.enabled = 1 
 	END
 	ELSE IF @roleid=2
@@ -57,12 +58,24 @@ BEGIN
 							WHERE c.custid = @CustID)
 			OR c.custid IN (SELECT mrecommend FROM custInfo t WITH (NOLOCK)
 							WHERE c.custid = @CustID)
+			AND C.roleid IN (4,3)
 			AND c.enabled = 1 
 	END
 	ELSE IF @roleid=1
 	BEGIN
 		INSERT INTO #tblCust(custid, roleid)
 		SELECT @CustID, @roleid
+		UNION ALL
+		SELECT custid, roleid		--Headline
+		FROM custinfo c WITH(NOLOCK)				
+		WHERE c.custid IN (SELECT srecommend FROM custInfo t WITH (NOLOCK)
+							WHERE c.custid = @CustID)
+			OR c.custid IN (SELECT mrecommend FROM custInfo t WITH (NOLOCK)
+							WHERE c.custid = @CustID)
+			OR c.custid IN (SELECT recommend FROM custInfo t WITH (NOLOCK)
+							WHERE c.custid = @CustID)
+			AND C.roleid IN (4,3,2)
+			AND c.enabled = 1 
 	END 
 
 	WHILE(1=1)
@@ -85,6 +98,8 @@ BEGIN
 		WHERE custid IN (SELECT custid FROM @tmpCust)
 
 		DELETE @tmpCust
+		
+		WAITFOR DELAY '00:00:0.100'
 	END
 END
 GO
@@ -110,11 +125,12 @@ DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT
 */
 
 INSERT INTO #Cust_Headline (custid, roleid, headline, newSite)
-SELECT  ca.custid, cu.roleid, ch.username headline,		CASE WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
-           WHEN ch.username='ET789HL'				THEN 'y789'             --Group  3
-           WHEN ch.username IN ('BC1','SD67','DTF233','8U01','V3901','8K01','DTE113','DTE131','ET889HL','DTE249','XU1','9S')
+SELECT  ca.custid, cu.roleid, ch.username headline,		CASE	WHEN ch.username='ZU01'				THEN 'yUT'              --Group 1
+				WHEN ch.username='ET789HL'			THEN 'y789'             --Group 3
+				WHEN ch.username IN ('BC1','SD67','DTF233','8U01','V3901','8K01','DTE113','DTE131','ET889HL','DTE249','XU1','9S')
                                                     THEN 'y889'             --Group 2
-                                                    ELSE 'yOther'			--Group 4		END AS newSite FROM custAccount ca WITH (NOLOCK)						INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid					INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid					LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID					LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID				WHERE c.site='789y'						AND c.currency<>20					AND cu.enabled=1				
+                                                    ELSE 'yOther'			--Group 4		END AS newSite FROM custAccount ca WITH (NOLOCK)						INNER JOIN customer  c WITH (NOLOCK) ON c.custid=ca.custid					INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=ca.custid					LEFT JOIN CustGroupHeadline h WITH (NOLOCK) ON h.GroupID = ca.groupID					LEFT JOIN Customer ch WITH (NOLOCK) ON ch.custid = h.CustID				WHERE c.site='789y'						AND c.currency<>20					AND cu.enabled=1
+	AND ca.groupID>0
 
 -- For DEPLOYER info
 DECLARE @headline_cnt INT, @index INT = 0
