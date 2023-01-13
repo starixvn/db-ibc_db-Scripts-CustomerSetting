@@ -11,7 +11,7 @@ GO
 
 UPDATE s
 SET s.SiteLabel = CASE  WHEN site='789y'					THEN '789y'
-						WHEN site IN ('IBCIndo','76666B')	THEN 'IBCIndo'
+						WHEN site IN ('IBCIndo','76666B')	THEN 'IBC'
 															ELSE 'Nova88'
 					END
 FROM Site s WITH(UPDLOCK, ROWLOCK)
