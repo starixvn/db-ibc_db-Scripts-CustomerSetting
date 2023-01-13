@@ -333,3 +333,8 @@ SELECT * FROM ProductStatusProfile WITH(NOLOCK) ORDER BY bitmapOrder
 		,MaxPerMatch,DefaultMinBet,DefaultMaxBet,DefaultMaxPerMatch
 	FROM ProductBetSetting p WITH(NOLOCK) 
 	WHERE Sporttype = 180 AND bettype = 1201
+
+--> INSERT ProductSettingSystemDisplay
+	INSERT INTO ProductSettingSystemDisplay(SystemID,ProductID,SettingType,DisplayMode)
+	SELECT 5,44,22,3 UNION ALL
+	SELECT 9,44,22,3 
