@@ -82,12 +82,13 @@ BEGIN
 		UPDATE c
 		SET site = @site
 		FROM CustAgent c WITH(ROWLOCK)
-		WHERE custid IN (SELECT custid FROM @tmpCust WHERE roleid=2)
+		INNER JOIN @tmpCust t ON t.custid=c.custid
+		WHERE t.roleid=2
 
 		UPDATE c
 		SET site = @site
 		FROM Customer c WITH(ROWLOCK)
-		WHERE custid IN (SELECT custid FROM @tmpCust)
+		INNER JOIN @tmpCust t ON t.custid=c.custid
 
 		DELETE @tmpCust
 		
