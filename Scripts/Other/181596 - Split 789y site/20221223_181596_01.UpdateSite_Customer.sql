@@ -22,11 +22,14 @@ BEGIN
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT)
 	DECLARE @srecommend INT, @mrecommend INT, @recommend INT
 
-	SELECT  @srecommend=srecommend,
-			@mrecommend=mrecommend,
-			@recommend=recommend
-	FROM custInfo WITH (NOLOCK)
-	WHERE custid=@CustID
+	IF @roleid<>4
+	BEGIN
+		SELECT  @srecommend=srecommend,
+				@mrecommend=mrecommend,
+				@recommend=recommend
+		FROM custInfo WITH (NOLOCK)
+		WHERE custid=@CustID
+	END
 
 	IF @roleid=4
 	BEGIN
