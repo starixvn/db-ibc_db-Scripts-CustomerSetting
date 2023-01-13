@@ -12,4 +12,4 @@ GO
 UPDATE s
 SET s.isActive=0, s.site='789y (Old)'
 FROM Site s WITH(UPDLOCK, ROWLOCK)
-WHERE siteid=3
+WHERE site='789y'
