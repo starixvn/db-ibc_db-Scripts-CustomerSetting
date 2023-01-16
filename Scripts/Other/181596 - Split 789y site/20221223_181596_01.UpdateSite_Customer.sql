@@ -20,21 +20,11 @@ BEGIN
 		
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT(0))
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT)
-	DECLARE @srecommend INT, @mrecommend INT, @recommend INT
-
-	IF @roleid<>4
-	BEGIN
-		SELECT  @srecommend=srecommend,
-				@mrecommend=mrecommend,
-				@recommend=recommend
-		FROM custInfo WITH (NOLOCK)
-		WHERE custid=@CustID
-	END
-
+	
 	IF @roleid=4
 	BEGIN
 		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
+		SELECT custid, roleid		
 		FROM custinfo c WITH(NOLOCK)				
 		WHERE c.srecommend = @CustID
 			AND c.enabled = 1
@@ -42,35 +32,23 @@ BEGIN
 	ELSE IF @roleid=3
 	BEGIN
 		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
+		SELECT custid, roleid	
 		FROM custinfo c WITH(NOLOCK)				
 		WHERE c.mrecommend = @CustID
 			AND c.enabled = 1
-		UNION ALL
-		SELECT @srecommend, 4 AS roleid		--Headline
 	END
 	ELSE IF @roleid=2
 	BEGIN
 		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		--Downline
+		SELECT custid, roleid
 		FROM custinfo c WITH(NOLOCK)				
 		WHERE c.recommend = @CustID
 			AND c.enabled = 1
-		UNION ALL
-		SELECT @srecommend, 4 AS roleid		--Headline
-		UNION ALL
-		SELECT @mrecommend, 3 AS roleid
 	END
 	ELSE IF @roleid=1
 	BEGIN
 		INSERT INTO #tblCust(custid, roleid)
 		SELECT @CustID, @roleid
-		UNION ALL
-		SELECT @srecommend, 4 AS roleid		--Headline
-		UNION ALL
-		SELECT @mrecommend, 3 AS roleid
-		UNION ALL
-		SELECT @recommend, 2 AS roleid
 	END 
 
 	WHILE(1=1)
