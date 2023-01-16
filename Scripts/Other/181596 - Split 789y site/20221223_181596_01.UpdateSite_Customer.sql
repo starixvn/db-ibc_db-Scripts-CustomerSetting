@@ -18,7 +18,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('CustAgent') = 0 RETURN	
 		
-	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, oldSite VARCHAR(10), isDummy BIT, isfinished BIT DEFAULT(0))
+	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, oldSite VARCHAR(10), isDummy BIT DEFAULT(0), isfinished BIT DEFAULT(0))
 	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT, oldSite VARCHAR(10), isDummy BIT)
 	DECLARE @srecommend INT, @mrecommend INT, @recommend INT
 
@@ -33,35 +33,34 @@ BEGIN
 
 	IF @roleid=4
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
-		SELECT c.custid, c.roleid, c.site, 0		
-		FROM Customer c WITH(NOLOCK)		
-		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid
+		INSERT INTO #tblCust(custid, roleid)
+		SELECT c.custid, c.roleid		
+		FROM custInfo c WITH(NOLOCK)		
 		WHERE c.srecommend = @CustID
-			AND ci.enabled = 1
+			AND c.enabled = 1
 	END
 	ELSE IF @roleid=3
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
-		SELECT c.custid, c.roleid, c.site, 0		
-		FROM Customer c WITH(NOLOCK)		
-		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
+		INSERT INTO #tblCust(custid, roleid)
+		SELECT c.custid, c.roleid		
+		FROM custInfo c WITH(NOLOCK)		
 		WHERE c.mrecommend = @CustID
-			AND ci.enabled = 1
-		UNION ALL
+			AND c.enabled = 1
+		
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
 		SELECT @srecommend, 4, site, 1		--Dummy
 		FROM Customer WITH (NOLOCK)
 		WHERE custid=@srecommend
 	END
 	ELSE IF @roleid=2
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
-		SELECT c.custid, c.roleid, c.site, 0		
-		FROM Customer c WITH(NOLOCK)		
-		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
+		INSERT INTO #tblCust(custid, roleid)
+		SELECT c.custid, c.roleid		
+		FROM custInfo c WITH(NOLOCK)		
 		WHERE c.recommend = @CustID
-			AND ci.enabled = 1
-		UNION ALL
+			AND c.enabled = 1
+
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
 		SELECT @srecommend, 4, site, 1		--Dummy
 		FROM Customer WITH (NOLOCK)
 		WHERE custid=@srecommend
@@ -72,12 +71,10 @@ BEGIN
 	END
 	ELSE IF @roleid=1
 	BEGIN
+		INSERT INTO #tblCust(custid, roleid)
+		SELECT @CustID, @roleid
+		
 		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
-		SELECT c.custid, c.roleid, c.site, 0
-		FROM Customer c WITH(NOLOCK)		
-		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
-		WHERE c.custid = @CustID
-		UNION ALL
 		SELECT @srecommend, 4, site, 1		--Dummy
 		FROM Customer WITH (NOLOCK)
 		WHERE custid=@srecommend
