@@ -6,6 +6,9 @@
 */
 USE CustDB
 GO
+	--Backup table (for rollback plan)
+	SELECT * INTO ProductSettingDetail_BU_180640 FROM ProductSettingDetail WITH(NOLOCK)
+
 	DELETE p
 	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
 	WHERE SportType IN(9908,9909)

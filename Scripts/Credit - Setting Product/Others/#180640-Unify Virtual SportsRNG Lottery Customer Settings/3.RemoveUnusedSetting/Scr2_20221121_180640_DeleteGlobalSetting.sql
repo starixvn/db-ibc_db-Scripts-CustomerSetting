@@ -28,3 +28,7 @@ GO
 	DELETE 
 	FROM ProductSettingSystemDisplay WITH(ROWLOCK) 
 	WHERE productid = 44 AND SettingType = 6
+
+--> Drop Backup Table
+	IF	OBJECT_ID('ProductSettingDetail_BU_180640') IS NOT NULL
+		DROP TABLE ProductSettingDetail_BU_180640
