@@ -18,56 +18,97 @@ BEGIN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('CustAgent') = 0 RETURN	
 		
-	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, isfinished BIT DEFAULT(0))
-	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT)
-	
+	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT, oldSite VARCHAR(10), isDummy BIT, isfinished BIT DEFAULT(0))
+	DECLARE @tmpCust TABLE (custid INT PRIMARY KEY, roleid TINYINT, oldSite VARCHAR(10), isDummy BIT)
+	DECLARE @srecommend INT, @mrecommend INT, @recommend INT
+
+	IF @roleid<>4
+	BEGIN
+		SELECT  @srecommend=srecommend,
+				@mrecommend=mrecommend,
+				@recommend=recommend
+		FROM custInfo WITH (NOLOCK)
+		WHERE custid=@CustID
+	END
+
 	IF @roleid=4
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid		
-		FROM custinfo c WITH(NOLOCK)				
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
+		SELECT c.custid, c.roleid, c.site, 0		
+		FROM Customer c WITH(NOLOCK)		
+		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid
 		WHERE c.srecommend = @CustID
-			AND c.enabled = 1
+			AND ci.enabled = 1
 	END
 	ELSE IF @roleid=3
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid	
-		FROM custinfo c WITH(NOLOCK)				
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
+		SELECT c.custid, c.roleid, c.site, 0		
+		FROM Customer c WITH(NOLOCK)		
+		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
 		WHERE c.mrecommend = @CustID
-			AND c.enabled = 1
+			AND ci.enabled = 1
+		UNION ALL
+		SELECT @srecommend, 4, site, 1		--Dummy
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@srecommend
 	END
 	ELSE IF @roleid=2
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT custid, roleid
-		FROM custinfo c WITH(NOLOCK)				
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
+		SELECT c.custid, c.roleid, c.site, 0		
+		FROM Customer c WITH(NOLOCK)		
+		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
 		WHERE c.recommend = @CustID
-			AND c.enabled = 1
+			AND ci.enabled = 1
+		UNION ALL
+		SELECT @srecommend, 4, site, 1		--Dummy
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@srecommend
+		UNION ALL
+		SELECT @mrecommend, 3, site, 1		
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@mrecommend
 	END
 	ELSE IF @roleid=1
 	BEGIN
-		INSERT INTO #tblCust(custid, roleid)
-		SELECT @CustID, @roleid
+		INSERT INTO #tblCust(custid, roleid, oldSite, isDummy)
+		SELECT c.custid, c.roleid, c.site, 0
+		FROM Customer c WITH(NOLOCK)		
+		INNER JOIN custInfo ci WITH (NOLOCK) ON ci.custid=c.custid				
+		WHERE c.custid = @CustID
+		UNION ALL
+		SELECT @srecommend, 4, site, 1		--Dummy
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@srecommend
+		UNION ALL
+		SELECT @mrecommend, 3, site, 1		
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@mrecommend
+		UNION ALL
+		SELECT @recommend, 2, site, 1		
+		FROM Customer WITH (NOLOCK)
+		WHERE custid=@recommend
 	END 
 
 	WHILE(1=1)
 	BEGIN
 		DELETE TOP (5000) t
-		OUTPUT DELETED.custid, deleted.roleid INTO @tmpCust(custid, roleid)
+		OUTPUT DELETED.custid, deleted.roleid, deleted.oldSite, deleted.isDummy
+			INTO @tmpCust(custid, roleid, oldSite, isDummy)
 		FROM #tblCust t
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 			
 		UPDATE c
-		SET site = @site
+		SET site = CASE WHEN isDummy=1 AND oldSite='789y' THEN 'yOther' ELSE @site END
 		FROM CustAgent c WITH(ROWLOCK)
 		INNER JOIN @tmpCust t ON t.custid=c.custid
 		WHERE t.roleid=2
 
 		UPDATE c
-		SET site = @site
+		SET site = CASE WHEN isDummy=1 AND oldSite='789y' THEN 'yOther' ELSE @site END
 		FROM Customer c WITH(ROWLOCK)
 		INNER JOIN @tmpCust t ON t.custid=c.custid
 
