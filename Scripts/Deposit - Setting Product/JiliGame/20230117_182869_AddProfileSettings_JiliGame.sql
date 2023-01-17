@@ -36,9 +36,9 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ,[SettingStatus]
            ,[MinDefaultValue]
            ,[IsApplyBA])
-SELECT       156, 158, 5100, 0, 0, 0, NULL, 0
-UNION SELECT 157, 158, 5100, 0, 0, 0, NULL, 0
-UNION SELECT 158, 158, 5100, 0, 0, 0, NULL, 0
+SELECT       156, 158, 5100, 0, 0, 1, NULL, 0
+UNION SELECT 157, 158, 5100, 0, 0, 1, NULL, 0
+UNION SELECT 158, 158, 5100, 0, 0, 1, NULL, 0
 GO
 
 INSERT INTO [dbo].[GameGroup]
