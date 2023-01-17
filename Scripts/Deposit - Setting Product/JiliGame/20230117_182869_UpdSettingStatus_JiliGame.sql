@@ -9,7 +9,7 @@
 UPDATE 
 [dbo].[Dep_ProductSettingDetail]
 SET SettingStatus=0
-WHERE ProductSettingID IN ('156','157','158')
+WHERE ProductSettingID IN (156,157,158)
 AND SportType = 158
 AND BetType = 5100
 
