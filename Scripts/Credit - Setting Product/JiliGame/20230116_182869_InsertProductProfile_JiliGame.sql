@@ -45,4 +45,4 @@ INSERT INTO   [ProductSettingDetail]
 INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
 VALUES 
 (41,158,5100,'Level 1',0) ,
-(42,158,5100,'Level 1',1)
+(43,158,5100,'Level 1',1)
