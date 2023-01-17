@@ -39,25 +39,10 @@ INSERT INTO   [ProductSettingDetail]
 [SubType] )
  VALUES
   --SettingType = 8 : BetLimit Level SportType/GameGroup
-  ( 8, @sportType,5100,0,@productID,NULL,NULL,NULL,NULL,NULL,2,5,@settingstatus,NULL,@RealProductID,NULL,@ProductSettingID,NULL,NULL,NULL)
+  ( 8, @sportType,@BetType,0,@productID,NULL,NULL,NULL,NULL,NULL,2,5,@settingstatus,NULL,@RealProductID,NULL,@ProductSettingID,NULL,NULL,NULL)
 
 --GameGroup
 INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
 VALUES 
 (41,158,5100,'Level 1',0) ,
 (42,158,5100,'Level 1',1)
-
-
---DECLARE @MaxGameGroupID INT 
---SELECT @MaxGameGroupID = MAX(GameGroupID) FROM GameGroup (NOLOCK)
-
---Create Table #Temp ([GameGroupID] INT, [RefSportType] SmallInt, [RefBetType] Int, [GroupName] nvarchar(100), [IsDeposit] bit)
---Insert into #Temp
---VALUES
---  ( 1 + @MaxGameGroupID , 158, 5100, 'Level 1', 0),
---  ( 2 + @MaxGameGroupID , 158, 5100, 'Level 1', 1)
-----GameGroup
---INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
---SELECT * FROM #Temp
-
---DROP TABLE #Temp
