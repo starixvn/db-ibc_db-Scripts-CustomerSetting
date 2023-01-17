@@ -16,6 +16,9 @@ SELECT @SettingStatus = 1 --0: Production, 1: UAT, 2: Hide
 	 , @ProductSettingID = 243
 -- Insert [ProductSettingDetail]
 
+
+DELETE [ProductSettingDetail] WITH(ROWLOCK) WHERE ProductID = @productID AND [SportType] = @sportType AND BetType = @BetType and [SettingType] = 8
+
 INSERT INTO   [ProductSettingDetail]
 ([SettingType], 
 [SportType],
@@ -40,6 +43,9 @@ INSERT INTO   [ProductSettingDetail]
  VALUES
   --SettingType = 8 : BetLimit Level SportType/GameGroup
   ( 8, @sportType,@BetType,0,@productID,NULL,NULL,NULL,NULL,NULL,2,5,@settingstatus,NULL,@RealProductID,NULL,@ProductSettingID,NULL,NULL,NULL)
+
+
+DELETE FROM GameGroup WHERE [GameGroupID] in (41,43) and [RefSportType] = 158 and [RefBetType] = 5100
 
 --GameGroup
 INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])

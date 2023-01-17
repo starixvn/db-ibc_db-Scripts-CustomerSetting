@@ -5,7 +5,7 @@
 	DB: DBPRO/bodb02
 */
 
-DELETE FROM RefResource WHERE RefId = 'StakeLevel_GG' AND ResourceId IN (41,43)
+DELETE FROM RefResource WITH(ROWLOCK) WHERE RefId = 'StakeLevel_GG' AND ResourceId IN (41,43)
 
 INSERT INTO dbo.RefResource (RefId, ResourceId, Resource_en, Resource_ch, Resource_cs, Resource_th)
 VALUES 
