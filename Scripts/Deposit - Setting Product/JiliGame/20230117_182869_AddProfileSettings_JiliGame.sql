@@ -10,8 +10,6 @@ DELETE Dep_ProductStatusProfile WITH(ROWLOCK) WHERE SportType = 158
 DELETE Dep_ProductSetting WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
 DELETE Dep_ProductSettingDetail WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
 DELETE GameGroup WITH(ROWLOCK) WHERE GameGroupID = 43
-DELETE Dep_StakeLevel WITH(ROWLOCK) WHERE GameTypeID = 5100
-DELETE Dep_StakeLevelGroupDetail WITH(ROWLOCK) WHERE GameTypeID = 5100
 GO
 
 INSERT INTO Dep_ProductStatusProfile(SportType,Bettype,BitmapOrder)
