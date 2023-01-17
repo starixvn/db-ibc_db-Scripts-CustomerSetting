@@ -39,7 +39,7 @@ INSERT INTO   [ProductSettingDetail]
 [SubType] )
  VALUES
   --SettingType = 8 : BetLimit Level SportType/GameGroup
-  ( 8, @sportType,5100,0,@productID,90.00,0.01000000,1,0,0,2,5,@settingstatus,NULL,@RealProductID,NULL,@ProductSettingID,NULL,NULL,NULL)
+  ( 8, @sportType,5100,0,@productID,NULL,NULL,NULL,NULL,NULL,2,5,@settingstatus,NULL,@RealProductID,NULL,@ProductSettingID,NULL,NULL,NULL)
 
 --GameGroup
 INSERT INTO GameGroup ([GameGroupID], [RefSportType], [RefBetType], [GroupName], [IsDeposit])
