@@ -2,14 +2,14 @@
 --/*
 --	Date: 20230117
 --	Created: Helios 
---	Task: Jili Games - Incorporate to Licensee Sites [redmine : #137768]
+--	Task: Jili Games - Incorporate to Licensee Sites [redmine : #182869]
 --	DB: DBCUST/CUSTDB
 --*/
 
 DELETE Dep_ProductStatusProfile WITH(ROWLOCK) WHERE SportType = 158
 DELETE Dep_ProductSetting WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
 DELETE Dep_ProductSettingDetail WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
-DELETE GameGroup WITH(ROWLOCK) WHERE GameGroupID = 42
+DELETE GameGroup WITH(ROWLOCK) WHERE GameGroupID = 43
 DELETE Dep_StakeLevel WITH(ROWLOCK) WHERE GameTypeID = 5100
 DELETE Dep_StakeLevelGroupDetail WITH(ROWLOCK) WHERE GameTypeID = 5100
 GO
@@ -49,5 +49,5 @@ INSERT INTO [dbo].[GameGroup]
            ,[RefBetType]
            ,[GroupName]
            ,[IsDeposit])
-SELECT 42, 158, 5100, 'Level 1', 1
+SELECT 43, 158, 5100, 'Level 1', 1
 GO
