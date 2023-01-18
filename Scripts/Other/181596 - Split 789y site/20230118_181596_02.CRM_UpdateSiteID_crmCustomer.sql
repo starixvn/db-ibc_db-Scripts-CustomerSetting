@@ -25,8 +25,11 @@ INSERT INTO #tmp_Customer (custid, newSiteID)
 SELECT  cc.CustID, s.SettingIDFROM crmCustomer cc WITH (NOLOCK)
 INNER JOIN DBCUST.CustDB.dbo.Customer c WITH(NOLOCK) ON c.custid=cc.CustID
 INNER JOIN crmSetting s WITH(NOLOCK) ON s.SettingValue=c.site
-WHERE SettingName  = 'SITE' 
-AND cc.SiteID=@siteID
+INNER JOIN DBCUST.CustDB.dbo.Custinfo ci WITH(NOLOCK) ON ci.custid=cc.CustID
+WHERE SettingName='SITE' 
+	AND cc.SiteID=@siteID
+	AND c.currency<>20
+	AND ci.Enabled=1
 
 WHILE (1 = 1)
 BEGIN
