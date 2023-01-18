@@ -17,12 +17,13 @@ CREATE TABLE #tmp_Customer_Batch (
 		custid		INT, 
 		newSiteID	INT)
 
-DECLARE @CustList NVARCHAR(MAX), @site VARCHAR(50), @siteID INT
+DECLARE @siteID INT
 
-SELECT @siteID=s.SettingIDFROM crmSetting s WITH (NOLOCK) WHERE SettingName='SITE' and SettingValue='789y'
+SELECT @siteID=s.SettingID FROM crmSetting s WITH (NOLOCK) WHERE SettingName='SITE' and SettingValue='789y'
 
 INSERT INTO #tmp_Customer (custid, newSiteID)
-SELECT  cc.CustID, s.SettingIDFROM crmCustomer cc WITH (NOLOCK)
+SELECT  cc.CustID, s.SettingID 
+FROM crmCustomer cc WITH (NOLOCK)
 INNER JOIN DBCUST.CustDB.dbo.Customer c WITH(NOLOCK) ON c.custid=cc.CustID
 INNER JOIN crmSetting s WITH(NOLOCK) ON s.SettingValue=c.site
 INNER JOIN DBCUST.CustDB.dbo.Custinfo ci WITH(NOLOCK) ON ci.custid=cc.CustID
