@@ -8,4 +8,4 @@
 
 UPDATE Dep_ProductSettingDetail WITH(ROWLOCK)
 SET SettingStatus = 0
-WHERE ProductSettingID IN (156,157,158)
+WHERE ProductSettingID IN (159,160,161)

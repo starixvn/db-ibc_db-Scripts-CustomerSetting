@@ -57,12 +57,12 @@ WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 	AND ci.Enabled=1
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)	
 	
-DECLARE @BitmapOrder INT = 35
+DECLARE @BitmapOrder INT = 36
 
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT custid, t.ProductSettingID
 FROM #tblSMA 
-	CROSS APPLY (SELECT 156 ProductSettingID UNION SELECT 157 UNION SELECT 158) t
+	CROSS APPLY (SELECT 159 ProductSettingID UNION SELECT 160 UNION SELECT 161) t
 WHERE roleid = 4
 
 -------------------------------------PT Setting-----------------------------------------------

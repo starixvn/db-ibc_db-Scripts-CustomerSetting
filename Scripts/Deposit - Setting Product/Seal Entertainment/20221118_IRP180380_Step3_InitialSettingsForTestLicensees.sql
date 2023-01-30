@@ -68,12 +68,12 @@ BEGIN
 		AND ci.Enabled=1
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 	
-	DECLARE @BitmapOrder INT = 35
+	DECLARE @BitmapOrder INT = 36
 	
 	INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
-	SELECT @srecommend,156
-	UNION SELECT @srecommend,157
-	UNION SELECT @srecommend,158
+	SELECT @srecommend,159
+	UNION SELECT @srecommend,160
+	UNION SELECT @srecommend,161
 	
 	-------------------------------------PT Setting-----------------------------------------------
 	INSERT INTO dbo.Dep_CustPTSetting_Agent

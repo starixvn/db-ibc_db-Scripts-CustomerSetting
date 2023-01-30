@@ -7,15 +7,15 @@
 */
 
 DELETE Dep_ProductStatusProfile WITH(ROWLOCK) WHERE SportType = 156
-DELETE Dep_ProductSetting WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
-DELETE Dep_ProductSettingDetail WITH(ROWLOCK) WHERE ProductSettingID IN (156,157,158)
+DELETE Dep_ProductSetting WITH(ROWLOCK) WHERE ProductSettingID IN (159,160,161)
+DELETE Dep_ProductSettingDetail WITH(ROWLOCK) WHERE ProductSettingID IN (159,160,161)
 DELETE GameGroup WITH(ROWLOCK) WHERE GameGroupID = 42
 DELETE Dep_StakeLevel WITH(ROWLOCK) WHERE GameTypeID = 8900
 DELETE Dep_StakeLevelGroupDetail WITH(ROWLOCK) WHERE GameTypeID = 8900
 GO
 
 INSERT INTO Dep_ProductStatusProfile(SportType,Bettype,BitmapOrder)
-SELECT 156,8900,35
+SELECT 156,8900,36
 
 INSERT INTO [dbo].[Dep_ProductSetting]
            ([ProductSettingID]
@@ -24,9 +24,9 @@ INSERT INTO [dbo].[Dep_ProductSetting]
            ,[TemplateID]
            ,[DisplayOrder]
            ,[SettingLevel])
-SELECT 156, 72, 4, 0, 1, 1
-UNION SELECT 157, 72, 1, 0, 2, 1
-UNION SELECT 158, 72, 8, 0, 3, 2
+SELECT 159, 72, 4, 0, 1, 1
+UNION SELECT 160, 72, 1, 0, 2, 1
+UNION SELECT 161, 72, 8, 0, 3, 2
 GO
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail]

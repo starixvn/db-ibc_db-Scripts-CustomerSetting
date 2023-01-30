@@ -49,7 +49,7 @@ BEGIN
 		
 	DELETE Dep_LicenseeProductSetting WITH(ROWLOCK)
 	WHERE custid IN (SELECT custid FROM #supers)
-		AND ProductSettingID IN (156,157,158)
+		AND ProductSettingID IN (159,160,161)
 	
 	DELETE Dep_CustPTSetting_Agent WITH(ROWLOCK)
 	WHERE custid IN (SELECT custid FROM custinfo WITH(NOLOCK)
