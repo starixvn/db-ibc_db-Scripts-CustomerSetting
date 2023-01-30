@@ -37,8 +37,20 @@ GO
 --add botResource
 ;WITH T AS(
 SELECT 	'Action_Name'	ResourceName,	'45'	ResourceKey,	'en-US'	Language,	N'Risk Alert' Value
-UNION SELECT 'Function_Description', '17', 'en-US', N'Alert to your Telegram whenever winloss reached your configurations on Risk Management functions'
+UNION SELECT 'Function_Description', '17', 'en-US', N'Notify via your Telegram when any set win loss limit is reached'
 UNION SELECT 'Function_Name', '17', 'en-US', N'Risk Alert'
+UNION SELECT 'Action_Name',	'45',	'zh-Hans',	N'风险提示'
+UNION SELECT 'Function_Description', '17', 'zh-Hans', N'会通过Telegram通知当达到任何设定的输赢限额'
+UNION SELECT 'Function_Name', '17', 'zh-Hans', N'风险提示'
+UNION SELECT 'Action_Name',	'45',	'zh-Hant',	N'風險提示'
+UNION SELECT 'Function_Description', '17', 'zh-Hant', N'會通過Telegram通知當達到任何設定的輸贏限額'
+UNION SELECT 'Function_Name', '17', 'zh-Hant', N'風險提示'
+UNION SELECT 'Action_Name',	'45',	'th-TH',	N'ขอบพระคุณ'
+UNION SELECT 'Function_Description', '17', 'th-TH', N'แจ้งเตือนผ่านเทเลแกรมของคุณเมื่อถึงขีดจำกัดการแพ้ชนะที่ตั้งไว้'
+UNION SELECT 'Function_Name', '17', 'th-TH', N'ขอบพระคุณ'
+UNION SELECT 'Action_Name',	'45',	'vi-VN',	N'Cảnh Báo Rủi Ro'
+UNION SELECT 'Function_Description', '17', 'vi-VN', N'Thông báo trên Telegram khi đạt đến bất kỳ giới hạn thắng thua nào đã đặt'
+UNION SELECT 'Function_Name', '17', 'vi-VN', N'Cảnh Báo Rủi Ro'
 )	
 INSERT INTO [dbo].[BotResource]
            ([ResourceName]
