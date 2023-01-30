@@ -266,9 +266,15 @@ CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
 
 DECLARE @target VARCHAR(20)
 IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
+BEGIN
 	SET @target = 'DBCUST'
+	DELETE cg FROM dbo.ProductStatusSiteCurrency cg WITH(ROWLOCK) WHERE SportType = 212 AND BetType = 4001	
+	DELETE cg FROM dbo.SportNonOfferedSiteCurrency cg WITH(ROWLOCK) WHERE SportType = 212 AND BetType = 4001	
+END
 ELSE 
+BEGIN	
 	SET @target = 'REPLICATED'
+END
 
 Print 'Server Name : ' + @target
 
