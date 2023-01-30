@@ -75,7 +75,7 @@ AND settingstatus = 2
 	SELECT SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
 							,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,ProductSettingID,Parent_ProductSettingID,Child_DisplayOrder,SubType
 	FROM ProductSettingDetail WITH(NOLOCK)
-	WHERE SettingStatus <> 2
+	WHERE SettingStatus = 0
 
 --> Config new for ProductSettingDetail_UAT
 	--VS
