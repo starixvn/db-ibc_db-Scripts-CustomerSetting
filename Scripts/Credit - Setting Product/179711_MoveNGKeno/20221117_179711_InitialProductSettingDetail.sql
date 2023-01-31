@@ -21,11 +21,11 @@ DELETE FROM ProductSettingDetail WHERE ProductID = 44 AND SettingType IN (23,18)
 DELETE FROM ProductSettingDetail WHERE ProductID = 44 AND SettingStatus = 2
 
 INSERT INTO ProductSettingDetail ([SettingType], [SportType], [BetType], [IsLive], [ProductID], [MaxPT], [MaxDiscount], [IsSync], [IsHidden], [IsDisabled], [SettingLevel], [DisplayOrder], [SettingStatus], [IntervalValue], [RealProductId], [MaxChoice], [ProductSettingID], [Parent_ProductSettingID], [Child_DisplayOrder], [SubType])
-SELECT 23,202,1501,0,44,NULL,NULL,NULL,NULL,NULL,2,2,@SettingStatus, NULL, 8, NULL,238, NULL,4,1
+SELECT 23,202,1501,0,44,NULL,NULL,NULL,NULL,NULL,2,2,1, NULL, 8, NULL,240, NULL,4,1
 UNION ALL
-SELECT 23,161,81,0,44,NULL,NULL,NULL,NULL,NULL,2,2,@SettingStatus, NULL, 3, NULL,239, NULL,5,2
+SELECT 23,161,81,0,44,NULL,NULL,NULL,NULL,NULL,2,2,1, NULL, 3, NULL,241, NULL,5,2
 UNION ALL
-SELECT 23,164,8101,0,44,NULL,NULL,NULL,NULL,NULL,2,2,@SettingStatus, NULL, 3, NULL,240, NULL,6,2
+SELECT 23,164,8101,0,44,NULL,NULL,NULL,NULL,NULL,2,2,1, NULL, 3, NULL,242, NULL,6,2
 UNION ALL
 SELECT 13,161,81,0,3,NULL,NULL,1,0,0,2,1,@SettingStatus, NULL, 3, NULL,236, NULL,NULL,NULL
 UNION ALL
@@ -47,13 +47,17 @@ SET Child_DisplayOrder =  CASE WHEN SportType = 169 THEN 1
 FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 AND SettingType IN (18,23,13)
 
+INSERT INTO ProductStatusProfile ([Sporttype], [Bettype], [bitmapOrder])
+SELECT 161, 81, 41
 
 SELECT *
 FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 --AND SettingType = 23
 
+/* Testting
+
 INSERT INTO ProductSettingDetail ([SettingType], [SportType], [BetType], [IsLive], [ProductID], [MaxPT], [MaxDiscount], [IsSync], [IsHidden], [IsDisabled], [SettingLevel], [DisplayOrder], [SettingStatus], [IntervalValue], [RealProductId], [MaxChoice], [ProductSettingID], [Parent_ProductSettingID], [Child_DisplayOrder], [SubType])
-SELECT 23, [SportType], [BetType], [IsLive], [ProductID], NULL, NULL, [IsSync], [IsHidden], [IsDisabled], [SettingLevel], [DisplayOrder], 1, [IntervalValue], [RealProductId], [MaxChoice], 
+SELECT 23, [SportType], [BetType], [IsLive], [ProductID], NULL, NULL, [IsSync], [IsHidden], [IsDisabled], 2, [DisplayOrder], 1, [IntervalValue], [RealProductId], [MaxChoice], 
 CASE WHEN ProductSettingID = 43 THEN 237
 	WHEN ProductSettingID = 59 THEN 238
 	WHEN ProductSettingID = 60 THEN 239
@@ -72,3 +76,5 @@ WHERE ProductID = 44 AND SettingType = 2 AND SettingStatus = 0
 	AND ((SportType = 220 AND BetType = 1024) OR SportType <> 220)
 
 SELECT MAX(ProductSEttingId) FROM ProductSettingDetail
+
+*/
