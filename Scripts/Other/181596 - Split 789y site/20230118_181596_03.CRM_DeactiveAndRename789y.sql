@@ -8,4 +8,4 @@
 
 USE bodb_CRM
 GO
-UPDATE sSET SettingValue='789y (Old)', IsActive=0FROM crmSetting s WITH (ROWLOCK,UPDLOCK) WHERE SettingName  = 'SITE' and SettingValue='789y'
+UPDATE s SET SettingValue='789y (Old)', IsActive=0FROM crmSetting s WITH (ROWLOCK,UPDLOCK) WHERE SettingName  = 'SITE' and SettingValue='789y'
