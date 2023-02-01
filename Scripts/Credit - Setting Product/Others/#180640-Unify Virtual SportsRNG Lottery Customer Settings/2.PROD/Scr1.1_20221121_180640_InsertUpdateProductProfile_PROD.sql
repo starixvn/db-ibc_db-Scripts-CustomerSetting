@@ -7,7 +7,10 @@
 USE CustDB
 GO
 	--Backup table (for rollback plan)
-	SELECT * INTO ProductSettingDetail_BU_180640 FROM ProductSettingDetail WITH(NOLOCK)
+	IF	OBJECT_ID('ProductSettingDetail_BU_180640') IS NULL
+		SELECT * 
+		INTO ProductSettingDetail_BU_180640 
+		FROM ProductSettingDetail WITH(NOLOCK)
 
 	DELETE p
 	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
