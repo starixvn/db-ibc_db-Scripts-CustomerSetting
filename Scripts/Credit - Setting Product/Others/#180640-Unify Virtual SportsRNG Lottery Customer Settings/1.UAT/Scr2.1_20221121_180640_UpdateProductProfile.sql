@@ -235,6 +235,7 @@ SELECT * FROM ProductStatusProfile WITH(NOLOCK) ORDER BY bitmapOrder
 	WHERE Sporttype = 180 AND bettype = 1201
 
 --> INSERT ProductSettingSystemDisplay ( Hide on Ext NAP)
+IF NOT EXISTS( SELECT 1 FROM ProductSettingSystemDisplay WITH(NOLOCK) WHERE ProductID = 44 AND SettingType = 22)
 	INSERT INTO ProductSettingSystemDisplay(SystemID,ProductID,SettingType,DisplayMode)
 	SELECT 5,44,22,3 UNION ALL
 	SELECT 9,44,22,3 
