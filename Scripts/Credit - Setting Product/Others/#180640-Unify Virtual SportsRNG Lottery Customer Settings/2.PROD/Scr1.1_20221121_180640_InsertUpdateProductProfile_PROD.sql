@@ -14,7 +14,7 @@ GO
 	WHERE SportType IN(9908,9909)
 
 	DELETE p
-	FROM ProductSettingDetail p WITH(NOLOCK) 
+	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
 	WHERE sporttype = 220 and bettype = 1024  AND settingtype = 13
 
 --VS
@@ -35,7 +35,7 @@ GO
 									WHEN SettingType = 6  THEN 232
 									WHEN SettingType = 13  THEN 233
 								END
-	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+	FROM ProductSettingDetail p WITH(NOLOCK) 
 	WHERE productid = 5 
 		AND SportType = 180 
 
@@ -52,7 +52,7 @@ GO
 	SELECT SettingType = 22,SportType = 9909,BetType = 3700,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel = 1
 			,DisplayOrder,SettingStatus = 0 ,IntervalValue,RealProductId = 44,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,SubType
 			,ProductSettingID = 234
-	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+	FROM ProductSettingDetail p WITH(NOLOCK) 
 	WHERE productid = 44 
 		AND SportType = 169 
 		AND settingtype = 6
@@ -62,7 +62,7 @@ GO
 	SELECT SettingType,SportType, BetType = 1024,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel
 			,DisplayOrder,SettingStatus = 0 ,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,SubType
 			,ProductSettingID = 235
-	FROM ProductSettingDetail p WITH(ROWLOCK,UPDLOCK) 
+	FROM ProductSettingDetail p WITH(NOLOCK) 
 	WHERE productid = 44 
 		AND SportType = 220 
 		AND bettype = 1021
