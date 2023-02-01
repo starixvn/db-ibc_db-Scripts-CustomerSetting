@@ -9,19 +9,15 @@ USE CustDB
 GO
 
 UPDATE sm
-SET BetTypeRefPT=CASE	WHEN SportType BETWEEN 180 AND 186	THEN 1201	--Virtual Sports
-						WHEN SportType=220					THEN 1024	--Lottery
+SET BetTypeRefPT=CASE WHEN SportType=220 THEN 1024	--Lottery
+										 ELSE 1201	--Virtual Sports
 				END,
-	SportTypeRefPT=CASE WHEN SportType BETWEEN 180 AND 186	THEN 9908 
-						WHEN SportType=220					THEN 220
-				END,
-	BetTypeRefBetSetting=CASE	WHEN SportType BETWEEN 180 AND 186	THEN 1201 
-								WHEN SportType=220					THEN 1024
-						END,
-	SportTypeRefBetSetting=CASE WHEN SportType BETWEEN 180 AND 186	THEN 9908 
-								WHEN SportType=220					THEN 220
-						END
+	SportTypeRefPT=CASE WHEN SportType=220 THEN 220 ELSE 9908 END,
+	BetTypeRefBetSetting=CASE WHEN SportType=220 THEN 1024 ELSE 1201 END,
+	SportTypeRefBetSetting=CASE WHEN SportType=220 THEN 220 ELSE 9908 END
 FROM SportBettypeSettingMatrix sm WITH (ROWLOCK, UPDLOCK)
-WHERE isLicensee=0
-AND (SportType BETWEEN 180 AND 186
-	OR SportType=220)
+WHERE isLicensee=0 AND Site = 'ALL'
+AND SportType IN (180, 186, 190, 191, 192, 193, 194, 196, 197, 199, 220)
+
+-- Delete unused Sports
+DELETE tFROM SportBettypeSettingMatrix t WITH(ROWLOCK) WHERE SportType BETWEEN 180 AND 199	AND isLicensee = 0  AND Site = 'ALL'	AND SportType NOT IN (180, 186, 190, 191, 192, 193, 194, 196, 197, 199)
