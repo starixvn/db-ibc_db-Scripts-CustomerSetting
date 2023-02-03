@@ -27,7 +27,7 @@ FROM @temp sbm
 INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
 	ON sbm.SportType=ref.SportType
 	AND sbm.IsLive=ref.isLive
-WHERE ref.BetType=5100 AND ref.SportType=155 AND Site<>'CN88'
+WHERE ref.BetType=5100 AND ref.SportType=158 AND Site<>'CN88'
 AND NOT EXISTS (SELECT 1 FROM SportBettypeSettingMatrix rm WITH (NOLOCK)
                 WHERE	ref.SportType=rm.SportType
 					AND ref.BetType=rm.BetType
