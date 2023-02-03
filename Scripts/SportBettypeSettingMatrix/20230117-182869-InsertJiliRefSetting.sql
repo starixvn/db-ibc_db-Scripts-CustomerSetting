@@ -7,14 +7,27 @@
 	Database: DBCUST-CustDB
 */
 /*
-	bettype: 5100-5299
+	Jili: 5100-5299
 */
+DECLARE @temp TABLE (Sporttype SMALLINT, bettype INT IDENTITY(5100,1), IsLive BIT)
+DECLARE @i INT = 1
+
+WHILE (@i < 201)
+BEGIN
+	INSERT INTO @temp( Sporttype, IsLive)
+	SELECT 158, 0
+
+	SELECT @i = @i + 1
+END
+
 INSERT INTO SportBettypeSettingMatrix 
       (SportType, BetType, isLicensee, isLive, Site, isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, TableBettrans, RealProductId) 
-SELECT SportType, BetType, isLicensee, isLive, Site, 1, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, 'bettransRNG' as TableBettrans, 75
-FROM dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
-WHERE Site<>'CN88' 
-AND BetType BETWEEN 5100 AND 5299
+SELECT sbm.SportType, sbm.BetType, isLicensee, sbm.isLive, Site, 1 as isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, 'bettransRNG' AS TableBettrans, 75 AS RealProductId
+FROM @temp sbm 
+INNER JOIN dbtxn.bodb02.dbo.Sport_Bettype_Reference_Setting ref WITH (NOLOCK)
+	ON sbm.SportType=ref.SportType
+	AND sbm.IsLive=ref.isLive
+WHERE ref.BetType=5100 AND ref.SportType=155 AND Site<>'CN88'
 AND NOT EXISTS (SELECT 1 FROM SportBettypeSettingMatrix rm WITH (NOLOCK)
                 WHERE	ref.SportType=rm.SportType
 					AND ref.BetType=rm.BetType
