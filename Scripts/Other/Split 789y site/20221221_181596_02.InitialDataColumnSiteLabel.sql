@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20221221@Tacy
-	Task: 02. Initial data for column SiteLabel on SIT/PRO
+	Task: 02. Initial data for column SiteLabel
 		 https://nexdev.net/issues/181596 [RedmineID: #181596]
 	Database: DBCUST/CustDB
 */
