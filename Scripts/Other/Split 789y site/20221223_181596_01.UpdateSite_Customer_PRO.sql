@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20221223@Tacy
-	Task: Update new sites (yUT, y789, y889, yOther) for customers
+	Task: Update new sites (yUT, y789, y889, yOther) for customers on PRO
 		 https://nexdev.net/issues/181596 [RedmineID: #181596]
 	Database: DBCUST/CustDB
 */
