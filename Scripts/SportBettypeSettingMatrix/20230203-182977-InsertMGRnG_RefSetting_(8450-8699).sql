@@ -22,7 +22,7 @@ END
 
 INSERT INTO SportBettypeSettingMatrix 
       (SportType, BetType, isLicensee, isLive, Site, isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, TableBettrans, RealProductId) 
-SELECT sbm.SportType, sbm.BetType, isLicensee, sbm.isLive, Site, 1 as isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, 'BettransRNG' AS TableBettrans, 73 AS RealProductId
+SELECT sbm.SportType, sbm.BetType, isLicensee, sbm.isLive, Site, 1 as isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, StructureVerPT, SportTypeRefComm, BetTypeRefComm, TableComm, StructureVerComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, StructureVerBetSetting, IsLiveComm, IsLiveBetSetting, 'bettransRNG' AS TableBettrans, 73 AS RealProductId
 FROM @temp sbm 
 INNER JOIN SportBettypeSettingMatrix sm WITH (NOLOCK)
 	ON sbm.SportType=sm.SportType
