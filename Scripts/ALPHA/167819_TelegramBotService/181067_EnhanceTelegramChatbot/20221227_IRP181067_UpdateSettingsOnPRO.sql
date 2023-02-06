@@ -18,12 +18,12 @@ GO
 
 UPDATE BotAction WITH(ROWLOCK)
 SET [Status] = 2
-WHERE FunctionID IN (30,42)
+WHERE ActionID IN (30,42)
 GO
 
 UPDATE BotAction WITH(ROWLOCK)
 SET [Status] = 0
-WHERE FunctionID IN (45)
+WHERE ActionID IN (45)
 GO
 
 --initial setting for linked accounts Real
