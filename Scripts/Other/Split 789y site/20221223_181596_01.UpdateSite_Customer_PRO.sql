@@ -118,6 +118,10 @@ END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
+
+----------------------------------------
+--UDPATE Site: customers belong to HLs--
+----------------------------------------
 IF	OBJECT_ID('tempdb..#Cust_Headline') IS NOT NULL
 	DROP TABLE	#Cust_Headline;
 
@@ -127,7 +131,6 @@ CREATE TABLE #Cust_Headline (
 		headline		VARCHAR(100),
 		newSite			VARCHAR(50),
 		isfinished		BIT DEFAULT(0))
-
 
 DECLARE @HeadlineID INT, @site VARCHAR(50), @roleid TINYINT
 /*
@@ -175,5 +178,32 @@ BEGIN
 	WAITFOR DELAY '00:00:0.100'
 END
 
-DROP TABLE #Cust_Headline
+-------------------------------------------------
+--UDPATE Site: customers dont belong to any HLs--
+-------------------------------------------------
+CREATE TABLE #Cust_NonHeadline (
+		custid	INT, 
+		roleid	TINYINT,
+		newSite	VARCHAR(50) DEFAULT('yOther'))
+
+INSERT INTO #Cust_NonHeadline (custid, roleid)
+SELECT c.custid, c.roleid
+FROM customer c WITH (NOLOCK)				INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=c.custid		
+WHERE c.site='789y'					AND c.currency<>20				AND cu.enabled=1
+
+IF EXISTS (SELECT 1 FROM #Cust_NonHeadline WHERE roleid=2)
+BEGIN
+	UPDATE c
+	SET site = t.newSite
+	FROM CustAgent c WITH(ROWLOCK)
+	INNER JOIN #Cust_NonHeadline t ON t.custid=c.custid
+	WHERE t.roleid=2
+END
+
+UPDATE c
+SET site = t.newSite
+FROM Customer c WITH(ROWLOCK)
+INNER JOIN #Cust_NonHeadline t ON t.custid=c.custid
+
+DROP TABLE #Cust_Headline, #Cust_NonHeadline
 GO
