@@ -102,12 +102,13 @@ BEGIN
 		SET site = CASE WHEN isDummy=1 AND oldSite='789y' THEN 'yOther' ELSE @site END
 		FROM CustAgent c WITH(ROWLOCK)
 		INNER JOIN @tmpCust t ON t.custid=c.custid
-		WHERE t.roleid=2
+		WHERE t.roleid=2 AND NOT (isDummy=1 AND oldSite<>'789y')
 
 		UPDATE c
 		SET site = CASE WHEN isDummy=1 AND oldSite='789y' THEN 'yOther' ELSE @site END
 		FROM Customer c WITH(ROWLOCK)
 		INNER JOIN @tmpCust t ON t.custid=c.custid
+		WHERE NOT (isDummy=1 AND oldSite<>'789y')
 
 		DELETE @tmpCust
 		
