@@ -1,15 +1,17 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Winfred
-	Date:	 202209152
-	Task: Macau Games - Remove commission [#RM:174513]
+	Date:	 20221228
+	Task: Macau Games - Remove commission / PT / Winlost limit [#RM:174513]
 	DB: DBCUST/CustDB And all subscriber of CustDB_Custsetting Publication
 */
  
  -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB ------
 ------------------------------------------------------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
-	@target VARCHAR(20)
+	@srecommend INT
+	,@maxcustid INT
+	,@target VARCHAR(20)
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -22,80 +24,234 @@ BEGIN
 	IF dbo.f_CheckRepTable('customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('custsuper') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_CustSuper') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Agent') = 0 RETURN
+	IF dbo.f_CheckRepTable('CustWinLossLimit_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('CustDiscount3rd_Agent') = 0 RETURN			
 
 	DECLARE @Sporttype SMALLINT = 212,@bettype SMALLINT = 4001
-	CREATE TABLE #supers (custid INT)
-	CREATE TABLE #CustDiscount3rd_AgentTemp(custid INT)
-	CREATE TABLE #CustDiscount3rd_MemberTemp(custid INT)
-
-	INSERT INTO #supers(custid)
-	SELECT ci.custid
-	FROM dbo.customer c WITH (NOLOCK) 
-		INNER JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
-		INNER JOIN dbo.site s WITH(NOLOCK) ON c.site = s.site
-		INNER JOIN  dbo.custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-		INNER JOIN dbo.CustDiscount3rd_Agent cdis WITH (NOLOCK) ON cdis.CustID = c.custid AND cdis.sporttype = @Sporttype AND cdis.bettype = @bettype
-	WHERE ci.roleid = 4
-		AND ci.custid NOT IN (SELECT custid FROM dbo.Dep_CustSuper WITH(NOLOCK))
-		AND cs.isinternal = 0 	
-		AND ci.Enabled = 1
-		AND s.islicensee = 0
-		AND c.username NOT LIKE '3rdSuper%'
-		AND cdis.Discount <> 0
-						
-	SELECT DISTINCT cg.custid 
-	INTO #CustDiscoun_Agent
-	FROM CustDiscount3rd_Agent cg WITH(NOLOCK)	
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
-		INNER JOIN #supers s ON ci.srecommend = s.custid	
-	WHERE SportType = @Sporttype AND BetType = @BetType
-		
-	SELECT DISTINCT cg.CustID AS CustID
-	INTO #CustDiscoun_Member
-	FROM CustDiscount3rd_Member cg WITH(NOLOCK)		
-		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID	
-		INNER JOIN #supers s ON ci.srecommend = s.custid	
-	WHERE SportType = @Sporttype AND BetType = @BetType
 	
+	CREATE TABLE #Member (CustID INT PRIMARY KEY CLUSTERED, isfinished BIT DEFAULT(0) )
+	CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT, isfinished BIT DEFAULT(0))
+	CREATE TABLE #MemberTemp (CustID INT PRIMARY KEY)
+	CREATE TABLE #SMATempNew (CustID INT PRIMARY KEY)
 
-	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscoun_Agent)
+	INSERT INTO #Member (CustID  )
+	SELECT custid 
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @srecommend AND roleid = 1  AND Enabled = 1 AND custid <= @maxcustid
+	
+	INSERT INTO #SMATemp (CustID, roleid)
+	SELECT custid, roleid
+	FROM Custinfo WITH (NOLOCK)
+	WHERE srecommend = @srecommend AND roleid IN (2,3,4) AND Enabled = 1 AND custid <= @maxcustid 
+		
+	DECLARE @batch int = 3000	
+	--PositionTaking
+	CREATE TABLE #CustPTSetting3rd_Agent(CustID	INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #CustPTSetting3rd_Member(CustID	INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #CustPTGroupSetting3rd_Member(AgentID INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(AgentID ,Sporttype ,Bettype ,IsLive))
+
+	CREATE TABLE #CustPTSetting3rd_AgentTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #CustPTSetting3rd_MemberTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #CustPTGroupSetting3rd_MemberTemp(AgentID INT, SportType SMALLINT, BetType SMALLINT, IsLive BIT, 
+											PRIMARY KEY(AgentID ,Sporttype ,Bettype ,IsLive))
+		
+	INSERT INTO #CustPTSetting3rd_Agent(CustID, SportType, BetType, IsLive)
+	SELECT a.CustID, a.SportType, a.BetType, a.IsLive
+	FROM CustPTSetting3rd_Agent a WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+		
+	INSERT INTO #CustPTSetting3rd_Member(CustID, SportType, BetType, IsLive)
+	SELECT a.CustID, a.SportType, a.BetType, a.IsLive
+	FROM CustPTSetting3rd_Member a WITH(NOLOCK)
+		INNER JOIN #Member ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+
+	INSERT INTO #CustPTGroupSetting3rd_Member(AgentID, SportType, BetType, IsLive)
+	SELECT a.AgentID, a.SportType, a.BetType, a.IsLive
+	FROM CustPTGroupSetting3rd_Member a WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.AgentID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype AND ci.roleid = 2
+		
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTSetting3rd_Agent)
 	BEGIN
-		DELETE TOP (3000) #CustDiscoun_Agent OUTPUT DELETED.* INTO #CustDiscount3rd_AgentTemp
+		DELETE TOP (@batch) #CustPTSetting3rd_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType,DELETED.IsLive
+		INTO #CustPTSetting3rd_AgentTemp(CustID, SportType, BetType, IsLive)
 
 		IF @@ROWCOUNT=0
-			BREAK
+			BREAK		
 
 		DELETE cg
-		FROM CustDiscount3rd_Agent cg WITH(ROWLOCK)		
-			INNER JOIN #CustDiscount3rd_AgentTemp ci ON ci.custid = cg.CustID
-		WHERE SportType = @Sporttype  AND BetType = @BetType
+		FROM dbo.CustPTSetting3rd_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_AgentTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType AND ci.IsLive = cg.IsLive
+
+		TRUNCATE TABLE #CustPTSetting3rd_AgentTemp
+	END
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTSetting3rd_Member)
+	BEGIN
+		DELETE TOP (@batch) #CustPTSetting3rd_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType,DELETED.IsLive
+		INTO #CustPTSetting3rd_MemberTemp(CustID, SportType, BetType, IsLive)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustPTSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTSetting3rd_MemberTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType AND ci.IsLive = cg.IsLive
+
+		TRUNCATE TABLE #CustPTSetting3rd_MemberTemp
+	END
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustPTGroupSetting3rd_Member)
+	BEGIN
+		DELETE TOP (@batch) #CustPTGroupSetting3rd_Member OUTPUT DELETED.AgentID, DELETED.SportType,DELETED.BetType,DELETED.IsLive 
+		INTO #CustPTGroupSetting3rd_MemberTemp(AgentID, SportType, BetType, IsLive)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustPTGroupSetting3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustPTGroupSetting3rd_MemberTemp ci ON ci.AgentID = cg.AgentID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType AND ci.IsLive = cg.IsLive
+
+		TRUNCATE TABLE #CustPTGroupSetting3rd_MemberTemp
+	END
+
+	--Commission	
+	CREATE TABLE #CustDiscount3rd_Agent(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #CustDiscount3rd_Member(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+
+	CREATE TABLE #CustDiscount3rd_AgentTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+	CREATE TABLE #CustDiscount3rd_MemberTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT,  
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+		
+	INSERT INTO #CustDiscount3rd_Agent(CustID, SportType, BetType)
+	SELECT a.CustID, a.SportType, a.BetType
+	FROM CustDiscount3rd_Agent a WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+		
+	INSERT INTO #CustDiscount3rd_Member(CustID, SportType, BetType)
+	SELECT a.CustID, a.SportType, a.BetType
+	FROM CustDiscount3rd_Member a WITH(NOLOCK)
+		INNER JOIN #Member ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscount3rd_Agent)
+	BEGIN
+		DELETE TOP (@batch) #CustDiscount3rd_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
+		INTO #CustDiscount3rd_AgentTemp(CustID, SportType, BetType)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustDiscount3rd_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustDiscount3rd_AgentTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType
 
 		TRUNCATE TABLE #CustDiscount3rd_AgentTemp
 	END
-
-	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscoun_Member)
+	
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustDiscount3rd_Member)
 	BEGIN
-		DELETE TOP (3000) #CustDiscoun_Member OUTPUT DELETED.* INTO #CustDiscount3rd_MemberTemp
+		DELETE TOP (@batch) #CustDiscount3rd_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
+		INTO #CustDiscount3rd_MemberTemp(CustID, SportType, BetType)
 
 		IF @@ROWCOUNT=0
-			BREAK	
-							
+			BREAK		
+
 		DELETE cg
-		FROM CustPTSetting3rd_Member cg WITH(ROWLOCK)		
-			INNER JOIN #CustDiscount3rd_MemberTemp ci ON ci.custid = cg.CustID
-		WHERE SportType = @Sporttype  AND BetType = @BetType
+		FROM dbo.CustDiscount3rd_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustDiscount3rd_MemberTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType
 
 		TRUNCATE TABLE #CustDiscount3rd_MemberTemp
 	END
 
+	--Win Loss Limit
+	CREATE TABLE #CustWinLossLimit_Agent(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #CustWinLossLimit_Member(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+
+	CREATE TABLE #CustWinLossLimit_AgentTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT, 
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+	CREATE TABLE #CustWinLossLimit_MemberTemp(CustID	INT, SportType SMALLINT, BetType SMALLINT,  
+											PRIMARY KEY(CustID ,Sporttype ,Bettype))
+		
+	INSERT INTO #CustWinLossLimit_Agent(CustID, SportType, BetType)
+	SELECT a.CustID, a.SportType, a.BetType
+	FROM CustWinLossLimit_Agent a WITH(NOLOCK)
+		INNER JOIN #SMATemp ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+		
+	INSERT INTO #CustWinLossLimit_Member(CustID, SportType, BetType)
+	SELECT a.CustID, a.SportType, a.BetType
+	FROM CustWinLossLimit_Member a WITH(NOLOCK)
+		INNER JOIN #Member ci WITH(NOLOCK) ON a.CustID = ci.custid
+	WHERE a.SportType = @Sporttype and a.BetType = @bettype
+
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLossLimit_Agent)
+	BEGIN
+		DELETE TOP (@batch) #CustWinLossLimit_Agent OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
+		INTO #CustWinLossLimit_AgentTemp(CustID, SportType, BetType)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustWinLossLimit_Agent cg WITH(ROWLOCK)		
+			INNER JOIN #CustWinLossLimit_AgentTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType
+
+		TRUNCATE TABLE #CustWinLossLimit_AgentTemp
+	END
 	
-	DROP TABLE #CustDiscoun_Member
-	DROP TABLE #CustDiscount3rd_MemberTemp
-	DROP TABLE #CustDiscoun_Agent
+	WHILE EXISTS(SELECT TOP 1 1 FROM #CustWinLossLimit_Member)
+	BEGIN
+		DELETE TOP (@batch) #CustWinLossLimit_Member OUTPUT DELETED.CustID, DELETED.SportType,DELETED.BetType
+		INTO #CustWinLossLimit_MemberTemp(CustID, SportType, BetType)
+
+		IF @@ROWCOUNT=0
+			BREAK		
+
+		DELETE cg
+		FROM dbo.CustWinLossLimit_Member cg WITH(ROWLOCK)		
+			INNER JOIN #CustWinLossLimit_MemberTemp ci ON ci.custid = cg.CustID AND ci.SportType = cg.Sporttype AND ci.BetType = cg.betType
+
+		TRUNCATE TABLE #CustWinLossLimit_MemberTemp
+	END
+	
+	DROP TABLE #Member
+	DROP TABLE #SMATemp
+	DROP TABLE #MemberTemp
+	DROP TABLE #SMATempNew
+	DROP TABLE #CustWinLossLimit_Agent
+	DROP TABLE #CustWinLossLimit_Member
+	DROP TABLE #CustWinLossLimit_AgentTemp
+	DROP TABLE #CustWinLossLimit_MemberTemp
+	DROP TABLE #CustDiscount3rd_Agent
+	DROP TABLE #CustDiscount3rd_Member
 	DROP TABLE #CustDiscount3rd_AgentTemp
-	DROP TABLE #supers
+	DROP TABLE #CustDiscount3rd_MemberTemp
+	DROP TABLE #CustPTSetting3rd_Agent
+	DROP TABLE #CustPTSetting3rd_Member
+	DROP TABLE #CustPTGroupSetting3rd_Member
+	DROP TABLE #CustPTSetting3rd_AgentTemp
+	DROP TABLE #CustPTSetting3rd_MemberTemp
+	DROP TABLE #CustPTGroupSetting3rd_MemberTemp
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -104,17 +260,60 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS AND DBCUST(run finally)
 --------------------------------------------------------------------------------------
+PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
+	DROP TABLE	#supers;
+CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
+
 DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
 
 Print 'Server Name : ' + @target
 
-PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
+DECLARE @max_custid INT, @srecommend INT
+SELECT @max_custid = xxx
 
-EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = @target
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND cs.isinternal = 0
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0
+		AND ci.custid <= @max_custid
+		
+-- For deployer info
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+
+SET @super_cnt = (SELECT COUNT(*) FROM #supers )
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #Supers
+	SET isfinished = 1
+		,@srecommend = custid
+	WHERE isfinished = 0
+	
+	IF @@ROWCOUNT = 0 BREAK
+	
+	SET @index = @index + 1
+	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+
+	EXEC dbo.Acc_DynamicCustSetting3rd_09 @srecommend = @srecommend
+			,@maxcustid = @max_custid
+			,@target = @target
+			
+	WAITFOR DELAY '00:00:0.100'
+END
 
 PRINT N'Step 1: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
