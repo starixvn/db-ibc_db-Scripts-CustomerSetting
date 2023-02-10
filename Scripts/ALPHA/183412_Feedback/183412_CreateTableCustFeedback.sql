@@ -16,6 +16,7 @@ GO
 
 CREATE TABLE [dbo].[CustFeedback](
 	[CustID] [int] NOT NULL,
+	[Subaccid] [int] NOT NULL,
 	[Comment] [nvarchar](4000) NULL,
 	[Rate] [tinyint] NULL,
 	[CreatedDate] [smalldatetime] NULL,
