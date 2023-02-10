@@ -13,6 +13,9 @@ SET ANSI_NULLS OFF
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CustFeedback]') AND type in (N'U'))
+DROP TABLE [dbo].[CustFeedback]
+GO
 
 CREATE TABLE [dbo].[CustFeedback](
 	[CustID] [int] NOT NULL,
