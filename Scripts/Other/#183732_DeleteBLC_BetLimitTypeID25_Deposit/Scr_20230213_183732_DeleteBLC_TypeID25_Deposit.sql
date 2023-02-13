@@ -9,6 +9,10 @@ GO
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
 AS
 BEGIN	
+	IF dbo.f_CheckRepTable('BetLimitControlCustSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('custinfo') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_Customer_Archived') = 0 RETURN	
+
 	CREATE TABLE #Temp_BLC_25_Deposit(CustID INT)
 	CREATE TABLE #Temp_BLC_25(CustID INT)
 	CREATE TABLE #TempCustBatch(CustID INT)
