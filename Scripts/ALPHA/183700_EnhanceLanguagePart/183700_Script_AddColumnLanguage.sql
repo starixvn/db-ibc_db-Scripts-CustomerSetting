@@ -8,10 +8,10 @@
 USE [CustDB]
 GO
 
-ALTER TABLE CustLoginInfo     ADD LanguageUsage varchar(4) DEFAULT NULL
+ALTER TABLE CustLoginInfo     ADD LanguageUsage varchar(4) NULL
 GO
 
 GO
 
-ALTER TABLE CustLoginInfoSub  ADD LanguageUsage varchar(4) DEFAULT NULL
+ALTER TABLE CustLoginInfoSub  ADD LanguageUsage varchar(4) NULL
 GO
