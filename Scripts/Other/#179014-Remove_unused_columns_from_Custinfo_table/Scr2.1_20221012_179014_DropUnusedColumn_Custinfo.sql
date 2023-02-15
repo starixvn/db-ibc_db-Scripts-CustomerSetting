@@ -22,24 +22,24 @@ GO
 ALTER TABLE dbo.custInfo DROP CONSTRAINT DF_custInfo_MaxPerMatch99MP --MaxPerMatch99MP
 GO
 --Drop unused Columns
-ALTER TABLE dbo.custinfo DROP COLUMN DEL_maxpermatch          
-									,DEL_MaxPerMatch1MP       
-									,DEL_maxpermatch2         
-									,DEL_maxpermatch3         
-									,DEL_maxpermatch5         
-									,DEL_maxpermatch8         
-									,DEL_maxpermatch10        
-									,DEL_maxpermatch11        
-									,DEL_maxpermatch12        
-									,DEL_maxpermatch99        
-									,DEL_MaxPerMatch99MP      
-									,DEL_maxpermatch161       
-									,DEL_MaxPerBall161        
-									,DEL_maxpermatch164       
-									,DEL_HideGoldDeluxe       
-									,DEL_DisableGoldDeluxe    
-									,DEL_DisableCasino        
-									,DEL_SyncCasino 
+ALTER TABLE dbo.custinfo DROP COLUMN maxpermatch          
+									,MaxPerMatch1MP       
+									,maxpermatch2         
+									,maxpermatch3         
+									,maxpermatch5         
+									,maxpermatch8         
+									,maxpermatch10        
+									,maxpermatch11        
+									,maxpermatch12        
+									,maxpermatch99        
+									,MaxPerMatch99MP      
+									,maxpermatch161       
+									,MaxPerBall161        
+									,maxpermatch164       
+									,HideGoldDeluxe       
+									,DisableGoldDeluxe    
+									,DisableCasino        
+									,SyncCasino 
 GO
 
 
