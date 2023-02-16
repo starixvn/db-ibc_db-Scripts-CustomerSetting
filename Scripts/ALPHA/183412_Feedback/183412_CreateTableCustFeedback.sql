@@ -1,11 +1,14 @@
 /*<info serverAlias="DBBOT-TESTDB053"></info>*/
---/*
---	Date: 2/8/2023 1:03:18
---	Created: Helios 
---	Task: Feedback Feature [redmine : #183412]
---	DB: DBBOT/DB-61\DevDB053
---	DB: DBBOT/TESTDB053
---*/
+/*
+ Created: 20230210@Helios
+ Task : Create new table CustFeedback
+ DB: DBBOT.bodb_ChatBot  
+  
+     
+ Revisions:    
+  - 20230210@Helios: Create new table CustFeedback  
+ Parameter's Explanation:  
+*/
 
 USE [bodb_ChatBot]
 GO
