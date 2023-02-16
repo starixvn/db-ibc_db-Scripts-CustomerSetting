@@ -1,4 +1,4 @@
-/*<info serverAlias="DBBOT-TESTDB053"></info>*/
+/*<info serverAlias="DBBOT-bodb_ChatBot"></info>*/
 /*
  Created: 20230210@Helios
  Task : Create new table CustFeedback
