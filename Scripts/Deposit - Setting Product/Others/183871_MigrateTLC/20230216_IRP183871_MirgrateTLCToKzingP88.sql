@@ -33,19 +33,33 @@ BEGIN
 		
 	IF dbo.f_CheckRepTable('Dep_CustBetSettingGame_Member') = 0 RETURN		
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN		
-		
-	UPDATE cs2
-	SET cs2.minbet = cs1.minbet,
-		cs2.maxbet = cs1.maxbet,
-		cs2.maxpermatch = cs1.maxpermatch,
-		cs2.MaxPerNumber = cs1.MaxPerNumber,
-		cs2.MaxPayoutPerMatch = cs1.MaxPayoutPerMatch
-	FROM Dep_CustBetSettingGame_Member cs2 WITH(ROWLOCK)
-		INNER JOIN #tblCust t ON cs2.custid = t.custid2
-		INNER JOIN Dep_CustBetSettingGame_Member cs1 WITH(NOLOCK) ON cs1.custid = t.custid1
-													AND cs1.sporttype = cs2.sporttype
-													AND cs1.bettype = cs2.bettype																								
-	WHERE cs2.sporttype IN (1,2,3,5,8,10,11,43,99,99,9901,9902,161)
+	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
+	
+	INSERT INTO [dbo].[Dep_CustBetSettingGame_Member]
+           ([CustID]
+           ,[SportType]
+           ,[BetType]
+           ,[MinBet]
+           ,[MaxBet]
+           ,[MaxPerMatch]
+           ,[MaxPerNumber]
+           ,[MaxPayoutPerMatch])
+	SELECT	t.[CustID2]
+           ,[SportType]
+           ,[BetType]
+           ,[MinBet]
+           ,[MaxBet]
+           ,[MaxPerMatch]
+           ,[MaxPerNumber]
+           ,[MaxPayoutPerMatch]	
+	FROM #tblCust t 
+		INNER JOIN Dep_CustBetSettingGame_Member cs1 WITH(NOLOCK) ON cs1.custid = t.custid1																																				
+	WHERE cs1.sporttype IN (1,2,3,5,8,10,11,43,99,9901,9902,161)
+	
+	UPDATE cs
+	SET IsGroupedBetLimit = 0 
+	FROM Dep_CustSettingMode cs WITH(ROWLOCK)
+	WHERE custid IN (SELECT custid2 FROM #tblCust)
 	
 	UPDATE cs2
 	SET cs2.minbet = cs1.minbet,
@@ -56,7 +70,7 @@ BEGIN
 		INNER JOIN Dep_CustBetSetting_Member cs1 WITH(NOLOCK) ON cs1.custid = t.custid1
 													AND cs1.sporttype = cs2.sporttype
 													AND cs1.bettype = cs2.bettype																								
-	WHERE cs2.sporttype IN (180,181,182,183,184,185,186,190,191,199,202)		
+	WHERE cs2.sporttype IN (180,181,182,183,184,185,186,190,191,192,193,199,202)		
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -21672,7 +21686,7 @@ INTO #tblCust2
 FROM #temp
 
 INSERT INTO #tmpCust(custidTLC,custidP88)
-select replace (replace(replace(custidTLC,char(9),''),char(13),''),char(10),'') as custidM88, replace (replace(replace(custidP88,char(9),''),char(13),''),char(10),'') as custidP88
+select replace (replace(replace(custidTLC,char(9),''),char(13),''),char(10),'') as custidTLC, replace (replace(replace(custidP88,char(9),''),char(13),''),char(10),'') as custidP88
 from #tblCust2
 
 
