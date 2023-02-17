@@ -12,4 +12,4 @@ DELETE [WinLimit_ProductOffer] WITH(ROWLOCK) WHERE [ProductID] = 75 AND [BetType
 -- [WinLimit_ProductOffer]
 INSERT INTO [WinLimit_ProductOffer] ([ProductID], [BetType], [IsActive_SMA], [IsActive_Company])
 VALUES 
-  ( 75, 5100, 1, 0)
+  ( 75, 4001, 1, 0)
