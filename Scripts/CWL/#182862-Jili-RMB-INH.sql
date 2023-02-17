@@ -66,16 +66,3 @@ EXEC NAP_CWL_Initialize_Settings
 	@IsBlockedTransfer_DepositSite_Level3 = 1, 
 	@RepresentativeBettype = 4001;
 
-UPDATE w
-  SET 
-	 w.GroupID = 59
-FROM Winlimit_GameGroupSetting w
-WHERE 
-	 w.BetTypeID = 4598;
-
-UPDATE w
-  SET 
-	 w.GroupID = 59
-FROM Winlimit_ProductGlobalSetting w
-WHERE 
-	 w.BetTypeID = 4598;
