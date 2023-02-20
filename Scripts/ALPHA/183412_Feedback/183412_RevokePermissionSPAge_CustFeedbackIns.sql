@@ -1,12 +1,12 @@
 /*<info serverAlias="DBBOT-bodb_ChatBot"></info>*/
 /*
- Created: 202300220@Helios
+ Created: 20230220@Helios
  Task : revoke permission bodbDownlineNetView SP Age_CustFeedbackIns
  DB: DBBOT.bodb_ChatBot  
   
      
  Revisions:    
-  - 202300220@Helios: revoke permission bodbDownlineNetView SP Age_CustFeedbackIns 
+  - 20230220@Helios: revoke permission bodbDownlineNetView SP Age_CustFeedbackIns 
  Parameter's Explanation:  
 */
 
