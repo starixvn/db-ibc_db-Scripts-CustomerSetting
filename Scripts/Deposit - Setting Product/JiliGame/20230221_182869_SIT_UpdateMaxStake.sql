@@ -6,6 +6,7 @@
 --	DB: DBCUST/CUSTDB
 --*/
 
+use CustDB
 DECLARE @StakeLevelID int
 
 SELECT @StakeLevelID = StakeLevelID 
