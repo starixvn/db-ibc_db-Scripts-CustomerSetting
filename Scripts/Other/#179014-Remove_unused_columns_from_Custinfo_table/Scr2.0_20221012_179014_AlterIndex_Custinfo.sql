@@ -1,3 +1,4 @@
+/*<info serverAlias="DBBOF-bodb02"></info>*/
 /*	
 	Created: 20221012@Eden
 	Task: Alter Index on DB054 DB055 custinfo - remove unused columns [#179014]
