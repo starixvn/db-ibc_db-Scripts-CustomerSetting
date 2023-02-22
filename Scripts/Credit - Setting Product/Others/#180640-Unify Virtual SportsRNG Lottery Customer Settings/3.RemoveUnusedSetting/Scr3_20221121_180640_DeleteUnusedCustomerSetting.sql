@@ -326,7 +326,7 @@ ELSE
 Print 'Server Name : ' + @target
 
 DECLARE @max_custid INT, @srecommend INT 
-SELECT @max_custid = 1000000000
+SELECT @max_custid = xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
