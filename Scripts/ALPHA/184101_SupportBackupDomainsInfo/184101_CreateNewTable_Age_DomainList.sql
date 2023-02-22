@@ -22,7 +22,7 @@ DROP TABLE [dbo].[Age_DomainList]
 GO
 CREATE TABLE [dbo].[Age_DomainList](
 	SiteLabel varchar(50) NOT NULL ,
-	Domain varchar(100) NULL
+	Domain varchar(100) NOT NULL
 ) 
 GO
 
