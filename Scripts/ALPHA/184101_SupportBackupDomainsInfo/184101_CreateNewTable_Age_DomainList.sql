@@ -22,11 +22,11 @@ DROP TABLE [dbo].[Age_DomainList]
 GO
 CREATE TABLE [dbo].[Age_DomainList](
 	SiteLabel varchar(50) NOT NULL ,
-	Domain varchar(100) NOT NULL
+	Domain varchar(50) NOT NULL
 ) 
 GO
 
-CREATE CLUSTERED INDEX [IX_AGE_DomainList_SiteLabel] ON [dbo].[Age_DomainList]
+CREATE CLUSTERED INDEX [CIX_AGE_DomainList_SiteLabel] ON [dbo].[Age_DomainList]
 (
 	SiteLabel ASC 
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
