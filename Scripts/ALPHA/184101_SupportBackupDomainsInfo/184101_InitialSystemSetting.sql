@@ -6,6 +6,8 @@
 */
 
 
+
+
 DECLARE @FunctionID SmallINT , @ActionID SmallINT 
 SELECT @FunctionID = MAX(FunctionID) + 1 from BotFunction (NOLOCK)
 
@@ -21,7 +23,7 @@ INSERT INTO [dbo].[BotFunction]
 		   ,[Priority]
 		   ,[ParentID])
 
-SELECT @FunctionID ,  'Backup Domains' , 'Backup Domains' , 3 , NULL , 1 , 202 , NULL , NULL
+SELECT @FunctionID ,  'Backup Domains' , 'BackupDomains' , 3 , NULL , 1 , 202 , NULL , NULL
 
 SELECT @ActionID = MAX(ActionID) + 1  FROM BotAction (NOLOCK)
 
