@@ -55,8 +55,6 @@ INSERT INTO ProductStatusProfile ([Sporttype], [Bettype], [bitmapOrder])
 SELECT 161, 81, 41 UNION ALL
 SELECT 202, 1501, 40
 
-
-
 /* Testting
 SELECT *
 FROM ProductSettingDetail_UAT ps WITH (ROWLOCK)
