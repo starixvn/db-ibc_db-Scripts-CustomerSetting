@@ -5,8 +5,7 @@
 	DB: DBBOT/bodb_Chatbot
 */
 
-
-
+use bodb_Chatbot
 
 DECLARE @FunctionID SmallINT , @ActionID SmallINT 
 SELECT @FunctionID = MAX(FunctionID) + 1 from BotFunction (NOLOCK)
@@ -23,7 +22,7 @@ INSERT INTO [dbo].[BotFunction]
 		   ,[Priority]
 		   ,[ParentID])
 
-SELECT @FunctionID ,  'Backup Domains' , 'BackupDomains' , 3 , NULL , 1 , 202 , NULL , NULL
+SELECT @FunctionID ,  'Available Domains' , 'AvailableDomains' , 3 , NULL , 1 , 5 , NULL , NULL
 
 SELECT @ActionID = MAX(ActionID) + 1  FROM BotAction (NOLOCK)
 
@@ -38,7 +37,7 @@ INSERT INTO [dbo].[BotAction]
            ,[Status]
            ,[IsEndAction]
            ,[Order])
-SELECT @ActionID ,  'Backup Domains' , 1 , @FunctionID  , @FunctionID , 0 , 1 , 0 , 5011
+SELECT @ActionID ,  'Available Domains' , 1 , @FunctionID  , @FunctionID , 0 , 1 , 1 , 5
 
 -- Insert BotResource
 INSERT INTO [dbo].[BotResource]
@@ -46,7 +45,6 @@ INSERT INTO [dbo].[BotResource]
            ,[ResourceKey]
            ,[Language]
            ,[Value])
-SELECT 'Function_Name' , @FunctionID , 'en-US' , 'Backup Domains'
+SELECT 'Function_Name' , @FunctionID , 'en-US' , 'Available Domains'
 UNION ALL
-SELECT 'Action_Name' , @ActionID , 'en-US' , 'Backup Domains'
-
+SELECT 'Action_Name' , @ActionID , 'en-US' , 'Available Domains'
