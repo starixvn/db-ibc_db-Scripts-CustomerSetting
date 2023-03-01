@@ -97,6 +97,7 @@ AS
 	- 20220901@Johnson: Add CCSoccer,CCBasketball,CCEsports,CCOtherSports [redmine:#176992]
 	- 20221124@Johnson: Add CCNonSports [redmine: #179500]
 	- 20221013@Eden: Remove unused columns [redmine:#179014]
+	- 20230301@Johnson: Add autosuspend3 [redmine:#184339]
 */
 BEGIN
 	SET NOCOUNT ON
