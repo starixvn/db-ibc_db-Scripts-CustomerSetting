@@ -1,27 +1,27 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created by: Elodie
+	Created by: Eden
 	Date: 20221117
-	Task: Init global setting for UAT table [#179711]
+	Task: Init global setting [#179711]
 	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
 
-DECLARE @SettingStatus TINYINT = 0
+DECLARE @SettingStatus TINYINT = 1
 
 UPDATE ps
 SET ps.SettingType = 23, 
 	--SettingLevel = 2,
 	SubType = 1
-FROM ProductSettingDetail_UAT ps WITH (ROWLOCK)
+FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 
 	AND SettingType = 2
 	AND SportType NOT IN(164,161)
 
-DELETE FROM ProductSettingDetail_UAT WHERE ProductID = 44 AND SportType IN (161,164,202)
+DELETE FROM ProductSettingDetail WHERE ProductID = 44 AND SportType IN (161,164,202)
 
-INSERT INTO ProductSettingDetail_UAT ([SettingType], [SportType], [BetType], [IsLive], [ProductID], [MaxPT], [MaxDiscount], [IsSync], [IsHidden], [IsDisabled], [SettingLevel], [DisplayOrder], [SettingStatus], [IntervalValue], [RealProductId], [MaxChoice], [ProductSettingID], [Parent_ProductSettingID], [Child_DisplayOrder], [SubType])
+INSERT INTO ProductSettingDetail ([SettingType], [SportType], [BetType], [IsLive], [ProductID], [MaxPT], [MaxDiscount], [IsSync], [IsHidden], [IsDisabled], [SettingLevel], [DisplayOrder], [SettingStatus], [IntervalValue], [RealProductId], [MaxChoice], [ProductSettingID], [Parent_ProductSettingID], [Child_DisplayOrder], [SubType])
 --Status
 SELECT 13,161,81,0,44,NULL,NULL,1,0,0,2,1,@SettingStatus, NULL, 3, NULL,236, NULL,6,NULL
 UNION ALL
@@ -46,39 +46,12 @@ SET Child_DisplayOrder =  CASE WHEN SportType = 169 THEN 1
 								WHEN SportType = 224 THEN 4
 								ELSE Child_DisplayOrder
 								END 
-FROM ProductSettingDetail_UAT ps WITH (ROWLOCK)
+FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 AND SettingType IN (18,23,13)
-
-DELETE FROM ProductStatusProfile WITH(ROWLOCK) WHERE [bitmapOrder] IN (40,41)
-
-INSERT INTO ProductStatusProfile ([Sporttype], [Bettype], [bitmapOrder])
-SELECT 161, 81, 41 UNION ALL
-SELECT 202, 1501, 40
-
---> INSERT ProductSettingSystemDisplay ( Hide on Ext NAP)
-IF NOT EXISTS( SELECT 1 FROM ProductSettingSystemDisplay WITH(NOLOCK) WHERE ProductID = 44 AND SettingType = 23)
-INSERT INTO ProductSettingSystemDisplay(SystemID,ProductID,SettingType,DisplayMode)
-SELECT 5,44,23,3 UNION ALL
-SELECT 9,44,23,3 
-
----->Insert ProductSettingType
-INSERT INTO ProductSettingType(SettingType,SettingName,SettingNameDetail)
-SELECT 23,'Bet Setting','Bet Setting 23'
-WHERE NOT EXISTS( SELECT 1 FROM ProductSettingType WITH(NOLOCK) WHERE SettingType = 23)
-
-----> Insert ProductStatusSiteCurrency
---DELETE 
---FROM ProductStatusSiteCurrency WITH(ROWLOCK) 
---WHERE sporttype IN(202, 161)
-
---INSERT INTO ProductStatusSiteCurrency(SportType,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced)
---SELECT SportType = 202 ,BetType,Currency,SiteID,IsHidden,IsDisabled,HasSynced 
---FROM ProductStatusSiteCurrency WITH(NOLOCK) 
---WHERE sporttype = 180 and BetType = 1201
 
 /*
 SELECT *
-FROM ProductSettingDetail_UAT ps WITH (ROWLOCK)
+FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 
 
 SELECT * FROM ProductStatusProfile (NOLOCK) WHERE [bitmapOrder] IN(40,41)
