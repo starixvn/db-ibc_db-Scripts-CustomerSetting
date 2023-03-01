@@ -141,6 +141,7 @@ BEGIN
 		,CCEsports
 		,CCOtherSports
 		,CCNonSports
+		,autosuspend3
 		)
 	SELECT username
 		,custid
@@ -181,6 +182,7 @@ BEGIN
 		,CCEsports
 		,CCOtherSports
 		,CCNonSports
+		,autosuspend3
 	FROM [DELETED]
 END
     
