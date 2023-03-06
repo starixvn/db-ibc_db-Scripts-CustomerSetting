@@ -22,7 +22,7 @@ INSERT INTO [dbo].[BotFunction]
 		   ,[Priority]
 		   ,[ParentID])
 
-SELECT @FunctionID ,  'Available Domains' , 'AvailableDomains' , 3 , NULL , 1 , 5 , NULL , NULL
+SELECT @FunctionID ,  'Available Domains' , 'AvailableDomains' , 1 , '/ad' , 1 , 5 , NULL , NULL
 
 SELECT @ActionID = MAX(ActionID) + 1  FROM BotAction (NOLOCK)
 
@@ -37,7 +37,7 @@ INSERT INTO [dbo].[BotAction]
            ,[Status]
            ,[IsEndAction]
            ,[Order])
-SELECT @ActionID ,  'Available Domains' , 1 , @FunctionID  , @FunctionID , 0 , 1 , 1 , 5
+SELECT @ActionID ,  'Available Domains' , 1 , '/ad'  , @FunctionID , 0 , 1 , 1 , 5
 
 -- Insert BotResource
 INSERT INTO [dbo].[BotResource]
@@ -48,3 +48,7 @@ INSERT INTO [dbo].[BotResource]
 SELECT 'Function_Name' , @FunctionID , 'en-US' , 'Available Domains'
 UNION ALL
 SELECT 'Action_Name' , @ActionID , 'en-US' , 'Available Domains'
+UNION ALL
+SELECT 'Function_Description' , @FunctionID , 'en-US' , 'Get a list of all the available backup domains.'
+UNION ALL
+SELECT 'Action_Description' , @ActionID , 'en-US' , 'Get a list of all the available backup domains.'
