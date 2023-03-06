@@ -33,3 +33,9 @@ FROM StakeLevelGroupDetail sl WITH(ROWLOCK,UPDLOCK) WHERE StakeLevelID IN (SELEC
 --SELECT * 
 DELETE s
 FROM StakeLevel s WITH(ROWLOCK,UPDLOCK) WHERE GameGroupID = @GameGroupID AND GameTypeID = @BetType
+
+---- Update New BetType For JiliGames
+--select * 
+UPDATE gg SET RefBetType = 5160
+FROM GameGroup gg WITH (ROWLOCK , UPDLOCK) 
+WHERE RefSportType = 158 and IsDeposit = 0 
