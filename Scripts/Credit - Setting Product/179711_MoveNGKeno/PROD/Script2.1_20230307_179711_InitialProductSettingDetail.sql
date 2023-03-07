@@ -1,14 +1,13 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created by: Eden
-	Date: 20221117
-	Task: Init global setting [#179711]
+	Created by: Eden@20230307
+	Task: Init Data for ProductSettingDetail table [#179711]
 	DB: DBCUST/CustDB
 */
 USE CustDB
 GO
 
-DECLARE @SettingStatus TINYINT = 1
+DECLARE @SettingStatus TINYINT = 0
 
 UPDATE ps
 SET ps.SettingType = 23, 
@@ -48,15 +47,15 @@ SET Child_DisplayOrder =  CASE WHEN SportType = 169 THEN 1
 								END 
 FROM ProductSettingDetail ps WITH (ROWLOCK)
 WHERE ProductID = 44 AND SettingType IN (18,23,13)
-
 /*
+
 SELECT *
-FROM ProductSettingDetail ps WITH (ROWLOCK)
+FROM ProductSettingDetail ps WITH (NOLOCK)
 WHERE ProductID = 44 
+ORDER BY DisplayOrder, Child_DisplayOrder
 
-SELECT * FROM ProductStatusProfile (NOLOCK) WHERE [bitmapOrder] IN(40,41)
-
-SELECT * FROM ProductSettingSystemDisplay WITH(NOLOCK) WHERE ProductID = 44
-
-SELECT * FROM ProductSettingType WITH(NOLOCK) WHERE SettingType = 23
+SELECT *
+FROM ProductSettingDetail ps WITH (NOLOCK)
+WHERE ProductID = 44 
+ORDER BY DisplayOrder, Child_DisplayOrder
 */
