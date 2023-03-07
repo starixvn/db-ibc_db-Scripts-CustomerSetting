@@ -18,7 +18,7 @@ FROM Dep_ProductSettingDetail dp WITH(ROWLOCK , UPDLOCK) WHERE SportType = 158 A
 
 -- COLLECT Data Temp
 INSERT INTO @tmp_StakeLevel
-SELECT StakeLevelID FROM Dep_StakeLevel s WITH(ROWLOCK,UPDLOCK) WHERE GameGroupID = @GameGroupID AND GameTypeID = @BetType
+SELECT StakeLevelID FROM Dep_StakeLevel s WITH(NOLOCK) WHERE GameGroupID = @GameGroupID AND GameTypeID = @BetType
 
 ---- DELETE Dep_StakeLevelGroupDetail --> SAS Initial Againt New Values
 --SELECT DISTINCT StakeLevelID

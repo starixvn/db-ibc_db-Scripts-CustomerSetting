@@ -20,7 +20,7 @@ WHERE ProductID = 18 AND [SportType] = 158 AND BetType = @BetType and [SettingTy
 
 -- COLLECT Data Temp
 INSERT INTO @tmp_StakeLevel
-SELECT StakeLevelID FROM StakeLevel s WITH(ROWLOCK,UPDLOCK) WHERE GameGroupID = @GameGroupID AND GameTypeID = @BetType
+SELECT StakeLevelID FROM StakeLevel s WITH(NOLOCK) WHERE GameGroupID = @GameGroupID AND GameTypeID = @BetType
 
 
 ---- DELETE StakeLevelGroupDetail --> SAS Initial Againt New Values
