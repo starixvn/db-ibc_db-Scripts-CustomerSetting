@@ -21,7 +21,7 @@ SELECT @ActionID = ActionID FROM BotAction WITH (NOLOCK) WHERE ActionName = 'Ava
 
 -- DELETE BotResource
 
-DELETE FROM BotResource WITH (ROWLOCK, UPDLOCK) WHERE Language ='en-US' AND ResourceKey IN (@FunctionID ,@ActionID)
+DELETE FROM BotResource WITH (ROWLOCK, UPDLOCK) WHERE Language ='en-US' AND ResourceKey IN (@FunctionID ,@ActionID) AND [Value] IN ('Available Domains' , 'Get a list of all the available backup domains.')
 
 -- DELETE BotFunction
 DELETE FROM BotFunction WITH (ROWLOCK, UPDLOCK) WHERE FunctionID = @FunctionID
