@@ -22,7 +22,7 @@ INSERT INTO [dbo].[BotFunction]
 		   ,[Priority]
 		   ,[ParentID])
 
-SELECT @FunctionID ,  'Available Domains' , 'AvailableDomains' , 1 , '/ad' , 1 , 5 , NULL , NULL
+SELECT @FunctionID ,  'Available Domains' , 'AvailableDomains' , 1 , '/domain' , 1 , 5 , NULL , NULL
 
 SELECT @ActionID = MAX(ActionID) + 1  FROM BotAction (NOLOCK)
 
@@ -37,7 +37,7 @@ INSERT INTO [dbo].[BotAction]
            ,[Status]
            ,[IsEndAction]
            ,[Order])
-SELECT @ActionID ,  'Available Domains' , 1 , '/ad'  , @FunctionID , 0 , 1 , 1 , 5
+SELECT @ActionID ,  'Available Domains' , 1 , '/domain'  , @FunctionID , 0 , 1 , 1 , 5
 
 -- Insert BotResource
 INSERT INTO [dbo].[BotResource]
