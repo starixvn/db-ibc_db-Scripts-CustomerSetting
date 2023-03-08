@@ -1,8 +1,11 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20230303@Helios
-	Task: Enhance Initial data Setting For Jili [redmine:#182869]
-	DB: DBCust/CustDB
+	Created: Helios@20230308
+	Task: Enhance Initial data Setting For Jili [RM:#181791]
+	DB: DBCUST/CUSTDB
+
+	Revisions:
+		- 20230308@Helios: Insert new Product profile for Jili Games [redmine:#182869]
 */
 DECLARE @tmp_StakeLevel TABLE (StakeLevelID INT)  
 
