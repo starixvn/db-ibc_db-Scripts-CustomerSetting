@@ -17,7 +17,7 @@ SELECT  @BetType = 5100 , @GameGroupID = 41
 
 ---- Update New BetType For JiliGames
 --SELECT *
-UPDATE p SET BetType = 5160
+UPDATE p SET BetType = 5299
 FROM [ProductSettingDetail] p WITH(ROWLOCK,UPDLOCK)
 WHERE ProductID = 18 AND [SportType] = 158 AND BetType = @BetType and [SettingType] = 8
 
@@ -39,6 +39,6 @@ FROM StakeLevel s WITH(ROWLOCK,UPDLOCK) WHERE GameGroupID = @GameGroupID AND Gam
 
 ---- Update New BetType For JiliGames
 --select * 
-UPDATE gg SET RefBetType = 5160
+UPDATE gg SET RefBetType = 5299
 FROM GameGroup gg WITH (ROWLOCK , UPDLOCK) 
 WHERE RefSportType = 158 and IsDeposit = 0 

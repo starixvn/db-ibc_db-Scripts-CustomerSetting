@@ -16,7 +16,7 @@ SELECT  @BetType = 5100 , @GameGroupID = 43
 
 -- UPDATE New BetType For JiliGames
 --SELECT * 
-UPDATE dp SET BetType = 5160
+UPDATE dp SET BetType = 5299
 FROM Dep_ProductSettingDetail dp WITH(ROWLOCK , UPDLOCK) WHERE SportType = 158 AND ProductSettingID = 157 AND BetType = @BetType
 
 -- COLLECT Data Temp
@@ -36,7 +36,7 @@ FROM Dep_StakeLevel s WITH(ROWLOCK,UPDLOCK) WHERE GameGroupID = @GameGroupID AND
 
 ---- Update New BetType For JiliGames
 --select * 
-UPDATE gg SET RefBetType = 5160
+UPDATE gg SET RefBetType = 5299
 FROM GameGroup gg WITH (ROWLOCK , UPDLOCK) 
 WHERE RefSportType = 158 and IsDeposit = 1
 
