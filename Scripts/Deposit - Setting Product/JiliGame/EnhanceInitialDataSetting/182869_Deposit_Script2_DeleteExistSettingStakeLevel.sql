@@ -51,8 +51,6 @@ BEGIN
 		AND s.islicensee = 1			
 		AND ci.currency IN  (SELECT ExchangeId FROM #tmp_Exchange ) 
 
-	select * from #supers
-
 	DECLARE @batch int = 3000    
 	IF EXISTS (SELECT TOP 1 1 FROM #supers)
 	BEGIN
