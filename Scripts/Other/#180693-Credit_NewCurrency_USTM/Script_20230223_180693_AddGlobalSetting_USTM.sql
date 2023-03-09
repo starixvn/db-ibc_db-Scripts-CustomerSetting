@@ -69,7 +69,27 @@ WHERE Currency = @FromCurrency
 ----------SportNonOfferedSiteCurrency
 DELETE SportNonOfferedSiteCurrency WITH(ROWLOCK) WHERE Currency = @ToCurrency
 
-SELECT SportType,BetType,@FromCurrency,SiteID 
+INSERT INTO SportNonOfferedSiteCurrency(SportType,BetType,Currency,SiteID )
+SELECT SportType,BetType,@ToCurrency,SiteID 
 FROM SportNonOfferedSiteCurrency WITH(NOLOCK) 
 WHERE Currency = @FromCurrency
 
+
+--------------PlayCurrencySetting
+DELETE PlayCurrencySetting WITH(ROWLOCK) WHERE MemberCurrency = @ToCurrency
+
+INSERT INTO dbo.PlayCurrencySetting(SiteId,SiteName,SportType,MemberCurrency,PlayCurrency,FromDate,ToDate)
+SELECT SiteId,SiteName,SportType,@ToCurrency,PlayCurrency,FromDate,ToDate
+FROM PlayCurrencySetting WITH (NOLOCK)
+WHERE MemberCurrency = @FromCurrency
+
+
+/*
+SELECT * FROM ProductBetSetting (NOLOCK) WHERE currency = 11
+SELECT * FROM LossLimit_GlobalSetting (NOLOCK) WHERE ExchangeId = 11
+SELECT * FROM WinLimit_ProductSettingDetail (NOLOCK) WHERE ExchangeID = 11
+SELECT * FROM ProductStatusSiteCurrency (NOLOCK) WHERE currency = 11
+SELECT * FROM ProductLaunchedSiteCurrency (NOLOCK) WHERE currency = 11
+SELECT * FROM SportNonOfferedSiteCurrency (NOLOCK) WHERE currency = 11
+SELECT * FROM PlayCurrencySetting (NOLOCK) WHERE MemberCurrency = 11
+*/
