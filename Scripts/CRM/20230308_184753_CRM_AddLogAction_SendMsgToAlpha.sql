@@ -7,6 +7,6 @@
 */
 
 INSERT INTO LogAction ([ActionID], [ActionTypeID], [SPName], [ActionNameEN], [ActionNameCH], [ActionNameCS], [ActionNameJP], [ActionNameIT], [ActionNameTH], [ActionNameKO], [IsInternal], [ActionNameVI], [ActionNameCN])
-VALUES	 (6073,NULL,'Acc_CRM_MessageIns','Insert message','Insert message','Insert message','Insert message','Insert message','Insert message','Insert message',1,'Insert message','Insert message')
-		,(6074,NULL,'Acc_CRM_MessageUpd','Update message','Update message','Update message','Update message','Update message','Update message','Update message',1,'Update message','Update message')
-		,(6075,NULL,'Acc_CRM_MessageDel','Delete message','Delete message','Delete message','Delete message','Delete message','Delete message','Delete message',1,'Delete message','Delete message')
+VALUES	 (1051,NULL,'Acc_CRM_MessageIns','Add new SMA message','Add new SMA message','Add new SMA message','Add new SMA message','Add new SMA message','Add new SMA message','Add new SMA message',1,'Add new SMA message','Add new SMA message')
+		,(1052,NULL,'Acc_CRM_MessageUpd','Update SMA message','Update SMA message','Update SMA message','Update SMA message','Update SMA message','Update SMA message','Update SMA message',1,'Update SMA message','Update SMA message')
+		,(1053,NULL,'Acc_CRM_MessageDel','Delete SMA message','Delete SMA message','Delete SMA message','Delete SMA message','Delete SMA message','Delete SMA message','Delete SMA message',1,'Delete SMA message','Delete SMA message')
