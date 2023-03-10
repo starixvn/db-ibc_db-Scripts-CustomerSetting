@@ -9,7 +9,7 @@
 */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
 	@target VARCHAR(20)
-
+	
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -40,16 +40,13 @@ BEGIN
 
 	INSERT INTO #supers(custid)
 	SELECT ci.custid
-	FROM customer ci WITH (NOLOCK) 
-		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
-		LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	FROM custInfo ci WITH (NOLOCK) 
+		INNER JOIN Dep_CustSuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE 
-		ci.roleid = 4  AND 
-		ci.username NOT LIKE '3rdSuper%'
-		AND cs.isinternal = 0
-		AND ci.custid NOT IN (SELECT custid FROM CustSuper WITH(NOLOCK))
-		AND s.islicensee = 1			
+		ci.username NOT LIKE '3rdSuper%' 
+		AND ci.Enabled = 1
 		AND ci.currency IN  (SELECT ExchangeId FROM #tmp_Exchange ) 
+		AND cs.site IN ('spondemo','Athena000','Seal888','YES888')                      -- Site Initial Deposit on LOCAL - SIT - PRO 
 
 	DECLARE @batch int = 3000    
 	IF EXISTS (SELECT TOP 1 1 FROM #supers)
@@ -70,8 +67,8 @@ BEGIN
 	WHERE SportType = @Sporttype and BetType = 5100
 
 -----Dep_CustStakeLevel_Member
+	INSERT INTO #Dep_CustStakeLevel_Member
 	SELECT DISTINCT cg.custid 
-	INTO #Dep_CustStakeLevel_Member
 	FROM dbo.Dep_CustStakeLevel_Member cg WITH(NOLOCK)		
 		INNER JOIN dbo.custInfo ci WITH (NOLOCK) ON ci.custid = cg.CustID
 		INNER JOIN #supers s ON ci.srecommend = s.custid
