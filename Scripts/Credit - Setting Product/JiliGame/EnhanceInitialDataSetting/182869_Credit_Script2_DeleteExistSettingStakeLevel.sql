@@ -121,16 +121,16 @@ BEGIN
 
 END	
 GO
- ----END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
---------------------------------------------------	
+--END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
+----------------------------------------------	
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+----------------------------------------------------------------------------------
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
+
+
+-- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
 --------------------------------------------------------------------------------------
-----EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'REPLICATED'
-
-
------- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
-------------------------------------------------------------------------------------------
-----EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
+EXEC dbo.Acc_DynamicCustSetting3rd_09 @target = 'DBCUST'
 
 		
