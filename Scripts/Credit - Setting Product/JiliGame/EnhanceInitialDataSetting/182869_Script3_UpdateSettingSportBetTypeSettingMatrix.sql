@@ -1,14 +1,14 @@
-/*<info serverAlias="DBACC-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: Helios@20230309
 	Task: Enhance Initial data Setting For Jili [RM:#181791]
-	DB: DBACC/bodb02
+	DB: DBCUST/CustDB
 
 	Revisions:
 		- 20230308@Helios: Insert new Product profile for Jili Games [redmine:#182869]
 */
 
-use bodb02
+use CustDB
 
 
 --SELECT  *
