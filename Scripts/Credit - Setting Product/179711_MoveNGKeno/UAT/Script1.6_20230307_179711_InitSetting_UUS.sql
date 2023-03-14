@@ -1,7 +1,8 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20221117@Elodie
+	Created: 20230314@Eden
 	Task: Initialize Setting for NG and Keno - UUS [Redmine: #179711]
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB AND all replicated server of CustDB_CustSetting publication
 */ 
 ALTER PROCEDURE [dbo].Acc_DynamicCustSetting3rd_09
 	 @srecommend INT
@@ -208,7 +209,7 @@ GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS and DBCUST -----
 --------------------------------------------------------------------------------------
 SET NOCOUNT ON
 PRINT N'Step : Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

@@ -1,7 +1,8 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20221117@Elodie
+	Created: 20230314@Eden
 	Task: Initialize Product Status of NG for Credit customers - UUS [Redmine: #179711]
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB AND all replicated server of CustDB_Customer_Info, CustDB_DBTrans_CustInfo publication
 */ 
 ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
 	 @srecommend INT
@@ -23,7 +24,7 @@ BEGIN
 		RETURN
 	
 
-	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
+	/**************************************************************/	
 	DECLARE @BitmapOrder_NG TINYINT = 41
 	DECLARE @BitmapOrder_KN TINYINT = 40
 	DECLARE @BatchNum INT = 5000
@@ -97,6 +98,13 @@ BEGIN
 			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapHasSynced, CONVERT(VARCHAR(MAX),@xmlStrSync)) as sync
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_NG,ci.DisableNumber) as Dis
 
+		--Enable Keno by default, will disable on step adjust if yes
+		UPDATE cs
+		SET bitmapIsDisabled = dis.NewBitmap
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustTempBatch ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_KN,0) as Dis
+
 	END
 	
 	DROP TABLE #CustTemp
@@ -107,7 +115,7 @@ GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ------------------------------------------------------	
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
+-- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS and DBCUST-----
 --------------------------------------------------------------------------------------
 SET NOCOUNT ON
 PRINT N'Step : Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

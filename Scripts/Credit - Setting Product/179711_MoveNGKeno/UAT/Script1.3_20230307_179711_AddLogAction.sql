@@ -1,7 +1,6 @@
 ﻿/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
-	Created by: Elodie
-	Date: 20221117
+	Created: 20230314@Eden
 	Task: Insert LogAction for DCS
 	DB: DBLOG/bodb_CustomerLog
 */

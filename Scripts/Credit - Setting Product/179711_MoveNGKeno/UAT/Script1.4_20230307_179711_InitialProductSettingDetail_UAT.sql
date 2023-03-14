@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created by: Eden@20230307
+	Created: 20230314@Eden
 	Task: Init Data for ProductSettingDetail_UAT table [#179711]
 	DB: DBCUST/CustDB
 */
