@@ -26,7 +26,7 @@ BEGIN
 	   )
 		RETURN
 -----Collect Data Cust by Currency	
-	DECLARE @Sporttype SMALLINT  = 158  -- Changed SportType JiliGame
+	DECLARE @Sporttype SMALLINT  = 158  -- Changed SportType JiliGame 
 	
 	IF OBJECT_ID('tempdb..#tmp_Exchange') IS NOT NULL
     DROP TABLE #tmp_Exchange ;  
