@@ -26,19 +26,81 @@ BEGIN
 	/*******************************CUST PRODUCT STATUS TABLE*******************************/	
 	DECLARE @BitmapOrder_NG TINYINT = 41
 	DECLARE @BitmapOrder_KN TINYINT = 40
+	DECLARE @BatchNum INT = 5000
 
-	SELECT custid
-	INTO #CustList
+	CREATE TABLE #CustTemp(CustID INT, DisableNumber BIT, Isfinished BIT default 0)
+	CREATE TABLE #CustTempBatch(CustID INT, DisableNumber BIT)
+
+	INSERT INTO #CustTemp(CustID,DisableNumber)
+	SELECT custid,DisableNumber
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @srecommend
 		AND ci.Enabled = 1
 		AND ci.custid <= @maxcustid
 
-	UPDATE cs
-	SET cs.bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder_NG,0)),
-		bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_KN,0)) 	
-	FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN #CustList ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+	DECLARE @xmlStrHidden XML, @xmlStrSync XML
+	--Set default hidden = 0
+	SET @xmlStrHidden =(
+		SELECT (SELECT * 
+				FROM
+					(	SELECT @BitmapOrder_NG	AS '@b' 
+							, 0	AS '@s'
+						UNION ALL
+						SELECT @BitmapOrder_KN	AS '@b'
+							, 0	AS '@s'
+					) t
+				FOR XML PATH('r')
+					, TYPE
+				)
+		FOR XML PATH('root')
+			, TYPE
+		)
+
+	--Set default Sync = 1
+	SET @xmlStrSync =(
+		SELECT (SELECT * 
+				FROM
+					(	SELECT @BitmapOrder_NG	AS '@b'
+							, 1	AS '@s'
+						UNION ALL
+						SELECT @BitmapOrder_KN	AS '@b'
+							, 1	AS '@s'
+					) t
+				FOR XML PATH('r')
+					, TYPE
+				)
+		FOR XML PATH('root')
+			, TYPE
+		)
+
+
+	WHILE (1=1)
+	BEGIN
+		TRUNCATE TABLE #CustTempBatch
+
+		UPDATE TOP (@BatchNum)  t 
+		SET t.IsFinished = 1 
+		OUTPUT DELETED.CustID, DELETED.DisableNumber INTO #CustTempBatch(CustID,DisableNumber) 
+		FROM #CustTemp t 
+		WHERE t.IsFinished = 0
+
+		IF @@ROWCOUNT=0
+			BREAK
+
+		UPDATE cs
+		SET bitmapIsDisabled = dis.NewBitmap
+			, bitmapIsHidden = hid.bitmap
+			, bitmapHasSynced = sync.bitmap
+		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #CustTempBatch ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrHidden)) as hid
+			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapHasSynced, CONVERT(VARCHAR(MAX),@xmlStrSync)) as sync
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_NG,ci.DisableNumber) as Dis
+
+	END
+	
+	DROP TABLE #CustTemp
+	DROP TABLE #CustTempBatch
 
 END
 GO
@@ -70,6 +132,7 @@ SELECT @max_custid = xxx
 INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM customer ci WITH (NOLOCK) 
+	INNER JOIN custinfo C WITH(NOLOCK) ON c.CustID = ci.custid 
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
@@ -79,6 +142,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND ci.custid <= @max_custid
 		AND ci.Site<>'CN88'
+		AND c.Enabled = 1
 		AND ci.currency IN (20,72) --UUS
 
 -- For deployer info

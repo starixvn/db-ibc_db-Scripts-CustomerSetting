@@ -35,6 +35,7 @@ WHERE ActionID IN (SELECT ActionID FROM @tmpAction)
 GO
 
 ---------------------------SB----------------------------------------------------------
+/*
 DELETE FROM LogAction WITH(ROWLOCK,UPDLOCK) WHERE ActionID BETWEEN 220039 AND 220045
 DELETE FROM LogActionDetail WITH(ROWLOCK,UPDLOCK) WHERE ActionID BETWEEN 220039 AND 220045
 
@@ -115,3 +116,4 @@ WHERE ActionID BETWEEN 400 AND 403
 	OR ActionID BETWEEN 220035 AND 220038 
 	OR ActionID BETWEEN 240000 AND 240003
 
+*/
