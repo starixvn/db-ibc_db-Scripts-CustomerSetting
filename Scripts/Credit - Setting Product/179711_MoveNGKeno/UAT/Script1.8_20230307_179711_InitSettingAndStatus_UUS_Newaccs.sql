@@ -34,8 +34,7 @@
 			AND s.islicensee = 0
 			AND ci.Site<>'CN88'
 			AND c.Enabled = 1
-			--AND ci.currency IN (20,72) --UUS
-			AND ci.custid = 82355928
+			AND ci.currency IN (20,72) --UUS
 
 	--------------------DELETE redudant Setting---------------------------------
 	--PT

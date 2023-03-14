@@ -75,7 +75,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		--AND ci.custid <= @max_custid
 		AND ci.Site<>'CN88'
-		--AND ci.currency IN (20,72) --UUS
+		AND ci.currency NOT IN (20,72)
 		AND c.Enabled = 1
 DECLARE @CustIDs VARCHAR(MAX) = ''
 
