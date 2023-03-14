@@ -14,3 +14,4 @@ GO
 
 INSERT INTO SystemSetting(SettingName,Value,ServiceName,DataType)
 SELECT 'MaxVoidingHistoryCollectionId',0,'AutoFB','Int32'
+UNION SELECT 'MaxVoidingHistoryCollectionIdUAT',0,'AutoFB','Int32'
