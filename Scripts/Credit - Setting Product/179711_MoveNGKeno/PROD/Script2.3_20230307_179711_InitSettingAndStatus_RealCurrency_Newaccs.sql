@@ -34,7 +34,7 @@
 			AND s.islicensee = 0
 			AND ci.Site<>'CN88'
 			AND c.Enabled = 1
-			AND ci.currency NOT IN (20,72)
+			AND ci.currency NOT IN (20,72) --UUS
 
 	--------------------DELETE redudant Setting---------------------------------
 	--PT
@@ -192,17 +192,17 @@
 	--Bet Setting
 	SELECT 202, 1501, 202, 1501, 2, 1
 
-	CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED, DisableNumber BIT, Isfinished BIT DEFAULT 0)
-	CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT, DisableNumber BIT, Isfinished BIT DEFAULT 0)
+	CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED, DisableNumber BIT, HideKeno BIT, Isfinished BIT DEFAULT 0)
+	CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT, DisableNumber BIT, HideKeno BIT, Isfinished BIT DEFAULT 0)
 
-	INSERT INTO #MemberTemp (CustID, DisableNumber)
-	SELECT custid, DisableNumber
+	INSERT INTO #MemberTemp (CustID, DisableNumber, HideKeno)
+	SELECT custid, DisableNumber, HideKeno
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN( SELECT custid from #supers) 
 		AND roleid = 1  AND Enabled = 1 AND custid > @maxcustid
 	
-	INSERT INTO #SMATemp (CustID, roleid,DisableNumber)
-	SELECT custid, roleid, DisableNumber
+	INSERT INTO #SMATemp (CustID, roleid,DisableNumber, HideKeno)
+	SELECT custid, roleid, DisableNumber, HideKeno
 	FROM Custinfo WITH (NOLOCK)
 	WHERE srecommend IN( SELECT custid from #supers)
 		AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @maxcustid
@@ -360,42 +360,7 @@
 		INNER JOIN #InitSportBettype s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
 
 	-----------------Status------------------------
-	CREATE TABLE #CustTempStatus(CustID INT, DisableNumber BIT)
-
-	DECLARE @xmlStrHidden XML, @xmlStrSync XML
-	--Set default hidden = 0
-	SET @xmlStrHidden =(
-		SELECT (SELECT * 
-				FROM
-					(	SELECT @BitmapOrder_NG	AS '@b' 
-							, 0	AS '@s'
-						UNION ALL
-						SELECT @BitmapOrder_KN	AS '@b'
-							, 0	AS '@s'
-					) t
-				FOR XML PATH('r')
-					, TYPE
-				)
-		FOR XML PATH('root')
-			, TYPE
-		)
-
-	--Set default Sync = 1
-	SET @xmlStrSync =(
-		SELECT (SELECT * 
-				FROM
-					(	SELECT @BitmapOrder_NG	AS '@b'
-							, 1	AS '@s'
-						UNION ALL
-						SELECT @BitmapOrder_KN	AS '@b'
-							, 1	AS '@s'
-					) t
-				FOR XML PATH('r')
-					, TYPE
-				)
-		FOR XML PATH('root')
-			, TYPE
-		)
+	CREATE TABLE #CustTempStatus(CustID INT, DisableNumber BIT, HideKeno BIT)
 	
 	WHILE (1=1)
 	BEGIN
@@ -403,7 +368,7 @@
 
 		UPDATE TOP (@BatchNum)  t 
 		SET t.IsFinished = 1 
-		OUTPUT DELETED.CustID, DELETED.DisableNumber INTO #CustTempStatus(CustID,DisableNumber) 
+		OUTPUT DELETED.CustID, DELETED.DisableNumber,deleted.HideKeno INTO #CustTempStatus(CustID,DisableNumber,HideKeno) 
 		FROM #SMATemp t 
 		WHERE t.IsFinished = 0
 
@@ -412,21 +377,24 @@
 
 		UPDATE cs
 		SET bitmapIsDisabled = dis.NewBitmap
-			, bitmapIsHidden = hid.bitmap
-			, bitmapHasSynced = sync.bitmap
+			, bitmapIsHidden = hid.NewBitmap
+			, bitmapHasSynced = sync.NewBitmap
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustTempStatus ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrHidden)) as hid
-			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapHasSynced, CONVERT(VARCHAR(MAX),@xmlStrSync)) as sync
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder_NG,1) as sync
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_NG,ci.DisableNumber) as Dis
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder_NG,0) as Hid
 
 		--Enable Keno by default, will disable on step adjust if yes
 		UPDATE cs
 		SET bitmapIsDisabled = dis.NewBitmap
+			,bitmapIsHidden = hid.NewBitmap
+			,bitmapHasSynced = sync.NewBitmap
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustTempStatus ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder_KN,1) as sync
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_KN,0) as Dis
-
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder_KN,ci.HideKeno) as Hid
 	END
 
 	WHILE (1=1)
@@ -435,7 +403,7 @@
 
 		UPDATE TOP (@BatchNum)  t 
 		SET t.IsFinished = 1 
-		OUTPUT DELETED.CustID, DELETED.DisableNumber INTO #CustTempStatus(CustID,DisableNumber) 
+		OUTPUT DELETED.CustID, DELETED.DisableNumber,deleted.HideKeno INTO #CustTempStatus(CustID,DisableNumber,HideKeno) 
 		FROM #MemberTemp t 
 		WHERE t.IsFinished = 0
 
@@ -444,20 +412,24 @@
 
 		UPDATE cs
 		SET bitmapIsDisabled = dis.NewBitmap
-			, bitmapIsHidden = hid.bitmap
-			, bitmapHasSynced = sync.bitmap
+			, bitmapIsHidden = hid.NewBitmap
+			, bitmapHasSynced = sync.NewBitmap
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustTempStatus ci WITH(NOLOCK) ON cs.CustID = ci.CustID
-			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrHidden)) as hid
-			CROSS APPLY dbo.f_GenerateProductStatus_multiple (cs.bitmapHasSynced, CONVERT(VARCHAR(MAX),@xmlStrSync)) as sync
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder_NG,1) as sync
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_NG,ci.DisableNumber) as Dis
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder_NG,0) as Hid
 
 		--Enable Keno by default, will disable on step adjust if yes
 		UPDATE cs
 		SET bitmapIsDisabled = dis.NewBitmap
+			,bitmapIsHidden = hid.NewBitmap
+			,bitmapHasSynced = sync.NewBitmap
 		FROM [dbo].[CustProductStatus] cs WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #CustTempStatus ci WITH(NOLOCK) ON cs.CustID = ci.CustID
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapHasSynced,@BitmapOrder_KN,1) as sync
 			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsDisabled,@BitmapOrder_KN,0) as Dis
+			CROSS APPLY dbo.f_CustSetting_GenerateProductStatus(cs.bitmapIsHidden,@BitmapOrder_KN,ci.HideKeno) as Hid
 
 	END
 
