@@ -1,4 +1,4 @@
-
+/*<info serverAlias="DBBOT-bodb_Chatbot"></info>*/
 /*
 	Created: 20230315@Helios
 	Task: Initial data system setting for Backup Domain telegram bot service [#RedmineID:#184101]
@@ -8,7 +8,7 @@
 	Revisions:  
 	- 20230315@Helios : Update Status Active on Production
 */
-use bodb_Chatbot 
+use bodb_Chatbot
 
 --SELECT * 
 UPDATE BF SET Status = 0
