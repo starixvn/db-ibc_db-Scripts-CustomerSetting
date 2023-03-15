@@ -1,4 +1,4 @@
-/*<info serverAlias="DBLOG-bodb_CustomerLog" ></info>*/
+﻿/*<info serverAlias="DBLOG-bodb_CustomerLog" ></info>*/
 /*
 	Created: Helios@20230310
 	Task: Initial New Data LogActionID 95085 [RM:#181791]
@@ -25,4 +25,4 @@ INSERT INTO [dbo].[LogAction]
            ,[IsInternal]
            ,[ActionNameVI]
            ,[ActionNameCN])
-SELECT 95085 , 4 , 'Age_CustLanguageUsageUpd' , 'Update Display Language', 'Update Display Language', 'Update Display Language', 'Update Display Language', 'Update Display Language', 'Update Display Language', 'Update Display Language', NULL , 0, 'Update Display Language', 'Update Display Language' 
+SELECT 95085 , 4 , 'Age_CustLanguageUsageUpd' , 'Update Display Language', N'更新語言顯示', N'更新语言显示', 'Update Display Language', 'Update Display Language', N'ปรับเปลี่ยนภาษาที่ใช้แสดงผล', 'Update Display Language', NULL , 0, 'Update Display Language', 'Update Display Language' 
