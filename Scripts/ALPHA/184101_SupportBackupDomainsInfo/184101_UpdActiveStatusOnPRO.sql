@@ -8,7 +8,7 @@
 	Revisions:  
 	- 20230315@Helios : Update Status Active on Production
 */
-use bodb_Chatbot
+use bodb_Chatbot 
 
 --SELECT * 
 UPDATE BF SET Status = 0
