@@ -34,10 +34,15 @@ WHERE NOT EXISTS( SELECT 1 FROM ProductSettingType WITH(NOLOCK) WHERE SettingTyp
 --FROM ProductStatusSiteCurrency WITH(NOLOCK) 
 --WHERE sporttype = 180 and BetType = 1201
 
+--INSERT INTO ProductBetSetting(Sporttype,Bettype,Currency,MinBet,IsDep,MaxBet,MaxPerMatch,DefaultMinBet,DefaultMaxBet,DefaultMaxPerMatch)
+--SELECT Sporttype = 202,Bettype = 1501,exchangeid,MinBet = 0,IsDep = 0
+--		,MaxBet = 0,MaxPerMatch = 0,DefaultMinBet = NULL ,DefaultMaxBet = NULL,DefaultMaxPerMatch  = NULL
+--FROM exchange WITH(NOLOCK)
+--WHERE OfferSite IN(0,1)
+
 /*
 SELECT * FROM ProductStatusProfile (NOLOCK) WHERE [bitmapOrder] IN(40,41)
-
 SELECT * FROM ProductSettingSystemDisplay WITH(NOLOCK) WHERE ProductID = 44
-
 SELECT * FROM ProductSettingType WITH(NOLOCK) WHERE SettingType = 23
+SELECT * FROM ProductBetSetting WITH(NOLOCK) WHERE sporttype = 202 AND bettype = 1501
 */
