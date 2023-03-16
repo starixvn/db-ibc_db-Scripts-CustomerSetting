@@ -86,7 +86,8 @@ Print 'Server Name : ' + @target
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid = xxx
+SELECT @max_custid=MAX (custid)
+FROM custInfo WITH (NOLOCK)
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
