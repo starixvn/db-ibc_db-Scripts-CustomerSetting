@@ -27,17 +27,10 @@ BEGIN
 	CREATE TABLE #CustList (CustID INT PRIMARY KEY,isfinished BIT DEFAULT(0))
 	CREATE TABLE #CustListTemp (CustID INT PRIMARY KEY)
 
-	DECLARE @xmlStrHidden XML, @bitmapOrder TINYINT
+	DECLARE @bitmapOrder TINYINT
 
 	SET @bitmapOrder=21
 	
-	SET @xmlStrHidden = (
-				SELECT DISTINCT
-					@bitmapOrder AS '@b', 
-					1 AS '@s'
-				FOR XML PATH ('r'), ROOT ('root')
-				)
-
 	INSERT INTO #CustList(CustID)
 	SELECT custid
 	FROM dbo.custInfo ci WITH (NOLOCK)
@@ -57,9 +50,9 @@ BEGIN
 			BREAK		
 			
 		UPDATE cs
-		SET	bitmapIsHidden = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsHidden, CONVERT(VARCHAR(MAX),@xmlStrHidden))),
-			bitmapIsDisabled = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapIsDisabled, CONVERT(VARCHAR(MAX),@xmlStrHidden))),
-			bitmapHasSynced = (SELECT bitmap FROM dbo.f_GenerateProductStatus_multiple (cs.bitmapHasSynced, CONVERT(VARCHAR(MAX),@xmlStrHidden)))
+		SET	bitmapIsHidden = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (cs.bitmapIsHidden, @bitmapOrder, 1)),
+			bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (cs.bitmapIsDisabled, @bitmapOrder, 1)),
+			bitmapHasSynced = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (cs.bitmapHasSynced, @bitmapOrder, 1))
 		FROM [dbo].CustProductStatus cs WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #CustListTemp b ON cs.CustID = b.CustID 
 
@@ -89,8 +82,7 @@ Print 'Server Name : ' + @target
 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid=MAX (custid)
-FROM custInfo WITH (NOLOCK)
+SELECT @max_custid=xxx
 
 INSERT INTO #supers(custid)
 SELECT ci.custid

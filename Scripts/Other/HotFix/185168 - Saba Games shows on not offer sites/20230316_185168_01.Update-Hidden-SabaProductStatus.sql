@@ -13,7 +13,7 @@ USE CustDB
 GO
 
 UPDATE ProductStatusSiteCurrency WITH (ROWLOCK, UPDLOCK)
-SET IsHidden=1, IsDisabled=1, HasSynced=0
+SET IsHidden=1, IsDisabled=1, HasSynced=1
 WHERE SportType=200 AND SiteID<>3
 
 UPDATE ProductLaunchedSiteCurrency WITH (ROWLOCK, UPDLOCK)
