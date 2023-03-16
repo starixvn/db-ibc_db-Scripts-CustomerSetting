@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20230316@Tacy
-	Task: 01. Update Saba's Status - Exists Customers
+	Task: Update Saba's Status
 		 https://nexdev.net/issues/185168 [RedmineID: #185168]
 	Database: DBCUST/CustDB
 */
@@ -64,6 +64,8 @@ BEGIN
 		INNER JOIN #CustListTemp b ON cs.CustID = b.CustID 
 
 		TRUNCATE TABLE #CustListTemp
+
+		WAITFOR DELAY '00:00:0.100'
 	END
 	
 	DROP TABLE #CustList
@@ -74,6 +76,7 @@ GO
 ------------------------------------------------------	
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 	DROP TABLE	#supers;
+
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
 
 DECLARE @target VARCHAR(20)
@@ -120,7 +123,5 @@ BEGIN
 			 @custid = @srecommend
 			,@maxcustid = @max_custid
 			,@target = @target
-			
-	waitfor delay '00:00:0.100'
 END
 GO
