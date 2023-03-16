@@ -98,6 +98,7 @@ FROM customer ci WITH (NOLOCK)
 WHERE ci.roleid = 4  
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND ci.custid <= @max_custid
+	AND site<>'789y'
 		
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
