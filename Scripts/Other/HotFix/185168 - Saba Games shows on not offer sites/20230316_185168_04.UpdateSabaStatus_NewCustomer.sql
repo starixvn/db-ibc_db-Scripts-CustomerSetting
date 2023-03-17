@@ -13,7 +13,7 @@ CREATE TABLE #Customer (CustID INT PRIMARY KEY CLUSTERED)
 
 DECLARE @max_custid INT, @bitmapOrder TINYINT
 
-SELECT @max_custid = 82027191
+SELECT @max_custid = xxx
 
 SET @bitmapOrder=21
 
