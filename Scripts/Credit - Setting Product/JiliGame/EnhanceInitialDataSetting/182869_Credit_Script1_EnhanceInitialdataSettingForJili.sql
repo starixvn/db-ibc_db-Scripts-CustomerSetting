@@ -5,7 +5,7 @@
 	DB: DBCUST/CUSTDB
 
 	Revisions:
-		- 20230308@Helios: Insert new Product profile for Jili Games [redmine:#182869]
+		- 20230308@Helios: Insert new Product profile for  Jili Games [redmine:#182869]
 */
 DECLARE @tmp_StakeLevel TABLE (StakeLevelID INT)  
 
