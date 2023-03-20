@@ -55,9 +55,18 @@ SET Child_DisplayOrder =  CASE WHEN SportType = 169 THEN 1
 								WHEN SportType = 222 THEN 3
 								WHEN SportType = 224 THEN 4
 								ELSE Child_DisplayOrder
+								END ,
+	DisplayOrder = CASE WHEN SettingType = 13 THEN 1 
+								WHEN SettingType = 8 THEN 2
+								WHEN SettingType = 23 THEN 3
+								WHEN SettingType = 18 THEN 4
+								WHEN SettingType = 22 THEN 5
+								ELSE DisplayOrder
 								END 
 FROM ProductSettingDetail_UAT ps WITH (ROWLOCK)
-WHERE ProductID = 44 AND SettingType IN (18,23,13)
+WHERE ProductID = 44 AND SettingType IN (18,23,13,22,8)
+
+
 /*
 
 SELECT *
@@ -65,8 +74,8 @@ FROM ProductSettingDetail ps WITH (NOLOCK)
 WHERE ProductID = 44 
 ORDER BY DisplayOrder, Child_DisplayOrder
 
-SELECT *
+SELECT DisplayOrder, Child_DisplayOrder,*
 FROM ProductSettingDetail_UAT ps WITH (NOLOCK)
 WHERE ProductID = 44 
-ORDER BY DisplayOrder, Child_DisplayOrder
+ORDER BY 1, 2
 */
