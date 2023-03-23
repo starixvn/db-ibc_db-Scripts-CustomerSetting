@@ -110,7 +110,7 @@ BEGIN
 	DELETE #tmp
 	
 	INSERT INTO #tmp(custid)
-	SELECT c.CustID
+	SELECT DISTINCT c.CustID
 	FROM Dep_CustSettingMode c WITH (NOLOCK)
 		INNER JOIN #tblCust t ON c.CustID = t.CustID
 		CROSS APPLY (SELECT Sporttype, Bettype
