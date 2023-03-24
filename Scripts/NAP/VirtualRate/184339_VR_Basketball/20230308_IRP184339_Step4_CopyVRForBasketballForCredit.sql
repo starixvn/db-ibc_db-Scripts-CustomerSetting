@@ -35,15 +35,20 @@ BEGIN
 								);
 								
 	DECLARE @VR_HDP SMALLMONEY
-
-	SELECT @VR_HDP =  dbo.f_GetVirtualSetting(cvs.bitmapVirtual, pvs.profileID) 
-    FROM        CustVirtualSetting    AS cvs WITH(NOLOCK)
-    INNER JOIN  ProfileVirtualSetting       AS pvs WITH(NOLOCK)
-            ON  cvs.seqNo = pvs.seqNo
-    WHERE cvs.custid = @srecommend	
-		AND Sporttype = 1
-		AND Bettype = 1
-		AND IsLive = 1
+	
+	IF @srecommend IN (3800272,26393456,1575555,39583203,13864417,4802250,11674017,51266705,840993,398437)
+		SELECT @VR_HDP = 1 -- 0%
+	ELSE IF @srecommend IN (13744152)
+		SELECT @VR_HDP = 0.1 -- -90%
+	ELSE
+		SELECT @VR_HDP =  dbo.f_GetVirtualSetting(cvs.bitmapVirtual, pvs.profileID) 
+		FROM        CustVirtualSetting    AS cvs WITH(NOLOCK)
+		INNER JOIN  ProfileVirtualSetting       AS pvs WITH(NOLOCK)
+				ON  cvs.seqNo = pvs.seqNo
+		WHERE cvs.custid = @srecommend	
+			AND Sporttype = 1
+			AND Bettype = 1
+			AND IsLive = 1
 	
 	INSERT INTO @tblVirtualrate(SportType,Bettype,IsLive,VirtualMultiplier)
 	SELECT SportType,Bettype,IsLive, @VR_HDP
