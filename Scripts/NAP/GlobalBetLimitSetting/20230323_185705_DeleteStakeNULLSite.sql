@@ -1,4 +1,4 @@
-/*<info serverAliAS="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20230323@Tacy
 	Task: Delete - SiteID's Dep_StakeLevel is NULL
