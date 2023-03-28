@@ -7,5 +7,10 @@
 USE CustDB
 GO
 
-DELETE FROM Dep_StakeLevel WITH (ROWLOCK, UPDLOCK)
+DELETE sd
+FROM Dep_StakeLevelGroupDetail sd WITH (ROWLOCK)
+INNER JOIN Dep_StakeLevel s WITH (NOLOCK) ON sd.StakeLevelID=s.StakeLevelID
+WHERE s.SiteID IS NULL AND s.GameGroupID=0
+
+DELETE FROM Dep_StakeLevel WITH (ROWLOCK)
 WHERE SiteID IS NULL and GameGroupID=0
