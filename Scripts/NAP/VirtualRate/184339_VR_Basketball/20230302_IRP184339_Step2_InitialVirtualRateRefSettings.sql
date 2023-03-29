@@ -1,0 +1,42 @@
+/*<info serverAlias="DBTXN-bodb02"></info>*/
+/*
+	Created: 20230302@Johnson
+	Task: Add data for Sport_Bettype_Reference_VirtualRate [redmine: #184339]
+	DB: DBTXN/bodb02
+*/
+
+DELETE Sport_Bettype_Reference_VirtualRate WITH(ROWLOCK)
+WHERE SportType = 2
+GO
+
+INSERT INTO [dbo].[Sport_Bettype_Reference_VirtualRate]
+           ([SportType]
+           ,[BetType]
+           ,[SportTypeRefVirtualRate]
+           ,[BetTypeRefVirtualRate]
+           ,[isActive])
+SELECT 2,1,2,1,1
+UNION SELECT 2,609,2,1,1
+UNION SELECT 2,3,2,3,1
+UNION SELECT 2,401,2,3,1
+UNION SELECT 2,402,2,3,1
+UNION SELECT 2,610,2,3,1
+UNION SELECT 2,615,2,3,1
+UNION SELECT 2,616,2,3,1
+UNION SELECT 2,2,2,2,1
+UNION SELECT 2,611,2,2,1
+UNION SELECT 2,20,2,20,1
+UNION SELECT 2,613,2,20,1
+UNION SELECT 2,603,2,20,1
+UNION SELECT 2,604,2,20,1
+UNION SELECT 2,605,2,20,1
+UNION SELECT 2,612,2,20,1
+UNION SELECT 2,617,2,20,1	
+UNION SELECT 2,7,2,7,1	   
+UNION SELECT 2,8,2,8,1
+UNION SELECT 2,403,2,8,1
+UNION SELECT 2,404,2,8,1
+UNION SELECT 2,12,2,12,1
+UNION SELECT 2,21,2,21,1
+UNION SELECT 2,606,2,21,1
+UNION SELECT 2,607,2,21,1
