@@ -54,10 +54,9 @@ BEGIN
 
 	update bodb02.dbo.Systemsettings with(rowlock, updlock) set VValue = @status where VName = 'aa_Stmt_Status'
 
-	SELECT 
-		TOP 1 @to = winlostdate--balance-up date
-	FROM bodb02.dbo.transfer WITH(NOLOCK)
-	WHERE bettype = 20000 and custid = 3
+	 SELECT TOP 1 @to = CONVERT(SMALLDATETIME, VValue) --balance-up date  
+		FROM bodb02.dbo.MBUSettings  
+		WHERE VName = 'BalanceUpDate'  
 
 	--select @from, @to, @status
 
