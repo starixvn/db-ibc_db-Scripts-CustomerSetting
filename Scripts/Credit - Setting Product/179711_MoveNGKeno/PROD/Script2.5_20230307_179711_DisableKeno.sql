@@ -59,7 +59,11 @@ GO
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 	DROP TABLE	#supers;
 
-CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers (custid int)
+CREATE TABLE #CustTmp_DisabledKeno (custid int)
+CREATE TABLE #CustTmp_Batch (custid int)
+DECLARE @Batch INT = 50000
+DECLARE @CustIDs VARCHAR(MAX) = ''
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -73,13 +77,12 @@ WHERE ci.roleid = 4
 		AND cs.isinternal = 0
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
-		--AND ci.custid <= @max_custid
 		AND ci.Site<>'CN88'
 		AND ci.currency NOT IN (20,72)
 		AND c.Enabled = 1
-DECLARE @CustIDs VARCHAR(MAX) = ''
 
-SELECT @CustIDs = @CustIDs + CONVERT(VARCHAR(MAX),',' + CONVERT(VARCHAR(15),c.custid))
+INSERT INTO #CustTmp_DisabledKeno(custid)
+SELECT c.CustID
 FROM CustGameType c WITH(NOLOCK)
 	INNER JOIN custinfo Ci WITH(NOLOCK)
 		ON c.CustID = ci.custid 
@@ -88,8 +91,32 @@ WHERE c.GameTypeID = 1
 	AND ci.Enabled = 1
 	AND ci.srecommend IN( SELECT custid FROM #supers)
 
+WHILE (1=1)
+BEGIN
+	SELECT @CustIDs = ''
+	TRUNCATE TABLE #CustTmp_Batch
 
-EXEC dbo.Acc_DynamicCustomerInfo_09 
+	DELETE TOP (@Batch) t 
+	OUTPUT DELETED.CustID INTO #CustTmp_Batch(CustID) 
+	FROM #CustTmp_DisabledKeno t 
+
+	IF @@ROWCOUNT=0
+		BREAK
+
+	SELECT @CustIDs = @CustIDs + CONVERT(VARCHAR(MAX),',' + CONVERT(VARCHAR(15),c.custid))
+	FROM #CustTmp_Batch c
+	
+	EXEC dbo.Acc_DynamicCustomerInfo_09 
 			@CustIDs = @CustIDs
+END
+
+DROP TABLE #CustTmp_Batch
+DROP TABLE #CustTmp_DisabledKeno
+DROP TABLE #supers
+
+
+
+
+
 
 
