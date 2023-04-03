@@ -80,6 +80,7 @@ WHERE ci.roleid = 4
 		AND ci.Site<>'CN88'
 		AND ci.currency NOT IN (20,72)
 		AND c.Enabled = 1
+		AND c.HideKeno = 0
 
 INSERT INTO #CustTmp_DisabledKeno(custid)
 SELECT c.CustID
