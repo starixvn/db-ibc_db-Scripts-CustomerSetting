@@ -59,14 +59,14 @@ GO
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 	DROP TABLE	#supers;
 
-CREATE TABLE #supers (custid int)
+CREATE TABLE #supers (custid int PRIMARY KEY)
 CREATE TABLE #CustTmp_DisabledKeno (custid int)
 CREATE TABLE #CustTmp_Batch (custid int)
 DECLARE @Batch INT = 50000
 DECLARE @CustIDs VARCHAR(MAX) = ''
 
 INSERT INTO #supers(custid)
-SELECT ci.custid
+SELECT DISTINCT ci.custid
 FROM vw_customer ci WITH (NOLOCK) 
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
 	INNER JOIN custinfo C WITH(NOLOCK)

@@ -21,7 +21,7 @@ BEGIN
 	   )
 		RETURN
 
-	CREATE TABLE #supers (custid int)
+	CREATE TABLE #supers (custid int PRIMARY KEY)
 	CREATE TABLE #CustPTSetting3rd_Agent(CustID INT, SportType SMALLINT, BetType SMALLINT)
 	CREATE TABLE #CustPTSetting3rd_Member (CustID INT, SportType SMALLINT, BetType SMALLINT)
 	CREATE TABLE #CustPTGroupSetting3rd_Member (CustID INT, SportType SMALLINT, BetType SMALLINT)
@@ -35,7 +35,7 @@ BEGIN
 	SELECT 202, 1501 
 
 	INSERT INTO #supers(custid)
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM customer ci WITH (NOLOCK) 
 		INNER JOIN custinfo C WITH(NOLOCK) ON c.CustID = ci.custid 
 		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site

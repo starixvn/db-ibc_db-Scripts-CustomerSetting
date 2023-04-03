@@ -6,9 +6,9 @@
 */ 
 DECLARE @BatchSize INT = 5000
 
-CREATE TABLE #supers (custid int)
+CREATE TABLE #supers (custid int PRIMARY KEY)
 INSERT INTO #supers(custid)
-SELECT ci.custid
+SELECT DISTINCT ci.custid
 FROM customer ci WITH (NOLOCK) 
 	INNER JOIN custinfo C WITH(NOLOCK) ON c.CustID = ci.custid 
 	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
