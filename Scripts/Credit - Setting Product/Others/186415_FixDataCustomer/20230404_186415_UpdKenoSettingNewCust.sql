@@ -98,7 +98,7 @@
 		SET cs.isDisabled = CASE WHEN @Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #SMATempNew b ON cs.CustID = b.CustID
-		WHERE  GameTypeID BETWEEN 1 AND 31AND isDisabled = 1
+		WHERE  GameTypeID BETWEEN 1 AND 31AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
 		SET HideKeno = CASE WHEN @Rule_RNGKeno = 2 THEN 0 ELSE HideKeno END 
@@ -121,7 +121,7 @@
 		SET cs.isDisabled = CASE WHEN @Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #MemberTemp b ON cs.CustID = b.CustID
-		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 1
+		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
 		SET HideKeno = CASE WHEN @Rule_RNGKeno = 2 THEN 0 ELSE HideKeno END 
