@@ -49,8 +49,7 @@ BEGIN
 		SET cs.isDisabled = 1		
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #CustListTemp b ON cs.CustID = b.CustID
-		WHERE  GameTypeID BETWEEN 1 AND 31
-			AND isDisabled = 1
+		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		
 		TRUNCATE TABLE #CustListTemp
 	END
