@@ -90,6 +90,7 @@ FROM CustGameType c WITH(NOLOCK)
 WHERE c.GameTypeID = 1 
 	AND c.IsDisabled = 1
 	AND ci.Enabled = 1
+	AND ci.HideKeno = 0
 	AND ci.srecommend IN( SELECT custid FROM #supers)
 
 WHILE (1=1)
