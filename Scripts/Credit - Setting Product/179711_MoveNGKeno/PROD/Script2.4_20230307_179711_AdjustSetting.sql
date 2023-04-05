@@ -369,7 +369,7 @@ BEGIN
 		AND (isDisabledNG.value <> ci.DisableNumber 
 			OR isHiddenNG.value <> 0
 			OR SyncNG.value <> 1
-			OR isDisabledKN.value <> 0
+			OR isDisabledKN.value <> ci.HideKeno
 			OR isHiddenKN.value <> ci.HideKeno
 			OR SyncKN.value <> 1
 			)
