@@ -29,6 +29,7 @@ BEGIN
 	FROM dbo.custInfo ci WITH (NOLOCK)
 	WHERE ci.srecommend = @Custid
 		AND ci.Enabled = 1
+		AND ci.HideKeno = 1
 		AND ci.custid <= @maxcustid
 	
 	DECLARE @batch int = 3000
