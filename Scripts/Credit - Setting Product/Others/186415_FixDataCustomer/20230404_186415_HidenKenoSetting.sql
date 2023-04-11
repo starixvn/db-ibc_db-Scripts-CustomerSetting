@@ -62,6 +62,7 @@ GO
 IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
 	DROP TABLE	#supers;
 CREATE TABLE #supers (custid INT, isfinished BIT DEFAULT(0))
+CREATE TABLE #supers_missDis (custid INT PRIMARY KEY) --update hideKeno=1, miss update disabled=1
 
 DECLARE @target VARCHAR(20)
 IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
@@ -72,6 +73,22 @@ Print 'Server Name : ' + @target
 
 DECLARE @srecommend INT , @max_custid INT
 SELECT @max_custid = xxx
+
+INSERT INTO #supers_missDis(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND cs.isinternal = 0
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0
+		AND (  ( ci.Site IN ('611111') AND ci.currency IN (2,42))
+			OR ( ci.Site IN ('722222','733333') AND ci.currency IN (13))
+			OR ( ci.Site IN ('789y') AND ci.currency IN (2,6))
+			OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
+			OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -105,6 +122,7 @@ WHERE ISNULL(ca.groupid,0) NOT IN (
 	AND ci.currency IN (2,3,5,6,9,12,13,15,16,22,33,34,42,43,45,47,53,64,67,69)
 	AND ci.custid NOT IN (SELECT custid FROM Acc_CustDirect WITH(NOLOCK) WHERE roleid = 4) --super not dummy account
 	AND ci.username not like '3rdSuper%'  
+	AND ci.custid NOT IN (SELECT custid FROM #supers_missDis )
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -133,4 +151,5 @@ BEGIN
 	WAITFOR DELAY '00:00:0.100'
 END
 	DROP TABLE #supers
+	DROP TABLE #supers_missDis
 GO

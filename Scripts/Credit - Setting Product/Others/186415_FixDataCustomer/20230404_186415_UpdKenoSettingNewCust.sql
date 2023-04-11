@@ -70,18 +70,51 @@
 	SELECT custid, 2 AS Rule_RNGKeno from #supers_missHiden --update disabled=0 miss update hideKeno=0
 	UNION 
 	SELECT custid, 1 AS Rule_RNGKeno from #supers_missDis --update hideKeno=1, miss update disabled=1
+	UNION 
+	SELECT ci.custid, 3 AS Rule_RNGKeno --update hideKeno=0
+	FROM customer ci WITH (NOLOCK) 
+		INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = ci.custid
+		INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+		INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+	WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND ci.site IN ('789y')
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0
+		AND Enabled = 1 
 		
 	INSERT INTO #Member (CustID , Rule_RNGKeno)
 	SELECT c.custid , s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1,2)
 	WHERE roleid = 1  AND Enabled = 1 AND c.custid > @max_custid
-	
+	UNION
+	SELECT c.custid , s.Rule_RNGKeno
+	FROM Custinfo c WITH (NOLOCK)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno =3
+		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = c.custid
+	WHERE roleid = 1  AND Enabled = 1 AND c.custid > @max_custid
+		AND c.HideKeno = 1
+		AND Enabled = 1 
+		AND cs.IsDisabled = 0
+		AND cs.GameTypeID BETWEEN 1 AND 99
+
+
 	INSERT INTO #SMATemp (CustID, Rule_RNGKeno)
 	SELECT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1,2)
 	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
+	UNION
+	SELECT c.custid, s.Rule_RNGKeno
+	FROM Custinfo c WITH (NOLOCK)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (3)
+		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = c.custid
+	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
+		AND c.HideKeno = 1
+		AND Enabled = 1 
+		AND cs.IsDisabled = 0
+		AND cs.GameTypeID BETWEEN 1 AND 99
 
 	DECLARE @batch int = 3000
 
@@ -101,7 +134,7 @@
 		WHERE  GameTypeID BETWEEN 1 AND 31AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
-		SET HideKeno = CASE WHEN @Rule_RNGKeno = 2 THEN 0 ELSE HideKeno END 
+		SET HideKeno = CASE WHEN @Rule_RNGKeno IN (2,3) THEN 0 ELSE HideKeno END 
 		FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #SMATempNew b ON g.CustID = b.CustID 
 
@@ -124,7 +157,7 @@
 		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
-		SET HideKeno = CASE WHEN @Rule_RNGKeno = 2 THEN 0 ELSE HideKeno END 
+		SET HideKeno = CASE WHEN @Rule_RNGKeno  IN (2,3) THEN 0 ELSE HideKeno END 
 		FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #MemberTemp b ON g.CustID = b.CustID 
 
@@ -136,3 +169,5 @@
 	DROP TABLE #supers
 	DROP TABLE #MemberTemp
 	DROP TABLE #SMATempNew
+	DROP TABLE #supers_missHiden
+	DROP TABLE #supers_missDis
