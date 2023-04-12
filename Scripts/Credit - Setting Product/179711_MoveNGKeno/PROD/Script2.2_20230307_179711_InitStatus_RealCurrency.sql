@@ -27,7 +27,7 @@ BEGIN
 	/**************************************************************/	
 	DECLARE @BitmapOrder_NG TINYINT = 41
 	DECLARE @BitmapOrder_KN TINYINT = 40
-	DECLARE @BatchNum INT = 5000
+	DECLARE @BatchNum INT = 2500
 
 	CREATE TABLE #CustTemp(CustID INT, DisableNumber BIT, HideKeno BIT, Isfinished BIT default 0)
 	CREATE TABLE #CustTempBatch(CustID INT, DisableNumber BIT, HideKeno BIT)
