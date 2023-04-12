@@ -90,7 +90,7 @@
 	--SELECT * FROM #CustBetSetting3rd_Agent
 	--SELECT * FROm #CustBetSetting3rd_Member
 
-	DECLARE @BatchNum INT = 5000
+	DECLARE @BatchNum INT = 2500
 
 	-----------------Delete Setting-------------------
 	--PT
