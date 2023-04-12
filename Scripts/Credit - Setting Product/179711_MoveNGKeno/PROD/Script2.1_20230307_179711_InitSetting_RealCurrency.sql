@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20230314@Eden
-	Task: Initialize Setting for NG and Keno - UUS [Redmine: #179711]
+	Task: Initialize Setting for NG and Keno - Real Currency [Redmine: #179711]
 	DB: DBCUST/CustDB AND all replicated server of CustDB_CustSetting publication
 */ 
 ALTER PROCEDURE [dbo].Acc_DynamicCustSetting3rd_09
@@ -90,6 +90,18 @@ BEGIN
 		INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN custOverride3rd o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
 
+	--SMA Bet Setting - Keno
+	INSERT INTO CustBetSetting3rd_Agent (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+	SELECT c.custid
+		,s.tSportType
+		,s.tBetType
+		,c.MinBet
+		,c.MaxBet
+		,c.MaxPerGameType
+	FROM dbo.CustGameType C WITH(NOLOCK) 
+		INNER JOIN #SMATemp ci ON ci.custid = C.custid
+		INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
+
 	--SMA PT - Keno
 	INSERT INTO dbo.CustPTSetting3rd_Agent
 		(	[CustID]
@@ -123,18 +135,6 @@ BEGIN
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
 		INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN CustOverrideGame o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
-
-	--SMA Bet Setting - Keno
-	INSERT INTO CustBetSetting3rd_Agent (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
-	SELECT c.custid
-		,s.tSportType
-		,s.tBetType
-		,c.MinBet
-		,c.MaxBet
-		,c.MaxPerGameType
-	FROM dbo.CustGameType C WITH(NOLOCK) 
-		INNER JOIN #SMATemp ci ON ci.custid = C.custid
-		INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
 
 	
 	---------------------MEMBER LEVEL-----------------------------
@@ -178,6 +178,18 @@ BEGIN
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
 			INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 
+		--Member Bet Setting - Keno
+		INSERT INTO CustBetSetting3rd_Member (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
+		SELECT c.custid
+			,s.tSportType
+			,s.tBetType
+			,c.MinBet
+			,c.MaxBet
+			,c.MaxPerGameType
+		FROM dbo.CustGameType C WITH(NOLOCK) 
+			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
+			INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
+
 		--Member PT - Keno
 		INSERT INTO dbo.CustPTSetting3rd_Member
 			(	[custid]
@@ -206,18 +218,6 @@ BEGIN
 		FROM CustSettingGame C WITH(NOLOCK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
 			INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
-
-		--Member Bet Setting - Keno
-		INSERT INTO CustBetSetting3rd_Member (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
-		SELECT c.custid
-			,s.tSportType
-			,s.tBetType
-			,c.MinBet
-			,c.MaxBet
-			,c.MaxPerGameType
-		FROM dbo.CustGameType C WITH(NOLOCK) 
-			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
-			INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
 
 	END
 
