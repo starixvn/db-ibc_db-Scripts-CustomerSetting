@@ -237,7 +237,7 @@
 		,C.autolivepositiontaking * 100
 		,o.minlivepositiontaking * 100
 		,100 AS MAXPT
-	FROM dbo.CustSetting3rd C WITH(NOLOCK) 
+	FROM dbo.CustSetting3rd C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN custOverride3rd o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
@@ -267,7 +267,7 @@
 		,C.autolivempositiontaking * 100
 		,C.isautolivepositiontaking
 		,C.autolivepositiontaking * 100
-	FROM CustSetting3rd C WITH(NOLOCK) 
+	FROM CustSetting3rd C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #MemberTemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 
@@ -300,7 +300,7 @@
 		,C.autopositiontaking * 100
 		,o.minpositiontaking * 100
 		,100 AS MAXPT
-	FROM dbo.CustSettingGame C WITH(NOLOCK) 
+	FROM dbo.CustSettingGame C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN CustOverrideGame o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
@@ -330,7 +330,7 @@
 		,C.autompositiontaking * 100
 		,C.isautopositiontaking
 		,C.autopositiontaking * 100
-	FROM CustSettingGame C WITH(NOLOCK) 
+	FROM CustSettingGame C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #MemberTemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 
@@ -343,7 +343,7 @@
 		,c.MinBet
 		,c.MaxBet
 		,c.MaxPerGameType
-	FROM dbo.CustGameType C WITH(NOLOCK) 
+	FROM dbo.CustGameType C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
 
@@ -355,7 +355,7 @@
 		,c.MinBet
 		,c.MaxBet
 		,c.MaxPerGameType
-	FROM dbo.CustGameType C WITH(NOLOCK) 
+	FROM dbo.CustGameType C WITH(NOLOCK,FORCESEEK) 
 		INNER JOIN #MemberTemp ci ON ci.custid = C.custid
 		INNER JOIN #InitSportBettype s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
 
