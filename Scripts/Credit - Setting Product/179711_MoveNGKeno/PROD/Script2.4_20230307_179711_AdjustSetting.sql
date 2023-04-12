@@ -4,7 +4,7 @@
 	Task: Adjust Setting [Redmine: #179711]
 	DB: DBCUST/CustDB
 */ 
-DECLARE @BatchSize INT = 5000
+DECLARE @BatchSize INT = 2500
 
 CREATE TABLE #supers (custid int PRIMARY KEY)
 INSERT INTO #supers(custid)
