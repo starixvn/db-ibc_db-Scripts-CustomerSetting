@@ -166,7 +166,7 @@ BEGIN
 			,C.autolivempositiontaking * 100
 			,C.isautolivepositiontaking
 			,C.autolivepositiontaking * 100
-		FROM CustSetting3rd C WITH(NOLOCK,FORCESEEK) 
+		FROM CustSetting3rd C WITH(NOLOCK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
 		WHERE c.sporttype = 161 AND c.bettype = 85
 
@@ -178,7 +178,7 @@ BEGIN
 			,c.MinBet
 			,c.MaxBet
 			,c.MaxPerGameType
-		FROM dbo.CustGameType C WITH(NOLOCK,FORCESEEK) 
+		FROM dbo.CustGameType C WITH(NOLOCK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
 		WHERE c.GameTypeID = 1
 
@@ -207,7 +207,7 @@ BEGIN
 			,C.autompositiontaking * 100
 			,C.isautopositiontaking
 			,C.autopositiontaking * 100
-		FROM CustSettingGame C WITH(NOLOCK,FORCESEEK) 
+		FROM CustSettingGame C WITH(NOLOCK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
 		WHERE c.sporttype = 202 AND c.bettype = 1501
 
