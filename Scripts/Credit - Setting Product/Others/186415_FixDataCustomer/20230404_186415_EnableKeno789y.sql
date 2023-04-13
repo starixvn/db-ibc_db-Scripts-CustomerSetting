@@ -21,13 +21,12 @@ BEGIN
 	CREATE TABLE #DownlineTemp
 	(
 		CustID INT,
-		GameTypeID INT,
 		IsFinishedStatus BIT DEFAULT(0)
 	)	
 	
 	CREATE CLUSTERED INDEX CIX_DownlineTemp ON #DownlineTemp (CustID)
 
-	INSERT INTO #DownlineTemp (CustID, GameTypeID)
+	INSERT INTO #DownlineTemp (CustID)
 	SELECT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
