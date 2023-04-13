@@ -32,15 +32,7 @@ BEGIN
 	   )
 		RETURN
 
-	CREATE TABLE #SportBetType(fSportType SMALLINT, fBetType SMALLINT, tSportType SMALLINT, tBetType SMALLINT, SettingType TINYINT,GameTypeID INT)
-	INSERT INTO #SportBetType(fSportType,fBetType,tSportType,tBetType,SettingType,GameTypeID)
-	--PT
-	SELECT 161, 85, 161, 81, 1, NULL UNION ALL
-	SELECT 202, 1501, 202, 1501, 1, NULL UNION ALL
-	--Bet Setting
-	SELECT 202, 1501, 202, 1501, 2, 1
-
-	DECLARE @batchNum INT = 5000
+	DECLARE @batchNum INT = 4000
 	CREATE TABLE #MemberTemp(CustID INT PRIMARY KEY CLUSTERED)
 	CREATE TABLE #MemberTempbatch(CustID INT)
 	CREATE TABLE #SMATemp(CustID INT PRIMARY KEY CLUSTERED, roleid TINYINT)
@@ -73,8 +65,8 @@ BEGIN
 			,[MaxPT])
 	SELECT 
 		C.custid
-		,s.tSportType
-		,s.tBetType
+		,161 AS [SportType]
+		,81 AS [BetType]
 		,0 AS IsLive
 		,C.slivepositiontaking * 100
 		,C.mlivepositiontaking * 100
@@ -85,22 +77,22 @@ BEGIN
 		,C.autolivepositiontaking * 100
 		,o.minlivepositiontaking * 100
 		,100 AS MAXPT
-	FROM dbo.CustSetting3rd C WITH(NOLOCK,FORCESEEK) 
+	FROM dbo.CustSetting3rd C WITH(NOLOCK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
-		INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN custOverride3rd o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
+	WHERE c.sporttype = 161 AND c.bettype = 85
 
 	--SMA Bet Setting - Keno
 	INSERT INTO CustBetSetting3rd_Agent (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
 	SELECT c.custid
-		,s.tSportType
-		,s.tBetType
+		,202 AS [SportType]
+		,1501 AS [BetType]
 		,c.MinBet
 		,c.MaxBet
 		,c.MaxPerGameType
-	FROM dbo.CustGameType C WITH(NOLOCK,FORCESEEK) 
+	FROM dbo.CustGameType C WITH(NOLOCK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
-		INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
+	WHERE c.GameTypeID = 1
 
 	--SMA PT - Keno
 	INSERT INTO dbo.CustPTSetting3rd_Agent
@@ -119,8 +111,8 @@ BEGIN
 			,[MaxPT])
 	SELECT 
 		C.custid
-		,s.tSportType
-		,s.tBetType
+		,202 AS [SportType]
+		,1501 AS [BetType]
 		,0 AS IsLive
 		,C.spositiontaking * 100
 		,C.mpositiontaking * 100
@@ -131,10 +123,10 @@ BEGIN
 		,C.autopositiontaking * 100
 		,o.minpositiontaking * 100
 		,100 AS MAXPT
-	FROM dbo.CustSettingGame C WITH(NOLOCK,FORCESEEK) 
+	FROM dbo.CustSettingGame C WITH(NOLOCK) 
 		INNER JOIN #SMATemp ci ON ci.custid = C.custid
-		INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
 		INNER JOIN CustOverrideGame o WITH(NOLOCK) ON c.custid = o.custid AND c.sporttype = o.sporttype AND c.bettype = o.bettype
+	WHERE c.sporttype = 202 AND c.bettype = 1501
 
 	
 	---------------------MEMBER LEVEL-----------------------------
@@ -164,8 +156,8 @@ BEGIN
 				,	[AutoSuperPT])
 		SELECT 
 			C.custid
-			,s.tSportType
-			,s.tBetType
+			,161 AS [SportType]
+			,81 AS [BetType]
 			,0 AS IsLive
 			,C.slivepositiontaking * 100
 			,C.mlivepositiontaking * 100
@@ -176,19 +168,19 @@ BEGIN
 			,C.autolivepositiontaking * 100
 		FROM CustSetting3rd C WITH(NOLOCK,FORCESEEK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
-			INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
+		WHERE c.sporttype = 161 AND c.bettype = 85
 
 		--Member Bet Setting - Keno
 		INSERT INTO CustBetSetting3rd_Member (CustID,SportType,BetType,MinBet,MaxBet,MaxPerMatch)
 		SELECT c.custid
-			,s.tSportType
-			,s.tBetType
+			,202 AS [SportType]
+			,1501 AS [BetType]
 			,c.MinBet
 			,c.MaxBet
 			,c.MaxPerGameType
 		FROM dbo.CustGameType C WITH(NOLOCK,FORCESEEK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
-			INNER JOIN #SportBetType s ON c.GameTypeID = s.GameTypeID AND s.SettingType = 2
+		WHERE c.GameTypeID = 1
 
 		--Member PT - Keno
 		INSERT INTO dbo.CustPTSetting3rd_Member
@@ -205,8 +197,8 @@ BEGIN
 				,	[AutoSuperPT])
 		SELECT 
 			C.custid
-			,s.tSportType
-			,s.tBetType
+			,202 AS [SportType]
+			,1501 AS [BetType]
 			,0 AS IsLive
 			,C.spositiontaking * 100
 			,C.mpositiontaking * 100
@@ -217,14 +209,13 @@ BEGIN
 			,C.autopositiontaking * 100
 		FROM CustSettingGame C WITH(NOLOCK,FORCESEEK) 
 			INNER JOIN #MemberTempBatch ci ON ci.custid = C.custid
-			INNER JOIN #SportBetType s ON c.SportType = s.fSportType AND c.bettype = s.fBetType AND s.SettingType = 1
+		WHERE c.sporttype = 202 AND c.bettype = 1501
 
 	END
 
 	DROP TABLE #MemberTemp
 	DROP TABLE #MemberTempbatch
 	DROP TABLE #SMATemp
-	DROP TABLE #SportBetType
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
