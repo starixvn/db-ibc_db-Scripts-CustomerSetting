@@ -220,6 +220,6 @@ BEGIN
 		,@target = @target
 			
 			
-	waitfor delay '00:00:0.280'
+	WAITFOR DELAY '00:00:00.050'
 END
 GO

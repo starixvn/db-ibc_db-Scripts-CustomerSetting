@@ -110,6 +110,8 @@ BEGIN
 	
 	EXEC dbo.Acc_DynamicCustomerInfo_09 
 			@CustIDs = @CustIDs
+
+	WAITFOR DELAY '00:00:00.050'
 END
 
 DROP TABLE #CustTmp_Batch
