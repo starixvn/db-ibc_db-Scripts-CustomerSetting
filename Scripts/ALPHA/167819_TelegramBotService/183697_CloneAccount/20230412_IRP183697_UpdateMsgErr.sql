@@ -21,3 +21,4 @@ SET
 	MsgNameVI = t.MsgNameVI
 FROM  MsgError msg WITH (UPDLOCK)
 	INNER JOIN T ON msg.MsgID = t.MsgID
+	
