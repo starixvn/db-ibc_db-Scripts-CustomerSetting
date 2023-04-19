@@ -21,7 +21,7 @@ CREATE TABLE #Cust_NonHeadline_batch (
 INSERT INTO #Cust_NonHeadline (custid, roleid)
 SELECT c.custid, c.roleid
 FROM customer c WITH (NOLOCK)				INNER JOIN custinfo cu WITH (NOLOCK) ON cu.custid=c.custid		
-WHERE c.site='789y'					AND c.currency<>20				
+WHERE c.site='789y'					AND c.currency<>20				
 WHILE (1 = 1)
 BEGIN
 	TRUNCATE TABLE #Cust_NonHeadline_batch
