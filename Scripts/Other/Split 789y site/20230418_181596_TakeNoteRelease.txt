@@ -1,0 +1,23 @@
+/*
+	Created: 20230418@Tacy
+	Task: take note step release
+*/ 
+--Start at 8.00 AM
+01. Main DB: Update customers' site --> max_custid=86316394
+	- Exists customers : DBCust ~ 38 mins;  replicated server ~ 41 mins
+	- New customers (run in UM) (this script is bugged when getting all headlines' with condition: site = 789y, so 11 new members and 2 new agents don't have new sub-site)
+	- Customers don't belong to any headlines (run in UM)
+02. CRM db: Update customers' site ~ 10s
+03. Inactive and rename site: 789y --> 789y (old) [main db, crm db]
+  & Update SiteId on EaGroupHeadline
+04. Main DB: update the rest of the UUS customers' site
+05. Main DB: correct site for 11 new members (step 01) 
+06. Delete data from some of the global setting tables for old site 789y (siteid=3):
+        - GameLaunchPerSite
+        - PlayCurrencySetting
+        - VRSettingRuleDetail
+        
+        - ProductLaunchedSiteCurrency
+        - ProductStatusSiteCurrency
+        - SportNonOfferedSiteCurrency
+        - WinLimit_ProductSettingDetail
