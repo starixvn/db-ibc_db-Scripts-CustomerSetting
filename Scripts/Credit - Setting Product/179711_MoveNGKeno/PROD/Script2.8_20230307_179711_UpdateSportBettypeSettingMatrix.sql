@@ -10,8 +10,8 @@ GO
 UPDATE t 
 SET t.SportTypeRefPT = 161,
 	t.BetTypeRefPT = 81,
-	TablePT = 'CustPTSetting3rd_Member',
-	StructureVerPT = 'DCS'
+	t.isLivePT = 0,
+	TablePT = 'CustPTSetting3rd_Member'
 FROM SportBettypeSettingMatrix t WITH(ROWLOCK,UPDLOCK) 
 WHERE sporttype IN(161,164,168)
 	AND isLicensee = 0 
@@ -20,12 +20,11 @@ WHERE sporttype IN(161,164,168)
 UPDATE t 
 SET t.SportTypeRefPT = 202,
 	t.BetTypeRefPT = 1501,
+	t.isLivePT = 0,
 	TablePT = 'CustPTSetting3rd_Member',
-	StructureVerPT = 'DCS',
 	SportTypeRefBetSetting = 202,
 	BetTypeRefBetSetting = 1501,
-	TableBetSetting = 'CustBetSetting3rd_Member',
-	StructureVerBetSetting = 'DCS'
+	TableBetSetting = 'CustBetSetting3rd_Member'
 FROM SportBettypeSettingMatrix t WITH(ROWLOCK,UPDLOCK) 
 WHERE sporttype IN(202)
 	AND isLicensee = 0 
