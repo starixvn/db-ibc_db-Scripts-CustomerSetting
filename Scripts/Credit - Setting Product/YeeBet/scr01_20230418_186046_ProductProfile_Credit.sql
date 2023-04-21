@@ -27,7 +27,7 @@ VALUES
 (13, @Sporttype, @Bettype, 0, 41, NULL, NULL, 1, 0, 0, 2, 1, 1, NULL, 76, NULL, 245, NULL, 2, NULL) --Product Status
 INSERT INTO ProductSettingDetail(SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, ProductSettingID, Parent_ProductSettingID, Child_DisplayOrder, SubType)
 VALUES
-(7, @Sporttype, @Bettype, 0, 41, NULL, NULL, NULL, NULL, NULL, 2, 6, 1, NULL, 76, 3, 246, NULL, NULL, NULL) --Stake Level
+(7, @Sporttype, @Bettype, 0, 41, NULL, NULL, NULL, NULL, NULL, 2, 6, 1, NULL, 76, NULL, 246, NULL, NULL, NULL) --Stake Level
 INSERT INTO ProductSettingDetail(SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, ProductSettingID, Parent_ProductSettingID, Child_DisplayOrder, SubType)
 VALUES
 (18, @Sporttype, @Bettype, 0, 41, 90, NULL, NULL, NULL, NULL, 2, 3, 1, NULL, 76, NULL, 247, NULL, NULL, NULL) --Position Taking
