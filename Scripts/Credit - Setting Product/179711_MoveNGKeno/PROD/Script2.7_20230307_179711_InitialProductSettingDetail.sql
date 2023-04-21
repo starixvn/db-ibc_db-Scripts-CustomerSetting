@@ -6,6 +6,11 @@
 */
 USE CustDB
 GO
+--Backup table (for rollback plan)
+IF	OBJECT_ID('ProductSettingDetail_BU_179711') IS NULL
+	SELECT * 
+	INTO ProductSettingDetail_BU_179711
+	FROM ProductSettingDetail WITH(NOLOCK)
 
 DECLARE @SettingStatus TINYINT = 0
 
