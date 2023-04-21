@@ -33,7 +33,7 @@ VALUES
 (18, @Sporttype, @Bettype, 0, 41, 90, NULL, NULL, NULL, NULL, 2, 3, 1, NULL, 76, NULL, 247, NULL, NULL, NULL) --Position Taking
 INSERT INTO ProductSettingDetail(SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, ProductSettingID, Parent_ProductSettingID, Child_DisplayOrder, SubType)
 VALUES
-(19, @Sporttype, @Bettype, 0, 41, NULL, 0.05, NULL, NULL, NULL, 2, 2, 1, 0.0005, 76, NULL, 248, NULL, NULL, NULL) --Commission
+(19, @Sporttype, @Bettype, 0, 41, NULL, 0.005, NULL, NULL, NULL, 2, 2, 1, 0.0005, 76, NULL, 248, NULL, NULL, NULL) --Commission
 
 --ProductStatusProfile
 DELETE psp
