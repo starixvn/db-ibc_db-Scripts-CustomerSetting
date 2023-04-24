@@ -91,7 +91,7 @@ FROM customer ci WITH (NOLOCK)
 	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 WHERE ci.roleid = 4  
 	AND ci.username NOT LIKE '3rdSuper%'
-	AND ci.site IN ('789y')
+	AND ci.site IN ('y789','y889','yOther','yUT')
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
 	AND ci.currency <> 20

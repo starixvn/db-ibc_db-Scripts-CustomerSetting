@@ -87,7 +87,7 @@ WHERE ci.roleid = 4
 		AND s.islicensee = 0
 		AND (  ( ci.Site IN ('611111') AND ci.currency IN (2,42))
 			OR ( ci.Site IN ('722222','733333') AND ci.currency IN (13))
-			OR ( ci.Site IN ('789y') AND ci.currency IN (2,6))
+			OR ( ci.Site IN ('y789','y889','yOther','yUT') AND ci.currency IN (2,6))
 			OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
 			OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 		

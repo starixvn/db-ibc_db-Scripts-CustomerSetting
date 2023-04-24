@@ -45,7 +45,7 @@
 							)
 		AND NOT EXISTS (SELECT 1 FROM CustSuper s WITH(NOLOCK) WHERE ci.custid = s.custid AND isInternal = 1)					
 		AND c.enabled = 1
-		AND ci.site NOT IN ('789y')
+		AND ci.site NOT IN ('y789','y889','yOther','yUT')
 		AND ci.currency IN (2,3,5,6,9,12,13,15,16,22,33,34,42,43,45,47,53,64,67,69)
 		AND ci.custid NOT IN (SELECT custid FROM Acc_CustDirect WITH(NOLOCK) WHERE roleid = 4) --super not dummy account
 		AND ci.username not like '3rdSuper%'  
@@ -62,7 +62,7 @@
 			AND s.islicensee = 0
 			AND (  ( ci.Site IN ('611111') AND ci.currency IN (2,42))
 				OR ( ci.Site IN ('722222','733333') AND ci.currency IN (13))
-				OR ( ci.Site IN ('789y') AND ci.currency IN (2,6))
+				OR ( ci.Site IN ('y789','y889','yOther','yUT') AND ci.currency IN (2,6))
 				OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
 				OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 
@@ -78,7 +78,7 @@
 		INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.roleid = 4  
 		AND ci.username NOT LIKE '3rdSuper%'
-		AND ci.site IN ('789y')
+		AND ci.site IN ('y789','y889','yOther','yUT')
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND Enabled = 1 
