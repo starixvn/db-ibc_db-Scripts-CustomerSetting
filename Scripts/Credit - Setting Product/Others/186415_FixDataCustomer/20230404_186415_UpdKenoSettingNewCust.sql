@@ -86,6 +86,7 @@
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND Enabled = 1 
+		AND ci.currency <> 20
 		AND ci.custid NOT IN (SELECT custid FROM #supers_missDis )
 		
 	INSERT INTO #Member (CustID , Rule_RNGKeno)
