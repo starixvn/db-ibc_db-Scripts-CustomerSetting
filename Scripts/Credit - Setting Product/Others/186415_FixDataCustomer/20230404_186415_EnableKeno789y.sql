@@ -27,7 +27,7 @@ BEGIN
 	CREATE CLUSTERED INDEX CIX_DownlineTemp ON #DownlineTemp (CustID)
 
 	INSERT INTO #DownlineTemp (CustID)
-	SELECT ci.custid
+	SELECT DISTINCT ci.custid
 	FROM Custinfo ci WITH (NOLOCK)
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
 	WHERE srecommend = @srecommend
@@ -94,6 +94,7 @@ WHERE ci.roleid = 4
 	AND ci.site IN ('789y')
 	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.islicensee = 0
+	AND ci.currency <> 20
 	AND Enabled = 1 
 
 -- For deployer info
