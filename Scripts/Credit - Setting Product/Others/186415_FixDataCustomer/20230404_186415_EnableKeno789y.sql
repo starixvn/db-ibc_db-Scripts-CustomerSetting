@@ -82,6 +82,23 @@ ELSE
 Print 'Server Name : ' + @target
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
+CREATE TABLE #supers_missDis (custid INT PRIMARY KEY) --update hideKeno=1, miss update disabled=1
+
+INSERT INTO #supers_missDis(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND cs.isinternal = 0
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0
+		AND (  ( ci.Site IN ('611111') AND ci.currency IN (2,42))
+			OR ( ci.Site IN ('722222','733333') AND ci.currency IN (13))
+			OR ( ci.Site IN ('y789','y889','yOther','yUT') AND ci.currency IN (2,6))
+			OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
+			OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 
 INSERT INTO #supers(custid)
 SELECT ci.custid
@@ -96,6 +113,7 @@ WHERE ci.roleid = 4
 	AND s.islicensee = 0
 	AND ci.currency <> 20
 	AND Enabled = 1 
+		AND ci.custid NOT IN (SELECT custid FROM #supers_missDis )
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
@@ -127,6 +145,7 @@ END
 
 --Drop all temp tables
 DROP TABLE #supers
+DROP TABLE #supers_missDis
 GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----

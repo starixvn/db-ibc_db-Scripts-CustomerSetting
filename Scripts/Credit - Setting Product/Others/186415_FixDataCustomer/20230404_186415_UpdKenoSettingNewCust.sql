@@ -66,11 +66,15 @@
 				OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
 				OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 
-	INSERT INTO #supers(custid,Rule_RNGKeno)
-	SELECT custid, 2 AS Rule_RNGKeno from #supers_missHiden --update disabled=0 miss update hideKeno=0
-	UNION 
+	INSERT INTO #supers(custid,Rule_RNGKeno) 
 	SELECT custid, 1 AS Rule_RNGKeno from #supers_missDis --update hideKeno=1, miss update disabled=1
-	UNION 
+
+	INSERT INTO #supers(custid,Rule_RNGKeno)
+	SELECT custid, 2 AS Rule_RNGKeno 
+	from #supers_missHiden --update disabled=0 miss update hideKeno=0
+	WHERE custid NOT IN (SELECT custid FROM #supers_missDis )
+	
+	INSERT INTO #supers(custid,Rule_RNGKeno)
 	SELECT ci.custid, 3 AS Rule_RNGKeno --update hideKeno=0
 	FROM customer ci WITH (NOLOCK) 
 		INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = ci.custid
@@ -82,6 +86,7 @@
 		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 		AND s.islicensee = 0
 		AND Enabled = 1 
+		AND ci.custid NOT IN (SELECT custid FROM #supers )
 		
 	INSERT INTO #Member (CustID , Rule_RNGKeno)
 	SELECT c.custid , s.Rule_RNGKeno
