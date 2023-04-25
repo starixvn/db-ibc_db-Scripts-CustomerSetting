@@ -92,12 +92,17 @@
 	INSERT INTO #Member (CustID , Rule_RNGKeno)
 	SELECT c.custid , s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1,2)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 1
 	WHERE roleid = 1  AND Enabled = 1 AND c.custid > @max_custid
+	UNION
+	SELECT c.custid , s.Rule_RNGKeno
+	FROM Custinfo c WITH (NOLOCK)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 2
+	WHERE roleid = 1  AND Enabled = 1 AND c.HideKeno = 1 AND c.custid > @max_custid
 	UNION
 	SELECT DISTINCT c.custid , s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno =3
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 3
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = c.custid
 	WHERE roleid = 1  AND Enabled = 1 AND c.custid > @max_custid
 		AND c.HideKeno = 1
@@ -109,18 +114,18 @@
 	INSERT INTO #SMATemp (CustID, Rule_RNGKeno)
 	SELECT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 1
 	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
 	UNION
 	SELECT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (2)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 2
 	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
 		AND c.HideKeno = 1
 	UNION
 	SELECT DISTINCT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (3)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno = 3
 		INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = c.custid
 	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
 		AND c.HideKeno = 1
