@@ -109,8 +109,14 @@
 	INSERT INTO #SMATemp (CustID, Rule_RNGKeno)
 	SELECT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
-		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1,2)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (1)
 	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
+	UNION
+	SELECT c.custid, s.Rule_RNGKeno
+	FROM Custinfo c WITH (NOLOCK)
+		INNER JOIN #supers s ON c.srecommend = s.custid AND s.Rule_RNGKeno IN (2)
+	WHERE c.roleid IN (2,3,4) AND Enabled = 1 AND c.custid > @max_custid 
+		AND c.HideKeno = 1
 	UNION
 	SELECT DISTINCT c.custid, s.Rule_RNGKeno
 	FROM Custinfo c WITH (NOLOCK)
@@ -137,7 +143,7 @@
 		SET cs.isDisabled = CASE WHEN @Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #SMATempNew b ON cs.CustID = b.CustID
-		WHERE  GameTypeID BETWEEN 1 AND 31AND isDisabled = 0
+		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
 		SET HideKeno = CASE WHEN @Rule_RNGKeno IN (2,3) THEN 0 ELSE HideKeno END 
