@@ -15,7 +15,7 @@
 	CREATE TABLE #SMATemp (	CustID INT PRIMARY KEY CLUSTERED, Rule_RNGKeno INT)
 	CREATE TABLE #SMATempNew (CustID INT PRIMARY KEY, Rule_RNGKeno INT)
 
-	DECLARE @srecommend INT , @Rule_RNGKeno INT, @max_custid INT
+	DECLARE @srecommend INT , @max_custid INT
 	SELECT @max_custid = xxx
 
 	INSERT INTO #supers_missHiden(custid)
@@ -145,13 +145,13 @@
 
 		--update hideKeno=1, miss update disabled=1 
 		UPDATE cs
-		SET cs.isDisabled = CASE WHEN @Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
+		SET cs.isDisabled = CASE WHEN Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #SMATempNew b ON cs.CustID = b.CustID
 		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
-		SET HideKeno = CASE WHEN @Rule_RNGKeno IN (2,3) THEN 0 ELSE HideKeno END 
+		SET HideKeno = CASE WHEN Rule_RNGKeno IN (2,3) THEN 0 ELSE HideKeno END 
 		FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #SMATempNew b ON g.CustID = b.CustID 
 
@@ -168,13 +168,13 @@
 
 		--update hideKeno=1, miss update disabled=1 
 		UPDATE cs
-		SET cs.isDisabled = CASE WHEN @Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
+		SET cs.isDisabled = CASE WHEN Rule_RNGKeno = 1 THEN 1 ELSE isDisabled END
 		FROM CustGameType cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #MemberTemp b ON cs.CustID = b.CustID
 		WHERE  GameTypeID BETWEEN 1 AND 31 AND isDisabled = 0
 		--update disabled=0 miss update hideKeno=0 
 		UPDATE g 
-		SET HideKeno = CASE WHEN @Rule_RNGKeno  IN (2,3) THEN 0 ELSE HideKeno END 
+		SET HideKeno = CASE WHEN Rule_RNGKeno  IN (2,3) THEN 0 ELSE HideKeno END 
 		FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN #MemberTemp b ON g.CustID = b.CustID 
 
