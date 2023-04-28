@@ -9,7 +9,6 @@
 ALTER PROCEDURE [dbo].[Acc_CustSetting3rd_19]
 	@Custid INT
 	,@maxcustid INT
-	,@Rule_RNGKeno INT
 	,@target VARCHAR(20)
 AS
 BEGIN
