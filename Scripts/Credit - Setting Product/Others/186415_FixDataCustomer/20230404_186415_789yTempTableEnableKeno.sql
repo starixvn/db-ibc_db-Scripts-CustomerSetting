@@ -7,7 +7,7 @@
 */ 
 DECLARE @max_custid INT, @srecommend INT
 
-SELECT @max_custid = 85339916
+SELECT @max_custid = xxx
 
 CREATE TABLE #supers (custid int,isfinished bit default(0))
 CREATE TABLE #supers_missDis (custid INT PRIMARY KEY) --update hideKeno=1, miss update disabled=1
