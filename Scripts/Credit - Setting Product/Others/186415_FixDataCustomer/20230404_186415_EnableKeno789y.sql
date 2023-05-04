@@ -5,106 +5,63 @@
 	Task: Enable Product Status for all disabled customers under 789y Headline - RedmineID: #124311
 	DB: DBCUST/CustDB
 */ 
---	Keno
-ALTER PROCEDURE [dbo].[Acc_DynamicCustomerInfo_09]
-	@CustIDs VARCHAR(MAX) 	= ''
-	,@target VARCHAR(20)
-AS
-BEGIN
-	SET NOCOUNT ON
+
+CREATE TABLE #supers (custid int)
+CREATE TABLE #supers_missDis (custid INT PRIMARY KEY) --update hideKeno=1, miss update disabled=1
+CREATE TABLE #DownlineTemp ( CustID INT)	
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbcust only
-	
-	CREATE TABLE #DownlineTemp ( 
-		CustID INT PRIMARY KEY, 
-		IsFinishedStatus BIT DEFAULT(0)
-	)	
-	
-	INSERT INTO #DownlineTemp(custid)	
-	SELECT VALUE AS RuleID 
-	FROM STRING_SPLIT(@CustIDs,',') WHERE VALUE <> ''
+CREATE CLUSTERED INDEX CIX_DownlineTemp ON #DownlineTemp (CustID)
 
-	----------------------------------------BetSetting------------------------------------
-	DECLARE @MemberBatch TABLE(CustId INT)
-	
-	WHILE(1=1)
-	BEGIN
-		UPDATE TOP (5000) t 		 
-		SET t.IsFinishedStatus = 1
-		OUTPUT INSERTED.CustID INTO @MemberBatch
-		FROM #DownlineTemp t
-		WHERE IsFinishedStatus = 0
-	 
-		IF @@ROWCOUNT = 0
-			BREAK
-		
-		--update disabled=0 miss update hideKeno=0 
-		UPDATE g 
-		SET HideKeno = 0
-		FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
-			INNER JOIN @MemberBatch b ON g.CustID = b.CustID 
+INSERT INTO #supers_missDis(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	LEFT JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+		AND ci.username NOT LIKE '3rdSuper%'
+		AND cs.isinternal = 0
+		AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+		AND s.islicensee = 0
+		AND (  ( ci.Site IN ('611111') AND ci.currency IN (2,42))
+			OR ( ci.Site IN ('722222','733333') AND ci.currency IN (13))
+			OR ( ci.Site IN ('y789','y889','yOther','yUT') AND ci.currency IN (2,6))
+			OR ( ci.Site IN ('7aa666') AND ci.currency IN (2))
+			OR ( ci.Site IN ('BEST-ODDS') AND ci.currency IN (42)))
 
-		DELETE @MemberBatch
-	END
-	
-	--Drop all temp tables
-	DROP TABLE #DownlineTemp
-END
-GO
+INSERT INTO #supers(custid)
+SELECT ci.custid
+FROM customer ci WITH (NOLOCK) 
+	INNER JOIN custInfo C WITH (NOLOCK) ON C.custid = ci.custid
+	INNER JOIN site s WITH (NOLOCK) ON ci.site = s.site
+	INNER JOIN custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+WHERE ci.roleid = 4  
+	AND ci.username NOT LIKE '3rdSuper%'
+	AND ci.site IN ('y789','y889','yOther','yUT')
+	AND ci.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
+	AND s.islicensee = 0
+	AND ci.currency <> 20
+	AND Enabled = 1 
+		AND ci.custid NOT IN (SELECT custid FROM #supers_missDis )
 
--- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
-------------------------------------------------------	
+INSERT INTO #DownlineTemp (CustID)
+SELECT DISTINCT ci.custid
+FROM Custinfo ci WITH (NOLOCK)
+	INNER JOIN dbo.CustGameType cs WITH (NOLOCK) ON cs.CustID = ci.custid
+WHERE srecommend IN (SELECT custid FROM #supers)
+	AND ci.HideKeno = 1
+	AND Enabled = 1 
+	AND cs.IsDisabled = 0
+	AND cs.GameTypeID BETWEEN 1 AND 99
 
--- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS -----
---------------------------------------------------------------------------------------
---Create Supers temp table:
-DECLARE @max_custid INT
+--update disabled=0 miss update hideKeno=0 
+UPDATE g 
+SET HideKeno = 0
+FROM dbo.CustInfo g WITH(UPDLOCK,ROWLOCK)
+	INNER JOIN #DownlineTemp b ON g.CustID = b.CustID 
 
-DECLARE @target VARCHAR(20)
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
-	SET @target = 'DBCUST'
-ELSE 
-	SET @target = 'REPLICATED'
-PRINT 'Server Name : ' + @target
-
-DECLARE @batch SMALLINT = 20000
-DECLARE @CustIDs VARCHAR(MAX) = ''
-CREATE TABLE #tmpCustTemp		(CustID INT PRIMARY KEY)
-
--- For deployer info
-DECLARE @super_cnt INT, @index INT = 0
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of Cust: %d.'
-
-SET @super_cnt = (SELECT COUNT(*) FROM Temp_DownlineTemp )
-RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
-
-WHILE (1 = 1)
-BEGIN
-	SELECT @CustIDs = ''
-
-	UPDATE TOP (@batch) a
-	SET a.IsFinishedStatus = 1
-	OUTPUT INSERTED.CustID INTO #tmpCustTemp(CustID)	
-	FROM Temp_DownlineTemp a	
-	WHERE IsFinishedStatus = 0 
-	
-	IF @@ROWCOUNT = 0 BREAK
-	
-	SET @index = @index + @batch
-	RAISERROR (@msg, 0, 1, @index) WITH NOWAIT
-
-	SET @CustIDs = @CustIDs + (SELECT string_agg(convert(varchar(max),custid),',')  FROM #tmpCustTemp)
-
-	EXEC dbo.Acc_DynamicCustomerInfo_09 
-			@CustIDs = @CustIDs
-			,@target = @target
-	
-	TRUNCATE TABLE #tmpCustTemp
-	WAITFOR DELAY '00:00:0.1'
-END
-DROP TABLE #tmpCustTemp
+DROP TABLE #supers_missDis
+DROP TABLE #supers
+DROP TABLE #DownlineTemp
 GO
 
 -- BEGIN STEP 3: RUN THIS SCRIPT AT DBCUST -----
