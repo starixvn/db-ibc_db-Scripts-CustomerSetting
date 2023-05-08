@@ -11,7 +11,7 @@ SELECT	@ToCurrency = 11 ,  -- USTM
 		@FromCurrency = 64 -- UT
 
 --------------ProductBetSetting
-DELETE ProductBetSetting WITH(ROWLOCK) WHERE Currency = @ToCurrency
+DELETE ProductBetSetting WITH(ROWLOCK) WHERE Currency = @ToCurrency AND Sporttype NOT IN (43,44)
 
 INSERT INTO dbo.ProductBetSetting (Sporttype, Bettype, Currency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch)
 SELECT Sporttype, Bettype, @ToCurrency, MinBet, IsDep, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch
