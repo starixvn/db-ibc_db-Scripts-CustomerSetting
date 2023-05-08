@@ -83,6 +83,54 @@ SELECT SiteId,SiteName,SportType,@ToCurrency,PlayCurrency,FromDate,ToDate
 FROM PlayCurrencySetting WITH (NOLOCK)
 WHERE MemberCurrency = @FromCurrency
 
+---------------------Correct Stake label for some special game--------------
+CREATE TABLE #StakeLevelGroupDetail(
+	[StakeLevelID] [int],
+	[GameTypeID] [int],
+	[MinLabel] [nvarchar](50) ,
+	[MaxLabel] [nvarchar](50) ,
+	[MinStake] [decimal](19, 8) ,
+	[MaxStake] [decimal](19, 8) ,
+	[ParentTypeID] [int] ,
+	[MaxGameStake] [decimal](19, 8) ,
+ PRIMARY KEY ([StakeLevelID] ASC,[GameTypeID] ASC)
+)
+
+INSERT INTO #StakeLevelGroupDetail(
+	 StakeLevelID
+	,GameTypeID
+	,MinLabel
+	,MaxLabel
+	,MinStake
+	,MaxStake
+	,ParentTypeID
+	,MaxGameStake
+)
+SELECT StakeLevelID = CASE  WHEN StakeLevelID = 2333 THEN 2456 
+							WHEN StakeLevelID = 2334 THEN 2457
+							END
+	,GameTypeID
+	,MinLabel
+	,MaxLabel
+	,MinStake
+	,MaxStake
+	,ParentTypeID
+	,MaxGameStake
+FROM StakeLevelGroupDetail ds WITH (NOLOCK)
+WHERE ds.StakeLevelID IN (2333,2334) --(2456,2457)
+	AND ds.GameTypeID BETWEEN 2101 and 2299
+
+UPDATE st
+SET st.MaxLabel = t.MaxLabel,
+	st.MinLabel = t.MinLabel
+FROM #StakeLevelGroupDetail t
+	INNER JOIN StakeLevelGroupDetail st WITH(ROWLOCK,UPDLOCK)
+		ON t.StakeLevelID = st.StakeLevelID
+		AND t.GameTypeID = st.GameTypeID
+		AND (t.MaxLabel <> st.MaxLabel OR t.MinLabel <> st.MinLabel)
+
+DROP TABLE #StakeLevelGroupDetail
+
 
 /*
 SELECT * FROM ProductBetSetting (NOLOCK) WHERE currency = 11
