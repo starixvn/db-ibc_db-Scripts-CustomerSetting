@@ -19,7 +19,7 @@ FROM DBCUST.CUSTDB.dbo.CustBetSetting3rd_Agent s WITH(NOLOCK)
 		and s.sporttype = d.sporttype
 		and s.BetType = d.BetType
 WHERE s.SportType = 202
-	AND ( s.MinBet <> d.MaxBet 
+	AND ( s.MinBet <> d.MinBet 
 		OR s.MaxBet <> d.MaxBet
 		OR s.MaxPerMatch <> d.MaxPerMatch
 		)
@@ -32,7 +32,7 @@ FROM DBCUST.CUSTDB.dbo.CustBetSetting3rd_Member s WITH(NOLOCK)
 		and s.sporttype = d.sporttype
 		and s.BetType = d.BetType
 WHERE s.SportType = 202
-	AND ( s.MinBet <> d.MaxBet 
+	AND ( s.MinBet <> d.MinBet 
 		OR s.MaxBet <> d.MaxBet
 		OR s.MaxPerMatch <> d.MaxPerMatch
 		)
