@@ -206,5 +206,6 @@ BEGIN
 	DROP TABLE #supers
 	DROP TABLE #Cust
 END
+GO
 ----------
 EXEC Acc_DynamicCustSetting3rd_09
