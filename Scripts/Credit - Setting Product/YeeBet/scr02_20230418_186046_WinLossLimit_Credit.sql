@@ -1,4 +1,4 @@
-/*<info serverAlias="DBTRANS-bodb02"></info>*/
+/*<info serverAlias="DBTXN-bodb02"></info>*/
 /*
 	Created: Luke
 	Date: 20230418
