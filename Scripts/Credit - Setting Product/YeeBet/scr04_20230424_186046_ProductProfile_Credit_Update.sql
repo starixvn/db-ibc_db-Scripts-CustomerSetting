@@ -8,9 +8,10 @@
 USE CustDB
 GO
 
-DECLARE @Sporttype SMALLINT
-SET @Sporttype = 159
+DECLARE @RealProductID SMALLINT
+
+SELECT	@RealProductID = 76
 
 UPDATE ProductSettingDetail WITH (ROWLOCK, UPDLOCK)
 SET SettingStatus = 0
-WHERE SportType = @Sporttype
+WHERE RealProductId = @RealProductID

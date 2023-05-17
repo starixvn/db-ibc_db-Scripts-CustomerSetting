@@ -13,10 +13,17 @@ DECLARE @ProductID SMALLINT,
 SET @ProductID = 76
 SET @Bettype = 3151
 
-DELETE wp
-FROM WinLimit_ProductOffer wp WITH (ROWLOCK)
-WHERE wp.ProductID = @ProductID AND wp.Bettype = @Bettype
-
-INSERT INTO WinLimit_ProductOffer(ProductID, BetType, IsActive_SMA, IsActive_Company)
-VALUES
-(@ProductID, @Bettype, 1, 1)
+IF EXISTS(
+	SELECT 1
+	FROM WinLimit_ProductOffer WITH (NOLOCK)
+	WHERE ProductID = @ProductID AND bettype = @Bettype
+)
+BEGIN
+	RAISERROR('This ProductID and BetType have been used.', 16, 1)
+END
+ELSE
+BEGIN
+	INSERT INTO WinLimit_ProductOffer(ProductID, BetType, IsActive_SMA, IsActive_Company)
+	VALUES
+	(@ProductID, @Bettype, 1, 1)
+END
