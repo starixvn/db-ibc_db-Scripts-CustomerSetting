@@ -43,6 +43,8 @@ BEGIN
 							69,		--MMK
 							72		--YNG
 					) --supported currencies
+		AND OfferSite IN (0, 1) 
+		AND IsActive = 1
 
 	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
 	SELECT DISTINCT @Sporttype, @Bettype, 0, Currency, 1, 1, 1  
