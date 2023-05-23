@@ -1,3 +1,4 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20230423@Luke
 	Task: Update ProductStatusSiteCurrency for YeeBet [Redmine: #186046]
