@@ -41,8 +41,7 @@ BEGIN
 							64,		--UT
 							67,		--HKK
 							69,		--MMK
-							72,		--YNG
-							95		--USD
+							72		--YNG
 					) --supported currencies
 
 	INSERT INTO ProductStatusSiteCurrency (SportType, BetType, SiteID, Currency, IsHidden, IsDisabled, HasSynced)
