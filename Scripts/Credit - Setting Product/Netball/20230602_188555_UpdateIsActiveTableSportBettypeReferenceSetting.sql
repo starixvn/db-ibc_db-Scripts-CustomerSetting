@@ -10,7 +10,7 @@ GO
 DECLARE @SportType SMALLINT = 32,
 		@BetType INT = 20
 
-UPDATE s WITH (ROWLOCK, UPDLOCK)
+UPDATE s
 SET s.isActive = 1
-FROM Sport_Bettype_Reference_Setting s 
+FROM Sport_Bettype_Reference_Setting s WITH (ROWLOCK, UPDLOCK)
 WHERE s.SportType = @SportType AND s.BetType = @BetType
