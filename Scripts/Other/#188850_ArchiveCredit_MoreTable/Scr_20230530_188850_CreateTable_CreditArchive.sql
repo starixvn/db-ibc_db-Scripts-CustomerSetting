@@ -1,6 +1,6 @@
 /*<info serverAlias="DBARCCUST-bodb_Customer"></info>*/
 /*
-	Created: Eden@20230529
+	Created: Eden@20230530
 	Task: Include newly created tables into Archive Credit Dormant Account process [Redmine: #162050]   
 		CustMaxPayoutSetting_Member_old
 		CustMaxPayoutSetting_Agent_old
