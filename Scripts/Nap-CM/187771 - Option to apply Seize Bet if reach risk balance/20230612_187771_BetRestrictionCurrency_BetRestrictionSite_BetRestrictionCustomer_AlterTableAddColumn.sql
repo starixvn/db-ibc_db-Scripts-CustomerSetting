@@ -17,7 +17,7 @@ BEGIN
 END
 ELSE
 BEGIN
-	RAISERROR('This table doen''t exist', 16, 1)
+	RAISERROR('This table doesn''t exist', 16, 1)
 END
 GO
 
@@ -31,7 +31,7 @@ BEGIN
 END
 ELSE
 BEGIN
-	RAISERROR('This table doen''t exist', 16, 1)
+	RAISERROR('This table doesn''t exist', 16, 1)
 END
 GO
 
@@ -45,6 +45,6 @@ BEGIN
 END
 ELSE
 BEGIN
-	RAISERROR('This table doen''t exist', 16, 1)
+	RAISERROR('This table doesn''t exist', 16, 1)
 END
 GO
