@@ -2,7 +2,7 @@
 /*
     Created by: Luke
     Date: 2023/05/17
-	Task:  Initial data for status lock Basketball [redmine : #187460]
+	Task:  Initial data for status lock Basketball [redmine : #185991]
 	DB: DBCUST/CustDB
 
     Revisions: 
