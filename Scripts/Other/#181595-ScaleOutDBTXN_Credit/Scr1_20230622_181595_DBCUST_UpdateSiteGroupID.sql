@@ -12,7 +12,8 @@ SET s.SiteDBGroupID = 3
 FROM Site s WITH (ROWLOCK)
 WHERE s.isLicensee = 0
 	AND s.SiteDBGroupID <> 3
-	AND s.SiteLabel IN ('Nova88','789y','IBC')
+	AND (s.SiteLabel IN ('Nova88','789y','IBC') OR s.SiteLabel IS NULL)
+	AND s.site <> 'CN88'
 
 UPDATE cs
 SET cs.SiteDBGroupID = 3
@@ -24,7 +25,9 @@ FROM CustSuper cs WITH (ROWLOCK)
 WHERE s.isLicensee = 0
 	AND s.SiteDBGroupID <> 3
 	AND cs.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
-	AND s.SiteLabel IN ('Nova88','789y','IBC')
+	AND (s.SiteLabel IN ('Nova88','789y','IBC') OR s.SiteLabel IS NULL)
+	AND s.site <> 'CN88'
+
 
 
 
