@@ -14,7 +14,7 @@ FROM custdb.dbo.customer ci WITH(NOLOCK)
 WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
-	--AND s.site IN ('')
+	AND s.SiteLabel IN ('Nova88','789y','IBC')
 
 DELETE c
 FROM dbo.Winlimit_CreditGame c WITH(ROWLOCK,UPDLOCK)
@@ -23,6 +23,16 @@ WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 
 DELETE c
 FROM dbo.Winlimit_DebitGame c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+
+DELETE c
+FROM dbo.BalanceCreditGame c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+
+DELETE c
+FROM dbo.BalanceDebitGame c WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
 WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 
@@ -45,7 +55,18 @@ FROM dbo.Winlimit_DebitGame c WITH(NOLOCK)
 WHERE ci.srecommend NOT IN (SELECT custid FROM custdb.dbo.Dep_custsuper WITH(NOLOCK))
 
 SELECT COUNT(1)
+FROM dbo.BalanceCreditGame c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+
+SELECT COUNT(1)
+FROM dbo.BalanceDebitGame c WITH(ROWLOCK,UPDLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+
+SELECT COUNT(1)
 FROM dbo.Task_Cust_CheckBalance_Exception c WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
 WHERE ci.srecommend NOT IN (SELECT custid FROM custdb.dbo.Dep_custsuper WITH(NOLOCK))
+
 */

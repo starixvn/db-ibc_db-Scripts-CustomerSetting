@@ -16,7 +16,7 @@ FROM custdb.dbo.customer ci WITH(NOLOCK)
 WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
-	--AND s.site IN ('')
+	AND s.SiteLabel IN ('Nova88','789y','IBC')
 
 INSERT INTO Winlimit_CreditGame(CustId,WinlostDate,BetType,Winlost)
 SELECT c.CustId,c.WinlostDate,c.BetType,c.Winlost
@@ -37,6 +37,30 @@ FROM DBCTG.bodb02.dbo.Winlimit_DebitGame c WITH(NOLOCK)
 WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 	AND NOT EXISTS( SELECT  TOP 1 1 
 					FROM Winlimit_DebitGame e WITH(NOLOCK)
+					WHERE e.CustId = c.CustId
+						AND e.WinlostDate = c.WinlostDate
+						AND e.BetType = c.BetType
+					)
+
+INSERT INTO BalanceDebitGame(CustId,WinlostDate,BetType,Balance)
+SELECT c.CustId,c.WinlostDate,c.BetType,c.Balance
+FROM DBCTG.bodb02.dbo.BalanceDebitGame c WITH(NOLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+	AND NOT EXISTS( SELECT  TOP 1 1 
+					FROM BalanceDebitGame e WITH(NOLOCK)
+					WHERE e.CustId = c.CustId
+						AND e.WinlostDate = c.WinlostDate
+						AND e.BetType = c.BetType
+					)
+
+INSERT INTO BalanceCreditGame(CustId,WinlostDate,BetType,Balance)
+SELECT c.CustId,c.WinlostDate,c.BetType,c.Balance
+FROM DBCTG.bodb02.dbo.BalanceCreditGame c WITH(NOLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+	AND NOT EXISTS( SELECT  TOP 1 1 
+					FROM BalanceCreditGame e WITH(NOLOCK)
 					WHERE e.CustId = c.CustId
 						AND e.WinlostDate = c.WinlostDate
 						AND e.BetType = c.BetType
