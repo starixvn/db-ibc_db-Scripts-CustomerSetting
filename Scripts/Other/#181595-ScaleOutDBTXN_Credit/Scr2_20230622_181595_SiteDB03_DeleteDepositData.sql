@@ -6,6 +6,15 @@
 */
 USE bodb02
 GO
+
+--> check pending table of centralDB
+WHILE EXISTS( SELECT 1 FROM DBCTG.bodb02.dbo.BalancePendingCreditGame WITH(NOLOCK) )
+	OR EXISTS(SELECT 1 FROM DBCTG.bodb02.dbo.BalancePendingDebitGame WITH(NOLOCK))
+BEGIN
+	PRINT 'Wait 10s for job ''bodb02 : Game : Task_BalanceUpd'' proceed done'
+	WAITFOR DELAY '00:00:10'
+END
+
 CREATE TABLE #Supers (custid int PRIMARY KEY)
 
 INSERT INTO #Supers(custid)
