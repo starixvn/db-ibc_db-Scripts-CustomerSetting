@@ -7,44 +7,88 @@
 
 USE CustDB
 GO
-IF EXISTS (
-	SELECT 1
-	FROM sys.tables 
-	WHERE name = 'BetRestriction_Currency' AND SCHEMA_NAME(SCHEMA_ID) = 'dbo'
-)
-BEGIN
-	ALTER TABLE BetRestriction_Currency ADD AccumulateBalance BIT NULL
-END
-ELSE
-BEGIN
-	RAISERROR('This table doesn''t exist', 16, 1)
-END
-GO
+DECLARE @schemaName		VARCHAR(10),
+		@tableCustName	VARCHAR(50),
+		@tableCurrName	VARCHAR(50),
+		@tableSiteName	VARCHAR(50),
+		@newCol			VARCHAR(50)
+SELECT	@schemaName		= 'dbo',
+		@tableCustName	= 'BetRestriction_Customer',
+		@tableCurrName	= 'BetRestriction_Currency',
+		@tableSiteName	= 'BetRestriction_Site',
+		@newCol			= 'AccumulateBalance'
 
-IF EXISTS (
+--check exists and add new column to BetRestriction_Customer
+IF NOT EXISTS(
 	SELECT 1
-	FROM sys.tables 
-	WHERE name = 'BetRestriction_Site' AND SCHEMA_NAME(SCHEMA_ID) = 'dbo'
+	FROM sys.tables WITH (NOLOCK)
+	WHERE SCHEMA_NAME(schema_id) = @schemaName AND name = @tableCustName
 )
 BEGIN
-	ALTER TABLE BetRestriction_Site ADD AccumulateBalance BIT NULL
+	RAISERROR ('Table %s doesn''t exist.', 16, 1, @tableCustName)
+END
+ELSE IF EXISTS(
+	SELECT 1
+	FROM sys.tables t WITH (NOLOCK) 
+		INNER JOIN sys.columns c WITH (NOLOCK) ON c.object_id = t.object_id
+	WHERE SCHEMA_NAME(t.schema_id) = @schemaName
+		AND t.name = @tableCustName
+		AND c.name = @newCol
+)
+BEGIN
+	RAISERROR('Column %s is being used.', 16, 1, @newCol)
 END
 ELSE
 BEGIN
-	RAISERROR('This table doesn''t exist', 16, 1)
+	ALTER TABLE dbo.BetRestriction_Customer ADD AccumulateBalance BIT NULL
 END
-GO
 
-IF EXISTS (
+--check exists and add new column to BetRestriction_Currency
+IF NOT EXISTS(
 	SELECT 1
-	FROM sys.tables 
-	WHERE name = 'BetRestriction_Customer' AND SCHEMA_NAME(SCHEMA_ID) = 'dbo'
+	FROM sys.tables WITH (NOLOCK)
+	WHERE SCHEMA_NAME(schema_id) = @schemaName AND name = @tableCurrName
 )
 BEGIN
-	ALTER TABLE BetRestriction_Customer ADD AccumulateBalance BIT NULL
+	RAISERROR ('Table %s doesn''t exist.', 16, 1, @tableCurrName)
+END
+ELSE IF EXISTS(
+	SELECT 1
+	FROM sys.tables t WITH (NOLOCK) 
+		INNER JOIN sys.columns c WITH (NOLOCK) ON c.object_id = t.object_id
+	WHERE SCHEMA_NAME(t.schema_id) = @schemaName
+		AND t.name = @tableCurrName
+		AND c.name = @newCol
+)
+BEGIN
+	RAISERROR('Column %s is being used.', 16, 1, @newCol)
 END
 ELSE
 BEGIN
-	RAISERROR('This table doesn''t exist', 16, 1)
+	ALTER TABLE dbo.BetRestriction_Currency ADD AccumulateBalance BIT NULL
 END
-GO
+
+--check exists and add new column to BetRestriction_Site
+IF NOT EXISTS(
+	SELECT 1
+	FROM sys.tables WITH (NOLOCK)
+	WHERE SCHEMA_NAME(schema_id) = @schemaName AND name = @tableSiteName
+)
+BEGIN
+	RAISERROR ('Table %s doesn''t exist.', 16, 1, @tableSiteName)
+END
+ELSE IF EXISTS(
+	SELECT 1
+	FROM sys.tables t WITH (NOLOCK) 
+		INNER JOIN sys.columns c WITH (NOLOCK) ON c.object_id = t.object_id
+	WHERE SCHEMA_NAME(t.schema_id) = @schemaName
+		AND t.name = @tableSiteName
+		AND c.name = @newCol
+)
+BEGIN
+	RAISERROR('Column %s is being used.', 16, 1, @newCol)
+END
+ELSE
+BEGIN
+	ALTER TABLE dbo.BetRestriction_Site ADD AccumulateBalance BIT NULL
+END

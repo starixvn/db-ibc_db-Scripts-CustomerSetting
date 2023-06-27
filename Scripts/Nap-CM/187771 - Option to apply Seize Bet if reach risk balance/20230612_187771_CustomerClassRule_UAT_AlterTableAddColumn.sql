@@ -8,16 +8,34 @@
 USE CustDB
 GO
 
-IF EXISTS (
+DECLARE @schemaName VARCHAR(10),
+		@tableName	VARCHAR(50),
+		@newCol		VARCHAR(50)
+SELECT	@schemaName = 'dbo',
+		@tableName	= 'CustomerClassRule_UAT',
+		@newCol		= 'SeizeBetAccumulateBal'
+
+IF NOT EXISTS(
 	SELECT 1
-	FROM sys.tables
-	WHERE name = 'CustomerClassRule_UAT' AND SCHEMA_NAME(schema_id) = 'dbo'
+	FROM sys.tables WITH (NOLOCK)
+	WHERE SCHEMA_NAME(schema_id) = @schemaName AND name = @tableName
 )
 BEGIN
-	ALTER TABLE CustomerClassRule_UAT ADD SeizeBetAccumulateBal BIT NULL
+	RAISERROR ('Table %s doesn''t exist.', 16, 1, @tableName)
+END
+ELSE IF EXISTS(
+	SELECT 1
+	FROM sys.tables t WITH (NOLOCK) 
+		INNER JOIN sys.columns c WITH (NOLOCK) ON c.object_id = t.object_id
+	WHERE SCHEMA_NAME(t.schema_id) = @schemaName
+		AND t.name = @tableName
+		AND c.name = @newCol
+)
+BEGIN
+	RAISERROR('Column %s is being used.', 16, 1, @newCol)
 END
 ELSE
 BEGIN
-	RAISERROR('This table doesn''t exists', 16, 1)
+	ALTER TABLE dbo.CustomerClassRule_UAT ADD SeizeBetAccumulateBal BIT NULL
 END
 GO
