@@ -6,5 +6,4 @@
 */
 GO
 CREATE NONCLUSTERED INDEX IX_Cust_ArchiveAccount_Username ON Cust_ArchiveAccount(Username ASC)
-INCLUDE(RoleID,StageID) 
 GO
