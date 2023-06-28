@@ -36,10 +36,10 @@ FROM dbo.BalanceDebitGame c WITH(ROWLOCK,UPDLOCK)
 	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
 WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 
-DELETE c
-FROM dbo.Task_Cust_CheckBalance_Exception c WITH(ROWLOCK,UPDLOCK)
-	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
-WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+--DELETE c
+--FROM dbo.Task_Cust_CheckBalance_Exception c WITH(ROWLOCK,UPDLOCK)
+--	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+--WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 
 DROP TABLE #Supers
 	

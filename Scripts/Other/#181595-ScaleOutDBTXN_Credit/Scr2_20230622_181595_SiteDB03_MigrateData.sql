@@ -75,14 +75,14 @@ WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 						AND e.BetType = c.BetType
 					)
 	
-INSERT INTO Task_Cust_CheckBalance_Exception(CustId,Remark)
-SELECT c.CustId,c.Remark
-FROM DBCTG.bodb02.dbo.Task_Cust_CheckBalance_Exception c WITH(NOLOCK)
-	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
-WHERE ci.srecommend IN (SELECT custid FROM #Supers)
-	AND NOT EXISTS( SELECT  TOP 1 1 
-					FROM Task_Cust_CheckBalance_Exception e WITH(NOLOCK)
-					WHERE e.CustId = c.CustId
-					)
+--INSERT INTO Task_Cust_CheckBalance_Exception(CustId,Remark)
+--SELECT c.CustId,c.Remark
+--FROM DBCTG.bodb02.dbo.Task_Cust_CheckBalance_Exception c WITH(NOLOCK)
+--	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+--WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+--	AND NOT EXISTS( SELECT  TOP 1 1 
+--					FROM Task_Cust_CheckBalance_Exception e WITH(NOLOCK)
+--					WHERE e.CustId = c.CustId
+--					)
 	
 DROP TABLE #Supers
