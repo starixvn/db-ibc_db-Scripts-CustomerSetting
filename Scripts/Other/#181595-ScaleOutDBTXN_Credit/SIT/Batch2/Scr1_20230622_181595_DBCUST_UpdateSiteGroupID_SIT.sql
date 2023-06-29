@@ -14,6 +14,7 @@ WHERE s.isLicensee = 0
 	AND s.SiteDBGroupID <> 3
 	AND (s.SiteLabel IN ('Nova88','789y','IBC') OR s.SiteLabel IS NULL)
 	AND s.site <> 'CN88'
+	AND s.site != 'BEST-ODDS'
 
 UPDATE cs
 SET cs.SiteDBGroupID = 3
@@ -27,6 +28,7 @@ WHERE s.isLicensee = 0
 	AND cs.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND (s.SiteLabel IN ('Nova88','789y','IBC') OR s.SiteLabel IS NULL)
 	AND s.site <> 'CN88'
+	AND s.site != 'BEST-ODDS'
 
 
 

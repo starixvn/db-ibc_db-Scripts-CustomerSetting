@@ -15,6 +15,7 @@ WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
 	AND s.SiteLabel IN ('Nova88','789y','IBC')
+	AND s.site != 'BEST-ODDS'
 
 DELETE c
 FROM dbo.Winlimit_CreditGame c WITH(ROWLOCK,UPDLOCK)

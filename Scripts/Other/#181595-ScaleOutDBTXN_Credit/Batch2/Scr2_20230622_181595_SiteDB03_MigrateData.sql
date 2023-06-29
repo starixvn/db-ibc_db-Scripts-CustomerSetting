@@ -1,7 +1,7 @@
 /*<info serverAlias="DBSIC-bodb02"></info>*/
 /*
 	Created: 20230622@Eden
-	Task: Migrate data credit customer from DBCTG to SITEDB3 [#RedmineID:#181595]
+	Task: Migrate data credit customer from DBCTG to SITEDB3 - Batch2 [#RedmineID:#181595]
 	DB: DBSIC/bodb02  (SiteDB03 only)
 */
 USE bodb02
@@ -25,7 +25,7 @@ FROM custdb.dbo.customer ci WITH(NOLOCK)
 WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
-	AND s.SiteLabel IN ('Nova88','789y','IBC')
+	AND s.SiteLabel IN ('Nova88','789y')
 
 INSERT INTO Winlimit_CreditGame(CustId,WinlostDate,BetType,Winlost)
 SELECT c.CustId,c.WinlostDate,c.BetType,c.Winlost
