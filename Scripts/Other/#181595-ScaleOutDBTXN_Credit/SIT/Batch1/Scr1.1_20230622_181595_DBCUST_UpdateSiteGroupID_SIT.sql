@@ -22,7 +22,7 @@ FROM CustSuper cs WITH (ROWLOCK)
 	INNER JOIN Site s WITH(NOLOCK) 
 		ON ci.site = s.site
 WHERE s.isLicensee = 0
-	AND s.SiteDBGroupID <> 3
+	AND cs.SiteDBGroupID <> 3
 	AND cs.custid NOT IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND s.site = 'BEST-ODDS'
 
