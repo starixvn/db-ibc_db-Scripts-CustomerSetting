@@ -26,6 +26,7 @@ WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
 	AND s.SiteLabel IN ('Nova88','789y')
+	AND s.site NOT IN( 'CN88','222227')
 
 INSERT INTO Winlimit_CreditGame(CustId,WinlostDate,BetType,Winlost)
 SELECT c.CustId,c.WinlostDate,c.BetType,c.Winlost
