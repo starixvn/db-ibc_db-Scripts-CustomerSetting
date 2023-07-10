@@ -9,7 +9,8 @@ GO
 
 UPDATE s
 SET s.isActive = 1, 
-	s.SiteLabel = 'Nova88'
+	s.SiteLabel = 'Nova88',
+	s.RepUpdateTime = Sysdatetime()
 FROM Site s WITH (ROWLOCK)
 WHERE s.site = '222227'
 

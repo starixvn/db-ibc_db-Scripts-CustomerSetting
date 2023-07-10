@@ -8,7 +8,8 @@ USE CustDB
 GO
 
 UPDATE s
-SET s.SiteDBGroupID = 3
+SET s.SiteDBGroupID = 3,
+	s.RepUpdateTime = Sysdatetime()
 FROM Site s WITH (ROWLOCK)
 WHERE s.isLicensee = 0
 	AND s.SiteDBGroupID <> 3
