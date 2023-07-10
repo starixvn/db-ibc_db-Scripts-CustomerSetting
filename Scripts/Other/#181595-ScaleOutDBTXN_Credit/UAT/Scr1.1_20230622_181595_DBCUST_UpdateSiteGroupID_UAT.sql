@@ -8,9 +8,7 @@ USE CustDB
 GO
 
 UPDATE s
-SET s.SiteDBGroupID = 3, 
-	s.isActive = 1, 
-	s.SiteLabel = 'Nova88'
+SET s.SiteDBGroupID = 3
 FROM Site s WITH (ROWLOCK)
 WHERE s.site = '222227'
 
