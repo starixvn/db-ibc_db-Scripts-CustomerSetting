@@ -8,7 +8,8 @@ USE CustDB
 GO
 
 UPDATE s
-SET s.SiteDBGroupID = 2
+SET s.SiteDBGroupID = 2,
+	s.RepUpdateTime = Sysdatetime()
 FROM Site s WITH (ROWLOCK)
 WHERE site IN ('12bet')
 
