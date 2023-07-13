@@ -31,7 +31,7 @@ BEGIN
 		(168, @ProductID, 4, 0, 1, 1) --Product Status
 	INSERT INTO Dep_ProductSetting(ProductSettingID, ProductID, SettingType, TemplateID, DisplayOrder, SettingLevel)
 	VALUES
-		(169, @ProductID, 1, 0,	2, 1) --Position Taking
+		(169, @ProductID, 1, 0,	2, 2) --Position Taking
 	INSERT INTO Dep_ProductSetting(ProductSettingID, ProductID, SettingType, TemplateID, DisplayOrder, SettingLevel)
 	VALUES
 		(170, @ProductID, 11, 0, 3, 2) --Bet Setting
