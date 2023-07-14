@@ -1,7 +1,7 @@
 /*<info serverAlias="DBTP-bodb02"></info>*/
 /*
 	Created: Eden@20230714
-	Task: ALTER TRIGGER void duplicate PK[Redmine: #191243]   
+	Task: ALTER TRIGGER Back to Origin[Redmine: #191243]   
 	DB: DBTP-bodb02
 */
 -----------------Disable Trigger--------------------
@@ -17,7 +17,6 @@ AS
 
     Revisions: 
         - 20220301@Eden: Deposit - Sportsbook - Revise customer settings [Redmine: #167898] 
-		- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
     
 */
 BEGIN
@@ -35,7 +34,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,IsInserted
-		,UpdateTime
     )
     SELECT CustID
         ,SportType
@@ -46,7 +44,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,0
-		,DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
     FROM [DELETED]
 END 
 ----------------------------------------------------------------
@@ -61,7 +58,6 @@ AS
 
     Revisions: 
         - 20220301@Eden: Deposit - Sportsbook - Revise customer settings [Redmine: #167898] 
-		- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
     
 */
 BEGIN
@@ -79,7 +75,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,IsInserted
-		,UpdateTime
     )
     SELECT CustID
         ,SportType
@@ -90,7 +85,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,0
-		,DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
     FROM [DELETED]
 END
 GO
@@ -105,7 +99,6 @@ AS
 
     Revisions: 
         - 20220301@Eden: Deposit - Sportsbook - Revise customer settings [Redmine: #167898] 
-		- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
     
 */
 BEGIN
@@ -123,7 +116,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,IsInserted
-		,UpdateTime
     )
     SELECT AgentID
         ,SportType
@@ -134,7 +126,6 @@ BEGIN
         ,MaxPerNumber
         ,MaxPayoutPerMatch
         ,0
-		,DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
     FROM [DELETED]
 END
 GO
@@ -149,7 +140,6 @@ AS
 
     Revisions: 
         - 20210820@Eden: Max Payout Per Match [redmine: #158073]
-		- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
     
 */
 BEGIN
@@ -166,7 +156,6 @@ BEGIN
         ,MaxPerMatch
         ,MaxPerNumber
         ,MaxPayoutPerMatch
-		,UpdateTime
     )
     SELECT CustID
         ,SportType
@@ -176,7 +165,6 @@ BEGIN
         ,MaxPerMatch
         ,MaxPerNumber
         ,MaxPayoutPerMatch
-		,DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
     FROM [DELETED]
 END 
 GO
@@ -191,7 +179,6 @@ AS
 
     Revisions: 
         - 20210820@Eden: Max Payout Per Match [redmine: #158073]
-		- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
     
 */
 BEGIN
@@ -208,7 +195,6 @@ BEGIN
         ,MaxPerMatch
         ,MaxPerNumber
         ,MaxPayoutPerMatch
-		,UpdateTime
     )
     SELECT CustID
         ,SportType
@@ -218,43 +204,6 @@ BEGIN
         ,MaxPerMatch
         ,MaxPerNumber
         ,MaxPayoutPerMatch
-		,DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
     FROM [DELETED]
 END 
 GO
-----------------------------------------------------------------
-ALTER TRIGGER [dbo].[CustLimitPTSetting_update] ON [dbo].[CustLimitPTSetting] AFTER UPDATE
-AS
-/*
-        Task : NAP CM -  Limit Daily PT Update
-        DB: DBTP/bodb02
-        Original: 20211027@Winfred
-        Revisions:
-            - 20211027@Winfred: Create trigger [Redmine: #162476]
-			- 20230714@Eden: void Duplicate PK [Redmine: #191243] 
-        Param's Explanation: 
-            
-
-    */
-BEGIN 
-    SET NOCOUNT ON
-    INSERT INTO bodb_CustHistory.dbo.[CustLimitPTSetting_History] (
-        [CustID] ,
-        [SportType] ,
-        [BetType] ,
-        [ActorID],
-        [PTCount],
-        [LastUpdated],
-		UpdateTime
-    )
-    SELECT
-        [CustID] ,
-        [SportType] ,
-        [BetType] ,
-        [ActorID],
-        [PTCount],
-        [LastUpdated],
-		DATEADD(MILLISECOND,4 * ROW_NUMBER() OVER (ORDER BY (SELECT 0)),GETDATE () )
-    FROM [DELETED]
-    
-END
