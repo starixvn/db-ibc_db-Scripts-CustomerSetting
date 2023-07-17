@@ -11,8 +11,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
@@ -98,7 +98,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Agent)
 	BEGIN		
 		DELETE cg
-		FROM Dep_CustStakeLevel_Agent cg
+		FROM Dep_CustBetSetting_Agent cg
 			INNER  JOIN #Dep_CustBetSetting_Agent t
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 		
 	END 
@@ -106,7 +106,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Member)
 	BEGIN
 		DELETE cg
-		FROM Dep_CustStakeLevel_Member cg	
+		FROM Dep_CustBetSetting_Member cg	
 			INNER JOIN #Dep_CustBetSetting_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
