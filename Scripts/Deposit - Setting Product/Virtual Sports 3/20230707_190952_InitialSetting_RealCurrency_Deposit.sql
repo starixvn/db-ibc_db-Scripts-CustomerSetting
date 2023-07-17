@@ -283,7 +283,7 @@ CREATE TABLE #supers (custid int,isfinished bit default(0))
 DECLARE @srecommend INT , @max_custid INT,
 		@target NVARCHAR(20)
 
-IF @@SERVERNAME IN ('DBCUST', 'SITDBCUST', 'TESTDBCUST')
+IF @@SERVERNAME IN ('DBCUST', 'SITDBCUST', 'TESTDBCUST','DB233','DB230\SQLSERVER2008R2')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
