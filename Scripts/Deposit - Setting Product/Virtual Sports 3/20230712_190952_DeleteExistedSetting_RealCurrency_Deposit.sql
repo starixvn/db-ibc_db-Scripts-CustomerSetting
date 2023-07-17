@@ -366,6 +366,13 @@ BEGIN
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
 	END	
+
+	DROP TABLE #Dep_CustBetSetting_Agent,
+				#Dep_CustBetSetting_Member,
+				#Dep_CustPTGroupSetting_Member,
+				#Dep_CustPTSetting_Agent,
+				#Dep_CustPTSetting_Member,
+				#supers
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

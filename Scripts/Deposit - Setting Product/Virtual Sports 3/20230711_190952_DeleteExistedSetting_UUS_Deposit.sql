@@ -34,48 +34,48 @@ BEGIN
 		AND cs.site IN ('spondemo','Athena000')
 		AND ci.currency=20
 
-	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #Dep_CustPTGroupSetting_Member(CustID INT,SporttypeID INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ,IsLive))
-	CREATE TABLE #Dep_CustBetSetting_Agent(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
-	CREATE TABLE #Dep_CustBetSetting_Member(CustID INT,SporttypeID INT,Bettype INT, PRIMARY KEY(CustID ,SporttypeID ,Bettype ))
+	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #Dep_CustPTGroupSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
+	CREATE TABLE #Dep_CustBetSetting_Agent(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_CustBetSetting_Member(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 
-	INSERT INTO #Dep_CustPTSetting_Agent(CustID,SporttypeID,Bettype,IsLive)
-	SELECT s.Custid,SportType,BetType,IsLive 
+	INSERT INTO #Dep_CustPTSetting_Agent(CustID,Sporttype,Bettype,IsLive)
+	SELECT s.Custid, s.SportType, s.BetType, s.IsLive 
 	FROM Dep_CustPTSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #Dep_CustPTSetting_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT s.CustID,Sporttype,Bettype,IsLive 
+	INSERT INTO #Dep_CustPTSetting_Member(CustID,Sporttype,Bettype,IsLive)
+	SELECT s.CustID, s.Sporttype, s.Bettype, s.IsLive 
 	FROM Dep_CustPTSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #Dep_CustPTGroupSetting_Member(CustID,SporttypeID,Bettype,IsLive)
-	SELECT AgentID,SportType,BetType,IsLive 
+	INSERT INTO #Dep_CustPTGroupSetting_Member(CustID,Sporttype,Bettype,IsLive)
+	SELECT s.AgentID, s.SportType, s.BetType, s.IsLive 
 	FROM Dep_CustPTGroupSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.AgentID=c.custid
-	WHERE SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #Dep_CustBetSetting_Agent(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustBetSetting_Agent S WITH(NOLOCK) 
+	INSERT INTO #Dep_CustBetSetting_Agent(CustID,Sporttype,Bettype)
+	SELECT s.CustID, s.SportType, s.BetType 
+	FROM Dep_CustBetSetting_Agent s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
 
-	INSERT INTO #Dep_CustBetSetting_Member(CustID,SporttypeID,Bettype)
-	SELECT S.CustID,SportType,BetType 
-	FROM Dep_CustBetSetting_Member S WITH(NOLOCK) 
+	INSERT INTO #Dep_CustBetSetting_Member(CustID,Sporttype,Bettype)
+	SELECT s.CustID, s.SportType, s.BetType 
+	FROM Dep_CustBetSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
-	WHERE SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
 
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTSetting_Agent)
 	BEGIN
 		DELETE cg
 		FROM Dep_CustPTSetting_Agent cg 	
 			INNER JOIN #Dep_CustPTSetting_Agent t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
+				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
 	END	
 	
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTSetting_Member)
@@ -83,7 +83,7 @@ BEGIN
 		DELETE cg
 		FROM Dep_CustPTSetting_Member cg
 			INNER JOIN #Dep_CustPTSetting_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
+				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
 		OPTION(MAXDOP 1)		
 	END  
 	
@@ -92,7 +92,7 @@ BEGIN
 		DELETE cg
 		FROM Dep_CustPTGroupSetting_Member cg 
 			INNER JOIN #Dep_CustPTGroupSetting_Member t 
-				ON cg.AgentID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
+				ON cg.AgentID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
 	END 		
 			
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Agent)
@@ -100,7 +100,7 @@ BEGIN
 		DELETE cg
 		FROM Dep_CustBetSetting_Agent cg
 			INNER  JOIN #Dep_CustBetSetting_Agent t
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 		
+				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 		
 	END 
 
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Member)
@@ -108,9 +108,15 @@ BEGIN
 		DELETE cg
 		FROM Dep_CustBetSetting_Member cg	
 			INNER JOIN #Dep_CustBetSetting_Member t 
-				ON cg.CustID=t.CustID	AND cg.SportType=t.SporttypeID AND cg.BetType=t.Bettype 	
+				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
 	END	
+	DROP TABLE #Dep_CustBetSetting_Agent, 
+				#Dep_CustBetSetting_Member,
+				#Dep_CustPTGroupSetting_Member,
+				#Dep_CustPTSetting_Agent,
+				#Dep_CustPTSetting_Member,
+				#supers
 END	
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
