@@ -197,7 +197,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 						,'BBIN3'
 						,'TCGINR'
 						)
-		AND Ci.currency IN (61)
+		AND Ci.currency IN (61,121,97)
 		AND ci.custid NOT IN (SELECT custid FROM #Supers_Offered)
 
 -- For deployer info
