@@ -1,6 +1,6 @@
 --12betExchangeINR => format : {site} + Exchange + {currency}
 --DUmmy Agent => format : {site} + ACC + {currency} + 01
-CREATE TABLE #supers (custid INT, currency NVARCHAR(50), Site VARCHAR(20) ,DummyAgentID INT, DummyAgent varchar(30), DummyExchange varchar(30), ErrMsg VARCHAR(200), isfinished bit default(0))
+CREATE TABLE #supers (custid INT, currency NVARCHAR(50), Site VARCHAR(20) ,DummyAgentID INT, DummyAgent varchar(30), DummyExchange varchar(30), DummyExchangeID INT, ErrMsg VARCHAR(200), isfinished bit default(0))
 INSERT INTO #supers(custid,currency,Site,DummyAgent)
 SELECT ci.custid,ex.currency
 , CASE WHEN cs.site = 'Mansion88' THEN 'MS88' ELSE cs.Site END
@@ -89,32 +89,56 @@ FROM #supers t
 WHERE ag.username = t.DummyAgent
 
 UPDATE t 
-SET t.isfinished = 1
+SET t.isfinished = 1,
+	t.DummyExchangeID = m.custid
 FROM #supers t 
-	INNER JOIN custinfo ag WITH(NOLOCK) 
-		ON t.custid = ag.srecommend
-WHERE ag.username = t.DummyAgent
+	INNER JOIN custinfo m WITH(NOLOCK) 
+		ON t.custid = m.srecommend
+WHERE m.username = t.DummyExchange
+	AND m.recommend = t.DummyAgentID
 
-SELECT * FROM #supers t
 ----------Create Dummy Exchange------------------
-DECLARE @DummyExchange varchar(30), @DummyAgentID INT
+DECLARE @DummyExchange VARCHAR(30)
+	, @DummyAgentID INT
+	, @DummyExchangeID INT
+	, @ErrCode INT
+	, @ErrMsg NVARCHAR(4000)
+
 WHILE 1 = 1
 BEGIN
 	UPDATE TOP(1) t
-	SET isfinished = 1
+	SET isfinished = 1,
+		@DummyAgentID = t.DummyAgentID,
+		@DummyExchange = t.DummyExchange
 	FROM #supers t
 	WHERE isfinished = 0
+
+	IF @@ROWCOUNT = 0
+		BREAK
+
+	EXEC Acc_Dep_CustomerInsMember_Ag 
+		 @custid=@DummyExchangeID output
+		,@creator=8
+		,@username=@DummyExchange
+		,@userpwd=default
+		,@recommend=@DummyAgentID
+		,@IP='10.18.200.204'
+		,@Language=default
+		,@SubAccID=0
+		,@ErrCode=@ErrCode output
+		,@ErrMsg=@ErrMsg output
+
+		UPDATE  t
+		SET t.ErrMsg = @ErrMsg,
+			t.DummyExchangeID = @DummyExchangeID
+		FROM #supers t
+		WHERE DummyExchange = @DummyExchange
+
+	BREAK
 	
 END
-DROP TABLE #supers
 
---declare @p3 int
---exec Acc_Dep_CheckExistedAccount @username='12BETACCJPY01',@RoleID=2,@CustID=@p3 output
---select @p3
---go
---declare @p1 int
---declare @p9 int
---declare @p10 nvarchar(4000)
---exec Acc_Dep_CustomerInsMember_Ag @custid=@p1 output,@creator=8,@username='12BETACCJPY01EdenTest',@userpwd=default,@recommend=6006576,@IP='10.18.200.204',@Language=default,@SubAccID=0,@ErrCode=@p9 output,@ErrMsg=@p10 output
---select @p1, @p9, @p10
---go
+SELECT * FROM #supers t ORDER BY ErrMsg
+SELECT * FROM #supers t WHERE ISNULL(ErrMsg,'') <> ''
+
+DROP TABLE #supers
