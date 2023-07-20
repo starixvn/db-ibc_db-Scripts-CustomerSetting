@@ -171,13 +171,17 @@ GO
 ;WITH T AS(
 SELECT 'ProductGroup' RefId,'1' ResourceId,'Sportsbook' Resource_en
 UNION ALL SELECT 'ProductGroup','2','RNG Games'
-UNION ALL SELECT 'ProductGroup','3','Live & RNG Games'
+UNION ALL SELECT 'ProductGroup','3','Live & RNG Casino'
 UNION ALL SELECT 'SubGroup','1','Sportsbook'
 UNION ALL SELECT 'SubGroup','2','RNG Games'
-UNION ALL SELECT 'SubGroup','3','Allbet & SA Gaming'
-UNION ALL SELECT 'SubGroup','4','Other Live Casino'
-UNION ALL SELECT 'SubGroup','5','Allbet & SA Gaming'
-UNION ALL SELECT 'SubGroup','6','Other Live Casino & RNG Games'
+UNION ALL SELECT 'SubGroup','3','Allbet & SA Gaming'--comm all sites
+UNION ALL SELECT 'SubGroup','4','Other Live Casino'--comm others site
+UNION ALL SELECT 'SubGroup','5','Allbet & SA Gaming'--PT all site
+UNION ALL SELECT 'SubGroup','6','Other Live & RNG Casino'--PT all site
+UNION ALL SELECT 'SubGroup','7','IBCBet Live Casino'--comm
+UNION ALL SELECT 'SubGroup','8','ION'--ION comm for IBCIndo
+UNION ALL SELECT 'SubGroup','9','Other Live Casino'--Other Live Casino comm IBCIndo
+UNION ALL SELECT 'SubGroup','10','IBCBet Live Casino'--PT IBCIndo
 )
 INSERT INTO [dbo].[RefResource]
            ([RefId]
