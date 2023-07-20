@@ -19,6 +19,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
@@ -29,10 +30,12 @@ BEGIN
 	SELECT ci.custid
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
+		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
 	WHERE ci.username NOT LIKE '3rdSuper%'			
 		AND ci.Enabled=1
 		AND cs.site IN ('spondemo','Athena000')
-		AND ci.currency=20
+		AND ps.Sporttype = 178 AND ps.Bettype = 5302 AND ps.Currency = ci.currency
+		--AND ci.currency = 20
 
 	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
