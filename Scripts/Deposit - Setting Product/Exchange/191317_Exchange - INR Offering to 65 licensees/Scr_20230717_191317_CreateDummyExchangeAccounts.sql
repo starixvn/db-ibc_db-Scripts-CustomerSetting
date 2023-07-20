@@ -1,5 +1,12 @@
---12betExchangeINR => format : {site} + Exchange + {currency}
---DUmmy Agent => format : {site} + ACC + {currency} + 01
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: Eden@20230717
+	Task: Create Dummy exchange Account for INR - 65 licensees [Redmine:#191317]
+		Dummy Exchange => format : {site} + Exchange + {currency} 
+		--> Under line Dummy Agent => format : {site} + ACC + {currency} + 01
+	DB: DBCUST/CustDB
+*/
+
 CREATE TABLE #supers (custid INT, currency NVARCHAR(50), Site VARCHAR(20) ,DummyAgentID INT, DummyAgent varchar(30), DummyExchange varchar(30), DummyExchangeID INT, ErrMsg VARCHAR(200), isfinished bit default(0))
 INSERT INTO #supers(custid,currency,Site,DummyAgent)
 SELECT ci.custid,ex.currency
@@ -122,7 +129,7 @@ BEGIN
 		,@username=@DummyExchange
 		,@userpwd=default
 		,@recommend=@DummyAgentID
-		,@IP='10.18.200.204'
+		,@IP='0.0.0.0'
 		,@Language=default
 		,@SubAccID=0
 		,@ErrCode=@ErrCode output
@@ -133,9 +140,6 @@ BEGIN
 			t.DummyExchangeID = @DummyExchangeID
 		FROM #supers t
 		WHERE DummyExchange = @DummyExchange
-
-	BREAK
-	
 END
 
 SELECT * FROM #supers t ORDER BY ErrMsg
