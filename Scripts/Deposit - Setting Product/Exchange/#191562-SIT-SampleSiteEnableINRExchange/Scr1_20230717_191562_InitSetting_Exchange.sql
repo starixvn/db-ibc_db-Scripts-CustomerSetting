@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: Eden@20230616
-	Task: Init data exchange for SampleSite - UUS [Redmine:#189795]
+	Created: Eden@20230717
+	Task: Init data exchange for INR - SampleSite [Redmine:#191562]
 	DB: DBCUST/CustDB and all subscriber of CustDB_custseting Pub
 */
 
@@ -130,8 +130,8 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 		AND ci.CustID <= @max_custid
 		AND ci.Enabled=1
-		AND cs.site IN('SampleSite')	
-		AND Ci.currency IN (20)
+		AND cs.site IN('SampleSite')
+		AND Ci.currency IN (61)
 		AND ci.custid NOT IN (SELECT custid FROM #Supers_Offered)
 
 -- For deployer info

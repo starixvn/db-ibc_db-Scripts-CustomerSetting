@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: Eden@20230616
-	Task: Init data exchange for SampleSite - UUS - New accs [Redmine:#189795]
+	Created: Eden@20230717
+	Task: Init data exchange for INR - SampleSite - New accs [Redmine:#191562]
 	DB: DBCUST/CustDB
 */
 
@@ -17,9 +17,9 @@ BEGIN
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
 	WHERE ci.username NOT LIKE '3rdSuper%'
-			AND ci.Enabled=1
-			AND cs.site IN('SampleSite')	
-			AND Ci.currency IN (20)
+			AND ci.Enabled = 1
+			AND cs.site IN('SampleSite')
+			AND Ci.currency IN (61)
 
 	DECLARE @SportType SMALLINT = 221 
 		, @Bettype SMALLINT = 8001
