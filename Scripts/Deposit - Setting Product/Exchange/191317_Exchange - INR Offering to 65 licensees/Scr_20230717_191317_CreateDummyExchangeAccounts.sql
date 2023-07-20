@@ -125,11 +125,11 @@ BEGIN
 
 	EXEC Acc_Dep_CustomerInsMember_Ag 
 		 @custid=@DummyExchangeID output
-		,@creator=8
+		,@creator=10278938 --starixIT 
 		,@username=@DummyExchange
 		,@userpwd=default
 		,@recommend=@DummyAgentID
-		,@IP='0.0.0.0'
+		,@IP='10.3.11.200'
 		,@Language=default
 		,@SubAccID=0
 		,@ErrCode=@ErrCode output
