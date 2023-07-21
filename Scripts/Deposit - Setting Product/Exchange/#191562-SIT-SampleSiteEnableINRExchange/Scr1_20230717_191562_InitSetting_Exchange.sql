@@ -60,6 +60,9 @@ BEGIN
 	FROM #tmpCust c WITH(NOLOCK)
 	WHERE c.roleid IN(2,3,4)
 
+	DECLARE @bitmapInit	binary(32)
+	SELECT @bitmapInit = NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,@bitmapOrder,0)
+
 	WHILE 1 = 1
 	BEGIN
 		TRUNCATE TABLE #tmpCustBatch
@@ -76,6 +79,13 @@ BEGIN
 			,bitmapIsDisabled = (SELECT NewBitmap FROM dbo.f_CustSetting_GenerateProductStatus (c.bitmapIsDisabled,@bitmapOrder,0))
 		FROM [dbo].[Dep_CustProductStatus] c WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #tmpCustBatch t ON C.custid = T.custid
+
+		--Insert new if not exist record before
+		INSERT INTO [Dep_CustProductStatus](CustID,bitmapIsDisabled,bitmapIsHidden)
+		SELECT t.CustID, @bitmapInit, @bitmapInit
+		FROM #tmpCustBatch t
+			LEFT JOIN [dbo].[Dep_CustProductStatus] c WITH(NOLOCK) ON C.custid = T.custid
+		WHERE c.CustID IS NULL
 	END
 
 	INSERT INTO Dep_LicenseeProductSetting (CustID,ProductSettingID)
