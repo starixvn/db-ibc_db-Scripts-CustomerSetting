@@ -16,8 +16,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbcust only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbcust only
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
@@ -29,7 +29,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 
@@ -88,17 +87,15 @@ BEGIN
 
 	INSERT INTO #Dep_CustProductStatus(CustID, bitmapIsHidden, bitmapIsDisabled)
 	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus(c.bitmapIsHidden, psp.bitmapOrder, 0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus(c.bitmapIsDisabled, psp.bitmapOrder, 0)
+		,bitmapIsHidden = dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON psp.Bettype = @BetType AND psp.Sporttype = @SportType
 		INNER JOIN  #SMATemp temp ON temp.CustID = c.custid
 	UNION ALL
 	SELECT c.CustID
-		,bitmapIsHidden = dbo.f_GenerateProductStatus(c.bitmapIsHidden, psp.bitmapOrder, 0)
-		,bitmapIsDisabled = dbo.f_GenerateProductStatus(c.bitmapIsDisabled, psp.bitmapOrder, 0)
+		,bitmapIsHidden = dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0)
+		,bitmapIsDisabled = dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
 	FROM Dep_CustProductStatus c WITH(NOLOCK)
-		INNER JOIN  dbo.Dep_ProductStatusProfile psp WITH (NOLOCK) ON psp.Bettype = @BetType AND psp.Sporttype = @SportType
 		INNER JOIN  #MemberTemp temp ON temp.CustID = c.custid
 
 	DECLARE @batch INT = 3000
@@ -224,10 +221,8 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID, ps.SportType, ps.BetType, ps.MinBet, ps.MaxBet, ps.MaxPerMatch
+	SELECT t.CustID, @SportType, @BetType, 1, 10, 100
 	FROM #SMATemp t
-		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK) 
-	WHERE ps.SportType = @SportType AND ps.BetType = @Bettype AND ps.Currency = t.currency
 
 	INSERT INTO Dep_CustBetSetting_Member(
 		 CustID
@@ -237,10 +232,8 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID, ps.SportType, ps.BetType, ps.MinBet, ps.MaxBet, ps.MaxPerMatch
+	SELECT t.CustID, @SportType, @BetType, 1, 10, 100
 	FROM #MemberTemp t
-		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
-	WHERE ps.SportType = @SportType AND ps.BetType = @Bettype AND ps.Currency = t.currency
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 170)
 	BEGIN
@@ -265,7 +258,7 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 
 DECLARE @target NVARCHAR(20)
 
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
@@ -281,13 +274,16 @@ INSERT INTO #supers(custid)
 SELECT ci.custid
 FROM custInfo ci WITH (NOLOCK) 	
 	INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-	CROSS APPLY Dep_ProductBetSetting ps
+	INNER JOIN Dep_CustProductStatus s WITH (NOLOCK) ON ci.custid = s.CustID
+	INNER JOIN Dep_CustPTSetting_Agent a WITH (NOLOCK) ON ci.custid = a.CustID
+	CROSS APPLY f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, 33) f		--VS3(Old) Status
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled = 1
-	AND cs.site IN('spondemo','Athena000')
-	AND ps.Sporttype = 178 AND ps.Bettype = 5302 AND ps.Currency = ci.currency
-	--AND ci.currency = 20
+	AND cs.site IN('spondemo','Athena000')										
+	AND a.Sporttype = 190 AND a.Bettype = 2701									--VS2 PT
+	AND f.value = 0
+	AND ci.currency = 20
 
 
 -- For deployer info

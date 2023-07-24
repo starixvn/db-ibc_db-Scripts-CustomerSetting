@@ -11,15 +11,15 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN	-- run at all replicated servers
-	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','TESTDBCUST','SITDBCUST','DB233','DB230\SQLSERVER2008R2')) RETURN -- run at dbtrans only
+	IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN	-- run at all replicated servers
+	IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbtrans only
 	
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTGroupSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
@@ -30,12 +30,15 @@ BEGIN
 	SELECT ci.custid
 	FROM custInfo ci WITH (NOLOCK) 	
 		INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
-		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
-	WHERE ci.username NOT LIKE '3rdSuper%'			
-		AND ci.Enabled=1
-		AND cs.site IN ('spondemo','Athena000')
-		AND ps.Sporttype = 178 AND ps.Bettype = 5302 AND ps.Currency = ci.currency
-		--AND ci.currency = 20
+		INNER JOIN Dep_CustProductStatus s WITH (NOLOCK) ON ci.custid = s.CustID
+		INNER JOIN Dep_CustPTSetting_Agent a WITH (NOLOCK) ON ci.custid = a.CustID
+		CROSS APPLY f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, 33) f		--VS3(Old) Status
+	WHERE ci.username NOT LIKE '3rdSuper%'	
+		AND ci.Enabled = 1
+		AND cs.site IN('spondemo','Athena000')										
+		AND a.Sporttype = 190 AND a.Bettype = 2701									--VS2 PT
+		AND f.value = 0
+		AND ci.currency = 20
 
 	CREATE TABLE #Dep_CustPTSetting_Agent(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustPTSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
@@ -131,7 +134,7 @@ PRINT N'Step 1: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.'
 
 DECLARE @target NVARCHAR(20)
 
-IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB233','DB230\SQLSERVER2008R2')
+IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')
 	SET @target = 'DBCUST'
 ELSE 
 	SET @target = 'REPLICATED'
