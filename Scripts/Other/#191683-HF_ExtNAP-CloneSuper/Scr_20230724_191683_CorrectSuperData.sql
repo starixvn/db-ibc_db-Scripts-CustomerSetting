@@ -12,12 +12,12 @@ INSERT INTO #TempSuper(CustID)
 SELECT custid
 FROM dblog.bodb_CustomerLog.dbo.UserLog_RunSP WITH(NOLOCK) 
 WHERE ActionID = 95009
-	AND logdate >= '04/11/2023'
+	AND logdate >= '04/10/2023'
 UNION
 SELECT custid
 FROM dblog.bodb_CustomerLog_Archive.dbo.UserLog_RunSP WITH(NOLOCK) 
 WHERE ActionID = 95009
-	AND logdate >= '04/11/2023'
+	AND logdate >= '04/10/2023'
 
 --SELECT t.*,cs.custid,cs.MaxMember,s.site
 --FROM #TempSuper t
@@ -39,6 +39,7 @@ FROM #TempSuper t
 	INNER JOIN site s WITH(NOLOCK)
 		On s.site = c.site
 WHERE s.SiteLabel = '789y'
+	AND cs.MaxMember <> 20000
 
 DROP TABLE #TempSuper
 
