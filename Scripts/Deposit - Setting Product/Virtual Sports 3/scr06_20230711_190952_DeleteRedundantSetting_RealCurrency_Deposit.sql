@@ -19,6 +19,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
@@ -70,6 +72,12 @@ BEGIN
 		INNER JOIN #supers s ON c.srecommend = s.custid	 
 	WHERE a.SportType = 178 AND c.custid > @maxcustID
 
+	DELETE a 
+	FROM Dep_LicenseeProductSetting a WITH(ROWLOCK, UPDLOCK)
+		INNER JOIN Customer c WITH (NOLOCK) ON a.CustID = c.custid
+		INNER JOIN #supers s ON c.srecommend = s.custid	
+		INNER JOIN Dep_ProductSetting p WITH(NOLOCK) ON a.ProductSettingID = p.ProductSettingID
+	WHERE p.ProductID = 77 AND c.custid > @maxcustID
 END		
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------

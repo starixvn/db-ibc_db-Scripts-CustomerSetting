@@ -22,6 +22,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
@@ -48,6 +50,7 @@ BEGIN
 	CREATE TABLE #Dep_CustPTGroupSetting_Member(CustID INT,Sporttype INT,Bettype INT,IsLive BIT, PRIMARY KEY(CustID ,Sporttype ,Bettype ,IsLive))
 	CREATE TABLE #Dep_CustBetSetting_Agent(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
 	CREATE TABLE #Dep_CustBetSetting_Member(CustID INT,Sporttype INT,Bettype INT, PRIMARY KEY(CustID ,Sporttype ,Bettype ))
+	CREATE TABLE #Dep_LicenseeProductSetting(CustID INT, ProductSettingID INT, PRIMARY KEY(CustID, ProductSettingID))
 
 	INSERT INTO #Dep_CustPTSetting_Agent(CustID,Sporttype,Bettype,IsLive)
 	SELECT s.Custid, s.SportType, s.BetType, s.IsLive 
@@ -78,6 +81,12 @@ BEGIN
 	FROM Dep_CustBetSetting_Member s WITH(NOLOCK) 
 		INNER JOIN Customer c WITH(NOLOCK) ON s.CustID=c.custid
 	WHERE s.SportType =178 AND c.srecommend IN(SELECT CustID FROM #supers)
+
+	INSERT INTO #Dep_LicenseeProductSetting(CustID, ProductSettingID)
+	SELECT s.CustID, s.ProductSettingID
+	FROM Dep_LicenseeProductSetting s WITH(NOLOCK)
+		INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON s.ProductSettingID = p.ProductSettingID
+	WHERE p.ProductID = 77
 
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTSetting_Agent)
 	BEGIN
@@ -121,11 +130,19 @@ BEGIN
 		OPTION(MAXDOP 1)		
 	END	
 
+	IF EXISTS(SELECT 1 FROM #Dep_LicenseeProductSetting)
+	BEGIN
+		DELETE a
+		FROM Dep_LicenseeProductSetting a WITH(ROWLOCK,UPDLOCK)
+			INNER JOIN #Dep_LicenseeProductSetting t ON a.CustID = t.CustID AND a.ProductSettingID = t.ProductSettingID
+	END
+
 	DROP TABLE #Dep_CustBetSetting_Agent,
 				#Dep_CustBetSetting_Member,
 				#Dep_CustPTGroupSetting_Member,
 				#Dep_CustPTSetting_Agent,
 				#Dep_CustPTSetting_Member,
+				#Dep_LicenseeProductSetting,
 				#supers
 END	
 GO
