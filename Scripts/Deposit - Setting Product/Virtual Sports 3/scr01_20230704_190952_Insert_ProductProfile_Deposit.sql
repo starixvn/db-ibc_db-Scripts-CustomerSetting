@@ -17,10 +17,10 @@ SET @Bettype = 5302
 
 --Dep_ProductSetting
 --Delete old settings
-DELETE ps
-FROM Dep_ProductSetting ps WITH (ROWLOCK)
-WHERE ProductID = @ProductID
-	AND ProductSettingID IN (168, 169, 170)
+--DELETE ps
+--FROM Dep_ProductSetting ps WITH (ROWLOCK)
+--WHERE ProductID = @ProductID
+--	AND ProductSettingID IN (168, 169, 170)
 
 --Insert
 IF EXISTS(
