@@ -21,6 +21,7 @@ BEGIN
 
 	IF dbo.f_CheckRepTable('CustInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
@@ -277,11 +278,13 @@ FROM custInfo ci WITH (NOLOCK)
 	INNER JOIN Dep_CustProductStatus s WITH (NOLOCK) ON ci.custid = s.CustID
 	INNER JOIN Dep_CustPTSetting_Agent a WITH (NOLOCK) ON ci.custid = a.CustID
 	CROSS APPLY f_CustSetting_ProductStatusSel(s.bitmapIsDisabled, 33) f		--VS3(Old) Status
+	CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'	
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled = 1
 	AND cs.site IN('spondemo','Athena000')										
 	AND a.Sporttype = 190 AND a.Bettype = 2701									--VS2 PT
+	AND ps.Sporttype = 178 AND ps.Bettype = 5302 AND ps.Currency = ci.currency
 	AND f.value = 0
 	AND ci.currency = 20
 

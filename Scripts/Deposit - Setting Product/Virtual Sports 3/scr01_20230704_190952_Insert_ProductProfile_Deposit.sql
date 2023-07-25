@@ -51,15 +51,15 @@ IF EXISTS(
 	WHERE SportType = @Sporttype AND BetType = @Bettype
 )
 BEGIN
-	RAISERROR('This SportType and BetType have been used.', 16, 1)
+	RAISERROR('This Sport/BetType has been used.', 16, 1)
 END
 ELSE
 BEGIN
-INSERT INTO Dep_ProductSettingDetail(ProductSettingID, SportType, BetType, IsLive, MaxDefaultValue, SettingStatus, MinDefaultValue, IsApplyBA)
-VALUES
-	(168, @Sporttype, @Bettype, 0, 0, 1, NULL, 0),
-	(169, @Sporttype, @Bettype, 0, 0, 1, NULL, 0),
-	(170, @Sporttype, @Bettype, 0, 0, 1, NULL, 0)
+	INSERT INTO Dep_ProductSettingDetail(ProductSettingID, SportType, BetType, IsLive, MaxDefaultValue, SettingStatus, MinDefaultValue, IsApplyBA)
+	VALUES
+		(168, @Sporttype, @Bettype, 0, 0, 1, NULL, 0),
+		(169, @Sporttype, @Bettype, 0, 0, 1, NULL, 0),
+		(170, @Sporttype, @Bettype, 0, 0, 1, NULL, 0)
 END
 
 --Dep_ProductStatusProfile
@@ -69,7 +69,7 @@ IF EXISTS(
 	WHERE Sporttype = @Sporttype AND Bettype = @Bettype
 )
 BEGIN
-	RAISERROR('This SportType and BetType have been used.', 16, 1)
+	RAISERROR('This Sport/BetType has been used.', 16, 1)
 END
 ELSE
 BEGIN
@@ -125,7 +125,8 @@ VALUES (13, 'RMB', 5, 3000, 10000),
 		(134, 'ZMW', 40, 6000, 19000),
 		(135, 'TZS', 5300, 800000, 2650000),
 		(79, 'KES', 265, 40000, 135000),
-		(50, 'CAN', 2, 3000, 10000)
+		(50, 'CAN', 2, 3000, 10000),
+		(20, 'UUS', 1, 10, 100)
 
 INSERT INTO Dep_ProductBetSetting(Sporttype, Bettype, Currency, MinBet, MaxBet, MaxPerMatch, DefaultMinBet, DefaultMaxBet, DefaultMaxPerMatch)
 SELECT @sporttype, @bettype, ExchangeId, MinBet, MaxBet, MaxPerMatch, 0 AS DefaultMinBet, 0 AS DefaultMaxBet, 0 AS DefaultMaxPerMatch 
