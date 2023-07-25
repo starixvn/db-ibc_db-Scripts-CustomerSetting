@@ -222,8 +222,11 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID, @SportType, @BetType, 1, 10, 100
+	SELECT t.CustID, ps.SportType, ps.Bettype, ps.MinBet, ps.MaxBet, ps.MaxPerMatch
 	FROM #SMATemp t
+		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
+	WHERE ps.SportType = @Sporttype AND ps.BetType = @Bettype AND ps.Currency = t.currency
+
 
 	INSERT INTO Dep_CustBetSetting_Member(
 		 CustID
@@ -233,8 +236,10 @@ BEGIN
 		,MaxBet
 		,MaxPerMatch
 	)
-	SELECT t.CustID, @SportType, @BetType, 1, 10, 100
+	SELECT t.CustID, ps.SportType, ps.Bettype, ps.MinBet, ps.MaxBet, ps.MaxPerMatch
 	FROM #MemberTemp t
+		CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
+	WHERE ps.SportType = @Sporttype AND ps.BetType = @Bettype AND ps.Currency = t.currency
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 170)
 	BEGIN
