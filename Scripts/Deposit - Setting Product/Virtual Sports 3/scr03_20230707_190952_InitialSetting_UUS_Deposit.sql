@@ -23,6 +23,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBAActive') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
@@ -32,6 +33,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
 
 	CREATE TABLE #MemberTemp
 	(

@@ -31,6 +31,8 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustBAActive') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
 
 	DECLARE @batch INT = 3000
 

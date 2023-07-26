@@ -24,6 +24,7 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductSetting') = 0 RETURN
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
 	IF dbo.f_CheckRepTable('custInfo') = 0 RETURN
 	IF dbo.f_CheckRepTable('Customer') = 0 RETURN	
 	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN	
