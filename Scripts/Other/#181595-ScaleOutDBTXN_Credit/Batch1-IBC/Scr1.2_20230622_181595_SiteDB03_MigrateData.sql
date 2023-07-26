@@ -8,13 +8,6 @@ USE bodb02
 GO
 
 --> check pending table of centralDB
-WHILE EXISTS( SELECT 1 FROM DBCTG.bodb02.dbo.BalancePendingCreditGame WITH(NOLOCK) )
-	OR EXISTS(SELECT 1 FROM DBCTG.bodb02.dbo.BalancePendingDebitGame WITH(NOLOCK))
-BEGIN
-	PRINT 'Wait 10s for job ''bodb02 : Game : Task_BalanceUpd'' proceed done'
-	WAITFOR DELAY '00:00:10'
-END
-
 CREATE TABLE #Supers (custid int PRIMARY KEY)
 
 INSERT INTO #Supers(custid)
@@ -26,6 +19,21 @@ WHERE s.isLicensee = 0
 	AND ci.roleid = 4
 	AND ci.custid NOT IN ( SELECT custid FROM custdb.dbo.Dep_CustSuper WITH(NOLOCK))
 	AND s.SiteLabel IN ('IBC')
+
+WHILE EXISTS(	SELECT TOP 1 1
+				FROM DBCTG.bodb02.dbo.BalancePendingCreditGame c WITH(NOLOCK)
+					INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+				WHERE ci.srecommend IN (SELECT custid FROM #Supers) 
+			)
+	OR EXISTS(	SELECT TOP 1 1
+				FROM DBCTG.bodb02.dbo.BalancePendingDebitGame c WITH(NOLOCK)
+					INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+				WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+			)
+BEGIN
+	PRINT 'Wait 10s for job ''bodb02 : Game : Task_BalanceUpd'' proceed done'
+	WAITFOR DELAY '00:00:10'
+END
 
 INSERT INTO Winlimit_CreditGame(CustId,WinlostDate,BetType,Winlost)
 SELECT c.CustId,c.WinlostDate,c.BetType,c.Winlost
