@@ -91,7 +91,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTSetting_Agent)
 	BEGIN
 		DELETE cg
-		FROM Dep_CustPTSetting_Agent cg 	
+		FROM Dep_CustPTSetting_Agent cg WITH(ROWLOCK,UPDLOCK) 	
 			INNER JOIN #Dep_CustPTSetting_Agent t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
 	END	
@@ -99,7 +99,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTSetting_Member)
 	BEGIN					
 		DELETE cg
-		FROM Dep_CustPTSetting_Member cg
+		FROM Dep_CustPTSetting_Member cg WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN #Dep_CustPTSetting_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive
 		OPTION(MAXDOP 1)		
@@ -108,7 +108,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustPTGroupSetting_Member)
 	BEGIN	
 		DELETE cg
-		FROM Dep_CustPTGroupSetting_Member cg 
+		FROM Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK,UPDLOCK) 
 			INNER JOIN #Dep_CustPTGroupSetting_Member t 
 				ON cg.AgentID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype AND cg.IsLive=t.IsLive		
 	END 		
@@ -116,7 +116,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Agent)
 	BEGIN		
 		DELETE cg
-		FROM Dep_CustBetSetting_Agent cg
+		FROM Dep_CustBetSetting_Agent cg WITH(ROWLOCK,UPDLOCK)
 			INNER  JOIN #Dep_CustBetSetting_Agent t
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 		
 	END 
@@ -124,7 +124,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM #Dep_CustBetSetting_Member)
 	BEGIN
 		DELETE cg
-		FROM Dep_CustBetSetting_Member cg	
+		FROM Dep_CustBetSetting_Member cg WITH(ROWLOCK,UPDLOCK)	
 			INNER JOIN #Dep_CustBetSetting_Member t 
 				ON cg.CustID=t.CustID	AND cg.SportType=t.Sporttype AND cg.BetType=t.Bettype 	
 		OPTION(MAXDOP 1)		
