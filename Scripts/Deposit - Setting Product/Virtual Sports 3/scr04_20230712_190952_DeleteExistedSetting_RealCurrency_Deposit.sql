@@ -86,6 +86,7 @@ BEGIN
 	INSERT INTO #Dep_LicenseeProductSetting(CustID, ProductSettingID)
 	SELECT s.CustID, s.ProductSettingID
 	FROM Dep_LicenseeProductSetting s WITH(NOLOCK)
+		INNER JOIN #supers sp WITH (NOLOCK) ON s.CustID = sp.custid
 		INNER JOIN Dep_ProductSetting p WITH (NOLOCK) ON s.ProductSettingID = p.ProductSettingID
 	WHERE p.ProductID = 77
 
