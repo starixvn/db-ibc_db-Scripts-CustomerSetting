@@ -33,7 +33,6 @@ BEGIN
 	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_ProductStatusProfile') = 0 RETURN
 	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 0 RETURN
-	IF dbo.f_CheckRepTable('Dep_custsuper') = 0 RETURN
 
 	CREATE TABLE #MemberTemp
 	(
