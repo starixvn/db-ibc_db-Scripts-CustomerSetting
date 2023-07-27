@@ -64,7 +64,10 @@ UNION ALL SELECT 'G_GT_Sport_Bettype','1_151_1_9','Soccer Parlay', N'足球混�
 UNION ALL SELECT 'G_GT_Sport_Bettype','1_152_1_9','Soccer Parlay', N'足球混合过关', N'足球混合過關', N'บอลชุดฟุตบอล', NULL, N'Parlay Bóng Đá'
 UNION ALL SELECT 'G_GT_Sport_Bettype','1_151_99_9','Mix Sports Parlay', N'混合体育过关', N'混合體育過關', N'กีฬาบอลชุด', N'믹스 스포츠 팔레이', NULL
 UNION ALL SELECT 'G_GT_Sport_Bettype','1_152_99_9','Mix Sports Parlay', N'混合体育过关', N'混合體育過關', N'กีฬาบอลชุด', N'믹스 스포츠 팔레이', NULL
+UNION ALL SELECT 'G_GT_Sport_Bettype','1_153_99_9','Mix Sports Parlay', N'混合体育过关', N'混合體育過關', N'กีฬาบอลชุด', N'믹스 스포츠 팔레이', NULL
 UNION ALL SELECT 'G_GT_Sport_Bettype','2_154_9908_1201','Virtual Sports', N'虚拟运动', N'虚拟运动',N'กีฬาอนิเมชั่น',N'가상 스포츠 ', NULL
+UNION ALL SELECT 'G_GT_Sport_Bettype','3_156_9911_2400','Live Casino','Live Casino','Live Casino','Live Casino','Live Casino','Live Casino'
+UNION ALL SELECT 'G_GT_Sport_Bettype','3_153_9911_2400','Live Casino','Live Casino','Live Casino','Live Casino','Live Casino','Live Casino'
 )
 INSERT INTO [dbo].[RefResource]
            ([RefId]
@@ -118,6 +121,9 @@ UNION ALL SELECT 'G_GT_Sport_Bettype','2_154_220_1024','Lottery'
 UNION ALL SELECT 'G_GT_Sport_Bettype','2_154_222_4901','Table Game'
 UNION ALL SELECT 'G_GT_Sport_Bettype','2_154_161_81','Number Game'
 UNION ALL SELECT 'G_GT_Sport_Bettype','2_154_164_8101','Happy 5'
+UNION ALL SELECT 'G_GT_Sport_Bettype','4_153_175_7901','Bitcoin'
+UNION ALL SELECT 'G_GT_Sport_Bettype','4_156_175_7901','Bitcoin'
+UNION ALL SELECT 'G_GT_Sport_Bettype','4_157_175_7901','Bitcoin'
 )
 INSERT INTO [dbo].[RefResource]
            ([RefId]
@@ -172,16 +178,18 @@ GO
 SELECT 'ProductGroup' RefId,'1' ResourceId,'Sportsbook' Resource_en
 UNION ALL SELECT 'ProductGroup','2','RNG Games'
 UNION ALL SELECT 'ProductGroup','3','Live & RNG Casino'
+UNION ALL SELECT 'ProductGroup','4','Other Games'
 UNION ALL SELECT 'SubGroup','1','Sportsbook'
 UNION ALL SELECT 'SubGroup','2','RNG Games'
-UNION ALL SELECT 'SubGroup','3','Allbet & SA Gaming'--comm all sites
-UNION ALL SELECT 'SubGroup','4','Other Live Casino'--comm others site
-UNION ALL SELECT 'SubGroup','5','Allbet & SA Gaming'--PT all site
-UNION ALL SELECT 'SubGroup','6','Other Live & RNG Casino'--PT all site
+--UNION ALL SELECT 'SubGroup','3','Allbet & SA Gaming'--comm all sites
+UNION ALL SELECT 'SubGroup','4','Live Casino'--comm Live CS all sites
+--UNION ALL SELECT 'SubGroup','5','Allbet & SA Gaming'--PT all site
+UNION ALL SELECT 'SubGroup','6','Live & RNG Casino'--PT all site
 UNION ALL SELECT 'SubGroup','7','IBCBet Live Casino'--comm
-UNION ALL SELECT 'SubGroup','8','ION'--ION comm for IBCIndo
-UNION ALL SELECT 'SubGroup','9','Other Live Casino'--Other Live Casino comm IBCIndo
-UNION ALL SELECT 'SubGroup','10','IBCBet Live Casino'--PT IBCIndo
+UNION ALL SELECT 'SubGroup','8','IBCBet Live Casino'--PT IBCIndo
+UNION ALL SELECT 'SubGroup','9','Bitcoin'--Bitcoin comm
+UNION ALL SELECT 'SubGroup','10','Bitcoin'--Bitcoin PT
+
 )
 INSERT INTO [dbo].[RefResource]
            ([RefId]

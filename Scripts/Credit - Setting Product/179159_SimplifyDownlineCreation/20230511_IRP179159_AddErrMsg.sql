@@ -12,9 +12,9 @@ UNION SELECT 20047 , 3, 'This Template is not exists.'
 UNION SELECT 20048 , 3, 'Invalid Position Taking(min/max set by upline).'
 UNION SELECT 10069 , 5, 'Max Per Number must be equal to or less than Upline''s Max Per Number'
 UNION SELECT 10070 , 5, 'The Parlay Max Payout value must be a positive amount.'
-UNION SELECT 10071 , 5, 'Parlay Max Payout: The setting of SingleMatchParlay is higher than the upline''s.'
-UNION SELECT 10072 , 5, 'Parlay Max Payout: The setting of Combo2 is higher than the upline''s.'
-UNION SELECT 10073 , 5, 'Parlay Max Payout: The setting of Combo35 is higher than the upline''s.'
+UNION SELECT 10071 , 5, 'Parlay Max Payout: The setting of Single Match Parlay is higher than the upline''s.'
+UNION SELECT 10072 , 5, 'Parlay Max Payout: The setting of Combo 2 is higher than the upline''s.'
+UNION SELECT 10073 , 5, 'Parlay Max Payout: The setting of Combo 3 - 5 is higher than the upline''s.'
 UNION SELECT 10074 , 5, 'Parlay Max Payout: The setting of ComboOver6 is higher than the upline''s.'
 
 )
