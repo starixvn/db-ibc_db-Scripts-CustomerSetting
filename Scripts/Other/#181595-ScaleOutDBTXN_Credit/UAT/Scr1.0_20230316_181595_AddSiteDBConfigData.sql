@@ -11,9 +11,9 @@ DELETE FROM SiteDBConfig WITH(ROWLOCK) WHERE SiteDBGroupID = 3
 GO
 
 --PRO
---IF @@SERVERNAME = 'DBCUST'
---INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], AWSProxyDomain, AWSProxyPort)
---SELECT 3, 'DBSite03', 'DBGRP03L', '','',0
+IF @@SERVERNAME = 'DBCUST'
+	INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], AWSProxyDomain, AWSProxyPort)
+	SELECT 3, 'DBSite03', 'DBGRP03L', '10.40.40.140','',0
 
 SELECT * FROM SiteDBConfig WITH(NOLOCK)
 
