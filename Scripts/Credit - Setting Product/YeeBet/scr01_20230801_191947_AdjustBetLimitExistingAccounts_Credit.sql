@@ -51,7 +51,7 @@ BEGIN
 							WHEN @currency = 45 THEN 5000000 END
 	
 
-	CREATE TABLE #CustStakeLevelDownlines (
+	CREATE TABLE #CustStakeLevelDownlines_Agent(
 				CustID INT 
 				,DirectUplineID INT		
 				,roleid TINYINT
@@ -60,58 +60,77 @@ BEGIN
 				,StakeLevelList_new VARCHAR(100)							
 				, PRIMARY KEY CLUSTERED(CustID,Bettype)
 		)
-		
-	INSERT INTO #CustStakeLevelDownlines(CustID, DirectUplineID, roleid, Bettype, StakeLevelList, StakeLevelList_new)
+
+	CREATE TABLE #CustStakeLevelDownlines_Member(
+				CustID INT 
+				,DirectUplineID INT		
+				,roleid TINYINT
+				,Bettype SMALLINT
+				,StakeLevelList VARCHAR(100)
+				,StakeLevelList_new VARCHAR(100)							
+				, PRIMARY KEY CLUSTERED(CustID,Bettype)
+		)		
+
+	INSERT INTO #CustStakeLevelDownlines_Agent(CustID, DirectUplineID, roleid, Bettype, StakeLevelList, StakeLevelList_new)
 	SELECT ci.custid,
 			CASE 
-				WHEN ci.roleid = 3 THEN srecommend
-				WHEN ci.roleid = 2 THEN mrecommend				 	
+				WHEN ci.roleid = 3 THEN ci.srecommend
+				WHEN ci.roleid = 2 THEN ci.mrecommend				 	
 			END AS DirectUplineID,		
-			ci.roleid,cs.Bettype,cs.StakeLevelList,cs.StakeLevelList
+			ci.roleid, cs.Bettype, cs.StakeLevelList, cs.StakeLevelList
 	FROM dbo.custinfo ci WITH(NOLOCK)
 		INNER JOIN dbo.CustStakeLevel_Agent cs WITH(NOLOCK) ON ci.custid = cs.custid			
 	WHERE ci.srecommend = @srecommend
 		AND ci.custid <= @max_custid
-		AND roleid IN (2,3,4)
-		AND Bettype = 3151
+		AND ci.roleid IN (2,3,4)
+		AND cs.Sporttype = 159
+		AND cs.Bettype = 3151
 		
-	UNION ALL
+	INSERT INTO #CustStakeLevelDownlines_Member(CustID, DirectUplineID, roleid, Bettype, StakeLevelList, StakeLevelList_new)
 	SELECT ci.custid,
-			recommend as DirectUplineID,		
-			ci.roleid,cs.bettype,cs.StakeLevelList,cs.StakeLevelList
+			ci.recommend AS DirectUplineID,		
+			ci.roleid, cs.bettype, cs.StakeLevelList, cs.StakeLevelList
 	FROM dbo.custinfo ci WITH(NOLOCK)
 		INNER JOIN dbo.CustStakeLevel_Member cs WITH(NOLOCK) ON ci.custid = cs.custid				
 	WHERE ci.srecommend = @srecommend
+		AND ci.custid <= @max_custid
 		AND ci.roleid = 1
-		AND Bettype = 3151
+		AND cs.SportType = 159
+		AND cs.Bettype = 3151
 
 	--Current customer is assigned several bet limits which contain the removed bet limit => Remove the required bet limit
+	--Agent
 	UPDATE cs
 	SET cs.StakeLevelList_new = ISNULL(REVERSE(STUFF(REVERSE(REPLACE(cs.StakeLevelList+',',CAST(@excludedStakeLevelID as VARCHAR(10))+',','')),1,1,'')),'')
-	FROM #CustStakeLevelDownlines cs 
+	FROM #CustStakeLevelDownlines_Agent cs 
+
+	--Member
+	UPDATE cs
+	SET cs.StakeLevelList_new = ISNULL(REVERSE(STUFF(REVERSE(REPLACE(cs.StakeLevelList+',',CAST(@excludedStakeLevelID as VARCHAR(10))+',','')),1,1,'')),'')
+	FROM #CustStakeLevelDownlines_Member cs 
 
 	--Current customer is assigned only the bet limit which needs to be removed => Remove it and assign the adjacent lower bet limit from the upline
 	--Current customer is super => Remove and assign adjacent lower bet limit in gdoc
 	UPDATE cs
 	SET cs.StakeLevelList_new = CAST(@lowerStakeLevelID as VARCHAR(10)) 
-	FROM #CustStakeLevelDownlines cs 
+	FROM #CustStakeLevelDownlines_Agent cs 
 	WHERE StakeLevelList <> StakeLevelList_new
-		AND StakeLevelList_new = ''
+		AND cs.StakeLevelList_new = ''
 		AND cs.roleid = 4
 
 	--Current customer is assigned only the bet limit which needs to be removed => Remove it and assign the adjacent lower bet limit from the upline
 	--Master	
 	UPDATE T
 		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #CustStakeLevelDownlines T
-		INNER JOIN #CustStakeLevelDownlines Upline ON t.DirectUplineID = Upline.CustID 
+	FROM #CustStakeLevelDownlines_Agent T
+		INNER JOIN #CustStakeLevelDownlines_Agent Upline ON t.DirectUplineID = Upline.CustID 
 												AND Upline.StakeLevelList_new <> ''			 		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
 							FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID		
-							WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake DESC
+							WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
+						ORDER BY SL.maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 3
 		AND T.StakeLevelList_new = ''
@@ -120,16 +139,15 @@ BEGIN
 	--Agent		
 	UPDATE T
 		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #CustStakeLevelDownlines T
-		INNER JOIN #CustStakeLevelDownlines Upline ON t.DirectUplineID = Upline.CustID 
+	FROM #CustStakeLevelDownlines_Agent T
+		INNER JOIN #CustStakeLevelDownlines_Agent Upline ON t.DirectUplineID = Upline.CustID 
 												AND Upline.StakeLevelList_new <> ''			 
-		
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
 							FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID		
-							WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake DESC
+							WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
+						ORDER BY SL.maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 2
 		AND T.StakeLevelList_new = ''
@@ -138,24 +156,29 @@ BEGIN
 	--Member		
 	UPDATE T
 		SET StakeLevelList_new = T1.DownlineStakeLevelList_new
-	FROM #CustStakeLevelDownlines T
-		INNER JOIN #CustStakeLevelDownlines Upline ON t.DirectUplineID = Upline.CustID 
-												AND Upline.StakeLevelList_new <> ''			 
-		
+	FROM #CustStakeLevelDownlines_Member T
+		INNER JOIN #CustStakeLevelDownlines_Agent Upline ON t.DirectUplineID = Upline.CustID 
+												AND Upline.StakeLevelList_new <> ''			 	
 		CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 					FROM (SELECT CAST(val AS INT) AS val
 							FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
 							INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID		
-							WHERE MinStake <> 0 AND MaxStake <> 0
-						ORDER BY maxstake DESC
+							WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
+						ORDER BY SL.maxstake DESC
 					) T1 -- Direct Upline
 	WHERE t.roleid = 1
 		AND T.StakeLevelList_new = ''
 		AND T.StakeLevelList <> T.StakeLevelList_new
 	
 	--Current customer doesn't have bet limit => Unchange
+	--Agent
 	DELETE t											
-	FROM #CustStakeLevelDownlines t
+	FROM #CustStakeLevelDownlines_Agent t
+	WHERE t.StakeLevelList = t.StakeLevelList_new
+
+	--Member
+	DELETE t											
+	FROM #CustStakeLevelDownlines_Member t
 	WHERE t.StakeLevelList = t.StakeLevelList_new
 
 	DECLARE @batchSize INT = 3000
@@ -172,8 +195,27 @@ BEGIN
 		DELETE TOP (@batchSize) s
 		OUTPUT DELETED.CustID, DELETED.Bettype, DELETED.StakeLevelList, DELETED.StakeLevelList_new
 		INTO #BatchCustStakeLevelDownlines(CustID, Bettype, StakeLevelList, StakeLevelList_new)
-		FROM #CustStakeLevelDownlines s
-		WHERE roleid = 1
+		FROM #CustStakeLevelDownlines_Agent s
+
+		IF @@ROWCOUNT = 0 
+			BREAK;
+
+		UPDATE cs
+		SET cs.StakeLevelList = ISNULL(dl.StakeLevelList_new,'')
+		FROM dbo.CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)		
+			INNER JOIN #BatchCustStakeLevelDownlines dl ON cs.CustID = dl.CustID 
+													AND cs.bettype = dl.bettype
+
+		WAITFOR DELAY '00:00:00.280'
+	END
+
+	WHILE 1 = 1
+	BEGIN
+		TRUNCATE TABLE #BatchCustStakeLevelDownlines
+		DELETE TOP (@batchSize) s
+		OUTPUT DELETED.CustID, DELETED.Bettype, DELETED.StakeLevelList, DELETED.StakeLevelList_new
+		INTO #BatchCustStakeLevelDownlines(CustID, Bettype, StakeLevelList, StakeLevelList_new)
+		FROM #CustStakeLevelDownlines_Member s
 
 		IF @@ROWCOUNT = 0 
 			BREAK;
@@ -187,13 +229,7 @@ BEGIN
 		WAITFOR DELAY '00:00:00.280'
 	END
 
-	UPDATE cs
-	SET cs.StakeLevelList = ISNULL(dl.StakeLevelList_new,'')
-	FROM dbo.CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)			
-		INNER JOIN #CustStakeLevelDownlines dl ON cs.CustID = dl.CustID 
-												AND cs.bettype = dl.bettype
-
-	DROP TABLE #CustStakeLevelDownlines, #BatchCustStakeLevelDownlines
+	DROP TABLE #CustStakeLevelDownlines_Agent, #CustStakeLevelDownlines_Member, #BatchCustStakeLevelDownlines
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @ DBCUST.CustDB -------
@@ -240,7 +276,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled = 1
 	AND ci.currency IN (67, 5, 2, 13, 16, 64, 3, 69, 45)
-	AND Sporttype = 159 AND Bettype = 3151
+	AND ca.Sporttype = 159 AND ca.Bettype = 3151
 	AND st.val IN (SELECT stakelevelid FROM #stakeLevel)
 
 -- For deployer info
