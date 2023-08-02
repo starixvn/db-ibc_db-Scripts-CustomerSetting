@@ -205,8 +205,6 @@ BEGIN
 		FROM dbo.CustStakeLevel_Agent cs WITH(UPDLOCK,ROWLOCK)		
 			INNER JOIN #BatchCustStakeLevelDownlines dl ON cs.CustID = dl.CustID 
 													AND cs.bettype = dl.bettype
-
-		WAITFOR DELAY '00:00:00.280'
 	END
 
 	WHILE 1 = 1
@@ -225,8 +223,6 @@ BEGIN
 		FROM dbo.CustStakeLevel_Member cs WITH(UPDLOCK,ROWLOCK)		
 			INNER JOIN #BatchCustStakeLevelDownlines dl ON cs.CustID = dl.CustID 
 													AND cs.bettype = dl.bettype
-
-		WAITFOR DELAY '00:00:00.280'
 	END
 
 	DROP TABLE #CustStakeLevelDownlines_Agent, #CustStakeLevelDownlines_Member, #BatchCustStakeLevelDownlines
