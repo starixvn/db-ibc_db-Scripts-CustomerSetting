@@ -1,0 +1,132 @@
+/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
+/*
+	Created: 20230802@Johnson
+	Task: delete redundant log CTS [#RedmineID:#192208]
+	DB: DBLOG/bodb_CustomerLog
+*/
+--run batch by Date
+DECLARE @Log TABLE (Doing NVARCHAR(1000), IsDeleted BIT DEFAULT(0))
+DECLARE @Doing NVARCHAR(1000)
+CREATE TABLE #tblLog (LogID BIGINT PRIMARY KEY, CustID INT)
+DECLARE @tmpLog TABLE (LogID BIGINT PRIMARY KEY, CustID INT)
+
+INSERT INTO @Log(Doing)
+SELECT  '38 - 200 - 200'
+UNION ALL SELECT  '38 - 202 - 202'
+UNION ALL SELECT  '38 - 203 - 203'
+UNION ALL SELECT  '38 - 201 - 201'
+UNION ALL SELECT  '38 - 901 - 901'
+UNION ALL SELECT  '38 - 2303 - 2303'
+UNION ALL SELECT  '38 - 4000 - 4000'
+UNION ALL SELECT  '38 - 300 - 300'
+UNION ALL SELECT  '38 - 2202 - 2202'
+UNION ALL SELECT  '38 - 3000 - 3000'
+UNION ALL SELECT  '38 - 902 - 902'
+UNION ALL SELECT  '38 - 303 - 303'
+UNION ALL SELECT  '38 - 2100 - 2100'
+UNION ALL SELECT  '38 - 2200 - 2200'
+UNION ALL SELECT  '38 - 2102 - 2102'
+UNION ALL SELECT  '38 - 2201 - 2201'
+UNION ALL SELECT  '38 - 2000 - 2000'
+UNION ALL SELECT  '38 - 3201 - 3201'
+UNION ALL SELECT  '38 - 2403 - 2403'
+UNION ALL SELECT  '38 - 2203 - 2203'
+UNION ALL SELECT  '38 - 205 - 205'
+UNION ALL SELECT  '38 - 400 - 400'
+UNION ALL SELECT  '38 - 2500 - 2500'
+UNION ALL SELECT  '38 - 301 - 301'
+UNION ALL SELECT  '38 - 2103 - 2103'
+UNION ALL SELECT  '38 - 2101 - 2101'
+UNION ALL SELECT  '38 - 3101 - 3101'
+UNION ALL SELECT  '38 - 2002 - 2002'
+UNION ALL SELECT  '38 - 2305 - 2305'
+UNION ALL SELECT  '38 - 2003 - 2003'
+UNION ALL SELECT  '38 - 3001 - 3001'
+UNION ALL SELECT  '38 - 204 - 204'
+UNION ALL SELECT  '38 - 2001 - 2001'
+UNION ALL SELECT  '38 - 3003 - 3003'
+UNION ALL SELECT  '38 - 401 - 401'
+UNION ALL SELECT  '38 - 302 - 302'
+UNION ALL SELECT  '38 - 2304 - 2304'
+UNION ALL SELECT  '38 - 2503 - 2503'
+UNION ALL SELECT  '38 - 2405 - 2405'
+UNION ALL SELECT  '38 - 2105 - 2105'
+UNION ALL SELECT  '38 - 2505 - 2505'
+UNION ALL SELECT  '38 - 2205 - 2205'
+UNION ALL SELECT  '38 - 3002 - 3002'
+UNION ALL SELECT  '38 - 2504 - 2504'
+UNION ALL SELECT  '38 - 304 - 304'
+UNION ALL SELECT  '38 - 2005 - 2005'
+UNION ALL SELECT  '38 - 2104 - 2104'
+UNION ALL SELECT  '38 - 2404 - 2404'
+UNION ALL SELECT  '38 - 2204 - 2204'
+UNION ALL SELECT  '38 - 3100 - 3100'
+
+DECLARE @fromdate DATE = '2022-10-10',
+	@todate DATE 
+
+DECLARE @str varchar(30) 
+	
+SELECT @todate = dateadd(day,1,@fromdate)
+	
+WHILE (1=1)
+BEGIN		
+	WHILE (1=1)
+	BEGIN
+		UPDATE TOP (1) t
+		SET isDeleted = 1,
+			@Doing = Doing
+		FROM @Log t
+		WHERE isDeleted = 0 
+		
+		IF @@ROWCOUNT = 0 
+			BREAK;
+			
+		INSERT INTO #tblLog(LogID,CustID)
+		SELECT LogID, CustID
+		FROM UserLog_UserControl WITH(NOLOCK)
+		where ActionID = 5566
+			and Doing = @Doing
+			AND logdate BETWEEN @fromdate AND @todate
+					
+		WHILE(1=1)
+		BEGIN
+			DELETE TOP (5000) t
+			OUTPUT DELETED.LogID, DELETED.CustID 
+			INTO @tmpLog(LogID,CustID)
+			FROM #tblLog t
+			
+			IF @@ROWCOUNT = 0
+				BREAK;
+				
+			DELETE u
+			FROM UserLog_UserControl u WITH(ROWLOCK)
+				INNER JOIN @tmpLog t ON u.LogID = t.LogID AND u.CustID = t.CustID
+			WHERE ActionID = 5566
+				AND Doing = @Doing				
+				AND logdate BETWEEN @fromdate AND @todate
+				
+			DELETE @tmpLog
+			
+			WAITFOR DELAY '0:0:0.1'	
+		END
+			
+	END
+		
+	SELECT @fromdate = @todate
+	SELECT @todate = dateadd(day,1,@fromdate)
+	
+	UPDATE @Log 
+	SET isDeleted = 0
+	
+	IF @fromdate > GETDATE()
+		BREAK;	
+	
+	SELECT @str = convert (varchar(30), @fromdate)
+
+	RAISERROR ('%s', 0, 1, @str) WITH NOWAIT
+	
+END
+DROP TABLE #tblLog
+GO
+
