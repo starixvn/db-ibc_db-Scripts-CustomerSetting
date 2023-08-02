@@ -1,12 +1,12 @@
 /*<info serverAlias="DBSIC-msdb"></info>*/
 /*
 	Created: 202308014@Eden
-	Task: Enable Job : [#RedmineID:#181595]
+	Task: Enable Job on SiteDB03 : [#RedmineID:#181595]
 		bodb02 : Game : Task_BalanceUpd 
 		bodb02 : Game : ResetYesterday
 		bodb02: Task Clear balance all downlines 
 							
-	DB: DBCUST-msdb
+	DB: DBSIC-msdb
 */
 
 
