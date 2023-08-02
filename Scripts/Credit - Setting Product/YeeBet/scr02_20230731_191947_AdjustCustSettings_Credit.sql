@@ -36,6 +36,8 @@ BEGIN
 							WHEN @currency IN (16, 64, 3, 69) THEN 10000 
 							WHEN @currency = 45 THEN 10000000 END
 
+	IF @@ROWCOUNT = 0 RETURN 
+
 	DECLARE @lowerStakeLevelID INT 
 	SELECT @lowerStakeLevelID = StakeLevelID
 	FROM dbo.StakeLevel WITH(NOLOCK)									
@@ -48,7 +50,6 @@ BEGIN
 							WHEN @currency IN (16, 64, 3, 69) THEN 5000 
 							WHEN @currency = 45 THEN 5000000 END
 	
-	IF @@ROWCOUNT = 0 RETURN 
 
 	CREATE TABLE #CustStakeLevelDownlines (
 				CustID INT 
