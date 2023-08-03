@@ -15,14 +15,16 @@ CREATE TABLE #stakelevel(excludedStakeLevelID INT, lowerStakeLevelID INT, curren
 INSERT INTO #stakeLevel(excludedStakeLevelID, lowerStakeLevelID, currency)
 SELECT stakelevelid, NULL AS lowerStakeLevelID, ExchangeId
 FROM dbo.StakeLevel WITH (NOLOCK)																
-WHERE ExchangeId IN (67, 5, 2, 13, 16, 64, 3, 69, 45)
+WHERE ExchangeId IN (67, 5, 2, 13, 16, 64, 3, 69, 45, 43)
 	AND GameTypeID = 3151
 	AND MinStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 100	--HKK, HK$, RM, RMB
 						WHEN exchangeid IN (16, 64, 3, 69) THEN 50	--Yen, UT, US$, MMK
-						WHEN exchangeid = 45 THEN 30000 END			--Won
+						WHEN exchangeid = 45 THEN 30000 			--Won
+						WHEN exchangeid = 43 THEN 800 END			--THB
 	AND MaxStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 40000
 						WHEN exchangeid IN (16, 64, 3, 69) THEN 10000 
-						WHEN exchangeid = 45 THEN 10000000 END
+						WHEN exchangeid = 45 THEN 10000000
+						WHEN exchangeid = 43 THEN 200000 END
 UPDATE t 
 SET t.lowerStakeLevelID = s.StakeLevelID
 FROM #stakeLevel t 	
@@ -31,11 +33,12 @@ FROM #stakeLevel t
 		AND t.currency = s.ExchangeId
 		AND MinStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 50	--HKK, HK$, RM, RMB
 							WHEN exchangeid IN (16, 64, 3, 69) THEN 20	--Yen, UT, US$, MMK
-							WHEN exchangeid = 45 THEN 20000 END			--Won
+							WHEN exchangeid = 45 THEN 20000 			--Won
+							WHEN exchangeid = 43 THEN 800 END			--THB
 		AND MaxStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 20000
 							WHEN exchangeid IN (16, 64, 3, 69) THEN 5000 
-							WHEN exchangeid = 45 THEN 5000000 END
-
+							WHEN exchangeid = 45 THEN 5000000 
+							WHEN exchangeid = 43 THEN 200000 END
 
 CREATE TABLE #supers(custid INT PRIMARY KEY, currency INT, excludedStakeLevelID INT, lowerStakeLevelID INT)
 

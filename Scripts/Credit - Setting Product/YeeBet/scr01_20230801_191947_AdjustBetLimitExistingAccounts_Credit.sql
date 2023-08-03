@@ -31,10 +31,12 @@ BEGIN
 		AND GameTypeID = 3151
 		AND MinStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 100	--HKK, HK$, RM, RMB
 							WHEN @currency IN (16, 64, 3, 69) THEN 50	--Yen, UT, US$, MMK
-							WHEN @currency = 45 THEN 30000 END			--Won
+							WHEN @currency = 45 THEN 30000				--Won
+							WHEN @currency = 43 THEN 800 END			--THB
 		AND MaxStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 40000
 							WHEN @currency IN (16, 64, 3, 69) THEN 10000 
-							WHEN @currency = 45 THEN 10000000 END
+							WHEN @currency = 45 THEN 10000000 
+							WHEN @currency = 43 THEN 200000 END
 
 	IF @@ROWCOUNT = 0 RETURN 
 
@@ -45,12 +47,13 @@ BEGIN
 		AND GameTypeID = 3151
 		AND MinStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 50	--HKK, HK$, RM, RMB
 							WHEN @currency IN (16, 64, 3, 69) THEN 20	--Yen, UT, US$, MMK
-							WHEN @currency = 45 THEN 20000 END			--Won
+							WHEN @currency = 45 THEN 20000				--Won
+							WHEN @currency = 43 THEN 800 END			--THB
 		AND MaxStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 20000
 							WHEN @currency IN (16, 64, 3, 69) THEN 5000 
-							WHEN @currency = 45 THEN 5000000 END
+							WHEN @currency = 45 THEN 5000000 
+							WHEN @currency = 43 THEN 200000 END
 	
-
 	CREATE TABLE #CustStakeLevelDownlines_Agent(
 				CustID INT 
 				,DirectUplineID INT		
@@ -253,14 +256,16 @@ SELECT @max_custid = xxx
 SELECT StakeLevelID
 INTO #stakeLevel
 FROM dbo.Stakelevel WITH (NOLOCK)
-WHERE ExchangeId IN (67, 5, 2, 13, 16, 64, 3, 69, 45)
+WHERE ExchangeId IN (67, 5, 2, 13, 16, 64, 3, 69, 45, 43)
 	AND GameTypeID = 3151
 	AND MinStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 100	--HKK, HK$, RM, RMB
 						WHEN exchangeid IN (16, 64, 3, 69) THEN 50	--Yen, UT, US$, MMK
-						WHEN exchangeid = 45 THEN 30000 END			--Won
+						WHEN exchangeid = 45 THEN 30000 			--Won
+						WHEN exchangeid = 43 THEN 800 END			--THB
 	AND MaxStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 40000
 						WHEN exchangeid IN (16, 64, 3, 69) THEN 10000 
-						WHEN exchangeid = 45 THEN 10000000 END
+						WHEN exchangeid = 45 THEN 10000000 
+						WHEN exchangeid = 43 THEN 200000 END
 
 INSERT INTO #supers(custid, currency)
 SELECT ci.custid, ci.currency
@@ -271,7 +276,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.CustID <= @max_custid
 	AND ci.Enabled = 1
-	AND ci.currency IN (67, 5, 2, 13, 16, 64, 3, 69, 45)
+	AND ci.currency IN (67, 5, 2, 13, 16, 64, 3, 69, 45, 43)
 	AND ca.Sporttype = 159 AND ca.Bettype = 3151
 	AND st.val IN (SELECT stakelevelid FROM #stakeLevel)
 

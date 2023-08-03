@@ -18,7 +18,8 @@ INSERT INTO #rmStakeLevel(MinStake, MaxStake, ExchangeID) VALUES
 	(50, 10000, 64),		--'UT'
 	(50, 10000,	3),			--'US$'
 	(50, 10000,	69),		--'MMK'
-	(30000, 10000000, 45)	--'Won'
+	(30000, 10000000, 45),	--'Won'
+	(800, 200000, 43)		--'THB'
 
 DELETE s
 FROM StakeLevel s WITH (ROWLOCK, UPDLOCK)
