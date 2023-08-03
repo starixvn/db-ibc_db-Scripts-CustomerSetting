@@ -48,11 +48,11 @@ BEGIN
 		AND MinStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 50	--HKK, HK$, RM, RMB
 							WHEN @currency IN (16, 64, 3, 69) THEN 20	--Yen, UT, US$, MMK
 							WHEN @currency = 45 THEN 20000				--Won
-							WHEN @currency = 43 THEN 800 END			--THB
+							WHEN @currency = 43 THEN 400 END			--THB
 		AND MaxStake = CASE WHEN @currency IN (67, 5, 2, 13) THEN 20000
 							WHEN @currency IN (16, 64, 3, 69) THEN 5000 
 							WHEN @currency = 45 THEN 5000000 
-							WHEN @currency = 43 THEN 200000 END
+							WHEN @currency = 43 THEN 100000 END
 	
 	CREATE TABLE #CustStakeLevelDownlines_Agent(
 				CustID INT 

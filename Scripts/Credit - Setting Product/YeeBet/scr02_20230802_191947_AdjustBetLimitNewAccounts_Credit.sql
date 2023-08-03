@@ -34,11 +34,11 @@ FROM #stakeLevel t
 		AND MinStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 50	--HKK, HK$, RM, RMB
 							WHEN exchangeid IN (16, 64, 3, 69) THEN 20	--Yen, UT, US$, MMK
 							WHEN exchangeid = 45 THEN 20000 			--Won
-							WHEN exchangeid = 43 THEN 800 END			--THB
+							WHEN exchangeid = 43 THEN 400 END			--THB
 		AND MaxStake = CASE WHEN exchangeid IN (67, 5, 2, 13) THEN 20000
 							WHEN exchangeid IN (16, 64, 3, 69) THEN 5000 
 							WHEN exchangeid = 45 THEN 5000000 
-							WHEN exchangeid = 43 THEN 200000 END
+							WHEN exchangeid = 43 THEN 100000 END
 
 CREATE TABLE #supers(custid INT PRIMARY KEY, currency INT, excludedStakeLevelID INT, lowerStakeLevelID INT)
 
@@ -52,7 +52,7 @@ FROM custInfo ci WITH (NOLOCK)
 WHERE ci.username NOT LIKE '3rdSuper%'
 	AND ci.roleid = 4
 	AND ci.Enabled = 1
-	AND ci.currency IN (67, 5, 2, 13, 16, 64, 3, 69, 45)
+	AND ci.currency IN (67, 5, 2, 13, 16, 64, 3, 69, 45, 43)
 	AND ca.Sporttype = 159 AND ca.Bettype = 3151
 	AND st.val IN (SELECT excludedStakeLevelID FROM #stakeLevel)
 	AND sl.currency = ci.currency
