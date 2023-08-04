@@ -143,7 +143,7 @@ FROM #CustStakeLevelDownlines_Agent T
 											AND Upline.StakeLevelList_new <> ''			 		
 	CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 				FROM (SELECT CAST(val AS INT) AS val
-						FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
+						FROM strSplit(Upline.StakeLevelList_new,','))  cd
 						INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID					
 						WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
 					ORDER BY SL.maxstake DESC
@@ -161,7 +161,7 @@ FROM #CustStakeLevelDownlines_Agent T
 		
 	CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 				FROM (SELECT CAST(val AS INT) AS val
-						FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
+						FROM strSplit(Upline.StakeLevelList_new,','))  cd
 						INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID					
 						WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
 					ORDER BY SL.maxstake DESC
@@ -179,7 +179,7 @@ FROM #CustStakeLevelDownlines_Member T
 		
 	CROSS APPLY(SELECT TOP 1 ISNULL(CONVERT(varchar(20),SL.StakeLevelID),'') AS DownlineStakeLevelList_new
 				FROM (SELECT CAST(val AS INT) AS val
-						FROM dbo.strSplit(Upline.StakeLevelList_new,','))  cd
+						FROM strSplit(Upline.StakeLevelList_new,','))  cd
 						INNER JOIN dbo.StakeLevel SL WITH(NOLOCK) ON cd.val = sl.StakeLevelID							
 						WHERE SL.MinStake <> 0 AND SL.MaxStake <> 0
 					ORDER BY SL.maxstake DESC
