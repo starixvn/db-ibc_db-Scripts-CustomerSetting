@@ -83,7 +83,7 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 						,'BBIN3'
 						,'TCGINR'
 						)
-		AND Ci.currency IN (61,121,97)
+		AND Ci.currency IN (61,121)
 		AND ci.roleid = 4
 
 UPDATE t 

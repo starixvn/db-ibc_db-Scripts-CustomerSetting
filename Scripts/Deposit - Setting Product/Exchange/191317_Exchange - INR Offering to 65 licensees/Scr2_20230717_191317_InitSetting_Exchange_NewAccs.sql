@@ -85,7 +85,7 @@ BEGIN
 						,'BBIN3'
 						,'TCGINR'
 						)
-			AND Ci.currency IN (61,121,97)
+			AND Ci.currency IN (61,121)
 
 	DECLARE @SportType SMALLINT = 221 
 		, @Bettype SMALLINT = 8001
