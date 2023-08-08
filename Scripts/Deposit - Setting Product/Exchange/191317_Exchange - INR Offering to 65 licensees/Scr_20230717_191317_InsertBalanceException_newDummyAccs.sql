@@ -90,6 +90,8 @@ WHERE ci.username NOT LIKE '3rdSuper%'
 						,'24AVIA'
 						,'BBIN3'
 						,'TCGINR'
+						,'Yibo'
+						,'Alog'
 						)
 		AND Ci.currency IN (61,121)
 		AND ci.roleid = 4
