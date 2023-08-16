@@ -1,7 +1,7 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]        
         @level                  TINYINT = 0                  --0: All, 1: SMA, 2: Member
-        ,@type                  TINYINT                      --1: Product Status Existing, 2: Product Status New, 3: PT, 4: Bet Setting, 5: Dep_LicenseeProductSetting
+        ,@type                  TINYINT                      --1: Product Status Existing, 2: Product Status New, 3: PT, 4: Bet Setting
         ,@target                VARCHAR(20)
 AS
 BEGIN
@@ -22,14 +22,11 @@ BEGIN
 		IF dbo.f_CheckRepTable('Dep_CustBetSetting_Agent') = 0 RETURN
 		IF dbo.f_CheckRepTable('Dep_ProductBetSetting') = 0 RETURN
 		IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
-		IF dbo.f_CheckRepTable('Dep_LicenseeProductSetting') = 0 RETURN
-
-        
+ 
         --Checking dependency        
         IF (@type IN (1,2) AND OBJECT_ID('tempdb..#Dep_CustProductStatus_TempBatch') IS NULL)
             OR (@type = 3 AND OBJECT_ID('tempdb..#Cust_PTBatch') IS NULL)
             OR (@type = 4 AND OBJECT_ID('tempdb..#Cust_BSBatch') IS NULL)
-			OR (@type = 5 AND OBJECT_ID('tempdb..#Dep_LicenseeProductSetting_Batch') IS NULL)
         BEGIN  
             RETURN
         END
@@ -165,18 +162,6 @@ BEGIN
 				CROSS APPLY Dep_ProductBetSetting ps WITH (NOLOCK)
 			WHERE ps.SportType = @Sporttype AND ps.BetType = @Bettype AND ps.Currency = t.currency                        
         END
-
-		--Insert Dep_LicenseeProductSetting
-		ELSE IF @type = 5
-		BEGIN
-			INSERT INTO Dep_LicenseeProductSetting(CustID, ProductSettingID)
-			SELECT t.custid, t.productsettingid
-			FROM #Dep_LicenseeProductSetting_Batch t
-			WHERE NOT EXISTS(SELECT TOP 1 1
-							FROM Dep_LicenseeProductSetting l 
-							WHERE t.custid = l.CustID AND t.productsettingid = l.ProductSettingID
-				)
-		END
 END
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -189,8 +174,8 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 DECLARE @max_custid		INT,
         @target			NVARCHAR(20),
         @level			TINYINT,			--0: All, 1: SMA, 2: Member
-        @type			TINYINT,			--1: Product Status existing, 2:Product Status new, 3: PT, 4: Bet Setting, 5: Dep_LicenseeProductSetting
-        @cust_cnt		INT 
+        @type			TINYINT,			--1: Product Status existing, 2: Product Status new, 3: PT, 4: Bet Setting
+		@srecommend		INT
 		 
 SELECT @max_custid = xxx
 
@@ -200,10 +185,10 @@ ELSE
         SET @target = 'REPLICATED'
 Print 'Server Name : ' + @target
 
-CREATE TABLE #supers(custid int PRIMARY KEY)
+CREATE TABLE #supers(custid int PRIMARY KEY, isfinished BIT)
 
-INSERT INTO #supers(custid)
-SELECT ci.custid
+INSERT INTO #supers(custid, isfinished)
+SELECT ci.custid, 0 as isfinished
 FROM custInfo ci WITH (NOLOCK)         
         INNER JOIN Dep_custsuper cs WITH (NOLOCK) ON ci.custid = cs.custid
         INNER JOIN Dep_CustProductStatus s WITH (NOLOCK) ON ci.custid = s.CustID
@@ -227,50 +212,15 @@ WHERE c.roleid = 3
         AND (c.username LIKE '%Acc%' OR c.username LIKE '%LocalBank%' OR c.username LIKE '%AFF%' OR c.username LIKE 'AB88'+'CAS%')
         AND c.custid <= @max_custid 
 
-CREATE TABLE #SMATemp
-(
-        CustID			INT PRIMARY KEY
-        ,roleid			TINYINT
-        ,currency		INT
-        ,isfinishedpt	BIT
-        ,isfinishedbs	BIT
-)
-
-INSERT INTO #SMATemp(CustID, roleid, currency, isfinishedpt, isfinishedbs) 
-SELECT ci.custid, ci.roleid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
-FROM Custinfo ci WITH (NOLOCK)
-        INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.roleid IN (2,3,4) 
-        AND ci.Enabled = 1 
-        AND ci.custid <= @max_custid
-        AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
-
-CREATE TABLE #MemberTemp
-(
-        CustID			INT PRIMARY KEY
-        ,currency		INT
-        ,isfinishedpt	BIT
-        ,isfinishedbs	BIT
-)
-
-INSERT INTO #MemberTemp(CustID, currency, isfinishedpt, isfinishedbs) 
-SELECT ci.custid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
-FROM Custinfo ci WITH (NOLOCK)
-        INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.roleid = 1 
-        AND ci.Enabled = 1 
-        AND ci.custid <= @max_custid
-        AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
-
-SELECT @Cust_cnt = COUNT(1)
-FROM #SMATemp
-
-SELECT @Cust_cnt += COUNT(1)
-FROM #MemberTemp
-
-DECLARE @msg_total NVARCHAR(200) = 'Total of Customers Affected: %d.'
-
-RAISERROR (@msg_total, 0, 1, @Cust_cnt) WITH NOWAIT
+CREATE TABLE #AllAffectedCust(custid INT, roleid TINYINT, currency INT ,srecommend INT, isfinishedpt BIT, isfinishedbs BIT)
+INSERT INTO #AllAffectedCust(custid, roleid, currency, srecommend, isfinishedpt, isfinishedbs)
+SELECT ci.custid, ci.roleid, ci.currency, ci.srecommend, 0 as isfinishedpt, 0 as isfinishedbs
+FROM custinfo ci WITH (NOLOCK)
+	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+WHERE ci.roleid IN (1,2,3,4) 
+    AND ci.Enabled = 1 
+    AND ci.custid <= @max_custid
+    AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
 
 DECLARE		@SportType      SMALLINT = 178, 
             @BetType		SMALLINT = 5302,
@@ -281,202 +231,224 @@ SELECT @BitMapOrder = bitmapOrder
 FROM Dep_ProductStatusProfile WITH (NOLOCK)
 WHERE Sporttype = @SportType AND Bettype = @BetType
 
+CREATE TABLE #SMATemp(
+        CustID			INT PRIMARY KEY
+        ,currency		INT
+		,roleid			TINYINT
+        ,isfinishedpt	BIT
+        ,isfinishedbs	BIT
+) 
+
+CREATE TABLE #MemberTemp(
+        CustID			INT PRIMARY KEY
+        ,currency		INT
+        ,isfinishedpt	BIT
+        ,isfinishedbs	BIT
+) 
+
 CREATE TABLE #AllUsersTemp(CustID INT PRIMARY KEY)
 
-INSERT INTO #AllUsersTemp(CustID)
-SELECT custid FROM #SMATemp WITH (NOLOCK)
-UNION ALL
-SELECT custid FROM #MemberTemp WITH (NOLOCK)
-
---Product status
 CREATE TABLE #Dep_CustProductStatus_ExistingTemp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 CREATE TABLE #Dep_CustProductStatus_NewTemp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 CREATE TABLE #Dep_CustProductStatus_TempBatch(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 
-INSERT INTO #Dep_CustProductStatus_ExistingTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
-SELECT c.CustID, 
-                dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0),
-                dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
-FROM Dep_CustProductStatus c WITH (NOLOCK)
-        INNER JOIN #AllUsersTemp t ON c.CustID = t.CustID
-
-INSERT INTO #Dep_CustProductStatus_NewTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
-SELECT        t.custid
-                , dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0) AS bitmapIsHidden
-                , dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0)  AS bitmapIsDisabled
-FROM #AllUsersTemp t WITH (NOLOCK)
-WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus c WITH (NOLOCK) WHERE c.CustID = t.CustID)
-
-WHILE (1 = 1)
-BEGIN
-        DELETE FROM #Dep_CustProductStatus_TempBatch
-
-        DELETE TOP (5000) t
-        OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
-        FROM #Dep_CustProductStatus_ExistingTemp t 
-
-        IF @@ROWCOUNT = 0
-                BREAK
-                
-        EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
-                        @type = 1
-                        ,@target = @target
-
-        WAITFOR DELAY '00:00:0.050'
-
-		SET @msg_total = 'ProductStatus - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
-
-WHILE (1 = 1)
-BEGIN
-        DELETE FROM #Dep_CustProductStatus_TempBatch
-
-        DELETE TOP (5000) t
-        OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
-        FROM #Dep_CustProductStatus_NewTemp t 
-
-        IF @@ROWCOUNT = 0
-                BREAK
-                
-        EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
-                        @type = 2
-                        ,@target = @target
-
-        WAITFOR DELAY '00:00:0.050'
-
-		SET @msg_total = 'ProductStatus - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
-
---Position taking
 CREATE TABLE #Cust_PTBatch(custid INT PRIMARY KEY, roleid TINYINT)
-
-WHILE (1=1)
-BEGIN
-        DELETE FROM #Cust_PTBatch
-
-        UPDATE TOP (5000) t 
-        SET t.isfinishedpt = 1
-        OUTPUT DELETED.CustID, DELETED.roleid INTO #Cust_PTBatch(custid, roleid)
-        FROM #SMATemp t 
-        WHERE t.isfinishedpt = 0
-
-        IF @@ROWCOUNT = 0
-                BREAK
-
-        EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-            @type = 3
-            ,@level = 1
-            ,@target = @target
-        WAITFOR DELAY '00:00:0.050'
-
-		SET @msg_total = 'PositionTaking_SMA - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
-
-WHILE (1=1)
-BEGIN
-        DELETE FROM #Cust_PTBatch
-
-        UPDATE TOP (5000) t 
-        SET t.isfinishedpt = 1
-        OUTPUT DELETED.CustID INTO #Cust_PTBatch(custid)
-        FROM #MemberTemp t 
-        WHERE t.isfinishedpt = 0
-
-        IF @@ROWCOUNT = 0
-                BREAK
-
-        EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-            @type = 3
-            ,@level = 2
-            ,@target = @target
-        WAITFOR DELAY '00:00:0.050' 
-
-		SET @msg_total = 'PositionTaking_Member - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
-
---Bet setting
 CREATE TABLE #Cust_BSBatch(custid INT PRIMARY KEY, currency INT)
 
-WHILE (1=1)
-BEGIN
-        DELETE FROM #Cust_BSBatch
+DECLARE @super_cnt INT, @index INT = 0
+DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
+DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
 
-        UPDATE TOP (5000) t
-        SET t.isfinishedbs = 1
-        OUTPUT DELETED.CustID, DELETED.currency INTO #Cust_BSBatch(custid, currency)
-        FROM #SMATemp t 
-        WHERE t.isfinishedbs = 0
+SET @super_cnt = (SELECT COUNT(1) FROM #supers )
 
-        IF @@ROWCOUNT = 0
-                BREAK
-
-        EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-            @type = 4
-            ,@level = 1
-            ,@target = @target
-        WAITFOR DELAY '00:00:0.050'  
-
-		SET @msg_total = 'BetSetting_SMA - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
+RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
 
 WHILE (1=1)
 BEGIN
-        DELETE FROM #Cust_BSBatch
+	UPDATE TOP (1) s
+	SET s.isfinished = 1,
+		@srecommend = s.custid
+	FROM #supers s 
+	WHERE s.isfinished = 0
 
-        UPDATE TOP (5000) t
-        SET t.isfinishedbs = 1
-        OUTPUT DELETED.CustID, DELETED.currency INTO #Cust_BSBatch(custid, currency)
-        FROM #MemberTemp t 
-        WHERE t.isfinishedbs = 0
+	IF @@ROWCOUNT = 0
+		BREAK
+	
+	TRUNCATE TABLE #SMATemp
 
-        IF @@ROWCOUNT = 0
-                BREAK
+	DELETE t 
+	OUTPUT DELETED.custid, DELETED.roleid, DELETED.currency, DELETED.isfinishedpt, DELETED.isfinishedbs 
+	INTO #SMATemp(custid, roleid, currency,isfinishedpt, isfinishedbs)
+	FROM #AllAffectedCust t
+	WHERE t.srecommend = @srecommend AND t.roleid IN (2,3,4)
 
-        EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-            @type = 4
-			,@level = 2
-            ,@target = @target
-        WAITFOR DELAY '00:00:0.050'    
-		
-		SET @msg_total = 'BetSetting_Member - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
-END
+	TRUNCATE TABLE #MemberTemp
 
-CREATE TABLE #Dep_LicenseeProductSetting(custid INT, productsettingid INT, PRIMARY KEY(custid, productsettingid))
-CREATE TABLE #Dep_LicenseeProductSetting_Batch(custid INT, productsettingid INT, PRIMARY KEY(custid, productsettingid))
+	DELETE t
+	OUTPUT DELETED.custid, DELETED.currency, DELETED.isfinishedpt, DELETED.isfinishedbs 
+	INTO #MemberTemp(custid, currency, isfinishedpt, isfinishedbs)
+	FROM #AllAffectedCust t
+	WHERE t.srecommend = @srecommend AND t.roleid = 1
 
-INSERT INTO #Dep_LicenseeProductSetting(custid, productsettingid)
-SELECT s.custid, p.productsettingid 
-FROM #supers s
-	CROSS APPLY (SELECT 168 AS productsettingid
-				UNION ALL
-				SELECT 169 AS productsettingid
-				UNION ALL 
-				SELECT 170 AS productsettingid) p
+	INSERT INTO #AllUsersTemp(CustID)
+	SELECT custid FROM #SMATemp WITH (NOLOCK)
+	UNION ALL
+	SELECT custid FROM #MemberTemp WITH (NOLOCK)
 
-WHILE (1=1)
-BEGIN
-		DELETE FROM #Dep_LicenseeProductSetting_Batch
+	--Product status
+	INSERT INTO #Dep_CustProductStatus_ExistingTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
+	SELECT c.CustID, 
+					dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0),
+					dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
+	FROM Dep_CustProductStatus c WITH (NOLOCK)
+			INNER JOIN #AllUsersTemp t ON c.CustID = t.CustID
 
-		DELETE TOP (5000) t
-		OUTPUT DELETED.custid, DELETED.productsettingid INTO #Dep_LicenseeProductSetting_Batch(custid, productsettingid)
-		FROM #Dep_LicenseeProductSetting t
+	INSERT INTO #Dep_CustProductStatus_NewTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
+	SELECT        t.custid
+					, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0) AS bitmapIsHidden
+					, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0)  AS bitmapIsDisabled
+	FROM #AllUsersTemp t WITH (NOLOCK)
+	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus c WITH (NOLOCK) WHERE c.CustID = t.CustID)
 
-		IF @@ROWCOUNT = 0
-			BREAK
-			
-		EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-            @type = 5
-            ,@target = @target
-        WAITFOR DELAY '00:00:0.050'  
+	WHILE (1 = 1)
+	BEGIN
+			DELETE FROM #Dep_CustProductStatus_TempBatch
 
-		SET @msg_total = 'Dep_ProductBetSetting - curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
-		RAISERROR (@msg_total, 0, 1) WITH NOWAIT
+			DELETE TOP (5000) t
+			OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
+			FROM #Dep_CustProductStatus_ExistingTemp t 
+
+			IF @@ROWCOUNT = 0
+					BREAK
+                
+			EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
+							@type = 1
+							,@target = @target
+
+			WAITFOR DELAY '00:00:0.050'
+	END
+
+	WHILE (1 = 1)
+	BEGIN
+			DELETE FROM #Dep_CustProductStatus_TempBatch
+
+			DELETE TOP (5000) t
+			OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
+			FROM #Dep_CustProductStatus_NewTemp t 
+
+			IF @@ROWCOUNT = 0
+					BREAK
+                
+			EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
+							@type = 2
+							,@target = @target
+
+			WAITFOR DELAY '00:00:0.050'
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 168)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID, ProductSettingID)
+		SELECT @srecommend, 168
+	END
+	
+	--Position taking
+	WHILE (1=1)
+	BEGIN
+			DELETE FROM #Cust_PTBatch
+
+			UPDATE TOP (5000) t 
+			SET t.isfinishedpt = 1
+			OUTPUT DELETED.CustID, DELETED.roleid INTO #Cust_PTBatch(custid, roleid)
+			FROM #SMATemp t 
+			WHERE t.isfinishedpt = 0
+
+			IF @@ROWCOUNT = 0
+					BREAK
+
+			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
+				@type = 3
+				,@level = 1
+				,@target = @target
+			WAITFOR DELAY '00:00:0.050'
+	END
+
+	WHILE (1=1)
+	BEGIN
+			DELETE FROM #Cust_PTBatch
+
+			UPDATE TOP (5000) t 
+			SET t.isfinishedpt = 1
+			OUTPUT DELETED.CustID INTO #Cust_PTBatch(custid)
+			FROM #MemberTemp t 
+			WHERE t.isfinishedpt = 0
+
+			IF @@ROWCOUNT = 0
+					BREAK
+
+			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
+				@type = 3
+				,@level = 2
+				,@target = @target
+			WAITFOR DELAY '00:00:0.050' 
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 169)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID, ProductSettingID)
+		SELECT @srecommend, 169
+	END
+
+	--Bet setting
+	WHILE (1=1)
+	BEGIN
+			DELETE FROM #Cust_BSBatch
+
+			UPDATE TOP (5000) t
+			SET t.isfinishedbs = 1
+			OUTPUT DELETED.CustID, DELETED.currency INTO #Cust_BSBatch(custid, currency)
+			FROM #SMATemp t 
+			WHERE t.isfinishedbs = 0
+
+			IF @@ROWCOUNT = 0
+					BREAK
+
+			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
+				@type = 4
+				,@level = 1
+				,@target = @target
+			WAITFOR DELAY '00:00:0.050'  
+	END
+
+	WHILE (1=1)
+	BEGIN
+			DELETE FROM #Cust_BSBatch
+
+			UPDATE TOP (5000) t
+			SET t.isfinishedbs = 1
+			OUTPUT DELETED.CustID, DELETED.currency INTO #Cust_BSBatch(custid, currency)
+			FROM #MemberTemp t 
+			WHERE t.isfinishedbs = 0
+
+			IF @@ROWCOUNT = 0
+					BREAK
+
+			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
+				@type = 4
+				,@level = 2
+				,@target = @target
+			WAITFOR DELAY '00:00:0.050'    
+	END
+
+	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 170)
+	BEGIN
+		INSERT INTO Dep_LicenseeProductSetting(CustID, ProductSettingID)
+		SELECT @srecommend, 170
+	END
+
+	WAITFOR DELAY '00:00:0.050'  
+	SET @index +=1
+	RAISERROR(@msg, 0, 1, @index, @srecommend) WITH NOWAIT
 END
 
 DROP TABLE #supers,
@@ -486,11 +458,10 @@ DROP TABLE #supers,
 			#Dep_CustProductStatus_ExistingTemp,
 			#Dep_CustProductStatus_NewTemp,
 			#Dep_CustProductStatus_TempBatch,
-			#Dep_LicenseeProductSetting,
-			#Dep_LicenseeProductSetting_Batch,
 			#Dummy,
 			#MemberTemp,
-			#SMATemp
+			#SMATemp, 
+			#AllAffectedCust
 GO	
 
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
