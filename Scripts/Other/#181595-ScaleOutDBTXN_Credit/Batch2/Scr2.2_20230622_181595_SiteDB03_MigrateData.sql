@@ -52,6 +52,18 @@ WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 						AND e.BetType = c.BetType
 					)
 
+INSERT INTO BalanceCreditGame(CustId,WinlostDate,BetType,Balance)
+SELECT c.CustId,c.WinlostDate,c.BetType,c.Balance
+FROM DBCTG.bodb02.dbo.BalanceCreditGame c WITH(NOLOCK)
+	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
+WHERE ci.srecommend IN (SELECT custid FROM #Supers)
+	AND NOT EXISTS( SELECT  TOP 1 1 
+					FROM BalanceCreditGame e WITH(NOLOCK)
+					WHERE e.CustId = c.CustId
+						AND e.WinlostDate = c.WinlostDate
+						AND e.BetType = c.BetType
+					)
+
 INSERT INTO BalanceDebitGame(CustId,WinlostDate,BetType,Balance)
 SELECT c.CustId,c.WinlostDate,c.BetType,c.Balance
 FROM DBCTG.bodb02.dbo.BalanceDebitGame c WITH(NOLOCK)
@@ -64,17 +76,7 @@ WHERE ci.srecommend IN (SELECT custid FROM #Supers)
 						AND e.BetType = c.BetType
 					)
 
-INSERT INTO BalanceCreditGame(CustId,WinlostDate,BetType,Balance)
-SELECT c.CustId,c.WinlostDate,c.BetType,c.Balance
-FROM DBCTG.bodb02.dbo.BalanceCreditGame c WITH(NOLOCK)
-	INNER JOIN custdb.dbo.custinfo ci WITH(NOLOCK) ON c.CustId = ci.custid
-WHERE ci.srecommend IN (SELECT custid FROM #Supers)
-	AND NOT EXISTS( SELECT  TOP 1 1 
-					FROM BalanceCreditGame e WITH(NOLOCK)
-					WHERE e.CustId = c.CustId
-						AND e.WinlostDate = c.WinlostDate
-						AND e.BetType = c.BetType
-					)
+
 	
 --INSERT INTO Task_Cust_CheckBalance_Exception(CustId,Remark)
 --SELECT c.CustId,c.Remark
