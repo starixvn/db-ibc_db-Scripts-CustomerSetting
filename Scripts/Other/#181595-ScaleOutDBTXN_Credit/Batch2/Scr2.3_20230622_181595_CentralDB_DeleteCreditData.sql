@@ -4,6 +4,8 @@
 	Task: delete data for balance game tables after migrate Credit data to SITEDB3 - Batch2 [#RedmineID:#181595]
 	DB: DBCTG/bodb02 
 */
+USE bodb02
+GO
 CREATE TABLE #Supers (custid int PRIMARY KEY)
 
 INSERT INTO #Supers(custid)
