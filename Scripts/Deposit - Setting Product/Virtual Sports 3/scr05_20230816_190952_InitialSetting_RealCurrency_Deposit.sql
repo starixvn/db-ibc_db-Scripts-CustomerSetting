@@ -1,3 +1,10 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: Luke
+	Date: 20230816
+	Task: Insert setting for Virtual Sports 3 DEPOSIT - Real Currency [Redmine: #190952]
+	DB: DBCust/CustDB
+*/
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]        
         @level                  TINYINT = 0                  --0: All, 1: SMA, 2: Member
