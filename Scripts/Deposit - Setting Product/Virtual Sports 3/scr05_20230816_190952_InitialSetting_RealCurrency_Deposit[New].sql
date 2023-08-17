@@ -1,7 +1,7 @@
 -- BEGIN STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]        
         @level                  TINYINT = 0                  --0: All, 1: SMA, 2: Member
-        ,@type                  TINYINT                      --1: Product Status Existing, 2: Product Status New, 3: PT, 4: Bet Setting
+        ,@type                  TINYINT                      --1: Product Status, 2: PT, 3: Bet Setting
         ,@target                VARCHAR(20)
 AS
 BEGIN
@@ -24,9 +24,9 @@ BEGIN
 		IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 0 RETURN
  
         --Checking dependency        
-        IF (@type IN (1,2) AND OBJECT_ID('tempdb..#Dep_CustProductStatus_TempBatch') IS NULL)
-            OR (@type = 3 AND OBJECT_ID('tempdb..#Cust_PTBatch') IS NULL)
-            OR (@type = 4 AND OBJECT_ID('tempdb..#Cust_BSBatch') IS NULL)
+        IF (@type = 1 AND OBJECT_ID('tempdb..#Dep_CustProductStatus_TempBatch') IS NULL)
+            OR (@type = 2 AND OBJECT_ID('tempdb..#Cust_PTBatch') IS NULL)
+            OR (@type = 3 AND OBJECT_ID('tempdb..#Cust_BSBatch') IS NULL)
         BEGIN  
             RETURN
         END
@@ -42,16 +42,8 @@ BEGIN
 				INNER JOIN #Dep_CustProductStatus_TempBatch t ON c.CustID = t.CustID
         END
 
-		--Insert product status for customers not have yet
-        ELSE IF @type = 2
-        BEGIN
-            INSERT INTO Dep_CustProductStatus(CustID, bitmapIsHidden, bitmapIsDisabled)
-            SELECT t.custID, t.bitmapIsHidden, t.bitmapIsDisabled
-            FROM #Dep_CustProductStatus_TempBatch t
-        END
-
 		--Insert PT setting for SMAs
-        ELSE IF @type = 3 AND @level = 1
+        ELSE IF @type = 2 AND @level = 1
         BEGIN
             INSERT INTO Dep_CustPTSetting_Agent(
                 [CustID]
@@ -97,7 +89,7 @@ BEGIN
         END
 
 		--Insert PT setting for Members
-        ELSE IF @type = 3 AND @level = 2
+        ELSE IF @type = 2 AND @level = 2
         BEGIN
 			INSERT INTO Dep_CustPTSetting_Member(
 				[custid]
@@ -130,7 +122,7 @@ BEGIN
         END
         
 		--Insert Bet setting for SMAs
-        ELSE IF @type = 4 AND @level = 1
+        ELSE IF @type = 3 AND @level = 1
         BEGIN
 			INSERT INTO Dep_CustBetSetting_Agent(
 				CustID
@@ -147,7 +139,7 @@ BEGIN
         END
 
 		--Insert Bet setting for Members
-        ELSE IF @type = 4 AND @level = 2
+        ELSE IF @type = 3 AND @level = 2
         BEGIN
 			INSERT INTO Dep_CustBetSetting_Member(
 						CustID
@@ -174,7 +166,7 @@ PRINT N'Step 2: Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
 DECLARE @max_custid		INT,
         @target			NVARCHAR(20),
         @level			TINYINT,			--0: All, 1: SMA, 2: Member
-        @type			TINYINT,			--1: Product Status existing, 2: Product Status new, 3: PT, 4: Bet Setting
+        @type			TINYINT,			--1: Product Status, 2: PT, 3: Bet Setting
 		@srecommend		INT
 		 
 SELECT @max_custid = xxx
@@ -217,8 +209,7 @@ INSERT INTO #AllAffectedCust(custid, roleid, currency, srecommend, isfinishedpt,
 SELECT ci.custid, ci.roleid, ci.currency, ci.srecommend, 0 as isfinishedpt, 0 as isfinishedbs
 FROM custinfo ci WITH (NOLOCK)
 	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.roleid IN (1,2,3,4) 
-    AND ci.Enabled = 1 
+WHERE ci.Enabled = 1 
     AND ci.custid <= @max_custid
     AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
 
@@ -248,8 +239,7 @@ CREATE TABLE #MemberTemp(
 
 CREATE TABLE #AllUsersTemp(CustID INT PRIMARY KEY)
 
-CREATE TABLE #Dep_CustProductStatus_ExistingTemp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
-CREATE TABLE #Dep_CustProductStatus_NewTemp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
+CREATE TABLE #Dep_CustProductStatus_Temp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 CREATE TABLE #Dep_CustProductStatus_TempBatch(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 
 CREATE TABLE #Cust_PTBatch(custid INT PRIMARY KEY, roleid TINYINT)
@@ -296,19 +286,12 @@ BEGIN
 	SELECT custid FROM #MemberTemp WITH (NOLOCK)
 
 	--Product status
-	INSERT INTO #Dep_CustProductStatus_ExistingTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
+	INSERT INTO #Dep_CustProductStatus_Temp(CustID, bitmapIsHidden, bitmapIsDisabled)
 	SELECT c.CustID, 
 					dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0),
 					dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
 	FROM Dep_CustProductStatus c WITH (NOLOCK)
 			INNER JOIN #AllUsersTemp t ON c.CustID = t.CustID
-
-	INSERT INTO #Dep_CustProductStatus_NewTemp(CustID, bitmapIsHidden, bitmapIsDisabled)
-	SELECT        t.custid
-					, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0) AS bitmapIsHidden
-					, dbo.f_GenerateProductStatus (0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, @BitMapOrder,0)  AS bitmapIsDisabled
-	FROM #AllUsersTemp t WITH (NOLOCK)
-	WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus c WITH (NOLOCK) WHERE c.CustID = t.CustID)
 
 	WHILE (1 = 1)
 	BEGIN
@@ -316,7 +299,7 @@ BEGIN
 
 			DELETE TOP (5000) t
 			OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
-			FROM #Dep_CustProductStatus_ExistingTemp t 
+			FROM #Dep_CustProductStatus_Temp t 
 
 			IF @@ROWCOUNT = 0
 					BREAK
@@ -324,26 +307,6 @@ BEGIN
 			EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
 							@type = 1
 							,@target = @target
-
-			WAITFOR DELAY '00:00:0.050'
-	END
-
-	WHILE (1 = 1)
-	BEGIN
-			DELETE FROM #Dep_CustProductStatus_TempBatch
-
-			DELETE TOP (5000) t
-			OUTPUT DELETED.custid, DELETED.bitmapIsHidden, DELETED.bitmapIsDisabled INTO #Dep_CustProductStatus_TempBatch(CustID, bitmapIsHidden, bitmapIsDisabled)
-			FROM #Dep_CustProductStatus_NewTemp t 
-
-			IF @@ROWCOUNT = 0
-					BREAK
-                
-			EXEC  dbo.[Acc_DynamicCustSetting3rd_09] 
-							@type = 2
-							,@target = @target
-
-			WAITFOR DELAY '00:00:0.050'
 	END
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 168)
@@ -367,10 +330,9 @@ BEGIN
 					BREAK
 
 			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-				@type = 3
+				@type = 2
 				,@level = 1
 				,@target = @target
-			WAITFOR DELAY '00:00:0.050'
 	END
 
 	WHILE (1=1)
@@ -387,10 +349,9 @@ BEGIN
 					BREAK
 
 			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-				@type = 3
+				@type = 2
 				,@level = 2
 				,@target = @target
-			WAITFOR DELAY '00:00:0.050' 
 	END
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 169)
@@ -414,10 +375,9 @@ BEGIN
 					BREAK
 
 			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-				@type = 4
+				@type = 3
 				,@level = 1
 				,@target = @target
-			WAITFOR DELAY '00:00:0.050'  
 	END
 
 	WHILE (1=1)
@@ -434,10 +394,9 @@ BEGIN
 					BREAK
 
 			EXEC dbo.[Acc_DynamicCustSetting3rd_09] 
-				@type = 4
+				@type = 3
 				,@level = 2
-				,@target = @target
-			WAITFOR DELAY '00:00:0.050'    
+				,@target = @target  
 	END
 
 	IF NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting WITH(NOLOCK) WHERE Custid=@srecommend AND ProductSettingID = 170)
@@ -455,8 +414,7 @@ DROP TABLE #supers,
 			#AllUsersTemp,
 			#Cust_BSBatch,
 			#Cust_PTBatch,
-			#Dep_CustProductStatus_ExistingTemp,
-			#Dep_CustProductStatus_NewTemp,
+			#Dep_CustProductStatus_Temp,
 			#Dep_CustProductStatus_TempBatch,
 			#Dummy,
 			#MemberTemp,
