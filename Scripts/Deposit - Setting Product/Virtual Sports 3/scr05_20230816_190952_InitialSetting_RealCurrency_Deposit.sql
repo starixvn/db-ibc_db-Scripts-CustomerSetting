@@ -45,7 +45,7 @@ BEGIN
             UPDATE c 
             SET  c.bitmapIsHidden = t.bitmapIsHidden
 				,c.bitmapIsDisabled = t.bitmapIsDisabled
-            FROM Dep_CustProductStatus c WITH(ROWLOCK, UPDLOCK)
+            FROM Dep_CustProductStatus c WITH(ROWLOCK)
 				INNER JOIN #Dep_CustProductStatus_TempBatch t ON c.CustID = t.CustID
         END
 
@@ -211,15 +211,6 @@ WHERE c.roleid = 3
         AND (c.username LIKE '%Acc%' OR c.username LIKE '%LocalBank%' OR c.username LIKE '%AFF%' OR c.username LIKE 'AB88'+'CAS%')
         AND c.custid <= @max_custid 
 
-CREATE TABLE #AllAffectedCust(custid INT, roleid TINYINT, currency INT ,srecommend INT, isfinishedpt BIT, isfinishedbs BIT)
-INSERT INTO #AllAffectedCust(custid, roleid, currency, srecommend, isfinishedpt, isfinishedbs)
-SELECT ci.custid, ci.roleid, ci.currency, ci.srecommend, 0 as isfinishedpt, 0 as isfinishedbs
-FROM custinfo ci WITH (NOLOCK)
-	INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
-WHERE ci.Enabled = 1 
-    AND ci.custid <= @max_custid
-    AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
-
 DECLARE		@SportType      SMALLINT = 178, 
             @BetType		SMALLINT = 5302,
             @fSporttype		SMALLINT = 190,
@@ -244,7 +235,6 @@ CREATE TABLE #MemberTemp(
         ,isfinishedbs	BIT
 ) 
 
-CREATE TABLE #AllUsersTemp(CustID INT PRIMARY KEY)
 
 CREATE TABLE #Dep_CustProductStatus_Temp(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
 CREATE TABLE #Dep_CustProductStatus_TempBatch(CustID INT PRIMARY KEY, bitmapIsHidden BINARY(32), bitmapIsDisabled BINARY(32))
@@ -273,24 +263,25 @@ BEGIN
 	
 	TRUNCATE TABLE #SMATemp
 
-	DELETE t 
-	OUTPUT DELETED.custid, DELETED.roleid, DELETED.currency, DELETED.isfinishedpt, DELETED.isfinishedbs 
-	INTO #SMATemp(custid, roleid, currency,isfinishedpt, isfinishedbs)
-	FROM #AllAffectedCust t
-	WHERE t.srecommend = @srecommend AND t.roleid IN (2,3,4)
+	INSERT INTO #SMATemp(custid, roleid, currency, isfinishedpt, isfinishedbs)
+	SELECT ci.custid, ci.roleid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
+	FROM custinfo ci WITH (NOLOCK)
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	WHERE ci.Enabled = 1 
+		AND ci.roleid IN (2,3,4)
+		AND ci.custid <= @max_custid
+		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
 
 	TRUNCATE TABLE #MemberTemp
 
-	DELETE t
-	OUTPUT DELETED.custid, DELETED.currency, DELETED.isfinishedpt, DELETED.isfinishedbs 
-	INTO #MemberTemp(custid, currency, isfinishedpt, isfinishedbs)
-	FROM #AllAffectedCust t
-	WHERE t.srecommend = @srecommend AND t.roleid = 1
-
-	INSERT INTO #AllUsersTemp(CustID)
-	SELECT custid FROM #SMATemp WITH (NOLOCK)
-	UNION ALL
-	SELECT custid FROM #MemberTemp WITH (NOLOCK)
+	INSERT INTO #MemberTemp(custid, currency, isfinishedpt, isfinishedbs)
+	SELECT ci.custid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
+	FROM custinfo ci WITH (NOLOCK)
+		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
+	WHERE ci.Enabled = 1 
+		AND ci.roleid = 1
+		AND ci.custid <= @max_custid
+		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
 
 	--Product status
 	INSERT INTO #Dep_CustProductStatus_Temp(CustID, bitmapIsHidden, bitmapIsDisabled)
@@ -298,7 +289,13 @@ BEGIN
 					dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0),
 					dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
 	FROM Dep_CustProductStatus c WITH (NOLOCK)
-			INNER JOIN #AllUsersTemp t ON c.CustID = t.CustID
+			INNER JOIN #SMATemp t ON c.CustID = t.CustID
+	UNION ALL
+	SELECT c.CustID, 
+					dbo.f_GenerateProductStatus(c.bitmapIsHidden, @BitMapOrder, 0),
+					dbo.f_GenerateProductStatus(c.bitmapIsDisabled, @BitMapOrder, 0)
+	FROM Dep_CustProductStatus c WITH (NOLOCK)
+			INNER JOIN #MemberTemp t ON c.CustID = t.CustID
 
 	WHILE (1 = 1)
 	BEGIN
@@ -418,15 +415,13 @@ BEGIN
 END
 
 DROP TABLE #supers,
-			#AllUsersTemp,
 			#Cust_BSBatch,
 			#Cust_PTBatch,
 			#Dep_CustProductStatus_Temp,
 			#Dep_CustProductStatus_TempBatch,
 			#Dummy,
 			#MemberTemp,
-			#SMATemp, 
-			#AllAffectedCust
+			#SMATemp
 GO	
 
 PRINT N'Step 2: End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
