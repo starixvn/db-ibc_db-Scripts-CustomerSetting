@@ -266,8 +266,8 @@ BEGIN
 	INSERT INTO #SMATemp(custid, roleid, currency, isfinishedpt, isfinishedbs)
 	SELECT ci.custid, ci.roleid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
 	FROM custinfo ci WITH (NOLOCK)
-		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 	WHERE ci.Enabled = 1 
+		AND ci.srecommend = @srecommend
 		AND ci.roleid IN (2,3,4)
 		AND ci.custid <= @max_custid
 		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
@@ -277,8 +277,8 @@ BEGIN
 	INSERT INTO #MemberTemp(custid, currency, isfinishedpt, isfinishedbs)
 	SELECT ci.custid, ci.currency, 0 as isfinishedpt, 0 as isfinishedbs
 	FROM custinfo ci WITH (NOLOCK)
-		INNER JOIN #supers s WITH (NOLOCK) ON ci.srecommend = s.custid
 	WHERE ci.Enabled = 1 
+		AND ci.srecommend = @srecommend
 		AND ci.roleid = 1
 		AND ci.custid <= @max_custid
 		AND ci.mrecommend NOT IN (SELECT custid FROM #Dummy WITH (NOLOCK))
