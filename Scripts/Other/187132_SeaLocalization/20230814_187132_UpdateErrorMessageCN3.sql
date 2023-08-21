@@ -35,7 +35,7 @@ INSERT INTO #tmpMsgError(MsgID, MsgNameEN, MsgNameVI) VALUES
 (200017, N'This is the default group. Do you want to proceed?', N'Đây là nhóm mặc định. Bạn có muốn tiếp tục?'),
 (200018, N'Another group is currently set as default. Wanna set this group as default?', N'Nhóm khác hiện đang được thiết lập là mặc định. Bạn có muốn đặt nhóm này làm nhóm mặc định không?'),
 (200019, N'Process create new group commission has been failed!', N'Quá trình tạo Nhóm hoa hồng mới đã bị lỗi!'),
-(200020, N'This Group Name has been created before!', N'Tên nhóm này đã tồn tại!'),
+(200020, N'This group name has been already chosen, please try another name!', N'Tên nhóm này đã tồn tại, vui lòng chọn tên khác!'),
 (200026, N'This user does not belong to:', N'Người dùng này không thuộc về:'),
 (200033, N'This currency is not offered to operate BA yet!', N'Đơn vị tiền tệ này không hỗ trợ BA!'),
 (200034, N'This currency is not allowed BA!', N'Đơn vị tiền tệ này không được sử dụng cho BA!'),
@@ -49,5 +49,27 @@ INSERT INTO #tmpMsgError(MsgID, MsgNameEN, MsgNameVI) VALUES
 
 UPDATE m
 SET m.MsgNameEN = t.MsgNameEN, m.MsgNameVI = t.MsgNameVI
-FROM MsgError m WITH (ROWLOCK, UPDLOCK)
+FROM MsgError m WITH (ROWLOCK)
 	INNER JOIN #tmpMsgError t WITH (NOLOCK) ON m.MsgID = t.MsgID
+
+DECLARE @MsgID INT, 
+		@MsgNameEN NVARCHAR(500),
+		@MsgNameVI NVARCHAR(500)
+
+SELECT @MsgID = 200051,
+		@MsgNameEN = N'Customer does not belong to licensee',
+		@MsgNameVI = N'Khách hàng không thuộc Nhà Cái'
+
+IF NOT EXISTS(
+	SELECT TOP 1 1 
+	FROM MsgError WITH (NOLOCK)
+	WHERE MsgID = @MsgID
+)
+BEGIN
+	INSERT INTO MsgError(MsgID,		MsgGroupID, MsgNameEN,	MsgNameCT,	MsgNameCS,	MsgNameJP,	MsgNameTH,	MsgNameKO,	MsgNameES,	MsgNameVI,	IsActive,	MsgNameCN)
+	VALUES				(@MsgID,	11,			@MsgNameEN,	@MsgNameEN, @MsgNameEN, @MsgNameEN, @MsgNameEN, @MsgNameEN, @MsgNameEN, @MsgNameVI, 1,			@MsgNameEN)
+END
+ELSE
+BEGIN
+	RAISERROR('MsgID = %d has been used.', 16, 1, @MsgID)
+END
