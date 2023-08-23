@@ -7,6 +7,9 @@
 USE CustDB
 GO
 
+IF @@SERVERNAME = 'DBCUST' -- ^_^
+	RETURN
+
 DECLARE @MaxCustID INT
 --Get MaxCustID to avoid scan new cust data (new cust maybe not ready for replicate data)
 SELECT @MaxCustID = MAX(custid) FROM custinfo WITH(NOLOCK)
