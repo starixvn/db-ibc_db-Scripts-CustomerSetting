@@ -44,7 +44,7 @@ BEGIN
 		,d.CloseInfo		= s.CloseInfo
 		,d.Locked			= s.Locked
 		,d.SuspendInfo		= s.SuspendInfo
-	FROM CustProductStatus d WITH(NOLOCK)
+	FROM CustProductStatus d WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN #TempCustBatch t WITH(NOLOCK) ON t.custid = d.CustID
 		INNER JOIN DBCUST.CUSTDB.dbo.CustProductStatus s WITH(NOLOCK) ON d.CustID = s.CustID
 	WHERE  NOT(
