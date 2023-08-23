@@ -1,4 +1,4 @@
-/*<info serverAlias="DBTXN/CUSTDB"></info>*/
+/*<info serverAlias="DBTXN-CUSTDB"></info>*/
 /*	
 	Created: 20230823@Eden
 	Task: Correct data CustProductStatus of all sitedb [#193055]
