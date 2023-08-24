@@ -9,7 +9,10 @@
 USE CustDB
 GO
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
-(@maxcustID INT)
+(
+	@maxcustID INT,
+	@maxcustID2 INT
+)
 AS
 BEGIN			
 	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Agent') = 0 RETURN
@@ -46,38 +49,38 @@ BEGIN
 	FROM Dep_CustPTSetting_Agent cg WITH(ROWLOCK,UPDLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType = 178 AND cg.custid > @maxcustID
+	WHERE SportType = 178 AND cg.custid > @maxcustID AND cg.CustID < @maxcustID2
 						
 	DELETE cg
 	FROM Dep_CustPTSetting_Member cg WITH(ROWLOCK,UPDLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	
-	WHERE SportType = 178 AND cg.custid > @maxcustID
+	WHERE SportType = 178 AND cg.custid > @maxcustID AND cg.CustID < @maxcustID2
 		
 	DELETE cg
 	FROM Dep_CustPTGroupSetting_Member cg WITH(ROWLOCK,UPDLOCK)	
 		INNER JOIN Customer c WITH (NOLOCK) ON cg.AgentID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid		
-	WHERE SportType = 178 AND c.custid > @maxcustID		
+	WHERE SportType = 178 AND c.custid > @maxcustID	AND c.custid < @maxcustID2
 	
 	DELETE a
 	FROM Dep_CustBetSetting_Member a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN Customer c WITH (NOLOCK) ON a.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	 
-	WHERE a.SportType = 178 AND c.custid > @maxcustID
+	WHERE a.SportType = 178 AND c.custid > @maxcustID AND c.custid < @maxcustID2
 
 	DELETE a
 	FROM Dep_CustBetSetting_Agent a WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN Customer c WITH (NOLOCK) ON a.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	 
-	WHERE a.SportType = 178 AND c.custid > @maxcustID
+	WHERE a.SportType = 178 AND c.custid > @maxcustID AND c.custid < @maxcustID2
 
 	DELETE a 
 	FROM Dep_LicenseeProductSetting a WITH(ROWLOCK, UPDLOCK)
 		INNER JOIN Customer c WITH (NOLOCK) ON a.CustID = c.custid
 		INNER JOIN #supers s ON c.srecommend = s.custid	
 		INNER JOIN Dep_ProductSetting p WITH(NOLOCK) ON a.ProductSettingID = p.ProductSettingID
-	WHERE p.ProductID = 77 AND c.custid > @maxcustID
+	WHERE p.ProductID = 77 AND c.custid > @maxcustID AND c.custid < @maxcustID2
 END		
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -85,9 +88,11 @@ GO
 
 -- BEGIN STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------
-DECLARE @MaxCustID INT
+DECLARE @MaxCustID INT,
+		@MaxCustID2 INT
 	
-SELECT @MaxCustID = xxx
-EXEC dbo.Acc_Dep_DynamicCustSetting_09 @MaxCustID=@MaxCustID
+SELECT @MaxCustID = xxx,
+		@MaxCustID2 = xxx
+EXEC dbo.Acc_Dep_DynamicCustSetting_09 @MaxCustID=@MaxCustID, @MaxCustID2 = @MaxCustID2
 -- END STEP 2: RUN THIS SCRIPT AT DBCUST SERVERS -----
 --------------------------------------------------------------------------------------

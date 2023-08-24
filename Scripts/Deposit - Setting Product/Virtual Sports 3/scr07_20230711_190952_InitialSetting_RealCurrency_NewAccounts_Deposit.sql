@@ -6,7 +6,8 @@
 	DB: DBCust/CustDB
 */
 
-DECLARE @max_custid INT = xxx
+DECLARE @max_custid INT = xxx,
+		@max_custid2 INT = xxx
 
 DECLARE	@Sporttype	SMALLINT = 178,
 		@Bettype	SMALLINT = 5302,
@@ -49,7 +50,7 @@ CREATE TABLE #SMATemp
 INSERT INTO #SMATemp(CustID, RoleID, mrecommend, currency)
 SELECT custid, roleid, mrecommend, currency
 FROM Custinfo WITH (NOLOCK)
-WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid 
+WHERE srecommend IN (SELECT custid FROM #supers) AND roleid IN (2,3,4) AND Enabled = 1 AND custid > @max_custid  AND custid < @max_custid2
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 CREATE TABLE #MemberTemp
@@ -62,7 +63,7 @@ CREATE TABLE #MemberTemp
 INSERT INTO #MemberTemp(CustID, mrecommend, currency)
 SELECT custid, mrecommend, currency
 FROM Custinfo WITH (NOLOCK)
-WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid	
+WHERE srecommend IN (SELECT custid FROM #supers) AND roleid = 1  AND Enabled = 1 AND custid > @max_custid AND custid < @max_custid2
 	AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 
 DECLARE @bitmapOrder INT 
@@ -104,7 +105,7 @@ WHERE NOT EXISTS (SELECT 1 FROM Dep_CustProductStatus WITH (NOLOCK) WHERE CustID
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid, 168
 FROM #supers t
-WHERE t.custid > @max_custid	
+WHERE t.custid > @max_custid AND t.custid < @max_custid2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID = t.custid AND a.ProductSettingID = 168)
 
 ------------------------------------PT Setting-------------------------------------------------		
@@ -184,7 +185,7 @@ AND NOT EXISTS (SELECT 1 FROM Dep_CustBAActive BA WITH (NOLOCK) WHERE BA.CustId=
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid, 169
 FROM #supers t
-WHERE t.custid > @max_custid	
+WHERE t.custid > @max_custid AND t.custid < @max_custid2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID = t.custid AND a.ProductSettingID = 169)
 
 -------------------------------------------------BetSetting----------------------------------------------------------------
@@ -217,7 +218,7 @@ FROM #MemberTemp t
 INSERT INTO Dep_LicenseeProductSetting(CustID,ProductSettingID)
 SELECT t.custid, 170
 FROM #supers t
-WHERE t.custid > @max_custid	
+WHERE t.custid > @max_custid AND t.custid < @max_custid2	
 	AND NOT EXISTS(SELECT TOP 1 1 FROM Dep_LicenseeProductSetting a WITH(NOLOCK) WHERE a.CustID = t.custid AND a.ProductSettingID = 170)
 
 DROP TABLE #SMATemp, #AllUsers, #Dep_CustProductStatus, #Dummy, #MemberTemp, #supers
