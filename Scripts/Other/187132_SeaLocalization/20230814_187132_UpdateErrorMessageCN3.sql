@@ -1,8 +1,8 @@
-﻿/*<info serverAlias="DBCUST-CustDB,DBTXN-bodb02"></info>*/
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20230810@Luke
 	Task: LAP - SEA Localization [Redmine: #187132]
-	DB: DBCUST/CustDB, DBTXN/bodb02
+	DB: DBCUST/CustDB
 */
 
 --Update existed msg of CN3
