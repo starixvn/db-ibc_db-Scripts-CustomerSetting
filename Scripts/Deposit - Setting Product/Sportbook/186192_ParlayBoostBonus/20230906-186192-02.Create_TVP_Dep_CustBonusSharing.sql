@@ -1,0 +1,28 @@
+/*<info serverAlias="DBBOF-bodb02"></info>*/
+/*
+	Created: 20230906@Tacy
+	Task: In-House
+	DB: DBBOF-bodb02
+	
+	Revisions:
+		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
+*/
+IF EXISTS(SELECT 1 FROM sys.types 
+		  WHERE name = 'TVP_RepDep_CustBonusSharing' 
+		  AND is_table_type = 1 AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+	DROP TYPE [dbo].[TVP_RepDep_CustBonusSharing];
+END
+
+CREATE TYPE [dbo].[TVP_RepDep_CustBonusSharing] AS TABLE (
+	[CustID] [int] NOT NULL,
+	[BonusSharingRate] [money] NOT NULL,
+	[FromDate] [date] NOT NULL,
+	[ToDate] [date] NOT NULL,
+	[RepUpdateTime] [datetime2](7) NULL,
+	[_FetchedTime] [datetime2](7) NULL
+)
+GO
+
+GRANT EXECUTE ON TYPE::[dbo].[TVP_RepDep_CustBonusSharing] TO [repl_ap] AS [dbo]
+GO
