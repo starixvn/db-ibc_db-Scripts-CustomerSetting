@@ -5,9 +5,9 @@
 		 'spondemo$vntest1409'
 		,'spondemo$vntest2009'
 		,'spondemo$vntest20091'
-		,'Athena000$VNTest7Sep20206'
-		,'Athena000$VNTest7Sep20207'
-		,'Athena000$VNTest7Sep20208'
+		--,'Athena000$VNTest7Sep20206'
+		--,'Athena000$VNTest7Sep20207'
+		--,'Athena000$VNTest7Sep20208'
     DB: DBCUST/CustDB
 */ 
 
@@ -32,9 +32,9 @@ WHERE c.username2 IN (
 	'spondemo$vntest1409'
 	,'spondemo$vntest2009'
 	,'spondemo$vntest20091'
-	,'Athena000$VNTest7Sep20206'
-	,'Athena000$VNTest7Sep20207'
-	,'Athena000$VNTest7Sep20208'
+	--,'Athena000$VNTest7Sep20206'
+	--,'Athena000$VNTest7Sep20207'
+	--,'Athena000$VNTest7Sep20208'
 )
 --Create Clearbaldummy if not exists
 DECLARE @tmpClearBalCustID INT, 
@@ -93,7 +93,7 @@ SET [ClosingBalance] = b.MemberBalance
 FROM #Member
 INNER JOIN (
 	SELECT custid, ISNULL(SUM(winlost-actual_stake+playercomm),0) as MemberBalance
-	FROM DBACC.bodb02.dbo.bettrans WITH(NOLOCK)
+	FROM DBACC.bodb02.dbo.transfer WITH(NOLOCK)
 	WHERE custid IN (SELECT custid FROM #Member)
 	GROUP BY custid
 	) b ON #Member.custid = b.custid
