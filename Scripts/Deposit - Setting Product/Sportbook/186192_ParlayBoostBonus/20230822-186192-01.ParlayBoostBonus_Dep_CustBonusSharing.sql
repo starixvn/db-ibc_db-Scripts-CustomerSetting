@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-CustDB,DBBOF-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBBOF-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created by: Tacy@20230822
 	Task: Create new Database Structure and add in house replication [Redmine:#186192] 
-	DB:	DBCUST-CustDB,DBBOF-bodb02
+	DB:	DBCUST-CustDB,DBBOF-bodb02,DBTP-bodb02
 */
 SET ANSI_NULLS ON
 GO
@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[Dep_CustBonusSharing](
 	[BonusSharingRate] [money] NOT NULL,
 	[FromDate] [date] NOT NULL,
 	[ToDate] [date] NOT NULL,
-	[RepUpdateTime] [datetime2](7) NULL
+	[RepUpdateTime] [datetime2](7) NOT NULL
  CONSTRAINT [PK_Dep_CustBonusSharing] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
