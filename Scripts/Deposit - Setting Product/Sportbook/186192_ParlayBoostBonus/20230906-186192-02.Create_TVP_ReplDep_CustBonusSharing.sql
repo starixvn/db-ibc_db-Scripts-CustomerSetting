@@ -8,13 +8,13 @@
 		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
 */
 IF EXISTS(SELECT 1 FROM sys.types 
-		  WHERE name = 'TVP_RepDep_CustBonusSharing' 
+		  WHERE name = 'TVP_ReplDep_CustBonusSharing' 
 		  AND is_table_type = 1 AND schema_id = SCHEMA_ID('dbo'))
 BEGIN
-	DROP TYPE [dbo].[TVP_RepDep_CustBonusSharing];
+	DROP TYPE [dbo].[TVP_ReplDep_CustBonusSharing];
 END
 
-CREATE TYPE [dbo].[TVP_RepDep_CustBonusSharing] AS TABLE (
+CREATE TYPE [dbo].[TVP_ReplDep_CustBonusSharing] AS TABLE (
 	[CustID] [int] NOT NULL,
 	[BonusSharingRate] [money] NOT NULL,
 	[FromDate] [date] NOT NULL,
@@ -24,5 +24,5 @@ CREATE TYPE [dbo].[TVP_RepDep_CustBonusSharing] AS TABLE (
 )
 GO
 
-GRANT EXECUTE ON TYPE::[dbo].[TVP_RepDep_CustBonusSharing] TO [repl_ap] AS [dbo]
+GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplDep_CustBonusSharing] TO [repl_ap] AS [dbo]
 GO
