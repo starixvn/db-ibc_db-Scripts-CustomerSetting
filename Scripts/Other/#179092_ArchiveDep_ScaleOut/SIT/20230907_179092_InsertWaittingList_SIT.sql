@@ -17,7 +17,7 @@ SELECT   c.[CustID]
 		,[Username] =  c.username
 		,[Username2] = c.username2
 		,[Recommend] = c.recommend
-		,[ClosingBalance] = 0
+		,[ClosingBalance] = CAST(0 AS MONEY)
 		,[CustIDBalanceDummy] = bal.custid
 		,[Status] = 'waiting'
 		,ag.username AS Agent
@@ -95,6 +95,10 @@ INNER JOIN (
 	WHERE custid IN (SELECT custid FROM #Member)
 	GROUP BY custid
 	) b ON #Member.custid = b.custid
+
+DELETE C
+FROM [Dep_Customer_Archived] C WITH(ROWLOCK)
+	INNER JOIN #Member T ON C.CustID = T.custid
 
 INSERT INTO [dbo].[Dep_Customer_Archived]([CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status])
 SELECT [CustID],[ArchivedDate],[Username],[Username2],[Recommend],[ClosingBalance],[CustIDBalanceDummy],[Status]
