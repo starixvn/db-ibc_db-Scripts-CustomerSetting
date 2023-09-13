@@ -2,12 +2,11 @@
 /*
     Created: Eden@20230907
     Task: archive members on SIT : [#179092]
-		 'spondemo$vntest1409'
-		,'spondemo$vntest2009'
-		,'spondemo$vntest20091'
-		--,'Athena000$VNTest7Sep20206'
-		--,'Athena000$VNTest7Sep20207'
-		--,'Athena000$VNTest7Sep20208'
+		Athena000$VNTestSabaClub18
+		Athena000$VNTest24Sep20201
+		Athena000$VNTest24Sep20202
+		Athena000$VNTest7Sep202010
+		Athena000$vntest13091
     DB: DBCUST/CustDB
 */ 
 
@@ -29,12 +28,11 @@ FROM Customer c WITH(NOLOCK)
 		AND bal.username like '%ClearBal'
 	INNER JOIN Customer ag WITH(NOLOCK) ON c.recommend = ag.custid
 WHERE c.username2 IN (
-	'spondemo$vntest1409'
-	,'spondemo$vntest2009'
-	,'spondemo$vntest20091'
-	--,'Athena000$VNTest7Sep20206'
-	--,'Athena000$VNTest7Sep20207'
-	--,'Athena000$VNTest7Sep20208'
+	 'Athena000$VNTestSabaClub18'
+	,'Athena000$VNTest24Sep20201'
+	,'Athena000$VNTest24Sep20202'
+	,'Athena000$VNTest7Sep202010'
+	,'Athena000$vntest13091'
 )
 --Create Clearbaldummy if not exists
 DECLARE @tmpClearBalCustID INT, 
