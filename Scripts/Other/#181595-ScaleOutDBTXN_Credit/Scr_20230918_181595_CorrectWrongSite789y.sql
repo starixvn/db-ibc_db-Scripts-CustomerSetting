@@ -8,7 +8,6 @@ USE custdb
 GO
 CREATE TABLE #Cust(CustID INT)
 CREATE TABLE #Cust_Soure(CustID INT,Site VARCHAR(10))
-CREATE TABLE #Cust_redudant(CustID INT)
 
 --> Get wrong data 
 INSERT INTO #Cust(CustID)
@@ -24,16 +23,7 @@ FROM #cust t
 	INNER JOIN dbcust.custdb.dbo.vw_Customer S WITH (NOLOCK) 
 		ON t.custid = S.custid
 
---> Get redudant data
-INSERT INTO #Cust_redudant(CustID)
-SELECT c.custid
-FROM dbo.vw_Customer c WITH (NOLOCK)
-	LEFT JOIN dbo.custinfo ci WITH(NOLOCK) ON c.custid = ci.custid
-WHERE c.site in ('789y')
-	AND ci.custid IS NULL
-
 SELECT * FROM #Cust_Soure
-SELECT * FROM #Cust_redudant
 
 --> Update wrong data
 UPDATE c 
@@ -42,12 +32,5 @@ FROM #Cust_Soure t
 	INNER JOIN dbo.Customer c WITH (ROWLOCK,UPDLOCK) 
 		ON t.custid = c.custid
 
---> Delete redudant
-DELETE c
-FROM #Cust_redudant t
-	INNER JOIN dbo.Customer c WITH (ROWLOCK,UPDLOCK) 
-		ON t.custid = c.custid
-
 DROP TABLE #cust
 DROP TABLE #Cust_Soure
-DROP TABLE #Cust_redudant
