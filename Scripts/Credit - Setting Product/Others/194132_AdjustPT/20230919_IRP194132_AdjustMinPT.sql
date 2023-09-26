@@ -24,7 +24,17 @@ BEGIN
 	IF dbo.f_CheckRepTable('CustPTSetting3rd_Agent') = 0 RETURN	
 
 	DECLARE @PT smallmoney = 0.93
-		
+	
+	CREATE TABLE #tmpCust (custid INT PRIMARY KEY)
+	DECLARE @tmp TABLE (custid INT PRIMARY KEY)
+	
+	INSERT INTO #tmpCust(custid)
+	SELECT custid 
+	FROM custinfo WITH(NOLOCK)
+	WHERE srecommend = @custid
+		AND roleid IN (2,3)
+		AND Enabled = 1
+	
 	--update preset s4,m4,a4
 	UPDATE cs 
 	SET cs.spositiontaking = @PT ,
@@ -41,14 +51,31 @@ BEGIN
 	SET maxpositiontaking = CASE WHEN @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,			
 		minpositiontaking = CASE WHEN @PT > minpositiontaking THEN @PT ELSE minpositiontaking END,			
 		
-		maxlivepositiontaking = CASE WHEN @PT > maxlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE maxlivepositiontaking END,
+		maxlivepositiontaking = CASE WHEN @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END,
 		minlivepositiontaking = CASE WHEN @PT > minlivepositiontaking AND sporttype = 1 and bettype IN (1,3,7,8) THEN @PT ELSE minlivepositiontaking END
 	FROM custoverride cs WITH(ROWLOCK, UPDLOCK)				
 	WHERE custid = @custid
 	
+	WHILE(1=1)	
+	BEGIN	
+		DELETE TOP (500)t 
+		OUTPUT DELETED.custid INTO @tmp(custid)
+		FROM #tmpCust t
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+			
+		UPDATE cs 
+		SET maxpositiontaking = CASE WHEN @PT > maxpositiontaking THEN @PT ELSE maxpositiontaking END,						
+			maxlivepositiontaking = CASE WHEN @PT > maxlivepositiontaking THEN @PT ELSE maxlivepositiontaking END		
+		FROM custoverride cs WITH(ROWLOCK, UPDLOCK)				
+		WHERE custid IN (SELECT custid FROM @tmp)
+		
+		DELETE @tmp
+	END
+	
 	EXEC dbo.Acc_CustSetting_18 @custid = @custid, @srecommend = @custid, @roleid = 4, @Target = @Target						
-		
-		
+				
 		--> FOR Muay Thai, E-Sports
 	DECLARE @xml XML;
 	SET @xml = (
@@ -85,6 +112,8 @@ BEGIN
 				,@roleid = 4
 				,@SportBettypeXML = @SportBettypeXML
 				,@Target = @Target
+				
+	DROP TABLE #tmpCust			
 END		
 GO
 -- END STEP 1: DEPLOY THIS SP @DBCUST.CustDB --------
@@ -150,12 +179,14 @@ BEGIN
 	
 	SET @index = @index + 1
 	
-	RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
+	--RAISERROR (@msg, 0, 1,@index, @custid) WITH NOWAIT
+	DECLARE @__msgtemp VARCHAR(200) = @msg + '- curdt: ' + CONVERT(VARCHAR(50), GETDATE(), 121)
+	RAISERROR (@__msgtemp, 0, 1, @index, @custid) WITH NOWAIT
 	
 	EXEC dbo.[Acc_CustSetting_19] 
 			@custid = @custid, 			
-			@target = @target
-				
+			@target = @target	
+		
 	WAITFOR DELAY '00:00:00.280'			
 END	
 
