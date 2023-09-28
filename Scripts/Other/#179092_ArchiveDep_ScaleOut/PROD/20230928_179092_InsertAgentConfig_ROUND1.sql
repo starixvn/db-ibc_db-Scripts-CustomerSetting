@@ -7,8 +7,7 @@ DB: DBCUST.CustDB
 USE CustDB
 GO
 --DELETE all data from Dep_Customer_Archived_Config
-DELETE 
-FROM Dep_Customer_Archived_Config WITH(ROWLOCK,UPDLOCK)
+TRUNCATE TABLE Dep_Customer_Archived_Config
 
 --> Delete waiting agents before new scan
 SELECT CustID
