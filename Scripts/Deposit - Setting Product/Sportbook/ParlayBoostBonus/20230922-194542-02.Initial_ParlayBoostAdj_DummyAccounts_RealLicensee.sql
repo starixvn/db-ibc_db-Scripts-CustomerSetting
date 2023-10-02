@@ -24,6 +24,20 @@ CREATE TABLE #supers (srecommend	INT PRIMARY KEY,
 					  VirtualMultiplier SMALLMONEY
 					  )
 
+CREATE TABLE #supers_batch
+					 (srecommend	INT PRIMARY KEY,
+					  mrecommend	INT,
+					  recommend		INT,
+					  creator		INT,
+					  ExchangeId	INT, 
+					  currency		NVARCHAR(50), 
+					  SiteName		NVARCHAR(50),
+					  UplineClosed	BIT,
+					  DisableOutright	BIT,
+					  matchlimit		SMALLMONEY,
+					  VirtualMultiplier SMALLMONEY
+					  )
+
 DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
 						ErrCode		INT,
 						ErrMsg		NVARCHAR(4000)
@@ -81,7 +95,8 @@ DECLARE @custid		INT
 	,	@creator	INT
 	,	@ErrCode	INT
 	,	@ErrMsg		NVARCHAR(4000)
-	
+	,   @Batch		INT = 100
+
 SELECT @srecommend = NULL
 	,  @Userpwd = '8058095B7DDB08A608811097E5DB8D'
 
@@ -95,62 +110,73 @@ FROM #supers
 DECLARE @msg_total NVARCHAR(200) = 'Total of Supers Affected: %d.'
 
 RAISERROR (@msg_total, 0, 1, @cnt) WITH NOWAIT
-	
-WHILE (1 = 1)
-BEGIN
-	SELECT TOP 1 @srecommend=srecommend
-		, @mrecommend=mrecommend
-		, @recommend=recommend
-		, @creator=creator
-		, @currency=ExchangeId
-		, @UsernameParlayBoostAdj= SiteName + currency + 'ParlayBoostAdj'
-		, @UplineClosed=UplineClosed
-		, @DisableOutright=DisableOutright
-		, @matchlimit=matchlimit
-		, @VirtualMultiplier=VirtualMultiplier
-	FROM #supers
-	
-	IF ISNULL(@srecommend,0)=0 BREAK
 
-	SELECT @pwdexpiry = dateadd(dd, 30, getdate())
+WHILE EXISTS (SELECT TOP 1 1 FROM #supers)
+BEGIN	
+	TRUNCATE TABLE #supers_batch
 
-	--Insert general data 
-	EXEC dbo.Acc_Dep_CustomerInsUserInfo
-		@custid = @custid OUTPUT,
-		@creator = @creator,
-		@username = @UsernameParlayBoostAdj,
-		@userpwd = @userpwd,
-		@pwdexpiry = @pwdexpiry,
-		@currency = @currency,
-		@site = NULL,
-		@srecommend = @srecommend,
-		@mrecommend = @mrecommend,
-		@recommend = @recommend,
-		@roleid = 1,
-		@TransferOption = NULL,
-		@suspended = 0,
-		@closed=@UplineClosed,
-		@DisableOutright = @DisableOutright,		
-		@matchlimit = @matchlimit,
-		@virtualmultiplier = @VirtualMultiplier,
-		@IsInternal = 0,	
-		@credit = 0,
-		@maxcredit = 0,
-		@IP = DEFAULT,
-		@TransferOption_dec = 0,
-		@Language = DEFAULT,
-		@ErrCode = @ErrCode OUTPUT,
-		@ErrMsg = @ErrMsg OUTPUT
+	DELETE TOP (@Batch) S
+	OUTPUT deleted.srecommend,deleted.mrecommend,deleted.recommend,deleted.creator,deleted.ExchangeId,
+			deleted.currency,deleted.SiteName,deleted.UplineClosed,deleted.DisableOutright,deleted.matchlimit,deleted.VirtualMultiplier
+	INTO #supers_batch (srecommend,mrecommend,recommend,creator,ExchangeId,currency,SiteName,UplineClosed,DisableOutright,matchlimit,VirtualMultiplier)
+	FROM #supers S
 
-	IF @ErrCode<>0
+	WHILE EXISTS (SELECT TOP 1 1 FROM #supers_batch)
 	BEGIN
-		INSERT INTO @tbError (srecommend, ErrCode, ErrMsg)
-		SELECT @srecommend, @ErrCode, @ErrMsg
+		SELECT TOP 1 @srecommend=srecommend
+			, @mrecommend=mrecommend
+			, @recommend=recommend
+			, @creator=creator
+			, @currency=ExchangeId
+			, @UsernameParlayBoostAdj= SiteName + currency + 'ParlayBoostAdj'
+			, @UplineClosed=UplineClosed
+			, @DisableOutright=DisableOutright
+			, @matchlimit=matchlimit
+			, @VirtualMultiplier=VirtualMultiplier
+		FROM #supers_batch
+	
+		IF ISNULL(@srecommend,0)=0 BREAK
+
+		SELECT @pwdexpiry = dateadd(dd, 30, getdate())
+
+		--Insert general data 
+		EXEC dbo.Acc_Dep_CustomerInsUserInfo
+			@custid = @custid OUTPUT,
+			@creator = @creator,
+			@username = @UsernameParlayBoostAdj,
+			@userpwd = @userpwd,
+			@pwdexpiry = @pwdexpiry,
+			@currency = @currency,
+			@site = NULL,
+			@srecommend = @srecommend,
+			@mrecommend = @mrecommend,
+			@recommend = @recommend,
+			@roleid = 1,
+			@TransferOption = NULL,
+			@suspended = 0,
+			@closed=@UplineClosed,
+			@DisableOutright = @DisableOutright,		
+			@matchlimit = @matchlimit,
+			@virtualmultiplier = @VirtualMultiplier,
+			@IsInternal = 0,	
+			@credit = 0,
+			@maxcredit = 0,
+			@IP = DEFAULT,
+			@TransferOption_dec = 0,
+			@Language = DEFAULT,
+			@ErrCode = @ErrCode OUTPUT,
+			@ErrMsg = @ErrMsg OUTPUT
+
+		IF @ErrCode<>0
+		BEGIN
+			INSERT INTO @tbError (srecommend, ErrCode, ErrMsg)
+			SELECT @srecommend, @ErrCode, @ErrMsg
+		END
+
+		DELETE FROM #supers_batch WHERE srecommend=@srecommend
+
+		SET @srecommend=NULL
 	END
-
-	DELETE FROM #supers WHERE srecommend=@srecommend
-
-	SET @srecommend=NULL
 	
 	WAITFOR DELAY '00:00:0.20'
 END
