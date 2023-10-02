@@ -126,7 +126,7 @@ WHERE c.roleid = 2
 		,'LEIHUO'
 		,'Mayayule'
 		,'Zowin'
-		,'Saba789'
+		--,'Saba789'
 		,'liv66SW'
 		,'ZFRT166'
 		,'Bobo88'
