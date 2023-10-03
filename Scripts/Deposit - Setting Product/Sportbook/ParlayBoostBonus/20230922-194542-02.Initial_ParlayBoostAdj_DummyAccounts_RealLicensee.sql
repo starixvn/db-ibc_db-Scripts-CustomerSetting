@@ -128,7 +128,7 @@ BEGIN
 			, @recommend=recommend
 			, @creator=creator
 			, @currency=ExchangeId
-			, @UsernameParlayBoostAdj= SiteName + currency + 'ParlayBoostAdj'
+			, @UsernameParlayBoostAdj= SiteName + 'ParlayBoostAdj' + currency
 			, @UplineClosed=UplineClosed
 			, @DisableOutright=DisableOutright
 			, @matchlimit=matchlimit
