@@ -137,4 +137,8 @@ BEGIN
 	SELECT * FROM @tbError
 END
 
+SET @InsBalExceptCustList = STUFF(@InsBalExceptCustList,1,1,'')
+
+SELECT @InsBalExceptCustList
+
 PRINT N'End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
