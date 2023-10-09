@@ -1,8 +1,8 @@
-/*<info serverAlias="DBBOF-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBBOF-bodb02,DBAGE-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: 20230906@Tacy
 	Task: In-House
-	DB: DBBOF-bodb02,DBTP-bodb02
+	DB: DB05x-bodb02,DBTP-bodb02
 	
 	Revisions:
 		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
@@ -19,7 +19,8 @@ CREATE TYPE [dbo].[TVP_ReplDep_CustBonusSharing] AS TABLE (
 	[BonusSharingRate] [money] NOT NULL,
 	[FromDate] [date] NOT NULL,
 	[ToDate] [date] NOT NULL,
-	[RepUpdateTime] [datetime2](7) NULL,
+	[RepUpdateTime] [datetime2](7) NOT NULL,
+	[isDeleted] [bit] NOT NULL,
 	[_FetchedTime] [datetime2](7) NULL
 )
 GO
