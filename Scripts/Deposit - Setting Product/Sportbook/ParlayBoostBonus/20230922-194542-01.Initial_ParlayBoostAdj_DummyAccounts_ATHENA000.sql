@@ -8,6 +8,12 @@
 	Revisions:
 		- 20230922@Tacy: Integration - Parlay Boost Bonus [RedmineID: #194542]
 */  
+/*
+	DBCUST to SITEDB01/02
+	
+	Linked server name:	_tmpDBSite1
+						_tmpDBSite2
+*/
 USE CustDB
 GO
 
@@ -15,7 +21,8 @@ CREATE TABLE #supers (srecommend	INT PRIMARY KEY,
 					  mrecommend	INT,
 					  recommend		INT,
 					  currency		NVARCHAR(50), 
-					  SiteName		NVARCHAR(50)
+					  SiteName		NVARCHAR(50),
+					  SiteDBGroupID	TINYINT
 					  )
 
 CREATE TABLE #supers_batch
@@ -23,7 +30,8 @@ CREATE TABLE #supers_batch
 					  mrecommend	INT,
 					  recommend		INT,
 					  currency		NVARCHAR(50), 
-					  SiteName		NVARCHAR(50)
+					  SiteName		NVARCHAR(50),
+					  SiteDBGroupID	TINYINT
 					  )
 
 DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
@@ -31,8 +39,8 @@ DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
 						ErrMsg		NVARCHAR(4000)
 						)
 
-INSERT INTO #supers(srecommend,currency,SiteName)
-SELECT ci.custid, c.currency, c.site 
+INSERT INTO #supers(srecommend,currency,SiteName, SiteDBGroupID)
+SELECT ci.custid, c.currency, c.site, s.SiteDBGroupID
 FROM Customer c WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
 INNER JOIN Site s WITH (NOLOCK) ON s.site=c.site
@@ -65,11 +73,11 @@ DECLARE @CustIdParlayBoostAdj INT
 	,	@UsernameParlayBoostAdj VARCHAR(30)
 	,	@srecommend INT
 	,	@recommend	INT
+	,	@SiteDBGroupID	TINYINT
 	,	@Userpwd	VARCHAR(40)
 	,	@ErrCode	INT
 	,	@ErrMsg		NVARCHAR(4000)
 	,   @Batch		INT = 100
-	,	@InsBalExceptCustList varchar(MAX) = '' 
 	
 SELECT @srecommend = NULL
 	,  @Userpwd = '8058095B7DDB08A608811097E5DB8D'
@@ -90,8 +98,8 @@ BEGIN
 	TRUNCATE TABLE #supers_batch
 
 	DELETE TOP (@Batch) S
-	OUTPUT deleted.srecommend,deleted.mrecommend,deleted.recommend,deleted.currency,deleted.SiteName
-	INTO #supers_batch (srecommend,mrecommend,recommend,currency,SiteName)
+	OUTPUT deleted.srecommend,deleted.mrecommend,deleted.recommend,deleted.currency,deleted.SiteName, deleted.SiteDBGroupID
+	INTO #supers_batch (srecommend,mrecommend,recommend,currency,SiteName,SiteDBGroupID)
 	FROM #supers S
 
 	WHILE EXISTS (SELECT TOP 1 1 FROM #supers_batch)
@@ -99,6 +107,7 @@ BEGIN
 		SELECT TOP 1 @srecommend=srecommend
 			, @recommend=recommend
 			, @UsernameParlayBoostAdj= SiteName + 'ParlayBoostAdj' + currency
+			, @SiteDBGroupID=SiteDBGroupID
 		FROM #supers_batch
 	
 		IF ISNULL(@srecommend,0)=0 BREAK
@@ -115,8 +124,14 @@ BEGIN
 		@ErrCode		=	@ErrCode output,
 		@ErrMsg			=	@ErrMsg output
 
-		IF @ErrCode = 0
-			SELECT @InsBalExceptCustList = @InsBalExceptCustList + ISNULL(',' + CONVERT(VARCHAR,@CustIdParlayBoostAdj) +  ';' + @UsernameParlayBoostAdj,'')
+		IF @ErrCode = 0 AND @SiteDBGroupID=1
+		BEGIN
+			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
+		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		BEGIN
+			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
 
 		IF @ErrCode<>0
 		BEGIN
@@ -136,9 +151,5 @@ IF EXISTS (SELECT TOP 1 1 FROM @tbError)
 BEGIN
 	SELECT * FROM @tbError
 END
-
-SET @InsBalExceptCustList = STUFF(@InsBalExceptCustList,1,1,'')
-
-SELECT @InsBalExceptCustList
 
 PRINT N'End on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';

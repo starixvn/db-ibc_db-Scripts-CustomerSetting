@@ -14,28 +14,18 @@ GO
 CREATE TABLE #supers (srecommend	INT PRIMARY KEY,
 					  mrecommend	INT,
 					  recommend		INT,
-					  creator		INT,
-					  ExchangeId	INT, 
 					  currency		NVARCHAR(50), 
 					  SiteName		NVARCHAR(50),
-					  UplineClosed	BIT,
-					  DisableOutright	BIT,
-					  matchlimit		SMALLMONEY,
-					  VirtualMultiplier SMALLMONEY
+					  SiteDBGroupID	TINYINT
 					  )
 
 CREATE TABLE #supers_batch
 					 (srecommend	INT PRIMARY KEY,
 					  mrecommend	INT,
 					  recommend		INT,
-					  creator		INT,
-					  ExchangeId	INT, 
 					  currency		NVARCHAR(50), 
 					  SiteName		NVARCHAR(50),
-					  UplineClosed	BIT,
-					  DisableOutright	BIT,
-					  matchlimit		SMALLMONEY,
-					  VirtualMultiplier SMALLMONEY
+					  SiteDBGroupID	TINYINT
 					  )
 
 DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
@@ -43,15 +33,15 @@ DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
 						ErrMsg		NVARCHAR(4000)
 						)
 
-INSERT INTO #supers(srecommend,ExchangeId,currency,SiteName)
-SELECT ci.custid, e.ExchangeId, e.currency, c.site 
+INSERT INTO #supers(srecommend,currency,SiteName, SiteDBGroupID)
+SELECT ci.custid, c.currency, c.site, s.SiteDBGroupID
 FROM Customer c WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
-INNER JOIN exchange e WITH (NOLOCK) ON e.ExchangeId=c.currency
+INNER JOIN Site s WITH (NOLOCK) ON s.site=c.site
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
-AND ci.Enabled=1	
-AND c.site NOT IN ('Saba789','ATHENA000')
+AND ci.Enabled=1 AND s.isActive=1
+AND c.site NOT IN ('Saba789', 'SEAL888','ATHENA000')
 
 --Delete: existed dummy account
 DELETE s
@@ -63,40 +53,25 @@ CROSS APPLY (SELECT TOP 1 1 AS VAL FROM Customer c WITH (NOLOCK)
 
 --Update info
 UPDATE s
-SET s.mrecommend=c.mrecommend, s.recommend=c.custid, s.creator=c.creator
+SET s.mrecommend=c.mrecommend, s.recommend=c.custid
 FROM #supers s
-CROSS APPLY (SELECT TOP 1 c.custid, c.mrecommend, c.creator
+CROSS APPLY (SELECT TOP 1 c.custid, c.mrecommend
 			 FROM Customer c WITH (NOLOCK)
 			 WHERE roleid=2 AND c.srecommend=s.srecommend
 			 AND (username LIKE '%Acc%01')
 			 ORDER BY c.custid ASC) c
 
-UPDATE s
-SET s.UplineClosed=c.closed, 
-	s.matchlimit=c.MatchLimit,
-	s.DisableOutright=c.DisableOutright,
-	s.VirtualMultiplier=c.VirtualMultiplier
-FROM #supers s
-INNER JOIN custInfo c WITH (NOLOCK) ON s.recommend=c.custid
-
 --Create dummy account
-DECLARE @custid		INT
-	,	@srecommend INT
-	,	@mrecommend INT
-	,	@recommend	INT
-	,	@currency	INT
-	,	@pwdexpiry	DATETIME
-	,	@Userpwd	VARCHAR(40)
+DECLARE @CustIdParlayBoostAdj INT
 	,	@UsernameParlayBoostAdj VARCHAR(30)
-	,	@UplineClosed BIT
-	,	@DisableOutright BIT
-	,	@matchlimit SMALLMONEY
-	,	@VirtualMultiplier SMALLMONEY
-	,	@creator	INT
+	,	@srecommend INT
+	,	@recommend	INT
+	,	@SiteDBGroupID	TINYINT
+	,	@Userpwd	VARCHAR(40)
 	,	@ErrCode	INT
 	,	@ErrMsg		NVARCHAR(4000)
 	,   @Batch		INT = 100
-
+	
 SELECT @srecommend = NULL
 	,  @Userpwd = '8058095B7DDB08A608811097E5DB8D'
 
@@ -110,62 +85,46 @@ FROM #supers
 DECLARE @msg_total NVARCHAR(200) = 'Total of Supers Affected: %d.'
 
 RAISERROR (@msg_total, 0, 1, @cnt) WITH NOWAIT
-
+	
 WHILE EXISTS (SELECT TOP 1 1 FROM #supers)
 BEGIN	
 	TRUNCATE TABLE #supers_batch
 
 	DELETE TOP (@Batch) S
-	OUTPUT deleted.srecommend,deleted.mrecommend,deleted.recommend,deleted.creator,deleted.ExchangeId,
-			deleted.currency,deleted.SiteName,deleted.UplineClosed,deleted.DisableOutright,deleted.matchlimit,deleted.VirtualMultiplier
-	INTO #supers_batch (srecommend,mrecommend,recommend,creator,ExchangeId,currency,SiteName,UplineClosed,DisableOutright,matchlimit,VirtualMultiplier)
+	OUTPUT deleted.srecommend,deleted.mrecommend,deleted.recommend,deleted.currency,deleted.SiteName, deleted.SiteDBGroupID
+	INTO #supers_batch (srecommend,mrecommend,recommend,currency,SiteName,SiteDBGroupID)
 	FROM #supers S
 
 	WHILE EXISTS (SELECT TOP 1 1 FROM #supers_batch)
 	BEGIN
 		SELECT TOP 1 @srecommend=srecommend
-			, @mrecommend=mrecommend
 			, @recommend=recommend
-			, @creator=creator
-			, @currency=ExchangeId
 			, @UsernameParlayBoostAdj= SiteName + 'ParlayBoostAdj' + currency
-			, @UplineClosed=UplineClosed
-			, @DisableOutright=DisableOutright
-			, @matchlimit=matchlimit
-			, @VirtualMultiplier=VirtualMultiplier
+			, @SiteDBGroupID=SiteDBGroupID
 		FROM #supers_batch
 	
 		IF ISNULL(@srecommend,0)=0 BREAK
 
-		SELECT @pwdexpiry = dateadd(dd, 30, getdate())
+		EXEC Acc_Dep_CustomerInsMember_Ag 
+		@custid			=	@CustIdParlayBoostAdj output,
+		@creator		=	10278938, --starixIT
+		@username		=	@UsernameParlayBoostAdj,
+		@userpwd		=	@Userpwd,
+		@recommend		=	@recommend,
+		@IP				=	'10.3.11.200',
+		@Language		=	DEFAULT,
+		@SubAccID		=	DEFAULT,
+		@ErrCode		=	@ErrCode output,
+		@ErrMsg			=	@ErrMsg output
 
-		--Insert general data 
-		EXEC dbo.Acc_Dep_CustomerInsUserInfo
-			@custid = @custid OUTPUT,
-			@creator = @creator,
-			@username = @UsernameParlayBoostAdj,
-			@userpwd = @userpwd,
-			@pwdexpiry = @pwdexpiry,
-			@currency = @currency,
-			@site = NULL,
-			@srecommend = @srecommend,
-			@mrecommend = @mrecommend,
-			@recommend = @recommend,
-			@roleid = 1,
-			@TransferOption = NULL,
-			@suspended = 0,
-			@closed=@UplineClosed,
-			@DisableOutright = @DisableOutright,		
-			@matchlimit = @matchlimit,
-			@virtualmultiplier = @VirtualMultiplier,
-			@IsInternal = 0,	
-			@credit = 0,
-			@maxcredit = 0,
-			@IP = DEFAULT,
-			@TransferOption_dec = 0,
-			@Language = DEFAULT,
-			@ErrCode = @ErrCode OUTPUT,
-			@ErrMsg = @ErrMsg OUTPUT
+		IF @ErrCode = 0 AND @SiteDBGroupID=1
+		BEGIN
+			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
+		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		BEGIN
+			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
 
 		IF @ErrCode<>0
 		BEGIN
