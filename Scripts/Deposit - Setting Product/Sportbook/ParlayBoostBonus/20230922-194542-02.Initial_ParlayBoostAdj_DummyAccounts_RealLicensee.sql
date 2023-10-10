@@ -38,9 +38,10 @@ SELECT ci.custid, c.currency, c.site, s.SiteDBGroupID
 FROM Customer c WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
 INNER JOIN Site s WITH (NOLOCK) ON s.site=c.site
+INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = c.site
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
-AND ci.Enabled=1 AND s.isActive=1
+AND ci.Enabled=1 AND l.isActive=1
 AND c.site NOT IN ('Saba789', 'SEAL888','ATHENA000')
 
 --Delete: existed dummy account

@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB,DBAGE-bodb02,DBBOF-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBEXT-bodb02,DBBOF-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created by: Tacy@20230822
 	Task: Create new Database Structure and add in house replication [Redmine:#186192] 

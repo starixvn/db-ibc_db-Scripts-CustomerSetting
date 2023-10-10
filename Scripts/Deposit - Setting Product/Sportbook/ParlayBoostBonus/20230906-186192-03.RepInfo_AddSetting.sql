@@ -1,4 +1,4 @@
-/*<info serverAlias="DBBOF-bodb02,DBAGE-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBBOF-bodb02,DBEXT-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: 20230906@Tacy
 	Task: In-House
