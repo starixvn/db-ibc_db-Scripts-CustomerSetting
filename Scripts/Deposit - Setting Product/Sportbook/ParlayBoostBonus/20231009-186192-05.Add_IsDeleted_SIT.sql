@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBBOF-bodb02,DBAGE-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: 20231009@Tacy
 	Task: In-House - Add IsDeleted column
-	DB: DBCUST-CustDB
+	DB: DBCUST-CustDB,DB05x-bodb02,DBTP-bodb02
 	
 	Revisions:
 		- 20231009@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
