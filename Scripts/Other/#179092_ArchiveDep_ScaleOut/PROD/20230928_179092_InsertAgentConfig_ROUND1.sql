@@ -2,10 +2,18 @@
 /*
 Created: 20230928@Eden
 Task: ROUND 1: All terminated Licensees
+	add temp linked server _tmpDBSite1, _tmpDBSite2 to connect Sitedb01,sitedb02
 DB: DBCUST.CustDB
 */
 USE CustDB
 GO
+--Check LinkedServer
+SELECT TOP 1 1 AS CheckLinkedServer FROM _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception WITH(NOLOCK) WHERE 1 <> 1 UNION ALL
+SELECT TOP 1 1						FROM _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception WITH(NOLOCK) WHERE 1 <> 1
+
+IF @@ERROR <> 0
+	RETURN
+
 --DELETE all data from Dep_Customer_Archived_Config
 TRUNCATE TABLE Dep_Customer_Archived_Config
 
@@ -247,9 +255,10 @@ DECLARE @tmpClearBalCustID INT,
         @IP                VARCHAR(50)   = '0.0.0.0', 
         @Pass              VARCHAR(100)  = '8058095B7DDB08A608811097E5DB8D', 
         @tmpDumUserName    VARCHAR(30), 
-        @AgentID      INT
+        @AgentID			INT,
+		@SiteDBGroupID		SMALLINT
 
-SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status,c.username AS Agent
+SELECT c.custid AS Recommend,cu.site,@MinBalance AS MinBalance,@Mindays AS MinDays,ClearBal.CustID AS CustIDBalanceDummy, 0 AS Status,c.username AS Agent,s.SiteDBGroupID
 INTO #Dep_Customer_Archived_Config
 FROM custInfo c WITH(NOLOCK)
 	INNER JOIN Customer cu WITH(NOLOCK) ON c.custid = cu.custid
@@ -259,6 +268,7 @@ FROM custInfo c WITH(NOLOCK)
 						AND ClearBal.roleid = 1
 						AND ClearBal.username LIKE '%ClearBal'
 				) ClearBal
+	INNER JOIN Site s WITH(NOLOCK) ON s.site = cu.site
 WHERE c.srecommend IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND c.custid IN ( SELECT custid FROM #TempAgents)
 
@@ -267,9 +277,9 @@ CREATE CLUSTERED INDEX ix_TmpDep_Customer_Archived_Config_recommend ON #Dep_Cust
 --> Insert new dummy clearbal if not exists yet
 WHILE 1 = 1
 BEGIN
-	SELECT @AgentID = null, @tmpClearBalCustID = null, @tmpDumUserName = null, @ErrMsg = '',@ErrCode = 0
+	SELECT @AgentID = null, @tmpClearBalCustID = null, @tmpDumUserName = null, @ErrMsg = '',@ErrCode = 0, @SiteDBGroupID = NULL
 
-	SELECT TOP(1) @AgentID = Recommend, @tmpDumUserName = Agent + 'ClearBal'
+	SELECT TOP(1) @AgentID = Recommend, @tmpDumUserName = Agent + 'ClearBal', @SiteDBGroupID = SiteDBGroupID
 	FROM #Dep_Customer_Archived_Config
 	WHERE CustIDBalanceDummy IS NULL
 
@@ -301,6 +311,23 @@ BEGIN
 		UPDATE #Dep_Customer_Archived_Config
 		SET CustIDBalanceDummy = @tmpClearBalCustID
 		WHERE Recommend = @AgentID
+
+		IF @SiteDBGroupID = 1
+		BEGIN
+			--> Use LinkedServer to connect Sitedb --> Insert Task_Cust_CheckBalance_Exception on SiteDB
+			IF NOT EXISTS( SELECT 1 FROM _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception WITH(NOLOCK) WHERE custid = @tmpClearBalCustID)
+			BEGIN
+				INSERT INTO _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception(custid, remark) values(@tmpClearBalCustID, @tmpDumUserName)
+			END
+		END
+		ELSE IF @SiteDBGroupID = 2
+		BEGIN
+			--> Use LinkedServer to connect Sitedb --> Insert Task_Cust_CheckBalance_Exception on SiteDB
+			IF NOT EXISTS( SELECT 1 FROM _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception WITH(NOLOCK) WHERE custid = @tmpClearBalCustID)
+			BEGIN
+				INSERT INTO _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception(custid, remark) values(@tmpClearBalCustID, @tmpDumUserName)
+			END
+		END
 	END
 END
 
