@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-CustDB,DBBOF-bodb02,DBAGE-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBTP-bodb02"></info>*/
 /*
 	Created: 20231011@Tacy
 	Task: In-House - Alter IsDeleted column NOT NULL
-	DB: DBCUST-CustDB,DB05x-bodb02,DBTP-bodb02
+	DB: DBCUST-CustDB,DBTP-bodb02
 */
 UPDATE Dep_CustBonusSharing WITH (ROWLOCK, UPDLOCK)
 SET [isDeleted]=0
