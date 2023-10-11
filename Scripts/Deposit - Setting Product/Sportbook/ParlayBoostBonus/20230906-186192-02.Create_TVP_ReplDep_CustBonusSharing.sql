@@ -7,6 +7,12 @@
 	Revisions:
 		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
 */
+IF EXISTS(SELECT 1 FROM sys.objects 
+		  WHERE type = 'P' AND name = 'Repl_PutDep_CustBonusSharing')
+BEGIN
+	DROP PROCEDURE Repl_PutDep_CustBonusSharing;
+END
+
 IF EXISTS(SELECT 1 FROM sys.types 
 		  WHERE name = 'TVP_ReplDep_CustBonusSharing' 
 		  AND is_table_type = 1 AND schema_id = SCHEMA_ID('dbo'))
