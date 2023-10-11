@@ -1,8 +1,8 @@
-/*<info serverAlias="DBBOF-bodb02,DBEXT-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBTP-bodb02"></info>*/
 /*
 	Created: 20230906@Tacy
 	Task: In-House
-	DB: DB05x-bodb02, DBTP-bodb02
+	DB: DBTP-bodb02
 	
 	Revisions:
 		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]

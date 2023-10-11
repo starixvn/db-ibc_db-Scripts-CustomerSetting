@@ -1,14 +1,17 @@
-/*<info serverAlias="DBBOF-bodb02,DBEXT-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBTP-bodb02"></info>*/
 /*
 	Created: 20230906@Tacy
 	Task: In-House
-	DB: DB05x-bodb02,DBTP-bodb02
+	DB: DBTP-bodb02
 	
 	Revisions:
 		- 20230906@Tacy: Integration - Parlay Boost Bonus [RedmineID: #186192]
 */
+--CHECK IF: ADD NEW COLUMN INTO EXISTED TABLE
 IF EXISTS(SELECT 1 FROM sys.objects 
 		  WHERE type = 'P' AND name = 'Repl_PutDep_CustBonusSharing')
+AND EXISTS (SELECT 1 FROM RepInfo WITH (NOLOCK)
+			WHERE [name]='Dep_CustBonusSharing' AND active=0)
 BEGIN
 	DROP PROCEDURE Repl_PutDep_CustBonusSharing;
 END
