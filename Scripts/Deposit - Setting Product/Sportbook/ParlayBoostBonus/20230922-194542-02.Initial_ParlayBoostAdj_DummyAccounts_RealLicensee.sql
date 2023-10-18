@@ -34,7 +34,7 @@ DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
 						)
 
 INSERT INTO #supers(srecommend,currency,SiteName, SiteDBGroupID)
-SELECT top 10 ci.custid, e.currency, c.site, s.SiteDBGroupID
+SELECT ci.custid, e.currency, c.site, s.SiteDBGroupID
 FROM Customer c WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
 INNER JOIN Site s WITH (NOLOCK) ON s.site=c.site
