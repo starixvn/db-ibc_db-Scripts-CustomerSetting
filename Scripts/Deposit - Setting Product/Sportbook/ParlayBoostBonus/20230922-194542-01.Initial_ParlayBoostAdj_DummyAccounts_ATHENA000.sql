@@ -40,10 +40,11 @@ DECLARE @tbError TABLE (srecommend	INT PRIMARY KEY,
 						)
 
 INSERT INTO #supers(srecommend,currency,SiteName, SiteDBGroupID)
-SELECT ci.custid, c.currency, c.site, s.SiteDBGroupID
+SELECT ci.custid, e.currency, c.site, s.SiteDBGroupID
 FROM Customer c WITH(NOLOCK)
 INNER JOIN custInfo ci WITH(NOLOCK) ON ci.custid=c.custid
 INNER JOIN Site s WITH (NOLOCK) ON s.site=c.site
+INNER JOIN exchange e WITH (NOLOCK) ON e.ExchangeId=c.currency
 INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = c.site
 WHERE ci.roleid = 4 	
 AND ci.custid IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK)) 
