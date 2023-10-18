@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 Created: 20230928@Eden
-Task: ROUND 1: All terminated Licensees
+Task: ROUND 0: All terminated Licensees
 	add temp linked server _tmpDBSite1, _tmpDBSite2 to connect Sitedb01,sitedb02
 DB: DBCUST.CustDB
 */
