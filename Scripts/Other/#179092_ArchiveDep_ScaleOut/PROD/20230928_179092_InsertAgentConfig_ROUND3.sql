@@ -2,9 +2,11 @@
 /*
 Created: 20230928@Eden
 Task: ROUND 3: 
-	HAIFA
-	Pay4d
+	asiabet88
 	Baji
+	HAIFA
+	NukeGaming
+	awc2
 DB: DBCUST.CustDB
 */
 USE CustDB
@@ -40,11 +42,11 @@ WHERE c.roleid = 2
 	AND c.username NOT LIKE '%ACC%'
 	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
 	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.site IN (
-		 'HAIFA'
-		,'Pay4d'
-		,'Baji'
-	)
+	AND c.site IN ('asiabet88'
+					,'Baji'
+					,'HAIFA'
+					,'NukeGaming'
+					,'awc2')
 
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 

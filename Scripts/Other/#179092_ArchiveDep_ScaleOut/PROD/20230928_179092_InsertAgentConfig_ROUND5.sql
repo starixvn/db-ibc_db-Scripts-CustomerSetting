@@ -2,11 +2,22 @@
 /*
 Created: 20230928@Eden
 Task: ROUND 5: 
-	IONclub
-	365online
-	Wanbo
-	awc2
-	OneSports
+	W88
+	24AVIA
+	Xtu168
+	ig128
+	Yibo
+	mansion88
+	ig128s
+	ZhiFeng032
+	zt828
+	PKKing
+	Dawoo
+	Happy8
+	XTSB
+	998bet
+	khmer
+	Macaubet
 DB: DBCUST.CustDB
 */
 USE CustDB
@@ -42,13 +53,22 @@ WHERE c.roleid = 2
 	AND c.username NOT LIKE '%ACC%'
 	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
 	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.site IN (
-		'IONclub'
-		,'365online'
-		,'Wanbo'
-		,'awc2'
-		,'OneSports'
-		)
+	AND c.site IN ('W88'
+					,'24AVIA'
+					,'Xtu168'
+					,'ig128'
+					,'Yibo'
+					,'mansion88'
+					,'ig128s'
+					,'ZhiFeng032'
+					,'zt828'
+					,'PKKing'
+					,'Dawoo'
+					,'Happy8'
+					,'XTSB'
+					,'998bet'
+					,'khmer'
+					,'Macaubet')
 
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 

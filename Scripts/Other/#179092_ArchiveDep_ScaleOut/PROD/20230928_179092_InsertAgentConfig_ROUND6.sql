@@ -2,12 +2,61 @@
 /*
 Created: 20230928@Eden
 Task: ROUND 6: 
-	ISC888
-	Xtu168
-	Yibo
-	ig128
-	W88
-	24AVIA
+	Winbox
+	infini88
+	IBO
+	LEIHUO
+	Sunwin
+	KUTECH
+	TSEnter
+	BigGaming
+	livv88sw
+	MYGAME
+	DongYing
+	Mybet88
+	TGXICV
+	MANBETX
+	Peakk
+	X2Dynamic
+	PKbet
+	BE7
+	BSSB168
+	568WinSW
+	Sunriseb2b
+	ARYA
+	Kzing2
+	BGCV
+	mtegames
+	win365
+	txwl002
+	A1game
+	ZhiFeng055
+	iBET
+	VWIN66
+	H1royal
+	FB88
+	Aoncash
+	HuangMa
+	OCMS
+	JJBGAMECV
+	MTech
+	633esports
+	Abcasino
+	awc
+	Wanfang
+	Yunji
+	FB88CV
+	9w
+	CN88
+	ab6688
+	LIGAWLHKB
+	shengboyun
+	V9betSW
+	ZhiFeng013
+	VN88
+	Rakyat4DSW
+	CGame
+	Weiwei
 DB: DBCUST.CustDB
 */
 USE CustDB
@@ -43,14 +92,61 @@ WHERE c.roleid = 2
 	AND c.username NOT LIKE '%ACC%'
 	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
 	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.site IN (
-		'ISC888'
-		,'Xtu168'
-		,'Yibo'
-		,'ig128'
-		,'W88'
-		,'24AVIA'
-	)
+	AND c.site IN ('Winbox'
+					,'infini88'
+					,'IBO'
+					,'LEIHUO'
+					,'Sunwin'
+					,'KUTECH'
+					,'TSEnter'
+					,'BigGaming'
+					,'livv88sw'
+					,'MYGAME'
+					,'DongYing'
+					,'Mybet88'
+					,'TGXICV'
+					,'MANBETX'
+					,'Peakk'
+					,'X2Dynamic'
+					,'PKbet'
+					,'BE7'
+					,'BSSB168'
+					,'568WinSW'
+					,'Sunriseb2b'
+					,'ARYA'
+					,'Kzing2'
+					,'BGCV'
+					,'mtegames'
+					,'win365'
+					,'txwl002'
+					,'A1game'
+					,'ZhiFeng055'
+					,'iBET'
+					,'VWIN66'
+					,'H1royal'
+					,'FB88'
+					,'Aoncash'
+					,'HuangMa'
+					,'OCMS'
+					,'JJBGAMECV'
+					,'MTech'
+					,'633esports'
+					,'Abcasino'
+					,'awc'
+					,'Wanfang'
+					,'Yunji'
+					,'FB88CV'
+					,'9w'
+					,'CN88'
+					,'ab6688'
+					,'LIGAWLHKB'
+					,'shengboyun'
+					,'V9betSW'
+					,'ZhiFeng013'
+					,'VN88'
+					,'Rakyat4DSW'
+					,'CGame'
+					,'Weiwei')
 
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 

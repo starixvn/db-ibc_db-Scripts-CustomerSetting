@@ -1,7 +1,10 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 Created: 20230928@Eden
-Task: ROUND 2: 368Cash
+Task: ROUND 2: 
+	SM88
+	SL88SW
+	ug396
 DB: DBCUST.CustDB
 */
 USE CustDB
@@ -37,7 +40,9 @@ WHERE c.roleid = 2
 	AND c.username NOT LIKE '%ACC%'
 	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
 	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.site IN ('368Cash')
+	AND c.site IN ('SM88'
+					,'SL88SW'
+					,'ug396')
 
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 

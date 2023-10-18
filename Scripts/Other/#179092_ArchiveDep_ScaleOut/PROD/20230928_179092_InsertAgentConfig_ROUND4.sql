@@ -3,9 +3,15 @@
 Created: 20230928@Eden
 Task: ROUND 4: 
 	GamingSoft
-	asiabet88
-	MARS
 	AEUG
+	MARS
+	IONclub
+	365online
+	Wanbo
+	alog
+	JDYGaming
+	ISC888
+	OneSports
 DB: DBCUST.CustDB
 */
 USE CustDB
@@ -16,6 +22,7 @@ SELECT TOP 1 1						FROM _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception
 
 IF @@ERROR <> 0
 	RETURN
+
 --> Delete waiting agents before new scan
 SELECT CustID
 INTO #TempDeleted
@@ -40,12 +47,16 @@ WHERE c.roleid = 2
 	AND c.username NOT LIKE '%ACC%'
 	AND c.creatdate <= DATEADD(dd,-@Mindays,GETDATE())
 	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND c.site IN (
-		'GamingSoft'
-		,'asiabet88'
-		,'MARS'
-		,'AEUG'
-	)
+	AND c.site IN ('GamingSoft'
+					,'AEUG'
+					,'MARS'
+					,'IONclub'
+					,'365online'
+					,'Wanbo'
+					,'alog'
+					,'JDYGaming'
+					,'ISC888'
+					,'OneSports')
 
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 
