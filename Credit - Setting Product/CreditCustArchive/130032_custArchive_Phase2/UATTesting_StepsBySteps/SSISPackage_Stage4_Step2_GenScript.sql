@@ -77,7 +77,7 @@ FROM bodb_report.dbo.tmpCustArchived ag WITH (NOLOCK)
 	--	GROUP BY recommend
 	--	) b ON b.recommend = agci.custid	
 WHERE ag.isFinished = 1
-	AND isnull(MemCount, 0) > 0 
+	--AND isnull(MemCount, 0) > 0 
 	--AND isnull(TransCount, 0) = 0
 	AND agci.enabled = 0
 	AND agci.srecommend NOT IN (SELECT custid FROM bodb_report.dbo.Task_Cust_ArchiveAcc_Exception WITH(NOLOCK))
