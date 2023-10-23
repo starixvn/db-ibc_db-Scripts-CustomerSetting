@@ -22,6 +22,8 @@ SELECT TOP 1 1						FROM _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception
 IF @@ERROR <> 0
 	RETURN
 
+TRUNCATE TABLE Dep_Customer_Archived_Config -- avoid scan current agent on PRODUCTION config
+
 SELECT   c.[CustID]
 		,[ArchivedDate] = GETDATE()
 		,[Username] =  c.username
