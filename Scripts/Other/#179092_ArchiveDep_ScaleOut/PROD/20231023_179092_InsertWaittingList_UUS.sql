@@ -4,11 +4,10 @@
     Task: archive members UUS : [#179092]
 		Athena000UUS011937036
 		Athena000UUS011937045
-		Athena000UUS011905175
-		Athena000UUS011905176
-		Athena000UUS011905184
-		Athena000UUS011905185
 		Athena000UUS011905177
+		Athena000UUS011905179
+		Athena000UUS011905054
+		Athena000UUS011905160
     DB: DBCUST/CustDB
 */ 
 
@@ -44,11 +43,10 @@ FROM Customer c WITH(NOLOCK)
 WHERE c.username IN (
 						 'Athena000UUS011937036'
 						,'Athena000UUS011937045'
-						,'Athena000UUS011905175'
-						,'Athena000UUS011905176'
-						,'Athena000UUS011905184'
-						,'Athena000UUS011905185'
 						,'Athena000UUS011905177'
+						,'Athena000UUS011905179'
+						,'Athena000UUS011905054'
+						,'Athena000UUS011905160'
 					)
 	AND c.srecommend IN ( SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 
