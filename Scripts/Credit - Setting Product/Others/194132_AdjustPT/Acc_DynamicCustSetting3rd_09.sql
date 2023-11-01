@@ -2,7 +2,7 @@
  /*
 	Created: Johnson
 	Date: 2023-09-19
-	Task: correct pt when update minpt for super 
+	Task: correct pt when update minpt for super/master
 	DB: DBCUST/CUSTDB
  */
 ALTER PROCEDURE [dbo].[Acc_DynamicCustSetting3rd_09]
