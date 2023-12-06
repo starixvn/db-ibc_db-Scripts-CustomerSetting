@@ -5,7 +5,7 @@
 	DB: DBPRO/bodb02
 */
 ;WITH T AS(
-SELECT 'SubGroup' RefId,'5' ResourceId,'Other RNG Casino' Resource_en
+SELECT 'SubGroup' RefId,'5' ResourceId,'Other RNG Casino' Resource_en, N'其他RNG娱乐城' Resource_cs, N'其他RNG娛樂城' Resource_ch, N'RNG Casino อื่นๆ' Resource_th
 )
 INSERT INTO [dbo].[RefResource]
            ([RefId]
@@ -30,5 +30,5 @@ INSERT INTO [dbo].[RefResource]
            ,[Resource_de]
            ,[IsDeleted]
            ,[RepUpdateTime])
-SELECT RefID, ResourceId, Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,0,GETDATE()
+SELECT RefID, ResourceId, Resource_en,Resource_ch,Resource_cs,Resource_en,Resource_en,Resource_th,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,Resource_en,0,GETDATE()
 FROM T		
