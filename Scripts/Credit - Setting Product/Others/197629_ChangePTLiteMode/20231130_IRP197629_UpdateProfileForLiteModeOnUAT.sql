@@ -1,0 +1,174 @@
+/*<info serverAlias="DBCUST-CUSTDB"></info>*/
+/*
+	Created: 20231130@Johnson
+	Task: Lite Mode - Separate PT for Live & RNG Casino products group - All Credits Except 789y [redmine : #197629]
+	DB: DBCUST/CUSTDB
+*/
+
+DELETE ProductSettingProfile_UAT
+
+DELETE ProductProfileSiteCurrency_UAT
+
+--update maxPT = 93 for bitcoin
+UPDATE ProductSettingProfile WITH(ROWLOCK)
+SET maxPT = 93
+WHERE sporttype = 175
+	AND SettingType = 1
+	
+INSERT INTO [dbo].[ProductSettingProfile_UAT]
+           ([ProductSettingID]
+           ,[SettingType]
+           ,[SportType]
+           ,[BetType]
+           ,[IsLive]
+           ,[ProductID]
+           ,[MaxPT]
+           ,[MaxDiscount]
+           ,[IsSync]
+           ,[IsHidden]
+           ,[IsDisabled]
+           ,[SettingLevel]
+           ,[DisplayOrder]
+           ,[SettingStatus]
+           ,[IntervalValue]
+           ,[RealProductId]
+           ,[MaxChoice]
+           ,[Parent_ProductSettingID]
+           ,[Child_DisplayOrder]
+           ,[SubType]
+           ,[GroupID]
+           ,[GroupType]
+           ,[GroupTypeOrder]
+           ,[SubGroupID]
+           ,[SubGroupOrder]
+           ,[CreationStatus]
+           ,[DisplayType]
+           ,[MarketType])
+SELECT [ProductSettingID]
+           ,[SettingType]
+           ,[SportType]
+           ,[BetType]
+           ,[IsLive]
+           ,[ProductID]
+           ,[MaxPT]
+           ,[MaxDiscount]
+           ,[IsSync]
+           ,[IsHidden]
+           ,[IsDisabled]
+           ,[SettingLevel]
+           ,[DisplayOrder]
+           ,[SettingStatus]
+           ,[IntervalValue]
+           ,[RealProductId]
+           ,[MaxChoice]
+           ,[Parent_ProductSettingID]
+           ,[Child_DisplayOrder]
+           ,[SubType]
+           ,[GroupID]
+           ,[GroupType]
+           ,[GroupTypeOrder]
+           ,[SubGroupID]
+           ,[SubGroupOrder]
+           ,[CreationStatus]
+           ,[DisplayType]
+           ,[MarketType]
+FROM ProductSettingProfile (NOLOCK)
+
+
+INSERT INTO [dbo].[ProductProfileSiteCurrency_UAT]
+           ([SiteID]
+           ,[Currency]
+           ,[ProductSettingID])
+SELECT [SiteID]
+	   ,[Currency]
+	   ,[ProductSettingID]
+FROM ProductProfileSiteCurrency (NOLOCK)
+
+UPDATE ProductSettingProfile_UAT WITH(ROWLOCK)
+SET SubGroupID = 5,
+	SubGroupOrder = 2,
+	CreationStatus = 1
+WHERE ProductSettingID = 9 --VGaming
+
+UPDATE ProductSettingProfile_UAT WITH(ROWLOCK)
+SET SubGroupOrder = 3,
+	CreationStatus = 1
+WHERE ProductSettingID = 209 --IBCBet Live Casino
+
+UPDATE ProductSettingProfile_UAT WITH(ROWLOCK)
+SET MarketType = 1,
+	CreationStatus = 1
+WHERE ProductSettingID IN (196,212) --Saba Casino,Virtual Games
+
+
+INSERT INTO [dbo].[ProductSettingProfile_UAT]
+           ([ProductSettingID]
+           ,[SettingType]
+           ,[SportType]
+           ,[BetType]
+           ,[IsLive]
+           ,[ProductID]
+           ,[MaxPT]
+           ,[MaxDiscount]
+           ,[IsSync]
+           ,[IsHidden]
+           ,[IsDisabled]
+           ,[SettingLevel]
+           ,[DisplayOrder]
+           ,[SettingStatus]
+           ,[IntervalValue]
+           ,[RealProductId]
+           ,[MaxChoice]
+           ,[Parent_ProductSettingID]
+           ,[Child_DisplayOrder]
+           ,[SubType]
+           ,[GroupID]
+           ,[GroupType]
+           ,[GroupTypeOrder]
+           ,[SubGroupID]
+           ,[SubGroupOrder]
+           ,[CreationStatus]
+           ,[DisplayType]
+           ,[MarketType])
+SELECT 341,	18,	208,	2101,	0,	6,	90.00,	NULL,	NULL,	NULL,	NULL,	1,	2,	0,	NULL,	6,	NULL,	NULL,	5,	NULL,	3,	153,	2,	5, 2,	1,	2,	1
+UNION SELECT 342,	18,	245,	4601,	0,	64,	90.00,	NULL,	NULL,	NULL,	NULL,	2,	2,	0,	NULL,	38,	NULL,	NULL,	8,	NULL,	3,	153,	2,	5,	2,	1,	2,	1		   
+
+INSERT INTO [dbo].[ProductProfileSiteCurrency_UAT]
+           ([SiteID]
+           ,[Currency]
+           ,[ProductSettingID])
+SELECT SiteID,0, ProductSettingID
+FROM Site WITH(NOLOCK)	
+		CROSS APPLY (SELECT 196 ProductSettingID UNION SELECT 212) t
+WHERE SiteLabel = '789y'
+UNION 
+SELECT SiteID,0, ProductSettingID
+FROM Site WITH(NOLOCK)	
+		CROSS APPLY (SELECT 341 ProductSettingID UNION SELECT 342) t
+WHERE SiteLabel <> '789y'
+	AND isDeposit = 0 
+	AND isActive = 1
+	
+	
+--Init data for new group for existing PT template
+INSERT INTO [dbo].[CustPTTemplateDetail]
+           ([TemplateID]
+           ,[GroupID]
+           ,[SubGroupID]
+           ,[PT])
+SELECT t1.[TemplateID]
+	   ,3 [GroupID]
+	   ,5 [SubGroupID]
+	   ,[PT]
+FROM CustPTTemplateDetail t1 (NOLOCK)
+	INNER JOIN CustPTTemplate t WITH(NOLOCK) ON t.TemplateID = t1.TemplateID
+	INNER JOIN custinfo ci WITH(NOLOCK) ON t.custid = ci.custid
+WHERE NOT EXISTS (SELECT 1
+				FROM CustPTTemplateDetail t2 (NOLOCK)
+				WHERE t1.TemplateID = t2.TemplateID
+					AND t2.GroupID = 3
+					AND t2.SubGroupID = 5
+				)
+	AND t1.GroupID = 3
+	AND t1.SubGroupID = 6	
+	AND ci.currency = 20
