@@ -1,0 +1,25 @@
+/*<info serverAlias="DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB,DBBOF-bodb02,DBTP-bodb02"></info>*/
+/*
+	Created: 20231227@Eden
+	Task : Missing setting for some new account [#198589]
+	DB: DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB(Include sitedb),DBBOF-bodb02,DBTP-bodb02
+*/
+DROP TABLE [dbo].[RepInfo_CleanData]
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RepInfo_CleanData](
+	DatabaseName VARCHAR(100) NOT NULL,
+	TableName VARCHAR(100) NOT NULL,
+	Version_Key VARCHAR(100) NOT NULL,
+	Unique_Key	VARCHAR(100) NOT NULL
+ CONSTRAINT [PK_RepInfo_CleanData] PRIMARY KEY CLUSTERED 
+(
+	DatabaseName ASC,
+	TableName ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+) ON [DATA]
+GO
