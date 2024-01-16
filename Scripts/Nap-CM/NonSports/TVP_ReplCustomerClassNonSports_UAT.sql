@@ -1,0 +1,37 @@
+/*<info serverAlias="DBTP-bodb02"></info>*/
+
+/*
+     Created:  20231002@Winfred
+     Task : In-House
+     DB: DBTP-bodb02
+
+     Revisions:
+          - 20231002@Winfred: NAP CM Customer Class - Support for Non-Sports [RedmineID: #186116] 
+*/
+IF EXISTS(SELECT 1 FROM sys.objects WHERE type = 'P' AND name = 'Repl_PutCustomerClassNonSports_UAT')
+BEGIN
+     DROP PROCEDURE [dbo].[Repl_PutCustomerClassNonSports_UAT]
+END
+
+IF EXISTS(SELECT 1 FROM sys.types WHERE is_table_type = 1 AND schema_id = SCHEMA_ID('dbo') AND name = 'TVP_ReplCustomerClassNonSports_UAT')
+BEGIN
+     DROP TYPE [dbo].[TVP_ReplCustomerClassNonSports_UAT]
+END
+
+CREATE TYPE [dbo].[TVP_ReplCustomerClassNonSports_UAT] AS TABLE (
+       [PolicyID] [int] NOT NULL,
+          [PolicyTitle] [varchar](500) NOT NULL,
+          [MaxBet] [int] NULL,
+          [Products] [binary](32) NULL,
+          [Enable] [bit] NOT NULL,
+          [IsTest] [tinyint] NOT NULL,
+          [LastModifiedUser] [int] NULL,
+          [LastModifiedTime] [datetime] NULL,
+          [RepUpdateTime] [datetime2](7) NOT NULL,
+          [isDeleted] [bit] NOT NULL,
+          [_FetchedTime] [datetime2](7) NULL
+)
+GO
+
+GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassNonSports_UAT] TO [repl_ap] AS [dbo]
+GO
