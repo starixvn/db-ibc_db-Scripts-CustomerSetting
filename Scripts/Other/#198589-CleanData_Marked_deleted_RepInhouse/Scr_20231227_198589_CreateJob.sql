@@ -1,9 +1,9 @@
-/*<info serverAlias="DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB,DBBOF-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-msdb,DBACC-msdb,DBAGE-msdb,DBTXN-msdb,DBBOF-msdb,DBTP-msdb"></info>*/
 /*
 	Created: 20231227@Eden
 	Task : Init data RepInfo_CleanData for some tables [#198589]
 	DB: all database of CustDB_Customer_Info, CustDB_DBTrans_CustInfo pub
-		(DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB(Include sitedb),DBBOF-bodb02,DBTP-bodb02...)
+		(DBCUST-msdb,DBACC-msdb,DBAGE-msdb,DBTXN-msdb(Include sitedb),DBBOF-msdb,DBTP-msdb...)
 */
 USE [msdb]
 GO
