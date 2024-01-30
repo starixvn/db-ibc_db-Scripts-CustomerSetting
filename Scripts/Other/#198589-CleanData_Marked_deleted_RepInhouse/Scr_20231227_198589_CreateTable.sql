@@ -16,7 +16,8 @@ CREATE TABLE [dbo].[RepInfo_CleanData](
 	DatabaseName VARCHAR(100) NOT NULL,
 	TableName VARCHAR(100) NOT NULL,
 	Version_Key VARCHAR(100) NOT NULL,
-	Unique_Key	VARCHAR(100) NOT NULL
+	Unique_Key	VARCHAR(100) NOT NULL,
+	CleanFromDate	DATETIME NULL
  CONSTRAINT [PK_RepInfo_CleanData] PRIMARY KEY CLUSTERED 
 (
 	DatabaseName ASC,
