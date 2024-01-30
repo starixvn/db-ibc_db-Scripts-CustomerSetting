@@ -1,12 +1,10 @@
-/*<info serverAlias=DBCUST-CustDB></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB,DBBOF-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: 20231227@Eden
 	Task : Init data RepInfo_CleanData for some tables [#198589]
-	DB:  DBCUST-CustDB
+	DB: all database of CustDB_Customer_Info, CustDB_DBTrans_CustInfo pub
+		(DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB(Include sitedb),DBBOF-bodb02,DBTP-bodb02...)
 */
-USE CustDB
-GO
-
 DELETE FROM RepInfo_CleanData
 
 INSERT INTO RepInfo_CleanData (DatabaseName,TableName,Version_Key, Unique_Key)

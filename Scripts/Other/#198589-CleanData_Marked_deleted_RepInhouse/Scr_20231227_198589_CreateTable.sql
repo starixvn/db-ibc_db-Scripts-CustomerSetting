@@ -2,7 +2,8 @@
 /*
 	Created: 20231227@Eden
 	Task : Missing setting for some new account [#198589]
-	DB: DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB(Include sitedb),DBBOF-bodb02,DBTP-bodb02
+	DB: all database of CustDB_Customer_Info, CustDB_DBTrans_CustInfo punlication
+		(DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB(Include sitedb),DBBOF-bodb02,DBTP-bodb02...)
 */
 DROP TABLE [dbo].[RepInfo_CleanData]
 SET ANSI_NULLS ON
