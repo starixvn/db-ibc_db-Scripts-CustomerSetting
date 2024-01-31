@@ -35,7 +35,9 @@ SELECT 'bodb02','CustomerClassNonSports_UAT','RepUpdateTime','PolicyID' UNION
 SELECT 'CustDB','CustomerClassNonSportsDetail','RepUpdateTime','CustomerClass,SiteID,PolicyID' UNION
 SELECT 'bodb02','CustomerClassNonSportsDetail','RepUpdateTime','CustomerClass,SiteID,PolicyID' UNION
 SELECT 'CustDB','CustomerClassNonSportsDetail_UAT','RepUpdateTime','CustomerClass,SiteID,PolicyID' UNION
-SELECT 'bodb02','CustomerClassNonSportsDetail_UAT','RepUpdateTime','CustomerClass,SiteID,PolicyID' 
+SELECT 'bodb02','CustomerClassNonSportsDetail_UAT','RepUpdateTime','CustomerClass,SiteID,PolicyID' UNION
+SELECT 'bodb_Credit','CustProfilePicture','RepUpdateTime','CustID' UNION
+SELECT 'bodb02','CustProfilePicture','RepUpdateTime','CustID'
 
 SELECT * FROM RepInfo_CleanData WITH(NOLOCK)
 --EXEC Task_Repl_CleanDeletedData
