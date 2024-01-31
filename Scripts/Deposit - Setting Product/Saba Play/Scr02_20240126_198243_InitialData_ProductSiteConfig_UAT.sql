@@ -9,5 +9,5 @@
 INSERT INTO ProductSiteConfig ([SiteID], [ProductID], [RefProductID])
 SELECT siteid, 66,82
 FROM [Site] WITH (NOLOCK)
-WHERE [site]='SWSite'
+WHERE [site] IN ('SWSite','ATHENA000')
 GO
