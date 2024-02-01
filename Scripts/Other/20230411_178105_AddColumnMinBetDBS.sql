@@ -4,6 +4,9 @@
 	Date: 20230224
 	Task: NAP LM - Enhance Bet Setting function for AM to use RedmineID:#178105
 	DB: DBCUST/CustDB
+
+	Revision:
+		- 20240201@Tacy: Run on SIT
 	
 */
 
