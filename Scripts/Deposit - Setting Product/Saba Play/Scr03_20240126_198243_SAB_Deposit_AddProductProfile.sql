@@ -20,6 +20,8 @@ INSERT INTO [dbo].[Dep_ProductSetting]
            ,[SettingLevel])
 SELECT       186, 82, 4, 0, 1, 1
 UNION SELECT 187, 82, 1, 0, 2, 1
+UNION SELECT 188, 82, 9, 0, 4, 1
+
 GO
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail]
@@ -33,4 +35,5 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ,[IsApplyBA])
 SELECT       186, 9917, 2000, 0, 0, 1, NULL, 0
 UNION SELECT 187, 9917, 2000, 0, 0, 1, NULL, 0
+UNION SELECT 188, 9917, 2000, 0, 0, 1, NULL, 0
 GO

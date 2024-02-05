@@ -10,7 +10,7 @@ GO
 UPDATE 
 [dbo].[Dep_ProductSettingDetail] WITH (ROWLOCK, UPDLOCK)
 SET SettingStatus=0
-WHERE ProductSettingID IN (186,187)
+WHERE ProductSettingID IN (186,187,188)
 AND SportType = 9917
 AND BetType = 2000
 GO
