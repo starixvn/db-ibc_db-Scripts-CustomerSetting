@@ -40,17 +40,6 @@ WHERE c.roleid = 2
 	AND l.IsActive = 1
 	AND c.site NOT IN ('12Bet', 'N88', 'N8G', 'N8B', 'N8BK', 'IvoryBet', '12B', 'Saba789', 'SEAL888' )
 
---Terminated Licensee
-INSERT INTO #TempAgents(CustID,MinBalance,Mindays)
-SELECT c.custid, 1000000000 AS MinBalance, 0 AS Mindays
-FROM customer c(NOLOCK) 
-	INNER JOIN bodb_Licensee.dbo.Licensees l(NOLOCK)
-		 ON l.LicenseeName = c.site
-WHERE c.roleid = 2
-	AND c.username NOT LIKE '%ACC%'
-	AND c.srecommend IN( SELECT CustID FROM Dep_CustSuper WITH(NOLOCK))
-	AND l.IsActive = 0
-
 DECLARE @tmpClearBalCustID INT, 
         @ErrCode           INT           = 0, 
         @ErrMsg            NVARCHAR(200) = '', 
@@ -158,8 +147,10 @@ FROM #Dep_Customer_Archived_Config cf
 WHERE cf.CustIDBalanceDummy = 0
 
 --> Update another agents to pending (do not scan now)
-DELETE
-FROM Dep_Customer_Archived_Config WITH(ROWLOCK)
+UPDATE cf 
+SET cf.Status = 2 --Pending
+FROM Dep_Customer_Archived_Config cf WITH(ROWLOCK)
+WHERE cf.Status = 0
 
 --> INSERT/UPDATE agents ready to scan
 INSERT INTO Dep_Customer_Archived_Config (Recommend,Site,MinBalance,MinDays,CustIDBalanceDummy,Status)
@@ -168,14 +159,14 @@ FROM #Dep_Customer_Archived_Config
 WHERE CustIDBalanceDummy IS NOT NULL
 	AND Recommend NOT IN( SELECT Recommend FROM Dep_Customer_Archived_Config WITH(NOLOCK))
 
---UPDATE cf
---SET cf.MinDays = c.MinDays,
---	cf.MinBalance = c.MinBalance,
---	cf.CustIDBalanceDummy = c.CustIDBalanceDummy,
---	cf.Status = c.Status
---FROM #Dep_Customer_Archived_Config c
---	INNER JOIN Dep_Customer_Archived_Config cf WITH(ROWLOCK) ON c.Recommend = cf.Recommend
---WHERE c.CustIDBalanceDummy IS NOT NULL
+UPDATE cf
+SET cf.MinDays = c.MinDays,
+	cf.MinBalance = c.MinBalance,
+	cf.CustIDBalanceDummy = c.CustIDBalanceDummy,
+	cf.Status = c.Status
+FROM #Dep_Customer_Archived_Config c
+	INNER JOIN Dep_Customer_Archived_Config cf WITH(ROWLOCK) ON c.Recommend = cf.Recommend
+WHERE c.CustIDBalanceDummy IS NOT NULL
 
 DROP TABLE #TempAgents
 DROP TABLE #Dep_Customer_Archived_Config
