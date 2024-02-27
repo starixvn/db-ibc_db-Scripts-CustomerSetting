@@ -28,6 +28,7 @@ BEGIN
 	   AND dbo.f_CheckRepTable('CustPTGroupSetting3rd_Member') = 1
 	   AND dbo.f_CheckRepTable('CustBetSetting_Agent') = 1
 	   AND dbo.f_CheckRepTable('CustBetSetting_Member') = 1
+	   AND dbo.f_CheckRepTable('CustProductStatus') = 1
 	   )
 		RETURN
 
@@ -84,6 +85,21 @@ BEGIN
 				SportType		SMALLINT	'$.SportType',
 				BetType		SMALLINT	'$.BetType'
 			) AS js	ON cpa.CustID = js.CustID AND cpa.SportType = js.SportType AND cpa.BetType = js.BetType
+	END
+	ELSE IF @ModeCode = 'Reset_CustProductStatus'
+	BEGIN
+		UPDATE cpa
+			SET   cpa.bitmapHasSynced = js.bitmapHasSynced
+			,	cpa.bitmapIsHidden  =  js.bitmapIsHidden
+			,	cpa.bitmapIsDisabled = js.bitmapIsDisabled
+		FROM CustProductStatus cpa WITH (ROWLOCK , UPDLOCK)
+		INNER JOIN OPENJSON(@JsonData) 
+		WITH (      CustID			INT		'$.CustID',
+				bitmapHasSynced		BINARY(32)	'$.bitmapHasSynced',
+				bitmapIsHidden		BINARY(32)	'$.bitmapIsHidden',
+				bitmapIsDisabled		BINARY(32)	'$.bitmapIsDisabled'
+			) AS js	
+		ON cpa.CustID = js.CustID
 	END
 
 

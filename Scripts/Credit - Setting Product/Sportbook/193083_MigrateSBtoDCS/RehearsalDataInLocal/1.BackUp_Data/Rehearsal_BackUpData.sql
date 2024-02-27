@@ -1,4 +1,10 @@
-﻿
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20230913@Helios
+	Task: Inital Data Setting  [#193083]
+	DB: DBCust/CustDB
+*/
+
 SET ANSI_NULLS ON
 GO
 

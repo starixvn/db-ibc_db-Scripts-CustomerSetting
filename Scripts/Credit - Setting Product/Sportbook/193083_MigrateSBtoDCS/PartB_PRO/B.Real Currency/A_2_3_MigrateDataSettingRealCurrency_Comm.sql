@@ -2,7 +2,7 @@
 /*
 	Created: 20230913@Helios
 	Task: Inital Migrate Data Comm Setting SportsBook Currency UUS [#193083]
-		https://nexdev.net/issues/193083
+		https://nexdev.net/issues/193083 
 	DB: DBCust/CustDB
 */
 	SET NOCOUNT ON
@@ -139,7 +139,7 @@
 			AND cu.username NOT LIKE '3rdSuper%'
 			AND cs.IsInternal = 0
 			AND cu.custid NOT IN (SELECT custid FROM Dep_CustSuper WITH (NOLOCK))
-			AND e.ExchangeId <> 20
+			--AND e.ExchangeId <> 20
 			AND cu.srecommend <= @max_custid
 
 	WHILE (1 = 1)

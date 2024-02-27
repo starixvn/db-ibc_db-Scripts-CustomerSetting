@@ -1,4 +1,9 @@
-﻿
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20240301@Helios
+	Task: All sites - Remove Myanmar Odds from backend sites  [#201396]
+	DB: DBCust/CustDB
+*/
 
 SET ANSI_NULLS ON
 GO
@@ -7,134 +12,27 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-	-------------------------1.ProductSettingProfile------------------------------------
-	-- 1.1 : Remove Old Setting SportsBook , SportsBook2
-	DELETE psdu
-	FROM ProductSettingDetail psdu WITH (ROWLOCK)
+	-------------------------Remove Discount MyanmarOdds------------------------------------
+	-- 1.ProductSettingDetail
+	DELETE  
+	FROM ProductSettingDetail WITH (ROWLOCK)
+	WHERE ProductID = 1
+	AND SettingType = 25
+	AND SportType = 2
+	AND BetType = 1
 
-	-- 1.2 : Sync data From UAT
-	INSERT INTO ProductSettingDetail
-	(
-		SettingType
-	    , SportType
-	    , BetType
-	    , IsLive
-	    , ProductID
-	    , MaxPT
-	    , MaxDiscount
-	    , IsSync
-	    , IsHidden
-	    , IsDisabled
-	    , SettingLevel
-	    , DisplayOrder
-	    , SettingStatus
-	    , IntervalValue
-	    , RealProductId
-	    , MaxChoice
-	    , ProductSettingID
-	    , Parent_ProductSettingID
-	    , Child_DisplayOrder
-	    , SubType
-	)
-	SELECT
-		SettingType
-	    , SportType
-	    , BetType
-	    , IsLive
-	    , ProductID
-	    , MaxPT
-	    , MaxDiscount
-	    , IsSync
-	    , IsHidden
-	    , IsDisabled
-	    , SettingLevel
-	    , DisplayOrder
-	    , SettingStatus
-	    , IntervalValue
-	    , RealProductId
-	    , MaxChoice
-	    , ProductSettingID
-	    , Parent_ProductSettingID
-	    , Child_DisplayOrder
-	    , SubType
-	FROM ProductSettingDetail_UAT WITH (NOLOCK)
+	-- 2.ProductSettingProfile
+	DELETE
+	FROM ProductSettingProfile  WITH (ROWLOCK)
+	WHERE ProductID = 1
+	AND SettingType = 25
+	AND SportType = 2
+	AND BetType = 1
 
-
-	-------------------------2.ProductSettingProfile------------------------------------
-	-- 2.1 : Remove Old Setting SportsBook , SportsBook2
-	DELETE psdu
-	FROM ProductSettingProfile psdu WITH (ROWLOCK)
-
-	-- 2.2 : Sync data From UAT
-	INSERT INTO ProductSettingProfile
-	(
-		ProductSettingID
-	    , SettingType
-	    , SportType
-	    , BetType
-	    , IsLive
-	    , ProductID
-	    , MaxPT
-	    , MaxDiscount
-	    , IsSync
-	    , IsHidden
-	    , IsDisabled
-	    , SettingLevel
-	    , DisplayOrder
-	    , SettingStatus
-	    , IntervalValue
-	    , RealProductId
-	    , MaxChoice
-	    , Parent_ProductSettingID
-	    , Child_DisplayOrder
-	    , SubType
-	    , GroupID
-	    , GroupType
-	    , GroupTypeOrder
-	    , SubGroupID
-	    , SubGroupOrder
-	    , CreationStatus
-	    , DisplayType
-	    , MarketType
-	)
-	SELECT 
-		ProductSettingID
-	    , SettingType
-	    , SportType
-	    , BetType
-	    , IsLive
-	    , ProductID
-	    , MaxPT
-	    , MaxDiscount
-	    , IsSync
-	    , IsHidden
-	    , IsDisabled
-	    , SettingLevel
-	    , DisplayOrder
-	    , SettingStatus
-	    , IntervalValue
-	    , RealProductId
-	    , MaxChoice
-	    , Parent_ProductSettingID
-	    , Child_DisplayOrder
-	    , SubType
-	    , GroupID
-	    , GroupType
-	    , GroupTypeOrder
-	    , SubGroupID
-	    , SubGroupOrder
-	    , CreationStatus
-	    , DisplayType
-	    , MarketType
-	FROM ProductSettingProfile_UAT pspu WITH (NOLOCK)
-
-
-	-- 2.3 : Remove Setting Profile Redundant FW & GDG
-	DELETE psp
-	FROM dbo.ProductSettingProfile psp WITH (ROWLOCK)
-	WHERE psp.SportType IN (236,219)
-
-
+	-- 3.ProductProfileSiteCurrency
+	DELETE 
+	FROM ProductProfileSiteCurrency WITH (ROWLOCK)
+	WHERE ProductSettingID = 350
 
 
 

@@ -100,7 +100,7 @@
 			AND cu.username	 NOT LIKE '3rdSuper%'
 			AND cs.IsInternal  = 0
 			AND cu.CustId	 NOT IN (SELECT CustId FROM Dep_CustSuper WITH (NOLOCK))
-			AND e.ExchangeId	 <> 20
+			--AND e.ExchangeId	 <> 20
 			AND cu.srecommend  <= @max_custid
 
 	WHILE (1 = 1)

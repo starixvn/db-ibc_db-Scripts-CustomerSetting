@@ -112,24 +112,26 @@ BEGIN
 			   ,SportType
 			   ,BetType
 			   ,IsLive
-			   ,IsAutoMasterPT
-			   ,IsAutoSuperPT
 			   ,SuperPT
 			   ,MasterPT
 			   ,AgentPT
-			   ,AutoSuperPT
+			   ,IsAutoMasterPT
 			   ,AutoMasterPT
-			FROM OPENJSON(@JsonData) WITH (recommend INT '$.recommend',
+			   ,IsAutoSuperPT
+			   ,AutoSuperPT
+			FROM OPENJSON(@JsonData) WITH (
+			recommend INT '$.recommend',
 			SportType SMALLINT '$.SportType',
 			BetType SMALLINT '$.BetType',
 			IsLive BIT '$.IsLive',
-			IsAutoMasterPT BIT '$.IsAutoMasterPT',
-			IsAutoSuperPT BIT '$.IsAutoSuperPT',
 			SuperPT SMALLMONEY '$.SuperPT',
 			MasterPT SMALLMONEY '$.MasterPT',
 			AgentPT SMALLMONEY '$.AgentPT',
-			AutoSuperPT SMALLMONEY '$.AutoSuperPT',
-			AutoMasterPT SMALLMONEY '$.AutoMasterPT')
+			IsAutoMasterPT BIT '$.IsAutoMasterPT',
+			AutoMasterPT SMALLMONEY '$.AutoMasterPT',
+			IsAutoSuperPT BIT '$.IsAutoSuperPT',
+			AutoSuperPT SMALLMONEY '$.AutoSuperPT'
+			)
 
 	END
 	ELSE

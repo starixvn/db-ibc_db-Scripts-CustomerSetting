@@ -1,4 +1,10 @@
-﻿
+﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20230913@Helios
+	Task: Inital Data Setting  [#193083]
+	DB: DBCust/CustDB
+*/
+
 SET ANSI_NULLS ON
 GO
 
@@ -8,7 +14,7 @@ GO
 	-------------------------1.ProductSettingProfile_UAT------------------------------------
 
 --> Step 1.1: Clear Old Data Product Profile Setting:
-		DELETE FROM ProductSettingProfile_UAT WITH (ROWLOCK)
+		DELETE FROM ProductSettingProfile_UAT WITH (ROWLOCK) 
 
 --> Step 1.2: Sync Data UAT from Main Table
 		INSERT INTO ProductSettingProfile_UAT( 

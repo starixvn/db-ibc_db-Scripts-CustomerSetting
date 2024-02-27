@@ -2,7 +2,7 @@
 /*
 	Created: 20230913@Helios
 	Task: Inital Data Setting  [#193083]
-	DB: DBCust/CustDB
+	DB: DBCust/CustDB 
 */
 
 SET ANSI_NULLS ON
@@ -118,8 +118,7 @@ GO
 		    , DisplayType
 		    , MarketType
 		)
-	
-			 SELECT 343 , 13 , 44 , 3 , 0 , 1 , NULL , NULL , 1 , 0 , 0 , 2 , 1 , 0 , NULL , 1 , NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , NULL , 0 , NULL , 0 
+			 SELECT 343 , 13 , 44 , 3 , 0 , 1 , NULL , NULL , 1 , 0 , 0 , 2 , 1 , 0 , NULL , 1 , NULL , NULL , NULL , NULL , 1 , NULL , NULL , NULL , NULL , 0 , NULL , 0
 		 UNION SELECT 344 , 25 , 1 , 1 , 0 , 1 , NULL , 0.0025 , NULL , NULL , NULL , 4 , 1 , 0 , 0.0005 , 1 , NULL , NULL , 1 , NULL , 1 , 150 , 1 , NULL , NULL , 0 , 5 , 0 
 		 UNION SELECT 345 , 25 , 1 , 3 , 0 , 1 , NULL , 0.005 , NULL , NULL , NULL , 4 , 1 , 0 , 0.0005 , 1 , NULL , NULL , 2 , NULL , 1 , 150 , 1 , NULL , NULL , 0 , 5 , 1 
 		 UNION SELECT 346 , 25 , 1 , 4 , 0 , 1 , NULL , 0.01 , NULL , NULL , NULL , 4 , 1 , 0 , 0.0005 , 1 , NULL , NULL , 6 , NULL , 1 , 150 , 1 , NULL , NULL , 0 , 5 , 0 

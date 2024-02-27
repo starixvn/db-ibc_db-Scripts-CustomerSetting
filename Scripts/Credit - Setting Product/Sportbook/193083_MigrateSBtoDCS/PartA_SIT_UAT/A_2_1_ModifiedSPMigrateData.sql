@@ -2,7 +2,7 @@
 /*
 	Created by: Helios
 	Date: 2023/09/21
-	Task: Customer Setting - Migrate Sportsbook to DCS [redmine : #193083]  
+	Task: Customer Setting - Migrate Sportsbook to DCS [redmine : #193083] 
 		https://nexdev.net/issues/193083
 	DB: DBCUST/CustDB
 */
@@ -112,24 +112,24 @@ BEGIN
 			   ,SportType
 			   ,BetType
 			   ,IsLive
-			   ,IsAutoMasterPT
-			   ,IsAutoSuperPT
 			   ,SuperPT
 			   ,MasterPT
 			   ,AgentPT
-			   ,AutoSuperPT
+			   ,IsAutoMasterPT
 			   ,AutoMasterPT
+			   ,IsAutoSuperPT
+			   ,AutoSuperPT
 			FROM OPENJSON(@JsonData) WITH (recommend INT '$.recommend',
 			SportType SMALLINT '$.SportType',
 			BetType SMALLINT '$.BetType',
 			IsLive BIT '$.IsLive',
-			IsAutoMasterPT BIT '$.IsAutoMasterPT',
-			IsAutoSuperPT BIT '$.IsAutoSuperPT',
 			SuperPT SMALLMONEY '$.SuperPT',
 			MasterPT SMALLMONEY '$.MasterPT',
 			AgentPT SMALLMONEY '$.AgentPT',
-			AutoSuperPT SMALLMONEY '$.AutoSuperPT',
-			AutoMasterPT SMALLMONEY '$.AutoMasterPT')
+			IsAutoMasterPT BIT '$.IsAutoMasterPT',
+			AutoMasterPT SMALLMONEY '$.AutoMasterPT',
+			IsAutoSuperPT BIT '$.IsAutoSuperPT',
+			AutoSuperPT SMALLMONEY '$.AutoSuperPT')
 
 	END
 	ELSE

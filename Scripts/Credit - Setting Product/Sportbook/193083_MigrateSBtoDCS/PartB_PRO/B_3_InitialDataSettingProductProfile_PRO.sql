@@ -139,6 +139,16 @@ GO
 	FROM dbo.ProductSettingProfile psp WITH (ROWLOCK)
 	WHERE psp.SportType IN (236,219)
 
+	-------------------------3.ProductProfileSiteCurrency------------------------------------
+
+	--> Step 3.1: Clear Old Data:
+		DELETE FROM ProductProfileSiteCurrency WITH (ROWLOCK)
+
+	--> Step 2.2: Sync Data UAT
+		INSERT INTO ProductProfileSiteCurrency (SiteID , Currency , ProductSettingID)
+		SELECT SiteID , Currency , ProductSettingID
+		FROM ProductProfileSiteCurrency_UAT WITH (NOLOCK)
+
 
 
 

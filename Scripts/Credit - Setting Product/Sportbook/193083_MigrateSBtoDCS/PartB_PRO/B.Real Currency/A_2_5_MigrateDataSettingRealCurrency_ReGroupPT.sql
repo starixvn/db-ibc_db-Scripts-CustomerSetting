@@ -95,7 +95,7 @@
 			, 18479460
 			, 18289591
 			)
-			AND currency <> 20
+			--AND currency <> 20
 
 	WHILE (1=1)
 	BEGIN
