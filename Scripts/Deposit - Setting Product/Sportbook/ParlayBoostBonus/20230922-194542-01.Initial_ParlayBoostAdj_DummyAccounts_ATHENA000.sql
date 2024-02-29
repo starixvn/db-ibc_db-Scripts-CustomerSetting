@@ -7,6 +7,7 @@
 	
 	Revisions:
 		- 20230922@Tacy: Integration - Parlay Boost Bonus [RedmineID: #194542]
+		- 20240229@Tacy: DBTest - Skip add [Cust_CheckBalance_Exception]
 */  
 /*
 	DBCUST to SITEDB01/02
@@ -126,14 +127,14 @@ BEGIN
 		@ErrCode		=	@ErrCode output,
 		@ErrMsg			=	@ErrMsg output
 
-		IF @ErrCode = 0 AND @SiteDBGroupID=1
-		BEGIN
-			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		END
-		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
-		BEGIN
-			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		END
+		--IF @ErrCode = 0 AND @SiteDBGroupID=1
+		--BEGIN
+		--	EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		--END
+		--ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		--BEGIN
+		--	EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		--END
 
 		IF @ErrCode<>0
 		BEGIN
