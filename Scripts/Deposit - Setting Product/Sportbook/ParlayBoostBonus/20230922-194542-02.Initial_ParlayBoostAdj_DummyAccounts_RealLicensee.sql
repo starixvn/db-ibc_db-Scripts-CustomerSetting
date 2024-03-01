@@ -52,17 +52,20 @@ FROM #supers s
 CROSS APPLY (SELECT TOP 1 1 AS VAL FROM Customer c WITH (NOLOCK)
 			 WHERE roleid=1 AND s.srecommend=c.srecommend
 			 AND (username LIKE '%ParlayBoostAdj%'
-				OR username2 LIKE '%ParlayBoostAdj%')) c
+				OR username2 LIKE '%ParlayBoostAdj%')) t
 
 --Update info
 UPDATE s
-SET s.mrecommend=c.mrecommend, s.recommend=c.custid
+SET s.mrecommend=t.mrecommend, s.recommend=t.custid
 FROM #supers s
 CROSS APPLY (SELECT TOP 1 c.custid, c.mrecommend
 			 FROM Customer c WITH (NOLOCK)
 			 WHERE roleid=2 AND c.srecommend=s.srecommend
 			 AND (username LIKE '%Acc%01')
-			 ORDER BY c.custid ASC) c
+			 ORDER BY c.custid ASC) t
+
+--Delete: not exist dummy agent
+DELETE FROM #supers WHERE recommend IS NULL
 
 --Create dummy account
 DECLARE @CustIdParlayBoostAdj INT
@@ -137,7 +140,7 @@ BEGIN
 
 		DELETE FROM #supers_batch WHERE srecommend=@srecommend
 
-		SET @srecommend=NULL
+		SELECT @srecommend=NULL, @ErrCode=0, @ErrMsg=''
 	END
 	
 	WAITFOR DELAY '00:00:0.20'
