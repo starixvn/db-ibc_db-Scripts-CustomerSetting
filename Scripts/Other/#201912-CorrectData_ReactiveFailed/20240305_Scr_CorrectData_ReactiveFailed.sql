@@ -53,19 +53,19 @@ BEGIN
 	IF OBJECT_ID('DepositCustomer') IS NOT NULL 
 		DELETE DepositCustomer	WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
 
-	IF dbo.f_CheckRepTable('CustVirtualSetting') = 1 DELETE CustVirtualSetting WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 1 DELETE Dep_CustBetSetting_Member WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 1 DELETE Dep_CustDiscountSetting_Member WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustProductSetting') = 1 DELETE Dep_CustProductSetting WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 1 DELETE Dep_CustProductStatus WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 1 DELETE Dep_CustPTSetting_Member WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustSetting_AGCasino') = 1 DELETE Dep_CustSetting_AGCasino WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustSettingGame') = 1 DELETE Dep_CustSettingGame WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 1 DELETE Dep_CustSettingMode WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 1 DELETE Dep_CustStakeLevel_Member WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Dep_CustBetSettingGame_Member') = 1 DELETE Dep_CustBetSettingGame_Member WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('Customer') = 1 DELETE Customer WHERE CustID IN (SELECT CustID FROM #LstCustID)
-	IF dbo.f_CheckRepTable('custInfo') = 1 DELETE custInfo WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('CustVirtualSetting') = 1 DELETE CustVirtualSetting WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustBetSetting_Member') = 1 DELETE Dep_CustBetSetting_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustDiscountSetting_Member') = 1 DELETE Dep_CustDiscountSetting_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustProductSetting') = 1 DELETE Dep_CustProductSetting WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustProductStatus') = 1 DELETE Dep_CustProductStatus WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustPTSetting_Member') = 1 DELETE Dep_CustPTSetting_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustSetting_AGCasino') = 1 DELETE Dep_CustSetting_AGCasino WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustSettingGame') = 1 DELETE Dep_CustSettingGame WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustSettingMode') = 1 DELETE Dep_CustSettingMode WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustStakeLevel_Member') = 1 DELETE Dep_CustStakeLevel_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Dep_CustBetSettingGame_Member') = 1 DELETE Dep_CustBetSettingGame_Member WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('Customer') = 1 DELETE Customer WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
+	IF dbo.f_CheckRepTable('custInfo') = 1 DELETE custInfo WITH(ROWLOCK,UPDLOCK) WHERE CustID IN (SELECT CustID FROM #LstCustID)
 END
 GO
 EXEC [Acc_CustomerInfo_Execrep_19]
