@@ -9,6 +9,12 @@
 		- 20230922@Tacy: Integration - Parlay Boost Bonus [RedmineID: #194542]
 		- 20240229@Tacy: DBTest - Skip add [Cust_CheckBalance_Exception]
 */  
+/*
+	DBCUST to SITEDB01/02
+	
+	Linked server name:	_tmpDBSite1
+						_tmpDBSite2
+*/
 USE CustDB
 GO
 
@@ -63,9 +69,6 @@ CROSS APPLY (SELECT TOP 1 c.custid, c.mrecommend
 			 WHERE roleid=2 AND c.srecommend=s.srecommend
 			 AND (username LIKE '%Acc%01')
 			 ORDER BY c.custid ASC) t
-
---Delete: not exist dummy agent
-DELETE FROM #supers WHERE recommend IS NULL
 
 --Create dummy account
 DECLARE @CustIdParlayBoostAdj INT
@@ -123,14 +126,14 @@ BEGIN
 		@ErrCode		=	@ErrCode output,
 		@ErrMsg			=	@ErrMsg output
 
-		--IF @ErrCode = 0 AND @SiteDBGroupID=1
-		--BEGIN
-		--	EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		--END
-		--ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
-		--BEGIN
-		--	EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		--END
+		IF @ErrCode = 0 AND @SiteDBGroupID=1
+		BEGIN
+			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
+		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		BEGIN
+			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
 
 		IF @ErrCode<>0
 		BEGIN

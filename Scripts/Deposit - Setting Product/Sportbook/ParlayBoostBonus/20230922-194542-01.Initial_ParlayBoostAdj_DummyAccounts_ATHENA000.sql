@@ -127,14 +127,14 @@ BEGIN
 		@ErrCode		=	@ErrCode output,
 		@ErrMsg			=	@ErrMsg output
 
-		--IF @ErrCode = 0 AND @SiteDBGroupID=1
-		--BEGIN
-		--	EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		--END
-		--ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
-		--BEGIN
-		--	EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
-		--END
+		IF @ErrCode = 0 AND @SiteDBGroupID=1
+		BEGIN
+			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
+		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		BEGIN
+			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdParlayBoostAdj, @username = @UsernameParlayBoostAdj
+		END
 
 		IF @ErrCode<>0
 		BEGIN
@@ -144,7 +144,7 @@ BEGIN
 
 		DELETE FROM #supers_batch WHERE srecommend=@srecommend
 
-		SET @srecommend=NULL
+		SELECT @srecommend=NULL, @ErrCode=0, @ErrMsg=''
 	END
 	
 	WAITFOR DELAY '00:00:0.20'
