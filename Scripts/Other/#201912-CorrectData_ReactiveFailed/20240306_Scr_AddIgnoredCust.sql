@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCheck-CheckResultDB"></info>*/
 /*
 	Created: Eden@20240306
-	Task:  Ignore Account members whose usernames are null( 1st deposit failed) [RedmineID:#201912]
+	Task:  Ignore Account members whose username2 are null( 1st deposit failed) [RedmineID:#201912]
 	DB: DBCheck/CheckResultDB
 */
 USE CheckResultDB
