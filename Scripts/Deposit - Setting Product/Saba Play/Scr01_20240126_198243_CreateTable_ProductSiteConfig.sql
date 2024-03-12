@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB, DBTXN-CustDB, DBAGE-bodb02, DBACC-bodb02, DBTP-bodb02"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBACC-bodb02,DBAGE-bodb02,DBTXN-CustDB,DBBOF-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: Tacy@20240126 
 	Task: Create new table ProductSiteConfig [redmine: #198243]
@@ -23,11 +23,6 @@ CREATE TABLE [dbo].[ProductSiteConfig](
 (
 	[SiteID] ASC,
 	[ProductID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-, CONSTRAINT [IX_ProductSiteConfig_RefProductID] UNIQUE NONCLUSTERED 
-(
-	[SiteID] ASC,
-	[RefProductID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
 GO
