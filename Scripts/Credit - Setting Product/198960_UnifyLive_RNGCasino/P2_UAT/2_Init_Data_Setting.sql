@@ -31,23 +31,20 @@ GO
 	    , RealProductID
 	)
 	SELECT 
-		pssc.SportType , 
+		CASE WHEN SportType = 176 THEN 200 ELSE pssc.SportType END SportType , 
 		pssc.BetType , 
 		pssc.Currency , 
 		pssc.SiteID , 
 		CASE 
-			WHEN pssc.SportType = 176 THEN 70	-- FGG
-			WHEN pssc.SportType = 208 THEN 6	-- Saba Casino
-			WHEN pssc.SportType = 200 THEN 42	-- SABA.games
+			WHEN pssc.SportType = 176		THEN 70	-- FGG
+			WHEN pssc.SportType = 208		THEN 6	-- Saba Casino
+			WHEN pssc.SportType IN (171,200)	THEN 42	-- Vgaming/SABA.games
 		END AS RealProductID
-	FROM ProductSettingProfile_UAT pspuh WITH (NOLOCK)
-	INNER JOIN ProductStatusSiteCurrency pssc WITH (NOLOCK) ON pspuh.SportType = pssc.SportType AND pspuh.BetType = pssc.BetType
-	WHERE pspuh.ProductID IN (53,41)
-	AND pspuh.SettingType IN (7,17)
-	AND pspuh.IsHidden = 1
+	FROM ProductStatusSiteCurrency pssc WITH (NOLOCK)
+	WHERE pssc.SportType IN (171,176,200,208)
 	AND pssc.IsHidden = 1
-
-	IF NOT EXISTS (SELECT 1 FROM SportNonOfferedSiteCurrency snosc WITH (NOLOCK) WHERE snosc.SportType IN (SELECT DISTINCT SportType FROM #Temp_SportNonOffer tsno))
+	
+	IF NOT EXISTS (SELECT 1 FROM SportNonOfferedSiteCurrency snosc WITH (NOLOCK) WHERE snosc.SportType IN (171,176,200,208))
 	BEGIN
 		INSERT INTO SportNonOfferedSiteCurrency 
 		(
@@ -57,7 +54,12 @@ GO
 		    , SiteID
 		    , RealProductID
 		)
-		SELECT * 
+		SELECT 
+		DISTINCT SportType
+		    , BetType
+		    , Currency
+		    , SiteID
+		    , RealProductID
 		FROM #Temp_SportNonOffer tsno
 	END
 

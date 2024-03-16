@@ -159,8 +159,8 @@ GO
 	
 	UPDATE pt SET Child_DisplayOrder = 1 , SettingLevel = 2 , SettingType = 21	FROM #Profile_Temp pt WHERE pt.SettingType = 13 AND SportType = 9911	-- Live Casino 
 	UPDATE pt SET Child_DisplayOrder = 2							FROM #Profile_Temp pt WHERE pt.SettingType = 21 AND SportType = 9906	-- RNG Casino 
-	UPDATE pt SET Child_DisplayOrder = 3							FROM #Profile_Temp pt WHERE pt.SettingType = 21 AND SportType = 9918	-- Other RNG Casino 
-	UPDATE pt SET Child_DisplayOrder = 4							FROM #Profile_Temp pt WHERE pt.SettingType = 21 AND SportType = 9904	-- Jackpot 
+	UPDATE pt SET Child_DisplayOrder = 3							FROM #Profile_Temp pt WHERE pt.SettingType = 21 AND SportType = 9904	-- Jackpot 
+	UPDATE pt SET Child_DisplayOrder = 4							FROM #Profile_Temp pt WHERE pt.SettingType = 21 AND SportType = 9918	-- Other RNG Casino 
 
 	UPDATE pt
 		SET GroupID = 3 , IntervalValue = NULL , GroupType  = 160 , DisplayType = 3
@@ -287,10 +287,11 @@ GO
 	UPDATE pt SET Child_DisplayOrder = 13 FROM #Profile_Temp pt WHERE pt.ProductID = 18 AND pt.SettingType IN (7,17) AND SportType = 208	-- Saba Casino - RNG Game
 	UPDATE pt SET Child_DisplayOrder = 14 FROM #Profile_Temp pt WHERE pt.ProductID = 18 AND pt.SettingType IN (7,17) AND SportType = 200	-- SABA.games
 
-
-	UPDATE pt SET IsHidden = 1 FROM #Profile_Temp pt WHERE pt.ProductID = 41 AND pt.SettingType = 7 AND SportType = 176	-- FGG 
-	UPDATE pt SET IsHidden = 1 FROM #Profile_Temp pt WHERE pt.ProductID = 18 AND pt.SettingType = 7 AND SportType = 208	-- Saba Casino - RNG Game 
-
+	
+	--UPDATE pt SET IsHidden = 1 FROM #Profile_Temp pt WHERE pt.ProductID = 41 AND pt.SettingType = 7 AND SportType = 176	-- FGG 
+	--UPDATE pt SET IsHidden = 1 FROM #Profile_Temp pt WHERE pt.ProductID = 18 AND pt.SettingType = 7 AND SportType = 200	-- SABA.games 
+	--UPDATE pt SET IsHidden = 1 FROM #Profile_Temp pt WHERE pt.ProductID = 18 AND pt.SettingType = 7 AND SportType = 208	-- Saba Casino - RNG Game 
+	
 
 	UPDATE pt SET GroupType = 158
 	FROM #Profile_Temp pt
@@ -399,6 +400,16 @@ GO
 	UPDATE pt SET ProductID = 53 , RealProductId = 53
 	FROM #Profile_Temp pt
 	WHERE pt.ProductID = 18
+
+	--Update GroupTypeOrder
+	UPDATE pt 
+	SET GroupTypeOrder = CASE	WHEN GroupType = 160 THEN 1
+						WHEN GroupType = 156 THEN 2
+						WHEN GroupType = 153 THEN 3
+						WHEN GroupType = 155 THEN 4
+						WHEN GroupType = 158 THEN 5
+						ELSE GroupTypeOrder END
+	FROM #Profile_Temp pt
 
 -----------------------1.ProductSettingProfile_UAT------------------------------------
 
