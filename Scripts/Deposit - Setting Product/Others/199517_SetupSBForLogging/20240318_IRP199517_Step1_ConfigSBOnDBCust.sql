@@ -1,10 +1,13 @@
 /*<info serverAlias="DBCUST-bodb_CustomerLog"></info>*/
 /*
 	Created: 20240318@Johnson	
-	Task: Setup service broker for loggin deposit [RedmineID:#179334]
+	Task: Setup service broker for logging deposit settings [RedmineID:#179334]
 	DB: DBCust/bodb_CustomerLog
 */
 USE [bodb_CustomerLog]
+GO
+
+ALTER TABLE UserLog_RunSP ADD CreatedDate	DATETIME
 GO
 
 IF NOT EXISTS (	
