@@ -1,7 +1,7 @@
 ﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 2024012@Helios
-	Task: Unify Live Casino & RNG slot/RNG Casino - Initial StakeLevel [#198960]
+	Task: Unify Live Casino & RNG slot/RNG Casino - Initial StakeLevel - UUS Currency [#198960]
 		https://nexdev.net/issues/193083
 	DB: DBCust/CustDB
 */

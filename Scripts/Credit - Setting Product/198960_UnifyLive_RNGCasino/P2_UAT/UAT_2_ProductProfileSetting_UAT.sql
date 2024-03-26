@@ -43,6 +43,7 @@ GO
 		    , [CreationStatus]		  [tinyint]
 		    , [DisplayType]		  [tinyint]
 		    , [MarketType]		  [tinyint]
+	PRIMARY KEY (ProductSettingID , SettingType , SportType , BetType , IsLive)
 		)
 
 	INSERT INTO #Profile_Temp 
@@ -76,6 +77,7 @@ GO
 	    , DisplayType
 	    , MarketType
 	)
+	-- Get Affected Product in Project:
 	SELECT * 
 	FROM ProductSettingProfile psp WITH (NOLOCK)
 	WHERE ProductID IN (6 , 18 , 41 , 42 , 64 , 66)
@@ -246,7 +248,8 @@ GO
 
 	UPDATE pt SET Child_DisplayOrder = 1								FROM #Profile_Temp pt WHERE pt.SettingType = 18 AND SportType = 9911	-- Live Casino 
 	UPDATE pt SET Child_DisplayOrder = 2 , SettingLevel = 2 , IntervalValue = NULL	FROM #Profile_Temp pt WHERE pt.SettingType = 18 AND SportType = 9906	-- RNG Casino 
-	UPDATE pt SET Child_DisplayOrder = 3 , SettingLevel = 2 , IntervalValue = NULL	FROM #Profile_Temp pt WHERE pt.SettingType = 18 AND SportType = 9918	-- Other RNG Casino 
+	UPDATE pt SET Child_DisplayOrder = 3 , SettingLevel = 2 , IntervalValue = NULL 
+								, SubGroupID  = 5 , SubGroupOrder = 2	FROM #Profile_Temp pt WHERE pt.SettingType = 18 AND SportType = 9918	-- Other RNG Casino 
 	UPDATE pt SET Child_DisplayOrder = 4								FROM #Profile_Temp pt WHERE pt.SettingType = 18 AND SportType = 242	-- IBCBet Live Casino 
 
 	-- No.4: SettingType = 7,17,8	 - Stake Level
@@ -411,14 +414,107 @@ GO
 						ELSE GroupTypeOrder END
 	FROM #Profile_Temp pt
 
------------------------1.ProductSettingProfile_UAT------------------------------------
+
+	-- Include Product Non-Affected
+	INSERT INTO #Profile_Temp 
+	(
+		ProductSettingID
+	    , SettingType
+	    , SportType
+	    , BetType
+	    , IsLive
+	    , ProductID
+	    , MaxPT
+	    , MaxDiscount
+	    , IsSync
+	    , IsHidden
+	    , IsDisabled
+	    , SettingLevel
+	    , DisplayOrder
+	    , SettingStatus
+	    , IntervalValue
+	    , RealProductId
+	    , MaxChoice
+	    , Parent_ProductSettingID
+	    , Child_DisplayOrder
+	    , SubType
+	    , GroupID
+	    , GroupType
+	    , GroupTypeOrder
+	    , SubGroupID
+	    , SubGroupOrder
+	    , CreationStatus
+	    , DisplayType
+	    , MarketType
+	)
+	SELECT ProductSettingID
+	    , SettingType
+	    , SportType
+	    , BetType
+	    , IsLive
+	    , ProductID
+	    , MaxPT
+	    , MaxDiscount
+	    , IsSync
+	    , IsHidden
+	    , IsDisabled
+	    , SettingLevel
+	    , DisplayOrder
+	    , SettingStatus
+	    , IntervalValue
+	    , RealProductId
+	    , MaxChoice
+	    , Parent_ProductSettingID
+	    , Child_DisplayOrder
+	    , SubType
+	    , GroupID
+	    , GroupType
+	    , GroupTypeOrder
+	    , SubGroupID
+	    , SubGroupOrder
+	    , CreationStatus
+	    , DisplayType
+	    , MarketType
+	FROM ProductSettingProfile psd  WITH (NOLOCK)
+	WHERE psd.ProductID NOT IN (6 , 53 , 41 , 42 , 44 , 64 , 66 , 18)
+	UNION ALL
+	SELECT ProductSettingID
+	    , SettingType
+	    , SportType
+	    , BetType
+	    , IsLive
+	    , ProductID
+	    , MaxPT
+	    , MaxDiscount
+	    , IsSync
+	    , IsHidden
+	    , IsDisabled
+	    , SettingLevel
+	    , DisplayOrder
+	    , SettingStatus
+	    , IntervalValue
+	    , RealProductId
+	    , MaxChoice
+	    , Parent_ProductSettingID
+	    , Child_DisplayOrder
+	    , SubType
+	    , GroupID
+	    , GroupType
+	    , GroupTypeOrder
+	    , SubGroupID
+	    , SubGroupOrder
+	    , CreationStatus
+	    , DisplayType
+	    , MarketType
+	FROM ProductSettingProfile psd  WITH (NOLOCK)
+	WHERE psd.ProductID = 44 AND psd.SportType <> 224
+
+
+-------------------------1.ProductSettingProfile_UAT------------------------------------
 
 --> Step 1.1: Clear Old Data Product Profile Setting . Ignore: Number Game , Happy 5 , Sports Lottery , RNG Keno , Lottery , Table Game:
 	DELETE FROM ProductSettingProfile_UAT WITH (ROWLOCK)
-	WHERE ProductID IN (6 , 53 , 41 , 42 , 64 , 66)
-	OR 
-	(ProductID = 44 AND SportType = 224 AND BetType  = 5500)
-
+	 
 --> Step 1.2: Sync Data UAT from Main Table
 	INSERT INTO ProductSettingProfile_UAT
 	( 
@@ -481,15 +577,10 @@ GO
 			,MarketType 
 	FROM #Profile_Temp pt
 
-
-
 	-------------------------2.ProductSettingDetail_UAT------------------------------------
 
 --> Step 2.1: Clear Old Data Product Detail Setting . Ignore: Number Game , Happy 5 , Sports Lottery , RNG Keno , Lottery , Table Game:
 	DELETE FROM ProductSettingDetail_UAT WITH (ROWLOCK)
-	WHERE ProductID IN (6 , 53 , 41 , 42 , 64 , 66)
-	OR 
-	(ProductID = 44 AND SportType = 224 AND BetType  = 5500)
 
 --> Step 2.2: Sync Data UAT
 	INSERT INTO ProductSettingDetail_UAT 
