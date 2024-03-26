@@ -5,10 +5,7 @@
 	DB: DBLOG/bodb_CustomerLog
 */
 
-SET ANSI_NULLS  ON
-GO
-
-SET QUOTED_IDENTIFIER ON
+USE bodb_CustomerLog
 GO
 	-- Initial data Log Action: ProductStatus
 	IF NOT EXISTS (SELECT 1 FROM LogAction la WITH (NOLOCK) WHERE la.ActionID IN (60541,60540,65582,65580,70627,70624,75660,75664,75661,65581,70625,65583,75665,70628,70626,70629,75666,75662,75663,75667) )
@@ -228,6 +225,46 @@ GO
 		WHERE la.SPName ='Acc_CustSetting_WinLossLimitUpd' AND la.ActionID = 850
 	END
 
+	---Init Log Action : Stake level
+	DELETE
+	FROM LogAction WITH(ROWLOCK,UPDLOCK)
+	WHERE ActionID IN (220050) -- Stake Level
 
+	INSERT INTO LogAction (
+		 ActionID
+		,ActionTypeID
+		,SPName
+		,ActionNameEN
+		,ActionNameCH
+		,ActionNameCS
+		,ActionNameJP
+		,ActionNameIT
+		,ActionNameTH
+		,ActionNameKO
+		,XsltContent
+		,IsInternal
+		,ActionNameVI
+		,ActionNameCN
+	)
+	SELECT ActionID = CASE WHEN ActionID = 391 THEN 220050 END
+		,ActionTypeID
+		,SPName = CASE WHEN ActionID = 391 THEN 'Acc_CustSetting_StakeLevel_158_Upd' END
+		,ActionNameEN
+		,ActionNameCH
+		,ActionNameCS
+		,ActionNameJP
+		,ActionNameIT
+		,ActionNameTH
+		,ActionNameKO
+		,XsltContent
+		,IsInternal
+		,ActionNameVI
+		,ActionNameCN
+	FROM LogAction WITH(NOLOCK)
+	WHERE ActionID IN(391)
+
+	SELECT * 
+	FROM LogAction WITH(NOLOCK) 
+	WHERE ActionID IN (220050) -- Stake Level
 
 
