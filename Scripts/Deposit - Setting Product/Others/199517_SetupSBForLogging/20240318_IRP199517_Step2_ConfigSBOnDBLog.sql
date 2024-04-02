@@ -7,6 +7,9 @@
 USE [bodb_CustomerLog]
 GO
 
+ALTER TABLE UserLog_Dep_CustSetting ADD CreatedDate	datetime
+GO
+
 IF NOT EXISTS (	
 				SELECT 1
 				FROM sys.service_message_types
