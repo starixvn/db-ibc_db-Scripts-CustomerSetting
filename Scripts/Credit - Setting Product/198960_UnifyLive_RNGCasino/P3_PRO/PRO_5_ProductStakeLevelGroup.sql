@@ -6,73 +6,18 @@
 	DB: DBCust/CustDB
 */
 
-DECLARE @Temp_StakeLevelID TABLE (StakeLevelID INT , ExchangeId INT)
-DECLARE @Temp_Stake  TABLE  (StakeLevelID INT , SportType INT , MinStake DECIMAL (19,8) , MaxStake DECIMAL (19,8) , ExchangeId INT DEFAULT (0) , CreditGroupID TINYINT DEFAULT (0))
+	-- Add New Setting StakeLevel for Funky Games (224) , Virtual Games (245) , Vgaming (171)
 
-INSERT INTO @Temp_StakeLevelID (StakeLevelID , ExchangeId)
-SELECT sl.StakeLevelID , sl.ExchangeId
-FROM StakeLevel sl WITH (NOLOCK)
-WHERE sl.ExchangeId <> 20
-AND 	sl.GameTypeID IN (3801,5500,4601,4602,4605)
+	CREATE TABLE #Temp_StakeLevelGroup (
+		Sporttype		SMALLINT
+	    , GameGroupID		TINYINT
+	    , MinBet		MONEY
+	    , MaxBet		MONEY
+	    , CreditGroupID	TINYINT
+	    PRIMARY KEY (Sporttype , GameGroupID , CreditGroupID)
+	)
 
-
-INSERT INTO @Temp_Stake (StakeLevelID , SportType , MinStake , MaxStake)
-SELECT DISTINCT c.StakeLevelID , c.SportType , c.MinStake , c.MaxStake
-FROM (
-	SELECT 
-		sl.StakeLevelID
-	,	CASE 
-		WHEN sl.GameTypeID  = 3801 THEN 171
-		WHEN sl.GameTypeID  = 5500 THEN 224
-		ELSE 245
-		END AS SportType
-	, ISNULL(sl.MinStake, 0)	AS MinStake
-	, ISNULL(sl.MaxStake, 0)	AS MaxStake
-	FROM StakeLevel sl WITH (NOLOCK)
-	WHERE sl.StakeLevelID IN (SELECT sl.StakeLevelID FROM @Temp_StakeLevelID)
-	AND sl.GameTypeID IN (3801,5500,4601,4602,4605)
-	UNION ALL
-	SELECT 
-		sl.StakeLevelID
-	,	CASE 
-		WHEN sl.GameTypeID  = 3801 THEN 171
-		WHEN sl.GameTypeID  = 5500 THEN 224
-		ELSE 245
-		END AS SportType
-	, ISNULL(sl.MinStake, 0)  	AS MinStake
-	, ISNULL(sl.MaxStake, 0)	AS MaxStake
-	FROM StakeLevelGroupDetail sl WITH (NOLOCK)
-	WHERE sl.StakeLevelID IN (SELECT sl.StakeLevelID FROM @Temp_StakeLevelID)
-	AND sl.GameTypeID IN (3801,5500,4601,4602,4605)
-) AS C
-
-
-DELETE FROM @Temp_Stake WHERE MinStake = 0 AND MaxStake = 0
-
-
-UPDATE s 
-	SET s.ExchangeId = tl.ExchangeId
-FROM @Temp_Stake s
-INNER JOIN @Temp_StakeLevelID tl ON s.StakeLevelID = tl.StakeLevelID
-
-
-
-UPDATE ts 
-	SET ts.CreditGroupID = e.CreditGroupID
-FROM @Temp_Stake ts
-INNER JOIN exchange e WITH (NOLOCK) ON ts.ExchangeId = e.ExchangeId
-WHERE e.CreditGroupID IS NOT NULL
-
---SELECT TS.* , '      ' AS '      ' , e.CreditGroupID
---FROM @Temp_Stake ts
---INNER JOIN exchange e WITH (NOLOCK) ON ts.ExchangeId = e.ExchangeId
---WHERE e.CreditGroupID IN (3,9,11)
-
-DELETE FROM @Temp_Stake WHERE CreditGroupID = 0
-
-IF NOT EXISTS (SELECT 1 FROM ProductStakeLevelGroup WITH (NOLOCK) WHERE Sporttype IN (171,224,245) AND CreditGroupID <> 6)
-BEGIN
-	INSERT INTO ProductStakeLevelGroup 
+	INSERT INTO #Temp_StakeLevelGroup 
 	(
 		Sporttype
 	    , GameGroupID
@@ -80,10 +25,83 @@ BEGIN
 	    , MaxBet
 	    , CreditGroupID
 	)
+	--GameGroupID = 1 : Slot Game
+	--GameGroupID = 2 : Others only
+	     SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 300000 AS MaxBet , 6 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 5000 AS MaxBet , 1 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 20000 AS MaxBet , 2 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 5000 AS MaxBet , 5 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 5000 AS MaxBet , 4 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 2.5 AS MinBet , 300000 AS MaxBet , 8 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 5000 AS MaxBet , 10 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 20000 AS MaxBet , 7 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 25000 AS MaxBet , 9 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 50000 AS MaxBet , 12 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 2500 AS MaxBet , 13 AS CreditGroupID 
+ UNION ALL SELECT 171 AS SportType ,  2 AS GameGroupID , 0.01 AS MinBet , 5000 AS MaxBet , 14 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 2500 AS MaxBet , 1 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 8000 AS MaxBet , 2 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 500 AS MaxBet , 3 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 2000 AS MaxBet , 5 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 2500 AS MaxBet , 4 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 350000 AS MaxBet , 8 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 500 AS MaxBet , 10 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 20000 AS MaxBet , 7 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 6500 AS MaxBet , 9 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 500000 AS MaxBet , 11 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 25000 AS MaxBet , 12 AS CreditGroupID 
+ UNION ALL SELECT 224 AS SportType ,  2 AS GameGroupID , 0.1 AS MinBet , 500 AS MaxBet , 6 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 5 AS MinBet , 2000 AS MaxBet , 1 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 10 AS MinBet , 15000 AS MaxBet , 2 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 2000 AS MaxBet , 3 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 5 AS MinBet , 3000 AS MaxBet , 5 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 5 AS MinBet , 3000 AS MaxBet , 4 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1000 AS MinBet , 500000 AS MaxBet , 8 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 2000 AS MaxBet , 10 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 25 AS MinBet , 30000 AS MaxBet , 7 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 10 AS MinBet , 10000 AS MaxBet , 9 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 2000 AS MaxBet , 11 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 50 AS MinBet , 20000 AS MaxBet , 12 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 2000 AS MaxBet , 14 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 500 AS MaxBet , 13 AS CreditGroupID 
+ UNION ALL SELECT 245 AS SportType ,  2 AS GameGroupID , 1 AS MinBet , 2000 AS MaxBet , 6 AS CreditGroupID 
 
-	SELECT SportType , 1 AS GameGroupID , MAX(MinStake) AS MinBet , MIN(MaxStake) AS MaxBet , CreditGroupID AS CreditGroupID
-	FROM @Temp_Stake
-	GROUP BY SportType , CreditGroupID
-END
 
 
+	-- REMOVE CreditGroupCurrency UUS Currency
+	DELETE FROM #Temp_StakeLevelGroup WHERE CreditGroupID = 6
+
+	-- Check Data
+	--SELECT 
+	--	--e.CreditGroupID , e.currency , 
+	--	DISTINCT t.*
+	--FROM #Temp_StakeLevelGroup t 
+	--INNER JOIN [exchange_test] e ON t.CreditGroupID = e.CreditGroupID
+	--ORDER BY t.Sporttype
+
+	-- INS CreditGroupCurrency REAL Currency
+	IF NOT EXISTS (SELECT 1 FROM ProductStakeLevelGroup WITH (NOLOCK) WHERE Sporttype IN (171,224,245) AND GameGroupID = 2 AND CreditGroupID <> 6)
+	BEGIN
+		INSERT INTO ProductStakeLevelGroup 
+		(
+			Sporttype
+			, GameGroupID
+			, MinBet
+			, MaxBet
+			, CreditGroupID
+			, Remark
+			, RepUpdateTime
+			, isDeleted
+		)
+		SELECT Sporttype
+			, GameGroupID
+			, MinBet
+			, MaxBet
+			, CreditGroupID
+			, NULL
+			, SYSDATETIME ()
+			, 0
+		FROM #Temp_StakeLevelGroup t
+	END
+
+	DROP TABLE #Temp_StakeLevelGroup

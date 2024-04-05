@@ -1,7 +1,7 @@
 ﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20240129@Helios
-	Task: Inital Data Setting SportBetTypeSettingMatrix [#198960] 
+	Task: Inital Data Setting SportBettypeSettingMatrix [#198960] 
 	DB: DBCust/CustDB
 */
 
@@ -10,18 +10,15 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
+------------------- MOVE ProductID = 41 (LiveCasino) -------------------
+-- Part 1: Update With Real Product - Real SportType - Real BetType
 -- FGG (70)  
---SELECT * 
 UPDATE sm
 	SET 
-		sm.SportTypeRefPT = 9911
-	,	sm.BetTypeRefPT = 2400
-	,	sm.SporttypeRefWinlossLimit = 9911
+		sm.SporttypeRefWinlossLimit = 9911
 	,	sm.BettypeRefWinlossLimit = 2400
-	,	sm.ProductId = 41
 	,	sm.RepUpdateTime = SYSDATETIME ()
-FROM SportBettypeSettingMatrix_UAT AS sm WITH (ROWLOCK , UPDLOCK)
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
 WHERE
 	isLicensee = 0
 	AND
@@ -33,38 +30,96 @@ WHERE
 	AND
 	bettype = 8201
 
--- Saba Casino (6)  
---SELECT * 
+-- Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+UPDATE sm
+	SET 
+		sm.SportTypeRefPT = 9911
+	,	sm.BetTypeRefPT = 2400
+	,	sm.ProductID = 41
+	,	sm.RepUpdateTime = SYSDATETIME ()
+FROM
+	SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
+	WHERE
+		isLicensee = 0
+		AND
+		Site = 'ALL'
+		AND
+		RealProductId = 70
+
+
+------------------- MOVE ProductID = 53 (RNG CASINO) -------------------
+
+-- Saba Casino (6) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
 UPDATE sm
 	SET
 		sm.SportTypeRefPT = 9918
 	,	sm.BetTypeRefPT = 4601
-	,	sm.SporttypeRefWinlossLimit = 9918
-	,	sm.BettypeRefWinlossLimit = 4601
 	,	sm.ProductId = 53
 	,	sm.RepUpdateTime = SYSDATETIME ()
-FROM SportBettypeSettingMatrix_UAT AS sm WITH (ROWLOCK , UPDLOCK)
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
 WHERE
 	isLicensee = 0
 	AND
 	Site = 'ALL'
 	AND
 	RealProductId = 6
-	AND
-	SportType = 208
-	AND
-	bettype = 2101
 
--- RNG Slot (18) 
--- Macau Games (22), PP (32), Arcadia Gaming (34), SG (36), PG Soft (55),  Joker (56), MaxGame (60), Habanero (61),  CG (62), AdvantPlay (67), AdvantPlay Mini (68), SEAL Entertainment (72), MG-RNG (73), Jili (75), UU Slots (78), Yolo Play (84)  
---SELECT * 
+
+-- Funky Games (50) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+UPDATE sm
+	SET 
+		sm.SportTypeRefPT = 9906
+	,	sm.BetTypeRefPT = 4001
+	,	sm.ProductID = 53
+	,	sm.RepUpdateTime = SYSDATETIME ()
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
+WHERE
+	isLicensee = 0
+	AND
+	Site = 'ALL'
+	AND
+	RealProductId = 50
+
+
+-- Virtual Games (38) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+UPDATE sm
+	SET 
+		sm.SportTypeRefPT = 9918
+	,	sm.BetTypeRefPT = 4601
+	,	sm.ProductID = 53
+	,	sm.RepUpdateTime = SYSDATETIME ()
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
+WHERE
+	isLicensee = 0
+	AND
+	Site = 'ALL'
+	AND
+	RealProductId = 38
+
+-- Vgaming (66) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+UPDATE sm
+	SET 
+		sm.SportTypeRefPT = 9918
+	,	sm.BetTypeRefPT = 4601
+	,	sm.ProductID = 53
+	,	sm.RepUpdateTime = SYSDATETIME ()
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
+WHERE
+	isLicensee = 0
+	AND
+	Site = 'ALL'
+	AND
+	RealProductId = 66
+
+-- RNG Slot (18) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+-- Affted RealProductID:  Macau Games (22), PP (32), Arcadia Gaming (34), SG (36), PG Soft (55),  Joker (56), MaxGame (60), Habanero (61),  CG (62), AdvantPlay (67), AdvantPlay Mini (68), SEAL Entertainment (72), MG-RNG (73), Jili (75), UU Slots (78), Yolo Play (84)  
 UPDATE sm
 	SET 
 		sm.SportTypeRefPT = 9906
 	,	sm.BetTypeRefPT = 4001
 	,	sm.ProductId = 53
 	,	sm.RepUpdateTime = SYSDATETIME ()
-FROM SportBettypeSettingMatrix_UAT AS sm WITH (ROWLOCK , UPDLOCK)
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
 WHERE
 	isLicensee = 0
 	AND
@@ -72,60 +127,16 @@ WHERE
 	AND
 	ProductID = 18
 
--- Virtual Games (38)
---SELECT * 
-UPDATE sm
-	SET 
-		sm.SportTypeRefPT = 9918
-	,	sm.BetTypeRefPT = 4601
-	,	sm.ProductId = 53
-	,	sm.RepUpdateTime = SYSDATETIME ()
-FROM SportBettypeSettingMatrix_UAT AS sm WITH (ROWLOCK , UPDLOCK)
-WHERE
-	isLicensee = 0
-	AND
-	Site = 'ALL'
-	AND
-	RealProductId = 38
-	AND
-	SportType = 245
-	AND
-	bettype IN (4601 , 4602 , 4605)
-
-
--- Funky Games (50)
---SELECT * 
-UPDATE sm
-	SET 
-		sm.SportTypeRefPT = 9906
-	,	sm.BetTypeRefPT = 4001
-	,	sm.SporttypeRefWinlossLimit = 9906
-	,	sm.BettypeRefWinlossLimit = 4001
-	,	sm.ProductId = 53
-	,	sm.RepUpdateTime = SYSDATETIME ()
-FROM SportBettypeSettingMatrix_UAT AS sm WITH (ROWLOCK , UPDLOCK)
-WHERE
-	isLicensee = 0
-	AND
-	Site = 'ALL'
-	AND
-	RealProductId = 50
-	AND
-	SportType = 224
-	AND
-	bettype = 5500
-
-
 --------------- Initial For Vgaming , RNG Casino , Other RNG Casino ---------------
 
 IF    NOT EXISTS
 	(
 		SELECT 1 
-		FROM SportBettypeSettingMatrix_UAT WITH (NOLOCK)
+		FROM SportBettypeSettingMatrix WITH (NOLOCK)
 		WHERE ProductID = 53 AND RealProductId IN (53 , 66) AND SportType IN (171 , 9906 , 9918) AND bettype IN (3801 , 4001 , 4601)
 	)
 BEGIN
-	INSERT INTO SportBettypeSettingMatrix_UAT
+	INSERT INTO SportBettypeSettingMatrix
 				(
 					RealProductId
 				    , ProductID
@@ -153,7 +164,7 @@ BEGIN
 				    , TableBettrans
 				    , RepUpdateTime
 				)
-	-- Vgaming (66)
+	-- Vgaming (66) : Real Sport Type - BetType
 	SELECT
 		66		   AS RealProductId
 	    , 53		   AS ProductID
@@ -175,10 +186,10 @@ BEGIN
 	    , 0		   AS isLivePT
 	    , 0		   AS IsLiveComm
 	    , 0		   AS IsLiveBetSetting
-	    , NULL		   AS TablePT
-	    , NULL		   AS TableComm
-	    , NULL		   AS TableBetSetting
-	    , NULL		   AS TableBettrans
+	    , 'CustPTSetting3rd_member'		   AS TablePT
+	    , 'CustDiscount3rd_member'		   AS TableComm
+	    , 'CustStakeLevel_Member'			   AS TableBetSetting
+	    , 'bettransRNG'				   AS TableBettrans
 	    , SYSDATETIME () AS RepUpdateTime
 	UNION ALL
 
@@ -191,7 +202,7 @@ BEGIN
 	    , 0		   AS isLicensee
 	    , 0		   AS isLive
 	    , 'ALL'		   AS Site
-	    , 0		   AS isActive
+	    , 1		   AS isActive
 	    , 9906		   AS SportTypeRefPT
 	    , 4001		   AS BetTypeRefPT
 	    , 9906		   AS SportTypeRefComm
@@ -204,10 +215,10 @@ BEGIN
 	    , 0		   AS isLivePT
 	    , 0		   AS IsLiveComm
 	    , 0		   AS IsLiveBetSetting
-	    , NULL		   AS TablePT
-	    , NULL		   AS TableComm
-	    , NULL		   AS TableBetSetting
-	    , NULL		   AS TableBettrans
+	    , 'CustPTSetting3rd_member'		   AS TablePT
+	    , 'CustDiscount3rd_member'		   AS TableComm
+	    , 'CustStakeLevel_Member'			   AS TableBetSetting
+	    , 'bettransRNG'				   AS TableBettrans
 	    , SYSDATETIME () AS RepUpdateTime
 
 	UNION ALL
@@ -221,7 +232,7 @@ BEGIN
 	    , 0		   AS isLicensee
 	    , 0		   AS isLive
 	    , 'ALL'		   AS Site
-	    , 0		   AS isActive
+	    , 1		   AS isActive
 	    , 9918		   AS SportTypeRefPT
 	    , 4601		   AS BetTypeRefPT
 	    , 9918		   AS SportTypeRefComm
@@ -234,9 +245,9 @@ BEGIN
 	    , 0		   AS isLivePT
 	    , 0		   AS IsLiveComm
 	    , 0		   AS IsLiveBetSetting
-	    , NULL		   AS TablePT
-	    , NULL		   AS TableComm
-	    , NULL		   AS TableBetSetting
-	    , NULL		   AS TableBettrans
+	    , 'CustPTSetting3rd_member'		   AS TablePT
+	    , 'CustDiscount3rd_member'		   AS TableComm
+	    , 'CustStakeLevel_Member'			   AS TableBetSetting
+	    , 'bettransRNG'				   AS TableBettrans
 	    , SYSDATETIME () AS RepUpdateTime
 END

@@ -32,18 +32,22 @@ GO
 	    , RealProductID
 	)
 	SELECT DISTINCT
-		CASE WHEN SportType = 171 THEN 200 ELSE pssc.SportType END SportType , 
-		CASE WHEN pssc.BetType = 3801 THEN 1611 ELSE pssc.BetType END BetType ,  
+		pssc.SportType , 
+		pssc.BetType ,  
 		pssc.Currency , 
 		pssc.SiteID , 
 		CASE 
 			WHEN pssc.SportType = 176		THEN 70	-- FGG
 			WHEN pssc.SportType = 208		THEN 6	-- Saba Casino
-			WHEN pssc.SportType IN (171,200)	THEN 42	-- Vgaming/SABA.games
+			WHEN pssc.SportType = 200		THEN 42	-- SABA.games
+			WHEN pssc.SportType = 171		THEN 66	-- Vgaming
+			WHEN pssc.SportType = 224		THEN 50	-- Funky Games
+			WHEN pssc.SportType = 245		THEN 38	-- Virtual Games
 		END AS RealProductID
-	FROM ProductStatusSiteCurrency_helios pssc WITH (NOLOCK)
-	WHERE pssc.SportType IN (171,176,200,208)
+	FROM ProductStatusSiteCurrency pssc WITH (NOLOCK)
+	WHERE pssc.SportType IN (171,176,200,208,224,245)
 	AND pssc.IsHidden = 1
+	AND pssc.Currency <> 20
 
 	--SELECT c.*--DISTINCT RealProductID , s.ProductName  , s1.SportType , s1.SportName , BetType ,  b.typenamee --, c.*
 	--FROM #Temp_SportNonOffer c
@@ -52,7 +56,8 @@ GO
 	--INNER JOIN DBAGE.bodb02.dbo.bettype b ON c.BetType = b.typeid
 	--WHERE c.SportType = 200
 	
-	IF NOT EXISTS (SELECT 1 FROM SportNonOfferedSiteCurrency snosc WITH (NOLOCK) WHERE snosc.SportType IN (171,176,200,208))
+	IF NOT EXISTS (SELECT 1 FROM SportNonOfferedSiteCurrency snosc WITH (NOLOCK) 
+					INNER JOIN #Temp_SportNonOffer tsno ON snosc.SportType = tsno.SportType AND snosc.BetType = tsno.BetType AND snosc.Currency = tsno.Currency AND snosc.SiteID = tsno.SiteID)
 	BEGIN
 		INSERT INTO SportNonOfferedSiteCurrency 
 		(

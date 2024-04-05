@@ -35,7 +35,7 @@
 		 UNION ALL SELECT 9 ,   53 ,   21 ,   3
 
 		 -- Position Taking:
-			     SELECT 5 , 53 , 18 , 3 
+		 UNION ALL SELECT 5 , 53 , 18 , 3 
 		 UNION ALL SELECT 9,  53 , 18 , 3
 
 		 -- Commission:
