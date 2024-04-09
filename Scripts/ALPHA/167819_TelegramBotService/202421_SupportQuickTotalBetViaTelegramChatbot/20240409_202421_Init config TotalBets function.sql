@@ -5,6 +5,14 @@
 	DB: DBBOT/bodb_Chatbot
 */
 
+--Check if existed [FunctionID] = 24 -> RETURN
+IF EXISTS (SELECT TOP 1 1 FROM [BotFunction](NOLOCK) WHERE [FunctionID] = 24)
+BEGIN
+	RAISERROR('FunctionID 24 is existed! Please check with DEV.',16,1)
+	RETURN
+END
+GO
+
 --BotFunction
 DELETE FROM [BotFunction] WHERE [FunctionID] = 24 AND [FunctionKey] = 'TotalBets'
 
