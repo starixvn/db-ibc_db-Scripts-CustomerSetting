@@ -9,7 +9,7 @@ USE CustDB
 GO
 
 SELECT ep.ExchangeId, ep.currency, ep.code, ep.stakerate, ep.actualrate, ep.commaxpayout, ep.creator, ep.minbet, ep.minbetlive, ep.AUDRate, ep.ZARRate, ep.GBPRate, ep.EURORate, ep.US$Rate, ep.Description, ep.MultipliedBy, ep.ExVirtualRate, 
-	ep.IsActive, ep.OfferSite, ep.ExchangeId, ep.CurrencyType, ep.CreditGroupID, ep.LicenseeGroupID INTO #TmpCurrency
+	ep.IsActive, ep.OfferSite, ep.CurrencyType, ep.CreditGroupID, ep.LicenseeGroupID INTO #TmpCurrency
 FROM Exchange e WITH (NOLOCK)
 	RIGHT JOIN exchange_staging_tmp ep WITH (NOLOCK) ON e.ExchangeId = ep.ExchangeId
 WHERE (e.currency = ep.currency AND e.Code = ep.Code) 
