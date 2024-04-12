@@ -247,9 +247,10 @@ END
 	INNER JOIN #Temp_SportBetType sb ON gg.BetType = sb.BetType
 	WHERE sb.SportType = 245
 
-IF EXISTS (SELECT 1 FROM GameGroup slgd WITH (NOLOCK) INNER JOIN @Temp_GameGroup gg ON slgd.GameGroupID = gg.GameGroupID AND slgd.RefBetType = gg.BetType)
+IF EXISTS (SELECT 1 FROM GameGroup slgd WITH (NOLOCK) INNER JOIN @Temp_GameGroup gg ON slgd.GameGroupID = gg.GameGroupID AND slgd.RefBetType = gg.BetType WHERE slgd.IsDeposit = 0)
 BEGIN
 	DELETE slgd
 	FROM GameGroup slgd WITH (ROWLOCK) 
 	INNER JOIN @Temp_GameGroup gg ON slgd.GameGroupID = gg.GameGroupID AND slgd.RefBetType = gg.BetType
+	WHERE slgd.IsDeposit = 0
 END
