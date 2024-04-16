@@ -152,6 +152,10 @@
 	DELETE FROM #Temp_StakeLevel
 	WHERE GameTypeId = 1611 AND ExchangeID IN (72,95)
 
+	--FGG : Just changed of WON Currency (45)
+	DELETE FROM #Temp_StakeLevel
+	WHERE GameTypeId = 8201 AND ExchangeID <> 45
+
 	-- Check Data --
 
 	--SELECT  '#Temp_StakeLevel' AS Note , * FROM #Temp_StakeLevel tsl
@@ -225,12 +229,7 @@
 			sl.MinLabel = tem_sl.MinLabel ,
 			sl.MaxLabel = tem_sl.MaxLabel ,
 			sl.MinStake = tem_sl.MinStake ,
-			sl.MaxStake = tem_sl.MaxStake ,
-			sl.ResourceId = CASE
-							WHEN tem_sl.GameTypeID  IN (1611,2101) AND tem_sl.ResourceID IN ('13','34') THEN '1'  
-							WHEN tem_sl.GameTypeID  IN (1611,2101) AND tem_sl.ResourceID IN ('20','36') THEN '7'
-							ELSE sl.ResourceId
-					    END 
+			sl.MaxStake = tem_sl.MaxStake 
 
 	FROM #Temp_StakeLevel tem_sl
 	INNER JOIN StakeLevel sl WITH (ROWLOCK , UPDLOCK) ON tem_sl.StakeLevelID = sl.StakeLevelID AND tem_sl.GameTypeID = sl.GameTypeID AND tem_sl.ExchangeID = sl.ExchangeId

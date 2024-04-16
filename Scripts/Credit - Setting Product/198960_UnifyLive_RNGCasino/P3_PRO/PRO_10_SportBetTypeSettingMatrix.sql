@@ -65,6 +65,22 @@ WHERE
 	RealProductId = 6
 
 
+-- Saba Games (42) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
+UPDATE sm
+	SET
+		sm.SportTypeRefPT = 9918
+	,	sm.BetTypeRefPT = 4601
+	,	sm.ProductId = 53
+	,	sm.RepUpdateTime = SYSDATETIME ()
+FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
+WHERE
+	isLicensee = 0
+	AND
+	Site = 'ALL'
+	AND
+	RealProductId = 42
+
+
 -- Funky Games (50) : Part 2: Update Dummy ProductID , SportTypeRefPT , BetTypeRefPT (Cover ALL BetType)
 UPDATE sm
 	SET 
@@ -133,7 +149,7 @@ IF    NOT EXISTS
 	(
 		SELECT 1 
 		FROM SportBettypeSettingMatrix WITH (NOLOCK)
-		WHERE ProductID = 53 AND RealProductId IN (53 , 66) AND SportType IN (171 , 9906 , 9918) AND bettype IN (3801 , 4001 , 4601)
+		WHERE ProductID = 53 AND RealProductId IN (53 , 66, 42) AND SportType IN (171 , 9906 , 9918, 200) AND bettype IN (3801 , 4001 , 4601, 1611)
 	)
 BEGIN
 	INSERT INTO SportBettypeSettingMatrix
@@ -170,6 +186,35 @@ BEGIN
 	    , 53		   AS ProductID
 	    , 171		   AS SportType
 	    , 3801		   AS BetType
+	    , 0		   AS isLicensee
+	    , 0		   AS isLive
+	    , 'ALL'		   AS Site
+	    , 1		   AS isActive
+	    , 9918		   AS SportTypeRefPT
+	    , 4601		   AS BetTypeRefPT
+	    , NULL		   AS SportTypeRefComm
+	    , NULL		   AS BetTypeRefComm
+	    , NULL		   AS SportTypeRefBetSetting
+	    , NULL		   AS BetTypeRefBetSetting
+	    , NULL		   AS SporttypeRefWinlossLimit
+	    , NULL		   AS BettypeRefWinlossLimit
+	    , 0		   AS isDeleted
+	    , 0		   AS isLivePT
+	    , 0		   AS IsLiveComm
+	    , 0		   AS IsLiveBetSetting
+	    , 'CustPTSetting3rd_member'		   AS TablePT
+	    , 'CustDiscount3rd_member'		   AS TableComm
+	    , 'CustStakeLevel_Member'			   AS TableBetSetting
+	    , 'bettransRNG'				   AS TableBettrans
+	    , SYSDATETIME () AS RepUpdateTime
+	UNION ALL
+
+	-- Saba Games (42) : Real Sport Type - BetType
+	SELECT
+		42		   AS RealProductId
+	    , 53		   AS ProductID
+	    , 200		   AS SportType
+	    , 1611		   AS BetType
 	    , 0		   AS isLicensee
 	    , 0		   AS isLive
 	    , 'ALL'		   AS Site
