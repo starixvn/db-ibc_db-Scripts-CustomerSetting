@@ -5,15 +5,11 @@
 	DB: DBCUST/CustDB 
 */ 
 ALTER PROCEDURE [dbo].Acc_DynamicCustSetting3rd_18
-	 @srecommend INT
-	--,@target VARCHAR(20)
+	 @JsonData VARCHAR(MAX) 
 
 AS
 BEGIN
 	SET NOCOUNT ON
-	
-	--IF (@target = 'REPLICATED' AND @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at all replicated servers
-	--IF (@target = 'DBCUST' AND @@SERVERNAME NOT IN ('DBCUST','SITDBCUST','TESTDBCUST','DB-60\DEVDBCUST')) RETURN -- run at dbcust only
 	
 	IF NOT (dbo.f_CheckRepTable('Custinfo') = 1 
 	   AND dbo.f_CheckRepTable('CustBetSetting3rd_Member') = 1
@@ -28,19 +24,19 @@ BEGIN
 
 	INSERT INTO #CustTemp(CustID,Sporttype,Bettype,MaxBet,MaxPerMatch)
 	SELECT ci.custid,m.SportType,m.BetType,a.MaxBet,a.MaxPerMatch
-	FROM custinfo ci WITH(NOLOCK)
+	FROM OPENJSON(@JsonData) WITH (
+				  CustID	INT '$.CustID'
+				, recommend	INT '$.recommend'
+				) AS ci
 		INNER JOIN CustBetSetting3rd_Member m WITH(NOLOCK) ON ci.CustID = m.CustID
 		INNER JOIN CustBetSetting3rd_Agent a WITH(NOLOCK) 
-			ON ci.Recommend = a.CustID 
+			ON ci.recommend = a.CustID 
 			AND m.SportType = a.SportType
 			AND m.BetType = a.BetType
 	WHERE (
 			(m.MaxBet > a.MaxBet AND a.MaxBet > 0) 
 			OR (m.MaxPerMatch > a.MaxPerMatch AND a.MaxPerMatch > 0)
 		  )
-		AND ci.Enabled = 1
-		AND ci.roleid = 1
-		AND ci.srecommend = @srecommend
 		AND m.SportType IN(169,202,220,222)
 
 	WHILE (1=1)
@@ -74,25 +70,16 @@ END
 GO
 -------------------------------------------------------------
 SET NOCOUNT ON
---PRINT N'Step : Start on ' + CAST(GETDATE() AS NVARCHAR(30)) + N'.';
+IF	OBJECT_ID('tempdb..#MemberTemp') IS NOT NULL
+	DROP TABLE	#MemberTemp;
+IF	OBJECT_ID('tempdb..#MemberTempBatch') IS NOT NULL
+	DROP TABLE	#MemberTempBatch;
 
---DECLARE @target VARCHAR(20)
---IF @@SERVERNAME IN ('DBCUST','SITDBCUST','DB233','TESTDBCUST','DB-60\DEVDBCUST')
---	SET @target = 'DBCUST'
---ELSE 
---	SET @target = 'REPLICATED'
+CREATE TABLE #MemberTemp(CustID INT, recommend INT)
+CREATE TABLE #MemberTempBatch(CustID INT, recommend INT)
 
---Print 'Server Name : ' + @target
-
-IF	OBJECT_ID('tempdb..#supers') IS NOT NULL
-	DROP TABLE	#supers;
-
-CREATE TABLE #supers (custid int,isfinished bit default(0))
-
-DECLARE @srecommend INT
-
-INSERT INTO #supers(custid)
-SELECT DISTINCT TOP(2)  ci.srecommend
+INSERT INTO #MemberTemp(custid,recommend)
+SELECT DISTINCT ci.CustID,ci.recommend
 FROM custinfo ci WITH(NOLOCK)
 	INNER JOIN CustBetSetting3rd_Member m WITH(NOLOCK) ON ci.CustID = m.CustID
 	INNER JOIN CustBetSetting3rd_Agent a WITH(NOLOCK) 
@@ -105,33 +92,35 @@ WHERE (
 	  )
 	AND ci.Enabled = 1
 	AND ci.roleid = 1
-	AND ci.srecommend NOT IN (SELECT custid FROM CustSuper WITH(NOLOCK))
+	AND ci.srecommend NOT IN (SELECT custid FROM Dep_CustSuper WITH(NOLOCK))
 	AND m.SportType IN(169,202,220,222)
 	--AND ci.currency <> 20
 
--- For deployer info
-DECLARE @super_cnt INT, @index INT = 0
-DECLARE @msg NVARCHAR(200) = 'Currently at order %d, SuperID: %d.'
-DECLARE @msg_total NVARCHAR(200) = 'Total of supers: %d.'
+DECLARE @Batch	INT = 5000, @JsonData		VARCHAR(MAX)
 
-SET @super_cnt = (SELECT COUNT(*) FROM #supers )
-RAISERROR (@msg_total, 0, 1, @super_cnt) WITH NOWAIT
+-- For deployer info
+DECLARE @cnt INT, @index INT = 0
+DECLARE @msg_total NVARCHAR(200) = 'Total of Custids: %d.'
+
+SET @cnt = (SELECT COUNT(*) FROM #MemberTemp )
+RAISERROR (@msg_total, 0, 1, @cnt) WITH NOWAIT
 
 WHILE (1 = 1)
 BEGIN
-	UPDATE TOP (1) #Supers
-	SET isfinished = 1
-		,@srecommend = custid	
-	WHERE isfinished = 0
-	
-	IF @@ROWCOUNT = 0 BREAK
-			
-	SET @index = @index + 1
-	RAISERROR (@msg, 0, 1, @index, @srecommend) WITH NOWAIT
+	TRUNCATE TABLE #MemberTempBatch
+	DELETE TOP (@Batch)  t 
+	OUTPUT DELETED.CustID,deleted.recommend
+	INTO #MemberTempBatch(CustID,recommend) 
+	FROM #MemberTemp t 
+
+	IF @@ROWCOUNT = 0 
+	BREAK;
+
+	SELECT @JsonData = (SELECT CustID,recommend FROM #MemberTempBatch FOR JSON PATH)
+
 
 	EXEC dbo.Acc_DynamicCustSetting3rd_18 
-				@srecommend = @srecommend
-				--, @target = @target
+				@JsonData = @JsonData
 			
 	WAITFOR DELAY '00:00:00.050'
 END
