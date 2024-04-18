@@ -101,7 +101,7 @@ WHERE (m.MaxBet > a.MaxBet AND a.MaxBet > 0) OR (m.MaxPerMatch > a.MaxPerMatch A
 	AND ci.roleid = 1
 	AND ci.srecommend NOT IN (SELECT custid FROM CustSuper WITH(NOLOCK))
 	AND m.SportType IN(169,202,220,222)
-	AND ci.currency <> 20
+	--AND ci.currency <> 20
 
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0
