@@ -34,7 +34,10 @@ BEGIN
 			ON ci.Recommend = a.CustID 
 			AND m.SportType = a.SportType
 			AND m.BetType = a.BetType
-	WHERE (m.MaxBet > a.MaxBet AND a.MaxBet > 0) OR (m.MaxPerMatch > a.MaxPerMatch AND a.MaxPerMatch > 0)
+	WHERE (
+			(m.MaxBet > a.MaxBet AND a.MaxBet > 0) 
+			OR (m.MaxPerMatch > a.MaxPerMatch AND a.MaxPerMatch > 0)
+		  )
 		AND ci.Enabled = 1
 		AND ci.roleid = 1
 		AND ci.srecommend = @srecommend
@@ -96,7 +99,10 @@ FROM custinfo ci WITH(NOLOCK)
 		ON ci.Recommend = a.CustID 
 		AND m.SportType = a.SportType
 		AND m.BetType = a.BetType
-WHERE (m.MaxBet > a.MaxBet AND a.MaxBet > 0) OR (m.MaxPerMatch > a.MaxPerMatch AND a.MaxPerMatch > 0)
+WHERE (
+		(m.MaxBet > a.MaxBet AND a.MaxBet > 0) 
+		OR (m.MaxPerMatch > a.MaxPerMatch AND a.MaxPerMatch > 0)
+	  )
 	AND ci.Enabled = 1
 	AND ci.roleid = 1
 	AND ci.srecommend NOT IN (SELECT custid FROM CustSuper WITH(NOLOCK))
