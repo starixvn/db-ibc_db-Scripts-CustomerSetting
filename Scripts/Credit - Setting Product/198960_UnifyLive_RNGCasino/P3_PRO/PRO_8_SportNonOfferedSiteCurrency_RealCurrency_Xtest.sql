@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20240129@Helios
-	Task: Inital Data Setting SportNonOfferedSiteCurrency [#198960] 
+	Task: Inital Data Setting SportNonOfferedSiteCurrency Real Currency [#198960]  
 	DB: DBCust/CustDB
 */
 
@@ -58,8 +58,8 @@ AND (
 	OR 
 	(ProductID = 44 AND psp.SportType = 224 AND psp.BetType  = 5500)
 )
+AND psp.SportType IN (171,176,200,208,224,245)
 
---SELECT '@Temp_SportTypeBetType' AS note ,* from @Temp_SportTypeBetType
 
 INSERT INTO #Temp_CollectData 
 	(
@@ -75,11 +75,7 @@ SELECT tsno.SportType , tsno.BetType, tsno.RealProductID , tsno.IsHidden , pssc.
 FROM @Temp_SportTypeBetType tsno
 INNER JOIN ProductStatusSiteCurrency pssc WITH (NOLOCK) ON tsno.SportType = pssc.SportType AND tsno.BetType = pssc.BetType
 
---SELECT '#Temp_CollectData' AS note , * FROM #Temp_CollectData
-
 ------------------------------------------------------------------
---SELECT '@Temp_Currency' AS Note , * FROM @Temp_Currency
---SELECT '@Temp_Site' AS Note , * FROM @Temp_Site
 
 CREATE TABLE  #Temp_SampleDataOffer (
 		SportType			SMALLINT
@@ -124,7 +120,7 @@ WHERE tem.IsHidden  = 1				-- Non Offer From ProductSettingDetail
 AND tem.IsHidden_NonOffer = 0				-- Offer From ProductStatusSiteCurrency
 AND tem.Currency_NonOffer <> 0 
 
---SELECT '#Temp_SampleDataOffer' AS Note , * FROM #Temp_SampleDataOffer
+
 
 ; WITH Cte_SiteOffer AS (
 	SELECT DISTINCT tem.SportType, tem.BetType, tem.RealProductID, tem.SiteID_NonOffer
@@ -151,8 +147,6 @@ DELETE so
 FROM #Temp_SiteOffer so
 INNER JOIN #Temp_SampleDataOffer tsdo ON so.SportType = tsdo.SportType AND so.BetType = tsdo.BetType AND so.RealProductID = tsdo.RealProductID AND so.SiteID_Offer = tsdo.SiteID_Offer AND so.Currency_Offer = tsdo.Currency_Offer
 
-
---SELECT 'Check Remove data reduntdant SiteOffer' AS Note , * FROM #Temp_SiteOffer  WHERE SiteID_Offer = 1
 
 
 ; WITH Cte_CurrencyOffer AS (
@@ -181,9 +175,6 @@ FROM #Temp_CurrencyOffer so
 INNER JOIN #Temp_SampleDataOffer tsdo ON so.SportType = tsdo.SportType AND so.BetType = tsdo.BetType AND so.RealProductID = tsdo.RealProductID AND so.SiteID_Offer = tsdo.SiteID_Offer AND so.Currency_Offer = tsdo.Currency_Offer
 
 
---SELECT 'Check Remove data reduntdant CurrencyOffer' AS Note , * FROM #Temp_CurrencyOffer WHERE SiteID_Offer = 1
-
-
 INSERT INTO #Temp_SportNonOffferSiteCurrency 
 	(
 		SportType
@@ -197,9 +188,14 @@ SELECT SportType , BetType , Currency_Offer AS Currency , SiteID_Offer AS SiteID
 UNION  
 SELECT SportType , BetType , Currency_Offer AS Currency , SiteID_Offer AS SiteID, RealProductID FROM #Temp_CurrencyOffer
 
---SELECT '#Temp_SportNonOffferSiteCurrency_Case 1'AS NOTE , * FROM #Temp_SportNonOffferSiteCurrency
-----------------------------------------
--- Case 2: Condition : ProductStatusSiteCurrency.IsHidden = 0 , ProductStatusSiteCurrency.Currency = 0
+
+
+------------------------------------------
+-- Case 2.1: Remove Data Of Site 1216 , 1233 Of Vgaming
+
+DELETE FROM #Temp_SportNonOffferSiteCurrency WHERE SportType = 171 AND SiteID IN (1216,1233)
+
+-- Case 2.2: Condition : ProductStatusSiteCurrency.IsHidden = 0 , ProductStatusSiteCurrency.Currency = 0
 
 ; WITH Cte_FGG_FunkyGames_VirtualGames AS(
 	SELECT DISTINCT tem.SportType , tem.BetType , tem.RealProductID , tem.SiteID_NonOffer AS SiteOffer
@@ -223,11 +219,9 @@ FROM Cte_FGG_FunkyGames_VirtualGames AS Cte
 CROSS APPLY @Temp_Site AS s
 WHERE Cte.SiteOffer <> s.SiteId
 
---SELECT '#Temp_SportNonOffferSiteCurrency_Case 2'AS NOTE , * 
---FROM #Temp_SportNonOffferSiteCurrency
---WHERE Currency = 20
 
-----------------------------------------
+
+------------------------------------------
 -- Case 3: Condition : ProductStatusSiteCurrency.IsHidden = 1
 
 
@@ -249,19 +243,22 @@ SELECT SportType, BetType , Currency_NonOffer , SiteID_NonOffer , RealProductID
 FROM #Temp_CollectData
 WHERE IsHidden_NonOffer = 1
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Remove UUS Currency in Temp Table
+DELETE FROM #Temp_SportNonOffferSiteCurrency WHERE Currency =  20
 
 
---SELECT '#Temp_SportNonOffferSiteCurrency_Case 3'AS NOTE , * 
---FROM #Temp_SportNonOffferSiteCurrency
---WHERE Currency = 20
+-- initial data real table Just Real Account
+IF EXISTS (SELECT 1 FROM SportNonOfferedSiteCurrency sp WITH (NOLOCK)
+			   INNER JOIN #Temp_SportNonOffferSiteCurrency tsnosc ON sp.SportType = tsnosc.SportType AND sp.BetType = tsnosc.BetType AND sp.Currency = tsnosc.Currency AND sp.SiteID = tsnosc.SiteID)
+BEGIN
+	DELETE sp
+	FROM SportNonOfferedSiteCurrency sp WITH (ROWLOCK)
+	INNER JOIN #Temp_SportNonOffferSiteCurrency tsnosc ON sp.SportType = tsnosc.SportType AND sp.BetType = tsnosc.BetType AND sp.Currency = tsnosc.Currency AND sp.SiteID = tsnosc.SiteID
+END
 
-----------------------------------------
+
 -- initial data real table
-
-DELETE sp
-FROM SportNonOfferedSiteCurrency sp WITH (ROWLOCK)
-INNER JOIN #Temp_SportNonOffferSiteCurrency tsnosc ON sp.SportType = tsnosc.SportType AND sp.BetType = tsnosc.BetType AND sp.Currency = tsnosc.Currency AND sp.SiteID = tsnosc.SiteID
-
 INSERT INTO SportNonOfferedSiteCurrency
 	(
 		SportType

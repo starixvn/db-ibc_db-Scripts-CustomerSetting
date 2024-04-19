@@ -11,7 +11,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 ------------------- MOVE ProductID = 41 (LiveCasino) -------------------
--- Part 1: Update With Real Product - Real SportType - Real BetType
+-- Part 1: Update With Real Product - Real SportType - Real BetType 
 -- FGG (70)  
 UPDATE sm
 	SET 
