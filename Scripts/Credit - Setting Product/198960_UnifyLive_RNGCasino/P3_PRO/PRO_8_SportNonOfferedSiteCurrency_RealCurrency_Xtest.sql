@@ -52,7 +52,7 @@ CREATE TABLE #Temp_SportNonOffferSiteCurrency (
 INSERT INTO @Temp_SportTypeBetType (SportType , BetType , IsHidden, RealProductID)
 SELECT psp.SportType , psp.BetType , psp.IsHidden , psp.RealProductID
 FROM ProductSettingProfile psp WITH (NOLOCK)
-WHERE  psp.SettingType IN (4,11,13,21,160)
+WHERE  psp.SettingType IN (4,11,13,21)
 AND (
 	ProductID IN (6 , 18 , 41 , 42 , 64 , 66)
 	OR 
@@ -120,7 +120,7 @@ INSERT INTO #Temp_SampleDataOffer
 	)
 SELECT DISTINCT tem.SportType, tem.BetType, tem.RealProductID, tem.SiteID_NonOffer,tem.Currency_NonOffer
 FROM #Temp_CollectData tem
-WHERE tem.IsHidden IN (0,1)				-- Non Offer From ProductSettingDetail
+WHERE tem.IsHidden  = 1				-- Non Offer From ProductSettingDetail
 AND tem.IsHidden_NonOffer = 0				-- Offer From ProductStatusSiteCurrency
 AND tem.Currency_NonOffer <> 0 
 
@@ -129,7 +129,7 @@ AND tem.Currency_NonOffer <> 0
 ; WITH Cte_SiteOffer AS (
 	SELECT DISTINCT tem.SportType, tem.BetType, tem.RealProductID, tem.SiteID_NonOffer
 	FROM #Temp_CollectData tem
-	WHERE tem.IsHidden  IN (0,1)
+	WHERE tem.IsHidden  = 1
 	AND tem.IsHidden_NonOffer = 0
 	AND tem.Currency_NonOffer <> 0 
 )
@@ -158,7 +158,7 @@ INNER JOIN #Temp_SampleDataOffer tsdo ON so.SportType = tsdo.SportType AND so.Be
 ; WITH Cte_CurrencyOffer AS (
 	SELECT DISTINCT tem.SportType, tem.BetType, tem.RealProductID, tem.Currency_NonOffer
 	FROM #Temp_CollectData tem
-	WHERE tem.IsHidden  IN (0,1)
+	WHERE tem.IsHidden   = 1
 	AND tem.IsHidden_NonOffer = 0
 	AND tem.Currency_NonOffer <> 0 
 )

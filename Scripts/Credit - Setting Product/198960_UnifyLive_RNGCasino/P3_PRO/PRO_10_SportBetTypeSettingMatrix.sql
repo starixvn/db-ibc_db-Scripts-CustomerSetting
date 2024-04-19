@@ -86,6 +86,8 @@ UPDATE sm
 	SET 
 		sm.SportTypeRefPT = 9906
 	,	sm.BetTypeRefPT = 4001
+	,	sm.SporttypeRefWinlossLimit = NULL
+	,	sm.BettypeRefWinlossLimit = NULL
 	,	sm.ProductID = 53
 	,	sm.RepUpdateTime = SYSDATETIME ()
 FROM SportBettypeSettingMatrix AS sm WITH (ROWLOCK , UPDLOCK)
