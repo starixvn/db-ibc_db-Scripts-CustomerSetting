@@ -180,6 +180,7 @@ BEGIN
 	SELECT custID
 	FROM Transfer ts WITH(NOLOCK) 
 	WHERE TransDate >= @Scan_TranferDTS
+		AND bettype IN (21003, 21004) -- Agent transfer members 
 
 	WHILE 1 = 1
 	BEGIN
@@ -209,6 +210,9 @@ BEGIN
 		WAITFOR DELAY '00:00:00.280'
 	END
 END
+
+SELECT CustID FROM BalanceDebitGame WITH(NOLOCK)  WHERE bettype = 4601 UNION
+SELECT CustID FROM BalanceCreditGame WITH(NOLOCK)  WHERE bettype = 4601
 
 DROP TABLE #WeeklyResetCustomer
 DROP TABLE #TempCust_transfer
