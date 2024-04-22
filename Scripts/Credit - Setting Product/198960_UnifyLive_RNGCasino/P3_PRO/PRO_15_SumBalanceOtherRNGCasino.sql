@@ -11,7 +11,7 @@
 USE bodb02
 GO
 
-DECLARE @Scan_TranferDTS DATETIME = GETDATE()
+DECLARE @Scan_TranferDTS DATETIME = DATEADD(minute,-5,GETDATE()) -- Time before run script Insert update SportBetTypeSettingMatrix Table
 
 DECLARE @Bettypes TABLE(bettype SMALLINT)
 INSERT INTO @Bettypes(bettype)
