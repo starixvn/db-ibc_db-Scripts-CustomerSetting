@@ -211,8 +211,8 @@ BEGIN
 	END
 END
 
-SELECT CustID FROM BalanceDebitGame WITH(NOLOCK)  WHERE bettype = 4601 UNION
-SELECT CustID FROM BalanceCreditGame WITH(NOLOCK)  WHERE bettype = 4601
+--SELECT CustID FROM BalanceDebitGame WITH(NOLOCK)  WHERE bettype = 4601 UNION
+--SELECT CustID FROM BalanceCreditGame WITH(NOLOCK)  WHERE bettype = 4601
 
 DROP TABLE #WeeklyResetCustomer
 DROP TABLE #TempCust_transfer
