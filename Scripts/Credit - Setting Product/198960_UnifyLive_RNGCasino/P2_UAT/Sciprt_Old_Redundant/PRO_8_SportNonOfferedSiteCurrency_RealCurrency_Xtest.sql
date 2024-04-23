@@ -5,7 +5,7 @@
 	DB: DBCust/CustDB
 */
 
-ALTER PROCEDURE [dbo].Acc_DynamicCustSetting3rd_18_Helios
+ALTER PROCEDURE [dbo].Acc_DynamicCustSetting3rd_18
   @JsonData			VARCHAR(MAX) 
 , @target			VARCHAR (20)
 
@@ -327,7 +327,7 @@ BEGIN
 				FOR JSON PATH
 		)
 
-	EXEC dbo.[Acc_DynamicCustSetting3rd_18_Helios] 
+	EXEC dbo.[Acc_DynamicCustSetting3rd_18] 
 								  @JsonData = @JsonData
 								, @target	  = @target
 
