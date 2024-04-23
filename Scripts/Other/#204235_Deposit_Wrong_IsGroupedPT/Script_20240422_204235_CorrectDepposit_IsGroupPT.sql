@@ -13,7 +13,7 @@ INSERT INTO #Member_WrongGroupPT(CustID)
 SELECT CustID
 FROM dep_custsettingmode WITH(NOLOCK) 
 WHERE IsGroupedPT = 0
-	AND custid IN (65749344,54577777)
+	AND custid IN (113891227,117839753)
 
 UPDATE c
 SET c.IsGroupedPT = 1
