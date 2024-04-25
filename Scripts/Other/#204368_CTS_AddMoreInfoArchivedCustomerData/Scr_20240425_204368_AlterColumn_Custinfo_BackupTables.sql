@@ -10,7 +10,7 @@ USE Bodb_Archive_Customer_Licensee
 GO
 ALTER TABLE Custinfo ADD ArchivedDate DATETIME NULL CONSTRAINT DF_custInfo_ArchivedDate DEFAULT(GETDATE())
 GO
-CREATE NONCLUSTERED INDEX ix_Custinfo_ArchivedDate ON Custinfo(ArchivedDate)
+CREATE NONCLUSTERED INDEX ix_Custinfo_ArchivedDate ON Custinfo(ArchivedDate) WITH (ONLINE=ON)
 
 /*
 DROP INDEX Custinfo.ix_Custinfo_ArchivedDate
