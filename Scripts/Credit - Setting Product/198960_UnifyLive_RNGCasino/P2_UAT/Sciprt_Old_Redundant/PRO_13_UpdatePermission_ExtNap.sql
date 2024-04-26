@@ -1,7 +1,7 @@
 ﻿/*<info serverAlias="DBCUST-NAP_UserControl"></info>*//*
 	Created: Helios
 	Date: 2024/04/16
-	Task: Update permission for ExtGroup [#198960]
+	Task: Update permission for ExtGroup [#198960]  
 		https://nexdev.net/issues/198960
 	DB: DBCUST/NAP_UserControl
 */

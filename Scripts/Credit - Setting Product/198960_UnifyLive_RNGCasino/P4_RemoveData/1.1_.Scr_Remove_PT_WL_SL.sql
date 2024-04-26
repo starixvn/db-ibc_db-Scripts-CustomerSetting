@@ -1,7 +1,7 @@
 ﻿/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20240129@Helios
-	Task: Remove Redundant Data Position Taking , Win Loss Limit , Stake Level [#198960] 
+	Task: Remove Redundant Data Position Taking , Win Loss Limit , Stake Level [#198960]  
 	DB: DBCust/CustDB
 */
 
@@ -42,48 +42,39 @@ GO
 	CREATE TABLE #Tmp_DataSettingAffect (CustID INT , SportType SMALLINT , BetType SMALLINT )--, IsLive BIT)
 
 	INSERT INTO #ProfileSetting (SettingType , SportType , BetType)
-		SELECT 18 , 245 , 4601  
-	UNION SELECT 18 , 200 , 1611  
-	UNION SELECT 18 , 224 , 5500  
-	UNION SELECT 18 , 171 , 3801  
-	UNION SELECT 18 , 208 , 2101  
+		SELECT 18 , 171 , 3801  
 	UNION SELECT 18 , 176 , 8201  
-	UNION SELECT 22 , 208 , 2101  
-	UNION SELECT 22 , 245 , 4601  
+	UNION SELECT 18 , 200 , 1611  
+	UNION SELECT 18 , 208 , 2101  
+	UNION SELECT 18 , 224 , 5500  
+	UNION SELECT 18 , 245 , 4601    
+
 	UNION SELECT 22 , 171 , 3801  
 	UNION SELECT 22 , 176 , 8201  
 	UNION SELECT 22 , 200 , 1611  
-	UNION SELECT 22 , 9909 , 3700  
-	UNION SELECT 7  , 176  , 8201  
+	UNION SELECT 22 , 208 , 2101  
+	UNION SELECT 22 , 245 , 4601  
+	
+	
+	UNION SELECT 7  , 171  , 3801  
+	UNION SELECT 7  , 224  , 5500  
 	UNION SELECT 7  , 245  , 4601  
 	UNION SELECT 7  , 245  , 4602  
 	UNION SELECT 7  , 245  , 4605  
-	UNION SELECT 7  , 171  , 3801  
-	UNION SELECT 7  , 200  , 1611  
-	UNION SELECT 7  , 208  , 2101  
-	UNION SELECT 7  , 224  , 5500  
 
 	---------------------------------------Collect Super Infor:---------------------------------------
 
 	INSERT INTO #TmpSuperInfo ( CustID )
 	SELECT cu.CustId
 	FROM Customer cu WITH (NOLOCK)
-	INNER JOIN Site s WITH (NOLOCK)
-		    ON cu.Site = s.Site
-	INNER JOIN exchange e WITH (NOLOCK)
-		    ON cu.currency = e.ExchangeId
-		    AND e.IsActive = 1
-		    AND e.OfferSite IN (0 , 1)
-	LEFT JOIN CustSuper cs WITH (NOLOCK)
-		    ON cu.custid = cs.custid
-		WHERE
-			cu.roleid			= 4
-			AND s.islicensee		= 0
-			AND s.isActive		= 1
-			AND cu.username		NOT LIKE '3rdSuper%'
-			AND cs.isinternal		= 0
-			AND cu.custid		NOT IN (SELECT custid FROM Dep_CustSuper WITH (NOLOCK))
-			--AND e.ExchangeId		<> 20
+	INNER JOIN Site s WITH (NOLOCK) ON cu.Site = s.Site
+	WHERE
+	cu.roleid			= 4
+	AND s.islicensee		= 0
+	--AND s.isActive		= 1
+	AND cu.username		NOT LIKE '3rdSuper%'
+	AND cu.custid		NOT IN (SELECT custid FROM Dep_CustSuper WITH (NOLOCK))
+		
 			
 	---------------------------------------Declare Deployed Info---------------------------------------
 	DECLARE

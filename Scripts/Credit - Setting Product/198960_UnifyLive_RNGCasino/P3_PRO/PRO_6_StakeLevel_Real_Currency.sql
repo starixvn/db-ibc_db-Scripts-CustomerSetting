@@ -235,6 +235,24 @@
 	INNER JOIN StakeLevel sl WITH (ROWLOCK , UPDLOCK) ON tem_sl.StakeLevelID = sl.StakeLevelID AND tem_sl.GameTypeID = sl.GameTypeID AND tem_sl.ExchangeID = sl.ExchangeId
 	
 
+	-- Initial for StakeLevel_History to detect ticket
+	INSERT INTO StakeLevel_History 
+	(
+		StakeLevelID
+		, GameTypeID
+		, MaxLabel
+		, MaxStake
+		, UpdateTime
+	)
+	SELECT
+		  StakeLevelID
+		, GameTypeID
+		, MaxLabel
+		, MaxStake
+		, GETDATE ()
+	FROM #Temp_StakeLevel tsl
+	
+
 	DROP TABLE #Temp_StakeLevel
 
 

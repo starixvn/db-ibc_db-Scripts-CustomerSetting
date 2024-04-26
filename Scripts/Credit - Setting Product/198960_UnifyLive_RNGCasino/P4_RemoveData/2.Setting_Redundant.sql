@@ -99,6 +99,7 @@ END
 	    , BetType
 	)
 	 SELECT 'Virtual Games' AS SportName , 245 AS SportType , 4601 AS BetType  
+ UNION SELECT 'Virtual Games'	AS SportName , 245 AS SportType , 4602 AS BetType  
  UNION SELECT 'Saba Casino'	AS SportName , 208 AS SportType , 2101 AS BetType  
  UNION SELECT 'FGG'		AS SportName , 176 AS SportType , 8201 AS BetType  
  UNION SELECT 'Vgaming'		AS SportName , 171 AS SportType , 3801 AS BetType  

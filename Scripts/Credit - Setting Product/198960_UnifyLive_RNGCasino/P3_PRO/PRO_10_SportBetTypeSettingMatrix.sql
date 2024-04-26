@@ -196,8 +196,8 @@ BEGIN
 	    , 4601		   AS BetTypeRefPT
 	    , NULL		   AS SportTypeRefComm
 	    , NULL		   AS BetTypeRefComm
-	    , NULL		   AS SportTypeRefBetSetting
-	    , NULL		   AS BetTypeRefBetSetting
+	    , 171		   AS SportTypeRefBetSetting
+	    , 3801		   AS BetTypeRefBetSetting
 	    , NULL		   AS SporttypeRefWinlossLimit
 	    , NULL		   AS BettypeRefWinlossLimit
 	    , 0		   AS isDeleted
@@ -225,8 +225,8 @@ BEGIN
 	    , 4601		   AS BetTypeRefPT
 	    , NULL		   AS SportTypeRefComm
 	    , NULL		   AS BetTypeRefComm
-	    , NULL		   AS SportTypeRefBetSetting
-	    , NULL		   AS BetTypeRefBetSetting
+	    , 200		   AS SportTypeRefBetSetting
+	    , 1611		   AS BetTypeRefBetSetting
 	    , NULL		   AS SporttypeRefWinlossLimit
 	    , NULL		   AS BettypeRefWinlossLimit
 	    , 0		   AS isDeleted

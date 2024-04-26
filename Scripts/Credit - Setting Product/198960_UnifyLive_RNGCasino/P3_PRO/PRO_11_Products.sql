@@ -1,8 +1,8 @@
-﻿/*<info serverAlias="DBTXN-bodb02"></info>*/
+﻿/*<info serverAlias="DBPRO-bodb02"></info>*/
 /*
 	Created: 20240408@Helios
 	Task: Update Products.CasinoType [#198960] 
-	DB: DBTXN-bodb02
+	DB: DBPRO-bodb02
 */
 
 SET ANSI_NULLS ON
