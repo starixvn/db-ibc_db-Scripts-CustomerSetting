@@ -102,7 +102,6 @@ VALUES
 ,('Function_Name', 24, 'th-TH', N'จำนวนการวางเดิมพันทั้งหมด')
 ,('Function_Name', 24, 'zh-Hans', N'总投注')
 ,('Function_Name', 24, 'zh-Hant', N'總投注')
-,('Function_Name', 24, 'vi-VN', N'Tổng Cược')
 
 ,('Function_Description', 24, 'en-US', N'Stay updated on the top 10 highest-turnover soccer matches and monitor their total turnover easily.')
 ,('Function_Description', 24, 'th-TH', N'ดูข้อมูลล่าสุด ของการแข่งขันฟุตบอลที่มีมูลค่าการเดิมพันสูงสุด 10 อันดับแรก และตรวจสอบมูลค่าการเดิมพันรวมของแต่ละเกมได้อย่างรวดเร็ว')
@@ -113,7 +112,6 @@ VALUES
 ,('Action_Name', 55, 'th-TH', N'จำนวนการวางเดิมพันทั้งหมด')
 ,('Action_Name', 55, 'zh-Hans', N'总投注')
 ,('Action_Name', 55, 'zh-Hant', N'總投注')
-,('Action_Name', 55, 'vi-VN', N'Tổng Cược')
 
 ,('Action_Description', 55, 'en-US', N'Stay updated on the top 10 highest-turnover soccer matches and monitor their total turnover easily.')
 ,('Action_Description', 55, 'th-TH', N'ดูข้อมูลล่าสุด ของการแข่งขันฟุตบอลที่มีมูลค่าการเดิมพันสูงสุด 10 อันดับแรก และตรวจสอบมูลค่าการเดิมพันรวมของแต่ละเกมได้อย่างรวดเร็ว')
