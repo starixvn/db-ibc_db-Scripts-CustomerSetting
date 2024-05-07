@@ -6,7 +6,7 @@
 */
 
 --Check if existed ID -> RETURN
-IF EXISTS (SELECT TOP 1 1 FROM [BotFunction](NOLOCK) WHERE [FunctionID] = 24 AND [FunctionKey] <> 'TotalBets')
+IF EXISTS (SELECT TOP 1 1 FROM [BotFunction](NOLOCK) WHERE [FunctionID] = 24 AND [FunctionName] <> 'Total Bets')
 BEGIN
 	RAISERROR('[BotFunction].[FunctionID] = 24 is existed! Please check with DEV.',16,1)
 	RETURN
@@ -49,10 +49,22 @@ FROM T
 GO
 
 --BotAction
+UPDATE [BotAction]
+SET [Order] = CASE  WHEN ActionID = 1	AND ActionName = 'Outstanding'				THEN 2
+					WHEN ActionID = 2	AND ActionName = 'Balance Info'				THEN 3
+					WHEN ActionID = 3	AND ActionName = 'Today Win Loss'			THEN 4
+					WHEN ActionID = 4	AND ActionName = 'Yesterday Win Loss'		THEN 5
+					WHEN ActionID = 48	AND ActionName = 'Available Domains'		THEN 6
+					WHEN ActionID = 46	AND ActionName = 'Customer Settings'		THEN 7
+					WHEN ActionID = 51	AND ActionName = 'Auto Transfer Settings'	THEN 8
+					WHEN ActionID = 11	AND ActionName = 'Settings'					THEN 9
+			  END
+WHERE ActionID IN (1,2,3,4,48,46,51,11)
+
 DELETE FROM [BotAction] WHERE ActionID = 55 AND ActionName = 'Total Bets'
 
 ;WITH T AS (
-SELECT 55 ActionID,	'Total Bets' ActionName, 1 Type, NULL Command, 24 FunctionID, 0 ParentID, 1 Status, 1 IsEndAction, 5 [Order])
+SELECT 55 ActionID,	'Total Bets' ActionName, 1 Type, NULL Command, 24 FunctionID, 0 ParentID, 1 Status, 1 IsEndAction, 1 [Order])
 INSERT INTO [dbo].[BotAction]
            ([ActionID]
            ,[ActionName]
@@ -74,13 +86,6 @@ SELECT [ActionID]
            ,[Order]
 FROM T
 
-UPDATE [BotAction]
-SET [Order] = CASE ActionName 
-					WHEN 'Available Domains' THEN 6
-					WHEN 'Customer Settings' THEN 7
-					WHEN 'Auto Transfer Settings' THEN 8
-					ELSE 9 END
-WHERE ActionName IN ('Available Domains','Customer Settings','Auto Transfer Settings','Settings')
 
 GO
 
@@ -99,11 +104,10 @@ VALUES
 ,('Function_Name', 24, 'zh-Hant', N'總投注')
 ,('Function_Name', 24, 'vi-VN', N'Tổng Cược')
 
-,('Function_Description', 24, 'en-US', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Function_Description', 24, 'th-TH', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Function_Description', 24, 'zh-Hans', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Function_Description', 24, 'zh-Hant', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Function_Description', 24, 'vi-VN', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
+,('Function_Description', 24, 'en-US', N'Stay updated on the top 10 highest-turnover soccer matches and monitor their total turnover easily.')
+,('Function_Description', 24, 'th-TH', N'ดูข้อมูลล่าสุด ของการแข่งขันฟุตบอลที่มีมูลค่าการเดิมพันสูงสุด 10 อันดับแรก และตรวจสอบมูลค่าการเดิมพันรวมของแต่ละเกมได้อย่างรวดเร็ว')
+,('Function_Description', 24, 'zh-Hans', N'随时获知前10场足球赛事最高投注额的最新动态，并轻松监控其总投注额。')
+,('Function_Description', 24, 'zh-Hant', N'隨時獲知前10場足球賽事最高投注額的最新動態，並輕鬆監控其總投注額。')
 
 ,('Action_Name', 55, 'en-US', N'Total Bets')
 ,('Action_Name', 55, 'th-TH', N'จำนวนการวางเดิมพันทั้งหมด')
@@ -111,11 +115,10 @@ VALUES
 ,('Action_Name', 55, 'zh-Hant', N'總投注')
 ,('Action_Name', 55, 'vi-VN', N'Tổng Cược')
 
-,('Action_Description', 55, 'en-US', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Action_Description', 55, 'th-TH', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Action_Description', 55, 'zh-Hans', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Action_Description', 55, 'zh-Hant', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
-,('Action_Description', 55, 'vi-VN', N'Get the latest top 10 highest-turnover soccer matches and quickly monitor the total turnover of each game.')
+,('Action_Description', 55, 'en-US', N'Stay updated on the top 10 highest-turnover soccer matches and monitor their total turnover easily.')
+,('Action_Description', 55, 'th-TH', N'ดูข้อมูลล่าสุด ของการแข่งขันฟุตบอลที่มีมูลค่าการเดิมพันสูงสุด 10 อันดับแรก และตรวจสอบมูลค่าการเดิมพันรวมของแต่ละเกมได้อย่างรวดเร็ว')
+,('Action_Description', 55, 'zh-Hans', N'随时获知前10场足球赛事最高投注额的最新动态，并轻松监控其总投注额。')
+,('Action_Description', 55, 'zh-Hant', N'隨時獲知前10場足球賽事最高投注額的最新動態，並輕鬆監控其總投注額。')
 				 
 
 
