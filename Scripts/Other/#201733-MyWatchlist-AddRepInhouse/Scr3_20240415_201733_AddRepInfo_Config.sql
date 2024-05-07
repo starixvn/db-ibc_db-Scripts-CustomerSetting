@@ -16,8 +16,8 @@ SELECT 1,'WLMonitored_Player',0,'RepUpdateTime',0,'CustID|Sporttype','Repl_GetWL
 SELECT 1,'WLMonitored_SMA',0,'RepUpdateTime',0,'CustID|Sporttype','Repl_GetWLMonitored_SMA','Repl_PutWLMonitored_SMA',1000,10,60000 
 
 GO
-GRANT ALTER ON [dbo].WLMonitored_Global TO [repl_ap]
-GRANT ALTER ON [dbo].WLMonitored_Player TO [repl_ap]
-GRANT ALTER ON [dbo].WLMonitored_SMA TO [repl_ap]
-GO
+--GRANT ALTER ON [dbo].WLMonitored_Global TO [repl_ap]
+--GRANT ALTER ON [dbo].WLMonitored_Player TO [repl_ap]
+--GRANT ALTER ON [dbo].WLMonitored_SMA TO [repl_ap]
+--GO
 
