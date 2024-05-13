@@ -18,9 +18,7 @@ GO
 ALTER TABLE VRSettingRuleDetail_NotApply ADD CCSporttype SMALLINT NOT NULL CONSTRAINT DF_VRSettingRuleDetail_NotApply_CCSporttype DEFAULT(0) WITH VALUES 
 GO
 
-DROP INDEX VRSettingRuleDetail_NotApply.ix_VRSettingRuleDetail_NotApply;
-
-CREATE NONCLUSTERED INDEX [ix_VRSettingRuleDetail_NotApply] ON [dbo].[VRSettingRuleDetail_NotApply]
+CREATE NONCLUSTERED INDEX [IX_VRSettingRuleDetail_NotApply] ON [dbo].[VRSettingRuleDetail_NotApply]
 (
 	[Sporttype] ASC,
 	[Bettype] ASC,
@@ -33,6 +31,6 @@ CREATE NONCLUSTERED INDEX [ix_VRSettingRuleDetail_NotApply] ON [dbo].[VRSettingR
 	[CurrencyID] ASC,
 	[CustomerClassDetail] ASC,
 	[CCSporttype] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = ON, ONLINE = ON, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [virtualrate_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, ONLINE = ON, DROP_EXISTING = ON, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [virtualrate_table];
 GO
 
