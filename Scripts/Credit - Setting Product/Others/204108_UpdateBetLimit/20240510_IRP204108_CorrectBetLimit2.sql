@@ -61,13 +61,13 @@ BEGIN
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)		
 		AND ci.Enabled = 1
 		AND cs.SportType IN (175,169,220,222,202,9908)
-		AND ((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
+		AND (((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
 			AND cs.MinBet > cs.MaxBet
 			)
 		OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
 			AND cs.MaxBet > cs.MaxPerMatch
 			)
-	
+		)
 	
 	WHILE(1=1)
 	BEGIN
@@ -103,12 +103,13 @@ BEGIN
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)		
 		AND ci.Enabled = 1
 		AND cs.SportType IN (175,169,220,222,202,9908)
-		AND ((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
+		AND (((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
 			AND cs.MinBet > cs.MaxBet
 			)
 		OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
 			AND cs.MaxBet > cs.MaxPerMatch
 			)
+		)
 		
 	WHILE(1=1)
 	BEGIN
