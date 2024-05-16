@@ -13,7 +13,7 @@ DECLARE @recommend INT,
 
 SELECT  @srecommend = ci.srecommend,    
 		@mrecommend = ci.mrecommend,     
-		@recommend = ci.custID   
+		@recommend = ci.recommend   
 FROM custinfo ci WITH(NOLOCK)     
 WHERE ci.CustID = @CustID  
 
