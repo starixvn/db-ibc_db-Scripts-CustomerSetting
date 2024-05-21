@@ -1,11 +1,11 @@
-/*<info serverAlias="DBAGE-bodb02"></info>*/
+/*<info serverAlias="DBAGE-bodb02,DBTP-bodb02"></info>*/
 /*
 	Created: 20240415@Eden
 	Task: Disable job sync [#201733]
 		WLMonitored_Global
 		WLMonitored_Player
 		WLMonitored_SMA
-	DB: DBAGE-bodb02
+	DB: DBAGE-bodb02,DBTP-bodb02
 */
 USE bodb02
 GO
