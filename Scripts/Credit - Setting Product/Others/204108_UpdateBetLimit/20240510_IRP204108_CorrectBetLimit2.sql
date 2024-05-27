@@ -22,16 +22,11 @@ BEGIN
 		RETURN
 	
 	DECLARE @BatchNum INT = 5000,
-		@NewMaxBet MONEY = 0,
-		@NewMaxbet_tmp MONEY = 0,
-		@NewMinBet MONEY = 0,
-		@NewMaxPerMatch MONEY = 0,
-		@NewMaxPerNumber MONEY = 0,
-		@NewMaxPayoutPerMatch MONEY = 0
+			@MinBet MONEY = 0
 		
 	CREATE TABLE #Supers (custid INT PRIMARY KEY)
-	CREATE TABLE #tblCustSport (custid INT, Sporttype INT, Bettype INT PRIMARY KEY (custid,sporttype,bettype))
-	DECLARE @tmpCust TABLE (custid INT, Sporttype INT, Bettype INT PRIMARY KEY (custid,sporttype,bettype))
+	CREATE TABLE #tblCustSport (custid INT, roleid TINYINT, UplineID INT, Sporttype INT, Bettype INT, isUpdated BIT DEFAULT(0) PRIMARY KEY (custid,sporttype,bettype))
+	DECLARE @tmpCust TABLE (custid INT, roleid TINYINT, UplineID INT, Sporttype INT, Bettype INT PRIMARY KEY (custid,sporttype,bettype))
 	
 	INSERT INTO #Supers(custid)
 	SELECT ci.custid
@@ -54,183 +49,265 @@ BEGIN
 			
 	---------------------------------------------------------------------
 	--update CustBetSetting3rd_Agent
-	INSERT INTO #tblCustSport(custid,Sporttype,Bettype)
-	SELECT cs.custid,cs.Sporttype,cs.Bettype
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT cs.custid, roleid,
+		CASE WHEN roleid = 2 THEN mrecommend
+			WHEN roleid = 3 THEN srecommend END,
+		cs.Sporttype,cs.Bettype
 	FROM custinfo ci WITH(NOLOCK)
 		INNER JOIN CustBetSetting3rd_Agent cs (NOLOCK) ON cs.custid = ci.custid
-	WHERE ci.srecommend IN (SELECT custid FROM #Supers)		
+	WHERE ci.srecommend IN (SELECT custid FROM #Supers)	
+		AND roleid IN (2,3)
 		AND ci.Enabled = 1
 		AND cs.SportType IN (175,169,220,222,202,9908)
-		AND (((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
-			AND cs.MinBet > cs.MaxBet
-			)
-		OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-			AND cs.MaxBet > cs.MaxPerMatch
-			)
-		)
+		AND (cs.MinBet > cs.MaxBet			
+			OR cs.MaxBet > cs.MaxPerMatch
+			)		
 	
 	WHILE(1=1)
 	BEGIN
-		DELETE TOP(@batchNum) t
-		OUTPUT DELETED.custid, DELETED.sporttype, DELETED.bettype
-		INTO @tmpCust(custid,sporttype,bettype)
+		UPDATE TOP(@batchNum) t
+		SET isUpdated = 1
+		OUTPUT DELETED.custid, DELETED.roleid, DELETED.uplineID, DELETED.sporttype, DELETED.bettype
+		INTO @tmpCust(custid,roleid,uplineID,sporttype,bettype)
 		FROM #tblCustSport t
-		
+		WHERE roleid = 3
+			AND isUpdated = 0
+				
 		IF @@ROWCOUNT = 0
 			BREAK;
 	
 		UPDATE cs
-		SET @NewMaxbet = CASE WHEN (cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0) AND cs.MaxBet > cs.MaxPerMatch THEN cs.MaxPerMatch ELSE cs.MaxBet END,
-			cs.MaxBet = @NewMaxbet,
-			cs.MinBet = CASE WHEN cs.MinBet	<> 0 AND @NewMaxbet <> 0 AND cs.MinBet > @NewMaxBet THEN @NewMaxBet ELSE cs.MinBet END		
+		SET @MinBet = ucs.MinBet,
+			cs.MinBet = @MinBet,
+			cs.MaxBet = @MinBet,
+			cs.MaxPerMatch = @MinBet
 		FROM CustBetSetting3rd_Agent cs WITH(ROWLOCK)
 			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype			
-		WHERE ((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-		
+			INNER JOIN CustBetSetting3rd_Agent ucs WITH(NOLOCK) ON ucs.custid = t.UplineID AND t.sporttype = ucs.sporttype AND t.bettype = ucs.bettype
+				
 		DELETE @tmpCust		
 	END
 	
-	--update CustBetSetting3rd_Member
-	INSERT INTO #tblCustSport(custid,Sporttype,Bettype)
-	SELECT cs.custid,cs.Sporttype,cs.Bettype
+	--get agent downlines of master
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT ci.custid, ci.roleid, ci.mrecommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.mrecommend = t.custid
+	WHERE ci.roleid IN (2)
+		AND t.roleid = 3
+		AND ci.Enabled = 1
+		AND NOT EXISTS (SELECT 1 FROM #tblCustSport t2 
+						WHERE t2.custid = ci.custid
+							AND t2.sporttype = t.sporttype
+							AND t2.bettype = t.bettype
+						)
+					
+	WHILE(1=1)
+	BEGIN
+		UPDATE TOP(@batchNum) t
+		SET isUpdated = 1
+		OUTPUT DELETED.custid, DELETED.roleid, DELETED.uplineID, DELETED.sporttype, DELETED.bettype
+		INTO @tmpCust(custid,roleid,uplineID,sporttype,bettype)
+		FROM #tblCustSport t
+		WHERE roleid = 2
+			AND isUpdated = 0
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+	
+		UPDATE cs
+		SET cs.MinBet = 0,
+			cs.MaxBet = 0.1,
+			cs.MaxPerMatch = 0.1
+		FROM CustBetSetting3rd_Agent cs WITH(ROWLOCK)
+			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype						
+				
+		DELETE @tmpCust		
+	END
+	
+	--get member downlines of master/agent
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT ci.custid, ci.roleid, ci.recommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.mrecommend = t.custid
+	WHERE ci.roleid = 1
+		AND t.roleid = 3
+		AND ci.Enabled = 1
+	UNION 
+	SELECT ci.custid, ci.roleid, ci.recommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.recommend = t.custid
+	WHERE ci.roleid = 1
+		AND t.roleid = 2
+		AND ci.Enabled = 1
+				
+	--get members break rule
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT ci.custid,ci.roleid,ci.recommend,cs.Sporttype,cs.Bettype
 	FROM custinfo ci WITH(NOLOCK)
 		INNER JOIN CustBetSetting3rd_Member cs (NOLOCK) ON cs.custid = ci.custid
+		LEFT JOIN #tblCustSport t ON ci.custid = t.custid
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)		
 		AND ci.Enabled = 1
+		AND t.custid IS NULL
+		AND ci.roleid = 1
 		AND cs.SportType IN (175,169,220,222,202,9908)
-		AND (((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
-			AND cs.MinBet > cs.MaxBet
-			)
-		OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-			AND cs.MaxBet > cs.MaxPerMatch
-			)
-		)
-		
+		AND (cs.MinBet > cs.MaxBet			
+			OR cs.MaxBet > cs.MaxPerMatch
+			)	
+	
 	WHILE(1=1)
 	BEGIN
 		DELETE TOP(@batchNum) t
 		OUTPUT DELETED.custid, DELETED.sporttype, DELETED.bettype
 		INTO @tmpCust(custid,sporttype,bettype)
 		FROM #tblCustSport t
+		WHERE roleid = 1
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 	
 		UPDATE cs
-		SET @NewMaxbet = CASE WHEN (cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0) AND cs.MaxBet > cs.MaxPerMatch THEN cs.MaxPerMatch ELSE cs.MaxBet END,
-			cs.MaxBet = @NewMaxbet,
-			cs.MinBet = CASE WHEN cs.MinBet	<> 0 AND @NewMaxbet <> 0 AND cs.MinBet > @NewMaxBet THEN @NewMaxBet ELSE cs.MinBet END		
+		SET cs.MinBet = 0,
+			cs.MaxBet = 0.1,
+			cs.MaxPerMatch = 0.1
 		FROM CustBetSetting3rd_Member cs WITH(ROWLOCK)
 			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype			
-		WHERE ((cs.MinBet	<> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-		
+				
 		DELETE @tmpCust		
 	END
+	
+	DELETE #tblCustSport
 	
 	---------------------------------------------------------------------
 	--update CustBetSetting_Agent
-	INSERT INTO #tblCustSport(custid,Sporttype,Bettype)
-	SELECT ci.custid,cs.Sporttype,cs.Bettype
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT cs.custid, roleid,
+		CASE WHEN roleid = 2 THEN mrecommend
+			WHEN roleid = 3 THEN srecommend END,
+		cs.sporttype, cs.bettype
 	FROM custinfo ci WITH(NOLOCK)
 		INNER JOIN CustBetSetting_Agent cs (NOLOCK) ON cs.custid = ci.custid
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)	
-		AND ci.Enabled = 1		
-		AND (((cs.MinBet <> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-			OR (cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
+		AND ci.Enabled = 1	
+		AND roleid IN (2,3)
+		AND (cs.MinBet > cs.MaxBet				
+			OR cs.MaxBet > cs.MaxPerMatch				
+			OR (cs.Sporttype IN (161) 
 				AND (cs.MaxBet > cs.MaxPerNumber 
 					OR cs.MaxPerNumber > cs.MaxPerMatch 
 					)
 				)
-			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-				AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
+			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 				
 				AND cs.MaxPerMatch > cs.MaxPayoutPerMatch			
 				)	
 			)	
 				
 	WHILE(1=1)
 	BEGIN
-		DELETE TOP(@batchNum) t
-		OUTPUT DELETED.custid, DELETED.sporttype, DELETED.bettype
-		INTO @tmpCust(custid,sporttype,bettype)
+		UPDATE TOP(@batchNum) t
+		SET isUpdated = 1
+		OUTPUT DELETED.custid, DELETED.roleid, DELETED.uplineID, DELETED.sporttype, DELETED.bettype
+		INTO @tmpCust(custid,roleid,uplineID,sporttype,bettype)
 		FROM #tblCustSport t
+		WHERE roleid = 3
+			AND isUpdated = 0
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 	
 		UPDATE cs
-		SET @NewMaxPerMatch = CASE WHEN cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-										AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
-										AND cs.MaxPerMatch > cs.MaxPayoutPerMatch	
-									THEN cs.MaxPayoutPerMatch ELSE cs.MaxPerMatch END,	
-			@NewMaxPerNumber = CASE WHEN cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
-										AND cs.MaxPerNumber > @NewMaxPerMatch 
-									THEN @NewMaxPerMatch ELSE cs.MaxPerNumber END,		
-			@NewMaxbet_tmp = CASE WHEN cs.Sporttype IN (161) AND @NewMaxPerNumber <> 0
-									AND cs.MaxBet > @NewMaxPerNumber THEN @NewMaxPerNumber ELSE cs.MaxBet END,
-			@NewMaxbet = CASE WHEN (@NewMaxbet_tmp <> 0 OR @NewMaxPerMatch <> 0)
-									AND @NewMaxbet_tmp > @NewMaxPerMatch
-									THEN @NewMaxPerMatch ELSE @NewMaxbet_tmp END,
-			cs.MinBet = CASE WHEN cs.MinBet	<> 0 AND @NewMaxbet <> 0 AND cs.MinBet > @NewMaxBet THEN @NewMaxBet ELSE cs.MinBet END,						
-			cs.MaxBet = CASE WHEN cs.MaxBet <> @NewMaxbet THEN @NewMaxbet ELSE cs.MaxBet END,
-			cs.MaxPerNumber = CASE WHEN cs.Sporttype IN (161) AND cs.MaxPerNumber <> @NewMaxPerNumber THEN @NewMaxPerNumber ELSE cs.MaxPerNumber END,
-			cs.MaxPerMatch = CASE WHEN cs.MaxPerMatch <> @NewMaxPerMatch THEN @NewMaxPerMatch ELSE cs.MaxPerMatch END
+		SET @MinBet = ucs.MinBet,
+			cs.MinBet = @MinBet,
+			cs.MaxBet = @MinBet,
+			cs.MaxPerNumber = CASE WHEN cs.Sporttype IN (161) THEN @MinBet ELSE cs.MaxPerNumber END,
+			cs.MaxPerMatch = @MinBet,
+			cs.MaxPayoutPerMatch = CASE WHEN cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) THEN @MinBet ELSE cs.MaxPayoutPerMatch END
 		FROM CustBetSetting_Agent cs WITH(ROWLOCK)
 			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype			
-		WHERE (((cs.MinBet <> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-			OR (cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
-				AND (cs.MaxBet > cs.MaxPerNumber 
-					OR cs.MaxPerNumber > cs.MaxPerMatch 
-					)
-				)
-			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-				AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
-				AND cs.MaxPerMatch > cs.MaxPayoutPerMatch			
-				)	
-			)
-		
+			INNER JOIN CustBetSetting_Agent ucs WITH(NOLOCK) ON ucs.custid = t.UplineID AND t.sporttype = ucs.sporttype AND t.bettype = ucs.bettype
+				
 		DELETE @tmpCust		
 	END
 	
+	--get agent downlines of master
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT ci.custid, ci.roleid, ci.mrecommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.mrecommend = t.custid
+	WHERE ci.roleid = 2
+		AND t.roleid = 3
+		AND ci.Enabled = 1
+		AND NOT EXISTS (SELECT 1 FROM #tblCustSport t2 
+						WHERE t2.custid = ci.custid
+							AND t2.sporttype = t.sporttype
+							AND t2.bettype = t.bettype
+						)					
+					
+	WHILE(1=1)
+	BEGIN
+		UPDATE TOP(@batchNum) t
+		SET isUpdated = 1
+		OUTPUT DELETED.custid, DELETED.roleid, DELETED.uplineID, DELETED.sporttype, DELETED.bettype
+		INTO @tmpCust(custid,roleid,uplineID,sporttype,bettype)
+		FROM #tblCustSport t
+		WHERE roleid = 2
+			AND isUpdated = 0
+		
+		IF @@ROWCOUNT = 0
+			BREAK;
+	
+		UPDATE cs
+		SET cs.MinBet = 0,
+			cs.MaxBet = 0.1,
+			cs.MaxPerNumber = CASE WHEN cs.Sporttype IN (161) THEN 0.1 ELSE cs.MaxPerNumber END,
+			cs.MaxPerMatch = 0.1,
+			cs.MaxPayoutPerMatch = CASE WHEN cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) THEN 0.1 ELSE cs.MaxPayoutPerMatch END
+		FROM CustBetSetting_Agent cs WITH(ROWLOCK)
+			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype						
+				
+		DELETE @tmpCust		
+	END
+	
+	--get member downlines of master/agent
+	INSERT INTO #tblCustSport(custid,roleid,uplineID,Sporttype,Bettype)
+	SELECT ci.custid, ci.roleid, ci.recommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.mrecommend = t.custid
+	WHERE ci.roleid = 1
+		AND t.roleid = 3
+		AND ci.Enabled = 1
+	UNION 
+	SELECT ci.custid, ci.roleid, ci.recommend, t.Sporttype,t.Bettype
+	FROM custinfo ci WITH(NOLOCK)
+		INNER JOIN #tblCustSport t ON ci.recommend = t.custid
+	WHERE ci.roleid = 1
+		AND t.roleid = 2
+		AND ci.Enabled = 1
+		
 	--update CustBetSetting_Member
-	INSERT INTO #tblCustSport(custid,Sporttype,Bettype)
-	SELECT ci.custid,cs.Sporttype,cs.Bettype
+	INSERT INTO #tblCustSport(custid,roleid,Sporttype,Bettype)
+	SELECT ci.custid,ci.roleid,cs.Sporttype,cs.Bettype
 	FROM custinfo ci WITH(NOLOCK)
 		INNER JOIN CustBetSetting_Member cs (NOLOCK) ON cs.custid = ci.custid
+		LEFT JOIN #tblCustSport t ON ci.custid = t.custid
+									AND cs.sporttype = t.sporttype
+									AND cs.bettype = t.bettype
 	WHERE ci.srecommend IN (SELECT custid FROM #Supers)	
 		AND ci.Enabled = 1		
-		AND (((cs.MinBet <> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-			OR (cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
+		AND ci.roleid = 1
+		AND t.custid IS NULL
+		AND (cs.MinBet > cs.MaxBet				
+			OR cs.MaxBet > cs.MaxPerMatch				
+			OR (cs.Sporttype IN (161) 
 				AND (cs.MaxBet > cs.MaxPerNumber 
 					OR cs.MaxPerNumber > cs.MaxPerMatch 
 					)
 				)
-			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-				AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
+			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 				
 				AND cs.MaxPerMatch > cs.MaxPayoutPerMatch			
 				)	
 			)	
@@ -241,46 +318,20 @@ BEGIN
 		OUTPUT DELETED.custid, DELETED.sporttype, DELETED.bettype
 		INTO @tmpCust(custid,sporttype,bettype)
 		FROM #tblCustSport t
+		WHERE roleid = 1
 		
 		IF @@ROWCOUNT = 0
 			BREAK;
 	
 		UPDATE cs
-		SET @NewMaxPerMatch = CASE WHEN cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-										AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
-										AND cs.MaxPerMatch > cs.MaxPayoutPerMatch	
-									THEN cs.MaxPayoutPerMatch ELSE cs.MaxPerMatch END,	
-			@NewMaxPerNumber = CASE WHEN cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
-										AND cs.MaxPerNumber > @NewMaxPerMatch 
-									THEN @NewMaxPerMatch ELSE cs.MaxPerNumber END,		
-			@NewMaxbet_tmp = CASE WHEN cs.Sporttype IN (161) AND @NewMaxPerNumber <> 0
-									AND cs.MaxBet > @NewMaxPerNumber THEN @NewMaxPerNumber ELSE cs.MaxBet END,
-			@NewMaxbet = CASE WHEN (@NewMaxbet_tmp <> 0 OR @NewMaxPerMatch <> 0)
-									AND @NewMaxbet_tmp > @NewMaxPerMatch
-									THEN @NewMaxPerMatch ELSE @NewMaxbet_tmp END,
-			cs.MinBet = CASE WHEN cs.MinBet	<> 0 AND @NewMaxbet <> 0 AND cs.MinBet > @NewMaxBet THEN @NewMaxBet ELSE cs.MinBet END,						
-			cs.MaxBet = CASE WHEN cs.MaxBet <> @NewMaxbet THEN @NewMaxbet ELSE cs.MaxBet END,
-			cs.MaxPerNumber = CASE WHEN cs.Sporttype IN (161) AND cs.MaxPerNumber <> @NewMaxPerNumber THEN @NewMaxPerNumber ELSE cs.MaxPerNumber END,
-			cs.MaxPerMatch = CASE WHEN cs.MaxPerMatch <> @NewMaxPerMatch THEN @NewMaxPerMatch ELSE cs.MaxPerMatch END
+		SET cs.MinBet = 0,
+			cs.MaxBet = 0.1,
+			cs.MaxPerNumber = CASE WHEN cs.Sporttype IN (161) THEN 0.1 ELSE cs.MaxPerNumber END,
+			cs.MaxPerMatch = 0.1,
+			cs.MaxPayoutPerMatch = CASE WHEN cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902)  THEN 0.1 ELSE cs.MaxPayoutPerMatch END
 		FROM CustBetSetting_Member cs WITH(ROWLOCK)
 			INNER JOIN @tmpCust t ON cs.custid = t.custid AND cs.sporttype = t.sporttype AND cs.bettype = t.bettype			
-		WHERE (((cs.MinBet <> 0 OR cs.MaxBet <> 0)
-				AND cs.MinBet > cs.MaxBet
-				)
-			OR ((cs.MaxBet <> 0 OR cs.MaxPerMatch <> 0)
-				AND cs.MaxBet > cs.MaxPerMatch
-				)
-			OR (cs.Sporttype IN (161) AND cs.MaxPerNumber <> 0
-				AND (cs.MaxBet > cs.MaxPerNumber 
-					OR cs.MaxPerNumber > cs.MaxPerMatch 
-					)
-				)
-			OR (cs.Sporttype IN (1,2,3,5,8,10,11,99,9901,9902) 
-				AND (cs.MaxPerMatch <> 0 OR cs.MaxPayoutPerMatch <> 0) 
-				AND cs.MaxPerMatch > cs.MaxPayoutPerMatch			
-				)	
-			)
-		
+				
 		DELETE @tmpCust		
 	END
 	
