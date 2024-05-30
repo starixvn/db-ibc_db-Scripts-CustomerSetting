@@ -20,9 +20,9 @@ DECLARE @TempCustList TABLE (
 )
 INSERT INTO @TempCustList(custid,recommend,mrecommend,srecommend)
 SELECT	ci.custid	
-	,ci.srecommend,    
+	,ci.recommend,    
 	ci.mrecommend,     
-	ci.recommend   
+	ci.srecommend   
 FROM custinfo ci WITH(NOLOCK)     
 WHERE ci.CustID IN (124779065,124779066,124662242,124662243)
 
