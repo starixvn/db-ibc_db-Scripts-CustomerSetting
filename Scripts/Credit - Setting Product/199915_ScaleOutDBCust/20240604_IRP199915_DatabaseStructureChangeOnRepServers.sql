@@ -83,6 +83,8 @@ GO
 
 -------------------------------------------------------
 --deploy history tables on DBTP ONLY
+USE bodb_CustHistory
+GO
 
 CREATE TABLE [dbo].[BetSetting_Agent_History](
 	[CustID] [int] NOT NULL,

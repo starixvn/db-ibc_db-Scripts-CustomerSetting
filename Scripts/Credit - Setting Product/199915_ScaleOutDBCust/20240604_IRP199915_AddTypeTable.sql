@@ -1,8 +1,8 @@
-/*<info serverAlias="DBACC-bodb02,DBTP-bodb02"></info>*/
+/*<info serverAlias="DBACC-bodb02,DBTP-bodb02,DBCustRepl-ReplCustDB"></info>*/
 /*
 	Created: 20240604@Johnson
 	Task:add new type for rep in-house [redmine: #199915]
-	DB: DBACC-bodb02,DBTP-bodb02
+	DB: DBACC-bodb02,DBTP-bodb02,DBCustRepl-ReplCustDB
 */ 
 
 

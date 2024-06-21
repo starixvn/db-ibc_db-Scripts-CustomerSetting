@@ -4,32 +4,50 @@
 	Task: Database structure change to scale out dbcust [redmine: #199915]
 	DB: DBCUST/CustDB_History
 */ 
+/*
 use master
 GO
 
 CREATE DATABASE [CustDB_History]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'bodb_History', FILENAME = N'/mnt/DiskG/CustDB_History/CustDB_History.mdf' , SIZE = 233344KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ), 
+( NAME = N'bodb_History', FILENAME = N'/mnt/DiskG/CustDB_History/CustDB_History.mdf' , SIZE = 4096MB , MAXSIZE = UNLIMITED, FILEGROWTH = 128MB ), 
  FILEGROUP [CustSetting_table] 
-( NAME = N'bodb_CustSetting_01', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_01.ndf' , SIZE = 1051648KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB ), 
-( NAME = N'bodb_CustSetting_02', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_02.ndf' , SIZE = 265216KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB ), 
-( NAME = N'bodb_CustSetting_03', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_03.ndf' , SIZE = 396288KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'bodb_CustSetting_01', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_01.ndf' , SIZE = 4096MB , MAXSIZE = UNLIMITED, FILEGROWTH = 128MB ), 
+( NAME = N'bodb_CustSetting_02', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_02.ndf' , SIZE = 4096MB , MAXSIZE = UNLIMITED, FILEGROWTH = 128MB ), 
+( NAME = N'bodb_CustSetting_03', FILENAME = N'/mnt/DiskG/CustDB_History/bodb_CustSetting_03.ndf' , SIZE = 4096MB , MAXSIZE = UNLIMITED, FILEGROWTH = 128MB )
 LOG ON 
-( NAME = N'CustDB_History_log', FILENAME = N'/mnt/DiskG/CustDB_History/CustDB_History_log.ldf' , SIZE = 23416192KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+( NAME = N'CustDB_History_log', FILENAME = N'/mnt/DiskG/CustDB_History/CustDB_History_log.ldf' , SIZE = 4096MB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
 GO
 
 USE CustDB_History
 GO
+--grant permission for web accounts
+CREATE USER [wsv_alp] FOR LOGIN [wsv_alp] WITH DEFAULT_SCHEMA=[dbo]
+GO
 
+GRANT CONNECT,INSERT TO wsv_alp
+GO
+
+CREATE USER [wsv_xnap] FOR LOGIN [wsv_xnap] WITH DEFAULT_SCHEMA=[dbo]
+GO
+
+GRANT CONNECT,INSERT TO wsv_xnap
+GO
+
+CREATE USER [wsv_nap] FOR LOGIN [wsv_nap] WITH DEFAULT_SCHEMA=[dbo]
+GO
+
+GRANT CONNECT,INSERT TO wsv_nap
+GO
+*/
 CREATE TABLE [dbo].[BetSetting_Agent_History](
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
 	[MinBet] [money] NULL,
 	[MaxBet] [money] NULL,
-	[MaxPerMatch] [money] NULL,
-	[MaxPerNumber] [money] NULL,
+	[MaxPerMatch] [money] NULL,	
 	[MaxPayoutPerMatch] [money] NULL,
 	[UpdateTime] [datetime] NOT NULL
 ) ON [CustSetting_table]
@@ -52,8 +70,7 @@ CREATE TABLE [dbo].[BetSetting_Member_History](
 	[BetType] [smallint] NOT NULL,
 	[MinBet] [money] NULL,
 	[MaxBet] [money] NULL,
-	[MaxPerMatch] [money] NULL,
-	[MaxPerNumber] [money] NULL,
+	[MaxPerMatch] [money] NULL,	
 	[MaxPayoutPerMatch] [money] NULL,
 	[UpdateTime] [datetime] NOT NULL
 ) ON [CustSetting_table]
