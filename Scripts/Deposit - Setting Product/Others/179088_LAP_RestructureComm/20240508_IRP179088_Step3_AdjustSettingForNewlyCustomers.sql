@@ -5,7 +5,7 @@
 	DB: DBCUST/bodb_Licensee
 */
 	CREATE TABLE #tblCust (LicenseeID INT, CustID INT PRIMARY KEY,GroupDiscountID INT)
-	DECLARE @tmpCust TABLE(CustID INT PRIMARY KEY,GroupDiscountID INT)
+	DECLARE @tmpCust TABLE(LicenseeID INT, CustID INT PRIMARY KEY,GroupDiscountID INT)
 	DECLARE @tmpLic TABLE(LicenseeID INT,GroupDiscountID INT)
 	DECLARE @tblSettingDCS TABLE (Col VARCHAR(20),Sporttype INT, Bettype INT)
 	
@@ -61,6 +61,10 @@
 	SELECT LicenseeID,CustID,GroupCommID
 	FROM LicenseeCustComm WITH(NOLOCK)
 	WHERE custid > @MaxCustID
+		AND LicenseeID IN (SELECT LicenseeID 
+							FROM Licensees WITH(NOLOCK)
+							WHERE IsDeposit = 1 
+								AND IsActive = 1)
 		
 	WHILE(1=1)
 	BEGIN	
@@ -73,7 +77,7 @@
 			BREAK;
 				
 		INSERT INTO LicenseeCustDiscount (LicenseeID,CustID,GroupDiscountID)	
-		SELECT LicenseeID,CustID,GroupDiscountID
+		SELECT t.LicenseeID,t.CustID,t.GroupDiscountID
 		FROM @tmpCust t
 			LEFT JOIN LicenseeCustDiscount c WITH(NOLOCK) ON t.custid = c.custid
 		WHERE c.custid IS NULL
@@ -92,22 +96,23 @@
 			   ,[color]
 			   ,[IsDefault])
 	OUTPUT INSERTED.GroupDiscountID, INSERTED.LicenseeID INTO @tmpLic(GroupDiscountID,LicenseeID)			
-	SELECT  ID
-		,[LicenseeID]
-	   ,[GroupName]
-	   ,[IsActive]
-	   ,[color]
-	   ,[IsDefault]
+	SELECT  gc.ID
+		,gc.[LicenseeID]
+	   ,gc.[GroupName]
+	   ,gc.[IsActive]
+	   ,gc.[color]
+	   ,gc.[IsDefault]
 	FROM LicenseeGroupComm gc WITH(NOLOCK)
 		LEFT JOIN LicenseeGroupDiscount gd WITH(NOLOCK) ON gc.ID = gd.GroupDiscountID
 	WHERE gd.GroupDiscountID IS NULL	
 		AND gc.ID > @MaxGroupDiscountID
+		AND gc.LicenseeID IN (SELECT LicenseeID 
+							FROM Licensees WITH(NOLOCK)
+							WHERE IsDeposit = 1 
+								AND IsActive = 1)
 
 	SET IDENTITY_INSERT [LicenseeGroupDiscount] OFF
-	
-	IF @@ROWCOUNT = 0
-		RETURN;
-	
+		
 	;WITH tmp AS (
 		SELECT *
 		FROM

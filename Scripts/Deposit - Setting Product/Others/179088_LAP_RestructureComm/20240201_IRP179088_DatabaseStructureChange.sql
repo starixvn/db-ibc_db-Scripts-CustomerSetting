@@ -39,7 +39,7 @@ CREATE TABLE [dbo].[LicenseeGroupDiscountDetail](
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
 	[Discount] [decimal](9, 8) NULL,
- CONSTRAINT [PK_LicenseeGroupCommDetail] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_LicenseeGroupDiscountDetail] PRIMARY KEY CLUSTERED 
 (
 	[GroupDiscountID] ASC,
 	[Licenseeid] ASC,

@@ -126,7 +126,8 @@ BEGIN
 			, HabaneroComm, VGamingComm, CGComm, AdvantComm, AdvantMiniComm, MaxGameComm, FGGComm, JiliComm, YeeBetComm, MgRNGComm,
 			SBComm, Parlaycomm, NGComm, KenoComm
 		FROM LicenseeGroupComm WITH(NOLOCK)
-		WHERE LicenseeID = @LicenseeID) t
+		WHERE LicenseeID = @LicenseeID
+			AND ID <= @MaxGroupDiscountID) t
 		UNPIVOT (
 			Discount for col IN ( MacauComm,PPComm, SexyGamingComm, SpadeGamingComm, LotteryComm, VSComm, TableGameComm, VirtualGamesComm, ArcadiaGamingComm,
 				SabaclubComm, SAGamingComm, PGSoftComm, AllbetComm, RNGComm, WMCasinoComm, BigGamingComm, JokerComm
