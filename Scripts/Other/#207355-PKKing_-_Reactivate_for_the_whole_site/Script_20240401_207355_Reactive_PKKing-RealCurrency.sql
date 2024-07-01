@@ -31,9 +31,16 @@ DECLARE @custid INT
 	, @ErrMsg nvarchar(2000) = ''
 	, @ReinitOldBalance BIT 
 
+DECLARE @Cnt INT = 0
+
 WHILE (1 = 1)
 BEGIN
 	SELECT @ErrCode = 0, @ErrMsg = ''
+	SET @Cnt = @Cnt + 1
+	IF (@Cnt %1000) = 0 -- Delay 1s each 1000 loop
+	BEGIN
+		WAITFOR DELAY '00:00:01'
+	END
 
 	UPDATE TOP(1) t
 	SET isfinished = 1,
