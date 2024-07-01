@@ -6,7 +6,7 @@ DB: DBCUST.CustDB
 */
 USE CustDB
 GO
-DECLARE @count INT = 1000 -- reactive for 1000 accs
+DECLARE @count INT = 100 -- reactive for xx accs
 
 CREATE TABLE #Dep_Customer_Archived (custid INT, ClosingBalance	money, CustIDBalanceDummy	int, isfinished bit default 0)
 CREATE TABLE #ErrorTbl (ErrCode int, ErrMsg nvarchar(2000))
