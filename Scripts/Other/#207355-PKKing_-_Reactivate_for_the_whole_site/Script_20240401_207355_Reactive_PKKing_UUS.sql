@@ -23,6 +23,15 @@ SELECT TOP (@count) ar.CustID,ar.ClosingBalance,ar.CustIDBalanceDummy
 FROM Dep_Customer_Archived ar WITH(NOLOCK) 
 	INNER JOIN @AgentTbl ag ON ar.Recommend = ag.Recommend
 WHERE ar.status = 'completed'
+AND ar.CustID NOT IN(
+		46515391
+		,46533713
+		,46538852
+		,46538885
+		,46542088
+		,46553864
+		,46573019
+	)
 
 DECLARE @custid INT
 	, @ClosingBalance	money
