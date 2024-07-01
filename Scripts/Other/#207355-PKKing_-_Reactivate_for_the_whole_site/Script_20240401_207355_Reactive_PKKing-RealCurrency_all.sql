@@ -86,6 +86,10 @@ BEGIN
 			SELECT @ErrCode, @ErrMsg
 		END
 	END
+
+	--Stop at this time , avoid EC match
+	IF GETDATE() > = '2024-07-01 11:00'
+		BREAK
 END
 
 SELECT * FROM #ErrorTbl
