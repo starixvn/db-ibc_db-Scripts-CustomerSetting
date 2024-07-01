@@ -81,4 +81,8 @@ BEGIN
 	END
 END
 
+SELECT * FROM #ErrorTbl
 SELECT * FROM #Dep_Customer_Archived
+
+DROP TABLE #Dep_Customer_Archived
+DROP TABLE #ErrorTbl
