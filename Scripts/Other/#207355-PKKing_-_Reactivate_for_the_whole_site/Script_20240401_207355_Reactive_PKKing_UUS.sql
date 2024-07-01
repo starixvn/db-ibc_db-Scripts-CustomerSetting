@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 Created: 20240701@Eden
-Task: Reactive manually for site = 'PKKing' 
+Task: Reactive manually for site = 'PKKing' - UUS
 DB: DBCUST.CustDB
 */
 USE CustDB
