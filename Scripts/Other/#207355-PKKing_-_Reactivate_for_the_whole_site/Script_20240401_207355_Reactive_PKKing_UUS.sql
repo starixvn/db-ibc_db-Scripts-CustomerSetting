@@ -75,7 +75,7 @@ BEGIN
 	ELSE
 	BEGIN
 		--Reactive on sitedb02
-		EXEC _tmpDBSite2.bodb02.dbo.[Dot_Dep_Customer_Archive_ReactiveCustomer_Trans]
+		EXEC _tmpDBSite2.bodb02.dbo.[Dot_Dep_Customer_Archive_ReactiveCustomer_Trans_UAT1]
 			 @CustID = @custid
 			,@CustIDBalanceDummy = @CustIDBalanceDummy
 			,@ClosingBalance = @ClosingBalance
