@@ -26,7 +26,7 @@ IF @@ROWCOUNT <> 0
 BEGIN
 	WHILE(1=1)
 	BEGIN	
-		DELETE TOP (500) #tblCust
+		DELETE TOP (200) #tblCust
 		OUTPUT DELETED.custid, DELETED.sporttype,DELETED.bettype 
 		INTO @tmpCust(custid,sporttype,bettype)
 		
@@ -43,7 +43,7 @@ BEGIN
 			INNER JOIN CustBetSetting_Agent cs2 WITH(NOLOCK) ON cs.custid = cs2.custid
 															AND cs.sporttype = cs2.sporttype
 															AND cs.bettype = cs2.bettype
-			INNER JOIN @tmpCust t WITH(NOLOCK) ON cs.custid = t.custid
+			INNER JOIN @tmpCust t ON cs.custid = t.custid
 												AND cs.sporttype = t.sporttype
 												AND cs.bettype = t.bettype	
 		WHERE (cs.MinBet <> cs2.MinBet
@@ -74,7 +74,7 @@ IF @@ROWCOUNT <> 0
 BEGIN
 	WHILE(1=1)
 	BEGIN	
-		DELETE TOP (500) #tblCust
+		DELETE TOP (200) #tblCust
 		OUTPUT DELETED.custid, DELETED.sporttype,DELETED.bettype 
 		INTO @tmpCust(custid,sporttype,bettype)
 		
@@ -91,7 +91,7 @@ BEGIN
 			INNER JOIN CustBetSetting_Member cs2 WITH(NOLOCK) ON cs.custid = cs2.custid
 															AND cs.sporttype = cs2.sporttype
 															AND cs.bettype = cs2.bettype
-			INNER JOIN @tmpCust t WITH(NOLOCK) ON cs.custid = t.custid
+			INNER JOIN @tmpCust t ON cs.custid = t.custid
 												AND cs.sporttype = t.sporttype
 												AND cs.bettype = t.bettype	
 		WHERE (cs.MinBet <> cs2.MinBet

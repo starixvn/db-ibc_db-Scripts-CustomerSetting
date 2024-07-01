@@ -16,6 +16,8 @@ BEGIN
 	
 	IF OBJECT_ID('CustBetSetting_Member') IS NULL
 		OR OBJECT_ID('CustBetSetting_Agent') IS NULL
+		OR OBJECT_ID('BetSetting_Member') IS NULL
+		OR OBJECT_ID('BetSetting_Agent') IS NULL
 	RETURN;
 	
 	CREATE TABLE #tblCust (custid INT PRIMARY KEY, roleid TINYINT)
@@ -31,7 +33,7 @@ BEGIN
 	WHILE(1=1)
 	BEGIN
 		;WITH tmp AS (
-			SELECT TOP(500) custid
+			SELECT TOP(200) custid
 			FROM #tblCust
 			WHERE roleid > 1
 			ORDER BY roleid DESC
@@ -51,17 +53,21 @@ BEGIN
            ,[MaxPerMatch]
            ,[MaxPayoutPerMatch]
            ,[RepUpdateTime])
-		SELECT [CustID]
-           ,[SportType]
-           ,[BetType]
-           ,[MinBet]
-           ,[MaxBet]
-           ,[MaxPerMatch]
-           ,[MaxPayoutPerMatch]
+		SELECT cs.[CustID]
+           ,cs.[SportType]
+           ,cs.[BetType]
+           ,cs.[MinBet]
+           ,cs.[MaxBet]
+           ,cs.[MaxPerMatch]
+           ,cs.[MaxPayoutPerMatch]
 		   ,NULL
-		FROM CustBetSetting_Agent WITH(NOLOCK)
-		WHERE custid IN (SELECT custid FROM @tmpCust)
-			AND sporttype NOT IN (161,164)
+		FROM CustBetSetting_Agent cs WITH(NOLOCK)
+			LEFT JOIN BetSetting_Agent cs2 WITH(NOLOCK) ON cs.custid = cs2.custid
+															AND cs.sporttype = cs2.sporttype
+															AND cs.bettype = cs2.bettype
+		WHERE cs.custid IN (SELECT custid FROM @tmpCust)
+			AND cs.sporttype NOT IN (161,164)
+			AND cs2.custid IS NULL
 		
 		DELETE @tmpCust	
 	END
@@ -69,7 +75,7 @@ BEGIN
 	WHILE(1=1)
 	BEGIN
 		;WITH tmp AS (
-			SELECT TOP(500) custid
+			SELECT TOP(200) custid
 			FROM #tblCust
 			WHERE roleid = 1
 			ORDER BY roleid DESC
@@ -89,17 +95,21 @@ BEGIN
            ,[MaxPerMatch]
            ,[MaxPayoutPerMatch]
            ,[RepUpdateTime])
-		SELECT [CustID]
-           ,[SportType]
-           ,[BetType]
-           ,[MinBet]
-           ,[MaxBet]
-           ,[MaxPerMatch]
-           ,[MaxPayoutPerMatch]
+		SELECT cs.[CustID]
+           ,cs.[SportType]
+           ,cs.[BetType]
+           ,cs.[MinBet]
+           ,cs.[MaxBet]
+           ,cs.[MaxPerMatch]
+           ,cs.[MaxPayoutPerMatch]
 		   ,NULL
-		FROM CustBetSetting_Member WITH(NOLOCK)
-		WHERE custid IN (SELECT custid FROM @tmpCust)
-			AND sporttype NOT IN (161,164)
+		FROM CustBetSetting_Member cs WITH(NOLOCK)
+			LEFT JOIN BetSetting_Member cs2 WITH(NOLOCK) ON cs.custid = cs2.custid
+															AND cs.sporttype = cs2.sporttype
+															AND cs.bettype = cs2.bettype
+		WHERE cs.custid IN (SELECT custid FROM @tmpCust)
+			AND cs.sporttype NOT IN (161,164)
+			AND cs2.custid IS NULL
 			
 		DELETE @tmpCust	
 	END

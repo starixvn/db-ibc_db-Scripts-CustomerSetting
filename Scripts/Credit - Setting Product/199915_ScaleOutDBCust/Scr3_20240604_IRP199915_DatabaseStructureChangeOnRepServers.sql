@@ -5,7 +5,6 @@
 	DB: DBCUST/CUSTDB	
 */ 
 
-
 CREATE TABLE [dbo].[BetSetting_Agent](
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
@@ -85,8 +84,13 @@ GO
 --deploy history tables on DBTP ONLY
 USE bodb_CustHistory
 GO
+-----------------------------------------------------
+--BetSetting_Agent_History
+--DROP TABLE BetSetting_Agent_History
+--GO
 
 CREATE TABLE [dbo].[BetSetting_Agent_History](
+	[rID] [bigint] NOT NULL,	
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
@@ -95,22 +99,36 @@ CREATE TABLE [dbo].[BetSetting_Agent_History](
 	[MaxPerMatch] [money] NULL,
 	[MaxPerNumber] [money] NULL,
 	[MaxPayoutPerMatch] [money] NULL,
-	[UpdateTime] [datetime] NOT NULL
-) ON [CustSetting_table]
+	[UpdateTime] [datetime] NOT NULL,
+	[SiteDBGroupID] smallint NULL
+) ON [CustSetting_table] WITH (DATA_COMPRESSION = PAGE);
 
+GO
+CREATE CLUSTERED INDEX [IX_BetSetting_Agent_History] ON [dbo].[BetSetting_Agent_History]
+(
+	[UpdateTime] ASC,
+	[CustID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,DATA_COMPRESSION = PAGE) ON [CustSetting_table]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BetSetting_Agent_History_rID_SiteDBGroupID] ON [dbo].[BetSetting_Agent_History]
+(
+	[rID] ASC,
+	[SiteDBGroupID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,DATA_COMPRESSION = PAGE) ON [CustSetting_table]
 GO
 
 ALTER TABLE [dbo].[BetSetting_Agent_History] ADD  CONSTRAINT [DF_BetSetting_Agent_History_UpdateTime]  DEFAULT (getdate()) FOR [UpdateTime]
 GO
 
-CREATE CLUSTERED INDEX [IX_BetSetting_Agent_History] ON [dbo].[BetSetting_Agent_History]
-(
-	[UpdateTime] ASC,
-	[CustID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CustSetting_table]
-GO
+
+-----------------------------------------------------
+--BetSetting_Member_History
+--DROP TABLE BetSetting_Member_History
+--GO
 
 CREATE TABLE [dbo].[BetSetting_Member_History](
+	[rID] [bigint] NOT NULL,
 	[CustID] [int] NOT NULL,
 	[SportType] [smallint] NOT NULL,
 	[BetType] [smallint] NOT NULL,
@@ -119,8 +137,9 @@ CREATE TABLE [dbo].[BetSetting_Member_History](
 	[MaxPerMatch] [money] NULL,
 	[MaxPerNumber] [money] NULL,
 	[MaxPayoutPerMatch] [money] NULL,
-	[UpdateTime] [datetime] NOT NULL
-) ON [CustSetting_table]
+	[UpdateTime] [datetime] NOT NULL,
+	[SiteDBGroupID] smallint NULL
+) ON [CustSetting_table] WITH (DATA_COMPRESSION = PAGE);
 
 GO
 
@@ -131,5 +150,13 @@ CREATE CLUSTERED INDEX [IX_BetSetting_Member_History] ON [dbo].[BetSetting_Membe
 (
 	[UpdateTime] ASC,
 	[CustID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [CustSetting_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,DATA_COMPRESSION = PAGE) ON [CustSetting_table]
 GO
+
+CREATE NONCLUSTERED INDEX [IX_BetSetting_Member_History_rID_SiteDBGroupID] ON [dbo].[BetSetting_Member_History]
+(
+	[rID] ASC,
+	[SiteDBGroupID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON,DATA_COMPRESSION = PAGE) ON [CustSetting_table]
+GO
+
