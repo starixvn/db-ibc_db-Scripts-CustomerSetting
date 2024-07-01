@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[BetSetting_Agent_old](
 	[MaxBet] [money] NULL,
 	[MaxPerMatch] [money] NULL,	
 	[MaxPayoutPerMatch] [money] NULL,
+	[RepUpdateTime]	[datetime2](7) NULL,
  CONSTRAINT [PK_BetSetting_Agent_old] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
@@ -46,6 +47,7 @@ CREATE TABLE [dbo].[BetSetting_Member_old](
 	[MaxBet] [money] NULL,
 	[MaxPerMatch] [money] NULL,	
 	[MaxPayoutPerMatch] [money] NULL,
+	[RepUpdateTime]	[datetime2](7) NULL,
  CONSTRAINT [PK_BetSetting_Member_old] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC,
