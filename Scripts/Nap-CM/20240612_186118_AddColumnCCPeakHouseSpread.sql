@@ -24,9 +24,10 @@ CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 ) ON [DATA]
 GO
-
+--DROP TABLE CustomerClassPeakHourRanger
+--Go
 CREATE TABLE [dbo].[CustomerClassPeakHourRanger](
-	[RangeID] [int] NOT NULL,
+	[RangeID] [int] IDENTITY(1,1) NOT NULL,
 	[WeekDay] [tinyint] NOT NULL,
 	[StartRange] [Time](1) NOT NULL,
 	[EndRange] [Time](1) NOT NULL,
@@ -48,7 +49,8 @@ GO
 
 ALTER TABLE dbo.CustomerClassSpread_UAT ADD Type TINYINT NOT NULL CONSTRAINT [DF_CustomerClassSpread_UAT_Type] DEFAULT ((1))
 GO
-
+--DROP TABLE CustomerClassSpreadLeagueGroup_UAT
+--Go
 CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT](
 	[PolicyID] [int] NOT NULL,
 	[LeagueGroupID] [smallint] NOT NULL,
