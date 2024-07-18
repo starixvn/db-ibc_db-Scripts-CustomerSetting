@@ -126,14 +126,14 @@ BEGIN
 		@ErrCode		=	@ErrCode output,
 		@ErrMsg			=	@ErrMsg output
 
-		IF @ErrCode = 0 AND @SiteDBGroupID=1
-		BEGIN
-			EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdDummy3rd, @username = @UsernameDummy3rd
-		END
-		ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
-		BEGIN
-			EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdDummy3rd, @username = @UsernameDummy3rd
-		END
+		--IF @ErrCode = 0 AND @SiteDBGroupID=1
+		--BEGIN
+		--	EXEC _tmpDBSite1.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdDummy3rd, @username = @UsernameDummy3rd
+		--END
+		--ELSE IF @ErrCode = 0 AND @SiteDBGroupID=2
+		--BEGIN
+		--	EXEC _tmpDBSite2.bodb02.dbo.Task_Cust_CheckBalance_Exception_Ins @custid = @CustIdDummy3rd, @username = @UsernameDummy3rd
+		--END
 
 		IF @ErrCode<>0
 		BEGIN

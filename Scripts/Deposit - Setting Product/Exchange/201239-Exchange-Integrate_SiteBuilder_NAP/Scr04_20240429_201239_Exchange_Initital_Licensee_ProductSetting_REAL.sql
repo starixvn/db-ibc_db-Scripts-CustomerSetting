@@ -3,7 +3,7 @@
 	Created: Tacy@20240429 
 	Task: Licensee/NAP - Integrate Exchange [RedmineID: #201239]
 		- Initial product setting into [Dep_LicenseeProductSetting] - Real Licensees
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB 
 */
 USE CustDB
 GO

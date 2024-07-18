@@ -2,7 +2,7 @@
 /*
 	Created: 20240429@Tacy
 	Task: Exchange - Insert new actionID into table LogAction [redmine:#201239]
-	DB: DBLOG.bodb_CustomerLog
+	DB: DBLOG.bodb_CustomerLog 
 */
 USE bodb_CustomerLog
 GO

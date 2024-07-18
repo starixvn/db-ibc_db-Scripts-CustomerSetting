@@ -2,7 +2,7 @@
 /*
 	Created: Tacy@20240429 
 	Task: Exchange - Update SettingStatus PRO [RedmineID: #201239]
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB 
 */
 USE CustDB
 GO

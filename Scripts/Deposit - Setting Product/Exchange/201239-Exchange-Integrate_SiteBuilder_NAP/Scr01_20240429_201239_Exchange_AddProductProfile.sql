@@ -2,7 +2,7 @@
 /*
 	Created: Tacy@20240429 
 	Task: Licensee/NAP - Integrate Exchange [RedmineID: #201239]
-	DB: DBCUST/CustDB
+	DB: DBCUST/CustDB 
 */
 
 DECLARE @ProductID SMALLINT,
