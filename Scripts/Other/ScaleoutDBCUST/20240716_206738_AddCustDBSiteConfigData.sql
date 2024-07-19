@@ -1,25 +1,27 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-GlobCustDB"></info>*/
 /*
 	Created: Elodie
-	Date: 20220715
-	Task: Create table SiteDBConfig [RedmineID:#158293]
-	DB: DBCust/CustDB
+	Date: 20240717
+	Task: Create table CustDBSiteConfig [RedmineID:#206738]
+	DB: DBCUST/GlobCustDB
 */
-USE CustDB
+USE GlobCustDB
 GO
-DELETE FROM SiteDBConfig
+DELETE FROM CustDBSiteConfig
 
 GO
 --Local
 IF @@SERVERNAME = 'TESTDBCUST'
-	INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
-	SELECT 0, 'DBTXN', 'DBTRANS', '10.18.200.55'
+	INSERT INTO CustDBSiteConfig ([CustDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], [AWSProxyDomain], [AWSProxyPort])
+	SELECT 0, 'DBCUST', 'DBCUST', '10.18.200.54', NULL, NULL
 	UNION ALL 
-	SELECT 1, 'DBSite01', 'DBGRP01L', '10.18.200.58\testsitedb'
+	SELECT [SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], [AWSProxyDomain], [AWSProxyPort]
+	FROM CustDB.dbo.SiteDBConfig (NOLOCK)
+	WHERE SiteDBGroupID <> 0
 
 --SIT
 IF @@SERVERNAME = 'SITDBCUST'
-INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
+INSERT INTO CustDBSiteConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
 SELECT 0, 'DBTXN', 'SITDBTRANS', '172.16.40.17'
 UNION ALL 
 SELECT 1, 'DBSite01', 'SITDBGRP01L', '172.16.40.28'
@@ -28,7 +30,7 @@ SELECT 2, 'DBSite02', 'SITDBGRP02L', '172.16.40.48'
 
 --PRO
 IF @@SERVERNAME = 'DBCUST'
-INSERT INTO SiteDBConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
+INSERT INTO CustDBSiteConfig ([SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP])
 SELECT 0, 'DBTXN', 'DBTRANS', '10.40.40.17'
 UNION ALL 
 SELECT 1, 'DBSite01', 'DBGRP01L', '10.40.40.108'
