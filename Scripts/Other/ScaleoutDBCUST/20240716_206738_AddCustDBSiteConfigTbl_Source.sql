@@ -5,7 +5,7 @@
 	Task: Create table CustDBSiteConfig [RedmineID:#206738]
 	DB: DBCust/GlobCustDB
 */
-USE CustDB
+USE GlobCustDB
 GO
 
 CREATE TABLE CustDBSiteConfig (
