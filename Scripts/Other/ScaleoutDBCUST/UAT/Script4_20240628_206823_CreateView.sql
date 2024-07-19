@@ -37,7 +37,7 @@ SELECT CustID
 	,roleid
 	,SiteDBGroupID
 	,RepUpdateTime
-FROM CustDB.dbo.CustInfoMini WITH (NOLOCK) 
+FROM CustDB.dbo.CustInfoMini 
 
 GO
 
@@ -58,7 +58,7 @@ SELECT subaccid
 	,username2
 	,SiteDBGroupID
 	,RepUpdateTime
-FROM CustDB.dbo.CustSubMini WITH (NOLOCK) 
+FROM CustDB.dbo.CustSubMini 
 
 GO
 
@@ -75,7 +75,7 @@ CREATE VIEW [dbo].CustInfoMini_Del_Inhouse
 AS
 SELECT CustID
 	,RepUpdateTime
-FROM CustDB.dbo.CustInfoMini_Del_Inhouse WITH (NOLOCK) 
+FROM CustDB.dbo.CustInfoMini_Del_Inhouse 
 
 GO
 
@@ -93,7 +93,7 @@ CREATE VIEW [dbo].CustSubMini_Del_Inhouse
 AS
 SELECT subaccid
 	,RepUpdateTime
-FROM CustDB.dbo.CustSubMini_Del_Inhouse WITH (NOLOCK) 
+FROM CustDB.dbo.CustSubMini_Del_Inhouse 
 
 GO
 
