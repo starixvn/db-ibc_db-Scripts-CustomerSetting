@@ -146,11 +146,6 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	DECLARE @Reseek_CustID INT = 117865052 --If @custid < @Reseek_CustID --> UAT testing or Reactivate
-
-	IF (SELECT Max(custid) FROM deleted) < @Reseek_CustID
-		RETURN;
-
 	IF UPDATE (username) OR  UPDATE (username2) OR  UPDATE (srecommend) OR  UPDATE (mrecommend) OR  UPDATE (recommend) OR  UPDATE (roleid)
 	BEGIN
 		UPDATE c
@@ -166,6 +161,31 @@ BEGIN
 				OR ISNULL(t.mrecommend,0)  <> ISNULL(c.mrecommend,0)
 				OR ISNULL(t.recommend,0)  <> ISNULL(c.recommend,0)
 				OR ISNULL(t.roleid,0)  <> ISNULL(c.roleid,0)
+
+		
+		INSERT INTO CustInfoMini_tmp (
+			 CustID
+			,username
+			,username2
+			,recommend
+			,mrecommend
+			,srecommend
+			,roleid
+			,SiteDBGroupID
+			,RepUpdateTime
+		)
+		SELECT	t.CustID
+			,t.username
+			,t.username2
+			,t.recommend
+			,t.mrecommend
+			,t.srecommend
+			,t.roleid
+			,0
+			,SYSDATETIME() AS RepUpdateTime
+		FROM Inserted t 
+			LEFT JOIN dbo.CustinfoMini c  WITH(NOLOCK) ON t.custid = c.custid
+		WHERE c.CustID IS NULL
 	END
 END 
 GO
@@ -186,7 +206,7 @@ GO
 
 ----------------------------------------------------------------
 CREATE TRIGGER [dbo].CustSub_update ON [dbo].CustSub
-AFTER INSERT
+AFTER UPDATE
 AS
 /*
     Created by: 20240628@Eden
@@ -213,6 +233,24 @@ BEGIN
 		WHERE ISNULL(t.username,'')  <> ISNULL(c.username,'')
 				OR ISNULL(t.username2,'')  <> ISNULL(c.username2,'')
 				OR ISNULL(t.custid,0)  <> ISNULL(c.custid,0)
+				
+		INSERT INTO CustSubMini_tmp (
+			subaccid
+			,CustID
+			,username
+			,username2
+			,SiteDBGroupID
+			,RepUpdateTime
+		)
+		SELECT	 t.subaccid
+			,t.CustID
+			,t.username
+			,t.username2
+			,0
+			,SYSDATETIME() AS RepUpdateTime
+		FROM Inserted t 
+			LEFT JOIN dbo.CustSubMini c  WITH(NOLOCK) ON t.subaccid = c.subaccid
+		WHERE c.CustID IS NULL
 	END
 END 
 GO
@@ -294,6 +332,11 @@ BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
+
+	DECLARE @Reseek_SubaccID INT = 1981548 --If @SubaccID < @Reseek_CustID --> UAT testing or Reactivate
+
+	IF (SELECT Max(SubaccID) FROM Inserted) < @Reseek_SubaccID
+		RETURN;
 
 	DELETE c
 	OUTPUT deleted.subaccid, SYSDATETIME()  

@@ -120,7 +120,7 @@ GO
 CREATE CLUSTERED INDEX IX_CustSubMini_tmp ON CustSubMini_tmp(subaccid ASC)  ON [custinfo_table]
 CREATE CLUSTERED INDEX IX_CustInfoMini_tmp ON CustInfoMini_tmp(CustID ASC)  ON [custinfo_table]
 
-
+/*
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.CustInfoMini TO wsv_alp;
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.CustInfoMini TO wsv_nap;
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.CustInfoMini TO wsv_xnap;
@@ -141,9 +141,4 @@ GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.[CustSubMini_Del_Inhouse] TO wsv_nap;
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.[CustSubMini_Del_Inhouse] TO wsv_xnap;
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.[CustSubMini_Del_Inhouse] TO svc_tig;
 GO
---EXEC sp_changedbowner 'sa'
---ALTER DATABASE GlobCustDB SET TRUSTWORTHY ON
---GRANT SELECT,UPDATE,INSERT,DELETE ON CustInfoMini TO dbo;
---GRANT SELECT,UPDATE,INSERT,DELETE ON CustInfoMini TO dbo;
---GRANT SELECT,UPDATE,INSERT,DELETE ON CustInfoMini TO dbo;
---GRANT SELECT,UPDATE,INSERT,DELETE ON CustInfoMini TO dbo;
+*/
