@@ -296,6 +296,30 @@ BEGIN
 	FROM dbo.CustinfoMini c WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN deleted t ON t.custid = c.custid
 
+	INSERT INTO CustInfoMini_tmp (
+		 CustID
+		,username
+		,username2
+		,recommend
+		,mrecommend
+		,srecommend
+		,roleid
+		,SiteDBGroupID
+		,RepUpdateTime
+	)
+	SELECT	t.CustID
+		,t.username
+		,t.username2
+		,t.recommend
+		,t.mrecommend
+		,t.srecommend
+		,t.roleid
+		,0
+		,SYSDATETIME() AS RepUpdateTime
+	FROM deleted t 
+		LEFT JOIN dbo.CustinfoMini c  WITH(NOLOCK) ON t.custid = c.custid
+	WHERE c.CustID IS NULL
+
 END 
 GO
 
@@ -343,6 +367,24 @@ BEGIN
 	INTO dbo.CustSubMini_Del_Inhouse(subaccid,RepUpdateTime)
 	FROM dbo.CustSubMini c WITH(ROWLOCK,UPDLOCK)
 		INNER JOIN deleted t ON t.subaccid = c.subaccid
+
+	INSERT INTO CustSubMini_tmp (
+		subaccid
+		,CustID
+		,username
+		,username2
+		,SiteDBGroupID
+		,RepUpdateTime
+	)
+	SELECT	t.subaccid
+		,t.CustID
+		,t.username
+		,t.username2
+		,0
+		,SYSDATETIME() AS RepUpdateTime
+	FROM deleted t 
+		LEFT JOIN dbo.CustSubMini c  WITH(NOLOCK) ON t.subaccid = c.subaccid
+	WHERE c.CustID IS NULL
 END 
 GO
 /*
