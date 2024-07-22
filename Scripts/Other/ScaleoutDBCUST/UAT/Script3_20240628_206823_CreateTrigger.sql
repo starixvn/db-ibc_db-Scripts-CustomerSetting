@@ -290,12 +290,6 @@ BEGIN
 	IF (SELECT Max(custid) FROM deleted) < @Reseek_CustID
 		RETURN;
 
-	DELETE c
-	OUTPUT deleted.CustID, SYSDATETIME()  
-	INTO dbo.CustInfoMini_Del_Inhouse(CustID,RepUpdateTime)
-	FROM dbo.CustinfoMini c WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN deleted t ON t.custid = c.custid
-
 	INSERT INTO CustInfoMini_tmp (
 		 CustID
 		,username
@@ -319,6 +313,12 @@ BEGIN
 	FROM deleted t 
 		LEFT JOIN dbo.CustinfoMini c  WITH(NOLOCK) ON t.custid = c.custid
 	WHERE c.CustID IS NULL
+
+	DELETE c
+	OUTPUT deleted.CustID, SYSDATETIME()  
+	INTO dbo.CustInfoMini_Del_Inhouse(CustID,RepUpdateTime)
+	FROM dbo.CustinfoMini c WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN deleted t ON t.custid = c.custid
 
 END 
 GO
@@ -362,12 +362,6 @@ BEGIN
 	IF (SELECT Max(SubaccID) FROM Inserted) < @Reseek_SubaccID
 		RETURN;
 
-	DELETE c
-	OUTPUT deleted.subaccid, SYSDATETIME()  
-	INTO dbo.CustSubMini_Del_Inhouse(subaccid,RepUpdateTime)
-	FROM dbo.CustSubMini c WITH(ROWLOCK,UPDLOCK)
-		INNER JOIN deleted t ON t.subaccid = c.subaccid
-
 	INSERT INTO CustSubMini_tmp (
 		subaccid
 		,CustID
@@ -385,6 +379,12 @@ BEGIN
 	FROM deleted t 
 		LEFT JOIN dbo.CustSubMini c  WITH(NOLOCK) ON t.subaccid = c.subaccid
 	WHERE c.CustID IS NULL
+
+	DELETE c
+	OUTPUT deleted.subaccid, SYSDATETIME()  
+	INTO dbo.CustSubMini_Del_Inhouse(subaccid,RepUpdateTime)
+	FROM dbo.CustSubMini c WITH(ROWLOCK,UPDLOCK)
+		INNER JOIN deleted t ON t.subaccid = c.subaccid
 END 
 GO
 /*
