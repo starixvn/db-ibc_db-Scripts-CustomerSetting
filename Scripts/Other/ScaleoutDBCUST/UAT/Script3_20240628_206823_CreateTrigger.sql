@@ -38,7 +38,7 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	DECLARE @Reseek_CustID INT = 117865052 --If @custid < @Reseek_CustID --> UAT testing or Reactivate
+	DECLARE @Reseek_CustID INT = xxx --If @custid < @Reseek_CustID --> UAT testing or Reactivate
 
 	IF (SELECT Max(custid) FROM Inserted) < @Reseek_CustID
 		RETURN;
@@ -97,7 +97,7 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	DECLARE @Reseek_SubaccID INT = 1981548 --If @SubaccID < @Reseek_CustID --> UAT testing or Reactivate
+	DECLARE @Reseek_SubaccID INT = xxx --If @SubaccID < @Reseek_CustID --> UAT testing or Reactivate
 
 	IF (SELECT Max(SubaccID) FROM Inserted) < @Reseek_SubaccID
 		RETURN;
@@ -285,7 +285,7 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	DECLARE @Reseek_CustID INT = 117865052 --If @custid < @Reseek_CustID --> UAT testing or Reactivate
+	DECLARE @Reseek_CustID INT = xxx --If @custid < @Reseek_CustID --> UAT testing or Reactivate
 
 	IF (SELECT Max(custid) FROM deleted) < @Reseek_CustID
 		RETURN;
@@ -357,7 +357,7 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	DECLARE @Reseek_SubaccID INT = 1981548 --If @SubaccID < @Reseek_CustID --> UAT testing or Reactivate
+	DECLARE @Reseek_SubaccID INT = xxx --If @SubaccID < @Reseek_CustID --> UAT testing or Reactivate
 
 	IF (SELECT Max(SubaccID) FROM Inserted) < @Reseek_SubaccID
 		RETURN;
