@@ -152,6 +152,9 @@ BEGIN
 		SET c.username = t.username,
 			c.username2 = t.username2,
 			c.srecommend = t.srecommend,
+			c.mrecommend = t.mrecommend,
+			c.recommend = t.recommend,
+			c.roleid = t.roleid,
 			c.RepUpdateTime = SYSDATETIME()
 		FROM dbo.CustinfoMini c WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN Inserted t ON t.custid = c.custid
@@ -227,6 +230,7 @@ BEGIN
 		UPDATE c
 		SET c.username = t.username,
 			c.username2 = t.username2,
+			c.CustID = t.custid,
 			c.RepUpdateTime = SYSDATETIME()
 		FROM dbo.CustSubMini c WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN inserted t ON t.subaccid = c.subaccid
