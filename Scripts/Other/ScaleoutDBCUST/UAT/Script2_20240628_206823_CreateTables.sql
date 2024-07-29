@@ -97,6 +97,8 @@ CREATE TABLE [dbo].[CustInfoMini_tmp](
 	[SiteDBGroupID]	[smallint] NULL,
 	[RepUpdateTime] [datetime2] NULL,
 	[LogDate] [datetime2] NULL CONSTRAINT DF_CustInfoMini_tmp_LogDate DEFAULT SYSDATETIME(),
+	[Site] [VARCHAR](10) NULL,	
+	[Currency] [int] NULL,
 ) ON [custinfo_table]
 
 GO
