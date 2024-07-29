@@ -2,7 +2,7 @@
 /*
 	Created: Elodie
 	Date: 20240716
-	Task: Create table CustDBSiteConfig [RedmineID:#158293]
+	Task: Create table CustDBSiteConfig [RedmineID:#206738]
 	DB: DBAGE-bodb02,DBACC-bodb02,DBSIG-CustDB,DBTXN-CustDB
 */
 
