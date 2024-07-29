@@ -51,6 +51,8 @@ BEGIN
 		,mrecommend
 		,srecommend
 		,roleid
+		,Site
+		,Currency
     )
     SELECT CustID
 		,username
@@ -59,6 +61,8 @@ BEGIN
 		,mrecommend
 		,srecommend
 		,roleid
+		,site
+		,currency
     FROM Inserted t
 END 
 GO
@@ -146,7 +150,8 @@ BEGIN
     -- interfering with SELECT statements.
     SET NOCOUNT ON;
 
-	IF UPDATE (username) OR  UPDATE (username2) OR  UPDATE (srecommend) OR  UPDATE (mrecommend) OR  UPDATE (recommend) OR  UPDATE (roleid)
+	IF UPDATE (username) OR  UPDATE (username2) OR  UPDATE (srecommend) OR  UPDATE (mrecommend) 
+		OR  UPDATE (recommend) OR  UPDATE (roleid) OR  UPDATE (Site) OR  UPDATE (Currency)
 	BEGIN
 		UPDATE c
 		SET c.username = t.username,
@@ -155,7 +160,9 @@ BEGIN
 			c.mrecommend = t.mrecommend,
 			c.recommend = t.recommend,
 			c.roleid = t.roleid,
-			c.RepUpdateTime = SYSDATETIME()
+			c.RepUpdateTime = SYSDATETIME(),
+			c.Site = t.site,
+			c.Currency = t.currency
 		FROM dbo.CustinfoMini c WITH(ROWLOCK,UPDLOCK)
 			INNER JOIN Inserted t ON t.custid = c.custid
 		WHERE ISNULL(t.username,'')  <> ISNULL(c.username,'')
@@ -164,7 +171,8 @@ BEGIN
 				OR ISNULL(t.mrecommend,0)  <> ISNULL(c.mrecommend,0)
 				OR ISNULL(t.recommend,0)  <> ISNULL(c.recommend,0)
 				OR ISNULL(t.roleid,0)  <> ISNULL(c.roleid,0)
-
+				OR ISNULL(t.Site,'')  <> ISNULL(c.Site,'')
+				OR ISNULL(t.Currency,0)  <> ISNULL(c.Currency,0)
 		
 		INSERT INTO CustInfoMini_tmp (
 			 CustID
@@ -176,6 +184,8 @@ BEGIN
 			,roleid
 			,SiteDBGroupID
 			,RepUpdateTime
+			,site
+			,currency
 		)
 		SELECT	t.CustID
 			,t.username
@@ -186,6 +196,8 @@ BEGIN
 			,t.roleid
 			,0
 			,SYSDATETIME() AS RepUpdateTime
+			,t.site
+			,t.currency
 		FROM Inserted t 
 			LEFT JOIN dbo.CustinfoMini c  WITH(NOLOCK) ON t.custid = c.custid
 		WHERE c.CustID IS NULL
@@ -304,6 +316,8 @@ BEGIN
 		,roleid
 		,SiteDBGroupID
 		,RepUpdateTime
+		,site
+		,currency
 	)
 	SELECT	t.CustID
 		,t.username
@@ -314,6 +328,8 @@ BEGIN
 		,t.roleid
 		,0
 		,SYSDATETIME() AS RepUpdateTime
+		,t.site
+		,t.currency
 	FROM deleted t 
 		LEFT JOIN dbo.CustinfoMini c  WITH(NOLOCK) ON t.custid = c.custid
 	WHERE c.CustID IS NULL
