@@ -28,6 +28,7 @@ CREATE TABLE [dbo].[CustInfoMini](
 	[RepUpdateTime] [datetime2] NULL CONSTRAINT DF_CustInfoMini_RepUpdateTime DEFAULT SYSDATETIME(),
 	[Site] [VARCHAR](10) NULL,	
 	[Currency] [int] NULL,	
+	[isDeleted] [bit],
  CONSTRAINT [PK_CustInfoMini] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC
@@ -49,6 +50,7 @@ CREATE TABLE [dbo].[CustSubMini](
 	[username2] [varchar](50) NULL,
 	[SiteDBGroupID]	[smallint] NULL CONSTRAINT DF_CustSubMini_SiteDBGroupID DEFAULT 0,
 	[RepUpdateTime] [datetime2] NULL CONSTRAINT DF_CustSubMini_RepUpdateTime DEFAULT SYSDATETIME(),
+	[isDeleted] [bit],
  CONSTRAINT [PK_CustSubMini] PRIMARY KEY CLUSTERED 
 (
 	[subaccid] ASC
