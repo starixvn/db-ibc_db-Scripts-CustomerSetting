@@ -28,10 +28,10 @@ CREATE TABLE [dbo].[CustInfoMini](
 	[mrecommend] [int] NULL,
 	[srecommend] [int] NULL,
 	[roleid] [tinyint] NULL,
-	[SiteID] [int] NULL,	
-	[Currency] [int] NULL,	
 	[SiteDBGroupID]	[smallint] NULL CONSTRAINT DF_CustInfoMini_SiteDBGroupID DEFAULT 0,
 	[RepUpdateTime] [datetime2] NULL CONSTRAINT DF_CustInfoMini_RepUpdateTime DEFAULT SYSDATETIME(),
+	[Site] [VARCHAR](10) NULL,	
+	[Currency] [int] NULL,	
  CONSTRAINT [PK_CustInfoMini] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC
@@ -66,21 +66,21 @@ CREATE NONCLUSTERED INDEX IX_CustInfoMini_Recommend ON CustInfoMini(Recommend AS
 CREATE NONCLUSTERED INDEX IX_CustSubMini_Username2 ON CustSubMini(Username2 ASC) ON [custinfo_table]
 
 ----------Deleted Table - CustDB Only----------
---CREATE TABLE [dbo].CustInfoMini_Del_Inhouse(
---	[CustID] [int] NOT NULL,
---	[RepUpdateTime] [datetime2] NULL,
---)  ON [custinfo_table]
+CREATE TABLE [dbo].CustInfoMini_Del_Inhouse(
+	[CustID] [int] NOT NULL,
+	[RepUpdateTime] [datetime2] NULL,
+)  ON [custinfo_table]
 
---CREATE TABLE [dbo].CustSubMini_Del_Inhouse(
---	[subaccid] [int] NOT NULL,
---	[RepUpdateTime] [datetime2] NULL,
---)  ON [custinfo_table]
+CREATE TABLE [dbo].CustSubMini_Del_Inhouse(
+	[subaccid] [int] NOT NULL,
+	[RepUpdateTime] [datetime2] NULL,
+)  ON [custinfo_table]
 
 --Create indexes:
 CREATE NONCLUSTERED INDEX IX_CustInfoMini_RepUpdateTime ON CustInfoMini(RepUpdateTime ASC) ON [custinfo_table]
 CREATE NONCLUSTERED INDEX IX_CustSubMini_RepUpdateTime ON CustSubMini(RepUpdateTime ASC)  ON [custinfo_table]
---CREATE CLUSTERED INDEX IX_CustInfoMini_Del_Inhouse ON CustInfoMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
---CREATE CLUSTERED INDEX IX_CustSubMini_Del_Inhouse ON CustSubMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
+CREATE CLUSTERED INDEX IX_CustInfoMini_Del_Inhouse ON CustInfoMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
+CREATE CLUSTERED INDEX IX_CustSubMini_Del_Inhouse ON CustSubMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
 GO
 
 SET QUOTED_IDENTIFIER ON

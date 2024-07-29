@@ -24,10 +24,10 @@ CREATE TABLE [dbo].[CustInfoMini](
 	[mrecommend] [int] NULL,
 	[srecommend] [int] NULL,
 	[roleid] [tinyint] NULL,
-	[SiteID] [int] NULL,	
-	[Currency] [int] NULL,	
 	[SiteDBGroupID]	[smallint] NULL CONSTRAINT DF_CustInfoMini_SiteDBGroupID DEFAULT 0,
 	[RepUpdateTime] [datetime2] NULL CONSTRAINT DF_CustInfoMini_RepUpdateTime DEFAULT SYSDATETIME(),
+	[Site] [VARCHAR](10) NULL,	
+	[Currency] [int] NULL,	
  CONSTRAINT [PK_CustInfoMini] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC
