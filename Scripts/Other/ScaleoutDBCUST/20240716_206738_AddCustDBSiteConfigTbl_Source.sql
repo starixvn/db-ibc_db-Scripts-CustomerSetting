@@ -26,3 +26,6 @@ CREATE NONCLUSTERED INDEX [IX_CustDBSiteConfig_RepUpdateTime] ON [dbo].[CustDBSi
 (
 	[RepUpdateTime] ASC
 )
+
+GO
+ALTER TABLE CustDBSiteConfig ADD FQDN VARCHAR(50) NULL;
