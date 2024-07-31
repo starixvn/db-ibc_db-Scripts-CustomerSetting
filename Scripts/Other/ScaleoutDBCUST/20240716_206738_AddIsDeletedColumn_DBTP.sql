@@ -46,8 +46,6 @@ ALTER TABLE Age_CustSeq ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Age_ProfilePicture ADD IsDeleted BIT NULL
 GO
-ALTER TABLE AgentCommRate ADD IsDeleted BIT NULL
-GO
 ALTER TABLE APIInfo ADD IsDeleted BIT NULL
 GO
 ALTER TABLE BetLimitControlCustSetting ADD  IsDeleted BIT NULL
@@ -109,14 +107,6 @@ ALTER TABLE CustNoComm ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Customer ADD  IsDeleted BIT NULL
 GO
-ALTER TABLE CustomerClassNonSports ADD IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassNonSports_UAT ADD IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassNonSportsDetail ADD IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassNonSportsDetail_UAT ADD IsDeleted BIT NULL
-GO
 ALTER TABLE CustomerClassPolicy ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustomerClassPolicyManagement ADD  IsDeleted BIT NULL
@@ -138,14 +128,6 @@ GO
 ALTER TABLE CustomerClassSpreadDetail ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE CustomerClassSpreadDetail_UAT ADD IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassUtilityOffer ADD  IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassUtilityOffer_UAT ADD IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassUtilityOfferDetail ADD  IsDeleted BIT NULL
-GO
-ALTER TABLE CustomerClassUtilityOfferDetail_UAT ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustOTP ADD IsDeleted BIT NULL
 GO
@@ -189,8 +171,6 @@ ALTER TABLE CustWinLossLimit_Agent ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustWinLossLimit_Member ADD  IsDeleted BIT NULL
 GO
-ALTER TABLE Dep_ChargeInfoSetting ADD IsDeleted BIT NULL
-GO
 ALTER TABLE Dep_CustBAActive ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_CustBetLimit_Special ADD IsDeleted BIT NULL
@@ -204,8 +184,6 @@ GO
 ALTER TABLE Dep_CustBetSettingGame_Member ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_CustBetSettingGameGroup_Member ADD  IsDeleted BIT NULL
-GO
-ALTER TABLE Dep_CustBonusSharing ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_CustCategoryHistory ADD IsDeleted BIT NULL
 GO
@@ -255,8 +233,6 @@ ALTER TABLE Dep_ProductSetting ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_ProductSettingDetail ADD  IsDeleted BIT NULL
 GO
-ALTER TABLE Dep_ProductStakeLevelGroup ADD  IsDeleted BIT NULL
-GO
 ALTER TABLE Dep_ProductStatusProfile ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_StakeLevel ADD IsDeleted BIT NULL
@@ -267,21 +243,11 @@ ALTER TABLE Dep_SuperSetting_AGCasino ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Dep_SupperProductSetting ADD  IsDeleted BIT NULL
 GO
-ALTER TABLE DomainManagement ADD IsDeleted BIT NULL
-GO
-ALTER TABLE Dot_MemberAllowList ADD IsDeleted BIT NULL
-GO
-ALTER TABLE Dot_MemberAllowList ADD IsDeleted BIT NULL
-GO
 ALTER TABLE Dot_StreamingVIP ADD IsDeleted BIT NULL
 GO
 ALTER TABLE EASCustOTP ADD IsDeleted BIT NULL
 GO
 ALTER TABLE EmailNotification ADD IsDeleted BIT NULL
-GO
-ALTER TABLE exchange ADD  IsDeleted BIT NULL
-GO
-ALTER TABLE Exchange ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE ExchangeDaily_Crypto ADD IsDeleted BIT NULL
 GO
@@ -345,8 +311,6 @@ ALTER TABLE ProductSettingUpdateRestriction ADD IsDeleted BIT NULL
 GO
 ALTER TABLE ProductSiteConfig ADD IsDeleted BIT NULL
 GO
-ALTER TABLE ProductStakeLevelGroup ADD IsDeleted BIT NULL
-GO
 ALTER TABLE ProductStatusProfile ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE ProductStatusSiteCurrency ADD IsDeleted BIT NULL
@@ -355,15 +319,9 @@ ALTER TABLE ProfileVirtualSetting ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE RobotList ADD  IsDeleted BIT NULL
 GO
-ALTER TABLE Site ADD  IsDeleted BIT NULL
-GO
-ALTER TABLE Site ADD  IsDeleted BIT NULL
-GO
 ALTER TABLE SiteDBConfig ADD  IsDeleted BIT NULL
 GO
 ALTER TABLE smartPunterList ADD IsDeleted BIT NULL
-GO
-ALTER TABLE SportBettypeSettingMatrix ADD IsDeleted BIT NULL
 GO
 ALTER TABLE SportNonOfferedSiteCurrency ADD IsDeleted BIT NULL
 GO
@@ -426,12 +384,6 @@ GO
 ALTER TABLE Winlimit_ProductSetting ADD IsDeleted BIT NULL
 GO
 ALTER TABLE WinLimit_ProductSettingDetail ADD IsDeleted BIT NULL
-GO
-ALTER TABLE WLMonitored_Global ADD IsDeleted BIT NULL
-GO
-ALTER TABLE WLMonitored_Player ADD IsDeleted BIT NULL
-GO
-ALTER TABLE WLMonitored_SMA ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustDBSiteConfig ADD IsDeleted BIT NULL
 GO
