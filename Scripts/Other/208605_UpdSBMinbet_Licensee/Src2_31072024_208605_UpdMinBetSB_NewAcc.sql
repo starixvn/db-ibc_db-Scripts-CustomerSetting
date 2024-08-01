@@ -18,7 +18,7 @@ BEGIN
 		)
 		RETURN
 		
-	DECLARE @BatchNum INT = 350 
+	DECLARE @BatchNum INT = 300 
 
 	CREATE TABLE #SportBettypeFilter (ProductID TINYINT, Sporttype SMALLINT, Bettype SMALLINT)
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY, site VARCHAR(20))
@@ -89,7 +89,7 @@ BEGIN
 	WHILE (1=1)
 	BEGIN
 		TRUNCATE TABLE #MemberTemp
-		UPDATE TOP (350)  t SET t.InsSetting = 1 
+		UPDATE TOP (@BatchNum)  t SET t.InsSetting = 1 
 		OUTPUT DELETED.CustID INTO #MemberTemp(CustID) FROM #Member t WHERE t.InsSetting = 0
 
 		IF @@ROWCOUNT=0

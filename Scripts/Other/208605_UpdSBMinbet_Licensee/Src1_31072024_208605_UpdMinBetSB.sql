@@ -80,7 +80,7 @@ PRINT N'--------------------------------------------------------'
 DECLARE @target VARCHAR(20)
 		,@max_custid INT
 		,@CustList   XML
-		,@BatchSize	INT = 350
+		,@BatchSize	INT = 300
 		,@srecommend INT
 
 SELECT @max_custid = xxx
