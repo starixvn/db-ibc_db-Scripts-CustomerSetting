@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20240731@Winfred
-	Task: [All licensees] - Change Sportsbook minbet to 30 new customer[Redmine: #208605]
+	Task: [All licensees] - Change Sportsbook minbet to 30 new customer[Redmine: #208605] 
 	DB: DBCust/CustDB
 */
 
@@ -21,7 +21,6 @@ BEGIN
 	DECLARE @BatchNum INT = 350 
 
 	CREATE TABLE #SportBettypeFilter (ProductID TINYINT, Sporttype SMALLINT, Bettype SMALLINT)
-
 	CREATE TABLE #Supers(CustID INT PRIMARY KEY, site VARCHAR(20))
 
 	CREATE TABLE #Member

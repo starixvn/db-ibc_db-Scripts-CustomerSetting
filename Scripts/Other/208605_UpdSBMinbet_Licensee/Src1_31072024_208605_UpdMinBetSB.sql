@@ -2,7 +2,7 @@
 /*
 	Created: 20240731@Winfred
 	Task: [All licensees] - Change Sportsbook minbet to 30 [Redmine: #208605]
-	DB: DBCust/CustDB and all replicated servers
+	DB: DBCust/CustDB and all replicated servers 
 */
 ALTER PROCEDURE [dbo].[Acc_Dep_DynamicCustSetting_09]
  	 @target VARCHAR(20),
