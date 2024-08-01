@@ -62,7 +62,7 @@ BEGIN
 	SELECT c.custid
 	FROM dbo.CustInfo c WITH(NOLOCK)
 		INNER JOIN #Supers s ON s.CustID=c.srecommend
-		CROSS APPLY(SELECT top 1 minbet FROM Dep_CustBetSettingGame_Member b WITH(NOLOCK) WHERE CustID = c.CustID ) d
+		CROSS APPLY(SELECT TOP 1 IsGroupedBetLimit  FROM Dep_CustSettingMode b WITH(NOLOCK) WHERE CustID = c.CustID AND IsGroupedBetLimit = 0 ) d
 	WHERE mrecommend NOT IN (SELECT custid FROM #Dummy)
 		AND c.custid > @maxcustID
 		AND c.roleid = 1
