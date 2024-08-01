@@ -387,3 +387,13 @@ ALTER TABLE WinLimit_ProductSettingDetail ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustDBSiteConfig ADD IsDeleted BIT NULL
 GO
+ALTER TABLE VRSettingRule ADD IsDeleted BIT NULL
+GO
+ALTER TABLE VRSettingRuleDetail ADD IsDeleted BIT NULL
+GO
+ALTER TABLE VRSettingRuleDetail_NotApply ADD IsDeleted BIT NULL
+GO
+ALTER TABLE WLMonitored_PersonalPreset ADD IsDeleted BIT NULL
+GO
+ALTER TABLE Dep_WLMonitored_Player ADD IsDeleted BIT NULL
+GO
