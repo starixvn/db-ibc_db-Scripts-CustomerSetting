@@ -91,7 +91,7 @@ ELSE
 	SET @target = 'REPLICATED'
 
 Print 'Server Name : ' + @target
-CREATE TABLE #Supers(CustID INT PRIMARY KEY, site VARCHAR(20))
+CREATE TABLE #Supers(CustID INT PRIMARY KEY, site VARCHAR(20),isfinished BIT DEFAULT 0)
 CREATE TABLE #Dummy	(CustID INT PRIMARY KEY)
 CREATE TABLE #SMAs (CustID INT PRIMARY KEY, RoleID TINYINT)
 CREATE TABLE #Members (CustID INT PRIMARY KEY)
@@ -130,16 +130,26 @@ WHERE mrecommend NOT IN (SELECT custid FROM #Dummy)
 	AND c.roleid IN (2,3,4)
 	AND c.Enabled=1
 
---Members
-INSERT INTO #Members (CustID)
-SELECT c.custid
-FROM dbo.CustInfo c WITH(NOLOCK)
-	INNER JOIN #Supers s ON s.CustID=c.srecommend
-	CROSS APPLY(SELECT TOP 1 IsGroupedBetLimit  FROM Dep_CustSettingMode b WITH(NOLOCK) WHERE CustID = c.CustID AND IsGroupedBetLimit = 0 ) d
-WHERE mrecommend NOT IN (SELECT custid FROM #Dummy)
-	AND c.custid <= @max_custid
-	AND c.roleid = 1
-	AND c.Enabled=1
+WHILE (1 = 1)
+BEGIN
+	UPDATE TOP (1) #supers
+	SET isfinished = 1
+		,@srecommend = custid			
+	WHERE isfinished = 0
+
+	IF @@ROWCOUNT = 0 BREAK
+	
+	--Members
+	INSERT INTO #Members (CustID)
+	SELECT c.custid
+	FROM dbo.CustInfo c WITH(NOLOCK)
+		CROSS APPLY(SELECT TOP 1 IsGroupedBetLimit  FROM Dep_CustSettingMode b WITH(NOLOCK) WHERE CustID = c.CustID AND IsGroupedBetLimit = 0 ) d
+	WHERE c.srecommend = @srecommend
+		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
+		AND c.custid <= @max_custid
+		AND c.roleid = 1
+		AND c.Enabled=1
+END		
 
 ---------------------------------------------------------------------------------------------
 -- Update defaule bet limit 
