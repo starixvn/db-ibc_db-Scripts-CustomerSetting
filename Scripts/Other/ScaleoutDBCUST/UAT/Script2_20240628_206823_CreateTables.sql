@@ -35,8 +35,8 @@ CREATE TABLE [dbo].[CustInfoMini](
  CONSTRAINT [PK_CustInfoMini] PRIMARY KEY CLUSTERED 
 (
 	[CustID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [custinfo_table]
-) ON [custinfo_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [table_customer]
+) ON [table_customer]
 
 GO
 
@@ -56,31 +56,31 @@ CREATE TABLE [dbo].[CustSubMini](
  CONSTRAINT [PK_CustSubMini] PRIMARY KEY CLUSTERED 
 (
 	[subaccid] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [custinfo_table]
-) ON [custinfo_table]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [table_customer]
+) ON [table_customer]
 
 GO
 
-CREATE NONCLUSTERED INDEX IX_CustInfoMini_Username2 ON CustInfoMini(Username2 ASC) ON [custinfo_table]
-CREATE NONCLUSTERED INDEX IX_CustInfoMini_Recommend ON CustInfoMini(Recommend ASC) INCLUDE (Username) ON [custinfo_table]
-CREATE NONCLUSTERED INDEX IX_CustSubMini_Username2 ON CustSubMini(Username2 ASC) ON [custinfo_table]
+CREATE NONCLUSTERED INDEX IX_CustInfoMini_Username2 ON CustInfoMini(Username2 ASC) ON [table_customer]
+CREATE NONCLUSTERED INDEX IX_CustInfoMini_Recommend ON CustInfoMini(Recommend ASC) INCLUDE (Username) ON [table_customer]
+CREATE NONCLUSTERED INDEX IX_CustSubMini_Username2 ON CustSubMini(Username2 ASC) ON [table_customer]
 
 ----------Deleted Table - CustDB Only----------
 CREATE TABLE [dbo].CustInfoMini_Del_Inhouse(
 	[CustID] [int] NOT NULL,
 	[RepUpdateTime] [datetime2] NULL,
-)  ON [custinfo_table]
+)  ON [table_customer]
 
 CREATE TABLE [dbo].CustSubMini_Del_Inhouse(
 	[subaccid] [int] NOT NULL,
 	[RepUpdateTime] [datetime2] NULL,
-)  ON [custinfo_table]
+)  ON [table_customer]
 
 --Create indexes:
-CREATE NONCLUSTERED INDEX IX_CustInfoMini_RepUpdateTime ON CustInfoMini(RepUpdateTime ASC) ON [custinfo_table]
-CREATE NONCLUSTERED INDEX IX_CustSubMini_RepUpdateTime ON CustSubMini(RepUpdateTime ASC)  ON [custinfo_table]
-CREATE CLUSTERED INDEX IX_CustInfoMini_Del_Inhouse ON CustInfoMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
-CREATE CLUSTERED INDEX IX_CustSubMini_Del_Inhouse ON CustSubMini_Del_Inhouse(RepUpdateTime ASC)  ON [custinfo_table]
+CREATE NONCLUSTERED INDEX IX_CustInfoMini_RepUpdateTime ON CustInfoMini(RepUpdateTime ASC) ON [table_customer]
+CREATE NONCLUSTERED INDEX IX_CustSubMini_RepUpdateTime ON CustSubMini(RepUpdateTime ASC)  ON [table_customer]
+CREATE CLUSTERED INDEX IX_CustInfoMini_Del_Inhouse ON CustInfoMini_Del_Inhouse(RepUpdateTime ASC)  ON [table_customer]
+CREATE CLUSTERED INDEX IX_CustSubMini_Del_Inhouse ON CustSubMini_Del_Inhouse(RepUpdateTime ASC)  ON [table_customer]
 GO
 
 SET QUOTED_IDENTIFIER ON
@@ -99,7 +99,7 @@ CREATE TABLE [dbo].[CustInfoMini_tmp](
 	[LogDate] [datetime2] NULL CONSTRAINT DF_CustInfoMini_tmp_LogDate DEFAULT SYSDATETIME(),
 	[Site] [VARCHAR](10) NULL,	
 	[Currency] [int] NULL,
-) ON [custinfo_table]
+) ON [table_customer]
 
 GO
 
@@ -117,12 +117,12 @@ CREATE TABLE [dbo].[CustSubMini_tmp](
 	[SiteDBGroupID]	[smallint] NULL,
 	[RepUpdateTime] [datetime2] NULL,
 	[LogDate] [datetime2] NULL CONSTRAINT DF_CustSubMini_tmp_LogDate DEFAULT SYSDATETIME(),
-) ON [custinfo_table]
+) ON [table_customer]
 
 GO
 
-CREATE CLUSTERED INDEX IX_CustSubMini_tmp ON CustSubMini_tmp(subaccid ASC)  ON [custinfo_table]
-CREATE CLUSTERED INDEX IX_CustInfoMini_tmp ON CustInfoMini_tmp(CustID ASC)  ON [custinfo_table]
+CREATE CLUSTERED INDEX IX_CustSubMini_tmp ON CustSubMini_tmp(subaccid ASC)  ON [table_customer]
+CREATE CLUSTERED INDEX IX_CustInfoMini_tmp ON CustInfoMini_tmp(CustID ASC)  ON [table_customer]
 
 /*
 GRANT UPDATE,INSERT,DELETE,ALTER ON dbo.CustInfoMini TO wsv_alp;
