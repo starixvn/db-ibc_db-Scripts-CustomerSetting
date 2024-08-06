@@ -3,6 +3,9 @@
 	Created: 20240129@Helios
 	Task: Inital Data Setting SportBettypeSettingMatrix [#198960] 
 	DB: DBCust/CustDB
+
+	Revisions:
+		- 20240806@Tacy: Run SIT [#207510]
 */
 
 SET ANSI_NULLS ON

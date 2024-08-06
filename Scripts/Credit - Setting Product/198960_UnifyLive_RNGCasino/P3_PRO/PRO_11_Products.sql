@@ -3,6 +3,9 @@
 	Created: 20240408@Helios
 	Task: Update Products.CasinoType [#198960] 
 	DB: DBPRO-bodb02
+
+	Revisions:
+		- 20240807@Tacy: Run SIT [#207510]
 */
 
 SET ANSI_NULLS ON
