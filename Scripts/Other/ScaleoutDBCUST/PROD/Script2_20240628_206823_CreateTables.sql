@@ -10,7 +10,7 @@ DROP TABLE [CustSubMini]
 DROP TABLE [CustInfoMini_Del_Inhouse]
 DROP TABLE [CustSubMini_Del_Inhouse]
 */
-USE CustDB
+USE GlobCustDB
 GO
 SET ANSI_NULLS ON
 GO
