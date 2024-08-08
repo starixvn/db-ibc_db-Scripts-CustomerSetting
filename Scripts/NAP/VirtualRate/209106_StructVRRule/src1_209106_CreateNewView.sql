@@ -6,7 +6,7 @@
 	DB: DBACC/bodb02
 */
 
-CREATE VIEW [dbo].vw_VRSettingRulee
+CREATE VIEW [dbo].vw_VRSettingRule
 /*
 	Created: 20210428@Eden
 	Task : VR Engine
