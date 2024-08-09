@@ -22,7 +22,6 @@ BEGIN
 	
 	CREATE TABLE #tbCustomer( CustID	INT, RoleID TINYINT , PRIMARY KEY CLUSTERED (CustID))
 	CREATE TABLE #SportBettypeFilter (ProductID TINYINT, Sporttype SMALLINT, Bettype SMALLINT)
-	CREATE TABLE #History_BetLimitTbl (CustID INT, SportType SMALLINT, BetType SMALLINT, MaxBet	MONEY , MaxPerMatch MONEY, UpdateTime DATETIME)
 
 	INSERT INTO #SportBettypeFilter (ProductID,SportType,Bettype)
 	SELECT 1 AS ProductID, SportType, Bettype 
@@ -37,8 +36,6 @@ BEGIN
 	SET d.MaxBet = CASE WHEN MaxBet < 30 THEN 30 ELSE MaxBet END,
 		d.MaxPerMatch = CASE WHEN MaxPerMatch < 30 THEN 30 ELSE MaxPerMatch END,
 		d.MaxPayoutPerMatch = CASE WHEN MaxPayoutPerMatch < 30 THEN 30 ELSE MaxPayoutPerMatch END
-	OUTPUT deleted.CustID, deleted.SportType, deleted.BetType, deleted.MaxBet, deleted.MaxPerMatch, GETDATE()
-	INTO #History_BetLimitTbl(CustID, SportType, BetType, MaxBet, MaxPerMatch, UpdateTime)
 	FROM #tbCustomer tmp
 	CROSS APPLY #SportBettypeFilter s
 	CROSS APPLY(SELECT top 15 minbet, MaxBet, MaxPerMatch, MaxPayoutPerMatch
@@ -47,16 +44,8 @@ BEGIN
 					AND BetType = s.Bettype AND MinBet = 30 AND
 					(MaxBet < 30 OR MaxPerMatch < 30 OR MaxPayoutPerMatch < 30) ) d
 	
-	IF @@SERVERNAME IN ('DBCUST','SITDBCUST','TESTDBCUST','DBSPARE') 
-	BEGIN
-		INSERT INTO Dep_CustMaxBetSetting_History (CustID, SportType, BetType, OldMaxBet, OldMaxPerMatch, OldStakeLevelList, UpdateTime)
-		SELECT CustID, SportType, BetType, MaxBet, MaxPerMatch, NULL, UpdateTime
-		FROM #History_BetLimitTbl
-	END
-
 	DROP TABLE #tbCustomer
 	DROP TABLE #SportBettypeFilter
-	DROP TABLE #History_BetLimitTbl
 END
 GO
 
