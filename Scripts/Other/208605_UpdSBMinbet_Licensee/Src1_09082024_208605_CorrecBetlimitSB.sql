@@ -123,11 +123,8 @@ BEGIN
 END		
 
 ---------------------------------------------------------------------------------------------
-
 DECLARE @Cust_cnt INT
 
-SELECT @Cust_cnt = COUNT(1)
-FROM #SMAs
 
 SELECT @Cust_cnt += COUNT(1)
 FROM #Members
