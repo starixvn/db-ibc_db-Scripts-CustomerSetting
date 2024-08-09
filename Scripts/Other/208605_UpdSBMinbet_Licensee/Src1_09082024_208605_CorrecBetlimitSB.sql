@@ -114,12 +114,12 @@ BEGIN
 	INSERT INTO #Members (CustID)
 	SELECT c.custid
 	FROM dbo.CustInfo c WITH(NOLOCK)
-		CROSS APPLY(SELECT TOP 1 Maxbet FROM Dep_CustBetSettingGame_Member b WITH(NOLOCK) WHERE CustID = c.CustID AND  MinBet = 30 and MaxBet < MinBet ) d
 	WHERE c.srecommend = @srecommend
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 		AND c.custid <= @max_custid
 		AND c.roleid = 1
 		AND c.Enabled=1
+		AND EXISTS (SELECT TOP 1 1 FROM Dep_CustBetSettingGame_Member b WITH(NOLOCK) WHERE CustID = c.CustID AND  MinBet = 30 and MaxBet < MinBet ) 
 END		
 
 ---------------------------------------------------------------------------------------------
