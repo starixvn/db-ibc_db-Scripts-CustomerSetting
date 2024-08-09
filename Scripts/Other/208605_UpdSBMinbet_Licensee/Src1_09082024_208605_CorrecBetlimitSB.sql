@@ -112,14 +112,17 @@ BEGIN
 	
 	--Members
 	INSERT INTO #Members (CustID)
-	SELECT c.custid
+	SELECT DISTINCT c.custid
 	FROM dbo.CustInfo c WITH(NOLOCK)
+      inner join Dep_CustBetSettingGame_Member b WITH(NOLOCK) ON b.CustID = c.CustID 
 	WHERE c.srecommend = @srecommend
 		AND mrecommend NOT IN (SELECT custid FROM #Dummy)
 		AND c.custid <= @max_custid
 		AND c.roleid = 1
 		AND c.Enabled=1
-		AND EXISTS (SELECT TOP 1 1 FROM Dep_CustBetSettingGame_Member b WITH(NOLOCK) WHERE CustID = c.CustID AND  MinBet = 30 and MaxBet < MinBet ) 
+		AND  MinBet = 30 
+		and MaxBet < MinBet
+		--AND EXISTS (SELECT TOP 1 1 FROM Dep_CustBetSettingGame_Member b WITH(NOLOCK) WHERE CustID = c.CustID AND  MinBet = 30 and MaxBet < MinBet ) 
 END		
 
 ---------------------------------------------------------------------------------------------
