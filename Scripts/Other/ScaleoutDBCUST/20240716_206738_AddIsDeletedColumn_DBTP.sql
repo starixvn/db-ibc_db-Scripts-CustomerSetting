@@ -16,13 +16,13 @@ ALTER TABLE Acc_CustGroup ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Acc_CustType ADD IsDeleted BIT NULL
 GO
-ALTER TABLE Acc_DWLList ADD IsDeleted BIT NULL
+--ALTER TABLE Acc_DWLList ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Acc_DWLList_ExtraPT ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Acc_DWLList_ExtraPT_xtest ADD IsDeleted BIT NULL
 GO
-ALTER TABLE Acc_DWLList_xtest ADD IsDeleted BIT NULL
+--ALTER TABLE Acc_DWLList_xtest ADD IsDeleted BIT NULL
 GO
 ALTER TABLE Acc_FinancePermission ADD IsDeleted BIT NULL
 GO
@@ -157,7 +157,7 @@ ALTER TABLE CustStakeLevel_Agent ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustStakeLevel_Member ADD IsDeleted BIT NULL
 GO
-ALTER TABLE custSub ADD IsDeleted BIT NULL
+--ALTER TABLE custSub ADD IsDeleted BIT NULL
 GO
 ALTER TABLE CustSuper ADD IsDeleted BIT NULL
 GO
