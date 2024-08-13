@@ -1,9 +1,9 @@
-/*<info serverAlias="DBAGE-bodb02,DBACC-bodb02,DBSIG-CustDB,DBTXN-CustDB"></info>*/
+/*<info serverAlias="DBAGE-bodb02,DBACC-bodb02,DBSIG-CustDB,DBTXN-CustDB, DBTP-bodb02"></info>*/
 /*
 	Created: Elodie
 	Date: 20240716
 	Task: Create table CustDBSiteConfig [RedmineID:#206738]
-	DB: DBAGE-bodb02,DBACC-bodb02,DBSIG-CustDB,DBTXN-CustDB
+	DB: DBAGE-bodb02,DBACC-bodb02,DBSIG-CustDB,DBTXN-CustDB, DBTP-bodb02
 */
 
 CREATE TABLE CustDBSiteConfig (
