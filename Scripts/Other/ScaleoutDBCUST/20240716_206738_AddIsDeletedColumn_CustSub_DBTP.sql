@@ -5,7 +5,7 @@
 	Task: Add IsDeleted column on DBTP [RedmineID:#206738]
 	DB: DBTP/bodb02
 */
-USE CustDB
+USE bodb02
 GO
 
 ALTER TABLE custSub ADD IsDeleted BIT NULL
