@@ -11,7 +11,11 @@ GO
 
 CREATE VIEW [dbo].[SiteDBConfig]
 AS
-SELECT [SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], [AWSProxyDomain], [AWSProxyPort], [GroupType], [RepUpdateTime], [FQDN]
+SELECT [SiteDBGroupID], [LinkedServerName], [ClientAccessName], [AGIP], [AWSProxyDomain], [AWSProxyPort], [RepUpdateTime], [FQDN]
 FROM CUSTDB.dbo.SiteDBConfig
 GO
 
+CREATE VIEW [dbo].[Exchange]
+AS
+SELECT [currency], [stakerate], [actualrate], [commaxpayout], [creator], [minbet], [minbetlive], [AUDRate], [ZARRate], [GBPRate], [EURORate], [US$Rate], [Code], [Description], [MultipliedBy], [ExVirtualRate], [IsActive], [OfferSite], [ExchangeId], [RepUpdateTime], [CurrencyType], [CreditGroupID], [LicenseeGroupID]
+FROM CUSTDB.dbo.Exchange
