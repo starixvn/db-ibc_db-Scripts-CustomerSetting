@@ -3,6 +3,9 @@
 	Created by: Tacy@20240617
 	Task: Clean bet limit  [Redmine:#206515] 
 	DB:	DBCUST-CustDB
+
+	Revision:
+		- 20240621@Tacy: Run on SIT
 */
 USE CustDB
 GO
