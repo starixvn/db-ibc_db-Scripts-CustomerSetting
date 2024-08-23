@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-bodb_CustomerLog"></info>*/
+/*<info serverAlias="DBGlob-GlobCustDB"></info>*/
 /*
 	Created: Eden@20240805
 	Task: SIGNATURE CERTIFICATE for testing [Redmine: #206823]   
-	DB: DBCUST-bodb_CustomerLog
+	DB: DBGlob-GlobCustDB
 */
 USE GlobCustDB
 GO
