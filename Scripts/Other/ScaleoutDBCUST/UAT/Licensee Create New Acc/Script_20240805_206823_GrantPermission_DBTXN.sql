@@ -8,6 +8,5 @@ USE CustDB
 GO
 GRANT SELECT ON exchange TO asv_cust
 GO
-
-
-
+GRANT SELECT ON customer TO asv_cust
+GO
