@@ -12,6 +12,8 @@ GO
 ---------------------CustDB--------------------------
 USE CustDB
 GO
+GRANT VIEW DEFINITION TO asv_cust AS [dbo]
+GO
 GRANT SELECT,INSERT ON site TO asv_cust
 GO
 GRANT SELECT ON siteDBConfig TO asv_cust
