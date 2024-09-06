@@ -79,7 +79,7 @@ WHERE ag.roleid = 2
 	AND agci.custid NOT IN (
 		SELECT DISTINCT recommend
 		FROM customer c WITH (NOLOCK)
-		WHERE --roleid = 1 AND
+		WHERE roleid in (1,2)  AND
 			creatdate >= DATEADD(mm, -3, GETDATE())
 		)
 

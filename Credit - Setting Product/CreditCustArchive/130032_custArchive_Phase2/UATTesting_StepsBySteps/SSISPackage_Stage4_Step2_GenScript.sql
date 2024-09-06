@@ -93,7 +93,7 @@ WHERE ag.isFinished = 1
 	AND agci.custid NOT IN (
 		SELECT DISTINCT recommend
 		FROM customer c WITH (NOLOCK)
-		WHERE --roleid = 1 AND
+		WHERE roleid IN (1,2) AND
 			creatdate >= @DDiff
 		)
 	AND ag.IsFinished = 1 AND (ISNULL(ag.ErrMsg,'') = '' OR ag.ErrMsg LIKE '%archived%')
