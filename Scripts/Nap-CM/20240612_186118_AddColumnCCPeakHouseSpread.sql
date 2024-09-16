@@ -14,6 +14,9 @@ GO
 ALTER TABLE dbo.CustomerClassSpread ADD Type TINYINT NOT NULL CONSTRAINT [DF_CustomerClassSpread_Type] DEFAULT ((1))
 GO
 
+UPDATE dbo.CustomerClassSpread SET Type = 1
+GO
+
 --DROP TABLE CustomerClassSpreadLeagueGroup
 --Go
 CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup](
