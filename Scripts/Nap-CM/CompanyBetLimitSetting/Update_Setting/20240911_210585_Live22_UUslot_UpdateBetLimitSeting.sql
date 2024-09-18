@@ -3,6 +3,9 @@
 	Created by: Tacy@20240911
 	Task: update bet limit setting for Live22 & UU slot  [Redmine:#210585] 
 	DB:	DBCUST-CustDB
+
+	Revision:
+		- 20240918@Tacy: run SIT
 */
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
@@ -18,11 +21,11 @@ GO
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 --Dep_ProductStakeLevelGroup
-INSERT INTO Dep_ProductStakeLevelGroup (Sporttype, GameGroupID, LicenseeGroupID, MinBet, MaxBet, SiteID)
-	  SELECT 227,	1,	20,	0.01,	100000,	0
-UNION SELECT 227,	1,	17,	0.01,	4000,	0
-UNION SELECT 227,	1,	24,	0.01,	1000,	0
-UNION SELECT 227,	1,	35,	0.01,	1000,	0
+INSERT INTO Dep_ProductStakeLevelGroup (Sporttype, GameGroupID, LicenseeGroupID, MinBet, MaxBet, SiteID, RepUpdateTime)
+	  SELECT 227,	1,	20,	0.01,	100000,	0, dbo.f_GetDateTime2()
+UNION SELECT 227,	1,	17,	0.01,	4000,	0, dbo.f_GetDateTime2()
+UNION SELECT 227,	1,	24,	0.01,	1000,	0, dbo.f_GetDateTime2()
+UNION SELECT 227,	1,	35,	0.01,	1000,	0, dbo.f_GetDateTime2()
 GO
 
 ----------------------------------------------------------------------------------------------------------------
