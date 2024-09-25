@@ -1,8 +1,8 @@
-/*<info serverAlias="DBTRANS-bodb02"></info>*/
+/*<info serverAlias="DBTXN-bodb02"></info>*/
 /*
 	Created: 2024/04/17 Helios
-	Task: Customer Setting - Unify Live Casino & RNG slot/RNG Casino [RM:#198960]
-	DB: DBTRANS/bodb02
+	Task: Customer Setting - Unify Live Casino & RNG slot/RNG Casino [RM:#198960]   
+	DB: DBTXN/bodb02
 */
 
 
@@ -15,4 +15,4 @@ UPDATE wp
 				END,
 		wp.IsActive_SMA = 1
 FROM WinLimit_ProductOffer wp WITH (ROWLOCK ,UPDLOCK)
-WHERE ProductID IN (6,38,42,66,50,70)
+WHERE ProductID IN (6,38,42,66,50,70) 
