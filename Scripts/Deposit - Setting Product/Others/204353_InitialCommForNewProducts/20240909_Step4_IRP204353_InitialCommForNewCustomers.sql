@@ -50,9 +50,10 @@
 		,PlayerDiscount
 		,AgentDiscount
 		,MasterDiscount
-		,SuperDiscount		
+		,SuperDiscount	
+		,RepUpdateTime
 		)
-	SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0
+	SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0, dbo.f_GetDateTime2()
 	FROM #tblCust t	
 		CROSS APPLY (
 					SELECT DISTINCT pd.SportType, pd.BetType
@@ -81,7 +82,8 @@
 		
 		-- UPDATE comm group for cust have not offered comm yet.
 		UPDATE cs
-			SET isGroupedComm = 1
+			SET isGroupedComm = 1,
+				RepUpdateTime = dbo.f_GetDateTime2()
 		FROM dbo.Dep_CustSettingMode cs WITH(UPDLOCK,ROWLOCK)
 			INNER JOIN @BatchCust cb ON cb.CustID = cs.CustID
 			OUTER APPLY (SELECT TOP 1 dcs_m.CustID FROM Dep_CustDiscountSetting_Member dcs_m WITH (NOLOCK) 
@@ -96,8 +98,9 @@
 							,PlayerDiscount
 							,AgentDiscount
 							,MasterDiscount
-							,SuperDiscount)  	
-		SELECT c.CustID, tmp.sporttype, tmp.bettype, 0,0,0,0
+							,SuperDiscount
+							,RepUpdateTime)  	
+		SELECT c.CustID, tmp.sporttype, tmp.bettype, 0,0,0,0,dbo.f_GetDateTime2()
 		FROM Dep_CustSettingMode c WITH (NOLOCK)
 			INNER JOIN @BatchCust cb ON c.CustID = cb.CustID
 			CROSS APPLY (SELECT DISTINCT pd.SportType, pd.BetType

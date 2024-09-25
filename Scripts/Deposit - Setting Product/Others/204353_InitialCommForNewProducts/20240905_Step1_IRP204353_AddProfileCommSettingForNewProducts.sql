@@ -12,14 +12,15 @@ INSERT INTO [dbo].[Dep_ProductSetting]
            ,[TemplateID]
            ,[DisplayOrder]
            ,[SettingLevel]
+		   ,RepUpdateTime 
            )
-SELECT 207, 72, 9, 0, 4, 1
-UNION SELECT 208, 78, 9, 0, 4, 1
-UNION SELECT 209, 79, 9, 0, 4, 1
-UNION SELECT 210, 80, 9, 0, 4, 1
-UNION SELECT 211, 85, 9, 0, 4, 1
-UNION SELECT 212, 87, 9, 0, 4, 1
-UNION SELECT 213, 89, 9, 0, 4, 1	   
+SELECT 207, 72, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 208, 78, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 209, 79, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 210, 80, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 211, 85, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 212, 87, 9, 0, 4, 1, SYSDATETIME()
+UNION SELECT 213, 89, 9, 0, 4, 1, SYSDATETIME()	   
 
 INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ([ProductSettingID]
@@ -30,19 +31,20 @@ INSERT INTO [dbo].[Dep_ProductSettingDetail]
            ,[SettingStatus]
            ,[MinDefaultValue]
            ,[IsApplyBA]
+		   ,RepUpdateTime
            )
-SELECT 207,	156, 8900, 0, 0, 0, NULL, 0	 
-UNION SELECT 208,	216,	10000, 0, 0, 0, NULL, 0
-UNION SELECT 209,	227,	7601, 0, 0, 0, NULL, 0
-UNION SELECT 210,	228,	10300, 0, 0, 0, NULL, 0
-UNION SELECT 211,	229,	10450, 0, 0, 0, NULL, 0
-UNION SELECT 212,	230,	11100, 0, 0, 0, NULL, 0
-UNION SELECT 213,	146,	11300, 0, 0, 0, NULL, 0
+SELECT 207,	156, 8900, 0, 0, 0, NULL, 0	, SYSDATETIME() 
+UNION SELECT 208,	216,	10000, 0, 0, 0, NULL, 0, SYSDATETIME()
+UNION SELECT 209,	227,	7601, 0, 0, 0, NULL, 0, SYSDATETIME()
+UNION SELECT 210,	228,	10300, 0, 0, 0, NULL, 0, SYSDATETIME()
+UNION SELECT 211,	229,	10450, 0, 0, 0, NULL, 0, SYSDATETIME()
+UNION SELECT 212,	230,	11100, 0, 0, 0, NULL, 0, SYSDATETIME()
+UNION SELECT 213,	146,	11300, 0, 0, 0, NULL, 0, SYSDATETIME()
 
 GO
 
-INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID)
-SELECT s.custid, t.ProductSettingID
+INSERT INTO dbo.Dep_LicenseeProductSetting(CustID,ProductSettingID,RepUpdateTime)
+SELECT s.custid, t.ProductSettingID, SYSDATETIME()
 FROM dbo.Dep_CustSuper s WITH(NOLOCK)
 	INNER JOIN bodb_licensee.dbo.Licensees l WITH (NOLOCK) ON l.LicenseeName = s.site
 	CROSS APPLY(SELECT 	207	ProductSettingID,	72 ProductID
