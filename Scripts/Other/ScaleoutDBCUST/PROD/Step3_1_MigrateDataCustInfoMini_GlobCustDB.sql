@@ -82,3 +82,9 @@ GO
 ALTER TABLE [dbo].[CustInfoMini] ADD  CONSTRAINT [DF_CustInfoMini_SiteDBGroupID]  DEFAULT ((0)) FOR [SiteDBGroupID]
 GO
 
+-- GRANT Perrmission account:
+GRANT SELECT ON CustInfoMini TO wsv_lap
+
+GRANT SELECT ON Exchange TO wsv_lap
+
+GRANT SELECT ON CustInfoMini TO asv_cust
