@@ -69,6 +69,10 @@ CREATE NONCLUSTERED INDEX [IX_CustSubMini_RepUpdateTime] ON [dbo].[CustSubMini]
 )WITH(MAXDOP=24) ON [custinfo_table]
 GO
 
+-- CHECK IDENT
+DBCC CHECKIDENT ('dbo.CustSubMini');
+GO
+
 --ADD CONSTRAINT
 ALTER TABLE [dbo].[CustSubMini] ADD  CONSTRAINT [DF_CustSubMini_RepUpdateTime]  DEFAULT (SYSDATETIME()) FOR [RepUpdateTime]
 GO

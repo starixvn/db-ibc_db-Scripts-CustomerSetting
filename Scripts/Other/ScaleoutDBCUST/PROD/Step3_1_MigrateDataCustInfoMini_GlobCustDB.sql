@@ -69,6 +69,18 @@ CREATE NONCLUSTERED INDEX [IX_CustInfoMini_RepUpdateTime] ON [dbo].[CustInfoMini
 	[RepUpdateTime] ASC
 )WITH (MAXDOP=24) ON [custinfo_table]
 GO
+CREATE NONCLUSTERED INDEX [IX_CustInfoMini_Srecommend] ON [dbo].[CustInfoMini]
+(
+	[srecommend] ASC
+)
+INCLUDE([username]) WITH (MAXDOP=24) ON [custinfo_table]
+GO
+CREATE NONCLUSTERED INDEX [IX_CustInfoMini_Mrecommend] ON [dbo].[CustInfoMini]
+(
+	[mrecommend] ASC
+)
+INCLUDE([username]) WITH (MAXDOP=24) ON [custinfo_table]
+GO
 CREATE NONCLUSTERED INDEX [IX_CustInfoMini_Recommend] ON [dbo].[CustInfoMini]
 (
 	[recommend] ASC
@@ -80,6 +92,10 @@ GO
 ALTER TABLE [dbo].[CustInfoMini] ADD  CONSTRAINT [DF_CustInfoMini_RepUpdateTime]  DEFAULT (SYSDATETIME()) FOR [RepUpdateTime]
 GO
 ALTER TABLE [dbo].[CustInfoMini] ADD  CONSTRAINT [DF_CustInfoMini_SiteDBGroupID]  DEFAULT ((0)) FOR [SiteDBGroupID]
+GO
+
+-- CHECK IDENT
+DBCC CHECKIDENT ('dbo.CustInfoMini');
 GO
 
 -- GRANT Perrmission account:
