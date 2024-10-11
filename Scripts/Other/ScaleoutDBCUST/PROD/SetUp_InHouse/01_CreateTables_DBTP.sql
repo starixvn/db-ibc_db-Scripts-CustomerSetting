@@ -1,7 +1,7 @@
 /*<info serverAlias="IRS_DBTP-bodb02"></info>*/
 /*
 	Created: Eden@20240628
-	Task: Create new tables to store all customers under system [Redmine: #206823]  
+	Task: Create new tables to store all customers under system [Redmine: #206823]   
 	DB: IRS_DBTP-bodb02
 */
 /*
@@ -45,8 +45,8 @@ GO
 
 CREATE TABLE [dbo].[CustSubMini](
 	[subaccid] [int] NOT NULL,
-	[CustID] [int] NOT NULL CONSTRAINT UQ_CustSubMini_username UNIQUE(username),
-	[username] [varchar](30) NOT NULL,
+	[CustID] [int] NOT NULL ,
+	[username] [varchar](30) NOT NULL CONSTRAINT UQ_CustSubMini_username UNIQUE(username),
 	[username2] [varchar](50) NULL,
 	[SiteDBGroupID]	[smallint] NULL CONSTRAINT DF_CustSubMini_SiteDBGroupID DEFAULT 0,
 	[RepUpdateTime] [datetime2] NULL CONSTRAINT DF_CustSubMini_RepUpdateTime DEFAULT SYSDATETIME(),

@@ -7,12 +7,15 @@
 
 USE bodb02
 GO
+
 DECLARE @group INT = xxx
 
+
+/***************************************************************************/
 IF NOT EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustInfoMini')
 BEGIN
 	INSERT INTO RepInfo ([group],[name],active,version_key,version_type,unique_key,get_sp,put_sp,interval,back_fix,delayed_fix,batch_size) 
-	SELECT @group,'CustInfoMini',0,'RepUpdateTime',0,'CustId','Repl_GetCustInfoMini','Repl_PutCustInfoMini',1000,10,60000,0
+	SELECT @group,'CustInfoMini',0,'RepUpdateTime',0,'CustID','Repl_GetCustInfoMini','Repl_PutCustInfoMini_Dist',1000,10,60000,0
 END
 ELSE
 BEGIN  
@@ -22,7 +25,7 @@ END
 IF NOT EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustSubMini')
 BEGIN
 	INSERT INTO RepInfo ([group],[name],active,version_key,version_type,unique_key,get_sp,put_sp,interval,back_fix,delayed_fix,batch_size) 
-	SELECT @group,'CustSubMini',0,'RepUpdateTime',0,'subaccid','Repl_GetCustSubMini','Repl_PutCustSubMini',1000,10,60000,0
+	SELECT @group,'CustSubMini',0,'RepUpdateTime',0,'subaccid','Repl_GetCustSubMini','Repl_PutCustSubMini_Dist',1000,10,60000,0
 END
 ELSE
 BEGIN  

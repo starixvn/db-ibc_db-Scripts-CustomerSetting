@@ -5,7 +5,10 @@
 	DB: IRS_DBTP-bodb02
 */
 
+USE bodb02
+GO
 
+/***************************************************************************/
 IF EXISTS (SELECT 1 FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustInfoMini')
 BEGIN
 	UPDATE r 
