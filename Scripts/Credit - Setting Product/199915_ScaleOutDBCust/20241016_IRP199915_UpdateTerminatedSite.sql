@@ -239,7 +239,6 @@
 'Soon88',
 'Soon88CV',
 'Spark',
-'spondemo',
 'SSSGaming',
 'SSSSEA',
 'Star99',
