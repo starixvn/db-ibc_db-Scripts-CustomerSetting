@@ -299,7 +299,7 @@
 'WGAMING',
 'win365',
 'Win68Club',
-'?in88',
+'Win88',
 'WINHX1',
 'Winn69',
 'Winner99',
