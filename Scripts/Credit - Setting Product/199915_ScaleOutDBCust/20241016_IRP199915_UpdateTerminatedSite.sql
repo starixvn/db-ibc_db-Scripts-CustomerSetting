@@ -1,4 +1,4 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*//*	Created: 20241016@Elodie	Task: Update terminated site	DB: DBCUST- CustDB*/USE CustDBUPDATE Site WITH (ROWLOCK, UPDLOCK)SET isActive = 0WHERE site IN ('0sServices',
+/*<info serverAlias="DBCUST-CustDB"></info>*//*	Created: 20241016@Elodie	Task: Update terminated site	DB: DBCUST- CustDB*/USE CustDBUPDATE Site WITH (ROWLOCK, UPDLOCK)SET isActive = 0, RepUpdateTime = dbo.f_GetDateTime2()WHERE site IN ('0sServices',
 '108bet',
 '10BET',
 '11bet',
