@@ -47,7 +47,7 @@ SET  username		= c.username
 	,RepUpdateTime	= [dbo].[f_GetDateTime2]()
 	,Site			= c.Site
 	,Currency		= c.Currency
-from CustInfoMini cm
+from CustInfoMini cm WITH(ROWLOCK)
 INNER JOIN Customer c WITH(NOLOCK) 
 	ON cm.CustID = c.custid
 WHERE cm.CustID IN(159916742,159916743,159916967)
