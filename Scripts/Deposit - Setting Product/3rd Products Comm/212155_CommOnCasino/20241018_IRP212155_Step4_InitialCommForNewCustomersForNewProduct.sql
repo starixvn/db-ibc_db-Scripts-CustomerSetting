@@ -54,7 +54,7 @@ INSERT INTO dbo.Dep_CustDiscountGroupSetting_Member
 	,SuperDiscount
 	,RepUpdateTime	
 	)
-SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0, NULL
+SELECT t.custid, sb.Sporttype, sb.Bettype, 0, 0, 0, 0, dbo.f_GetDateTime2()
 FROM #tblCust t	
 	CROSS APPLY (
 				SELECT @Sporttype Sporttype, @Bettype Bettype					
