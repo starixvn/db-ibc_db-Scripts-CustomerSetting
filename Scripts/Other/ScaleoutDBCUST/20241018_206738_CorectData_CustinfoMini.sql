@@ -51,3 +51,32 @@ from CustInfoMini cm WITH(ROWLOCK)
 INNER JOIN Customer c WITH(NOLOCK) 
 	ON cm.CustID = c.custid
 WHERE cm.CustID IN(159916742,159916743,159916967)
+
+--AdminCreateTest2
+INSERT INTO CustInfoMini (
+	 CustID
+	,username
+	,username2
+	,recommend
+	,mrecommend
+	,srecommend
+	,roleid
+	,SiteDBGroupID
+	,RepUpdateTime
+	,Site
+	,Currency
+)
+SELECT CustID
+	,username
+	,username2
+	,recommend
+	,mrecommend
+	,srecommend
+	,roleid
+	,SiteDBGroupID = 0
+	,RepUpdateTime = [dbo].[f_GetDateTime2]() 
+	,Site
+	,Currency
+FROM Customer c WITH(NOLOCK) 
+WHERE c.custid = 159916703
+	AND NOT EXISTS( SELECT custid FROM CustInfoMini WITH(NOLOCK) WHERE custid = c.custid)
