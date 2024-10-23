@@ -8,3 +8,7 @@
 UPDATE ProductSettingProfile WITH(ROWLOCK)
 SET SettingStatus = 2
 WHERE SportType = 175
+
+UPDATE ProductSettingProfile_UAT  WITH(ROWLOCK)
+SET SettingStatus = 2
+WHERE SportType = 175
