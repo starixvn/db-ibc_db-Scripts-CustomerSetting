@@ -11,7 +11,7 @@ DECLARE @custid INT = 0
 DELETE CustMaster WITH(ROWLOCK) WHERE custid = @custid
 	
 DELETE CustLoginInfo WITH(ROWLOCK) WHERE custid = @custid	
-DELETE dbo.CustLoginInfoSub WITH(ROWLOCK) WHERE custid = @custid	
+--DELETE dbo.CustLoginInfoSub WITH(ROWLOCK) WHERE custid = @custid	
 
 DELETE dbo.CustDirectAccount WITH(ROWLOCK) WHERE custid = @custid	
 DELETE dbo.Acc_CustAllowList WITH(ROWLOCK) WHERE custid = @custid	
