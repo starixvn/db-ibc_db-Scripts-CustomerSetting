@@ -22,7 +22,7 @@ DELETE dbo.CustGroupHeadline WITH(ROWLOCK) WHERE custid = @custid
 DELETE dbo.CustNoComm WITH(ROWLOCK) WHERE custid = @custid	
 DELETE dbo.CustOTP WITH(ROWLOCK) WHERE custid = @custid	
 DELETE dbo.CustOTPDetail WITH(ROWLOCK) WHERE custid = @custid	
-DELETE dbo.CustRequestGame WITH(ROWLOCK) WHERE custid = @custid	
+--DELETE dbo.CustRequestGame WITH(ROWLOCK) WHERE custid = @custid	
 	
 
 --DCS table
