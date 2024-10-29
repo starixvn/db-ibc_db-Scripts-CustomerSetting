@@ -46,6 +46,8 @@ GO
 ---
 -- BEGIN STEP 2: RUN THIS SCRIPT AT ALL REPLICATED SERVERS (DBTP) AND DBCUST (Run last)-----
 --------------------------------------------------------------------------------------
+SET NOCOUNT ON;
+
 DECLARE @target VARCHAR(20)
 		,@max_custid INT
 		,@CustList   XML
@@ -107,6 +109,15 @@ BEGIN
 		AND SportType = @SportType
 		AND Bettype = @Bettype
 END
+
+DECLARE @msg nvarchar(200) = 'Currently at No. of Customers: %d'
+DECLARE @msg_total nvarchar(200) = 'Total of members: %d.'
+DECLARE @cnt INT = 0,
+		@_cnt INT
+
+SELECT @_cnt = COUNT(1) FROM #Members
+
+RAISERROR (@msg_total, 0, 1, @_cnt) WITH NOWAIT
 	
 --For Member
 WHILE (1 = 1)
@@ -118,7 +129,14 @@ BEGIN
 		INTO #BatchCust(CustID)
 	FROM #Members t 
 
-	IF @@ROWCOUNT = 0 BREAK
+	SELECT @_cnt = @@ROWCOUNT
+	
+	IF @_cnt = 0 
+		BREAK;
+	
+	SELECT @cnt = @cnt + @_cnt
+	
+	RAISERROR (@msg, 0, 1,@cnt) WITH NOWAIT
 	
 	SELECT @CustList=(SELECT CustID	AS '@CustID' 							
 					FROM #BatchCust
