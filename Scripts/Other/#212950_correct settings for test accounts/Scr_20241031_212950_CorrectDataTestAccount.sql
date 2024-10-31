@@ -43,6 +43,13 @@ FROM Dep_CustBetSettingGame_Member cs WITH(ROWLOCK)
 	INNER JOIN #Temp_Cust c ON cs.CustID = c.custID
 	AND sporttype NOT IN (161,0)
 
+UPDATE cs
+SET cs.MaxPayoutPerMatch = cs.MaxPerMatch * 8,
+	cs.RepUpdateTime = dbo.f_GetDateTime2()
+FROM Dep_CustBetSettingGameGroup_Member cs WITH(ROWLOCK)
+	INNER JOIN #Temp_Cust c ON cs.AgentID = c.custID
+	AND sporttype NOT IN (161,0)
+
 --Update Sporttype for NumberGame
 UPDATE cs
 SET cs.SportType = 161,
@@ -58,6 +65,14 @@ SET cs.SportType = 161,
 	cs.RepUpdateTime = dbo.f_GetDateTime2()
 FROM Dep_CustBetSettingGame_Member cs WITH(ROWLOCK)
 	INNER JOIN #Temp_Cust c ON cs.CustID = c.custID
+	AND sporttype = 0
+
+UPDATE cs
+SET cs.SportType = 161,
+	cs.BetType = 81,
+	cs.RepUpdateTime = dbo.f_GetDateTime2()
+FROM Dep_CustBetSettingGameGroup_Member cs WITH(ROWLOCK)
+	INNER JOIN #Temp_Cust c ON cs.AgentID = c.custID
 	AND sporttype = 0
 
 DROP TABLE #Temp_Cust
