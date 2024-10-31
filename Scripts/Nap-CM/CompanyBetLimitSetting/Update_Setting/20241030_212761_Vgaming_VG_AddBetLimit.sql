@@ -3,6 +3,9 @@
 	Created by: Tacy@20241030
 	Task: initial data into Dep_ProductStakeLevelGroup for VGaming & Virtual Games  [Redmine:#212761] 
 	DB:	DBCUST-CustDB
+
+	Revision:
+		- 20241031@Tacy: Run SIT
 */
 /*
 	Vgaming: Need to add PGK and ETB
