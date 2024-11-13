@@ -3,7 +3,7 @@
 /*
 	Created: 20241113@Virgil
 	Task: Alpha - Initial data Offer Last Bets function for Super/Master [RedmineId : #213315]
-	DB: DBCRM/bodb_CRM
+	DB: DBBOT-bodb_ChatBot
 */
 
 USE [bodb_ChatBot]
@@ -14,7 +14,7 @@ CREATE TABLE #tmpUser(UserID INT)
 INSERT INTO #tmpUser(UserID)
 SELECT DISTINCT c.UserID
 FROM CustBotFunction c WITH (NOLOCK)	
-	INNER JOIN  CustBotAccount a with (NOLOCK) on c.UserID = a.UserId
+	INNER JOIN CustBotAccount a WITH (NOLOCK) ON c.UserID = a.UserId
 	LEFT JOIN bodb02.dbo.custSub s WITH (NOLOCK) ON a.SubAccId = s.subaccid
 WHERE c.UserID NOT IN (
 		SELECT UserID
