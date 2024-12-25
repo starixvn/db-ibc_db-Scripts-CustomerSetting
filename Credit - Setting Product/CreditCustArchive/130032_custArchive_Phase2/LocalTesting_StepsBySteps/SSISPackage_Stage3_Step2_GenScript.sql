@@ -53,6 +53,7 @@ SELECT custid
 FROM TransferExtra with (NOLOCK)
 WHERE recommend IN (xxx)
 	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+	AND bettype <> 30000
 UNION
 SELECT custid
 FROM SabaWalletTicket with (NOLOCK)

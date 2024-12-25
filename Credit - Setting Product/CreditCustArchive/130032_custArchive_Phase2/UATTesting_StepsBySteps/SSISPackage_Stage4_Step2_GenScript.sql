@@ -54,6 +54,7 @@ FROM bodb02.dbo.bettransLC with (NOLOCK) WHERE custid NOT IN(select custid from 
 UNION
 SELECT custid
 FROM bodb02.dbo.TransferExtra with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+	AND bettype <> 30000
 UNION
 SELECT custid
 FROM bodb02.dbo.SabaWalletTicket with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
