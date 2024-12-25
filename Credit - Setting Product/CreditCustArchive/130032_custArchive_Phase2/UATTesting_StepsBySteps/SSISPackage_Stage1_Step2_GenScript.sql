@@ -38,7 +38,12 @@ FROM bodb02.dbo.bettransRNG with (NOLOCK) WHERE custid NOT IN(select custid from
 UNION
 SELECT custid
 FROM bodb02.dbo.bettransLC with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
-
+UNION
+SELECT custid
+FROM bodb02.dbo.TransferExtra with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM bodb02.dbo.SabaWalletTicket with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 
 --update exception list
 EXEC CustDB.dbo.DBA_ArchiveAccount_UpdateException

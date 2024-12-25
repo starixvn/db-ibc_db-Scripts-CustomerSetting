@@ -48,7 +48,16 @@ WHERE bettype <> 20000
 --UNION
 --SELECT custid
 --FROM bettransLC with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
-
+UNION
+SELECT custid
+FROM TransferExtra with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+UNION
+SELECT custid
+FROM SabaWalletTicket with (NOLOCK)
+WHERE recommend IN (xxx)
+	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 
 --update exception list
 EXEC dbo.DBA_ArchiveAccount_UpdateException
