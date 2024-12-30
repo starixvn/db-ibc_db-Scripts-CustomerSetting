@@ -1,7 +1,7 @@
 /*<info serverAlias="IRS_DBTP-bodb02"></info>*/
 /*
-	Created: 20240415@Eden
-	Task: alter tables add isDeleted column: [#201733]
+	Created: 20241230@Eden
+	Task: alter tables add isDeleted column: [#216048]
 		WLMonitored_Global
 		WLMonitored_Player
 		WLMonitored_SMA
