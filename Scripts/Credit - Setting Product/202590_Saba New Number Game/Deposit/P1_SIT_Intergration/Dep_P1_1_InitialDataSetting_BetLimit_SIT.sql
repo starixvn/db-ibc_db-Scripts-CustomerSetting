@@ -4,6 +4,9 @@
 	Task: Incorporate Saba New Number Game - Init for UUS - Deposit [#202590] 
 		https://nexdev.net/issues/202590
 	DB: DBCust/CustDB
+
+	Revision:
+		- 20250114@Tacy: PROD - Enable Saba xD for Yes888 site [#216789]
 */
 	--Dep_ProductStakeLevelGroup
 	INSERT INTO Dep_ProductStakeLevelGroup 
@@ -13,6 +16,7 @@
 	    , MinBet
 	    , MaxBet
 	    , LicenseeGroupID
-	    , Remark
+		, SiteID
+		, RepUpdateTime
 	)
-	SELECT @Sporttype , 1 , 0.01 , 300000 , 6 , ''
+	SELECT 240 , 2 , 0.01 , 300000 , 6 , 0, dbo.f_GetDateTime2()
