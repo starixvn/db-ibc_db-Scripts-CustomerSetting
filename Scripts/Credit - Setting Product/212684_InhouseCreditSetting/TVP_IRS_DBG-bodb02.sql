@@ -128,9 +128,7 @@ CREATE TYPE [dbo].[TVP_ReplcustInfo] AS TABLE (
 	,[DoubleCommLosing] [BIT] NOT NULL
 	,[autosuspend2] [BIT] NULL
 	,[DisableEsports] [BIT] NULL
-	,[DisableSuperLive] [BIT] NULL
-	,[DisableColossusBet] [BIT] NULL
-	,[HideColossusBet] [BIT] NULL
+	,[DisableSuperLive] [BIT] NULL	
 	,[LockUpd] [BIT] NULL
 	,[BonusWalletFlag] [BIT] NULL
 	,[CreditUpdatedDate] [SMALLDATETIME] NULL
