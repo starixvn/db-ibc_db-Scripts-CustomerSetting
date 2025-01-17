@@ -37,7 +37,7 @@ CREATE TYPE [dbo].[TVP_ReplcustInfo] AS TABLE (
 	,[LockUpd] [BIT] NULL
 	,[BonusWalletFlag] [BIT] NULL
 	,[CreditUpdatedDate] [SMALLDATETIME] NULL
-	,[DangerLevel] [BIGINT] NULL
+	,[DangerLevel] [INT] NULL
 	,[CustomerClass] [SMALLINT] NULL
 	,[Danger4] [TINYINT] NULL
 	,[Danger5] [TINYINT] NULL

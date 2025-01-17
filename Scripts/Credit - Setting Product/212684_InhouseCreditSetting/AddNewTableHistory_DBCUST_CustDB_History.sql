@@ -6,6 +6,12 @@
 */
 USE CustDB_History
 GO
+--grant permission for Dot_Admin
+CREATE USER [Dot_Admin] FOR LOGIN [Dot_Admin] WITH DEFAULT_SCHEMA=[dbo]
+GO
+GRANT CONNECT,INSERT TO [Dot_Admin]
+GO
+
 ALTER DATABASE [CustDB_History] ADD FILEGROUP [DATA] 
 GO
 ALTER DATABASE [CustDB_History] ADD FILE 

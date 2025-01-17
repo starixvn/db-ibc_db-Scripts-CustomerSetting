@@ -11,24 +11,8 @@
 */
 CREATE TYPE [dbo].[TVP_Replcustinfo] AS TABLE (
 	[username] [NVARCHAR](50) NULL
-	,[custid] [INT] NOT NULL
-	,[currency] [INT] NULL
-	,[roleid] [TINYINT] NULL
-	,[srecommend] [INT] NULL
-	,[mrecommend] [INT] NULL
-	,[recommend] [INT] NULL
-	,[dangercust] [BIT] NULL
-	,[autosuspend] [BIT] NULL
-	,[reject] [BIT] NULL
-	,[credit] [MONEY] NULL
-	,[closed] [BIT] NULL
-	,[MatchLimit] [SMALLMONEY] NOT NULL
-	,[VirtualMultiplier] [SMALLMONEY] NOT NULL
-	,[Enabled] [BIT] NOT NULL
-	,[danger] [TINYINT] NOT NULL
-	,[danger2] [TINYINT] NOT NULL
-	,[danger3] [TINYINT] NOT NULL
-	,[DisableOutright] [BIT] NOT NULL
+	,[custid] [INT] NOT NULL	
+	,[roleid] [TINYINT] NULL	
 	,[Abnormal] [TINYINT] NOT NULL
 	,[DoubleCommLosing] [BIT] NOT NULL
 	,[autosuspend2] [BIT] NULL
@@ -37,7 +21,7 @@ CREATE TYPE [dbo].[TVP_Replcustinfo] AS TABLE (
 	,[LockUpd] [BIT] NULL
 	,[BonusWalletFlag] [BIT] NULL
 	,[CreditUpdatedDate] [SMALLDATETIME] NULL
-	,[DangerLevel] [BIGINT] NULL
+	,[DangerLevel] [INT] NULL
 	,[CustomerClass] [SMALLINT] NULL
 	,[Danger4] [TINYINT] NULL
 	,[Danger5] [TINYINT] NULL

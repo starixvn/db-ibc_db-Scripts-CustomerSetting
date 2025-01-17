@@ -11,8 +11,8 @@ GO
 DISABLE TRIGGER [dbo].[CustDiscount3rd_Member_update] ON [dbo].[CustDiscount3rd_Member]
 GO
 
-DISABLE TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
-GO
+--DISABLE TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
+--GO
 
 DISABLE TRIGGER [dbo].[CustMaxPayoutSetting_Agent_update] ON [dbo].[CustMaxPayoutSetting_Agent]
 GO
@@ -20,8 +20,8 @@ GO
 DISABLE TRIGGER [dbo].[CustMaxPayoutSetting_Member_update] ON [dbo].[CustMaxPayoutSetting_Member]
 GO
 
-DISABLE TRIGGER [dbo].[trg_Customer_update] ON [dbo].[Customer]
-GO
+--DISABLE TRIGGER [dbo].[trg_Customer_update] ON [dbo].[Customer]
+--GO
 
 DISABLE TRIGGER [dbo].[CustProductStatus_update] ON [dbo].[CustProductStatus]
 GO

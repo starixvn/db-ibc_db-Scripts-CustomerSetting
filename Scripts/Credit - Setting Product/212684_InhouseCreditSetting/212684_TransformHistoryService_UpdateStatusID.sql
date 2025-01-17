@@ -15,10 +15,10 @@ WHERE StatusID = 0
 	AND TableName IN  (
 		'CustDiscount3rd_Agent_History',
 		'CustDiscount3rd_Member_History',
-		'CustInfo_History',
+		--'CustInfo_History',
 		'CustMaxPayoutSetting_Agent_History',
 		'CustMaxPayoutSetting_Member_History',
-		'Customer_History',
+		--'Customer_History',
 		'CustProductStatus_History',
 		'CustPTGroupSetting3rd_Member_History',
 		'CustPTSetting3rd_Agent_History',

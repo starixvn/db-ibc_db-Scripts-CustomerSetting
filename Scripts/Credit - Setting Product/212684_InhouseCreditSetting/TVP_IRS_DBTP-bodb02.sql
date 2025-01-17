@@ -116,8 +116,7 @@ CREATE TYPE [dbo].[TVP_ReplCustSuper] AS TABLE (
 	,[AutoIBCPT152_AU] [SMALLMONEY] NOT NULL
 	,[AutoIBCPT153_AU] [SMALLMONEY] NOT NULL
 	,[NicknameLoginOnly] [BIT] NULL
-	,[creationRemark] [NVARCHAR](300) NULL
-	,[maxNewMemPerDay] [SMALLINT] NULL
+	,[creationRemark] [NVARCHAR](300) NULL	
 	,[IsMyanmarOdds] [BIT] NULL
 	,[IsAllDayBalTransfer] [BIT] NULL
 	,[MaxMember] [INT] NULL
@@ -380,7 +379,7 @@ CREATE TYPE [dbo].[TVP_ReplcustInfo] AS TABLE (
 	,[LockUpd] [BIT] NULL
 	,[BonusWalletFlag] [BIT] NULL
 	,[CreditUpdatedDate] [SMALLDATETIME] NULL
-	,[DangerLevel] [BIGINT] NULL
+	,[DangerLevel] [INT] NULL
 	,[CustomerClass] [SMALLINT] NULL
 	,[Danger4] [TINYINT] NULL
 	,[Danger5] [TINYINT] NULL

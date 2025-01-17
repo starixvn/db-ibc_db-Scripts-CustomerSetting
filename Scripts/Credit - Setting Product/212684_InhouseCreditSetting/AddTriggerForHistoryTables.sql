@@ -73,9 +73,9 @@ GO
 
 ----------------------------------------------------------------
 --custInfo
-CREATE TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
+/*CREATE TRIGGER [dbo].[CustInfo_update] ON [dbo].[custInfo]
 AFTER UPDATE
-AS
+AS*/
 /*
 	Created by: 2024114@Johnson
 	Task: Trigger for updating [custInfo] table
@@ -85,7 +85,7 @@ AS
         - 2024114@Johnson: Apply In-house Replication for Credit Customer Setting [redmine:#212684]
 
 */
-BEGIN 
+/*BEGIN 
 	SET NOCOUNT ON
 	
 	INSERT INTO CustDB_History.dbo.CustInfo_history (
@@ -164,7 +164,7 @@ BEGIN
         ,autosuspend3
     FROM [DELETED]
 END	
-GO
+GO*/
 ----------------------------------------------------------------
 --CustMaxPayoutSetting_Agent
 CREATE TRIGGER [dbo].[CustMaxPayoutSetting_Agent_update] ON [dbo].[CustMaxPayoutSetting_Agent] AFTER UPDATE
@@ -241,9 +241,9 @@ GO
 
 ----------------------------------------------------------------
 --Customer
-CREATE TRIGGER [dbo].[trg_Customer_update] ON [dbo].[Customer]
+/*CREATE TRIGGER [dbo].[trg_Customer_update] ON [dbo].[Customer]
 AFTER UPDATE
-AS
+AS*/
 /*  
 	Created by: 2024114@Johnson
 	Task: Trigger for updating [Customer] table
@@ -252,7 +252,7 @@ AS
 	Revisions: 
         - 2024114@Johnson: Apply In-house Replication for Credit Customer Setting [redmine:#212684]
 */
-BEGIN
+/*BEGIN
 	SET NOCOUNT ON
 	 
 
@@ -330,7 +330,7 @@ BEGIN
 		inner join inserted I on i.custid = d.custid
 	WHERE d.lastlogged = i.lastlogged  --- no need to record changes are made on lastlogged column
 END
-GO
+GO*/
 
 ----------------------------------------------------------------
 --CustProductStatus

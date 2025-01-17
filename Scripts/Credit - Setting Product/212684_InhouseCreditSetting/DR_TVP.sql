@@ -115,8 +115,7 @@ CREATE TYPE [dbo].[TVP_ReplCustSuper] AS TABLE (
 	,[AutoIBCPT152_AU] [SMALLMONEY] NOT NULL
 	,[AutoIBCPT153_AU] [SMALLMONEY] NOT NULL
 	,[NicknameLoginOnly] [BIT] NULL
-	,[creationRemark] [NVARCHAR](150) NULL
-	,[maxNewMemPerDay] [SMALLINT] NULL
+	,[creationRemark] [NVARCHAR](150) NULL	
 	,[IsMyanmarOdds] [BIT] NULL
 	,[IsAllDayBalTransfer] [BIT] NULL
 	,[MaxMember] [INT] NULL
@@ -372,13 +371,11 @@ CREATE TYPE [dbo].[TVP_ReplcustInfo] AS TABLE (
 	,[DoubleCommLosing] [BIT] NOT NULL
 	,[autosuspend2] [BIT] NULL
 	,[DisableEsports] [BIT] NULL
-	,[DisableSuperLive] [BIT] NULL
-	,[DisableColossusBet] [BIT] NULL
-	,[HideColossusBet] [BIT] NULL
+	,[DisableSuperLive] [BIT] NULL	
 	,[LockUpd] [BIT] NULL
 	,[BonusWalletFlag] [BIT] NULL
 	,[CreditUpdatedDate] [SMALLDATETIME] NULL
-	,[DangerLevel] [BIGINT] NULL
+	,[DangerLevel] [INT] NULL
 	,[CustomerClass] [SMALLINT] NULL
 	,[Danger4] [TINYINT] NULL
 	,[Danger5] [TINYINT] NULL
