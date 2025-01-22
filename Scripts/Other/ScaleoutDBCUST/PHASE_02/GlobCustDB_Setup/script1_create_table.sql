@@ -3,7 +3,7 @@
 	Created: DaveTruong
 	Date: 20250120
 	Task: Create table ScaleOut Custsetting on  GlobCustDB [RedmineID:#123456]
-	DB: DBCUST/CustDB
+	DB: DBGLOB/GlobCustDB
 */
 
 USE [GlobCustDB]
