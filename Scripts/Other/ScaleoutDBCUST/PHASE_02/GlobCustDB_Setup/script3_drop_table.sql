@@ -71,3 +71,5 @@ DROP TABLE IF EXISTS dbo.Winlimit_LevelSetting;
 DROP TABLE IF EXISTS dbo.Winlimit_ProductGlobalSetting;
 DROP TABLE IF EXISTS dbo.Winlimit_ProductSetting;
 DROP TABLE IF EXISTS dbo.WinLimit_ProductSettingDetail;
+DROP TABLE IF EXISTS dbo.BetLimitControlTypeDetails;
+DROP TABLE IF EXISTS dbo.ProfilePicture;

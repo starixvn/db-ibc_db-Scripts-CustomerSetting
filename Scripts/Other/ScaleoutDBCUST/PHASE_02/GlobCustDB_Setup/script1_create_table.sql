@@ -2,7 +2,7 @@
 /*
 	Created: DaveTruong
 	Date: 20250120
-	Task: Create table ScaleOut Custsetting on  GlobCustDB [RedmineID:#123456]
+	Task: Create table ScaleOut Custsetting on  GlobCustDB [RedmineID:#217137]
 	DB: DBGLOB/GlobCustDB
 */
 
@@ -1626,3 +1626,8 @@ ALTER TABLE [dbo].[WinLimit_ProductSettingDetail] ADD CONSTRAINT [DF_WinLimit_Pr
 GO
 ALTER TABLE [dbo].[WinLimit_ProductSettingDetail] ADD CONSTRAINT [DF_WinLimit_ProductSettingDetail_MaxWinLimit_RM] DEFAULT ((0)) FOR [MaxWinLimit_RM]; 
 GO
+
+
+CREATE TABLE [dbo].[BetLimitControlTypeDetails](	  [ID] INT NOT NULL IDENTITY(1,1)	, [BetLimitTypeID] INT NOT NULL	, [ProductID] TINYINT NOT NULL	, [Sporttype] SMALLINT NOT NULL	, [Bettype] SMALLINT NOT NULL	, [LeagueGroupID] INT NOT NULL	, [LeagueID] INT NOT NULL	, [RepUpdateTime] DATETIME2(7) NULL	, CONSTRAINT [PK_BetLimitControlTypeDetails] PRIMARY KEY ([ID] ASC))GOCREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_RepUpdateTime] ON [dbo].[BetLimitControlTypeDetails] ([RepUpdateTime] ASC);GOCREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_BetLimitTypeID] ON [dbo].[BetLimitControlTypeDetails] ([BetLimitTypeID] ASC);GO
+
+CREATE TABLE [dbo].[ProfilePicture](	  [ImageId] INT NOT NULL	, [Image] VARBINARY(MAX) NOT NULL	, [RepUpdateTime] DATETIME2(7) NULL	, [IsDeleted] BIT NULL	, CONSTRAINT [PK_ProfilePicture] PRIMARY KEY ([ImageId] ASC))GOCREATE NONCLUSTERED INDEX [IX_RepUpdateTime_ProfilePicture] ON [dbo].[ProfilePicture] ([RepUpdateTime] ASC);GOALTER TABLE [dbo].[ProfilePicture] ADD CONSTRAINT [DF_ProfilePicture_IsDeleted] DEFAULT ((0)) FOR [IsDeleted]; GO

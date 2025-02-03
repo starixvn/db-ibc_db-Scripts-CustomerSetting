@@ -1529,3 +1529,49 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.WinLimit_ProductSettingDetail WITH(NOLOCK);
 GO
+
+
+
+
+CREATE VIEW [dbo].[BetLimitControlTypeDetails]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBGLOB-GLOBCUSTDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   ID 
+		, BetLimitTypeID 
+		, ProductID 
+		, Sporttype 
+		, Bettype 
+		, LeagueGroupID 
+		, LeagueID 
+		, RepUpdateTime 
+	FROM GlobCustDB.dbo.BetLimitControlTypeDetails WITH(NOLOCK);
+GO
+
+
+CREATE VIEW [dbo].[ProfilePicture]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBGLOB-GLOBCUSTDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   ImageId 
+		, Image 
+		, RepUpdateTime 
+		, IsDeleted 
+	FROM GlobCustDB.dbo.ProfilePicture WITH(NOLOCK);
+GO

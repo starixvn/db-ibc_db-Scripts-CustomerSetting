@@ -266,5 +266,7 @@ FROM CustDB.[dbo].[WinLimit_ProductSettingDetail] WITH(NOLOCK);
 
 
 
+INSERT INTO GlobCustDB.[dbo].[BetLimitControlTypeDetails]( ID, BetLimitTypeID, ProductID, Sporttype, Bettype, LeagueGroupID, LeagueID, RepUpdateTime)SELECT  ID , BetLimitTypeID , ProductID , Sporttype , Bettype , LeagueGroupID , LeagueID , RepUpdateTime FROM CustDB.[dbo].[BetLimitControlTypeDetails] WITH(NOLOCK);
 
+INSERT INTO GlobCustDB.[dbo].[ProfilePicture]( ImageId, Image, RepUpdateTime, IsDeleted)SELECT  ImageId , Image , RepUpdateTime , IsDeleted FROM CustDB.[dbo].[ProfilePicture] WITH(NOLOCK);
 
