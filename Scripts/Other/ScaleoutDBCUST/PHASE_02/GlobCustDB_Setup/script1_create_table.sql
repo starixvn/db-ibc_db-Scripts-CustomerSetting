@@ -15,6 +15,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE TABLE [dbo].[Acc_SuperPrefix]
 (
 	  [GroupName] VARCHAR(50) NOT NULL
@@ -30,6 +31,25 @@ GO
 ALTER TABLE [dbo].[Acc_SuperPrefix] ADD CONSTRAINT [DF_Acc_SuperPrefix_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
 
+
+CREATE TABLE [dbo].[BetLimitControlTypeDetails]
+(
+	  [ID] INT NOT NULL IDENTITY(1,1)
+	, [BetLimitTypeID] INT NOT NULL
+	, [ProductID] TINYINT NOT NULL
+	, [Sporttype] SMALLINT NOT NULL
+	, [Bettype] SMALLINT NOT NULL
+	, [LeagueGroupID] INT NOT NULL
+	, [LeagueID] INT NOT NULL
+	, [RepUpdateTime] DATETIME2(7) NULL
+	, CONSTRAINT [PK_BetLimitControlTypeDetails] PRIMARY KEY ([ID] ASC)
+)
+GO
+CREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_RepUpdateTime] ON [dbo].[BetLimitControlTypeDetails] ([RepUpdateTime] ASC);
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_BetLimitTypeID] ON [dbo].[BetLimitControlTypeDetails] ([BetLimitTypeID] ASC);
+GO
 
 
 
@@ -54,8 +74,6 @@ ALTER TABLE [dbo].[CategoryConfig] ADD DEFAULT ((0)) FOR [HiddenSite];
 GO
 
 
-
-
 CREATE TABLE [dbo].[DangerLevelPolicy]
 (
 	  [SportType] TINYINT NOT NULL
@@ -68,8 +86,6 @@ CREATE TABLE [dbo].[DangerLevelPolicy]
 GO
 ALTER TABLE [dbo].[DangerLevelPolicy] ADD CONSTRAINT [DF_DangerLevelPolicy_LeagueGroupID] DEFAULT ((0)) FOR [LeagueGroupID]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_Initial_BetSetting]
@@ -86,8 +102,6 @@ CREATE TABLE [dbo].[Dep_Initial_BetSetting]
 	, CONSTRAINT [PK_Dep_Initial_Dep_Initial_BetSetting] PRIMARY KEY ([ConfigID] ASC, [Currency] ASC, [SportType] ASC, [BetType] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_Initial_ProductConfig]
@@ -110,8 +124,6 @@ CREATE TABLE [dbo].[Dep_Initial_ProductConfig]
 GO
 
 
-
-
 CREATE TABLE [dbo].[Dep_Initial_ProductConfig_Detail]
 (
 	  [ConfigID] INT NOT NULL
@@ -130,8 +142,6 @@ CREATE TABLE [dbo].[Dep_Initial_ProductConfig_Detail]
 GO
 
 
-
-
 CREATE TABLE [dbo].[Dep_Initial_StepByConfig]
 (
 	  [StepID] TINYINT NOT NULL
@@ -139,8 +149,6 @@ CREATE TABLE [dbo].[Dep_Initial_StepByConfig]
 	, [SortOrder] TINYINT NOT NULL IDENTITY(1,1)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_ProductBetSetting]
@@ -166,8 +174,6 @@ ALTER TABLE [dbo].[Dep_ProductBetSetting] ADD CONSTRAINT [DF_Dep_ProductBetSetti
 GO
 
 
-
-
 CREATE TABLE [dbo].[Dep_ProductSetting]
 (
 	  [ProductSettingID] INT NOT NULL
@@ -185,8 +191,6 @@ GO
 
 ALTER TABLE [dbo].[Dep_ProductSetting] ADD CONSTRAINT [DF_Dep_ProductSetting_TemplateID] DEFAULT ((0)) FOR [TemplateID]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_ProductSettingDetail]
@@ -212,8 +216,6 @@ ALTER TABLE [dbo].[Dep_ProductSettingDetail] ADD CONSTRAINT [DF_Dep_ProductSetti
 GO
 
 
-
-
 CREATE TABLE [dbo].[Dep_ProductSettingType]
 (
 	  [SettingType] TINYINT NOT NULL
@@ -222,8 +224,6 @@ CREATE TABLE [dbo].[Dep_ProductSettingType]
 	, CONSTRAINT [PK_Dep_ProductSettingType] PRIMARY KEY ([SettingType] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_ProductStakeLevelGroup]
@@ -251,8 +251,6 @@ ALTER TABLE [dbo].[Dep_ProductStakeLevelGroup] ADD CONSTRAINT [DF_Dep_ProductSta
 GO
 
 
-
-
 CREATE TABLE [dbo].[Dep_ProductStatusProfile]
 (
 	  [Sporttype] SMALLINT NOT NULL
@@ -264,8 +262,6 @@ CREATE TABLE [dbo].[Dep_ProductStatusProfile]
 GO
 CREATE NONCLUSTERED INDEX [IX_Dep_ProductStatusProfile_RepUpdateTime] ON [dbo].[Dep_ProductStatusProfile] ([RepUpdateTime] ASC);
 GO
-
-
 
 
 
@@ -292,6 +288,17 @@ ALTER TABLE [dbo].[Dep_StakeLevel] ADD CONSTRAINT [DF_Dep_StakeLevel_GameGroupID
 GO
 
 
+CREATE TABLE [dbo].[Dep_StakeLevel_History]
+(
+	  [StakeLevelID] INT NOT NULL
+	, [GameTypeID] SMALLINT NOT NULL
+	, [MaxLabel] NVARCHAR(50) NULL
+	, [MaxStake] DECIMAL(19,8) NULL
+	, [SiteID] INT NULL
+	, [UpdateTime] DATETIME NOT NULL
+	, CONSTRAINT [PK_Dep_StakeLevel_History] PRIMARY KEY ([StakeLevelID] ASC, [UpdateTime] ASC)
+)
+GO
 
 
 CREATE TABLE [dbo].[Dep_StakeLevelGroupDetail]
@@ -313,8 +320,6 @@ GO
 
 
 
-
-
 CREATE TABLE [dbo].[Dep_StakeLevelGroupDetail_History]
 (
 	  [StakeLevelID] INT NOT NULL
@@ -326,8 +331,6 @@ CREATE TABLE [dbo].[Dep_StakeLevelGroupDetail_History]
 	, CONSTRAINT [PK_Dep_StakeLevelGroupDetail_History] PRIMARY KEY ([StakeLevelID] ASC, [GameTypeID] ASC, [UpdateTime] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[Dep_UMConfig]
@@ -342,8 +345,6 @@ CREATE TABLE [dbo].[Dep_UMConfig]
 	, CONSTRAINT [PK_Dep_UMConfig] PRIMARY KEY ([FunctionType] ASC, [ProductID] ASC, [SettingType] ASC, [LicenseeID] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[DomainManagement]
@@ -374,57 +375,6 @@ ALTER TABLE [dbo].[DomainManagement] ADD CONSTRAINT [DF_DomainManagement_RepUpda
 GO
 
 
-
-
-CREATE TABLE [dbo].[EaGroupHeadline]
-(
-	  [GroupHeadlineId] INT NOT NULL
-	, [GroupId] INT NOT NULL
-	, [GroupName] VARCHAR(100) NOT NULL
-	, [SiteId] INT NOT NULL
-	, [ExchangeId] INT NOT NULL
-	, [GroupTypeId] TINYINT NULL
-	, [EffectiveDate] DATETIME NULL
-	, [EndDate] DATETIME NULL
-	, [RepUpdateTime] DATETIME2(7) NULL
-	, CONSTRAINT [PK_EaGroupHeadline] PRIMARY KEY ([GroupHeadlineId] ASC, [GroupId] ASC, [GroupName] ASC, [SiteId] ASC, [ExchangeId] ASC)
-)
-GO
-CREATE NONCLUSTERED INDEX [IX_EaGroupHeadline_RepUpdateTime] ON [dbo].[EaGroupHeadline] ([RepUpdateTime] ASC);
-GO
-
-ALTER TABLE [dbo].[EaGroupHeadline] ADD CONSTRAINT [DF_EaGroupHeadline_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
-GO
-
-
-
-
-CREATE TABLE [dbo].[GameGroup]
-(
-	  [GameGroupID] INT NOT NULL
-	, [RefSportType] SMALLINT NOT NULL
-	, [RefBetType] INT NOT NULL
-	, [GroupName] NVARCHAR(100) NULL
-	, [IsDeposit] BIT NULL
-	, [RepUpdateTime] DATETIME2(7) NULL
-	, CONSTRAINT [PK_GameGroup] PRIMARY KEY ([GameGroupID] ASC)
-)
-GO
-CREATE NONCLUSTERED INDEX [IX_GameGroup_RepUpdateTime] ON [dbo].[GameGroup] ([RepUpdateTime] ASC);
-GO
-
-ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
-GO
-ALTER TABLE [dbo].[GameGroup] ADD DEFAULT ((0)) FOR [IsDeposit]; 
-GO
-ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RefSportType] DEFAULT ((0)) FOR [RefSportType]; 
-GO
-ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RefBetType] DEFAULT ((0)) FOR [RefBetType]; 
-GO
-
-
-
-
 CREATE TABLE [dbo].[GameLaunchPerCurrency]
 (
 	  [SportType] SMALLINT NOT NULL
@@ -445,8 +395,6 @@ ALTER TABLE [dbo].[GameLaunchPerCurrency] ADD DEFAULT ((0)) FOR [IsLaunched];
 GO
 ALTER TABLE [dbo].[GameLaunchPerCurrency] ADD DEFAULT ((0)) FOR [IsTest]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[GameLaunchPerSite]
@@ -471,8 +419,6 @@ ALTER TABLE [dbo].[GameLaunchPerSite] ADD DEFAULT ((0)) FOR [IsTest];
 GO
 
 
-
-
 CREATE TABLE [dbo].[GameRoundBetLimitSettings]
 (
 	  [SportType] SMALLINT NOT NULL
@@ -490,8 +436,6 @@ ALTER TABLE [dbo].[GameRoundBetLimitSettings] ADD CONSTRAINT [DF_GameRoundBetLim
 GO
 ALTER TABLE [dbo].[GameRoundBetLimitSettings] ADD CONSTRAINT [DF_GameRoundBetLimitSettings_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[Initial_ProductConfig]
@@ -514,8 +458,6 @@ CREATE TABLE [dbo].[Initial_ProductConfig]
 GO
 
 
-
-
 CREATE TABLE [dbo].[Initial_ProductConfig_Detail]
 (
 	  [ConfigID] INT NOT NULL
@@ -536,8 +478,6 @@ CREATE TABLE [dbo].[Initial_ProductConfig_Detail]
 GO
 
 
-
-
 CREATE TABLE [dbo].[Initial_StepByConfig]
 (
 	  [StepID] TINYINT NOT NULL
@@ -545,8 +485,6 @@ CREATE TABLE [dbo].[Initial_StepByConfig]
 	, [SortOrder] TINYINT NOT NULL IDENTITY(1,1)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[LossLimit_GlobalSetting]
@@ -564,8 +502,6 @@ GO
 
 ALTER TABLE [dbo].[LossLimit_GlobalSetting] ADD CONSTRAINT [DF_LossLimit_GlobalSetting_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[MaxPayoutGlobalSetting]
@@ -599,10 +535,6 @@ ALTER TABLE [dbo].[MaxPayoutGlobalSetting] ADD CONSTRAINT [DF_MaxPayoutGlobalSet
 GO
 
 
-IF OBJECT_ID('MsgError', 'V') IS NOT NULL
-    DROP VIEW dbo.MsgError;
-GO
-
 CREATE TABLE [dbo].[MsgError]
 (
 	  [MsgID] INT NOT NULL
@@ -624,9 +556,10 @@ CREATE TABLE [dbo].[MsgError]
 GO
 CREATE NONCLUSTERED INDEX [IX_MsgError_RepUpdateTime] ON [dbo].[MsgError] ([RepUpdateTime] ASC);
 GO
-/*
+
 ALTER TABLE [dbo].[MsgError] ADD CONSTRAINT [DF_MsgError_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
+/*
 CREATE TRIGGER [dbo].[reminder2]
 ON [bodb02].[dbo].[MsgError]
 FOR UPDATE
@@ -636,8 +569,7 @@ exec sp_dropserver DBTXN , 'droplogins'
 --ROLLBACK TRANSACTION
 GO
 	ALTER TABLE [dbo].[MsgError] DISABLE TRIGGER [reminder2]
-GO
-CREATE TRIGGER [dbo].[Afterupdate]
+	GOCREATE TRIGGER [dbo].[Afterupdate]
 ON [bodb02].[dbo].[MsgError]
 after UPDATE
 AS
@@ -646,9 +578,7 @@ commit transaction t1
 GO
 	ALTER TABLE [dbo].[MsgError] DISABLE TRIGGER [Afterupdate]
 	GO
-
 */
-
 
 CREATE TABLE [dbo].[MsgErrorGroup]
 (
@@ -663,8 +593,6 @@ GO
 
 ALTER TABLE [dbo].[MsgErrorGroup] ADD CONSTRAINT [DF_MsgErrorGroup_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[PlayCurrencySetting]
@@ -686,8 +614,6 @@ GO
 
 ALTER TABLE [dbo].[PlayCurrencySetting] ADD CONSTRAINT [DF_PlayCurrencySetting_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProblemAccountReason]
@@ -712,8 +638,6 @@ ALTER TABLE [dbo].[ProblemAccountReason] ADD CONSTRAINT [DF_ProblemAccountReason
 GO
 ALTER TABLE [dbo].[ProblemAccountReason] ADD CONSTRAINT [DF_ProblemAccountReason_IsLicensee] DEFAULT ((0)) FOR [IsLicensee]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductBetSetting]
@@ -741,8 +665,6 @@ ALTER TABLE [dbo].[ProductBetSetting] ADD CONSTRAINT [DF_ProductBetSetting_Minbe
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductGlobalSetting]
 (
 	  [Sporttype] SMALLINT NOT NULL
@@ -763,8 +685,6 @@ ALTER TABLE [dbo].[ProductGlobalSetting] ADD CONSTRAINT [DF_ProductGlobalSetting
 GO
 ALTER TABLE [dbo].[ProductGlobalSetting] ADD CONSTRAINT [DF_ProductGlobalSetting_Maxsdiscount] DEFAULT ((0)) FOR [Maxsdiscount]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductLaunchedSiteCurrency]
@@ -791,8 +711,6 @@ ALTER TABLE [dbo].[ProductLaunchedSiteCurrency] ADD CONSTRAINT [DF_ProductLaunch
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductProfileSiteCurrency]
 (
 	  [SiteID] INT NOT NULL
@@ -809,8 +727,6 @@ ALTER TABLE [dbo].[ProductProfileSiteCurrency] ADD CONSTRAINT [DF_ProductProfile
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductProfileSiteCurrency_UAT]
 (
 	  [SiteID] INT NOT NULL
@@ -825,8 +741,6 @@ GO
 
 ALTER TABLE [dbo].[ProductProfileSiteCurrency_UAT] ADD CONSTRAINT [DF_ProductProfileSiteCurrency_UAT_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductSettingDetail]
@@ -879,8 +793,6 @@ ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductSettingDetail_UAT]
 (
 	  [SettingType] SMALLINT NOT NULL
@@ -929,8 +841,6 @@ ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDe
 GO
 ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductSettingProfile]
@@ -993,8 +903,6 @@ ALTER TABLE [dbo].[ProductSettingProfile] ADD CONSTRAINT [DF_ProductSettingProfi
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductSettingProfile_UAT]
 (
 	  [ProductSettingID] INT NOT NULL
@@ -1055,8 +963,6 @@ ALTER TABLE [dbo].[ProductSettingProfile_UAT] ADD CONSTRAINT [DF_ProductSettingP
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductSettingSystemDisplay]
 (
 	  [SystemID] TINYINT NOT NULL
@@ -1074,8 +980,6 @@ ALTER TABLE [dbo].[ProductSettingSystemDisplay] ADD CONSTRAINT [DF_ProductSettin
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductSettingSystemDisplay_UAT]
 (
 	  [SystemID] TINYINT NOT NULL
@@ -1086,8 +990,6 @@ CREATE TABLE [dbo].[ProductSettingSystemDisplay_UAT]
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductSettingType]
 (
 	  [SettingType] TINYINT NOT NULL
@@ -1096,8 +998,6 @@ CREATE TABLE [dbo].[ProductSettingType]
 	, CONSTRAINT [PK_ProductSettingType] PRIMARY KEY ([SettingType] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductSettingUpdateRestriction]
@@ -1118,8 +1018,6 @@ GO
 
 ALTER TABLE [dbo].[ProductSettingUpdateRestriction] ADD CONSTRAINT [DF_ProductSettingUpdateRestriction_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductStakeLevelGroup]
@@ -1144,8 +1042,6 @@ ALTER TABLE [dbo].[ProductStakeLevelGroup] ADD CONSTRAINT [DF_ProductStakeLevelG
 GO
 
 
-
-
 CREATE TABLE [dbo].[ProductStatusProfile]
 (
 	  [Sporttype] SMALLINT NOT NULL
@@ -1160,8 +1056,6 @@ GO
 
 ALTER TABLE [dbo].[ProductStatusProfile] ADD CONSTRAINT [DF_ProductStatusProfile_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[ProductStatusSiteCurrency]
@@ -1186,6 +1080,20 @@ ALTER TABLE [dbo].[ProductStatusSiteCurrency] ADD CONSTRAINT [DF_ProductStatusSi
 GO
 
 
+CREATE TABLE [dbo].[ProfilePicture]
+(
+	  [ImageId] INT NOT NULL
+	, [Image] VARBINARY(MAX) NOT NULL
+	, [RepUpdateTime] DATETIME2(7) NULL
+	, [IsDeleted] BIT NULL
+	, CONSTRAINT [PK_ProfilePicture] PRIMARY KEY ([ImageId] ASC)
+)
+GO
+CREATE NONCLUSTERED INDEX [IX_RepUpdateTime_ProfilePicture] ON [dbo].[ProfilePicture] ([RepUpdateTime] ASC);
+GO
+
+ALTER TABLE [dbo].[ProfilePicture] ADD CONSTRAINT [DF_ProfilePicture_IsDeleted] DEFAULT ((0)) FOR [IsDeleted]; 
+GO
 
 
 CREATE TABLE [dbo].[SettingSystem]
@@ -1198,10 +1106,6 @@ CREATE TABLE [dbo].[SettingSystem]
 )
 GO
 
-
-IF OBJECT_ID('Site', 'V') IS NOT NULL
-    DROP VIEW dbo.Site;
-GO
 
 CREATE TABLE [dbo].[Site]
 (
@@ -1310,12 +1214,8 @@ END
 GO
 	ALTER TABLE [dbo].[Site] DISABLE TRIGGER [trg_LOCAL_Site]
 	GO
-*/
 
-IF OBJECT_ID('SiteDBConfig', 'V') IS NOT NULL
-    DROP VIEW dbo.SiteDBConfig;
-GO
-
+	*/
 CREATE TABLE [dbo].[SiteDBConfig]
 (
 	  [SiteDBGroupID] SMALLINT NOT NULL
@@ -1334,8 +1234,6 @@ GO
 
 ALTER TABLE [dbo].[SiteDBConfig] ADD CONSTRAINT [DF_SiteDBConfig_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[SportBettypeSettingMatrix]
@@ -1388,8 +1286,6 @@ ALTER TABLE [dbo].[SportBettypeSettingMatrix] ADD CONSTRAINT [SportBettypeSettin
 GO
 
 
-
-
 CREATE TABLE [dbo].[SportNonOfferedSiteCurrency]
 (
 	  [SportType] SMALLINT NOT NULL
@@ -1406,8 +1302,6 @@ GO
 
 ALTER TABLE [dbo].[SportNonOfferedSiteCurrency] ADD CONSTRAINT [DF_SportNonOfferedSiteCurrency_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[StakeLevel]
@@ -1434,8 +1328,6 @@ ALTER TABLE [dbo].[StakeLevel] ADD CONSTRAINT [DF_StakeLevel_RepUpdateTime] DEFA
 GO
 
 
-
-
 CREATE TABLE [dbo].[StakeLevel_History]
 (
 	  [StakeLevelID] INT NOT NULL
@@ -1448,8 +1340,6 @@ CREATE TABLE [dbo].[StakeLevel_History]
 GO
 
 
-
-
 CREATE TABLE [dbo].[SystemSettings]
 (
 	  [VID] INT NOT NULL IDENTITY(1,1)
@@ -1458,8 +1348,6 @@ CREATE TABLE [dbo].[SystemSettings]
 	, CONSTRAINT [PK_SystemSettings_1] PRIMARY KEY ([VName] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[UMConfig]
@@ -1487,8 +1375,6 @@ GO
 
 
 
-
-
 CREATE TABLE [dbo].[Winlimit_ActionSetting]
 (
 	  [ActionID] TINYINT NOT NULL
@@ -1502,8 +1388,6 @@ GO
 
 ALTER TABLE [dbo].[Winlimit_ActionSetting] ADD CONSTRAINT [DF_Winlimit_ActionSetting_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[Winlimit_GameGroupSetting]
@@ -1522,8 +1406,6 @@ ALTER TABLE [dbo].[Winlimit_GameGroupSetting] ADD CONSTRAINT [DF_Winlimit_GameGr
 GO
 
 
-
-
 CREATE TABLE [dbo].[Winlimit_Group]
 (
 	  [GroupID] INT NOT NULL
@@ -1531,8 +1413,6 @@ CREATE TABLE [dbo].[Winlimit_Group]
 	, CONSTRAINT [PK_Winlimit_Group] PRIMARY KEY ([GroupID] ASC)
 )
 GO
-
-
 
 
 CREATE TABLE [dbo].[Winlimit_LevelSetting]
@@ -1549,8 +1429,6 @@ GO
 
 ALTER TABLE [dbo].[Winlimit_LevelSetting] ADD CONSTRAINT [DF_Winlimit_LevelSetting_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[Winlimit_ProductGlobalSetting]
@@ -1572,8 +1450,6 @@ CREATE TABLE [dbo].[Winlimit_ProductGlobalSetting]
 GO
 
 
-
-
 CREATE TABLE [dbo].[Winlimit_ProductSetting]
 (
 	  [ProductID] TINYINT NOT NULL
@@ -1591,8 +1467,6 @@ ALTER TABLE [dbo].[Winlimit_ProductSetting] ADD CONSTRAINT [DF_Winlimit_ProductS
 GO
 ALTER TABLE [dbo].[Winlimit_ProductSetting] ADD CONSTRAINT [DF_Winlimit_ProductSetting_SettingStatus] DEFAULT ((0)) FOR [SettingStatus]; 
 GO
-
-
 
 
 CREATE TABLE [dbo].[WinLimit_ProductSettingDetail]
@@ -1626,8 +1500,3 @@ ALTER TABLE [dbo].[WinLimit_ProductSettingDetail] ADD CONSTRAINT [DF_WinLimit_Pr
 GO
 ALTER TABLE [dbo].[WinLimit_ProductSettingDetail] ADD CONSTRAINT [DF_WinLimit_ProductSettingDetail_MaxWinLimit_RM] DEFAULT ((0)) FOR [MaxWinLimit_RM]; 
 GO
-
-
-CREATE TABLE [dbo].[BetLimitControlTypeDetails](	  [ID] INT NOT NULL IDENTITY(1,1)	, [BetLimitTypeID] INT NOT NULL	, [ProductID] TINYINT NOT NULL	, [Sporttype] SMALLINT NOT NULL	, [Bettype] SMALLINT NOT NULL	, [LeagueGroupID] INT NOT NULL	, [LeagueID] INT NOT NULL	, [RepUpdateTime] DATETIME2(7) NULL	, CONSTRAINT [PK_BetLimitControlTypeDetails] PRIMARY KEY ([ID] ASC))GOCREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_RepUpdateTime] ON [dbo].[BetLimitControlTypeDetails] ([RepUpdateTime] ASC);GOCREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_BetLimitTypeID] ON [dbo].[BetLimitControlTypeDetails] ([BetLimitTypeID] ASC);GO
-
-CREATE TABLE [dbo].[ProfilePicture](	  [ImageId] INT NOT NULL	, [Image] VARBINARY(MAX) NOT NULL	, [RepUpdateTime] DATETIME2(7) NULL	, [IsDeleted] BIT NULL	, CONSTRAINT [PK_ProfilePicture] PRIMARY KEY ([ImageId] ASC))GOCREATE NONCLUSTERED INDEX [IX_RepUpdateTime_ProfilePicture] ON [dbo].[ProfilePicture] ([RepUpdateTime] ASC);GOALTER TABLE [dbo].[ProfilePicture] ADD CONSTRAINT [DF_ProfilePicture_IsDeleted] DEFAULT ((0)) FOR [IsDeleted]; GO

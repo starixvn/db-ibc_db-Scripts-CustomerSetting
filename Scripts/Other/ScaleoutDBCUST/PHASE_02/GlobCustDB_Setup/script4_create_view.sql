@@ -17,7 +17,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   GroupName 
@@ -26,6 +26,31 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Acc_SuperPrefix WITH(NOLOCK);
 GO
+
+
+CREATE VIEW [dbo].[BetLimitControlTypeDetails]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   ID 
+		, BetLimitTypeID 
+		, ProductID 
+		, Sporttype 
+		, Bettype 
+		, LeagueGroupID 
+		, LeagueID 
+		, RepUpdateTime 
+	FROM GlobCustDB.dbo.BetLimitControlTypeDetails WITH(NOLOCK);
+GO
+
 
 CREATE VIEW [dbo].[CategoryConfig]
 AS
@@ -36,7 +61,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   CategoryID 
@@ -49,6 +74,7 @@ AS
 	FROM GlobCustDB.dbo.CategoryConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[DangerLevelPolicy]
 AS
 /*
@@ -58,7 +84,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -69,6 +95,7 @@ AS
 	FROM GlobCustDB.dbo.DangerLevelPolicy WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_Initial_BetSetting]
 AS
 /*
@@ -78,7 +105,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ConfigID 
@@ -93,6 +120,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_Initial_BetSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_Initial_ProductConfig]
 AS
 /*
@@ -102,7 +130,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ConfigID 
@@ -121,6 +149,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_Initial_ProductConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_Initial_ProductConfig_Detail]
 AS
 /*
@@ -130,7 +159,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ConfigID 
@@ -147,6 +176,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_Initial_ProductConfig_Detail WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_Initial_StepByConfig]
 AS
 /*
@@ -156,7 +186,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StepID 
@@ -164,6 +194,7 @@ AS
 		, SortOrder 
 	FROM GlobCustDB.dbo.Dep_Initial_StepByConfig WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Dep_ProductBetSetting]
 AS
@@ -174,7 +205,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -191,6 +222,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_ProductBetSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_ProductSetting]
 AS
 /*
@@ -200,7 +232,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductSettingID 
@@ -213,6 +245,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_ProductSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_ProductSettingDetail]
 AS
 /*
@@ -222,7 +255,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductSettingID 
@@ -237,6 +270,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_ProductSettingDetail WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_ProductSettingType]
 AS
 /*
@@ -246,7 +280,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SettingType 
@@ -254,6 +288,7 @@ AS
 		, SettingNameDetail 
 	FROM GlobCustDB.dbo.Dep_ProductSettingType WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Dep_ProductStakeLevelGroup]
 AS
@@ -264,7 +299,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -279,6 +314,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_ProductStakeLevelGroup WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_ProductStatusProfile]
 AS
 /*
@@ -288,7 +324,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -297,6 +333,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Dep_ProductStatusProfile WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Dep_StakeLevel]
 AS
@@ -307,7 +344,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StakeLevelID 
@@ -324,6 +361,29 @@ AS
 	FROM GlobCustDB.dbo.Dep_StakeLevel WITH(NOLOCK);
 GO
 
+
+CREATE VIEW [dbo].[Dep_StakeLevel_History]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   StakeLevelID 
+		, GameTypeID 
+		, MaxLabel 
+		, MaxStake 
+		, SiteID 
+		, UpdateTime 
+	FROM GlobCustDB.dbo.Dep_StakeLevel_History WITH(NOLOCK);
+GO
+
+
 CREATE VIEW [dbo].[Dep_StakeLevelGroupDetail]
 AS
 /*
@@ -333,7 +393,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StakeLevelID 
@@ -348,6 +408,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_StakeLevelGroupDetail WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_StakeLevelGroupDetail_History]
 AS
 /*
@@ -357,7 +418,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StakeLevelID 
@@ -369,6 +430,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_StakeLevelGroupDetail_History WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Dep_UMConfig]
 AS
 /*
@@ -378,7 +440,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   FunctionType 
@@ -391,6 +453,7 @@ AS
 	FROM GlobCustDB.dbo.Dep_UMConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[DomainManagement]
 AS
 /*
@@ -400,7 +463,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   DomainID 
@@ -418,50 +481,6 @@ AS
 	FROM GlobCustDB.dbo.DomainManagement WITH(NOLOCK);
 GO
 
-CREATE VIEW [dbo].[EaGroupHeadline]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   GroupHeadlineId 
-		, GroupId 
-		, GroupName 
-		, SiteId 
-		, ExchangeId 
-		, GroupTypeId 
-		, EffectiveDate 
-		, EndDate 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.EaGroupHeadline WITH(NOLOCK);
-GO
-
-CREATE VIEW [dbo].[GameGroup]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   GameGroupID 
-		, RefSportType 
-		, RefBetType 
-		, GroupName 
-		, IsDeposit 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.GameGroup WITH(NOLOCK);
-GO
 
 CREATE VIEW [dbo].[GameLaunchPerCurrency]
 AS
@@ -472,7 +491,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -484,6 +503,7 @@ AS
 	FROM GlobCustDB.dbo.GameLaunchPerCurrency WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[GameLaunchPerSite]
 AS
 /*
@@ -493,7 +513,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -505,6 +525,7 @@ AS
 	FROM GlobCustDB.dbo.GameLaunchPerSite WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[GameRoundBetLimitSettings]
 AS
 /*
@@ -514,7 +535,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -525,6 +546,7 @@ AS
 	FROM GlobCustDB.dbo.GameRoundBetLimitSettings WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Initial_ProductConfig]
 AS
 /*
@@ -534,7 +556,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ConfigID 
@@ -553,6 +575,7 @@ AS
 	FROM GlobCustDB.dbo.Initial_ProductConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Initial_ProductConfig_Detail]
 AS
 /*
@@ -562,7 +585,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ConfigID 
@@ -581,6 +604,7 @@ AS
 	FROM GlobCustDB.dbo.Initial_ProductConfig_Detail WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Initial_StepByConfig]
 AS
 /*
@@ -590,7 +614,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StepID 
@@ -598,6 +622,7 @@ AS
 		, SortOrder 
 	FROM GlobCustDB.dbo.Initial_StepByConfig WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[LossLimit_GlobalSetting]
 AS
@@ -608,7 +633,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductId 
@@ -619,6 +644,7 @@ AS
 	FROM GlobCustDB.dbo.LossLimit_GlobalSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[MaxPayoutGlobalSetting]
 AS
 /*
@@ -628,7 +654,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -643,6 +669,7 @@ AS
 	FROM GlobCustDB.dbo.MaxPayoutGlobalSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[MsgError]
 AS
 /*
@@ -652,7 +679,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   MsgID 
@@ -672,6 +699,7 @@ AS
 	FROM GlobCustDB.dbo.MsgError WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[MsgErrorGroup]
 AS
 /*
@@ -681,7 +709,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   MsgGroupID 
@@ -689,6 +717,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.MsgErrorGroup WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[PlayCurrencySetting]
 AS
@@ -699,7 +728,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ID 
@@ -714,6 +743,7 @@ AS
 	FROM GlobCustDB.dbo.PlayCurrencySetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProblemAccountReason]
 AS
 /*
@@ -723,7 +753,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ReasonID 
@@ -737,6 +767,7 @@ AS
 	FROM GlobCustDB.dbo.ProblemAccountReason WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductBetSetting]
 AS
 /*
@@ -746,7 +777,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -763,6 +794,7 @@ AS
 	FROM GlobCustDB.dbo.ProductBetSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductGlobalSetting]
 AS
 /*
@@ -772,7 +804,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -784,6 +816,7 @@ AS
 	FROM GlobCustDB.dbo.ProductGlobalSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductLaunchedSiteCurrency]
 AS
 /*
@@ -793,7 +826,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SiteID 
@@ -807,6 +840,7 @@ AS
 	FROM GlobCustDB.dbo.ProductLaunchedSiteCurrency WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductProfileSiteCurrency]
 AS
 /*
@@ -816,7 +850,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SiteID 
@@ -825,6 +859,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.ProductProfileSiteCurrency WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[ProductProfileSiteCurrency_UAT]
 AS
@@ -835,7 +870,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SiteID 
@@ -844,6 +879,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.ProductProfileSiteCurrency_UAT WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[ProductSettingDetail]
 AS
@@ -854,7 +890,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SettingType 
@@ -881,6 +917,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingDetail WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductSettingDetail_UAT]
 AS
 /*
@@ -890,7 +927,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SettingType 
@@ -917,6 +954,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingDetail_UAT WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductSettingProfile]
 AS
 /*
@@ -926,7 +964,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductSettingID 
@@ -961,6 +999,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingProfile WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductSettingProfile_UAT]
 AS
 /*
@@ -970,7 +1009,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductSettingID 
@@ -1005,6 +1044,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingProfile_UAT WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductSettingSystemDisplay]
 AS
 /*
@@ -1014,7 +1054,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SystemID 
@@ -1025,6 +1065,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingSystemDisplay WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductSettingSystemDisplay_UAT]
 AS
 /*
@@ -1034,7 +1075,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SystemID 
@@ -1043,6 +1084,7 @@ AS
 		, DisplayMode 
 	FROM GlobCustDB.dbo.ProductSettingSystemDisplay_UAT WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[ProductSettingType]
 AS
@@ -1053,7 +1095,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SettingType 
@@ -1061,6 +1103,7 @@ AS
 		, SettingNameDetail 
 	FROM GlobCustDB.dbo.ProductSettingType WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[ProductSettingUpdateRestriction]
 AS
@@ -1071,7 +1114,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SystemID 
@@ -1085,6 +1128,7 @@ AS
 	FROM GlobCustDB.dbo.ProductSettingUpdateRestriction WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductStakeLevelGroup]
 AS
 /*
@@ -1094,7 +1138,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -1108,6 +1152,7 @@ AS
 	FROM GlobCustDB.dbo.ProductStakeLevelGroup WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[ProductStatusProfile]
 AS
 /*
@@ -1117,7 +1162,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   Sporttype 
@@ -1126,6 +1171,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.ProductStatusProfile WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[ProductStatusSiteCurrency]
 AS
@@ -1136,7 +1182,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -1150,6 +1196,27 @@ AS
 	FROM GlobCustDB.dbo.ProductStatusSiteCurrency WITH(NOLOCK);
 GO
 
+
+CREATE VIEW [dbo].[ProfilePicture]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   ImageId 
+		, Image 
+		, RepUpdateTime 
+		, IsDeleted 
+	FROM GlobCustDB.dbo.ProfilePicture WITH(NOLOCK);
+GO
+
+
 CREATE VIEW [dbo].[SettingSystem]
 AS
 /*
@@ -1159,7 +1226,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SystemID 
@@ -1168,6 +1235,7 @@ AS
 		, SystemPrefix 
 	FROM GlobCustDB.dbo.SettingSystem WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Site]
 AS
@@ -1178,7 +1246,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   siteid 
@@ -1207,6 +1275,7 @@ AS
 	FROM GlobCustDB.dbo.Site WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[SiteDBConfig]
 AS
 /*
@@ -1216,7 +1285,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SiteDBGroupID 
@@ -1230,6 +1299,7 @@ AS
 	FROM GlobCustDB.dbo.SiteDBConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[SportBettypeSettingMatrix]
 AS
 /*
@@ -1239,7 +1309,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -1270,6 +1340,7 @@ AS
 	FROM GlobCustDB.dbo.SportBettypeSettingMatrix WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[SportNonOfferedSiteCurrency]
 AS
 /*
@@ -1279,7 +1350,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   SportType 
@@ -1291,6 +1362,7 @@ AS
 	FROM GlobCustDB.dbo.SportNonOfferedSiteCurrency WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[StakeLevel]
 AS
 /*
@@ -1300,7 +1372,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StakeLevelID 
@@ -1316,6 +1388,7 @@ AS
 	FROM GlobCustDB.dbo.StakeLevel WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[StakeLevel_History]
 AS
 /*
@@ -1325,7 +1398,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   StakeLevelID 
@@ -1336,6 +1409,7 @@ AS
 	FROM GlobCustDB.dbo.StakeLevel_History WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[SystemSettings]
 AS
 /*
@@ -1345,7 +1419,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   VID 
@@ -1353,6 +1427,7 @@ AS
 		, VValue 
 	FROM GlobCustDB.dbo.SystemSettings WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[UMConfig]
 AS
@@ -1363,7 +1438,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductID 
@@ -1384,6 +1459,7 @@ AS
 	FROM GlobCustDB.dbo.UMConfig WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Winlimit_ActionSetting]
 AS
 /*
@@ -1393,7 +1469,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ActionID 
@@ -1401,6 +1477,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Winlimit_ActionSetting WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Winlimit_GameGroupSetting]
 AS
@@ -1411,7 +1488,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductID 
@@ -1420,6 +1497,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Winlimit_GameGroupSetting WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Winlimit_Group]
 AS
@@ -1430,13 +1508,14 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   GroupID 
 		, GroupName 
 	FROM GlobCustDB.dbo.Winlimit_Group WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Winlimit_LevelSetting]
 AS
@@ -1447,7 +1526,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   LevelID 
@@ -1456,6 +1535,7 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Winlimit_LevelSetting WITH(NOLOCK);
 GO
+
 
 CREATE VIEW [dbo].[Winlimit_ProductGlobalSetting]
 AS
@@ -1466,7 +1546,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductID 
@@ -1484,6 +1564,7 @@ AS
 	FROM GlobCustDB.dbo.Winlimit_ProductGlobalSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[Winlimit_ProductSetting]
 AS
 /*
@@ -1493,7 +1574,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductID 
@@ -1504,6 +1585,7 @@ AS
 	FROM GlobCustDB.dbo.Winlimit_ProductSetting WITH(NOLOCK);
 GO
 
+
 CREATE VIEW [dbo].[WinLimit_ProductSettingDetail]
 AS
 /*
@@ -1513,7 +1595,7 @@ AS
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250120@Dave: Scale out dbcust - [Redmine: #216870]
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
 */
 	SELECT   ProductID 
@@ -1530,48 +1612,3 @@ AS
 	FROM GlobCustDB.dbo.WinLimit_ProductSettingDetail WITH(NOLOCK);
 GO
 
-
-
-
-CREATE VIEW [dbo].[BetLimitControlTypeDetails]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBGLOB-GLOBCUSTDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   ID 
-		, BetLimitTypeID 
-		, ProductID 
-		, Sporttype 
-		, Bettype 
-		, LeagueGroupID 
-		, LeagueID 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.BetLimitControlTypeDetails WITH(NOLOCK);
-GO
-
-
-CREATE VIEW [dbo].[ProfilePicture]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBGLOB-GLOBCUSTDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   ImageId 
-		, Image 
-		, RepUpdateTime 
-		, IsDeleted 
-	FROM GlobCustDB.dbo.ProfilePicture WITH(NOLOCK);
-GO

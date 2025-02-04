@@ -5,13 +5,14 @@
 	Task: Drop table in CustDB [RedmineID:#216870]
 	DB: DBCust/CustDB
 */
-USE CustDB
+USE [GlobCustDB]
 GO
 DROP TABLE IF EXISTS dbo.ProductSettingDetail_UAT;
 DROP TABLE IF EXISTS dbo.ProductSettingProfile;
 DROP TABLE IF EXISTS dbo.ProductSettingProfile_UAT;
 DROP TABLE IF EXISTS dbo.ProductStakeLevelGroup;
 DROP TABLE IF EXISTS dbo.Site;
+DROP TABLE IF EXISTS dbo.Dep_StakeLevel_History;
 DROP TABLE IF EXISTS dbo.SportBettypeSettingMatrix;
 DROP TABLE IF EXISTS dbo.StakeLevel;
 DROP TABLE IF EXISTS dbo.StakeLevel_History;
