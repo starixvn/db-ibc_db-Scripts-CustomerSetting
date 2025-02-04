@@ -273,7 +273,7 @@ BEGIN
 END
 GO
 /***************************************************************************/
-
+/*
 IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'custInfo')
 BEGIN
 	UPDATE RepInfo
@@ -286,8 +286,9 @@ BEGIN
 	SELECT 'custInfo not exists !!!'
 END
 GO
+*/
 /***************************************************************************/
-IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Customer')
+/*IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Customer')
 BEGIN
 	UPDATE RepInfo
 	SET active = 1
@@ -298,7 +299,7 @@ ELSE
 BEGIN  
 	SELECT 'Customer not exists !!!'
 END
-GO
+GO*/
 /***************************************************************************/
 IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustProductStatus')
 BEGIN
