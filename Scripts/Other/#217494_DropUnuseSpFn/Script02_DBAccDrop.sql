@@ -1,4 +1,4 @@
-/*<info serverAlias=DBACC-bodb02></info>*/
+/*<info serverAlias="DBACC-bodb02"></info>*/ 
 /*
 	Created by: 20250205@Dave
 	Task: Drop Unuse SP [RedmineID: #217494]

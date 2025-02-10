@@ -1,4 +1,4 @@
-/*<info serverAlias=DBCUST-CustDB></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/ 
 /*
 	Created by: 20250205@Dave
 	Task: Drop Unuse SP [RedmineID: #217494]
