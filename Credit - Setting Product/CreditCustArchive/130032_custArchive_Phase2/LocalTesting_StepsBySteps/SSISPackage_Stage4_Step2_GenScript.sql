@@ -56,15 +56,10 @@ WHERE bettype <> 20000
 --FROM bettransLC with (NOLOCK) WHERE custid NOT IN(select custid from bodb_report.dbo.tempCustID)
 UNION
 SELECT custid
-FROM TransferExtra with (NOLOCK)
-WHERE recommend IN (xxx)
-	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
-	AND bettype <> 30000
-UNION
-SELECT custid
 FROM SabaWalletTicket with (NOLOCK)
 WHERE recommend IN (xxx)
 	AND custid NOT IN(select custid from bodb_report.dbo.tempCustID)
+	AND WinlostDate >= CONVERT(DATE,DATEADD(mm,-2,GETDATE()))
 
 --update exception list
 EXEC dbo.DBA_ArchiveAccount_UpdateException
