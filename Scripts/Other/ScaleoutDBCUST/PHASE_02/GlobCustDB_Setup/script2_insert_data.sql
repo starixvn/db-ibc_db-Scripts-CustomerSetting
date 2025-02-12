@@ -117,6 +117,9 @@ FROM CustDB.[dbo].[DomainManagement] WITH(NOLOCK);
 SET IDENTITY_INSERT [dbo].[DomainManagement] OFF; 
 
 
+INSERT INTO GlobCustDB.[dbo].[GameGroup](	 GameGroupID, RefSportType, RefBetType, GroupName, IsDeposit, RepUpdateTime)SELECT 	 GameGroupID , RefSportType , RefBetType , GroupName , IsDeposit , RepUpdateTime FROM CustDB.[dbo].[GameGroup] WITH(NOLOCK);
+
+
 INSERT INTO GlobCustDB.[dbo].[GameLaunchPerCurrency]( SportType, BetType, Currency, IsLaunched, IsTest, RepUpdateTime)
 SELECT  SportType , BetType , Currency , IsLaunched , IsTest , RepUpdateTime 
 FROM CustDB.[dbo].[GameLaunchPerCurrency] WITH(NOLOCK);
@@ -208,16 +211,6 @@ SELECT  SiteID , Currency , ProductSettingID , RepUpdateTime
 FROM CustDB.[dbo].[ProductProfileSiteCurrency_UAT] WITH(NOLOCK);
 
 
-INSERT INTO GlobCustDB.[dbo].[ProductSettingDetail]( SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, ProductSettingID, Parent_ProductSettingID, Child_DisplayOrder, SubType, RepUpdateTime)
-SELECT  SettingType , SportType , BetType , IsLive , ProductID , MaxPT , MaxDiscount , IsSync , IsHidden , IsDisabled , SettingLevel , DisplayOrder , SettingStatus , IntervalValue , RealProductId , MaxChoice , ProductSettingID , Parent_ProductSettingID , Child_DisplayOrder , SubType , RepUpdateTime 
-FROM CustDB.[dbo].[ProductSettingDetail] WITH(NOLOCK);
-
-
-INSERT INTO GlobCustDB.[dbo].[ProductSettingDetail_UAT]( SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, ProductSettingID, Parent_ProductSettingID, Child_DisplayOrder, SubType, RepUpdateTime)
-SELECT  SettingType , SportType , BetType , IsLive , ProductID , MaxPT , MaxDiscount , IsSync , IsHidden , IsDisabled , SettingLevel , DisplayOrder , SettingStatus , IntervalValue , RealProductId , MaxChoice , ProductSettingID , Parent_ProductSettingID , Child_DisplayOrder , SubType , RepUpdateTime 
-FROM CustDB.[dbo].[ProductSettingDetail_UAT] WITH(NOLOCK);
-
-
 INSERT INTO GlobCustDB.[dbo].[ProductSettingProfile]( ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, RepUpdateTime)
 SELECT  ProductSettingID , SettingType , SportType , BetType , IsLive , ProductID , MaxPT , MaxDiscount , IsSync , IsHidden , IsDisabled , SettingLevel , DisplayOrder , SettingStatus , IntervalValue , RealProductId , MaxChoice , Parent_ProductSettingID , Child_DisplayOrder , SubType , GroupID , GroupType , GroupTypeOrder , SubGroupID , SubGroupOrder , CreationStatus , DisplayType , MarketType , RepUpdateTime 
 FROM CustDB.[dbo].[ProductSettingProfile] WITH(NOLOCK);
@@ -306,12 +299,6 @@ INSERT INTO GlobCustDB.[dbo].[StakeLevel_History]( StakeLevelID, GameTypeID, Max
 SELECT  StakeLevelID , GameTypeID , MaxLabel , MaxStake , UpdateTime 
 FROM CustDB.[dbo].[StakeLevel_History] WITH(NOLOCK);
 
-
-SET IDENTITY_INSERT [dbo].[SystemSettings] ON; 
-INSERT INTO GlobCustDB.[dbo].[SystemSettings]( VID, VName, VValue)
-SELECT  VID , VName , VValue 
-FROM CustDB.[dbo].[SystemSettings] WITH(NOLOCK);
-SET IDENTITY_INSERT [dbo].[SystemSettings] OFF; 
 
 
 SET IDENTITY_INSERT [dbo].[UMConfig] ON; 

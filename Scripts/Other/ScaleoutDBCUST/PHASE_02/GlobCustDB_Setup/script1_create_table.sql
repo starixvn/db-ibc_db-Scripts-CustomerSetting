@@ -375,6 +375,30 @@ ALTER TABLE [dbo].[DomainManagement] ADD CONSTRAINT [DF_DomainManagement_RepUpda
 GO
 
 
+CREATE TABLE [dbo].[GameGroup]
+(
+	  [GameGroupID] INT NOT NULL
+	, [RefSportType] SMALLINT NOT NULL
+	, [RefBetType] INT NOT NULL
+	, [GroupName] NVARCHAR(100) NULL
+	, [IsDeposit] BIT NULL
+	, [RepUpdateTime] DATETIME2(7) NULL
+	, CONSTRAINT [PK_GameGroup] PRIMARY KEY ([GameGroupID] ASC)
+)
+GO
+CREATE NONCLUSTERED INDEX [IX_GameGroup_RepUpdateTime] ON [dbo].[GameGroup] ([RepUpdateTime] ASC);
+GO
+
+ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
+GO
+ALTER TABLE [dbo].[GameGroup] ADD DEFAULT ((0)) FOR [IsDeposit]; 
+GO
+ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RefSportType] DEFAULT ((0)) FOR [RefSportType]; 
+GO
+ALTER TABLE [dbo].[GameGroup] ADD CONSTRAINT [DF_GameGroup_RefBetType] DEFAULT ((0)) FOR [RefBetType]; 
+GO
+
+
 CREATE TABLE [dbo].[GameLaunchPerCurrency]
 (
 	  [SportType] SMALLINT NOT NULL
@@ -742,105 +766,6 @@ GO
 ALTER TABLE [dbo].[ProductProfileSiteCurrency_UAT] ADD CONSTRAINT [DF_ProductProfileSiteCurrency_UAT_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
 GO
 
-
-CREATE TABLE [dbo].[ProductSettingDetail]
-(
-	  [SettingType] SMALLINT NOT NULL
-	, [SportType] SMALLINT NOT NULL
-	, [BetType] SMALLINT NOT NULL
-	, [IsLive] BIT NOT NULL
-	, [ProductID] TINYINT NOT NULL
-	, [MaxPT] SMALLMONEY NULL
-	, [MaxDiscount] DECIMAL(9,8) NULL
-	, [IsSync] BIT NULL
-	, [IsHidden] BIT NULL
-	, [IsDisabled] BIT NULL
-	, [SettingLevel] TINYINT NULL
-	, [DisplayOrder] TINYINT NOT NULL
-	, [SettingStatus] TINYINT NULL
-	, [IntervalValue] DECIMAL(19,8) NULL
-	, [RealProductId] TINYINT NOT NULL
-	, [MaxChoice] TINYINT NULL
-	, [ProductSettingID] INT NOT NULL
-	, [Parent_ProductSettingID] INT NULL
-	, [Child_DisplayOrder] INT NULL
-	, [SubType] TINYINT NULL
-	, [RepUpdateTime] DATETIME2(7) NULL
-	, CONSTRAINT [PK_ProductSettingDetail] PRIMARY KEY ([SettingType] ASC, [SportType] ASC, [BetType] ASC, [IsLive] ASC)
-)
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [UQ_ProductSettingID] ON [dbo].[ProductSettingDetail] ([ProductSettingID] ASC);
-GO
-
-CREATE NONCLUSTERED INDEX [IX_ProductSettingDetail_RepUpdateTime] ON [dbo].[ProductSettingDetail] ([RepUpdateTime] ASC);
-GO
-
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_MaxDiscount] DEFAULT ((0.01)) FOR [MaxDiscount]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_IsSync] DEFAULT ((0)) FOR [IsSync]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_IsHidden] DEFAULT ((1)) FOR [IsHidden]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_IsDisabled] DEFAULT ((0)) FOR [IsDisabled]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_DisplayOrder] DEFAULT ((0)) FOR [DisplayOrder]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_SettingStatus] DEFAULT ((0)) FOR [SettingStatus]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_MaxPT] DEFAULT ((90)) FOR [MaxPT]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail] ADD CONSTRAINT [DF_ProductSettingDetail_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
-GO
-
-
-CREATE TABLE [dbo].[ProductSettingDetail_UAT]
-(
-	  [SettingType] SMALLINT NOT NULL
-	, [SportType] SMALLINT NOT NULL
-	, [BetType] SMALLINT NOT NULL
-	, [IsLive] BIT NOT NULL
-	, [ProductID] TINYINT NOT NULL
-	, [MaxPT] SMALLMONEY NULL
-	, [MaxDiscount] DECIMAL(9,8) NULL
-	, [IsSync] BIT NULL
-	, [IsHidden] BIT NULL
-	, [IsDisabled] BIT NULL
-	, [SettingLevel] TINYINT NULL
-	, [DisplayOrder] TINYINT NOT NULL
-	, [SettingStatus] TINYINT NULL
-	, [IntervalValue] DECIMAL(19,8) NULL
-	, [RealProductId] TINYINT NOT NULL
-	, [MaxChoice] TINYINT NULL
-	, [ProductSettingID] INT NOT NULL
-	, [Parent_ProductSettingID] INT NULL
-	, [Child_DisplayOrder] INT NULL
-	, [SubType] TINYINT NULL
-	, [RepUpdateTime] DATETIME2(7) NULL
-	, CONSTRAINT [PK_ProductSettingDetail_UAT] PRIMARY KEY ([SettingType] ASC, [SportType] ASC, [BetType] ASC, [IsLive] ASC)
-)
-GO
-CREATE UNIQUE NONCLUSTERED INDEX [UQ_ProductSettingID_UAT] ON [dbo].[ProductSettingDetail_UAT] ([ProductSettingID] ASC);
-GO
-
-CREATE NONCLUSTERED INDEX [IX_ProductSettingDetail_UAT_RepUpdateTime] ON [dbo].[ProductSettingDetail_UAT] ([RepUpdateTime] ASC);
-GO
-
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_MaxPT] DEFAULT ((90)) FOR [MaxPT]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_MaxDiscount] DEFAULT ((0.01)) FOR [MaxDiscount]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_IsSync] DEFAULT ((0)) FOR [IsSync]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_IsHidden] DEFAULT ((1)) FOR [IsHidden]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_IsDisabled] DEFAULT ((0)) FOR [IsDisabled]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_DisplayOrder] DEFAULT ((0)) FOR [DisplayOrder]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_SettingStatus] DEFAULT ((0)) FOR [SettingStatus]; 
-GO
-ALTER TABLE [dbo].[ProductSettingDetail_UAT] ADD CONSTRAINT [DF_ProductSettingDetail_UAT_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime]; 
-GO
 
 
 CREATE TABLE [dbo].[ProductSettingProfile]
@@ -1339,15 +1264,6 @@ CREATE TABLE [dbo].[StakeLevel_History]
 )
 GO
 
-
-CREATE TABLE [dbo].[SystemSettings]
-(
-	  [VID] INT NOT NULL IDENTITY(1,1)
-	, [VName] VARCHAR(50) NOT NULL
-	, [VValue] VARCHAR(200) NULL
-	, CONSTRAINT [PK_SystemSettings_1] PRIMARY KEY ([VName] ASC)
-)
-GO
 
 
 CREATE TABLE [dbo].[UMConfig]

@@ -482,6 +482,19 @@ AS
 GO
 
 
+CREATE VIEW [dbo].[GameGroup]AS/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/	SELECT   GameGroupID 		, RefSportType 		, RefBetType 		, GroupName 		, IsDeposit 		, RepUpdateTime 	FROM GlobCustDB.dbo.GameGroup WITH(NOLOCK);
+GO
+
+
 CREATE VIEW [dbo].[GameLaunchPerCurrency]
 AS
 /*
@@ -881,80 +894,6 @@ AS
 GO
 
 
-CREATE VIEW [dbo].[ProductSettingDetail]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   SettingType 
-		, SportType 
-		, BetType 
-		, IsLive 
-		, ProductID 
-		, MaxPT 
-		, MaxDiscount 
-		, IsSync 
-		, IsHidden 
-		, IsDisabled 
-		, SettingLevel 
-		, DisplayOrder 
-		, SettingStatus 
-		, IntervalValue 
-		, RealProductId 
-		, MaxChoice 
-		, ProductSettingID 
-		, Parent_ProductSettingID 
-		, Child_DisplayOrder 
-		, SubType 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.ProductSettingDetail WITH(NOLOCK);
-GO
-
-
-CREATE VIEW [dbo].[ProductSettingDetail_UAT]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   SettingType 
-		, SportType 
-		, BetType 
-		, IsLive 
-		, ProductID 
-		, MaxPT 
-		, MaxDiscount 
-		, IsSync 
-		, IsHidden 
-		, IsDisabled 
-		, SettingLevel 
-		, DisplayOrder 
-		, SettingStatus 
-		, IntervalValue 
-		, RealProductId 
-		, MaxChoice 
-		, ProductSettingID 
-		, Parent_ProductSettingID 
-		, Child_DisplayOrder 
-		, SubType 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.ProductSettingDetail_UAT WITH(NOLOCK);
-GO
-
-
 CREATE VIEW [dbo].[ProductSettingProfile]
 AS
 /*
@@ -1217,9 +1156,7 @@ AS
 GO
 
 
-CREATE VIEW [dbo].[SettingSystem]
-AS
-/*
+CREATE VIEW [dbo].[SettingSystem]AS/*
 	Created: Dave
 	Date: 2025-01-20
 	Task: Scale out dbcust
@@ -1228,12 +1165,7 @@ AS
 	Revisions:
 		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
 
-*/
-	SELECT   SystemID 
-		, SystemName 
-		, Description 
-		, SystemPrefix 
-	FROM GlobCustDB.dbo.SettingSystem WITH(NOLOCK);
+*/	SELECT   SystemID 		, SystemName 		, Description 		, SystemPrefix 	FROM GlobCustDB.dbo.SettingSystem WITH(NOLOCK);
 GO
 
 
@@ -1407,25 +1339,6 @@ AS
 		, MaxStake 
 		, UpdateTime 
 	FROM GlobCustDB.dbo.StakeLevel_History WITH(NOLOCK);
-GO
-
-
-CREATE VIEW [dbo].[SystemSettings]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   VID 
-		, VName 
-		, VValue 
-	FROM GlobCustDB.dbo.SystemSettings WITH(NOLOCK);
 GO
 
 

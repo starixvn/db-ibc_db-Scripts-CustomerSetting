@@ -45,8 +45,6 @@ exec sp_rename 'dbo.ProductGlobalSetting','Del_ProductGlobalSetting';
 exec sp_rename 'dbo.ProductLaunchedSiteCurrency','Del_ProductLaunchedSiteCurrency';
 exec sp_rename 'dbo.ProductProfileSiteCurrency','Del_ProductProfileSiteCurrency';
 exec sp_rename 'dbo.ProductProfileSiteCurrency_UAT','Del_ProductProfileSiteCurrency_UAT';
-exec sp_rename 'dbo.ProductSettingDetail','Del_ProductSettingDetail';
-exec sp_rename 'dbo.ProductSettingDetail_UAT','Del_ProductSettingDetail_UAT';
 exec sp_rename 'dbo.ProductSettingProfile','Del_ProductSettingProfile';
 exec sp_rename 'dbo.ProductSettingProfile_UAT','Del_ProductSettingProfile_UAT';
 exec sp_rename 'dbo.ProductSettingSystemDisplay','Del_ProductSettingSystemDisplay';
@@ -64,7 +62,6 @@ exec sp_rename 'dbo.SportBettypeSettingMatrix','Del_SportBettypeSettingMatrix';
 exec sp_rename 'dbo.SportNonOfferedSiteCurrency','Del_SportNonOfferedSiteCurrency';
 exec sp_rename 'dbo.StakeLevel','Del_StakeLevel';
 exec sp_rename 'dbo.StakeLevel_History','Del_StakeLevel_History';
-exec sp_rename 'dbo.SystemSettings','Del_SystemSettings';
 exec sp_rename 'dbo.UMConfig','Del_UMConfig';
 exec sp_rename 'dbo.Winlimit_ActionSetting','Del_Winlimit_ActionSetting';
 exec sp_rename 'dbo.Winlimit_GameGroupSetting','Del_Winlimit_GameGroupSetting';
@@ -73,3 +70,9 @@ exec sp_rename 'dbo.Winlimit_LevelSetting','Del_Winlimit_LevelSetting';
 exec sp_rename 'dbo.Winlimit_ProductGlobalSetting','Del_Winlimit_ProductGlobalSetting';
 exec sp_rename 'dbo.Winlimit_ProductSetting','Del_Winlimit_ProductSetting';
 exec sp_rename 'dbo.WinLimit_ProductSettingDetail','Del_WinLimit_ProductSettingDetail';
+
+
+
+
+
+
