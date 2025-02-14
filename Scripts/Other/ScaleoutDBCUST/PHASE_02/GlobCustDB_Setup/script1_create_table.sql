@@ -147,7 +147,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Dep_Initial_ProductConfig](
-	[ConfigID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[ConfigID] [int] IDENTITY(1,1) NOT NULL,
 	[ProductID] [tinyint] NOT NULL,
 	[SportTypeList] [varchar](300) NOT NULL,
 	[BetTypeList] [varchar](300) NOT NULL,
@@ -493,7 +493,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[DomainManagement](
-	[DomainID] [smallint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[DomainID] [smallint] IDENTITY(1,1) NOT NULL,
 	[Domain] [varchar](50) NOT NULL,
 	[System] [varchar](20) NOT NULL,
 	[Site] [varchar](500) NOT NULL,
@@ -648,7 +648,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Initial_ProductConfig](
-	[ConfigID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[ConfigID] [int] IDENTITY(1,1) NOT NULL,
 	[ProductID] [tinyint] NOT NULL,
 	[SportTypeList] [varchar](300) NOT NULL,
 	[BetTypeList] [varchar](300) NOT NULL,
@@ -836,7 +836,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[PlayCurrencySetting](
-	[ID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[SiteId] [int] NULL,
 	[SiteName] [nvarchar](50) NULL,
 	[SportType] [int] NULL,
@@ -1391,7 +1391,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Site](
-	[siteid] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[siteid] [int] IDENTITY(1,1) NOT NULL,
 	[site] [nvarchar](50) NULL,
 	[type] [nvarchar](50) NULL,
 	[spreada] [float] NULL,
@@ -1571,7 +1571,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[StakeLevel](
-	[StakeLevelID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
+	[StakeLevelID] [int] IDENTITY(1,1) NOT NULL,
 	[GameTypeID] [int] NULL,
 	[MinLabel] [nvarchar](50) NULL,
 	[MaxLabel] [nvarchar](50) NULL,
