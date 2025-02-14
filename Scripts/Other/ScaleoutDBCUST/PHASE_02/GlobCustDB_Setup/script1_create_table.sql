@@ -28,6 +28,13 @@ CREATE TABLE [dbo].[Acc_SuperPrefix](
 GO
 ALTER TABLE [dbo].[Acc_SuperPrefix] ADD  CONSTRAINT [DF_Acc_SuperPrefix_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+
+CREATE NONCLUSTERED INDEX [IX_Acc_SuperPrefix_RepUpdateTime] ON [dbo].[Acc_SuperPrefix]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+
 /****** Object:  Table [dbo].[BetLimitControlTypeDetails]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -47,6 +54,18 @@ CREATE TABLE [dbo].[BetLimitControlTypeDetails](
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_BetLimitTypeID] ON [dbo].[BetLimitControlTypeDetails]
+(
+	[BetLimitTypeID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetails_RepUpdateTime] ON [dbo].[BetLimitControlTypeDetails]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[CategoryConfig]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -70,6 +89,11 @@ GO
 ALTER TABLE [dbo].[CategoryConfig] ADD  DEFAULT ((0)) FOR [HiddenSite]
 GO
 ALTER TABLE [dbo].[CategoryConfig] ADD  CONSTRAINT [DF_CategoryConfig_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_CategoryConfig_RepUpdateTime] ON [dbo].[CategoryConfig]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[DangerLevelPolicy]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -207,7 +231,11 @@ CREATE TABLE [dbo].[Dep_ProductBetSetting](
 GO
 ALTER TABLE [dbo].[Dep_ProductBetSetting] ADD  CONSTRAINT [DF_Dep_ProductBetSetting_Minbet]  DEFAULT ((0)) FOR [MinBet]
 GO
-
+CREATE NONCLUSTERED INDEX [IX_Dep_ProductBetSetting_RepUpdateTime] ON [dbo].[Dep_ProductBetSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 CREATE TABLE [dbo].[Dep_ProductSetting](
 	[ProductSettingID] [int] NOT NULL,
 	[ProductID] [smallint] NOT NULL,
@@ -224,6 +252,12 @@ CREATE TABLE [dbo].[Dep_ProductSetting](
 GO
 
 ALTER TABLE [dbo].[Dep_ProductSetting] ADD  CONSTRAINT [DF_Dep_ProductSetting_TemplateID]  DEFAULT ((0)) FOR [TemplateID]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Dep_ProductSetting_RepUpdateTime] ON [dbo].[Dep_ProductSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Dep_ProductSettingDetail]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -252,6 +286,12 @@ GO
 ALTER TABLE [dbo].[Dep_ProductSettingDetail] ADD  CONSTRAINT [DF_Dep_ProductSettingDetail_MaxDefaultValue]  DEFAULT ((0)) FOR [MaxDefaultValue]
 GO
 ALTER TABLE [dbo].[Dep_ProductSettingDetail] ADD  CONSTRAINT [DF_Dep_ProductSettingDetail_IsApplyBA]  DEFAULT ((0)) FOR [IsApplyBA]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Dep_ProductSettingDetail_RepUpdateTime] ON [dbo].[Dep_ProductSettingDetail]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Dep_ProductSettingType]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -298,6 +338,11 @@ ALTER TABLE [dbo].[Dep_ProductStakeLevelGroup] ADD  CONSTRAINT [DF_Dep_ProductSt
 GO
 ALTER TABLE [dbo].[Dep_ProductStakeLevelGroup] ADD  CONSTRAINT [DF_Dep_ProductStakeLevelGroup_isDeleted]  DEFAULT ((0)) FOR [isDeleted]
 GO
+CREATE NONCLUSTERED INDEX [IX_Dep_ProductStakeLevelGroup_RepUpdateTime] ON [dbo].[Dep_ProductStakeLevelGroup]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[Dep_ProductStatusProfile]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -315,6 +360,13 @@ CREATE TABLE [dbo].[Dep_ProductStatusProfile](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
 GO
+
+CREATE NONCLUSTERED INDEX [IX_Dep_ProductStatusProfile_RepUpdateTime] ON [dbo].[Dep_ProductStatusProfile]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+
 /****** Object:  Table [dbo].[Dep_StakeLevel]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -339,6 +391,12 @@ CREATE TABLE [dbo].[Dep_StakeLevel](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[Dep_StakeLevel] ADD  CONSTRAINT [DF_Dep_StakeLevel_GameGroupID]  DEFAULT ((0)) FOR [GameGroupID]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Dep_StakeLevel_RepUpdateTime] ON [dbo].[Dep_StakeLevel]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Dep_StakeLevel_History]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -380,6 +438,12 @@ CREATE TABLE [dbo].[Dep_StakeLevelGroupDetail](
 	[GameTypeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Dep_StakeLevelGroupDetail_RepUpdateTime] ON [dbo].[Dep_StakeLevelGroupDetail]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Dep_StakeLevelGroupDetail_History]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -453,6 +517,11 @@ ALTER TABLE [dbo].[DomainManagement] ADD  CONSTRAINT [DF_DomainManagement_isDele
 GO
 ALTER TABLE [dbo].[DomainManagement] ADD  CONSTRAINT [DF_DomainManagement_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_DomainManagement_RepUpdateTime] ON [dbo].[DomainManagement]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[GameGroup]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -478,6 +547,11 @@ GO
 ALTER TABLE [dbo].[GameGroup] ADD  DEFAULT ((0)) FOR [IsDeposit]
 GO
 ALTER TABLE [dbo].[GameGroup] ADD  CONSTRAINT [DF_GameGroup_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_GameGroup_RepUpdateTime] ON [dbo].[GameGroup]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[GameLaunchPerCurrency]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -505,6 +579,11 @@ ALTER TABLE [dbo].[GameLaunchPerCurrency] ADD  DEFAULT ((0)) FOR [IsTest]
 GO
 ALTER TABLE [dbo].[GameLaunchPerCurrency] ADD  CONSTRAINT [DF_GameLaunchPerCurrency_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_GameLaunchPerCurrency_RepUpdateTime] ON [dbo].[GameLaunchPerCurrency]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[GameLaunchPerSite]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -531,6 +610,11 @@ ALTER TABLE [dbo].[GameLaunchPerSite] ADD  DEFAULT ((0)) FOR [IsTest]
 GO
 ALTER TABLE [dbo].[GameLaunchPerSite] ADD  CONSTRAINT [DF_GameLaunchPerSite_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_GameLaunchPerSite_RepUpdateTime] ON [dbo].[GameLaunchPerSite]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[GameRoundBetLimitSettings]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -552,6 +636,11 @@ GO
 ALTER TABLE [dbo].[GameRoundBetLimitSettings] ADD  CONSTRAINT [DF_GameRoundBetLimitSettings_GameRoundBetLimit]  DEFAULT ((0)) FOR [GameRoundBetLimit]
 GO
 ALTER TABLE [dbo].[GameRoundBetLimitSettings] ADD  CONSTRAINT [DF_GameRoundBetLimitSettings_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_GameRoundBetLimitSettings_RepUpdateTime] ON [dbo].[GameRoundBetLimitSettings]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Initial_ProductConfig]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -638,6 +727,13 @@ CREATE TABLE [dbo].[LossLimit_GlobalSetting](
 GO
 ALTER TABLE [dbo].[LossLimit_GlobalSetting] ADD  CONSTRAINT [DF_LossLimit_GlobalSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+
+CREATE NONCLUSTERED INDEX [IX_LossLimit_GlobalSetting_RepUpdateTime] ON [dbo].[LossLimit_GlobalSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+
 /****** Object:  Table [dbo].[MaxPayoutGlobalSetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -673,6 +769,12 @@ ALTER TABLE [dbo].[MaxPayoutGlobalSetting] ADD  CONSTRAINT [DF_MaxPayoutGlobalSe
 GO
 ALTER TABLE [dbo].[MaxPayoutGlobalSetting] ADD  CONSTRAINT [DF_MaxPayoutGlobalSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+
+CREATE NONCLUSTERED INDEX [IX_MaxPayoutGlobalSetting_RepUpdateTime] ON [dbo].[MaxPayoutGlobalSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[MsgError]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -701,6 +803,11 @@ CREATE TABLE [dbo].[MsgError](
 GO
 ALTER TABLE [dbo].[MsgError] ADD  CONSTRAINT [DF_MsgError_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_MsgError_RepUpdateTime] ON [dbo].[MsgError]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[MsgErrorGroup]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -717,6 +824,11 @@ CREATE TABLE [dbo].[MsgErrorGroup](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[MsgErrorGroup] ADD  CONSTRAINT [DF_MsgErrorGroup_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_MsgErrorGroup_RepUpdateTime] ON [dbo].[MsgErrorGroup]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[PlayCurrencySetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -740,6 +852,11 @@ CREATE TABLE [dbo].[PlayCurrencySetting](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[PlayCurrencySetting] ADD  CONSTRAINT [DF_PlayCurrencySetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_PlayCurrencySetting_RepUpdateTime] ON [dbo].[PlayCurrencySetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[ProblemAccountReason]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -766,6 +883,12 @@ GO
 ALTER TABLE [dbo].[ProblemAccountReason] ADD  CONSTRAINT [DF_ProblemAccountReason_IsCredit]  DEFAULT ((0)) FOR [IsCredit]
 GO
 ALTER TABLE [dbo].[ProblemAccountReason] ADD  CONSTRAINT [DF_ProblemAccountReason_IsLicensee]  DEFAULT ((0)) FOR [IsLicensee]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_ProblemAccountReason_RepUpdateTime] ON [dbo].[ProblemAccountReason]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[ProductBetSetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -796,6 +919,11 @@ ALTER TABLE [dbo].[ProductBetSetting] ADD  CONSTRAINT [DF_ProductBetSetting_Minb
 GO
 ALTER TABLE [dbo].[ProductBetSetting] ADD  CONSTRAINT [DF_ProductBetSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductBetSetting_RepUpdateTime] ON [dbo].[ProductBetSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductGlobalSetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -820,6 +948,11 @@ GO
 ALTER TABLE [dbo].[ProductGlobalSetting] ADD  CONSTRAINT [DF_ProductGlobalSetting_Maxsdiscount]  DEFAULT ((0)) FOR [Maxsdiscount]
 GO
 ALTER TABLE [dbo].[ProductGlobalSetting] ADD  CONSTRAINT [DF_ProductGlobalSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_ProductGlobalSetting_RepUpdateTime] ON [dbo].[ProductGlobalSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[ProductLaunchedSiteCurrency]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -851,6 +984,11 @@ ALTER TABLE [dbo].[ProductLaunchedSiteCurrency] ADD  CONSTRAINT [DF_ProductLaunc
 GO
 ALTER TABLE [dbo].[ProductLaunchedSiteCurrency] ADD  CONSTRAINT [DF_ProductLaunchedSiteCurrency_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductLaunchedSiteCurrency_RepUpdateTime] ON [dbo].[ProductLaunchedSiteCurrency]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductProfileSiteCurrency]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -871,6 +1009,11 @@ CREATE TABLE [dbo].[ProductProfileSiteCurrency](
 GO
 ALTER TABLE [dbo].[ProductProfileSiteCurrency] ADD  CONSTRAINT [DF_ProductProfileSiteCurrency_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductProfileSiteCurrency_RepUpdateTime] ON [dbo].[ProductProfileSiteCurrency]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductProfileSiteCurrency_UAT]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -890,6 +1033,11 @@ CREATE TABLE [dbo].[ProductProfileSiteCurrency_UAT](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[ProductProfileSiteCurrency_UAT] ADD  CONSTRAINT [DF_ProductProfileSiteCurrency_UAT_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_ProductProfileSiteCurrency_UAT_RepUpdateTime] ON [dbo].[ProductProfileSiteCurrency_UAT]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[ProductSettingProfile]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -950,6 +1098,16 @@ ALTER TABLE [dbo].[ProductSettingProfile] ADD  CONSTRAINT [DF_ProductSettingProf
 GO
 ALTER TABLE [dbo].[ProductSettingProfile] ADD  CONSTRAINT [DF_ProductSettingProfile_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_GroupType] ON [dbo].[ProductSettingProfile]
+(
+	[GroupType] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_RepUpdateTime] ON [dbo].[ProductSettingProfile]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductSettingProfile_UAT]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1009,6 +1167,16 @@ ALTER TABLE [dbo].[ProductSettingProfile_UAT] ADD  CONSTRAINT [DF_ProductSetting
 GO
 ALTER TABLE [dbo].[ProductSettingProfile_UAT] ADD  CONSTRAINT [DF_ProductSettingProfile_UAT_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_UAT_GroupType] ON [dbo].[ProductSettingProfile_UAT]
+(
+	[GroupType] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_UAT_RepUpdateTime] ON [dbo].[ProductSettingProfile_UAT]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductSettingSystemDisplay]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1030,6 +1198,12 @@ CREATE TABLE [dbo].[ProductSettingSystemDisplay](
 GO
 ALTER TABLE [dbo].[ProductSettingSystemDisplay] ADD  CONSTRAINT [DF_ProductSettingSystemDisplay_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingSystemDisplay_RepUpdateTime] ON [dbo].[ProductSettingSystemDisplay]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+
 /****** Object:  Table [dbo].[ProductSettingSystemDisplay_UAT]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1042,6 +1216,7 @@ CREATE TABLE [dbo].[ProductSettingSystemDisplay_UAT](
 	[DisplayMode] [tinyint] NULL
 ) ON [DATA]
 GO
+
 /****** Object:  Table [dbo].[ProductSettingType]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1083,6 +1258,11 @@ CREATE TABLE [dbo].[ProductSettingUpdateRestriction](
 GO
 ALTER TABLE [dbo].[ProductSettingUpdateRestriction] ADD  CONSTRAINT [DF_ProductSettingUpdateRestriction_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductSettingUpdateRestriction_RepUpdateTime] ON [dbo].[ProductSettingUpdateRestriction]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductStakeLevelGroup]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1109,6 +1289,11 @@ ALTER TABLE [dbo].[ProductStakeLevelGroup] ADD  CONSTRAINT [DF_ProductStakeLevel
 GO
 ALTER TABLE [dbo].[ProductStakeLevelGroup] ADD  CONSTRAINT [DF_ProductStakeLevelGroup_isDeleted]  DEFAULT ((0)) FOR [isDeleted]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductStakeLevelGroup_RepUpdateTime] ON [dbo].[ProductStakeLevelGroup]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProductStatusProfile]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1127,6 +1312,11 @@ CREATE TABLE [dbo].[ProductStatusProfile](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[ProductStatusProfile] ADD  CONSTRAINT [DF_ProductStatusProfile_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_ProductStatusProfile_RepUpdateTime] ON [dbo].[ProductStatusProfile]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[ProductStatusSiteCurrency]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1155,6 +1345,11 @@ ALTER TABLE [dbo].[ProductStatusSiteCurrency] ADD  DEFAULT ((1)) FOR [HasSynced]
 GO
 ALTER TABLE [dbo].[ProductStatusSiteCurrency] ADD  CONSTRAINT [DF_ProductStatusSiteCurrency_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_ProductStatusSiteCurrency_RepUpdateTime] ON [dbo].[ProductStatusSiteCurrency]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[ProfilePicture]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1172,6 +1367,11 @@ CREATE TABLE [dbo].[ProfilePicture](
 ) ON [DATA] TEXTIMAGE_ON [DATA]
 GO
 ALTER TABLE [dbo].[ProfilePicture] ADD  CONSTRAINT [DF_ProfilePicture_IsDeleted]  DEFAULT ((0)) FOR [IsDeleted]
+GO
+CREATE NONCLUSTERED INDEX [IX_RepUpdateTime_ProfilePicture] ON [dbo].[ProfilePicture]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 
 CREATE TABLE [dbo].[SettingSystem](
@@ -1240,6 +1440,11 @@ ALTER TABLE [dbo].[Site] ADD  CONSTRAINT [DF_Site_CustDBGroupID]  DEFAULT ((0)) 
 GO
 ALTER TABLE [dbo].[Site] ADD  CONSTRAINT [DF_Site_SiteType]  DEFAULT ((0)) FOR [SiteType]
 GO
+CREATE NONCLUSTERED INDEX [IX_RepUpdateTime] ON [dbo].[Site]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[SiteDBConfig]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1261,6 +1466,11 @@ CREATE TABLE [dbo].[SiteDBConfig](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[SiteDBConfig] ADD  CONSTRAINT [DF_SiteDBConfig_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_SiteDBConfig_RepUpdateTime] ON [dbo].[SiteDBConfig]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[SportBettypeSettingMatrix]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1315,6 +1525,18 @@ ALTER TABLE [dbo].[SportBettypeSettingMatrix] ADD  CONSTRAINT [DF_SportBettypeSe
 GO
 ALTER TABLE [dbo].[SportBettypeSettingMatrix] ADD  CONSTRAINT [SportBettypeSettingMatrix_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
+CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_RepUpdateTime] ON [dbo].[SportBettypeSettingMatrix]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
+CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_SportType] ON [dbo].[SportBettypeSettingMatrix]
+(
+	[SportType] ASC,
+	[RealProductId] ASC,
+	[ProductID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[SportNonOfferedSiteCurrency]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1337,6 +1559,11 @@ CREATE TABLE [dbo].[SportNonOfferedSiteCurrency](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[SportNonOfferedSiteCurrency] ADD  CONSTRAINT [DF_SportNonOfferedSiteCurrency_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_SportNonOfferedSiteCurrency_RepUpdateTime] ON [dbo].[SportNonOfferedSiteCurrency]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[StakeLevel]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1363,6 +1590,11 @@ GO
 ALTER TABLE [dbo].[StakeLevel] ADD  CONSTRAINT [DF_StakeLevel_GameGroupID]  DEFAULT ((0)) FOR [GameGroupID]
 GO
 ALTER TABLE [dbo].[StakeLevel] ADD  CONSTRAINT [DF_StakeLevel_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_StakeLevel_RepUpdateTime] ON [dbo].[StakeLevel]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[StakeLevel_History]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1417,6 +1649,11 @@ CREATE TABLE [dbo].[UMConfig](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 ) ON [DATA]
 GO
+CREATE NONCLUSTERED INDEX [IX_UMConfig_ConfigID] ON [dbo].[UMConfig]
+(
+	[ConfigID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[Winlimit_ActionSetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1433,6 +1670,11 @@ CREATE TABLE [dbo].[Winlimit_ActionSetting](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[Winlimit_ActionSetting] ADD  CONSTRAINT [DF_Winlimit_ActionSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_Winlimit_ActionSetting_RepUpdateTime] ON [dbo].[Winlimit_ActionSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Winlimit_GameGroupSetting]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1452,6 +1694,11 @@ CREATE TABLE [dbo].[Winlimit_GameGroupSetting](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[Winlimit_GameGroupSetting] ADD  CONSTRAINT [DF_Winlimit_GameGroupSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_Winlimit_GameGroupSetting_RepUpdateTime] ON [dbo].[Winlimit_GameGroupSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 /****** Object:  Table [dbo].[Winlimit_Group]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
@@ -1484,6 +1731,11 @@ CREATE TABLE [dbo].[Winlimit_LevelSetting](
 ) ON [DATA]
 GO
 ALTER TABLE [dbo].[Winlimit_LevelSetting] ADD  CONSTRAINT [DF_Winlimit_LevelSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+GO
+CREATE NONCLUSTERED INDEX [IX_Winlimit_LevelSetting_RepUpdateTime] ON [dbo].[Winlimit_LevelSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
 
 CREATE TABLE [dbo].[Winlimit_ProductGlobalSetting](
@@ -1532,7 +1784,11 @@ ALTER TABLE [dbo].[Winlimit_ProductSetting] ADD  CONSTRAINT [DF_Winlimit_Product
 GO
 ALTER TABLE [dbo].[Winlimit_ProductSetting] ADD  CONSTRAINT [DF_Winlimit_ProductSetting_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
-
+CREATE NONCLUSTERED INDEX [IX_Winlimit_ProductSetting_RepUpdateTime] ON [dbo].[Winlimit_ProductSetting]
+(
+	[RepUpdateTime] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
+GO
 /****** Object:  Table [dbo].[WinLimit_ProductSettingDetail]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -1574,297 +1830,11 @@ GO
 ALTER TABLE [dbo].[WinLimit_ProductSettingDetail] ADD  CONSTRAINT [DF_WinLimit_ProductSettingDetail_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 GO
 
-
-
-
-/****** Object:  Index [IX_Acc_SuperPrefix_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Acc_SuperPrefix_RepUpdateTime] ON [dbo].[Acc_SuperPrefix]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_BetLimitControlTypeDetail_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_BetLimitControlTypeDetail_RepUpdateTime] ON [dbo].[BetLimitControlTypeDetail]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_CategoryConfig_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_CategoryConfig_RepUpdateTime] ON [dbo].[CategoryConfig]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_ProductBetSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_ProductBetSetting_RepUpdateTime] ON [dbo].[Dep_ProductBetSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_ProductSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_ProductSetting_RepUpdateTime] ON [dbo].[Dep_ProductSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_ProductSettingDetail_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_ProductSettingDetail_RepUpdateTime] ON [dbo].[Dep_ProductSettingDetail]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_ProductStakeLevelGroup_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_ProductStakeLevelGroup_RepUpdateTime] ON [dbo].[Dep_ProductStakeLevelGroup]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_ProductStatusProfile_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_ProductStatusProfile_RepUpdateTime] ON [dbo].[Dep_ProductStatusProfile]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_StakeLevel_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_StakeLevel_RepUpdateTime] ON [dbo].[Dep_StakeLevel]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Dep_StakeLevelGroupDetail_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Dep_StakeLevelGroupDetail_RepUpdateTime] ON [dbo].[Dep_StakeLevelGroupDetail]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_DomainManagement_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_DomainManagement_RepUpdateTime] ON [dbo].[DomainManagement]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_GameGroup_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_GameGroup_RepUpdateTime] ON [dbo].[GameGroup]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_GameLaunchPerCurrency_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_GameLaunchPerCurrency_RepUpdateTime] ON [dbo].[GameLaunchPerCurrency]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_GameLaunchPerSite_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_GameLaunchPerSite_RepUpdateTime] ON [dbo].[GameLaunchPerSite]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_GameRoundBetLimitSettings_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_GameRoundBetLimitSettings_RepUpdateTime] ON [dbo].[GameRoundBetLimitSettings]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_LossLimit_GlobalSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_LossLimit_GlobalSetting_RepUpdateTime] ON [dbo].[LossLimit_GlobalSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_MaxPayoutGlobalSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MaxPayoutGlobalSetting_RepUpdateTime] ON [dbo].[MaxPayoutGlobalSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_MsgError_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MsgError_RepUpdateTime] ON [dbo].[MsgError]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_MsgErrorGroup_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_MsgErrorGroup_RepUpdateTime] ON [dbo].[MsgErrorGroup]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_PlayCurrencySetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_PlayCurrencySetting_RepUpdateTime] ON [dbo].[PlayCurrencySetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProblemAccountReason_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProblemAccountReason_RepUpdateTime] ON [dbo].[ProblemAccountReason]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductBetSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductBetSetting_RepUpdateTime] ON [dbo].[ProductBetSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductGlobalSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductGlobalSetting_RepUpdateTime] ON [dbo].[ProductGlobalSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductLaunchedSiteCurrency_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductLaunchedSiteCurrency_RepUpdateTime] ON [dbo].[ProductLaunchedSiteCurrency]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductProfileSiteCurrency_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductProfileSiteCurrency_RepUpdateTime] ON [dbo].[ProductProfileSiteCurrency]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductProfileSiteCurrency_UAT_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductProfileSiteCurrency_UAT_RepUpdateTime] ON [dbo].[ProductProfileSiteCurrency_UAT]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingProfile_GroupType]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_GroupType] ON [dbo].[ProductSettingProfile]
-(
-	[GroupType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingProfile_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_RepUpdateTime] ON [dbo].[ProductSettingProfile]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingProfile_UAT_GroupType]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_UAT_GroupType] ON [dbo].[ProductSettingProfile_UAT]
-(
-	[GroupType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingProfile_UAT_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingProfile_UAT_RepUpdateTime] ON [dbo].[ProductSettingProfile_UAT]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingSystemDisplay_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingSystemDisplay_RepUpdateTime] ON [dbo].[ProductSettingSystemDisplay]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductSettingUpdateRestriction_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductSettingUpdateRestriction_RepUpdateTime] ON [dbo].[ProductSettingUpdateRestriction]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductStakeLevelGroup_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductStakeLevelGroup_RepUpdateTime] ON [dbo].[ProductStakeLevelGroup]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductStatusProfile_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductStatusProfile_RepUpdateTime] ON [dbo].[ProductStatusProfile]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_ProductStatusSiteCurrency_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_ProductStatusSiteCurrency_RepUpdateTime] ON [dbo].[ProductStatusSiteCurrency]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_RepUpdateTime_ProfilePicture]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_RepUpdateTime_ProfilePicture] ON [dbo].[ProfilePicture]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_RepUpdateTime] ON [dbo].[Site]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_SiteDBConfig_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_SiteDBConfig_RepUpdateTime] ON [dbo].[SiteDBConfig]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_SportBettypeSettingMatrix_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_RepUpdateTime] ON [dbo].[SportBettypeSettingMatrix]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_SportBettypeSettingMatrix_SportType]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_SportType] ON [dbo].[SportBettypeSettingMatrix]
-(
-	[SportType] ASC,
-	[RealProductId] ASC,
-	[ProductID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_SportNonOfferedSiteCurrency_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_SportNonOfferedSiteCurrency_RepUpdateTime] ON [dbo].[SportNonOfferedSiteCurrency]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_StakeLevel_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_StakeLevel_RepUpdateTime] ON [dbo].[StakeLevel]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_UMConfig_ConfigID]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_UMConfig_ConfigID] ON [dbo].[UMConfig]
-(
-	[ConfigID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Winlimit_ActionSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Winlimit_ActionSetting_RepUpdateTime] ON [dbo].[Winlimit_ActionSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Winlimit_GameGroupSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Winlimit_GameGroupSetting_RepUpdateTime] ON [dbo].[Winlimit_GameGroupSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Winlimit_LevelSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Winlimit_LevelSetting_RepUpdateTime] ON [dbo].[Winlimit_LevelSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_Winlimit_ProductSetting_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
-CREATE NONCLUSTERED INDEX [IX_Winlimit_ProductSetting_RepUpdateTime] ON [dbo].[Winlimit_ProductSetting]
-(
-	[RepUpdateTime] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-GO
-/****** Object:  Index [IX_WinLimit_ProductSettingDetail_RepUpdateTime]    Script Date: 2/13/2025 2:35:14 PM ******/
 CREATE NONCLUSTERED INDEX [IX_WinLimit_ProductSettingDetail_RepUpdateTime] ON [dbo].[WinLimit_ProductSettingDetail]
 (
 	[RepUpdateTime] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 GO
+
+
 
