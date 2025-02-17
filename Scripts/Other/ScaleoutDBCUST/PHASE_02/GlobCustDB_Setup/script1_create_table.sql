@@ -9,6 +9,16 @@
 
 USE [GlobCustDB]
 GO
+
+IF OBJECT_ID('MsgError', 'V') IS NOT NULL
+    DROP VIEW MsgError;
+GO
+IF OBJECT_ID('Site', 'V') IS NOT NULL
+    DROP VIEW [Site];
+GO
+IF OBJECT_ID('SiteDBConfig', 'V') IS NOT NULL
+    DROP VIEW SiteDBConfig;
+GO
 /****** Object:  Table [dbo].[Acc_SuperPrefix]    Script Date: 2/13/2025 10:37:36 AM ******/
 SET ANSI_NULLS ON
 GO
