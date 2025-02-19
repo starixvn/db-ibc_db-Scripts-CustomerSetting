@@ -22,9 +22,7 @@ GRANT SELECT ON dbo.Dep_ProductSettingType TO wsv_nap, wsv_alp, wsv_alpv, wsv_xn
 GRANT SELECT ON dbo.Dep_ProductStakeLevelGroup TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Dep_ProductStatusProfile TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Dep_StakeLevel TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-GRANT SELECT ON dbo.Dep_StakeLevel_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Dep_StakeLevelGroupDetail TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-GRANT SELECT ON dbo.Dep_StakeLevelGroupDetail_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Dep_UMConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.DomainManagement TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.GameGroup TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
@@ -61,7 +59,6 @@ GRANT SELECT ON dbo.SiteDBConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_la
 GRANT SELECT ON dbo.SportBettypeSettingMatrix TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.SportNonOfferedSiteCurrency TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.StakeLevel TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-GRANT SELECT ON dbo.StakeLevel_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust
 GRANT SELECT ON dbo.UMConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Winlimit_ActionSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Winlimit_GameGroupSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
