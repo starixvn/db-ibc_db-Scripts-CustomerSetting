@@ -362,28 +362,6 @@ AS
 GO
 
 
-CREATE VIEW [dbo].[Dep_StakeLevel_History]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   StakeLevelID 
-		, GameTypeID 
-		, MaxLabel 
-		, MaxStake 
-		, SiteID 
-		, UpdateTime 
-	FROM GlobCustDB.dbo.Dep_StakeLevel_History WITH(NOLOCK);
-GO
-
-
 CREATE VIEW [dbo].[Dep_StakeLevelGroupDetail]
 AS
 /*
@@ -407,29 +385,6 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.Dep_StakeLevelGroupDetail WITH(NOLOCK);
 GO
-
-
-CREATE VIEW [dbo].[Dep_StakeLevelGroupDetail_History]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   StakeLevelID 
-		, GameTypeID 
-		, MaxLabel 
-		, MaxStake 
-		, MaxGameStake 
-		, UpdateTime 
-	FROM GlobCustDB.dbo.Dep_StakeLevelGroupDetail_History WITH(NOLOCK);
-GO
-
 
 CREATE VIEW [dbo].[Dep_UMConfig]
 AS
@@ -1319,28 +1274,6 @@ AS
 		, RepUpdateTime 
 	FROM GlobCustDB.dbo.StakeLevel WITH(NOLOCK);
 GO
-
-
-CREATE VIEW [dbo].[StakeLevel_History]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   StakeLevelID 
-		, GameTypeID 
-		, MaxLabel 
-		, MaxStake 
-		, UpdateTime 
-	FROM GlobCustDB.dbo.StakeLevel_History WITH(NOLOCK);
-GO
-
 
 CREATE VIEW [dbo].[UMConfig]
 AS
