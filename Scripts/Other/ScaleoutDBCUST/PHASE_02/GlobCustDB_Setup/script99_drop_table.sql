@@ -8,7 +8,6 @@
 USE [CustDB]
 GO
 DROP TABLE IF EXISTS dbo.Acc_SuperPrefix;
-DROP TABLE IF EXISTS dbo.BetLimitControlTypeDetails;
 DROP TABLE IF EXISTS dbo.CategoryConfig;
 DROP TABLE IF EXISTS dbo.DangerLevelPolicy;
 DROP TABLE IF EXISTS dbo.Dep_Initial_BetSetting;

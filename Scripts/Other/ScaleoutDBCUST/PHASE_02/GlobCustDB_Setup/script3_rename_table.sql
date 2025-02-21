@@ -8,7 +8,6 @@
 USE CustDB
 GO
 exec sp_rename 'dbo.Acc_SuperPrefix','Del_Acc_SuperPrefix';
-exec sp_rename 'dbo.BetLimitControlTypeDetails','Del_BetLimitControlTypeDetails';
 exec sp_rename 'dbo.CategoryConfig','Del_CategoryConfig';
 exec sp_rename 'dbo.DangerLevelPolicy','Del_DangerLevelPolicy';
 exec sp_rename 'dbo.Dep_Initial_BetSetting','Del_Dep_Initial_BetSetting';

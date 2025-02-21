@@ -14,12 +14,6 @@ SELECT  GroupName , Prefix , AllowNewSuper , RepUpdateTime
 FROM CustDB.[dbo].[Acc_SuperPrefix] WITH(NOLOCK);
 
 
-SET IDENTITY_INSERT [dbo].[BetLimitControlTypeDetails] ON; 
-INSERT INTO GlobCustDB.[dbo].[BetLimitControlTypeDetails]( ID, BetLimitTypeID, ProductID, Sporttype, Bettype, LeagueGroupID, LeagueID, RepUpdateTime)
-SELECT  ID , BetLimitTypeID , ProductID , Sporttype , Bettype , LeagueGroupID , LeagueID , RepUpdateTime 
-FROM CustDB.[dbo].[BetLimitControlTypeDetails] WITH(NOLOCK);
-SET IDENTITY_INSERT [dbo].[BetLimitControlTypeDetails] OFF; 
-
 
 INSERT INTO GlobCustDB.[dbo].[CategoryConfig]( CategoryID, CategoryName, OfferDeposit, CategoryNameCS, CustomerClass, HiddenSite, RepUpdateTime)
 SELECT  CategoryID , CategoryName , OfferDeposit , CategoryNameCS , CustomerClass , HiddenSite , RepUpdateTime 

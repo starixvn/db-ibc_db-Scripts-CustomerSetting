@@ -8,7 +8,6 @@
 USE [CustDB]; 
 GO
 GRANT SELECT ON dbo.Acc_SuperPrefix TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-GRANT SELECT ON dbo.BetLimitControlTypeDetails TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.CategoryConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.DangerLevelPolicy TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 GRANT SELECT ON dbo.Dep_Initial_BetSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;

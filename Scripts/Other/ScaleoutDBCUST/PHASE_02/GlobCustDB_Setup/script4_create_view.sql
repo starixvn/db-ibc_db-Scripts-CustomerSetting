@@ -28,30 +28,6 @@ AS
 GO
 
 
-CREATE VIEW [dbo].[BetLimitControlTypeDetails]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   ID 
-		, BetLimitTypeID 
-		, ProductID 
-		, Sporttype 
-		, Bettype 
-		, LeagueGroupID 
-		, LeagueID 
-		, RepUpdateTime 
-	FROM GlobCustDB.dbo.BetLimitControlTypeDetails WITH(NOLOCK);
-GO
-
-
 CREATE VIEW [dbo].[CategoryConfig]
 AS
 /*
