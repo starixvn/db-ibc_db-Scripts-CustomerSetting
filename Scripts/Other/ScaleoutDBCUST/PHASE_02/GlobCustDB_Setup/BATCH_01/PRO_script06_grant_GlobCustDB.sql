@@ -2,11 +2,15 @@
 /*
 	Created: DaveTruong
 	Date: 20250120
-	Task: Grant on GlobCustDB (NOT for SiteDBConfig, site) [RedmineID:#216870]
+	Task: Grant on GlobCustDB [RedmineID:#216870]
 	DB: DBGLOB/GlobCustDB
 */
 USE GlobCustDB;
 GO
+/*Site*/
+GRANT SELECT ON dbo.Site TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
+/*SiteDBConfig*/
+GRANT SELECT ON dbo.SiteDBConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_Initial_BetSetting*/
 GRANT SELECT ON dbo.Dep_Initial_BetSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_Initial_ProductConfig*/
