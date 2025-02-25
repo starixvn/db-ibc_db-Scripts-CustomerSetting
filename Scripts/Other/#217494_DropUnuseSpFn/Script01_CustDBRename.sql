@@ -31,6 +31,9 @@ IF OBJECT_ID('Dot_Dep_CustomerInsMember_Ag_Cust_Switch', 'P') IS NOT NULL
 IF OBJECT_ID('Dot_Dep_CustomerInsMember_OddAdj', 'P') IS NOT NULL 
 	EXECUTE sp_rename 'dbo.Dot_Dep_CustomerInsMember_OddAdj' , 'DEL_Dot_Dep_CustomerInsMember_OddAdj';
 
+IF OBJECT_ID('Dot_Dep_Customer_Archive_ReactiveCustomer', 'P') IS NOT NULL 
+	EXECUTE sp_rename 'dbo.Dot_Dep_Customer_Archive_ReactiveCustomer' , 'DEL_Dot_Dep_Customer_Archive_ReactiveCustomer';
+
 IF OBJECT_ID('f_LAS_GenerateUsername', 'FN') IS NOT NULL 
 	EXECUTE sp_rename 'dbo.f_LAS_GenerateUsername' , 'DEL_f_LAS_GenerateUsername', object;
 

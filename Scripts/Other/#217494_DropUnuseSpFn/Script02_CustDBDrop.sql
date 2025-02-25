@@ -31,6 +31,8 @@ IF OBJECT_ID('DEL_Dot_Dep_CustomerInsMember_Ag_Cust_Switch', 'P') IS NOT NULL
 	DROP PROCEDURE dbo.DEL_Dot_Dep_CustomerInsMember_Ag_Cust_Switch;
 IF OBJECT_ID('DEL_Dot_Dep_CustomerInsMember_OddAdj', 'P') IS NOT NULL 
 	DROP PROCEDURE dbo.DEL_Dot_Dep_CustomerInsMember_OddAdj;
+IF OBJECT_ID('DEL_Dot_Dep_Customer_Archive_ReactiveCustomer', 'P') IS NOT NULL 
+	DROP PROCEDURE dbo.DEL_Dot_Dep_Customer_Archive_ReactiveCustomer;
 
 IF OBJECT_ID('DEL_f_LAS_GenerateUsername', 'FN') IS NOT NULL 
 	DROP FUNCTION dbo.DEL_f_LAS_GenerateUsername;
