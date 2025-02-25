@@ -7,6 +7,10 @@
 */
 USE CustDB
 GO
+/*Site*/
+exec sp_rename 'dbo.Site','Del_Site';
+/*SiteDBConfig*/
+exec sp_rename 'dbo.SiteDBConfig','Del_SiteDBConfig';
 /*Dep_Initial_BetSetting*/
 exec sp_rename 'dbo.Dep_Initial_BetSetting','Del_Dep_Initial_BetSetting';
 /*Dep_Initial_ProductConfig*/
@@ -57,10 +61,6 @@ exec sp_rename 'dbo.ProductBetSetting','Del_ProductBetSetting';
 exec sp_rename 'dbo.ProductStakeLevelGroup','Del_ProductStakeLevelGroup';
 /*SettingSystem*/
 exec sp_rename 'dbo.SettingSystem','Del_SettingSystem';
-/*Site*/
-exec sp_rename 'dbo.Site','Del_Site';
-/*SiteDBConfig*/
-exec sp_rename 'dbo.SiteDBConfig','Del_SiteDBConfig';
 /*SportBettypeSettingMatrix*/
 exec sp_rename 'dbo.SportBettypeSettingMatrix','Del_SportBettypeSettingMatrix';
 /*StakeLevel*/

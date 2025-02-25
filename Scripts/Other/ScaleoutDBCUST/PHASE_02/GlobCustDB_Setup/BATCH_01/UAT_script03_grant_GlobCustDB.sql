@@ -1,11 +1,11 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBGLOB-GlobCustDB" executers="" viewers="" isFunction="0"></info>*/
 /*
-	Created: Dave
+	Created: DaveTruong
 	Date: 20250120
-	Task: Create view in CustDB [RedmineID:#216870]
-	DB: DBCust/CustDB
+	Task: Grant on GlobCustDB (NOT for SiteDBConfig, site) [RedmineID:#216870]
+	DB: DBGLOB/GlobCustDB
 */
-USE [CustDB]; 
+USE GlobCustDB;
 GO
 /*Dep_Initial_BetSetting*/
 GRANT SELECT ON dbo.Dep_Initial_BetSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
@@ -30,9 +30,11 @@ GRANT SELECT ON dbo.Dep_ProductStatusProfile TO wsv_nap, wsv_alp, wsv_alpv, wsv_
 /*Dep_StakeLevel*/
 GRANT SELECT ON dbo.Dep_StakeLevel TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_StakeLevel_History*/
+GRANT SELECT ON dbo.Dep_StakeLevel_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_StakeLevelGroupDetail*/
 GRANT SELECT ON dbo.Dep_StakeLevelGroupDetail TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_StakeLevelGroupDetail_History*/
+GRANT SELECT ON dbo.Dep_StakeLevelGroupDetail_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*Dep_UMConfig*/
 GRANT SELECT ON dbo.Dep_UMConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*DomainManagement*/
@@ -55,12 +57,9 @@ GRANT SELECT ON dbo.ProductBetSetting TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, w
 GRANT SELECT ON dbo.ProductStakeLevelGroup TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*SettingSystem*/
 GRANT SELECT ON dbo.SettingSystem TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-/*Site*/
-GRANT SELECT ON dbo.Site TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
-/*SiteDBConfig*/
-GRANT SELECT ON dbo.SiteDBConfig TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*SportBettypeSettingMatrix*/
 GRANT SELECT ON dbo.SportBettypeSettingMatrix TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*StakeLevel*/
 GRANT SELECT ON dbo.StakeLevel TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;
 /*StakeLevel_History*/
+GRANT SELECT ON dbo.StakeLevel_History TO wsv_nap, wsv_alp, wsv_alpv, wsv_xnap, wsv_lap, svc_tig, asv_cust;

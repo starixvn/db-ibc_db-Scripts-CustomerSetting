@@ -8,6 +8,70 @@
 USE CustDB
 GO
 
+/*Site*/
+CREATE VIEW [dbo].[Site]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   siteid 
+		, site 
+		, type 
+		, spreada 
+		, spreadb 
+		, spreadc 
+		, spreadd 
+		, spreade 
+		, spreadf 
+		, ServerID 
+		, isLicensee 
+		, isActive 
+		, isDeposit 
+		, SpecialGroup 
+		, BlockNewCust 
+		, UnblockTime 
+		, IsChinaView 
+		, RepUpdateTime 
+		, SiteDBGroupID 
+		, SiteLabel 
+		, SpecialPlatfrom 
+		, CustDBGroupID 
+		, SiteType 
+	FROM GlobCustDB.dbo.Site WITH(NOLOCK);
+GO
+
+/*SiteDBConfig*/
+CREATE VIEW [dbo].[SiteDBConfig]
+AS
+/*
+	Created: Dave
+	Date: 2025-01-20
+	Task: Scale out dbcust
+	DB: DBCUST-CustDB
+	
+	Revisions:
+		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
+
+*/
+	SELECT   SiteDBGroupID 
+		, LinkedServerName 
+		, ClientAccessName 
+		, AGIP 
+		, AWSProxyDomain 
+		, AWSProxyPort 
+		, RepUpdateTime 
+		, FQDN 
+	FROM GlobCustDB.dbo.SiteDBConfig WITH(NOLOCK);
+GO
+
+
 /*Dep_Initial_BetSetting*/
 CREATE VIEW [dbo].[Dep_Initial_BetSetting]
 AS
@@ -563,68 +627,6 @@ CREATE VIEW [dbo].[SettingSystem]AS/*
 */	SELECT   SystemID 		, SystemName 		, Description 		, SystemPrefix 	FROM GlobCustDB.dbo.SettingSystem WITH(NOLOCK);
 GO
 
-/*Site*/
-CREATE VIEW [dbo].[Site]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   siteid 
-		, site 
-		, type 
-		, spreada 
-		, spreadb 
-		, spreadc 
-		, spreadd 
-		, spreade 
-		, spreadf 
-		, ServerID 
-		, isLicensee 
-		, isActive 
-		, isDeposit 
-		, SpecialGroup 
-		, BlockNewCust 
-		, UnblockTime 
-		, IsChinaView 
-		, RepUpdateTime 
-		, SiteDBGroupID 
-		, SiteLabel 
-		, SpecialPlatfrom 
-		, CustDBGroupID 
-		, SiteType 
-	FROM GlobCustDB.dbo.Site WITH(NOLOCK);
-GO
-
-/*SiteDBConfig*/
-CREATE VIEW [dbo].[SiteDBConfig]
-AS
-/*
-	Created: Dave
-	Date: 2025-01-20
-	Task: Scale out dbcust
-	DB: DBCUST-CustDB
-	
-	Revisions:
-		- 20250120@Dave:Scale out dbcust - [Redmine: #216870]
-
-*/
-	SELECT   SiteDBGroupID 
-		, LinkedServerName 
-		, ClientAccessName 
-		, AGIP 
-		, AWSProxyDomain 
-		, AWSProxyPort 
-		, RepUpdateTime 
-		, FQDN 
-	FROM GlobCustDB.dbo.SiteDBConfig WITH(NOLOCK);
-GO
 
 /*SportBettypeSettingMatrix*/
 CREATE VIEW [dbo].[SportBettypeSettingMatrix]

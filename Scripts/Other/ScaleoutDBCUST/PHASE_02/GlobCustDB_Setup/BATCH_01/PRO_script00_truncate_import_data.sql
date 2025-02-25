@@ -2,11 +2,41 @@
 /*
 	Created: DaveTruong
 	Date: 20250120
-	Task: Create table ScaleOut Custsetting on  GlobCustDB [RedmineID:#216870]
+	Task: Create table ScaleOut Custsetting on  GlobCustDB (NOT for SiteDBConfig, site) [RedmineID:#216870]
 	DB: DBGLOB/GlobCustDB
 */
 USE GlobCustDB
 GO
+
+TRUNCATE TABLE dbo.Dep_Initial_BetSetting;
+TRUNCATE TABLE dbo.Dep_Initial_ProductConfig;
+TRUNCATE TABLE dbo.Dep_Initial_ProductConfig_Detail;
+TRUNCATE TABLE dbo.Dep_Initial_StepByConfig;
+TRUNCATE TABLE dbo.Dep_ProductBetSetting;
+TRUNCATE TABLE dbo.Dep_ProductSetting;
+TRUNCATE TABLE dbo.Dep_ProductSettingDetail;
+TRUNCATE TABLE dbo.Dep_ProductSettingType;
+TRUNCATE TABLE dbo.Dep_ProductStakeLevelGroup;
+TRUNCATE TABLE dbo.Dep_ProductStatusProfile;
+TRUNCATE TABLE dbo.Dep_StakeLevel;
+TRUNCATE TABLE dbo.Dep_StakeLevel_History;
+TRUNCATE TABLE dbo.Dep_StakeLevelGroupDetail;
+TRUNCATE TABLE dbo.Dep_StakeLevelGroupDetail_History;
+TRUNCATE TABLE dbo.Dep_UMConfig;
+TRUNCATE TABLE dbo.DomainManagement;
+TRUNCATE TABLE dbo.GameGroup;
+TRUNCATE TABLE dbo.GameLaunchPerCurrency;
+TRUNCATE TABLE dbo.GameLaunchPerSite;
+TRUNCATE TABLE dbo.LossLimit_GlobalSetting;
+TRUNCATE TABLE dbo.MaxPayoutGlobalSetting;
+TRUNCATE TABLE dbo.PlayCurrencySetting;
+TRUNCATE TABLE dbo.ProductBetSetting;
+TRUNCATE TABLE dbo.ProductStakeLevelGroup;
+TRUNCATE TABLE dbo.SettingSystem;
+TRUNCATE TABLE dbo.SportBettypeSettingMatrix;
+TRUNCATE TABLE dbo.StakeLevel;
+TRUNCATE TABLE dbo.StakeLevel_History;
+
 /*Dep_Initial_BetSetting*/
 INSERT INTO GlobCustDB.[dbo].[Dep_Initial_BetSetting]( ConfigID, Currency, SportType, BetType, MinBet, MaxBet, MaxPerMatch, MaxPerNumber, MaxPayoutPerMatch)
 SELECT  ConfigID , Currency , SportType , BetType , MinBet , MaxBet , MaxPerMatch , MaxPerNumber , MaxPayoutPerMatch 
@@ -138,17 +168,6 @@ INSERT INTO GlobCustDB.[dbo].[SettingSystem]( SystemID, SystemName, Description,
 SELECT  SystemID , SystemName , Description , SystemPrefix 
 FROM CustDB.[dbo].[SettingSystem] WITH(NOLOCK);
 
-/*Site*/
-SET IDENTITY_INSERT [dbo].[Site] ON; 
-INSERT INTO GlobCustDB.[dbo].[Site]( siteid, site, type, spreada, spreadb, spreadc, spreadd, spreade, spreadf, ServerID, isLicensee, isActive, isDeposit, SpecialGroup, BlockNewCust, UnblockTime, IsChinaView, RepUpdateTime, SiteDBGroupID, SiteLabel, SpecialPlatfrom, CustDBGroupID, SiteType)
-SELECT  siteid , site , type , spreada , spreadb , spreadc , spreadd , spreade , spreadf , ServerID , isLicensee , isActive , isDeposit , SpecialGroup , BlockNewCust , UnblockTime , IsChinaView , RepUpdateTime , SiteDBGroupID , SiteLabel , SpecialPlatfrom , CustDBGroupID , SiteType 
-FROM CustDB.[dbo].[Site] WITH(NOLOCK);
-SET IDENTITY_INSERT [dbo].[Site] OFF; 
-
-/*SiteDBConfig*/
-INSERT INTO GlobCustDB.[dbo].[SiteDBConfig]( SiteDBGroupID, LinkedServerName, ClientAccessName, AGIP, AWSProxyDomain, AWSProxyPort, RepUpdateTime, FQDN)
-SELECT  SiteDBGroupID , LinkedServerName , ClientAccessName , AGIP , AWSProxyDomain , AWSProxyPort , RepUpdateTime , FQDN 
-FROM CustDB.[dbo].[SiteDBConfig] WITH(NOLOCK);
 
 /*SportBettypeSettingMatrix*/
 INSERT INTO GlobCustDB.[dbo].[SportBettypeSettingMatrix]( SportType, BetType, isLicensee, isLive, Site, isActive, SportTypeRefPT, BetTypeRefPT, isLivePT, TablePT, SportTypeRefComm, BetTypeRefComm, TableComm, SportTypeRefBetSetting, BetTypeRefBetSetting, TableBetSetting, IsLiveComm, IsLiveBetSetting, TableBettrans, SporttypeRefWinlossLimit, BettypeRefWinlossLimit, RealProductId, isDeleted, RepUpdateTime, ProductID)
