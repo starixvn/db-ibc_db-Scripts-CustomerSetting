@@ -1,49 +1,49 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/ 
 /*
 	Created: Eden@20250227
-	Task: Correct data SiteBuider New Currencies : 
-		Site = SoftGaming, 39 Currencies [RM:218685]
+	Task: Correct data SiteBuider Site = SoftGaming, 39 Currencies [RM:218685]
 	DB: DBCUST/CustDB
 */
 USE CUSTDB
 GO
-DECLARE @PT_Sportsbook SMALLMONEY = 92 -- get from site builder log
-	,@SiteName		VARCHAR(10)  = 'SoftGaming'
-	,@CurrencyList VARCHAR(MAX) = ''
+DECLARE @SiteName		VARCHAR(10)  = 'SoftGaming'
+	,@ProductList	VARCHAR(MAX)
+	,@LicenseeType	VARCHAR(50) = 'Boping'
 ------------------------------------------
-DECLARE @CurrencyTbl TABLE ( Currency INT)
-INSERT INTO @CurrencyTbl(Currency)
-SELECT Currency
-FROM vw_customer (NOLOCK) 
-WHERE site = @SiteName
-	AND roleid = 4
-ORDER BY Currency
+DECLARE @ProductTbl TABLE ( ProductID INT)
+INSERT INTO @ProductTbl(ProductID)
+		  SELECT 1
+UNION ALL SELECT 3
+UNION ALL SELECT 5
+UNION ALL SELECT 8
+UNION ALL SELECT 28
+UNION ALL SELECT 40
+UNION ALL SELECT 66
 
-SET @CurrencyList = (
-		SELECT DISTINCT Currency 
-		FROM @CurrencyTbl
-		FOR Json PATH
-	)
+SET @ProductList = (
+	SELECT DISTINCT ProductID 
+	FROM @ProductTbl
+	FOR Json PATH
+)
+
 -------------------
 DECLARE @ErrCode	INT = 0 
 	, @ErrMsg		NVARCHAR(MAX) = '' 
 	, @LicenseeId	INT = 0 
-	, @ErrExtraInfo VARCHAR(MAX) = ''  -- Log DB
+
+
 -------------------Init currency setting on bodb_licensee
-EXEC bodb_Licensee.dbo.[API_SiteBuilder_LicenseeDB_CurrencyIns]
+EXEC bodb_Licensee.dbo.API_SiteBuilder_LicenseeDB_Ins
 	 @SiteName		= @SiteName	
-	,@CurrencyList	= @CurrencyList
-	,@PT_Sportsbook	= @PT_Sportsbook
-	,@IP			= ''
+	,@LicenseeType  = @LicenseeType
+	,@ProductList	= @ProductList
 	,@ErrCode		= @ErrCode OUTPUT
 	,@ErrMsg		= @ErrMsg OUTPUT
 	,@LicenseeId	= @LicenseeId OUTPUT
-	,@ErrExtraInfo	= @ErrExtraInfo OUTPUT
 
 SELECT @ErrCode		AS ErrCode		
 	,@ErrMsg		AS ErrMsg		
 	,@LicenseeId	AS LicenseeId	
-	,@ErrExtraInfo	AS ErrExtraInfo
 	,'InitLicenseeDBSetting'	AS Step
 
 IF ISNULL(@LicenseeId,0) <> 0 -- Init company Winlimit
