@@ -3,6 +3,7 @@
 	Created: 20250228@Virgil
 	Task: BA Admin & LAP - Drop BA functions [RedmineID: #216882]
 	DB:	DBAGE-bodb02
+	Note: Step 1 - Rename SPs no longer using
 */
 USE bodb02
 GO

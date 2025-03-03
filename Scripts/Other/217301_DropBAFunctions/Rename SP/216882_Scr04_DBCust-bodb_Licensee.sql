@@ -3,6 +3,7 @@
 	Created: 20250228@Virgil
 	Task: BA Admin & LAP - Drop BA functions [RedmineID: #216882]
 	DB:	DBCust-bodb_Licensee
+	Note: Step 1 - Rename SPs no longer using
 */
 USE bodb_Licensee
 GO

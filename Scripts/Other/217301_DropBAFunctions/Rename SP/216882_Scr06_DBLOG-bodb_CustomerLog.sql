@@ -3,6 +3,7 @@
 	Created: 20250228@Virgil
 	Task: BA Admin & LAP - Drop BA functions [RedmineID: #216882]
 	DB:	DBLOG-bodb_CustomerLog
+	Note: Step 1 - Rename SPs no longer using
 */
 USE bodb_CustomerLog
 GO
