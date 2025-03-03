@@ -30,6 +30,8 @@ AND (
 	OR name LIKE 'Lrf_LicenseeBAHistoryIns%'
 	OR name LIKE 'Lrf_LicenseeBAHistoryUpdDone%'
 	OR name LIKE 'Task_CheckMissingActiveBAMember%'
+	OR name LIKE 'DBA_AddLicenseeToBA%'
+	OR name LIKE 'DBA_LicenseeBAConfig_Ins%'
 )
 
 WHILE (1=1)
