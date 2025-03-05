@@ -18,10 +18,11 @@ WHERE (type = 'P')
 AND (
 	name LIKE 'DBA_CheckComm_Dep%'
 	OR name LIKE 'DBA_CheckPT_Dep%'
+	OR name LIKE 'DBA_CheckComm_Deposit%'
 	OR name LIKE 'DBA_CheckPositionTaking_DepCustsetting%'
 	OR name LIKE 'DBA_CheckPositionTaking_Deposit%'
 )
-AND name NOT IN ('DBA_CheckComm_Deposit','DBA_CheckPT_Deposit')
+AND name NOT IN ('DBA_CheckPT_Deposit')
 
 WHILE (1=1)
 BEGIN

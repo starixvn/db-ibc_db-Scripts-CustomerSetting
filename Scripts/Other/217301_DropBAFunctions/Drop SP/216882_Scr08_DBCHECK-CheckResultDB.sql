@@ -17,6 +17,7 @@ FROM dbo.sysobjects
 WHERE (type = 'P')
 AND (
 	name LIKE 'DEL_DBA_CheckComm_Dep%'
+	OR name LIKE 'DEL_DBA_CheckComm_Deposit%'
 	OR name LIKE 'DEL_DBA_CheckPT_Dep%'
 	OR name LIKE 'DEL_DBA_CheckPositionTaking_DepCustsetting%'
 	OR name LIKE 'DEL_DBA_CheckPositionTaking_Deposit%'
