@@ -3,7 +3,7 @@
 	Created: 20250307@Virgil
 	Task: BA Admin & LAP - Drop BA functions [Redmine #216882]
 	DB: DBCUST-CustDB
-	Note: Step 1 - Remove redundant data
+	Note: Step 1 - Update AgentPT of BA (asiabet88)
 */
 CREATE TABLE #tmpDiffPT (
 	[CustID]	INT,
