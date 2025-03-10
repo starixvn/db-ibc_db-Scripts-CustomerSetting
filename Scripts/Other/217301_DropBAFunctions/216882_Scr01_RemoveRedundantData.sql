@@ -29,7 +29,7 @@ LEFT JOIN Dep_CustPTGroupSetting_Member p WITH (NOLOCK)
 WHERE c.site = 'asiabet88' 
 	AND c.currency IN (3,6)
 	AND c.roleid = 2
-	AND m.AgentPT <> ISNULL(p.AgentPT,0)
+	AND m.AgentPT <> ISNULL(p.AgentPT, -1)
 
 
 --SELECT * FROM #tmpDiffPT
