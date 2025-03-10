@@ -44,7 +44,8 @@ BEGIN
 END
 
 UPDATE g
-SET g.AgentPT = d.AgentPT
+SET g.AgentPT = d.AgentPT,
+	g.RepUpdateTime = dbo.f_GetDateTime2()
 FROM Dep_CustPTGroupSetting_Member g WITH(ROWLOCK, UPDLOCK)
 JOIN #tmpDiffPT d ON g.AgentID = d.CustID
 

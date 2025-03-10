@@ -3,7 +3,7 @@
 	Created: 20250307@Virgil
 	Task: BA Admin & LAP - Drop BA functions [Redmine #216882]
 	DB: DBCUST-CustDB
-	Note: Step 2 - Clean redundant data
+	Note: Step 2 - Remove redundant BA data
 */
 USE [CustDB]
 GO

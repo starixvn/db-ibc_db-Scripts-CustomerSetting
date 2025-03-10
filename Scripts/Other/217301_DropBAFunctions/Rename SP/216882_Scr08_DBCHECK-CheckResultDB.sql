@@ -34,7 +34,7 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		BREAK;
 	
-	--EXEC (@command)
+	EXEC (@command)
 
 END
 
