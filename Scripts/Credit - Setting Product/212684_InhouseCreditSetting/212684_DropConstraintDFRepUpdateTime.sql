@@ -1,0 +1,241 @@
+/*<info serverAlias="DBCUST-CustDB" executers="" viewers="" isFunction="0"></info>*/
+/*
+	 Created by: 20241225@Johnson
+	 Task: Drop constraint DF_RepUpdateTime  [Redmine:#212684]
+	 DB: DBCUST/CustDB
+*/
+ALTER TABLE Acc_CustAllowList DROP CONSTRAINT DF_Acc_CustAllowList_RepUpdateTime
+GO 
+ALTER TABLE Acc_CustDirect DROP CONSTRAINT DF_Acc_CustDirect_RepUpdateTime
+GO 
+ALTER TABLE Acc_CustGroup DROP CONSTRAINT DF_Acc_CustGroup_RepUpdateTime
+GO 
+ALTER TABLE Acc_CustType DROP CONSTRAINT DF_Acc_CustType_RepUpdateTime
+GO 
+ALTER TABLE Acc_FinancePermission DROP CONSTRAINT DF_Acc_FinancePermission_RepUpdateTime
+GO 
+ALTER TABLE Acc_GroupExtraCommRateSetting DROP CONSTRAINT DF_Acc_GroupExtraCommRateSetting_RepUpdateTime
+GO 
+ALTER TABLE Acc_GroupExtraPT_Product DROP CONSTRAINT DF_Acc_GroupExtraPT_Product_RepUpdateTime
+GO 
+ALTER TABLE Acc_GroupExtraPT2_Product DROP CONSTRAINT DF_Acc_GroupExtraPT2_Product_RepUpdateTime
+GO 
+ALTER TABLE Acc_GroupExtraPT2Setting DROP CONSTRAINT DF_Acc_GroupExtraPT2Setting_RepUpdateTime
+GO 
+ALTER TABLE Acc_GroupExtraPTSetting DROP CONSTRAINT DF_Acc_GroupExtraPTSetting_RepUpdateTime
+GO 
+ALTER TABLE Acc_SuperPrefix DROP CONSTRAINT DF_Acc_SuperPrefix_RepUpdateTime
+GO 
+ALTER TABLE Age_CustDateLimit DROP CONSTRAINT DF_Age_CustDateLimit_RepUpdateTime
+GO 
+ALTER TABLE Age_CustProfilePicture DROP CONSTRAINT DF_Age_CustProfilePicture_RepUpdateTime
+GO 
+ALTER TABLE Age_ProfilePicture DROP CONSTRAINT DF_Age_ProfilePicture_RepUpdateTime
+GO 
+ALTER TABLE APIInfo DROP CONSTRAINT DF_APIInfo_RepUpdateTime
+GO 
+ALTER TABLE BetLimitControlTypeDetail DROP CONSTRAINT DF_BetLimitControlTypeDetail_RepUpdateTime
+GO 
+ALTER TABLE CategoryConfig DROP CONSTRAINT DF_CategoryConfig_RepUpdateTime
+GO 
+ALTER TABLE Cust_ArchiveAccount DROP CONSTRAINT DF_Cust_ArchiveAccount_RepUpdateTime
+GO 
+ALTER TABLE Cust_LastBetFilter DROP CONSTRAINT DF_Cust_LastBetFilter_RepUpdateTime
+GO 
+ALTER TABLE custAccount DROP CONSTRAINT DF_custAccount_RepUpdateTime
+GO 
+ALTER TABLE CustAgent DROP CONSTRAINT DF_CustAgent_RepUpdateTime
+GO 
+ALTER TABLE CustBetSetting3rd_Agent DROP CONSTRAINT DF_CustBetSetting3rd_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustBetSetting3rd_Member DROP CONSTRAINT DF_CustBetSetting3rd_Member_RepUpdateTime
+GO 
+ALTER TABLE CustCategoryHistory DROP CONSTRAINT DF_CustCategoryHistory_RepUpdateTime
+GO 
+ALTER TABLE CustDirectAccount DROP CONSTRAINT DF_CustDirectAccount_RepUpdateTime
+GO 
+ALTER TABLE CustDiscount3rd_Agent DROP CONSTRAINT DF_CustDiscount3rd_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustDiscount3rd_Member DROP CONSTRAINT DF_CustDiscount3rd_Member_RepUpdateTime
+GO 
+ALTER TABLE CustGroupHeadline DROP CONSTRAINT DF_CustGroupHeadline_RepUpdateTime
+GO 
+ALTER TABLE CustInDirectLogin DROP CONSTRAINT DF_CustInDirectLogin_RepUpdateTime
+GO 
+ALTER TABLE custInfo DROP CONSTRAINT DF_custInfo_RepUpdateTime
+GO 
+ALTER TABLE CustLimitPTSetting DROP CONSTRAINT DF_CustLimitPTSetting_RepUpdateTime
+GO 
+ALTER TABLE CustLoginInfo DROP CONSTRAINT DF_CustLoginInfo_RepUpdateTime
+GO 
+ALTER TABLE CustLoginInfo_Member DROP CONSTRAINT DF_CustLoginInfo_Member_RepUpdateTime
+GO 
+ALTER TABLE CustLoginInfoSub DROP CONSTRAINT DF_CustLoginInfoSub_RepUpdateTime
+GO 
+ALTER TABLE CustMaster DROP CONSTRAINT DF_CustMaster_RepUpdateTime
+GO 
+ALTER TABLE CustMaxPayoutSetting_Agent DROP CONSTRAINT DF_CustMaxPayoutSetting_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustMaxPayoutSetting_Member DROP CONSTRAINT DF_CustMaxPayoutSetting_Member_RepUpdateTime
+GO 
+ALTER TABLE CustNoComm DROP CONSTRAINT DF_CustNoComm_RepUpdateTime
+GO 
+ALTER TABLE Customer DROP CONSTRAINT DF_Customer_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassPolicy DROP CONSTRAINT DF_CustomerClassPolicy_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassPolicyManagement DROP CONSTRAINT DF_CustomerClassPolicyManagement_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassPolicyRule DROP CONSTRAINT DF_CustomerClassPolicyRule_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassRule DROP CONSTRAINT DF_CustomerClassRule_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassRuleLeagueGroup DROP CONSTRAINT DF_CustomerClassRuleLeagueGroup_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSetting DROP CONSTRAINT DF_CustomerClassSetting_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSiteManagement DROP CONSTRAINT DF_CustomerClassSiteManagement_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpread DROP CONSTRAINT DF_CustomerClassSpread_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpreadClass DROP CONSTRAINT DF_CustomerClassSpreadClass_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpreadDetail DROP CONSTRAINT DF_CustomerClassSpreadDetail_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpreadDetail_UAT DROP CONSTRAINT DF_CustomerClassSpreadDetail_UAT_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpreadLeagueGroup DROP CONSTRAINT DF_CustomerClassSpreadLeagueGroup_RepUpdateTime
+GO 
+ALTER TABLE CustomerClassSpreadLeagueGroup_UAT DROP CONSTRAINT DF_CustomerClassSpreadLeagueGroup_UAT_RepUpdateTime
+GO 
+ALTER TABLE CustOTP DROP CONSTRAINT DF_CustOTP_RepUpdateTime
+GO 
+ALTER TABLE CustOTPDetail DROP CONSTRAINT DF_CustOTPDetail_RepUpdateTime
+GO 
+ALTER TABLE CustProductStatus DROP CONSTRAINT DF_CustProductStatus_RepUpdateTime
+GO 
+ALTER TABLE CustPTGroupSetting3rd_Member DROP CONSTRAINT DF_CustPTGroupSetting3rd_Member_RepUpdateTime
+GO 
+ALTER TABLE CustPTSetting3rd_Agent DROP CONSTRAINT DF_CustPTSetting3rd_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustPTSetting3rd_Member DROP CONSTRAINT DF_CustPTSetting3rd_Member_RepUpdateTime
+GO 
+ALTER TABLE CustPTTemplate DROP CONSTRAINT DF_CustPTTemplate_RepUpdateTime
+GO 
+ALTER TABLE CustPTTemplateDetail DROP CONSTRAINT DF_CustPTTemplateDetail_RepUpdateTime
+GO 
+ALTER TABLE CustQRCode DROP CONSTRAINT DF_CustQRCode_RepUpdateTime
+GO 
+ALTER TABLE custSearch DROP CONSTRAINT DF_custSearch_RepUpdateTime
+GO 
+ALTER TABLE CustSettingMode3rd DROP CONSTRAINT DF_CustSettingMode3rd_RepUpdateTime
+GO 
+ALTER TABLE CustStakeLevel_Agent DROP CONSTRAINT DF_CustStakeLevel_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustStakeLevel_Member DROP CONSTRAINT DF_CustStakeLevel_Member_RepUpdateTime
+GO 
+ALTER TABLE custSub DROP CONSTRAINT DF_custSub_RepUpdateTime
+GO 
+ALTER TABLE CustSuper DROP CONSTRAINT DF_CustSuper_RepUpdateTime
+GO 
+ALTER TABLE CustSuperProfile DROP CONSTRAINT DF_CustSuperProfile_RepUpdateTime
+GO 
+ALTER TABLE CustSuspendLockUpd DROP CONSTRAINT DF_CustSuspendLockUpd_RepUpdateTime
+GO 
+ALTER TABLE CustWinLossLimit_Agent DROP CONSTRAINT DF_CustWinLossLimit_Agent_RepUpdateTime
+GO 
+ALTER TABLE CustWinLossLimit_Member DROP CONSTRAINT DF_CustWinLossLimit_Member_RepUpdateTime
+GO 
+ALTER TABLE Dep_WLMonitored_Player DROP CONSTRAINT DF_Dep_WLMonitored_Player_RepUpdateTime
+GO 
+ALTER TABLE Dot_StreamingVIP DROP CONSTRAINT DF_Dot_StreamingVIP_RepUpdateTime
+GO 
+ALTER TABLE EASCustOTP DROP CONSTRAINT DF_EASCustOTP_RepUpdateTime
+GO 
+ALTER TABLE EmailNotification DROP CONSTRAINT DF_EmailNotification_RepUpdateTime
+GO 
+ALTER TABLE ExchangeDaily_Crypto DROP CONSTRAINT DF_ExchangeDaily_Crypto_RepUpdateTime
+GO 
+ALTER TABLE ExchangeDailyOanda DROP CONSTRAINT DF_ExchangeDailyOanda_RepUpdateTime
+GO 
+ALTER TABLE GameGroup DROP CONSTRAINT DF_GameGroup_RepUpdateTime
+GO 
+ALTER TABLE GameLaunchPerCurrency DROP CONSTRAINT DF_GameLaunchPerCurrency_RepUpdateTime
+GO 
+ALTER TABLE GameLaunchPerSite DROP CONSTRAINT DF_GameLaunchPerSite_RepUpdateTime
+GO 
+ALTER TABLE GameRoundBetLimitSettings DROP CONSTRAINT DF_GameRoundBetLimitSettings_RepUpdateTime
+GO 
+ALTER TABLE LimitPTDailySetting DROP CONSTRAINT DF_LimitPTDailySetting_RepUpdateTime
+GO 
+ALTER TABLE LossLimit_GlobalSetting DROP CONSTRAINT DF_LossLimit_GlobalSetting_RepUpdateTime
+GO 
+ALTER TABLE MaxPayoutGlobalSetting DROP CONSTRAINT DF_MaxPayoutGlobalSetting_RepUpdateTime
+GO 
+ALTER TABLE Member_LoginVerify DROP CONSTRAINT DF_Member_LoginVerify_RepUpdateTime
+GO 
+ALTER TABLE PhoneBettingCustomerList DROP CONSTRAINT DF_PhoneBettingCustomerList_RepUpdateTime
+GO 
+ALTER TABLE PlayCurrencySetting DROP CONSTRAINT DF_PlayCurrencySetting_RepUpdateTime
+GO 
+ALTER TABLE ProblemAccount DROP CONSTRAINT DF_ProblemAccount_RepUpdateTime
+GO 
+ALTER TABLE ProblemAccountAction DROP CONSTRAINT DF_ProblemAccountAction_RepUpdateTime
+GO 
+ALTER TABLE ProblemAccountClassification DROP CONSTRAINT DF_ProblemAccountClassification_RepUpdateTime
+GO 
+ALTER TABLE ProblemAccountLimitDownline DROP CONSTRAINT DF_ProblemAccountLimitDownline_RepUpdateTime
+GO 
+ALTER TABLE ProblemAccountReason DROP CONSTRAINT DF_ProblemAccountReason_RepUpdateTime
+GO 
+ALTER TABLE ProductBetSetting DROP CONSTRAINT DF_ProductBetSetting_RepUpdateTime
+GO 
+ALTER TABLE ProductGlobalSetting DROP CONSTRAINT DF_ProductGlobalSetting_RepUpdateTime
+GO 
+ALTER TABLE ProductLaunchedSiteCurrency DROP CONSTRAINT DF_ProductLaunchedSiteCurrency_RepUpdateTime
+GO 
+ALTER TABLE ProductProfileSiteCurrency DROP CONSTRAINT DF_ProductProfileSiteCurrency_RepUpdateTime
+GO 
+ALTER TABLE ProductProfileSiteCurrency_UAT DROP CONSTRAINT DF_ProductProfileSiteCurrency_UAT_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingDetail DROP CONSTRAINT DF_ProductSettingDetail_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingDetail_UAT DROP CONSTRAINT DF_ProductSettingDetail_UAT_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingProfile DROP CONSTRAINT DF_ProductSettingProfile_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingProfile_UAT DROP CONSTRAINT DF_ProductSettingProfile_UAT_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingSystemDisplay DROP CONSTRAINT DF_ProductSettingSystemDisplay_RepUpdateTime
+GO 
+ALTER TABLE ProductSettingUpdateRestriction DROP CONSTRAINT DF_ProductSettingUpdateRestriction_RepUpdateTime
+GO 
+ALTER TABLE ProductSiteConfig DROP CONSTRAINT DF_ProductSiteConfig_RepUpdateTime
+GO 
+ALTER TABLE ProductStatusProfile DROP CONSTRAINT DF_ProductStatusProfile_RepUpdateTime
+GO 
+ALTER TABLE ProductStatusSiteCurrency DROP CONSTRAINT DF_ProductStatusSiteCurrency_RepUpdateTime
+GO 
+ALTER TABLE RobotList DROP CONSTRAINT DF_RobotList_RepUpdateTime
+GO 
+ALTER TABLE SiteDBConfig DROP CONSTRAINT DF_SiteDBConfig_RepUpdateTime
+GO 
+ALTER TABLE smartPunterList DROP CONSTRAINT DF_smartPunterList_RepUpdateTime
+GO 
+ALTER TABLE SportNonOfferedSiteCurrency DROP CONSTRAINT DF_SportNonOfferedSiteCurrency_RepUpdateTime
+GO 
+ALTER TABLE StakeLevel DROP CONSTRAINT DF_StakeLevel_RepUpdateTime
+GO 
+ALTER TABLE StakeLevelGroupDetail DROP CONSTRAINT DF_StakeLevelGroupDetail_RepUpdateTime
+GO 
+ALTER TABLE SuspiciousCust DROP CONSTRAINT DF_SuspiciousCust_RepUpdateTime
+GO 
+ALTER TABLE TOControl_GlobalSetting DROP CONSTRAINT DF_TOControl_GlobalSetting_RepUpdateTime
+GO 
+ALTER TABLE TradeComm DROP CONSTRAINT DF_TradeComm_RepUpdateTime
+GO 
+ALTER TABLE TradeCust DROP CONSTRAINT DF_TradeCust_RepUpdateTime
+GO 
+ALTER TABLE VendorGlobalSetting DROP CONSTRAINT DF_VendorGlobalSetting_RepUpdateTime
+GO 
+ALTER TABLE WLMonitored_PersonalPreset DROP CONSTRAINT DF_WLMonitored_PersonalPreset_RepUpdateTime
