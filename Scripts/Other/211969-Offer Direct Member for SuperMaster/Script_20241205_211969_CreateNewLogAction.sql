@@ -29,9 +29,9 @@ DECLARE @Log TABLE (
 
 INSERT INTO @Log (ActionID, SPName, ActionNameEN,ActionNameCH,ActionNameCS,ActionNameTH,ActionNameVI,ActionTypeID,IsInternal)
 SELECT 1226	 ,'Acc_CustomerInsMember_DirectMember','Set credit for new direct member',N'為新直系會員設定信用額度',N'为新直系会员设定信用额度',N'กำหนดเครดิตสำหรับสมาชิกโดยตรงรายใหม่',N'Thiết lập hạn mức tín dụng cho Member trực tiếp mới',NULL,0 UNION ALL
-SELECT 169000,'Acc_CustomerInsMember_DirectMember','Initialize statuses for direct member',N'初始化直系會員的狀態',N'初始化直系会员的状态',N'กำหนดสถานะเริ่มต้นสำหรับสมาชิกโดยตรง',N'Khởi tạo các trạng thái cho Member trực tiếp',5,0 UNION ALL
-SELECT 264000,'Acc_CustomerInsMember_DirectMember','Enter general info for direct member',N'輸入直系會員的一般資訊',N'输入直系会员的一般资讯',N'ป้อนข้อมูลทั่วไปของสมาชิกโดยตรง',N'Nhập thông tin chung cho Member trực tiếp',4,0 UNION ALL
-SELECT 264001,'Acc_CustomerInsMember_DirectMember','Set up all product settings for direct member',N'為直系會員配置所有產品的設置',N'为直系会员配置所有产品的设置',N'ตั้งค่าผลิตภัณฑ์ทั้งหมดสำหรับสมาชิกโดยตรง',N'Thiết lập toàn bộ cài đặt sản phẩm cho Member trực tiếp',4,0 UNION ALL
+SELECT 169000,'Acc_CustomerInsMember_DirectMember','Add the initial statuses for direct member',N'添加直系會員的初始狀態',N'添加直系会员的初始状态',N'เพิ่มสถานะเริ่มต้นสำหรับสมาชิกโดยตรง',N'Thêm các trạng thái khởi tạo cho Member trực tiếp',5,0 UNION ALL
+SELECT 264000,'Acc_CustomerInsMember_DirectMember','Add the general information for direct member',N'添加直系會員的一般資訊',N'添加直系会员的一般信息',N'เพิ่มข้อมูลทั่วไปสำหรับสมาชิกโดยตรง',N'Thêm thông tin chung cho Member trực tiếp',4,0 UNION ALL
+SELECT 264001,'Acc_CustomerInsMember_DirectMember','Add all products settings for direct member',N'添加直系會員的所有產品設置',N'添加直系会员的所有产品设置',N'เพิ่มการตั้งค่าผลิตภัณฑ์ทั้งหมดสำหรับสมาชิกโดยตรง',N'Thêm tất cả cài đặt sản phẩm cho Member trực tiếp',4,0 UNION ALL
 --Update comm
 SELECT 257,'Acc_CustSetting_Discount150Upd','Update Sportsbook Commission for member',N'更新體育博彩會員傭金',N'更新体育博彩会员佣金',N'อัพเดทคอมมิชั่นในสปอร์ตบุ๊กสำหรับสมาชิก',N'Cập nhật giá trị hoa hồng của Sportbook cho Member',2,0 UNION ALL
 SELECT 258,'Acc_CustSetting_Discount150Upd','Update Sportsbook Commission for member',N'更新體育博彩會員傭金',N'更新体育博彩会员佣金',N'อัพเดทคอมมิชั่นในสปอร์ตบุ๊กสำหรับสมาชิก',N'Cập nhật giá trị hoa hồng của Sportbook cho Member',2,0 UNION ALL
