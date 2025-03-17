@@ -23,6 +23,8 @@ AND (
 	OR name LIKE 'Lrf_CustBAActive_SynData%'
 	OR name LIKE 'Lrf_CustomerUpdMemberBAStatus%'
 	OR name LIKE 'Lrf_CustomerBAStatusSel%'
+	OR name LIKE 'Lrf_BATimeCheck%'
+	OR name LIKE 'Lrf_CustomerUpdMemberBA_PositionTaking%'
 )
 
 WHILE (1=1)

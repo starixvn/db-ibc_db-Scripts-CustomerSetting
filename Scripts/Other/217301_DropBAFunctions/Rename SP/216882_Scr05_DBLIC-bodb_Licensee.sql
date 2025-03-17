@@ -21,7 +21,7 @@ AND (
 	OR name LIKE 'Acc_BA_DownlineCheck%'
 	OR name LIKE 'Acc_BA_SpecialCust_GroupCommSel%'
 	OR name LIKE 'Acc_BA_SpecialCustSearch%'
-
+	OR name LIKE 'Acc_Rpt_CreditSite_BetCount%'
 )
 
 WHILE (1=1)

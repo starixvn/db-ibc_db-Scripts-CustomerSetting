@@ -21,7 +21,7 @@ AND (
 	OR name LIKE 'DEL_Acc_BA_DownlineCheck%'
 	OR name LIKE 'DEL_Acc_BA_SpecialCust_GroupCommSel%'
 	OR name LIKE 'DEL_Acc_BA_SpecialCustSearch%'
-
+	OR name LIKE 'DEL_Acc_Rpt_CreditSite_BetCount%'
 )
 
 SELECT * FROM @tmpDropObjectsName

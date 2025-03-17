@@ -23,6 +23,8 @@ AND (
 	OR name LIKE 'DEL_Lrf_CustBAActive_SynData%'
 	OR name LIKE 'DEL_Lrf_CustomerUpdMemberBAStatus%'
 	OR name LIKE 'DEL_Lrf_CustomerBAStatusSel%'
+	OR name LIKE 'DEL_Lrf_BATimeCheck%'
+	OR name LIKE 'DEL_Lrf_CustomerUpdMemberBA_PositionTaking%'
 )
 
 SELECT * FROM @tmpDropObjectsName
