@@ -30,7 +30,6 @@ IF EXISTS (
 	WHERE GroupName = @NewGroupName 
 		AND GroupID = @OldGroupID
 )
-select 1
 BEGIN
 	UPDATE g 
 	SET g.GroupName = @OldGroupName
