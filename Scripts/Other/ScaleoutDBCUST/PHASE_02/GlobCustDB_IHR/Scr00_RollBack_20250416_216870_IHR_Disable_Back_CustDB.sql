@@ -1,0 +1,242 @@
+/*<info serverAlias="IRS_DBTP-bodb02,DBCustRepl-ReplCustDB"></info>*/
+/*
+	Created: 20250116@Tacy	
+	Task: Rollback - IHR get scr from CustDB
+	DB: IRS_DBTP-bodb02,DBCustRepl-ReplCustDB
+	
+	Revisions:
+		- 20250116@Tacy: Created [RedmineID: #216870]
+*/
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+	Dep_ProductSetting
+	Dep_ProductSettingDetail
+	Dep_ProductStatusProfile
+*/
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_ProductSetting')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_ProductSetting'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_ProductSetting not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_ProductSettingDetail')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_ProductSettingDetail'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_ProductSettingDetail not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_ProductStatusProfile')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_ProductStatusProfile'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_ProductStatusProfile not exists !!!'
+END
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+	Dep_ProductBetSetting
+	Dep_StakeLevel
+	Dep_StakeLevelGroupDetail
+
+	GameGroup
+
+	ProductBetSetting
+	StakeLevel
+*/
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_ProductBetSetting')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_ProductBetSetting'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_ProductBetSetting not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_StakeLevel')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_StakeLevel'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_StakeLevel not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Dep_StakeLevelGroupDetail')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 1 ELSE 0 END
+	WHERE [name] =  'Dep_StakeLevelGroupDetail'
+END
+ELSE
+BEGIN  
+	SELECT 'Dep_StakeLevelGroupDetail not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'GameGroup')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 16 ELSE 14 END
+	WHERE [name] =  'GameGroup'
+END
+ELSE
+BEGIN  
+	SELECT 'GameGroup not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'ProductBetSetting')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 16 ELSE 14 END
+	WHERE [name] =  'ProductBetSetting'
+END
+ELSE
+BEGIN  
+	SELECT 'ProductBetSetting not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'StakeLevel')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 16 ELSE 14 END
+	WHERE [name] =  'StakeLevel'
+END
+ELSE
+BEGIN  
+	SELECT 'StakeLevel not exists !!!'
+END
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+	Site
+	SiteDBConfig
+	PlayCurrencySetting
+*/
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'Site')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 16 ELSE 11 END
+	WHERE [name] =  'Site'
+	AND get_sp='Repl_GettblSite'
+END
+ELSE
+BEGIN  
+	SELECT 'Site not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'SiteDBConfig')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+		,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 18 ELSE 11 END
+	WHERE [name] =  'SiteDBConfig'
+END
+ELSE
+BEGIN  
+	SELECT 'SiteDBConfig not exists !!!'
+END
+
+IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'PlayCurrencySetting')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+	,[group] = CASE WHEN @@SERVERNAME IN ('DBTP10C') THEN 16 ELSE 14 END
+	WHERE [name] =  'PlayCurrencySetting'
+END
+ELSE
+BEGIN  
+	SELECT 'PlayCurrencySetting not exists !!!'
+END
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/* --DBTP only
+
+	GameLaunchPerCurrency
+	GameLaunchPerSite
+	
+	LossLimit_GlobalSetting
+	MaxPayoutGlobalSetting
+*/
+IF @@SERVERNAME IN ('DBTP10C')
+BEGIN
+	IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'GameLaunchPerCurrency')
+	BEGIN
+		UPDATE RepInfo
+		SET active = 0
+		,[group] = 16
+		WHERE [name] =  'GameLaunchPerCurrency'
+	END
+	ELSE
+	BEGIN  
+		SELECT 'GameLaunchPerCurrency not exists !!!'
+	END
+
+	IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'GameLaunchPerSite')
+	BEGIN
+		UPDATE RepInfo
+		SET active = 0
+		,[group] = 16
+		WHERE [name] =  'GameLaunchPerSite'
+	END
+	ELSE
+	BEGIN  
+		SELECT 'GameLaunchPerSite not exists !!!'
+	END
+	
+	IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'LossLimit_GlobalSetting')
+	BEGIN
+		UPDATE RepInfo
+		SET active = 0
+		,[group] = 18
+		WHERE [name] =  'LossLimit_GlobalSetting'
+	END
+	ELSE
+	BEGIN  
+		SELECT 'LossLimit_GlobalSetting not exists !!!'
+	END
+		
+	IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'MaxPayoutGlobalSetting')
+	BEGIN
+		UPDATE RepInfo
+		SET active = 0
+		,[group] = 18
+		WHERE [name] =  'MaxPayoutGlobalSetting'
+	END
+	ELSE
+	BEGIN  
+		SELECT 'MaxPayoutGlobalSetting not exists !!!'
+	END
+END
+GO
