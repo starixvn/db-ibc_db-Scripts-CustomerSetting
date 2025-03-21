@@ -16,9 +16,7 @@ SELECT 'sp_rename ' + name + ', DEL_' + name
 FROM dbo.sysobjects
 WHERE (type = 'P')
 AND (
-	name LIKE 'Acc_CustomerVirtualRateSelectBA%'
-	OR name LIKE 'Acc_CustVRGetLicenseeBA%'
-	OR name LIKE 'Acc_BA_DownlineCheck%'
+	name LIKE 'Acc_BA_DownlineCheck%'
 	OR name LIKE 'Acc_BA_SpecialCust_GroupCommSel%'
 	OR name LIKE 'Acc_BA_SpecialCustSearch%'
 	OR name LIKE 'Acc_Rpt_CreditSite_BetCount%'

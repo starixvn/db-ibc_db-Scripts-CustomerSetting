@@ -16,8 +16,7 @@ SELECT 'sp_rename ' + name + ', DEL_' + name
 FROM dbo.sysobjects
 WHERE (type = 'P')
 AND (
-	name LIKE 'Acc_LicenseeSelAll%'
-	OR name LIKE 'Acc_MoveBet_ExchangeSel%'
+	name LIKE 'Acc_MoveBet_ExchangeSel%'
 )
 
 WHILE (1=1)

@@ -16,8 +16,7 @@ SELECT 'DROP PROCEDURE ' + name
 FROM dbo.sysobjects
 WHERE (type = 'P')
 AND (
-	name LIKE 'DEL_Acc_LicenseeSelAll%'
-	OR name LIKE 'DEL_Acc_MoveBet_ExchangeSel%'
+	name LIKE 'DEL_Acc_MoveBet_ExchangeSel%'
 )
 
 SELECT * FROM @tmpDropObjectsName

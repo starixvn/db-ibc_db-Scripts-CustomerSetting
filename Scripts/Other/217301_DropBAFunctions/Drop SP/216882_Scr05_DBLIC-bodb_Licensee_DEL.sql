@@ -16,9 +16,7 @@ SELECT 'DROP PROCEDURE ' + name
 FROM dbo.sysobjects
 WHERE (type = 'P')
 AND (
-	name LIKE 'DEL_Acc_CustomerVirtualRateSelectBA%'
-	OR name LIKE 'DEL_Acc_CustVRGetLicenseeBA%'
-	OR name LIKE 'DEL_Acc_BA_DownlineCheck%'
+	name LIKE 'DEL_Acc_BA_DownlineCheck%'
 	OR name LIKE 'DEL_Acc_BA_SpecialCust_GroupCommSel%'
 	OR name LIKE 'DEL_Acc_BA_SpecialCustSearch%'
 	OR name LIKE 'DEL_Acc_Rpt_CreditSite_BetCount%'
