@@ -112,7 +112,7 @@ BEGIN
 	ELSE 
 		SET @BettypeIds=@NormalBT
 
-	IF @IsDeposit=1 
+	IF @IsDeposit=1 AND @GroupName NOT LIKE '%Prize%'
 		-- Cash member: block transfer if reach Red level
 		SET @IsBlockedTransfer_DepositSite_Level3 = 1
 	ELSE IF @IsDeposit=0 AND @GroupName NOT LIKE '%Prize%'
