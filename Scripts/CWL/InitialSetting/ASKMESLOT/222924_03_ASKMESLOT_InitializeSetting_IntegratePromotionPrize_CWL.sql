@@ -64,9 +64,9 @@ CREATE TABLE #tmpProductSetting (
 )
 
 INSERT INTO #tmpProductSetting(ProductID, GroupID, GroupName, Level102, Level101, Level1, Level2, Level3, Currency, IsDeposit)
-SELECT @ProductId, @MaxGroupId + 2, @GroupName + ' - Promotion Prize', 0, 0, 1000, 0, 0, NULL, 0
+SELECT @ProductId, @MaxGroupId + 1, @GroupName + ' - Promotion Prize', 0, 0, 1000, 0, 0, NULL, 0
 UNION ALL
-SELECT @ProductId, @MaxGroupId + 2, @GroupName + ' - Promotion Prize', 0, 0, 1000, 0, 0, NULL, 1
+SELECT @ProductId, @MaxGroupId + 1, @GroupName + ' - Promotion Prize', 0, 0, 1000, 0, 0, NULL, 1
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 WHILE (1=1)
