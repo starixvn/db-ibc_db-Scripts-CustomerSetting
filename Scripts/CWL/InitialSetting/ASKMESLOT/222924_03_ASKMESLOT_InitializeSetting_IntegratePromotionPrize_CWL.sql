@@ -69,6 +69,22 @@ UNION ALL
 SELECT @ProductId, @MaxGroupId + 1, @GroupName + ' - Promotion Prize', 0, 0, 1000, 0, 0, NULL, 1
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
+
+UPDATE w
+SET w.GroupID = @MaxGroupId + 1
+FROM Winlimit_GameGroupSetting AS w WITH (UPDLOCK, ROWLOCK)
+WHERE w.BetTypeID = 15199 AND w.ProductID = @ProductId
+
+UPDATE w
+SET w.GroupName = 'ASKMESLOT - Normal Games'
+FROM Winlimit_Group AS w WITH (UPDLOCK, ROWLOCK)
+WHERE w.GroupName = 'ASKMESLOT'
+
+UPDATE w
+SET w.GroupName = 'ASKMESLOT - Normal Games'
+FROM Winlimit_ProductGlobalSetting AS w WITH (UPDLOCK, ROWLOCK)
+WHERE w.ProductID = 103 AND w.BetTypeID = 15000
+
 WHILE (1=1)
 BEGIN
 
