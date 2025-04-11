@@ -81,7 +81,7 @@ FROM Winlimit_Group AS w WITH (UPDLOCK, ROWLOCK)
 WHERE w.GroupName = 'ASKMESLOT'
 
 UPDATE w
-SET w.GroupName = 'ASKMESLOT - Normal Games' , w.RepUpdateTime = dbo.f_GetDateTime2()
+SET w.GroupName = 'ASKMESLOT - Normal Games'
 FROM Winlimit_ProductGlobalSetting AS w WITH (UPDLOCK, ROWLOCK)
 WHERE w.ProductID = 103 AND w.BetTypeID = 15000
 
