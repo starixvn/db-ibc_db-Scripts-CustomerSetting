@@ -5,7 +5,7 @@
 	DB: IRS_DBTP-bodb02
 	
 	Revisions:
-		- 20250415@Winfred: Created [RedmineID: #186118]
+		- 20250411@Winfred: [NAP CM] Customer Class - Add Peak Hour Spread on rule setting [186118]
 
 	Example:			
 */

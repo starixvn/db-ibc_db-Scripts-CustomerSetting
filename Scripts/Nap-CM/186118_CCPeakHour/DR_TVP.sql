@@ -5,7 +5,7 @@
 	DB: DBCUST-CustDB
 	
 	Revisions:
-		- 20250411@Winfred: Created [RedmineID: #186118]
+		- 20250411@Winfred: [NAP CM] Customer Class - Add Peak Hour Spread on rule setting [186118]
 
 	Example:			
 */
