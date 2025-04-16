@@ -31,8 +31,8 @@ CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup](
 	[RepUpdateTime] DATETIME2 NULL ,
  CONSTRAINT [PK_CustomerClassSpreadLeagueGroup] PRIMARY KEY CLUSTERED 
 (
-	[LeagueGroupID] ASC,
-	[PolicyID] ASC
+	[PolicyID] ASC,
+	[LeagueGroupID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 ) ON [DATA]
 GO
@@ -59,8 +59,8 @@ CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT](
 	[RepUpdateTime] DATETIME2 NULL ,
  CONSTRAINT [PK_CustomerClassSpreadLeagueGroup_UAT] PRIMARY KEY CLUSTERED 
 (
-	[LeagueGroupID] ASC,
-	[PolicyID] ASC
+	[PolicyID] ASC,
+	[LeagueGroupID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [DATA]
 ) ON [DATA]
 GO
