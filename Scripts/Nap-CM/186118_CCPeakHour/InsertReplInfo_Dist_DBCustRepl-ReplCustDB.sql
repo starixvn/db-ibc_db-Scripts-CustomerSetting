@@ -65,7 +65,7 @@ GO
 IF NOT EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadLeagueGroup')
 BEGIN
 	INSERT INTO RepInfo ([group],[name],active,version_key,version_type,unique_key,get_sp,put_sp,interval,back_fix,delayed_fix,batch_size) 
-	SELECT 0,'CustomerClassSpreadLeagueGroup',0,'repupdatetime',0,'PolicyID|LeagueGroupID','Repl_GetCustomerClassSpreadLeagueGroup_Dist','Repl_PutCustomerClassSpreadLeagueGroup',1000,10,60000,0
+	SELECT 0,'CustomerClassSpreadLeagueGroup',0,'repupdatetime',0,'PolicyID|LeagueGroupID','Repl_GetCustomerClassSpreadLeagueGroup','Repl_PutCustomerClassSpreadLeagueGroup_Dist',1000,10,60000,0
 END
 ELSE
 BEGIN  
@@ -76,7 +76,7 @@ GO
 IF NOT EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadLeagueGroup_UAT')
 BEGIN
 	INSERT INTO RepInfo ([group],[name],active,version_key,version_type,unique_key,get_sp,put_sp,interval,back_fix,delayed_fix,batch_size) 
-	SELECT 0,'CustomerClassSpreadLeagueGroup_UAT',0,'repupdatetime',0,'PolicyID|LeagueGroupID','Repl_GetCustomerClassSpreadLeagueGroup_UAT_Dist','Repl_PutCustomerClassSpreadLeagueGroup_UAT',1000,10,60000,0
+	SELECT 0,'CustomerClassSpreadLeagueGroup_UAT',0,'repupdatetime',0,'PolicyID|LeagueGroupID','Repl_GetCustomerClassSpreadLeagueGroup_UAT','Repl_PutCustomerClassSpreadLeagueGroup_UAT_Dist',1000,10,60000,0
 END
 ELSE
 BEGIN  
