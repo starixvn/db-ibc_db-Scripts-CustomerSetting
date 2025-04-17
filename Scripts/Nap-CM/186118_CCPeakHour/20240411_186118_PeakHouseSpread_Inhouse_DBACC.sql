@@ -1,5 +1,5 @@
 /*<info serverAlias="DBACC-bodb02 "></info>*/
-USE CustDB
+USE bodb02
 GO
 /*
 	Created: 20250411@Winfred

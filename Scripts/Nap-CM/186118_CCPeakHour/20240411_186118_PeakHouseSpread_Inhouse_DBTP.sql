@@ -2,7 +2,7 @@
 /*
 	Created: 20250411@Winfred	
 	Task: In-House
-	DB: 
+	DB: bodb02
 	
 	Revisions:
 		- 20250411@Winfred: [NAP CM] Customer Class - Add Peak Hour Spread on rule setting [186118]
@@ -20,6 +20,8 @@ GO
 ALTER TABLE dbo.CustomerClassSpreadDetail_UAT ADD [ID] [INT] NULL
 GO
 /***************************************************************************/
+IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassPeakHourRanger')
+DROP TABLE CustomerClassPeakHourRanger;
 IF NOT EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassPeakHourRanger')
 BEGIN
 	CREATE TABLE [dbo].[CustomerClassPeakHourRanger]
@@ -51,6 +53,8 @@ BEGIN
 END
 GO
 /***************************************************************************/
+IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup')
+DROP TABLE CustomerClassSpreadLeagueGroup;
 IF NOT EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup')
 BEGIN
 	CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup]
@@ -78,6 +82,8 @@ BEGIN
 END
 GO
 /***************************************************************************/
+IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
+DROP TABLE CustomerClassSpreadLeagueGroup_UAT;
 IF NOT EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
 BEGIN
 	CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT]
