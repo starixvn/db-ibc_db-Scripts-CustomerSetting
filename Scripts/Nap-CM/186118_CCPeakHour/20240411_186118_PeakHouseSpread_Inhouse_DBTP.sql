@@ -10,15 +10,15 @@
 	Example:			
 */
 --===================================================================================
-ALTER TABLE dbo.CustomerClassSpreadClass ADD [ID] [INT] NULL
-GO
+--ALTER TABLE dbo.CustomerClassSpreadClass ADD [ID] [INT] NULL
+--GO
 ALTER TABLE dbo.CustomerClassSpreadClass_UAT ADD [ID] [INT] NULL
 GO
 /***************************************************************************/
-ALTER TABLE dbo.CustomerClassSpreadDetail ADD [ID] [INT] NULL
-GO
-ALTER TABLE dbo.CustomerClassSpreadDetail_UAT ADD [ID] [INT] NULL
-GO
+--ALTER TABLE dbo.CustomerClassSpreadDetail ADD [ID] [INT] NULL
+--GO
+--ALTER TABLE dbo.CustomerClassSpreadDetail_UAT ADD [ID] [INT] NULL
+--GO
 /***************************************************************************/
 IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassPeakHourRanger')
 DROP TABLE CustomerClassPeakHourRanger;
