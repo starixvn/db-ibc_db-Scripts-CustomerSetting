@@ -12,13 +12,13 @@
 --===================================================================================
 ALTER TABLE dbo.CustomerClassSpreadClass ADD [ID] [INT] NULL
 GO
-ALTER TABLE dbo.CustomerClassSpreadClass_UAT ADD [ID] [INT] NULL
-GO
+--ALTER TABLE dbo.CustomerClassSpreadClass_UAT ADD [ID] [INT] NULL
+--GO
 /***************************************************************************/
 ALTER TABLE dbo.CustomerClassSpreadDetail ADD [ID] [INT] NULL
 GO
-ALTER TABLE dbo.CustomerClassSpreadDetail_UAT ADD [ID] [INT] NULL
-GO
+--ALTER TABLE dbo.CustomerClassSpreadDetail_UAT ADD [ID] [INT] NULL
+--GO
 /***************************************************************************/
 IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup')
 DROP TABLE CustomerClassSpreadLeagueGroup;
@@ -49,34 +49,34 @@ BEGIN
 END
 GO
 /***************************************************************************/
-IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
-DROP TABLE CustomerClassSpreadLeagueGroup_UAT;
-IF NOT EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
-BEGIN
-	CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT]
-	(
-		[PolicyID] [INT] NOT NULL
-		,[LeagueGroupID] [SMALLINT] NOT NULL
-		,[ID] [INT] NULL
-		,[RepUpdateTime] [DATETIME2](7) NULL
-		,[isDeleted] [BIT] NULL
-		,CONSTRAINT [PK_CustomerClassSpreadLeagueGroup_UAT] PRIMARY KEY CLUSTERED ([PolicyID],[LeagueGroupID]) ON [DATA]
-	) ON [DATA]
+--IF EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
+--DROP TABLE CustomerClassSpreadLeagueGroup_UAT;
+--IF NOT EXISTS (SELECT * FROM sys.OBJECTS WHERE NAME = 'CustomerClassSpreadLeagueGroup_UAT')
+--BEGIN
+--	CREATE TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT]
+--	(
+--		[PolicyID] [INT] NOT NULL
+--		,[LeagueGroupID] [SMALLINT] NOT NULL
+--		,[ID] [INT] NULL
+--		,[RepUpdateTime] [DATETIME2](7) NULL
+--		,[isDeleted] [BIT] NULL
+--		,CONSTRAINT [PK_CustomerClassSpreadLeagueGroup_UAT] PRIMARY KEY CLUSTERED ([PolicyID],[LeagueGroupID]) ON [DATA]
+--	) ON [DATA]
 
-	ALTER TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT] ADD CONSTRAINT [DF_CustomerClassSpreadLeagueGroup_UAT_isDeleted]  DEFAULT ((0)) FOR [isDeleted]
+--	ALTER TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT] ADD CONSTRAINT [DF_CustomerClassSpreadLeagueGroup_UAT_isDeleted]  DEFAULT ((0)) FOR [isDeleted]
 	
-	ALTER TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT] ADD CONSTRAINT [DF_CustomerClassSpreadLeagueGroup_UAT_RepUpdateTime]  DEFAULT (SYSDATETIME()) FOR [RepUpdateTime]
+--	ALTER TABLE [dbo].[CustomerClassSpreadLeagueGroup_UAT] ADD CONSTRAINT [DF_CustomerClassSpreadLeagueGroup_UAT_RepUpdateTime]  DEFAULT (SYSDATETIME()) FOR [RepUpdateTime]
 	
-	CREATE NONCLUSTERED INDEX [IX_CustomerClassSpreadLeagueGroup_UAT_RepUpdateTime] ON [dbo].[CustomerClassSpreadLeagueGroup_UAT] 
-	(
-	  [RepUpdateTime] ASC
-	)ON [DATA]
-END
-ELSE 
-BEGIN
-	SELECT 'Table CustomerClassSpreadLeagueGroup_UAT exists!!!'
-END
-GO
+--	CREATE NONCLUSTERED INDEX [IX_CustomerClassSpreadLeagueGroup_UAT_RepUpdateTime] ON [dbo].[CustomerClassSpreadLeagueGroup_UAT] 
+--	(
+--	  [RepUpdateTime] ASC
+--	)ON [DATA]
+--END
+--ELSE 
+--BEGIN
+--	SELECT 'Table CustomerClassSpreadLeagueGroup_UAT exists!!!'
+--END
+--GO
 /***************************************************************************/
 
 

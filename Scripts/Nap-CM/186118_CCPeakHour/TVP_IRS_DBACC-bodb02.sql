@@ -11,20 +11,20 @@
 */
 DROP PROCEDURE Repl_PutCustomerClassSpreadClass
 GO
-DROP PROCEDURE Repl_PutCustomerClassSpreadClass_UAT
-GO
+--DROP PROCEDURE Repl_PutCustomerClassSpreadClass_UAT
+--GO
 DROP PROCEDURE Repl_PutCustomerClassSpreadDetail
 GO
-DROP PROCEDURE Repl_PutCustomerClassSpreadDetail_UAT
-GO
+--DROP PROCEDURE Repl_PutCustomerClassSpreadDetail_UAT
+--GO
 DROP TYPE TVP_ReplCustomerClassSpreadClass
 GO
-DROP TYPE TVP_ReplCustomerClassSpreadClass_UAT
-GO
+--DROP TYPE TVP_ReplCustomerClassSpreadClass_UAT
+--GO
 DROP TYPE TVP_ReplCustomerClassSpreadDetail
 GO
-DROP TYPE TVP_ReplCustomerClassSpreadDetail_UAT
-GO
+--DROP TYPE TVP_ReplCustomerClassSpreadDetail_UAT
+--GO
 CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadClass] AS TABLE (
 	[PolicyID] [INT] NOT NULL
 	,[CustomerClass] [SMALLINT] NOT NULL
@@ -37,17 +37,17 @@ GO
 GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadClass] TO [repl_ap] AS [dbo]
 GO
 /***************************************************************************/
-CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadClass_UAT] AS TABLE (
-	[PolicyID] [INT] NOT NULL
-	,[CustomerClass] [SMALLINT] NOT NULL
-	,[ID] [INT] NULL
-	,[RepUpdateTime] [DATETIME2](7) NOT NULL
-	,[isDeleted] [BIT]
-	,[_FetchedTime] [DATETIME2](7)
-)
-GO
-GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadClass_UAT] TO [repl_ap] AS [dbo]
-GO
+--CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadClass_UAT] AS TABLE (
+--	[PolicyID] [INT] NOT NULL
+--	,[CustomerClass] [SMALLINT] NOT NULL
+--	,[ID] [INT] NULL
+--	,[RepUpdateTime] [DATETIME2](7) NOT NULL
+--	,[isDeleted] [BIT]
+--	,[_FetchedTime] [DATETIME2](7)
+--)
+--GO
+--GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadClass_UAT] TO [repl_ap] AS [dbo]
+--GO
 /***************************************************************************/
 CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadDetail] AS TABLE (
 	[PolicyID] [INT] NOT NULL
@@ -64,20 +64,20 @@ GO
 GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadDetail] TO [repl_ap] AS [dbo]
 GO
 /***************************************************************************/
-CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadDetail_UAT] AS TABLE (
-	[PolicyID] [INT] NOT NULL
-	,[SiteID] [INT] NOT NULL
-	,[Currency] [INT] NOT NULL
-	,[Platform] [TINYINT] NOT NULL
-	,[SportType] [SMALLINT] NOT NULL
-	,[ID] [INT] NULL
-	,[RepUpdateTime] [DATETIME2](7) NOT NULL
-	,[isDeleted] [BIT]
-	,[_FetchedTime] [DATETIME2](7)
-)
-GO
-GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadDetail_UAT] TO [repl_ap] AS [dbo]
-GO
+--CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadDetail_UAT] AS TABLE (
+--	[PolicyID] [INT] NOT NULL
+--	,[SiteID] [INT] NOT NULL
+--	,[Currency] [INT] NOT NULL
+--	,[Platform] [TINYINT] NOT NULL
+--	,[SportType] [SMALLINT] NOT NULL
+--	,[ID] [INT] NULL
+--	,[RepUpdateTime] [DATETIME2](7) NOT NULL
+--	,[isDeleted] [BIT]
+--	,[_FetchedTime] [DATETIME2](7)
+--)
+--GO
+--GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadDetail_UAT] TO [repl_ap] AS [dbo]
+--GO
 /***************************************************************************/
 CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadLeagueGroup] AS TABLE (
 	[PolicyID] [INT] NOT NULL
@@ -91,17 +91,17 @@ GO
 GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadLeagueGroup] TO [repl_ap] AS [dbo]
 GO
 /***************************************************************************/
-CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadLeagueGroup_UAT] AS TABLE (
-	[PolicyID] [INT] NOT NULL
-	,[LeagueGroupID] [SMALLINT] NOT NULL
-	,[ID] [INT] NULL
-	,[RepUpdateTime] [DATETIME2](7) NOT NULL
-	,[isDeleted] [BIT]
-	,[_FetchedTime] [DATETIME2](7)
-)
-GO
-GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadLeagueGroup_UAT] TO [repl_ap] AS [dbo]
-GO
+--CREATE TYPE [dbo].[TVP_ReplCustomerClassSpreadLeagueGroup_UAT] AS TABLE (
+--	[PolicyID] [INT] NOT NULL
+--	,[LeagueGroupID] [SMALLINT] NOT NULL
+--	,[ID] [INT] NULL
+--	,[RepUpdateTime] [DATETIME2](7) NOT NULL
+--	,[isDeleted] [BIT]
+--	,[_FetchedTime] [DATETIME2](7)
+--)
+--GO
+--GRANT EXECUTE ON TYPE::[dbo].[TVP_ReplCustomerClassSpreadLeagueGroup_UAT] TO [repl_ap] AS [dbo]
+--GO
 /***************************************************************************/
 
 
