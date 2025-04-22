@@ -45,7 +45,7 @@ WHERE p.ProductID=@ProductID
 )
 SELECT @NormalBT = STUFF((SELECT ',' + CAST(t.BetType AS VARCHAR)
 						FROM cte_Bettype t
-						WHERE t.SubProduct NOT LIKE '%Prize' AND t.SubProduct NOT LIKE '%Contribution%'
+						WHERE t.SubProduct NOT LIKE '%Prize'
 						FOR XML PATH('')
 						),1,1,'')
 	,@PromotionBT = STUFF((SELECT ',' + CAST(t.BetType AS VARCHAR)
