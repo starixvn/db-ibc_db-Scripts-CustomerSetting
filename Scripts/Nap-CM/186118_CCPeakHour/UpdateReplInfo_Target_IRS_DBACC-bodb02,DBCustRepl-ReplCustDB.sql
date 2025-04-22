@@ -22,19 +22,6 @@ BEGIN
 END
 GO
 /***************************************************************************/
---IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadClass_UAT')
---BEGIN
---	UPDATE RepInfo
---	SET active = 1
---	WHERE [group] = 0
---		AND [name] =  'CustomerClassSpreadClass_UAT'
---END
---ELSE
---BEGIN  
---	SELECT 'CustomerClassSpreadClass_UAT not exists !!!'
---END
---GO
-/***************************************************************************/
 IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadDetail')
 BEGIN
 	UPDATE RepInfo
@@ -48,19 +35,6 @@ BEGIN
 END
 GO
 /***************************************************************************/
---IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadDetail_UAT')
---BEGIN
---	UPDATE RepInfo
---	SET active = 1
---	WHERE [group] = 0
---		AND [name] =  'CustomerClassSpreadDetail_UAT'
---END
---ELSE
---BEGIN  
---	SELECT 'CustomerClassSpreadDetail_UAT not exists !!!'
---END
---GO
-/***************************************************************************/
 IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadLeagueGroup')
 BEGIN
 	UPDATE RepInfo
@@ -73,19 +47,6 @@ BEGIN
 	SELECT 'CustomerClassSpreadLeagueGroup not exists !!!'
 END
 GO
-/***************************************************************************/
---IF EXISTS (SELECT * FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustomerClassSpreadLeagueGroup_UAT')
---BEGIN
---	UPDATE RepInfo
---	SET active = 1
---	WHERE [group] = 0
---		AND [name] =  'CustomerClassSpreadLeagueGroup_UAT'
---END
---ELSE
---BEGIN  
---	SELECT 'CustomerClassSpreadLeagueGroup_UAT not exists !!!'
---END
---GO
 /***************************************************************************/
 
 
