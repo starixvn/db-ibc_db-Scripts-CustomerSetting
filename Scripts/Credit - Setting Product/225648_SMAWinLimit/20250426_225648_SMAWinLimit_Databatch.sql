@@ -10,27 +10,27 @@ USE bodb02
 GO 
 DECLARE @custid INT = 229235151
 
-SELECT winlostdate, SUM(winlost-actual_stake) balance INTO #DebitGame
+SELECT winlostdate, ABS(SUM(winlost-actual_stake)) balance INTO #DebitGame
 FROM bettranslc 
-WHERE custid =  @custid
-	AND status = 'WON' 
+WHERE custid =  @custid AND productID = 211
+	AND status = 'LOSE' 
 GROUP BY winlostdate
 
-SELECT winlostdate, SUM(winlost-actual_stake) balance INTO #CreditGame
+SELECT winlostdate, ABS(SUM(winlost-actual_stake)) balance INTO #CreditGame
 FROM bettranslc 
-WHERE custid = @custid 
-	AND status = 'LOSE' 
+WHERE custid = @custid AND productID = 211 
+	AND status = 'WON' 
 GROUP BY winlostdate
 
 UPDATE b
 SET b.Balance = t.balance
 FROM BalanceDebitGame b
 	INNER JOIN #DebitGame t ON b.winlostdate = t.winlostdate
-WHERE b.custid = @custid
+WHERE b.custid = @custid AND b.bettype = 2401
 
 UPDATE b
 SET b.Balance = t.balance
 FROM BalanceCreditGame b
 	INNER JOIN #CreditGame t ON b.winlostdate = t.winlostdate
-WHERE b.custid = @custid
+WHERE b.custid = @custid AND b.bettype = 2401
 
