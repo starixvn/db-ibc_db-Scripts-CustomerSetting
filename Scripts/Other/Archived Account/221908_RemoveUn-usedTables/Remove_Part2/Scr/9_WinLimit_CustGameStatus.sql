@@ -10,21 +10,21 @@ DECLARE @__batchSize INT = 2000
 	, @__redBatch INT = 50000
 
 DROP TABLE IF EXISTS #Temp_ToDelete
-CREATE TABLE #Temp_ToDelete (CustID INT)
-DECLARE @Batch_Temp_ToDelete TABLE (CustID INT)
+CREATE TABLE #Temp_ToDelete (CustID INT , ProductID TINYINT , BettypeID SMALLINT)
+DECLARE @Batch_Temp_ToDelete TABLE (CustID INT , ProductID TINYINT , BettypeID SMALLINT)
 DECLARE @__custIds VARCHAR(MAX)
 	, @__info VARCHAR(300)          --add param
 
 -- Process each table sequentially
 
--- Table: VRAgentAutoAdjustment
+-- Table: WinLimit_CustGameStatus
 WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #Temp_ToDelete
-	INSERT INTO #Temp_ToDelete (CustID)
-	SELECT DISTINCT TOP (@__redBatch) V.AgentID
-	FROM VRAgentAutoAdjustment V WITH (NOLOCK)
-		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.AgentID = C.CustID
+	INSERT INTO #Temp_ToDelete (CustID , ProductID , BettypeID)
+	SELECT DISTINCT TOP (@__redBatch) V.CustID , V.ProductID , V.BettypeID
+	FROM WinLimit_CustGameStatus V WITH (NOLOCK)
+		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.CustID = C.CustID
 	WHERE C.CustID IS NULL
 
 	IF @@ROWCOUNT = 0
@@ -34,17 +34,21 @@ BEGIN
 	BEGIN
 		DELETE FROM @Batch_Temp_ToDelete
 		DELETE TOP(@__batchSize) #Temp_ToDelete
-		OUTPUT deleted.CustID INTO @Batch_Temp_ToDelete(CustID)
+		OUTPUT deleted.CustID , deleted.ProductID , deleted.BettypeID  INTO @Batch_Temp_ToDelete(CustID , ProductID, BettypeID)
 
 		IF @@ROWCOUNT = 0
 			BREAK
 
-		SELECT @__custIds = STRING_AGG(CAST(custid AS VARCHAR(MAX)), ',')
-		FROM @Batch_Temp_ToDelete
+		SET @__custIds = CAST((SELECT CustID as '@c'
+						    , ProductID as '@k2'
+						    , BettypeID as '@k3'
+						FROM @Batch_Temp_ToDelete
+						FOR XML PATH('r'), ROOT('root')
+						) AS VARCHAR(MAX))
 
 		EXEC dbo.[Acc_DynamicCustSetting3rd_16] 
 			@CustIdList = @__custIds,
-			@TableName = 'VRAgentAutoAdjustment'
+			@TableName = 'WinLimit_CustGameStatus'
 	END
 
 	SET @__info = CONVERT(VARCHAR(50), GETDATE(), 121)

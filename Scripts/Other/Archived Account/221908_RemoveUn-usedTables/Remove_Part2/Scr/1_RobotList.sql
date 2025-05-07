@@ -17,13 +17,13 @@ DECLARE @__custIds VARCHAR(MAX)
 
 -- Process each table sequentially
 
--- Table: VRCustLockStatus
+-- Table: RobotList
 WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #Temp_ToDelete
 	INSERT INTO #Temp_ToDelete (CustID)
 	SELECT DISTINCT TOP (@__redBatch) V.CustID
-	FROM VRCustLockStatus V WITH (NOLOCK)
+	FROM RobotList V WITH (NOLOCK)
 		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.CustID = C.CustID
 	WHERE C.CustID IS NULL
 
@@ -39,12 +39,14 @@ BEGIN
 		IF @@ROWCOUNT = 0
 			BREAK
 
-		SELECT @__custIds = STRING_AGG(CAST(custid AS VARCHAR(MAX)), ',')
-		FROM @Batch_Temp_ToDelete
+		SET @__custIds = CAST((SELECT CustID as '@c'
+						FROM @Batch_Temp_ToDelete
+						FOR XML PATH('r'), ROOT('root')
+						) AS VARCHAR(MAX))
 
 		EXEC dbo.[Acc_DynamicCustSetting3rd_16] 
 			@CustIdList = @__custIds,
-			@TableName = 'VRCustLockStatus'
+			@TableName = 'RobotList'
 	END
 
 	SET @__info = CONVERT(VARCHAR(50), GETDATE(), 121)

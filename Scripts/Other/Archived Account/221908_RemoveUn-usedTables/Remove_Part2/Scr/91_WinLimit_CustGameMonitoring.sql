@@ -10,8 +10,8 @@ DECLARE @__batchSize INT = 2000
 	, @__redBatch INT = 50000
 
 DROP TABLE IF EXISTS #Temp_ToDelete
-CREATE TABLE #Temp_ToDelete (CustID INT)
-DECLARE @Batch_Temp_ToDelete TABLE (CustID INT)
+CREATE TABLE #Temp_ToDelete (CustID INT , ProductID TINYINT , WinlostDate SMALLDATETIME , GroupID SMALLINT )
+DECLARE @Batch_Temp_ToDelete TABLE (CustID INT , ProductID TINYINT , WinlostDate SMALLDATETIME , GroupID SMALLINT )
 DECLARE @__custIds VARCHAR(MAX)
 	, @__info VARCHAR(300)          --add param
 
@@ -21,8 +21,8 @@ DECLARE @__custIds VARCHAR(MAX)
 WHILE 1 = 1
 BEGIN
 	TRUNCATE TABLE #Temp_ToDelete
-	INSERT INTO #Temp_ToDelete (CustID)
-	SELECT DISTINCT TOP (@__redBatch) V.CustID
+	INSERT INTO #Temp_ToDelete (CustID , ProductID , WinlostDate, GroupID)
+	SELECT DISTINCT TOP (@__redBatch) V.CustID , V.ProductID , V.WinlostDate , V.GroupID
 	FROM WinLimit_CustGameMonitoring V WITH (NOLOCK)
 		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.CustID = C.CustID
 	WHERE C.CustID IS NULL
@@ -34,13 +34,18 @@ BEGIN
 	BEGIN
 		DELETE FROM @Batch_Temp_ToDelete
 		DELETE TOP(@__batchSize) #Temp_ToDelete
-		OUTPUT deleted.CustID INTO @Batch_Temp_ToDelete(CustID)
+		OUTPUT deleted.CustID , deleted.ProductID , deleted.WinlostDate , deleted.GroupID  INTO @Batch_Temp_ToDelete(CustID , ProductID, WinlostDate, GroupID)
 
 		IF @@ROWCOUNT = 0
 			BREAK
 
-		SELECT @__custIds = STRING_AGG(CAST(custid AS VARCHAR(MAX)), ',')
-		FROM @Batch_Temp_ToDelete
+		SET @__custIds = CAST((SELECT CustID		as '@c'
+						    , ProductID		as '@k1'
+						    , WinlostDate		as '@k2'
+						    , GroupID		as '@k3'
+						FROM @Batch_Temp_ToDelete
+						FOR XML PATH('r'), ROOT('root')
+						) AS VARCHAR(MAX))
 
 		EXEC dbo.[Acc_DynamicCustSetting3rd_16] 
 			@CustIdList = @__custIds,
