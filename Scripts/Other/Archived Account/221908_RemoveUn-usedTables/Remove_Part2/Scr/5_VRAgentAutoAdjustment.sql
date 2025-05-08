@@ -24,7 +24,7 @@ BEGIN
 	INSERT INTO #Temp_ToDelete (CustID, Type)
 	SELECT DISTINCT TOP (@__redBatch) V.AgentID , V.Type
 	FROM VRAgentAutoAdjustment V WITH (NOLOCK)
-		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.AgentID = C.CustID
+		LEFT JOIN Customer C WITH (NOLOCK) ON V.AgentID = C.CustID
 	WHERE C.CustID IS NULL
 
 	IF @@ROWCOUNT = 0

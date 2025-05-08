@@ -24,7 +24,7 @@ BEGIN
 	INSERT INTO #Temp_ToDelete (LogID)
 	SELECT DISTINCT TOP (@__redBatch) V.LogID
 	FROM WinLimit_CustGameMonitoring_History V WITH (NOLOCK)
-		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.CustID = C.CustID
+		LEFT JOIN Customer C WITH (NOLOCK) ON V.CustID = C.CustID
 	WHERE C.CustID IS NULL
 
 	IF @@ROWCOUNT = 0

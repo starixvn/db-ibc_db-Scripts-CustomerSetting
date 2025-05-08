@@ -24,7 +24,7 @@ BEGIN
 	INSERT INTO #Temp_ToDelete (CustID , Type)
 	SELECT DISTINCT TOP (@__redBatch) V.CustID , V.Type
 	FROM VRMemberBigStake V WITH (NOLOCK)
-		LEFT JOIN CustInfo C WITH (NOLOCK) ON V.CustID = C.CustID
+		LEFT JOIN Customer C WITH (NOLOCK) ON V.CustID = C.CustID
 	WHERE C.CustID IS NULL
 
 	IF @@ROWCOUNT = 0
