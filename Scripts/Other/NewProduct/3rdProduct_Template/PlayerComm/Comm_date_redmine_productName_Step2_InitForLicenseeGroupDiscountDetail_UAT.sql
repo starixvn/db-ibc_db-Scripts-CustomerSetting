@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-bodb_Licensee"></info>*/
 /*
 	Created: {Nickname}@{date}
-	Task: Init data LicenseeGroupDiscountDetail for {ProductName} [redmine: #xxx]
+	Task: UAT - Init data LicenseeGroupDiscountDetail for {ProductName} [redmine: #xxx]
 	DB: DBCUST/bodb_Licensee
 */
 USE bodb_Licensee
@@ -43,7 +43,7 @@ BEGIN
 						AND p.ProductID = @ProductID
 						AND l.IsActive = 1
 						AND l.LicenseeID = gd.LicenseeID
-						AND NOT (l.licenseeName IN ('Athena000', 'spondemo') AND cs.currency=20)
+						AND l.licenseeName IN ('Athena000', 'spondemo')
 					)t
 
 	WAITFOR DELAY '0:0:0.280'

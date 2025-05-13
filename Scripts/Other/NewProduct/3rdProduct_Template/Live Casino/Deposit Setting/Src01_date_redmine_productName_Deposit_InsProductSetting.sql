@@ -34,8 +34,6 @@ UNION ALL
 SELECT @Max_psID + 3, @SportType SportType, @BetType BetType, 0 IsLive, 0 MaxDefaultValue, 1 SettingStatus, dbo.f_GetDateTime2() RepUpdateTime -- Position Taking
 UNION ALL
 SELECT @Max_psID + 4, @SportType SportType, @BetType BetType, 0 IsLive, 0 MaxDefaultValue, 1 SettingStatus, dbo.f_GetDateTime2() RepUpdateTime -- Commission
---UNION ALL -- Jackpot contribution
---SELECT @Max_psID + 3, @SportType SportType, 15798 BetType, 0 IsLive, 0 MaxDefaultValue, 1 SettingStatus, dbo.f_GetDateTime2() RepUpdateTime -- Position Taking
 
 -- Dep_ProductStatusProfile 
 INSERT INTO [dbo].[Dep_ProductStatusProfile] (Sporttype, Bettype, bitmapOrder, RepUpdateTime)

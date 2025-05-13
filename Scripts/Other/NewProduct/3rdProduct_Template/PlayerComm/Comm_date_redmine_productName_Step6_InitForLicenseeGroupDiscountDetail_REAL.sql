@@ -43,7 +43,7 @@ BEGIN
 						AND p.ProductID = @ProductID
 						AND l.IsActive = 1
 						AND l.LicenseeID = gd.LicenseeID
-						AND NOT (l.licenseeName IN ('Athena000', 'spondemo') AND cs.currency=20)
+						AND l.licenseeName NOT IN ('Athena000', 'spondemo')
 					)t
 
 	WAITFOR DELAY '0:0:0.280'
