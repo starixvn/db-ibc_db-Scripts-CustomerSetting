@@ -3,6 +3,9 @@
 	Created by: Tacy@20241220
 	Task: Create new table - Dep_CustSabaInfo [Redmine:#215807] 
 	DB:	DBCUST-CustDB,DBAGE-bodb02,DBACC-bodb02
+
+	Revision:
+		- 20250217@Tacy: create Clutered idx for [Dep_CustSabaInfo_Del_InHouse]
 */
 ----------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
@@ -52,7 +55,7 @@ BEGIN
 	) ON [DATA]
 
 	--CREATE INDEX
-	CREATE NONCLUSTERED INDEX [IX_Dep_CustSabaInfo_Del_InHouse_RepUpdateTime] ON [dbo].[Dep_CustSabaInfo_Del_InHouse]
+	CREATE CLUSTERED INDEX [CIX_Dep_CustSabaInfo_Del_InHouse_RepUpdateTime] ON [dbo].[Dep_CustSabaInfo_Del_InHouse]
 	(
 		[RepUpdateTime] ASC
 	)
