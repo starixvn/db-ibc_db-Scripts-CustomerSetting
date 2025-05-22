@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
-	Created: 20250421@Tacy
-	Task: Get MaxCustID [redmine: #224845]
+	Created: 20250520@Tacy
+	Task: Get MaxCustID [redmine: #227852]
 	DB: DBCUST/CustDB
 */
 USE CustDB
