@@ -1,4 +1,4 @@
-/*<info serverAlias="DBLOG-bodb_CustomerLog,DBSIC- bodb_CustomerLog"></info>*/
+/*<info serverAlias="DBLOG-bodb_CustomerLog, DBSIC-bodb_CustomerLog"></info>*/
 /*
 	Created: 20250527@Eden
 	Task: Log Transfer for Cash - [223896]  
