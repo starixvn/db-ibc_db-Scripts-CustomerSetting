@@ -20,4 +20,11 @@ GO
 GRANT SELECT ON [dbo].[vw_CashService_Customer] TO asv_CashService;
 GRANT SELECT ON [dbo].[vw_CashService_Customer] TO wsv_CashService;
 
+--Other tables: custinfo, exchange
+GRANT SELECT ON [dbo].[custinfo] TO asv_CashService;
+GRANT SELECT ON [dbo].[custinfo] TO wsv_CashService;
+
+GRANT SELECT ON [dbo].[exchange] TO asv_CashService;
+GRANT SELECT ON [dbo].[exchange] TO wsv_CashService;
+
 
