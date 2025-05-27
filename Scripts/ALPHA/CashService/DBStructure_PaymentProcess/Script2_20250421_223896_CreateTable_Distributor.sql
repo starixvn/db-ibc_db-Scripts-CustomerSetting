@@ -1,8 +1,8 @@
-﻿/*<info serverAlias="DBCustRepl-ReplCustDB,DBTP-bodb02"></info>*/
+﻿/*<info serverAlias="dbrepl-ReplDB,DBTP-bodb02"></info>*/
 /*
 	Created: 20250421@Eden
 	Task: Create Table stored cash member credit [#RedmineID:#223896]
-	DB: DBCustRepl-ReplCustDB,DBTP-bodb02
+	DB: dbrepl-ReplDB,DBTP-bodb02
 */
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CashAccumCredit]') AND type in (N'U'))
 DROP TABLE [dbo].[CashAccumCredit]
