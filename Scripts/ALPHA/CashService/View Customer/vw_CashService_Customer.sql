@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-CustDB,DBSIC-CustDB,DBCTG-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB,DBSIC-CustDB"></info>*/
 /*
 	Created: 20250417@Max
 	Task: Alpha - Agency Cash Service - [Redmine: #223896]  
-	DB: DBCUST-CustDB,DBSIC-CustDB,DBCTG-CustDB
+	DB: DBCUST-CustDB,DBSIC-CustDB
 */
 
 USE [CustDB]
