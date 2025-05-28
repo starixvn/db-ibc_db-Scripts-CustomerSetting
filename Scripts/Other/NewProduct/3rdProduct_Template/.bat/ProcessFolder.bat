@@ -73,13 +73,16 @@ powershell -Command ^
     "-replace '{Child_DisplayOrder}', '%childOrder%'| Set-Content -Path $_.FullName }"
 
 REM Handle Excel files
-echo Processing Excel files...
-python "%~dp0replace_excel.py" ^
-    "%destPath%" ^
-    "%prodID%" ^
-    "%prodName%" ^
-    "%sportType%" ^
-    "%betType%"
+
+	echo Processing Excel files...
+	
+	python "%~dp0replace_excel.py" ^
+		"%destPath%" ^
+		"%prodID%" ^
+		"%prodName%" ^
+		"%sportType%" ^
+		"%betType%"
+
 
 if %errorlevel% neq 0 (
     echo Error: Failed to replace content in files.

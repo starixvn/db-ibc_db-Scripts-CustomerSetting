@@ -1,7 +1,7 @@
 /*<info serverAlias="DBTXN-bodb02"></info>*/
 /*
 	Created by: {Nickname}@{date}
-	Task: initial data into Company Bet Limit for {productName} [Redmine: #xxx] 
+	Task: initial data for {productName} [Redmine: #xxx] 
 	DB: DBTXN-bodb02
 */
 USE bodb02

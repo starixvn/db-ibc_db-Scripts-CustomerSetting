@@ -1,7 +1,7 @@
 /*<info serverAlias="DBGLOB-GlobCustDB"></info>*/
 /*
 	Created by: {Nickname}@{date}
-	Task: initial data into Company Bet Limit for {productName}  [Redmine: #xxx] 
+	Task: initial data for {productName}  [Redmine: #xxx] 
 	DB: DBGLOB-GlobCustDB
 */
 USE GlobCustDB
@@ -14,6 +14,6 @@ UPDATE
 [dbo].[Dep_ProductSettingDetail] WITH (ROWLOCK, UPDLOCK)
 SET SettingStatus=0
 	,RepUpdateTime=dbo.f_GetDateTime2()
-WHERE SportType = SportType
-AND BetType = Bettype 
+WHERE SportType = @SportType
+AND BetType = @Bettype
 GO
