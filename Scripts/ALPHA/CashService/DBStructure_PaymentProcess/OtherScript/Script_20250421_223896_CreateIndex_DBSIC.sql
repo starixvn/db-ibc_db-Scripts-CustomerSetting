@@ -7,5 +7,7 @@
 USE bodb02
 GO
 --DROP INDEX IX_TypeID_Status ON [dbo].[CashTransaction];
+--DROP INDEX IX_TypeID_Status ON [dbo].[IX_CreatedTime];
 CREATE NONCLUSTERED INDEX IX_TypeID_Status ON [dbo].CashTransaction (CustId,TransactionTypeId,StatusId) ON [DATA];
+CREATE NONCLUSTERED INDEX IX_CreatedTime ON [dbo].CashTransaction (CreatedTime) ON [DATA];
 GO
