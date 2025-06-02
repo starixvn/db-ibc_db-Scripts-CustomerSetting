@@ -44,7 +44,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[CashTransaction](
-	[TransId] [bigint] NOT NULL,
+	[TransId] [bigint] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
 	[CustId] [int] NOT NULL,
 	[TransactionTypeID] [tinyint] NOT NULL,
 	[StatusId] [tinyint] NOT NULL,
