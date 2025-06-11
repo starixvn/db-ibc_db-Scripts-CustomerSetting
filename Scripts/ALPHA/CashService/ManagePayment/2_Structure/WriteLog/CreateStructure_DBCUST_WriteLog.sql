@@ -27,3 +27,9 @@ GO
 
 ALTER TABLE [dbo].[Cash_UserLog_RunSP] ADD  CONSTRAINT [DF_Cash_UserLog_RunSP_logdate]  DEFAULT (getdate()) FOR [logdate]
 GO
+
+
+GRANT SELECT ON [dbo].[Cash_UserLog_RunSP]			TO wsv_CashService;
+GRANT SELECT ON [dbo].[Cash_UserLog_RunSP]			TO asv_CashService;
+--GRANT UNMASK TO asv_CashService;
+--GRANT UNMASK TO wsv_CashService;
