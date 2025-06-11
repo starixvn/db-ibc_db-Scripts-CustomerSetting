@@ -6,6 +6,11 @@
 */
 
 --*************************BankList*************************
+IF EXISTS (SELECT TOP 1 1 FROM CashBankList cbl WITH (NOLOCK))
+BEGIN
+	DELETE FROM CashBankList
+END
+
 
 INSERT INTO CashBankList (BankCode, BankName, TransTypeList, DepositMode, RepUpdateTime) VALUES
     ('KKR',  N'Kasikornbank (K-Bank)',                  '1,2,3',      '{"sourceType": "SMS", "mappingType": [1, 2]}',      SYSDATETIME()),
@@ -37,34 +42,4 @@ INSERT INTO CashBankList (BankCode, BankName, TransTypeList, DepositMode, RepUpd
     ('UOBT', N'United Overseas Bank(Thailand)',         '1,3',        '{}',                                                SYSDATETIME());
 GO
 
---*************************PaymentProvider*************************
-
-INSERT INTO CashPaymentProvider 
-(
-	  ProviderName
-	, RepUpdateTime
-)
-VALUES
-(
-	N'U2Pay',
-	SYSDATETIME ()
-);
-
-GO
-
---*************************PaymentMethod*************************
-
-INSERT INTO CashPaymentMethod 
-(
-	  MethodName
-	, RepUpdateTime
-)
-VALUES
-    (N'ATM'			, SYSDATETIME()),
-    (N'Internet Banking', SYSDATETIME()),
-    (N'PromptPay'		, SYSDATETIME()),
-    (N'THAI QR'		, SYSDATETIME()),
-    (N'truemoney'		, SYSDATETIME()),
-    (N'Bank Transfer'	, SYSDATETIME());
-GO
 

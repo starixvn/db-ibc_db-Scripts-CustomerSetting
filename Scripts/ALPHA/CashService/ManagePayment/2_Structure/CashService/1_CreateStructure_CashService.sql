@@ -2,7 +2,7 @@
 /*
 	Created: 20250417@Helios
 	Task: Alpha - Agency Cash Service - [223896]  
-	DB: DBCUST/AgencyCashService
+	DB: DBCUST-AgencyCashService,DBTP-AgencyCashService
 */
 
 --*************************Payment Gateway*************************
@@ -194,7 +194,7 @@ BEGIN
 
     ALTER TABLE CashBankList ADD CONSTRAINT [DF_CashBankList_RepUpdateTime] DEFAULT (sysdatetime()) FOR [RepUpdateTime];
     ALTER TABLE CashBankList ADD CONSTRAINT [PK_CashBankList] PRIMARY KEY CLUSTERED (BankID ASC)
-    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [CashService];
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [CashService];  
 END;
 
 -- Check and create CashAgentBankAccountLimit table
@@ -274,8 +274,6 @@ BEGIN
 END;
 
 
-
-
 --*************************member site managed*************************
 
 -- Check and create CashAgentManagement table
@@ -288,6 +286,8 @@ BEGIN
         Contact                NVARCHAR(200)   MASKED WITH (FUNCTION = 'partial(0,"***",0)') NOT NULL,        -- JSON structure, Encrypt value
         Announcement           NVARCHAR(500)   NULL,            
         DailyWithdrawalCount   SMALLINT        NOT NULL,        -- Daily withdrawal count
+	  StartTime			 DATETIME	     NULL,
+	  TrialEndTime		 DATETIME	     NULL,
         RepUpdateTime          DATETIME2(7)    NULL             
     ) ON [CashService];
 

@@ -11,7 +11,7 @@
 --DROP DATABASE [AgencyCashService]
 use master
 GO
-CREATE DATABASE [AgencyCashService]
+CREATE DATABASE [AgencyCashService] 
  CONTAINMENT = NONE
  ON  PRIMARY 
 ( NAME = N'AgencyCashService', FILENAME = N'/var/opt/mssql/data/AgencyCashService.mdf' , SIZE = 508928KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB ), 
