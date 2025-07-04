@@ -9,8 +9,6 @@ USE [bodb_CustomerLog_Archive]
 GO
 
 --Lrf_UserLog_Session and Lrf_UserLog_LicenseeBehavior
-ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_25M07]
-GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_25M08]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_25M09]
@@ -154,6 +152,16 @@ GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M06]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M07]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M08]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M09]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M10]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M11]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_31M12]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILEGROUP [Lrf_UserLog_MAX]
 GO 

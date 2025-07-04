@@ -9,8 +9,6 @@ USE [bodb_CustomerLog_Archive]
 GO
 
 --RUNSP
-ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_25M07', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_25M07.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_25M07]
-GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_25M08', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_25M08.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_25M08]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_25M09', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_25M09.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_25M09]
@@ -154,6 +152,18 @@ GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M06', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M06.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M06]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M07', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M07.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M07]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M08', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M08.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M08]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M09', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M09.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M09]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M07', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M07.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M07]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M10', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M10.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M10]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M11', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M11.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M11]
+GO
+ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_31M12', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_31M12.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_31M12]
 GO
 ALTER DATABASE [bodb_CustomerLog_Archive] ADD FILE ( NAME = N'Lrf_UserLog_MAX', FILENAME = N'N:\USER_DB\bodb_CustomerLog_Archive\Lrf_UserLog\Lrf_UserLog_MAX.ndf' , SIZE = 1024KB , FILEGROWTH = 32768KB ) TO FILEGROUP [Lrf_UserLog_MAX]
 GO 

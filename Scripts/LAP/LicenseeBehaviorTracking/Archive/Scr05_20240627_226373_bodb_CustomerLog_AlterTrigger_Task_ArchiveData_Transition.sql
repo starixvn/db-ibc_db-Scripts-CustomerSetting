@@ -200,15 +200,15 @@ BEGIN
 	END
 	ELSE IF @tableName = 'Lrf_UserLog_Session'
 	BEGIN
-		INSERT INTO bodb_CustomerLog_Archive.dbo.Lrf_UserLog_Session(SessionID, UserID, LicenseeID, ServerID, IP, DomainName, BrowserName, Platform, LogDate)
-		SELECT SessionID, UserID, LicenseeID, ServerID, IP, DomainName, BrowserName, Platform, LogDate
+		INSERT INTO bodb_CustomerLog_Archive.dbo.Lrf_UserLog_Session(LogID, SessionID, UserID, LicenseeID, IP, DomainName, BrowserName, Platform, LogDate)
+		SELECT LogID, SessionID, UserID, LicenseeID, IP, DomainName, BrowserName, Platform, LogDate
 		FROM dbo.Lrf_UserLog_Session l WITH(NOLOCK)
-		WHERE EXISTS (SELECT TOP 1 1 FROM deleted WHERE deleted.LogId = l.SessionID AND deleted.LogDate = l.LogDate)
+		WHERE EXISTS (SELECT TOP 1 1 FROM deleted WHERE deleted.LogId = l.LogID AND deleted.LogDate = l.LogDate)
 	END
 	ELSE IF @tableName = 'Lrf_UserLog_LicenseeBehavior'
 	BEGIN
-		INSERT INTO bodb_CustomerLog_Archive.dbo.Lrf_UserLog_LicenseeBehavior(LogID, SessionID, UserID, LicenseeID, ActionTypeID, SubTypeID, Target, FullTag, FunctionKey, ExtraContext, LogDate)
-		SELECT LogID, SessionID, UserID, LicenseeID, ActionTypeID, SubTypeID, Target, FullTag, FunctionKey, ExtraContext, LogDate
+		INSERT INTO bodb_CustomerLog_Archive.dbo.Lrf_UserLog_LicenseeBehavior(LogID, SessionID, UserID, LicenseeID, ActionTypeID, SubTypeID, Target, FunctionKey, ExtraContext, LogDate)
+		SELECT LogID, SessionID, UserID, LicenseeID, ActionTypeID, SubTypeID, Target, FunctionKey, ExtraContext, LogDate
 		FROM dbo.Lrf_UserLog_LicenseeBehavior l WITH(NOLOCK)
 		WHERE EXISTS (SELECT TOP 1 1 FROM deleted WHERE deleted.LogId = l.LogID AND deleted.LogDate = l.LogDate)
 	END

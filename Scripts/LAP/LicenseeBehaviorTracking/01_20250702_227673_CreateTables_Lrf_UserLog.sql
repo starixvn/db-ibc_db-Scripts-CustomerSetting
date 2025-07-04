@@ -34,6 +34,7 @@ END
 ----------------------------------------------------------------------------------------------------------------------------------------------
 -- 1. Lrf_UserLog_Session
 CREATE TABLE [dbo].[Lrf_UserLog_Session](
+    [LogID]        BIGINT        NOT NULL IDENTITY(1,1),
     [SessionID]    VARCHAR(50)   NOT NULL,
     [UserID]       INT           NOT NULL,
     [LicenseeID]   INT           NOT NULL,
@@ -42,14 +43,21 @@ CREATE TABLE [dbo].[Lrf_UserLog_Session](
     [BrowserName]  VARCHAR(100)  NULL,
     [Platform]     VARCHAR(100)  NULL,
     [LogDate]      DATETIME      NOT NULL,
-    CONSTRAINT [PK_Lrf_UserLog_Session] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [PK_Lrf_UserLog_Session] PRIMARY KEY NONCLUSTERED 
     (
-        [SessionID] ASC
+        [LogID] ASC
     ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Lrf_UserLog]
 ) ON [Lrf_UserLog]
 GO
 
-ALTER TABLE [dbo].[Lrf_UserLog_Session] ADD CONSTRAINT [DF_Lrf_UserLog_Session_LogDate] DEFAULT (GETDATE()) FOR [LogDate];
+ALTER TABLE [dbo].[Lrf_UserLog_Session] ADD CONSTRAINT [DF_Lrf_UserLog_Session_LogDate] DEFAULT (GETDATE()) FOR [LogDate]
+GO
+
+CREATE CLUSTERED INDEX [CIX_Lrf_UserLog_Session] ON [dbo].[Lrf_UserLog_Session]
+(
+    [UserID] ASC,
+    [LogDate] ASC
+) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Lrf_UserLog]
 GO
 
 -- 2. Lrf_UserLog_LicenseeBehavior
@@ -64,7 +72,7 @@ CREATE TABLE [dbo].[Lrf_UserLog_LicenseeBehavior](
     [FunctionKey]  VARCHAR(50)    NULL,
     [ExtraContext] NVARCHAR(MAX) NULL, 
     [LogDate]      DATETIME       NOT NULL,
-    CONSTRAINT [PK_Lrf_UserLog_LicenseeBehavior] PRIMARY KEY CLUSTERED 
+    CONSTRAINT [PK_Lrf_UserLog_LicenseeBehavior] PRIMARY KEY NONCLUSTERED 
     (
         [LogID] ASC
     ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Lrf_UserLog]
@@ -74,11 +82,17 @@ GO
 ALTER TABLE [dbo].[Lrf_UserLog_LicenseeBehavior] ADD CONSTRAINT [DF_Lrf_UserLog_LicenseeBehavior_LogDate] DEFAULT (GETDATE()) FOR [LogDate];
 GO
 
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Lrf_UserLog_LicenseeBehavior_SessionID] ON [dbo].[Lrf_UserLog_LicenseeBehavior]
+CREATE CLUSTERED INDEX [CIX_Lrf_UserLog_LicenseeBehavior] ON [dbo].[Lrf_UserLog_LicenseeBehavior]
 (
-    [LicenseeID] ASC,
     [UserID] ASC,
-    [SessionID] ASC
+    [LogDate] ASC
+) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Lrf_UserLog]
+GO
+
+CREATE NONCLUSTERED INDEX [IX_Lrf_UserLog_LicenseeBehavior_UserID] ON [dbo].[Lrf_UserLog_LicenseeBehavior]
+(
+    [UserID] ASC,
+    [FunctionKey] ASC
 ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Lrf_UserLog]
 GO
 
