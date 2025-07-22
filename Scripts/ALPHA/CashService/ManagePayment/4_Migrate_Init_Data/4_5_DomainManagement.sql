@@ -9,4 +9,4 @@ UPDATE a
 	SET a.OfferType = 1,
 	RepUpdateTime = SYSDATETIME ()
 FROM DomainManagement a WITH (ROWLOCK ,UPDLOCK)
-WHERE DomainID IN (100,101)
+WHERE DomainID IN (100,101) 

@@ -1,7 +1,7 @@
 ﻿/*<info serverAlias="DBLOG-bodb_CustomerLog"></info>*/
 /*
 	Created: 20250417@Helios
-	Task: Alpha - Agency Cash Service - Init LogAction Cash Service status [223896]   
+	Task: Alpha - Agency Cash Service - Change LogAction Cash Service [223896]   
 	DB: DBLOG-bodb_CustomerLog
 */
 
