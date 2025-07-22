@@ -2,7 +2,7 @@
 /*
 	Created: 20250417@Helios
 	Task: Alpha - Agency Cash Service - [223896]  
-	DB: DBGLOB-GlobCustDB
+	DB: DBGLOB-GlobCustDB 
 */
 
 -- Grant Permission table
