@@ -61,9 +61,17 @@ SELECT @ProductId, @MaxGroupId + 1, @GroupName + ' - VS Tournament', 0, 0, 1000,
 ----------------------------------------------------------------------------------------
 
 INSERT INTO Winlimit_GameGroupSetting (ProductID,BetTypeID, GroupID, RepUpdateTime)
-SELECT @ProductId,2798,  @MaxGroupId + 1, dbo.f_GetDateTime2()
-UNION ALL
-SELECT @ProductId,2813, 27, dbo.f_GetDateTime2() --Miss bettype
+SELECT @ProductId, 2798, @MaxGroupId + 1, dbo.f_GetDateTime2()
+UNION ALL 
+SELECT @ProductId, 2813, 27, dbo.f_GetDateTime2() --Miss bettype LOCAL/SIT/PROD
+
+IF NOT EXISTS ( SELECT TOP 1 1 FROM Winlimit_GameGroupSetting WITH (NOLOCK) WHERE ProductID = @ProductId AND BetTypeID IN (2770,2771)) --Miss bettype SIT
+BEGIN
+	INSERT INTO Winlimit_GameGroupSetting (ProductID,BetTypeID, GroupID, RepUpdateTime)
+	SELECT @ProductId, 2770, 27, dbo.f_GetDateTime2()
+	UNION ALL 
+	SELECT @ProductId, 2771, 27, dbo.f_GetDateTime2()
+END
 
 UPDATE w
 SET w.GroupName = 'Virtual Sports 2 - Normal Games'
