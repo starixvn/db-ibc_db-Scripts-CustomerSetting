@@ -11,48 +11,31 @@ GO
 DELETE lat WITH (ROWLOCK,UPDLOCK) 
 FROM LogAction lat 
 WHERE lat.ActionID IN (
-							310001,
-							310003,
-							310005,
-							310006,
-							310007,
-							310008,
-							310009,
-							310010,
-							310011,
-							310012,
-							310013,
-							310014,
-							310015,
-							310016,
-							310017,
-							315001,
-							315002,
-							315003,
-							315004,
-							315101,
-							315102,
-							315103,
-							315104
-							)
-
-INSERT INTO LogAction (
-    ActionID,
-    ActionTypeID,
-    SPName,
-    ActionNameEN,
-    ActionNameCH,
-    ActionNameCS,
-    ActionNameJP,
-    ActionNameIT,
-    ActionNameTH,
-    ActionNameKO,
-    XsltContent,
-    IsInternal,
-    ActionNameVI,
-    ActionNameCN
+    310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
+    315001,315002,315003,315004,315101,315102,315103,315104
 )
-		  SELECT 310001, 104, N'Age_CashDeposit_ManualAdd', N'Add manual deposit', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
+
+DECLARE @LogAction TABLE (
+    ActionID INT NOT NULL,
+    ActionTypeID INT NULL,
+    SPName VARCHAR(50) NULL,
+    ActionNameEN NVARCHAR(256) NULL,
+    ActionNameCH NVARCHAR(256) NULL,
+    ActionNameCS NVARCHAR(256) NULL,
+    ActionNameJP NVARCHAR(256) NULL,
+    ActionNameIT NVARCHAR(256) NULL,
+    ActionNameTH NVARCHAR(256) NULL,
+    ActionNameKO NVARCHAR(256) NULL,
+    XsltContent VARCHAR(MAX) NULL,
+    IsInternal TINYINT NOT NULL,
+    ActionNameVI NVARCHAR(256) NULL,
+    ActionNameCN NVARCHAR(256) NULL
+)
+
+INSERT INTO @LogAction (
+    ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCN
+)
+SELECT 310001, 104, N'Age_CashDeposit_ManualAdd', N'Add manual deposit', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
 UNION ALL SELECT 310003, 105, N'Age_CashWithdrawal_ManualAdd', N'Add manual withdrawal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
 UNION ALL SELECT 310005, 104, N'API_CashDeposit_AddTransaction', N'Request deposit', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
 UNION ALL SELECT 310006, 105, N'API_CashWithdrawal_AddTransaction', N'Request withdrawal', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
@@ -76,31 +59,29 @@ UNION ALL SELECT 315102, 103, N'Age_CashPromotion_UpdateTransStatus', N'Update b
 UNION ALL SELECT 315103, 103, N'Age_CashPromotion_Reject_Multiple', N'Reject multiple pending bonus transactions', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
 UNION ALL SELECT 315104, 103, N'Task_CashPromotion_UpdateExpiredStatus', N'Expire bonus transaction', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL
 
-SELECT *
+INSERT INTO LogAction (
+    ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCN
+)
+SELECT 
+    ActionID, ActionTypeID, SPName, ActionNameEN,
+    ISNULL(ActionNameCH, ActionNameEN),
+    ISNULL(ActionNameCS, ActionNameEN),
+    ISNULL(ActionNameJP, ActionNameEN),
+    ISNULL(ActionNameIT, ActionNameEN),
+    ISNULL(ActionNameTH, ActionNameEN),
+    ISNULL(ActionNameKO, ActionNameEN),
+    XsltContent, IsInternal,
+    ISNULL(ActionNameVI, ActionNameEN),
+    ISNULL(ActionNameCN, ActionNameEN)
+FROM @LogAction
+WHERE ActionID IN (
+    310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
+    315001,315002,315003,315004,315101,315102,315103,315104
+)
+
+SELECT * 
 FROM LogAction lat WITH (NOLOCK) 
-WHERE lat.ActionID IN (
-							310001,
-							310003,
-							310005,
-							310006,
-							310007,
-							310008,
-							310009,
-							310010,
-							310011,
-							310012,
-							310013,
-							310014,
-							310015,
-							310016,
-							310017,
-							315001,
-							315002,
-							315003,
-							315004,
-							315101,
-							315102,
-							315103,
-							315104
-							)
---ORDER BY ActionTypeID, ActionID
+WHERE ActionID IN (
+    310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
+    315001,315002,315003,315004,315101,315102,315103,315104
+)
