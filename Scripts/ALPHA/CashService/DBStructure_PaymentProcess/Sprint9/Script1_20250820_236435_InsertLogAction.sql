@@ -33,7 +33,7 @@ DECLARE @LogAction TABLE (
 )
 
 INSERT INTO @LogAction (
-    ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCN
+    ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCN, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCS
 )
 		  SELECT 310001, 104, N'Age_CashDeposit_ManualAdd', N'Add manual deposit', N'添加手動存款', NULL, NULL, NULL, N'เพิ่มรายการธุรกรรมให้กับสมาชิกเมื่อมีการฝากเงิน', NULL, NULL, 0, NULL, N'添加手动存款'
 UNION ALL SELECT 310003, 105, N'Age_CashWithdrawal_ManualAdd', N'Add manual withdrawal', N'添加手動提款', NULL, NULL, NULL, N'เพิ่มรายการธุรกรรมให้กับสมาชิกเมื่อมีการถอนเงิน', NULL, NULL, 0, NULL, N'添加手动提款'
