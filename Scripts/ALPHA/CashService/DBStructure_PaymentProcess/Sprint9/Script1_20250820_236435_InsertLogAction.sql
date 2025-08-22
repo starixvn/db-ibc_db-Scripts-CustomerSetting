@@ -12,7 +12,7 @@ DELETE lat WITH (ROWLOCK,UPDLOCK)
 FROM LogAction lat 
 WHERE lat.ActionID IN (
     310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
-    315001,315002,315003,315004,315101,315102,315103,315104
+    315001,315002,315003,315004,315101,315102,315103,315104,315107
 )
 
 DECLARE @LogAction TABLE (
@@ -58,6 +58,8 @@ UNION ALL SELECT 315101, 103, N'Age_CashPromotion_ManualAddBonus', N'Add manual 
 UNION ALL SELECT 315102, 103, N'Age_CashPromotion_UpdateTransStatus', N'Update bonus transaction status', N'更新獎金交易狀態', NULL, NULL, NULL, N'อัปเดตสถานะโบนัสโปรโมชัน', NULL, NULL, 0, NULL, N'更新奖金交易状态'
 UNION ALL SELECT 315103, 103, N'Age_CashPromotion_Reject_Multiple', N'Reject multiple pending bonus transactions', N'拒絶多個待處理獎金交易', NULL, NULL, NULL, N'ปฏิเสธโบนัสโปรโมชัน (หลายรายการ)', NULL, NULL, 0, NULL, N'拒绝多个待处理奖金交易'
 UNION ALL SELECT 315104, 103, N'Task_CashPromotion_UpdateExpiredStatus', N'Expire bonus transaction', N'獎金交易已過期', NULL, NULL, NULL, N'อัปเดตโปรโมชันที่หมดอายุ', NULL, NULL, 1, NULL, N'奖金交易已过期'
+--
+UNION ALL SELECT 315107, 103, N'Task_CashService_BonusTransaction_Ins', N'Add bonus', N'添加獎金', NULL, NULL, NULL, N'เพิ่มรายการธุรกรรมโบนัสสำหรับสมาชิกเงินสด', NULL, NULL, 1, NULL, N'添加奖金'
 
 INSERT INTO LogAction (
     ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCN
@@ -74,14 +76,10 @@ SELECT
     ISNULL(ActionNameVI, ActionNameEN),
     ISNULL(ActionNameCN, ActionNameEN)
 FROM @LogAction
-WHERE ActionID IN (
-    310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
-    315001,315002,315003,315004,315101,315102,315103,315104
-)
 
 SELECT  *
 FROM LogAction lat WITH (NOLOCK) 
 WHERE ActionID IN (
     310001,310003,310005,310006,310007,310008,310009,310010,310011,310012,310013,310014,310015,310016,310017,
-    315001,315002,315003,315004,315101,315102,315103,315104
+    315001,315002,315003,315004,315101,315102,315103,315104,315107
 )
