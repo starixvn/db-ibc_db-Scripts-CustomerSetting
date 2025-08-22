@@ -48,7 +48,7 @@ UNION ALL SELECT 310012, 105, N'Age_CashWithdrawal_UpdateTransStatus', N'Update 
 UNION ALL SELECT 310013, 104, N'Age_CashDeposit_UpdateTransStatus', N'Update deposit transaction status', N'更新存款交易狀態', NULL, NULL, NULL, N'อัปเดตสถานะการถอนเงิน', NULL, NULL, 0, NULL, N'更新存款交易状态'
 UNION ALL SELECT 310014, 104, N'Age_CashTransaction_RevertDeposit_Upd', N'Revert deposit transaction to pending', N'將存款交易狀態恢複爲待處理', NULL, NULL, NULL, N'เปลี่ยนสถานะการฝากเงินกลับเป็น “รอดำเนินการ”', NULL, NULL, 0, NULL, N'将存款交易状态恢复为待处理'
 UNION ALL SELECT 310015, 105, N'Age_CashTransaction_RevertWithdrawal_Upd', N'Revert withdrawal transaction to pending', N'將提款交易狀態恢複爲待處理', NULL, NULL, NULL, N'เปลี่ยนสถานะการถอนเงินกลับเป็น “รอดำเนินการ”', NULL, NULL, 0, NULL, N'将提款交易状态恢复为待处理'
-UNION ALL SELECT 310016, 104, N'Task_CashService_UpdateExpiredStatus', N'Expire deposit transaction', N'存款交易已過期', NULL, NULL, NULL, N'บริการสำหรับอัปเดตรายการธุรกรรมที่หมดอายุ', NULL, NULL, 0, NULL, N'存款交易已过期'
+UNION ALL SELECT 310016, 104, N'Task_CashService_UpdateExpiredStatus', N'Expire deposit transaction', N'存款交易已過期', NULL, NULL, NULL, N'บริการสำหรับอัปเดตรายการธุรกรรมที่หมดอายุ', NULL, NULL, 1, NULL, N'存款交易已过期'
 UNION ALL SELECT 310017, 100, N'Task_CS_AccumCreditReturn_YesterdayLoss_Adjust', N'Adjust AccumCreditReturn of customers with yesterday loss', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL
 UNION ALL SELECT 315001, 103, N'Age_CashService_CashPromotionIns', N'Add new promotion', N'新增優惠活動', NULL, NULL, NULL, N'เพิ่มโปรโมชันใหม่', NULL, NULL, 0, NULL, N'新增优惠活动'
 UNION ALL SELECT 315002, 103, N'Age_CashService_CashPromotionUpd', N'Update promotion', N'更新優惠活動', NULL, NULL, NULL, N'ลบโปรโมชัน', NULL, NULL, 0, NULL, N'更新优惠活动'
@@ -57,7 +57,7 @@ UNION ALL SELECT 315004, 103, N'Age_CashService_CashPromotionStatusUpd', N'Updat
 UNION ALL SELECT 315101, 103, N'Age_CashPromotion_ManualAddBonus', N'Add manual bonus', N'新增手動獎金', NULL, NULL, NULL, N'เพิ่มโบนัสโปรโมชันด้วยตนเอง', NULL, NULL, 0, NULL, N'新增手动奖金'
 UNION ALL SELECT 315102, 103, N'Age_CashPromotion_UpdateTransStatus', N'Update bonus transaction status', N'更新獎金交易狀態', NULL, NULL, NULL, N'อัปเดตสถานะโบนัสโปรโมชัน', NULL, NULL, 0, NULL, N'更新奖金交易状态'
 UNION ALL SELECT 315103, 103, N'Age_CashPromotion_Reject_Multiple', N'Reject multiple pending bonus transactions', N'拒絶多個待處理獎金交易', NULL, NULL, NULL, N'ปฏิเสธโบนัสโปรโมชัน (หลายรายการ)', NULL, NULL, 0, NULL, N'拒绝多个待处理奖金交易'
-UNION ALL SELECT 315104, 103, N'Task_CashPromotion_UpdateExpiredStatus', N'Expire bonus transaction', N'獎金交易已過期', NULL, NULL, NULL, N'อัปเดตโปรโมชันที่หมดอายุ', NULL, NULL, 0, NULL, N'奖金交易已过期'
+UNION ALL SELECT 315104, 103, N'Task_CashPromotion_UpdateExpiredStatus', N'Expire bonus transaction', N'獎金交易已過期', NULL, NULL, NULL, N'อัปเดตโปรโมชันที่หมดอายุ', NULL, NULL, 1, NULL, N'奖金交易已过期'
 
 INSERT INTO LogAction (
     ActionID, ActionTypeID, SPName, ActionNameEN, ActionNameCH, ActionNameCS, ActionNameJP, ActionNameIT, ActionNameTH, ActionNameKO, XsltContent, IsInternal, ActionNameVI, ActionNameCN
