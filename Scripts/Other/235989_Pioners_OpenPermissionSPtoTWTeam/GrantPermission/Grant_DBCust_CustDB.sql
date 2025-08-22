@@ -1,6 +1,6 @@
 /*<info serverAlias="DBCust-CustDB" executers="" viewers="" isFunction="0" isNested="0"></info>*/
 /*
-      Task:         [3rd Integration] - Open SP permission to TW team [#235989]
+      Task:         [3rd Integration] - Open SP permission to TW team [#235989] 
       DB:           DBCust-CustDB
       Created:      20250820@Helios
 */
@@ -12,7 +12,7 @@ IF NOT EXISTS (
       SELECT 1 FROM sys.database_principals WHERE name = N'oneseal_integration'
 )
 BEGIN
-      PRINT N'Error: Account [oneseal_integration] does not exist in this database.';
+      PRINT N'Error: Account [oneseal_integration] does not exist in this database.'; 
       RETURN;
 END
 
