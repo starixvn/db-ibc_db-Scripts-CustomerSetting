@@ -12,7 +12,7 @@ SET NOCOUNT ON;
 
 -- Step 1: Get Customer List (example: all or by parameter)
 DECLARE @IsAllLine BIT = 1; -- Set to 1 to Only restore downline
-DECLARE @CustID INT = NULL; -- Set to specific CustID if needed
+DECLARE @CustID INT = xxxxxx; -- Set to specific CustID if needed
 DECLARE @Stage INT = 3;     -- Set stage as needed
 
 
