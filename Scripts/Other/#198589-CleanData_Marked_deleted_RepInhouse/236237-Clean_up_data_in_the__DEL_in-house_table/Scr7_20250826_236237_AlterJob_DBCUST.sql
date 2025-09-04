@@ -1,8 +1,8 @@
-/*<info serverAlias="DBTXN-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Created: 20250826@Eden
 	Task : Remove step GlobCustDB [#236237]
-	DB: DBTXN-CustDB
+	DB: DBCUST-CustDB
 */
 USE [msdb]
 GO
