@@ -1803,6 +1803,13 @@ BEGIN
 
         -- Restore in batch
         IF EXISTS (SELECT 1 FROM #Temp_CustProductStatus WITH (NOLOCK))
+            AND EXISTS (
+                SELECT 1
+                FROM dbo.CustProductStatus AS tgt WITH (NOLOCK)
+                INNER JOIN #Temp_CustProductStatus tmp
+                    ON tgt.CustID = tmp.CustID
+            )
+
         BEGIN
             WHILE EXISTS (SELECT 1 FROM #Temp_CustProductStatus WITH (NOLOCK))
             BEGIN
@@ -1917,7 +1924,7 @@ BEGIN
 
         -- Restore in batch
         IF EXISTS (SELECT 1 FROM #Temp_CustLoginInfo_Member WITH (NOLOCK))
-           AND NOT EXISTS (
+           AND EXISTS (
                 SELECT 1
                 FROM dbo.CustLoginInfo_Member AS tgt WITH (NOLOCK)
                 INNER JOIN #Temp_CustLoginInfo_Member tmp
