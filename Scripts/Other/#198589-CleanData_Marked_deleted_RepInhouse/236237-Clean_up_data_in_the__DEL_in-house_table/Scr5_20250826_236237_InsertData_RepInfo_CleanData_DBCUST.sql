@@ -22,3 +22,9 @@ FROM GlobCustDB.Sys.tables t WITH(NOLOCK)
 WHERE t.name LIKE '%[_]Del[_]Inhouse'
 	AND c.name = 'RepUpdateTime'
 	AND NOT EXISTS( SELECT 1 FROM RepInfo_CleanData WITH(NOLOCK) WHERE DatabaseName = 'GlobCustDB' AND TableName = t.[name] )
+
+--Move config from GlobCustDB to CustDB
+INSERT INTO RepInfo_CleanData(DatabaseName,TableName,Version_Key,Unique_Key)
+SELECT t.DatabaseName, t.TableName, t.Version_Key, t.Unique_Key 
+FROM GlobCustDB.dbo.RepInfo_CleanData t WITH(NOLOCK)
+WHERE NOT EXISTS( SELECT 1 FROM RepInfo_CleanData WITH(NOLOCK) WHERE DatabaseName = t.DatabaseName AND TableName = t.TableName )
