@@ -16,7 +16,43 @@ DECLARE @CustID INT = NULL; -- Set to specific CustID if needed
 DECLARE @Stage INT = 3;     -- Set stage as needed
 
 
--- Step 1.2: Prepare #CustList
+-- Step 1.2: Create #TableList to replace function call
+IF OBJECT_ID('tempdb..#TableList') IS NOT NULL DROP TABLE #TableList;
+CREATE TABLE #TableList (
+    TableSource NVARCHAR(100),
+    TableTarget NVARCHAR(100),
+    RoleID      INT DEFAULT 0   -- 0 : ALL , 1 : Member , 2 : SMA
+);
+
+-- Populate #TableList with data from Fn_Archive_RestoreData_GetTableListByStage function
+IF @Stage = 3
+BEGIN
+    INSERT INTO #TableList VALUES
+        ('BetSetting_Agent_old',           'BetSetting_Agent', 2),
+        ('BetSetting3rd_Agent_old',        'BetSetting3rd_Agent' , 2),
+        ('CustDiscount3rd_Agent_old',      'CustDiscount3rd_Agent' , 2),
+        ('CustMaxPayoutSetting_Agent_old', 'CustMaxPayoutSetting_Agent' , 2),
+        ('CustPTSetting3rd_Agent_old',     'CustPTSetting3rd_Agent' , 2),
+        ('CustStakeLevel_Agent_old',       'CustStakeLevel_Agent' , 2),
+        ('CustWinLossLimit_Agent_old',     'CustWinLossLimit_Agent' , 2),
+        ('CustSettingMode3rd_old',         'CustSettingMode3rd' , 1),
+        ('BetSetting_Member_old',          'BetSetting_Member' , 1),
+        ('BetSetting3rd_Member_old',       'BetSetting3rd_Member' , 1),
+        ('CustDiscount3rd_Member_old',     'CustDiscount3rd_Member' , 1),
+        ('CustPTSetting3rd_Member_old',    'CustPTSetting3rd_Member' , 1),
+        ('CustMaxPayoutSetting_Member_old','CustMaxPayoutSetting_Member' , 1),
+        ('CustStakeLevel_Member_old',      'CustStakeLevel_Member', 1),
+        ('CustWinLossLimit_Member_old',    'CustWinLossLimit_Member' , 1),
+        ('CustVirtualSetting_Old',         'CustVirtualSetting' , 0 ),
+        
+        ('custinfo_old',                   'custinfo' , 0),
+        ('CustProductStatus_old',          'CustProductStatus' , 0),
+        ('CustLoginInfo_old',              'CustLoginInfo' , 2),
+        ('CustLoginInfo_Member_old',       'CustLoginInfo_Member' , 1);
+END
+-- Add more stages as needed if you want to implement other stages from the function
+
+-- Step 1.3: Prepare #CustList
 IF OBJECT_ID('tempdb..#CustList') IS NOT NULL DROP TABLE #CustList;
 CREATE TABLE #CustList (
     CustID INT NOT NULL,
@@ -33,7 +69,7 @@ SELECT @RoleID = RoleID
 FROM Customer c WITH (NOLOCK)
 WHERE c.CustID = @CustID;
 
--- Step 1.3: Populate #CustList dynamically
+-- Step 1.4: Populate #CustList dynamically
 IF @RoleID = 4 AND @IsAllLine = 1  -- Super
 BEGIN
     INSERT INTO #CustList (CustID, Username, Role, TableSource, TableTarget, IsCollected, IsRestored)
@@ -45,7 +81,7 @@ BEGIN
         tbl.TableTarget,
         0, 0
     FROM dbo.customer c WITH (NOLOCK)
-    CROSS APPLY dbo.Fn_Archive_RestoreData_GetTableListByStage(@Stage) tbl
+    CROSS JOIN #TableList tbl
     WHERE c.Srecommend = @CustID
     AND c.RoleID IN (1,2,3) -- Include all downline roles
     AND (
@@ -65,7 +101,7 @@ BEGIN
         tbl.TableTarget,
         0, 0
     FROM dbo.customer c WITH (NOLOCK)
-    CROSS APPLY dbo.Fn_Archive_RestoreData_GetTableListByStage(@Stage) tbl
+    CROSS JOIN #TableList tbl
     WHERE c.Mrecommend = @CustID
     AND c.RoleID IN (1,2) -- Include all downline roles
     AND (
@@ -85,7 +121,7 @@ BEGIN
         tbl.TableTarget,
         0, 0
     FROM dbo.customer c WITH (NOLOCK)
-    CROSS APPLY dbo.Fn_Archive_RestoreData_GetTableListByStage(@Stage) tbl
+    CROSS JOIN #TableList tbl
     WHERE c.Recommend = @CustID
     AND c.RoleID = 1 -- Only members under this agent
     AND (
@@ -1954,3 +1990,4 @@ DROP TABLE IF EXISTS #Temp_CustLoginInfo_Member;
 ---------------------------------------------------------------------------
 DROP TABLE IF EXISTS #CustList;
 DROP TABLE IF EXISTS #CustBatch;
+DROP TABLE IF EXISTS #TableList;
