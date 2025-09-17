@@ -82,7 +82,7 @@
 
 	-----------------------DELETE DATA----------------------------
 	IF @Deleted = 1
-		BEGIN
+	BEGIN
 		DELETE FROM CustInfo_History WITH (ROWLOCK)
 		WHERE CustID IN (SELECT CustID FROM #CustIDList)
 		  AND UpdateTime >= @Date;
