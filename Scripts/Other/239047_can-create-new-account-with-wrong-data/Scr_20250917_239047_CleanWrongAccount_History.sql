@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*<info serverAlias="DBCUST-CustDB_History"></info>*/
 /*
 	Created: 20250917@Eden
 	Task : Delete accounts who incorrect data created during account registration - History table [#239047]
-	DB: DBCUST-CustDB
+	DB: DBCUST-CustDB_History
 */
 	USE CustDB_History
 	GO
