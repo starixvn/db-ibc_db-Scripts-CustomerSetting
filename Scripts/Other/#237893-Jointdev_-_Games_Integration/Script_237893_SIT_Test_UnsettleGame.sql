@@ -12,7 +12,7 @@ EXEC [dbo].[Dot_Intg_Unsettlement_VendorRNG_manually]
     @transid_RNG = 438699444368572416,
     @custid = 25016976,
     @productID = 200,
-    @gameID = 1633,
+    @gameID = 1636,
     @transdesc = N'Test - Unsettle by script',
     @ErrCode = @ErrCode OUTPUT,
     @ErrMsg = @ErrMsg OUTPUT;
