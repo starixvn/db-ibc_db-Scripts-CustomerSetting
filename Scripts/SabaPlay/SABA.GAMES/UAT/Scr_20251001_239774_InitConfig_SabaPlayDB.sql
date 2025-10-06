@@ -1,7 +1,7 @@
 /*<info serverAlias="DBSABAPLAY-WalletBridgeDB_Admin"></info>*/ 
 /*
 	Created: Eden@20251001
-	Task: Init config for SABA.GAMES on SABAPLAY [#239774]
+	Task: Init config for SABA.GAMES on SABAPLAY[#239774]
 	DB: DBSABAPLAY-WalletBridgeDB_Admin
 */
 USE WalletBridgeDB_Admin
@@ -18,10 +18,9 @@ EXEC [dbo].[BA_VendorAgentInfo_Ins] @OperatorId = 1, @VendorId = 42, @VendorAgen
 GO
 
 --Insert OperatorGameSetting table
+EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_General', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://l1uatapi.vn-sc-kluat.gamora.prod', @OtherInfo = NULL
+EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_Result', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://l1uatresult.vn-sc-kluat.gamora.prod', @OtherInfo = NULL
 EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'OperatorEndPoint', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub', @OtherInfo = NULL
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_General', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intapi.vn-sc-klprod.gamora.prod', @OtherInfo = NULL
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_Result', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod', @OtherInfo = NULL
-
 -- insert VendorGameList by n8n
 /*
 SELECT * FROM VendorGameList WITH(NOLOCK) WHERE vendorid = 42
