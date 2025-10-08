@@ -160,8 +160,6 @@ EXEC [dbo].[BA_VendorGameList_Ins] @GameId = N'13244', @VendorId = 42, @GameId3r
 EXEC [dbo].[BA_VendorGameList_Ins] @GameId = N'13245', @VendorId = 42, @GameId3rd = N'156', @GameName = N'Soccer PinGoal', @TypeDesc = N''
 GO
 /*
-SELECT * FROM VendorGameList WITH(NOLOCK) WHERE vendorid = 42
-
 SELECT * FROM GameVendorInfo WITH(NOLOCK) WHERE vendorid = 42
 SELECT * FROM OperatorProductSetting WITH(NOLOCK) WHERE vendorid = 42
 SELECT * 
@@ -172,6 +170,23 @@ WHERE OperatorProductSettingId IN (
 									WHERE vendorid = 42) 
 
 SELECT * FROM VendorAgentInfo WITH(NOLOCK) WHERE vendorid = 42 AND OperatorId = 1
-
 SELECT * FROM OperatorGameSetting WITH(NOLOCK) WHERE vendorid = 42 AND OperatorId = 1
+SELECT * FROM VendorGameList WITH(NOLOCK) WHERE vendorid = 42
+/*
+--CLEAN DATA : 
+DELETE FROM GameVendorInfo WITH(ROWLOCK) WHERE vendorid = 42
+
+DELETE FROM OperatorPositionTaking WITH(ROWLOCK) 
+	   WHERE OperatorProductSettingId IN ( 
+											SELECT OperatorProductSettingId 
+											FROM OperatorProductSetting WITH(NOLOCK) 
+											WHERE vendorid = 42) 
+
+DELETE FROM OperatorProductSetting WITH(ROWLOCK) WHERE vendorid = 42
+
+DELETE FROM VendorAgentInfo WITH(ROWLOCK) WHERE vendorid = 42 AND OperatorId = 1
+
+DELETE FROM OperatorGameSetting WITH(ROWLOCK) WHERE vendorid = 42 AND OperatorId = 1
+
+DELETE FROM VendorGameList WITH(ROWLOCK) WHERE vendorid = 42
 */
