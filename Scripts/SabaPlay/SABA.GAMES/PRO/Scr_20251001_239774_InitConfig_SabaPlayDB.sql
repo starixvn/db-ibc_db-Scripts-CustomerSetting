@@ -18,9 +18,9 @@ EXEC [dbo].[BA_VendorAgentInfo_Ins] @OperatorId = 1, @VendorId = 42, @VendorAgen
 GO
 
 --Insert OperatorGameSetting table
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @SubOperatorId = 0, @VendorId = 42, @SettingType = N'OperatorEndPoint', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub', @OtherInfo = NULL
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @SubOperatorId = 0, @VendorId = 42, @SettingType = N'VendorEndPoint_General', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intapi.vn-sc-klprod.gamora.prod', @OtherInfo = NULL
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @SubOperatorId = 0, @VendorId = 42, @SettingType = N'VendorEndPoint_Result', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod', @OtherInfo = NULL
+EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'OperatorEndPoint', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub', @OtherInfo = NULL, @SubOperatorId = 0
+EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_General', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intapi.vn-sc-klprod.gamora.prod', @OtherInfo = NULL							   , @SubOperatorId = 0
+EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_Result', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod', @OtherInfo = NULL						   , @SubOperatorId = 0
 GO
 
 -- insert VendorGameList
