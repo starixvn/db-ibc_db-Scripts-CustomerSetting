@@ -38,7 +38,7 @@ EXEC [dbo].[Dot_Intg_Unsettlement_VendorRNG_manually]
 
 SELECT @ErrCode AS ErrCode, @ErrMsg AS ErrMsg;
 
-SELECT TOP 10 Transid, CustID, ProductID, gameID,[status], *
+SELECT TOP 10 Transid, CustID, ProductID, gameID,[status]
 FROM BettransRNG WITH (NOLOCK)
 WHERE custid = @custid 
 	AND TransId = @transid_RNG
