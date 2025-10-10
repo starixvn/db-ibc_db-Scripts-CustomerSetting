@@ -1,6 +1,6 @@
 --VendorAPI
 DECLARE	@errorCode int, @errorMsg varchar(100)
-EXEC [dbo].[Dot_Intg_VendorAPI_Delete_test] @vendorid = 42, @siteid = 0, @servername = N'OwApiServer', @errorCode = @errorCode OUTPUT, @errorMsg = @errorMsg OUTPUT
+EXEC [dbo].[Dot_Intg_VendorAPI_Delete_test] @vendorid = 42, @siteid = 0, @servername = N'OneWorksApiCoreServer', @errorCode = @errorCode OUTPUT, @errorMsg = @errorMsg OUTPUT
 EXEC [dbo].[Dot_Intg_VendorAPI_Delete_test] @vendorid = 42, @siteid = 0, @servername = N'OwcwApiServer', @errorCode = @errorCode OUTPUT, @errorMsg = @errorMsg OUTPUT
 
 USE WalletBridgeDB_Admin
