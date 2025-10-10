@@ -8,29 +8,37 @@ USE WalletBridgeDB_Admin
 GO
 ------------------------SABAPLAY DB----------------------------------------------------
 --Insert OperatorGameSetting table
-DECLARE @Env VARCHAR(10) = 'UAT' --SIT, UAT, PRO
+DECLARE @Env VARCHAR(10) = 'SIT' --SIT, UAT, PRO
 DECLARE @return_value int, @ErrCode int, @ErrMsg varchar(100)
 DECLARE @VendorGeneralURL varchar(255)  -- OwcwApiServer
 DECLARE @VendorResultURL varchar(255)  -- OwcwApiServer
 DECLARE @OwCoreURL varchar(255) --OneWorksApiCoreServer
+DECLARE @RefKey varchar(50)
+DECLARE @Note nvarchar(255)
 
 IF @Env = 'PRO'
 BEGIN
 	SET @VendorGeneralURL = N'http://sg-intapi.vn-sc-klprod.gamora.prod'
 	SET @VendorResultURL = N'http://sg-intresult.vn-sc-klprod.gamora.prod'
 	SET @OwCoreURL = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub'
+	SET @RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf'
+	SET @Note = N'9jg479kb7v9kjv0g'
 END
 ELSE IF @Env = 'UAT'
 BEGIN
 	SET @VendorGeneralURL = N'http://l1uatapi.vn-sc-kluat.gamora.prod'
 	SET @VendorResultURL = N'http://l1uatresult.vn-sc-kluat.gamora.prod'
 	SET @OwCoreURL = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub'
+	SET @RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf'
+	SET @Note = N'9jg479kb7v9kjv0g'
 END
-IF @Env = 'SIT'
+ELSE IF @Env = 'SIT'
 BEGIN
 	SET @VendorGeneralURL = N'http://l1api.sc-sit.nebula.sit'
 	SET @VendorResultURL = N'http://l1result.sc-sit.nebula.sit'
 	SET @OwCoreURL = N'http://owapi1.playonesit.com:7133/api/SabaClub'
+	SET @RefKey = N'123licensee1%^&sit'
+	SET @Note = N'9jg479kb7v9kjv0g'
 END
 
 EXEC [dbo].[BA_OperatorGameSetting_Ins] 
@@ -52,6 +60,13 @@ EXEC [dbo].[BA_OperatorGameSetting_Ins]
 	, @ValidatePwd = NULL, @ValidateKey = NULL
 	, @Url = @VendorResultURL
 	, @OtherInfo = NULL, @SubOperatorId = 0
+
+-- Insert VendorAgentInfo table
+EXEC [dbo].[BA_VendorAgentInfo_Ins] 
+	  @OperatorId = 1, @VendorId = 42, @VendorAgentId = N''
+	, @VendorAgentKey = N'', @VendorAgentCode = N'Credit', @VendorAgentType = N'SABA'
+	, @RefName = N'ONEworks1',@RefKey = @RefKey
+	, @RefCode = N'',@Note = @Note
 GO
 
 -- Insert GameVendorInfo table
@@ -70,14 +85,6 @@ EXEC [dbo].[AP_BO_OperatorPositionTaking_Ins]
 	  @OperatorProductSettingId = @OperatorProductSettingId
 	, @CurrencyISO = N'ALL', @PositionTaking = 0, @OperatorPositionTakingId = @OperatorPositionTakingId OUTPUT
 	, @ErrCode = @ErrCode2 OUTPUT, @ErrMsg = @ErrMsg2 OUTPUT
-GO
-
--- Insert VendorAgentInfo table
-EXEC [dbo].[BA_VendorAgentInfo_Ins] 
-	  @OperatorId = 1, @VendorId = 42, @VendorAgentId = N''
-	, @VendorAgentKey = N'', @VendorAgentCode = N'Credit', @VendorAgentType = N'SABA'
-	, @RefName = N'ONEworks1',@RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf'
-	, @RefCode = N'',@Note='9jg479kb7v9kjv0g'
 GO
 
 -- insert VendorGameList

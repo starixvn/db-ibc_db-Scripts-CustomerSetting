@@ -22,7 +22,7 @@ EXEC [dbo].[BA_GameVendorInfo_Del] @VendorId = 42
 --OperatorProductSetting
 DECLARE  @ErrCode int, @ErrMsg varchar(100)
 EXEC [dbo].[AP_BO_OperatorProductSetting_Del] 
-	  @OperatorProductSettingId = 492
+	  @OperatorProductSettingId = 507
 	, @ErrCode = @ErrCode OUTPUT, @ErrMsg = @ErrMsg OUTPUT
 SELECT @ErrCode, @ErrMsg
 GO
@@ -30,7 +30,7 @@ GO
 --OperatorPositionTaking
 DECLARE  @ErrCode int, @ErrMsg varchar(100)
 EXEC [dbo].[AP_BO_OperatorPositionTaking_Del] 
-  @OperatorPositionTakingId = 531
+  @OperatorPositionTakingId = 548
 , @ErrCode = @ErrCode OUTPUT, @ErrMsg = @ErrMsg OUTPUT
 GO
 
