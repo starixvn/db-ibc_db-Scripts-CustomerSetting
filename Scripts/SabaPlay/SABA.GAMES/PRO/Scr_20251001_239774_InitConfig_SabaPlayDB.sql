@@ -7,20 +7,77 @@
 USE WalletBridgeDB_Admin
 GO
 ------------------------SABAPLAY DB----------------------------------------------------
+--Insert OperatorGameSetting table
+DECLARE @Env VARCHAR(10) = 'UAT' --SIT, UAT, PRO
+DECLARE @return_value int, @ErrCode int, @ErrMsg varchar(100)
+DECLARE @VendorGeneralURL varchar(255)  -- OwcwApiServer
+DECLARE @VendorResultURL varchar(255)  -- OwcwApiServer
+DECLARE @OwCoreURL varchar(255) --OneWorksApiCoreServer
+
+IF @Env = 'PRO'
+BEGIN
+	SET @VendorGeneralURL = N'http://sg-intapi.vn-sc-klprod.gamora.prod'
+	SET @VendorResultURL = N'http://sg-intresult.vn-sc-klprod.gamora.prod'
+	SET @OwCoreURL = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub'
+END
+ELSE IF @Env = 'UAT'
+BEGIN
+	SET @VendorGeneralURL = N'http://l1uatapi.vn-sc-kluat.gamora.prod'
+	SET @VendorResultURL = N'http://l1uatresult.vn-sc-kluat.gamora.prod'
+	SET @OwCoreURL = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub'
+END
+IF @Env = 'SIT'
+BEGIN
+	SET @VendorGeneralURL = N'http://l1api.sc-sit.nebula.sit'
+	SET @VendorResultURL = N'http://l1result.sc-sit.nebula.sit'
+	SET @OwCoreURL = N'http://owapi1.playonesit.com:7133/api/SabaClub'
+END
+
+EXEC [dbo].[BA_OperatorGameSetting_Ins] 
+	  @OperatorId = 1, @VendorId = 42
+	, @SettingType = N'OperatorEndPoint', @ValidatePwd = NULL, @ValidateKey = NULL
+	, @Url = @OwCoreURL
+	, @OtherInfo = NULL, @SubOperatorId = 0
+
+EXEC [dbo].[BA_OperatorGameSetting_Ins] 
+	  @OperatorId = 1, @VendorId = 42
+	, @SettingType = N'VendorEndPoint_General'
+	, @ValidatePwd = NULL, @ValidateKey = NULL
+	, @Url = @VendorGeneralURL
+	, @OtherInfo = NULL, @SubOperatorId = 0
+
+EXEC [dbo].[BA_OperatorGameSetting_Ins] 
+	  @OperatorId = 1, @VendorId = 42
+	, @SettingType = N'VendorEndPoint_Result'
+	, @ValidatePwd = NULL, @ValidateKey = NULL
+	, @Url = @VendorResultURL
+	, @OtherInfo = NULL, @SubOperatorId = 0
+GO
+
 -- Insert GameVendorInfo table
 EXEC [dbo].[BA_GameVendorInfo_Ins] @VendorId = 42, @VendorName = N'SabaClub', @GameType = N'SabaClub'
-DECLARE @OperatorProductSettingId int, @ErrCode int, @ErrMsg varchar(100) EXEC [dbo].[AP_BO_OperatorProductSetting_Ins] @OperatorInfoId = 1, @OperatorId = 1, @SubOperatorId = 0, @VendorId = 42, @FirstBillingDate = NULL, @BasisOfBilling = NULL, @ChargeTypeId = 1, @ChargeOnId = 1, @FromDate = N'2024-10-23', @ToDate = N'2050-12-31', @OperatorProductSettingId = @OperatorProductSettingId OUTPUT, @ErrCode = @ErrCode OUTPUT, @ErrMsg = @ErrMsg OUTPUT
-DECLARE @OperatorPositionTakingId int, @ErrCode2 int, @ErrMsg2 varchar(100) EXEC [dbo].[AP_BO_OperatorPositionTaking_Ins] @OperatorProductSettingId = @OperatorProductSettingId, @CurrencyISO = N'ALL', @PositionTaking = 0, @OperatorPositionTakingId = @OperatorPositionTakingId OUTPUT, @ErrCode = @ErrCode2 OUTPUT, @ErrMsg = @ErrMsg2 OUTPUT
+
+DECLARE @OperatorProductSettingId int, @ErrCode int, @ErrMsg varchar(100) 
+EXEC [dbo].[AP_BO_OperatorProductSetting_Ins] 
+	  @OperatorInfoId = 1, @OperatorId = 1, @SubOperatorId = 0
+	, @VendorId = 42, @FirstBillingDate = NULL, @BasisOfBilling = NULL
+	, @ChargeTypeId = 1, @ChargeOnId = 1, @FromDate = N'2024-10-23'
+	, @ToDate = N'2050-12-31', @OperatorProductSettingId = @OperatorProductSettingId OUTPUT
+	, @ErrCode = @ErrCode OUTPUT, @ErrMsg = @ErrMsg OUTPUT
+
+DECLARE @OperatorPositionTakingId int, @ErrCode2 int, @ErrMsg2 varchar(100) 
+EXEC [dbo].[AP_BO_OperatorPositionTaking_Ins] 
+	  @OperatorProductSettingId = @OperatorProductSettingId
+	, @CurrencyISO = N'ALL', @PositionTaking = 0, @OperatorPositionTakingId = @OperatorPositionTakingId OUTPUT
+	, @ErrCode = @ErrCode2 OUTPUT, @ErrMsg = @ErrMsg2 OUTPUT
 GO
 
 -- Insert VendorAgentInfo table
-EXEC [dbo].[BA_VendorAgentInfo_Ins] @OperatorId = 1, @VendorId = 42, @VendorAgentId = N'', @VendorAgentKey = N'', @VendorAgentCode = N'Credit', @VendorAgentType = N'SABA', @RefName = N'ONEworks1',@RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf', @RefCode = N'',@Note='9jg479kb7v9kjv0g'
-GO
-
---Insert OperatorGameSetting table
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'OperatorEndPoint', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://saba-wallet-group-005.3rd-party.klt2p.gamora.prod:32280/api/SabaClub', @OtherInfo = NULL, @SubOperatorId = 0
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_General', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intapi.vn-sc-klprod.gamora.prod', @OtherInfo = NULL							   , @SubOperatorId = 0
-EXEC [dbo].[BA_OperatorGameSetting_Ins] @OperatorId = 1, @VendorId = 42, @SettingType = N'VendorEndPoint_Result', @ValidatePwd = NULL, @ValidateKey = NULL, @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod', @OtherInfo = NULL						   , @SubOperatorId = 0
+EXEC [dbo].[BA_VendorAgentInfo_Ins] 
+	  @OperatorId = 1, @VendorId = 42, @VendorAgentId = N''
+	, @VendorAgentKey = N'', @VendorAgentCode = N'Credit', @VendorAgentType = N'SABA'
+	, @RefName = N'ONEworks1',@RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf'
+	, @RefCode = N'',@Note='9jg479kb7v9kjv0g'
 GO
 
 -- insert VendorGameList

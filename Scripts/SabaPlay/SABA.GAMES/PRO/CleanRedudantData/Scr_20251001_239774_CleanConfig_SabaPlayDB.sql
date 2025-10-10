@@ -1,14 +1,9 @@
-/*<info serverAlias="DBGLOB-GlobCustDB"></info>*/ 
+/*<info serverAlias="DBSABAPLAY-WalletBridgeDB_Admin"></info>*/ 
 /*
 	Created: Eden@20251001
-	Task: Delete config for SABA.GAMES[#239774]
-	DB: DBGLOB-GlobCustDB
+	Task: Clean config for SABA.GAMES on SABAPLAY - redudant data[#239774]
+	DB: DBSABAPLAY-WalletBridgeDB_Admin
 */
---VendorAPI
-DECLARE	@errorCode int, @errorMsg varchar(100)
-EXEC [dbo].[Dot_Intg_VendorAPI_Delete_test] @vendorid = 42, @siteid = 0, @servername = N'OneWorksApiCoreServer', @errorCode = @errorCode OUTPUT, @errorMsg = @errorMsg OUTPUT
-EXEC [dbo].[Dot_Intg_VendorAPI_Delete_test] @vendorid = 42, @siteid = 0, @servername = N'OwcwApiServer', @errorCode = @errorCode OUTPUT, @errorMsg = @errorMsg OUTPUT
-
 USE WalletBridgeDB_Admin
 GO
 --OperatorGameSetting
