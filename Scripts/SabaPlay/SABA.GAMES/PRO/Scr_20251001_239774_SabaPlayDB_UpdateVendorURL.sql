@@ -21,6 +21,15 @@ EXEC [dbo].[BA_OperatorGameSetting_Upd]
 , @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod'
 , @OtherInfo = NULL, @SubOperatorId = 0
 
+EXEC [dbo].[BA_VendorAgentInfo_Upd] 
+@OperatorId = 1, @VendorId = 42, @VendorAgentId = N''
+, @VendorAgentKey = N'', @VendorAgentCode = N'Credit'
+, @VendorAgentType = N'SABA'
+, @RefName = N'ONEworks1'
+, @RefKey = N'61tSCtQEwZscs93kK324lC0uQShncZmf'
+, @RefCode = N''
+, @Note='9jg479kb7v9kjv0g'
+
 /*
 SELECT * FROM OperatorGameSetting WITH(NOLOCK) WHERE vendorid = 42 AND OperatorId = 1
 */
