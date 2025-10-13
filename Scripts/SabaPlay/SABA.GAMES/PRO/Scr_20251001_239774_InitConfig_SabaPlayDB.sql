@@ -8,7 +8,7 @@ USE WalletBridgeDB_Admin
 GO
 ------------------------SABAPLAY DB----------------------------------------------------
 --Insert OperatorGameSetting table
-DECLARE @Env VARCHAR(10) = 'SIT' --SIT, UAT, PRO
+DECLARE @Env VARCHAR(10) = 'UAT' --SIT, UAT, PRO
 DECLARE @return_value int, @ErrCode int, @ErrMsg varchar(100)
 DECLARE @VendorGeneralURL varchar(255)  -- OwcwApiServer
 DECLARE @VendorResultURL varchar(255)  -- OwcwApiServer

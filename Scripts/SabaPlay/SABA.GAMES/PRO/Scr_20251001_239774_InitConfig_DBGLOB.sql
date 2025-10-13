@@ -7,7 +7,7 @@
 USE GlobCustDB
 GO
 --Insert GlobCustDB.dbo.Intg_VendorAPI table
-DECLARE @Env VARCHAR(10) = 'PRO' --SIT, UAT, PRO
+DECLARE @Env VARCHAR(10) = 'UAT' --SIT, UAT, PRO
 DECLARE @return_value int, @ErrCode int, @ErrMsg varchar(100)
 DECLARE @OwcwURL varchar(300)  -- OwcwApiServer
 DECLARE @OwCoreURL varchar(300) --OneWorksApiCoreServer
