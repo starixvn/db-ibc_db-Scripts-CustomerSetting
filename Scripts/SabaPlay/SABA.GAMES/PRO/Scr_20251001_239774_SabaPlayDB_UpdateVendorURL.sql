@@ -21,6 +21,7 @@ EXEC [dbo].[BA_OperatorGameSetting_Upd]
 , @Url = N'http://sg-intresult.vn-sc-klprod.gamora.prod'
 , @OtherInfo = NULL, @SubOperatorId = 0
 
+--VendorAgentInfo
 EXEC [dbo].[BA_VendorAgentInfo_Upd] 
 @OperatorId = 1, @VendorId = 42, @VendorAgentId = N''
 , @VendorAgentKey = N'', @VendorAgentCode = N'Credit'
@@ -31,5 +32,12 @@ EXEC [dbo].[BA_VendorAgentInfo_Upd]
 , @Note='9jg479kb7v9kjv0g'
 
 /*
-SELECT * FROM OperatorGameSetting WITH(NOLOCK) WHERE vendorid = 42 AND OperatorId = 1
+SELECT OperatorId,VendorId,SettingType,ValidatePwd
+	,ValidateKey,Url,OtherInfo,UpdateTime,SubOperatorId 
+FROM OperatorGameSetting WITH(NOLOCK) WHERE vendorid = 42 AND OperatorId = 1
+
+SELECT VendorAgentSeq,OperatorId,VendorId,VendorAgentId,VendorAgentKey,VendorAgentCode
+	,VendorAgentType,RefName,RefKey,RefCode,Note,UpdateTime	
+FROM VendorAgentInfo WITH(NOLOCK) 
+WHERE vendorid = 42 AND OperatorId = 1
 */
