@@ -20,13 +20,13 @@ DECLARE @ProductIds VARCHAR(MAX) = '6,21,22,28,32,34,36,38,39,42,45,46,50,51,52,
 --26: Lucky3 (Removed)
 DECLARE @SiteIds VARCHAR(MAX) = '1046,1047,1048,1045' --SiteLabel = '789y'
 
-DECLARE @tmp_SiteIds TABLE (SiteId INT, IsFinish BIT)
+DECLARE @tmp_SiteIds TABLE (SiteId INT, IsFinish BIT DEFAULT(0))
 INSERT INTO @tmp_SiteIds (SiteId)
 SELECT value
 FROM STRING_SPLIT(@SiteIds, ',')
 WHERE value <> ''
 
-DECLARE @tmp_ProductId_Loss TABLE (ProductId INT, IsFinish BIT)
+DECLARE @tmp_ProductId_Loss TABLE (ProductId INT, IsFinish BIT DEFAULT(0))
 INSERT INTO @tmp_ProductId_Loss (ProductId)
 SELECT value
 FROM STRING_SPLIT(@ProductIds, ',')
@@ -34,21 +34,23 @@ WHERE value <> ''
 
 WHILE (1=1)
 BEGIN
+		UPDATE @tmp_SiteIds SET IsFinish = 0
+
 		UPDATE TOP (1) @tmp_ProductId_Loss
 		SET	 IsFinish =1 
 			,@ProductID = ProductId
-		WHERE IsFinish IS NULL
+		WHERE IsFinish = 0
     
-		IF @@ROWCOUNT = 0 BREAK
+		IF @@ROWCOUNT = 0 BREAK;
 		
 		WHILE (1=1)
 		BEGIN
 			UPDATE TOP (1) @tmp_SiteIds
 			SET	 IsFinish =1 
 				,@SiteId = SiteId
-			WHERE IsFinish IS NULL
+			WHERE IsFinish = 0
     
-			IF @@ROWCOUNT = 0 BREAK
+			IF @@ROWCOUNT = 0 BREAK;
 		
 			INSERT INTO WinLimit_ProductSettingDetail(ProductID
 												, GroupID
