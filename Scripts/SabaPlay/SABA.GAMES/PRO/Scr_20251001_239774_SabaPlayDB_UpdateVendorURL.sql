@@ -7,14 +7,14 @@
 USE WalletBridgeDB_Admin
 GO
 --Insert OperatorGameSetting table
-EXEC [dbo].[BA_OperatorGameSetting_Upd] 
+EXEC [dbo].sabaplay_spbu_BA_OperatorGameSetting_Upd 
   @OperatorId = 1, @VendorId = 42
 , @SettingType = N'VendorEndPoint_General'
 , @ValidatePwd = NULL, @ValidateKey = NULL
 , @Url = N'http://sg-intapi.vn-sc-klprod.gamora.prod'
 , @OtherInfo = NULL, @SubOperatorId = 0
 
-EXEC [dbo].[BA_OperatorGameSetting_Upd] 
+EXEC [dbo].sabaplay_spbu_BA_OperatorGameSetting_Upd 
   @OperatorId = 1, @VendorId = 42
 , @SettingType = N'VendorEndPoint_Result'
 , @ValidatePwd = NULL, @ValidateKey = NULL
