@@ -7,8 +7,8 @@
 USE bodb02
 GO
 -- Unsettle Ticket 
-DECLARE @transid_RNG BIGINT = 100104374056
-DECLARE @custid INT = 1425099  
+DECLARE @transid_RNG BIGINT = 448323327912574981 
+DECLARE @custid INT = 264773863  
 ------------------------------------------
 DECLARE @productID SMALLINT           
 DECLARE @gameID SMALLINT          
