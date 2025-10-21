@@ -2,7 +2,7 @@
 /*
 	Created: Eden@20251001
 	Task: Unsettle SABAPLAY [#239774]
-	DB: DBSABAPLAY-WalletBridgeDB_Admin
+	DB: DBSIC-bodb02
 */
 USE bodb02
 GO
