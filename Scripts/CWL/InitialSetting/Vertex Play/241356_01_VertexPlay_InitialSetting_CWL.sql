@@ -1,7 +1,7 @@
 /*<info serverAlias="DBCUST-CustDB"></info>*/
 /*
 	Creator: 20251021@July
-	Task: CWL - Vertex Play Product Integration [Redmine: #240191]
+	Task: CWL - Vertex Play Product Integration [Redmine: #241356]
 	Database: DBCUST.CustDB
 */
 /*
@@ -60,7 +60,7 @@ CREATE TABLE #tmpProductSetting (
 INSERT INTO #tmpProductSetting(Level102, Level101, Level1, Level2, Level3, Currency, IsDeposit)
 SELECT -75000, -50000, 10000, 50000, 75000, NULL, 1
 UNION ALL
-SELECT -100000, -50000, 20000, 50000, 10000, NULL, 0
+SELECT -100000, -50000, 20000, 50000, 100000, NULL, 0
 UNION ALL
 SELECT -75000, -50000, 10000, 50000, 75000, 'RMB,INH', 0
 ----------------------------------------------------------------------------------------

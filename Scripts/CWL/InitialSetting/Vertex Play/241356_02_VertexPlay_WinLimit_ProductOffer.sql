@@ -1,7 +1,7 @@
 /*<info serverAlias="DBTXN-bodb02"></info>*/
 /*
 	Creator: 20251021@July
-	Task: CWL - Vertex Play Product Integration [Redmine: #240191]
+	Task: CWL - Vertex Play Product Integration [Redmine: #241356]
 	Database: DBTXN-bodb02
 */
 USE bodb02
