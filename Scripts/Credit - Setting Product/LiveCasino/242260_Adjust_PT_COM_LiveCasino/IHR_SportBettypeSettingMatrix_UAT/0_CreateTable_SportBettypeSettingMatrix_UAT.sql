@@ -70,11 +70,7 @@ BEGIN
 	
 	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_RepUpdateTime_UAT]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 	
-	CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_RepUpdateTime_UAT] ON [dbo].[SportBettypeSettingMatrix_UAT]
-	(
-		[RepUpdateTime] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
-	
+
 	CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_SportType_UAT] ON [dbo].[SportBettypeSettingMatrix_UAT]
 	(
 		[SportType] ASC,
