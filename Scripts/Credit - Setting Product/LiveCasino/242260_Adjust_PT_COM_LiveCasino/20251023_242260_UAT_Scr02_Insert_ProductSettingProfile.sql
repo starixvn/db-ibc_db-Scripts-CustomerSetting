@@ -7,6 +7,10 @@
 USE CustDB
 GO  
 
+INSERT INTO dbo.ProductSettingProfile_UAT_Del_InHouse(ProductSettingID, RepUpdateTime)
+SELECT ProductSettingID, dbo.f_GetDateTime2()
+FROM dbo.ProductSettingProfile_UAT WITH (NOLOCK);
+
 DELETE ProductSettingProfile_UAT;
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime)
 SELECT ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, dbo.f_GetDateTime2()
@@ -30,12 +34,16 @@ INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType,
 VALUES (389, 18, 9906, 4001, 0, 53, 90, 0.01, 0, 1, 0, 2, 3, 0, NULL, 53, NULL, NULL, 2, NULL, 3, 153, 3, 11, 1, 0, 2, 1, dbo.f_GetDateTime2(), 0);
 
 
-SELECT ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime
+SELECT ProductSettingID,SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,SubType
 FROM ProductSettingProfile_UAT 
-WHERE SettingType IN (18, 19) AND SportType IN (9916, 9917) AND BetType = 2400 AND ProductID = 41;
+WHERE ProductSettingID >= 385;
 
+INSERT INTO ProductProfileSiteCurrency_UAT_Del_InHouse(ProductSettingID, siteid, Currency, RepUpdateTime)
+SELECT ProductSettingID, siteid, Currency, dbo.f_GetDateTime2() AS RepUpdateTime
+FROM ProductProfileSiteCurrency_UAT AS psp WITH (NOLOCK);
 
 DELETE ProductProfileSiteCurrency_UAT;
+
 INSERT INTO ProductProfileSiteCurrency_UAT(siteid, Currency, ProductSettingID, RepUpdateTime)
 SELECT siteid, Currency, ProductSettingID, dbo.f_GetDateTime2()
 FROM ProductProfileSiteCurrency WITH (NOLOCK);
