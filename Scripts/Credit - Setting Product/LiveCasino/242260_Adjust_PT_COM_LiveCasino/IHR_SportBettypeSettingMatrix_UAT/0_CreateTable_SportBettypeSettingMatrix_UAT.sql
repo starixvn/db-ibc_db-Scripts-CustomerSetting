@@ -58,20 +58,20 @@ BEGIN
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [DATA]
 	) ON [DATA]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_isActive_UAT]  DEFAULT ((0)) FOR [isActive]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_UAT_isActive]  DEFAULT ((0)) FOR [isActive]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_isLivePT_UAT]  DEFAULT ((0)) FOR [isLivePT]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_UAT_isLivePT]  DEFAULT ((0)) FOR [isLivePT]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_IsLiveComm_UAT]  DEFAULT ((0)) FOR [IsLiveComm]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_UAT_IsLiveComm]  DEFAULT ((0)) FOR [IsLiveComm]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_IsLiveBetSetting_UAT]  DEFAULT ((0)) FOR [IsLiveBetSetting]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_UAT_IsLiveBetSetting]  DEFAULT ((0)) FOR [IsLiveBetSetting]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_isDeleted_UAT]  DEFAULT ((0)) FOR [isDeleted]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [DF_SportBettypeSettingMatrix_UAT_isDeleted]  DEFAULT ((0)) FOR [isDeleted]
 	
-	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_RepUpdateTime_UAT]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
+	ALTER TABLE [dbo].[SportBettypeSettingMatrix_UAT] ADD  CONSTRAINT [SportBettypeSettingMatrix_UAT_RepUpdateTime]  DEFAULT (sysdatetime()) FOR [RepUpdateTime]
 	
 
-	CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_SportType_UAT] ON [dbo].[SportBettypeSettingMatrix_UAT]
+	CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_UAT_SportType] ON [dbo].[SportBettypeSettingMatrix_UAT]
 	(
 		[SportType] ASC,
 		[RealProductId] ASC,
