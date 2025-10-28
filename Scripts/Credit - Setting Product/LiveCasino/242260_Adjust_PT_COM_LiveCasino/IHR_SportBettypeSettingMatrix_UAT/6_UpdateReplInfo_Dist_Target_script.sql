@@ -1,8 +1,8 @@
-/*<info serverAlias="DBCustRepl-ReplCustDB"></info>*/
+/*<info serverAlias="DBCustRepl-ReplCustDB,IRS_DBTP-bodb02,IRS_DBAGE-bodb02,IRS_DBBOF-bodb02,IRS_DBACC-bodb02,IRS_DBSIG-CustDB,IRS_DBCTG-CustDB"></info>*/
 /*
   Created: 20251027@Eden
   Task: In-House setup by GitHub Copilot
-  DB: DBCustRepl-ReplCustDB
+  DB: DBCustRepl-ReplCustDB,IRS_DBTP-bodb02,IRS_DBAGE-bodb02,IRS_DBBOF-bodb02,IRS_DBACC-bodb02,IRS_DBSIG-CustDB,IRS_DBCTG-CustDB
   
   Revisions:
     - 20251027@Eden: Initial [RedmineID: #242260]
@@ -15,8 +15,7 @@ IF EXISTS (SELECT TOP 1 1 FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'SportBe
 BEGIN
 	UPDATE RepInfo
 	SET active = 1
-	WHERE [group] = 130
-		AND [name] =  'SportBettypeSettingMatrix_UAT'
+	WHERE [name] =  'SportBettypeSettingMatrix_UAT'
 END
 ELSE
 BEGIN  
