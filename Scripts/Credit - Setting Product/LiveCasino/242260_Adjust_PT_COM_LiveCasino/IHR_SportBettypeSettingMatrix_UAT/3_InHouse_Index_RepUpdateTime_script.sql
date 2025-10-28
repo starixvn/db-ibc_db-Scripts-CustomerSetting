@@ -1,8 +1,8 @@
-/*<info serverAlias="DBGLOB-GlobCustDB"></info>*/
+/*<info serverAlias="DBGLOB-GlobCustDB,IRS_DBTP-bodb02,DBCustRepl-ReplCustDB"></info>*/
 /*
   Created: 20251027@Eden
   Task: In-House setup by GitHub Copilot
-  DB: DBGLOB-GlobCustDB
+  DB: DBGLOB-GlobCustDB,IRS_DBTP-bodb02,DBCustRepl-ReplCustDB
   
   Revisions:
     - 20251027@Eden: Initial [RedmineID: #242260]

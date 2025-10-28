@@ -37,7 +37,4 @@ CREATE TABLE [dbo].[SportBettypeSettingMatrix_UAT] (
     [ProductID] tinyint NULL,
     CONSTRAINT [PK_SportBettypeSettingMatrix_UAT] PRIMARY KEY ([BetType],[SportType],[isLicensee],[isLive],[Site])
 );
--- Create NONCLUSTERED INDEX
-CREATE NONCLUSTERED INDEX [IX_SportBettypeSettingMatrix_UAT_RepUpdateTime] ON [dbo].[SportBettypeSettingMatrix_UAT] ([RepUpdateTime]);
-GO
 -- No identity column, skip GRANT ALTER
