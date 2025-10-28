@@ -5,7 +5,13 @@
 	DB: DBGLOB-GlobCustDB
 */
 USE [GlobCustDB];
-TRUNCATE TABLE dbo.SportBettypeSettingMatrix_UAT;
+
+INSERT INTO dbo.SportBettypeSettingMatrix_UAT_Del_InHouse(BetType, SportType, isLicensee, isLive, Site, RepUpdateTime)
+SELECT BetType, SportType, isLicensee, isLive, Site, dbo.f_GetDateTime2() AS RepUpdateTime
+FROM dbo.SportBettypeSettingMatrix_UAT WITH (NOLOCK);
+
+
+DELETE dbo.SportBettypeSettingMatrix_UAT;
 
 WITH TMP_LC_GROUPED_BETTYPE AS
 (
@@ -101,3 +107,4 @@ INSERT INTO dbo.SportBettypeSettingMatrix_UAT
                 AND si.SiteLabel IN ('MBC','IBC','789y')
             ) AS s
 	WHERE sbsm.isDeleted = 0 
+    AND sbsm.Site = 'All'
