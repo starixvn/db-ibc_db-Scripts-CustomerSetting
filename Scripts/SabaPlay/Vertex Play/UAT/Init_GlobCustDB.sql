@@ -29,6 +29,7 @@ SELECT
 	@ErrCode
     , @ErrMsg
 
+
 EXEC @return_value = [dbo].[Dot_Intg_VendorAPI_Insert] @vendorid	 = 116
 								     , @siteid	 = 0
 								     , @servername = N'OwcwApiServer'
