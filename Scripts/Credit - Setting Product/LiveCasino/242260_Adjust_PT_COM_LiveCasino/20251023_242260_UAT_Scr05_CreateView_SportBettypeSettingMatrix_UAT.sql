@@ -43,5 +43,5 @@ AS
 		, isDeleted 
 		, RepUpdateTime 
 		, ProductID 
-	FROM GlobCustDB.dbo.SportBettypeSettingMatrix_UAT;
+	FROM GlobCustDB.dbo.SportBettypeSettingMatrix_UAT WITH (NOLOCK);
 GO

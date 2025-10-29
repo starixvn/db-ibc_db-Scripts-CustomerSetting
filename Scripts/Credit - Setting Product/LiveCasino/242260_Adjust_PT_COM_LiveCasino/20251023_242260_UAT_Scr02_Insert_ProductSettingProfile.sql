@@ -7,11 +7,11 @@
 USE CustDB
 GO  
 
-INSERT INTO dbo.ProductSettingProfile_UAT_Del_InHouse(ProductSettingID, RepUpdateTime)
-SELECT ProductSettingID, dbo.f_GetDateTime2()
-FROM dbo.ProductSettingProfile_UAT WITH (NOLOCK);
 
-DELETE ProductSettingProfile_UAT;
+DELETE FROM ProductSettingProfile_UAT WITH (ROWLOCK)
+OUTPUT DELETED.ProductSettingID, dbo.f_GetDateTime2()
+INTO dbo.ProductSettingProfile_UAT_Del_InHouse(ProductSettingID, RepUpdateTime);
+
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime)
 SELECT ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, dbo.f_GetDateTime2()
 FROM ProductSettingProfile WITH (NOLOCK);
@@ -38,11 +38,11 @@ SELECT ProductSettingID,SettingType,SportType,BetType,IsLive,ProductID,MaxPT,Max
 FROM ProductSettingProfile_UAT 
 WHERE ProductSettingID >= 385;
 
-INSERT INTO ProductProfileSiteCurrency_UAT_Del_InHouse(ProductSettingID, siteid, Currency, RepUpdateTime)
-SELECT ProductSettingID, siteid, Currency, dbo.f_GetDateTime2() AS RepUpdateTime
-FROM ProductProfileSiteCurrency_UAT AS psp WITH (NOLOCK);
 
-DELETE ProductProfileSiteCurrency_UAT;
+DELETE FROM ProductProfileSiteCurrency_UAT WITH (ROWLOCK)
+OUTPUT DELETED.ProductSettingID, DELETED.siteid, DELETED.Currency, dbo.f_GetDateTime2()
+INTO dbo.ProductProfileSiteCurrency_UAT_Del_InHouse(ProductSettingID, siteid, Currency, RepUpdateTime)
+;
 
 INSERT INTO ProductProfileSiteCurrency_UAT(siteid, Currency, ProductSettingID, RepUpdateTime)
 SELECT siteid, Currency, ProductSettingID, dbo.f_GetDateTime2()
