@@ -26,10 +26,6 @@ GRANT SELECT ON SportBettypeSettingMatrix_UAT TO Dot_Member;
 GO
 GRANT SELECT ON SportBettypeSettingMatrix_UAT TO LicBIUser;
 GO
-GRANT SELECT ON SportBettypeSettingMatrix_UAT TO ow_12bet;
-GO
-GRANT SELECT ON SportBettypeSettingMatrix_UAT TO ow_lic_12bet;
-GO
 GRANT SELECT ON SportBettypeSettingMatrix_UAT TO sportsbook_refdata;
 GO
 GRANT SELECT ON SportBettypeSettingMatrix_UAT TO svc_tig;

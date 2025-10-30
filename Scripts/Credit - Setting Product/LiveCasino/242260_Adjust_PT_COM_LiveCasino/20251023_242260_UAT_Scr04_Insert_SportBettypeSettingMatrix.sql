@@ -73,38 +73,22 @@ SELECT
 FROM (VALUES (45),(51),(57),(76),(90),(96),(98),(101),(107)
 ) AS G3 (ProductID);
 
+/*DELETE SportBettypeSettingMatrix_UAT;*/
 
---DELETE dbo.SportBettypeSettingMatrix_UAT;---check 
-
-IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.SportBettypeSettingMatrix_UAT WITH (NOLOCK))
-BEGIN
-    INSERT INTO dbo.SportBettypeSettingMatrix_UAT
-    (RealProductId,ProductID,SportType,BetType,isLicensee,isLive,Site,isActive,
-        SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
-        SportTypeRefComm,BetTypeRefComm,isLiveComm,TableComm,
-        SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
-        SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
-        isDeleted,TableBettrans,RepUpdateTime)
-    SELECT RealProductId,ProductID,SportType,BetType,isLicensee,isLive,Site,isActive,
-        SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
-        SportTypeRefComm,BetTypeRefComm,isLiveComm,TableComm,
-        SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
-        SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
-        isDeleted,TableBettrans,dbo.f_GetDateTime2()
-    FROM SportBettypeSettingMatrix sbsm WITH (NOLOCK);
-END
-ELSE IF EXISTS (SELECT TOP 1 1 
-                FROM dbo.SportBettypeSettingMatrix_UAT A WITH (NOLOCK) 
-                WHERE ProductID = 41 AND Site = 'All' AND isLicensee = 0 AND isDeleted = 1
-                AND EXISTS (SELECT TOP 1 1 FROM #tbl_LC_GROUPED_BETTYPE_242260 B WHERE B.ProductID = A.RealProductId))
-BEGIN
-    UPDATE sbsm
-    SET isDeleted = 0
-        --,RepUpdateTime = dbo.f_GetDateTime2()
-    FROM SportBettypeSettingMatrix_UAT sbsm WITH (ROWLOCK)
-    WHERE ProductID = 41 AND Site = 'All' AND isLicensee = 0 AND isDeleted = 1
-    AND EXISTS (SELECT TOP 1 1 FROM #tbl_LC_GROUPED_BETTYPE_242260 B WHERE B.ProductID = sbsm.RealProductId);
-END
+INSERT INTO #tbl_Matrix_UAT_242260
+(RealProductId,ProductID,SportType,BetType,isLicensee,isLive,Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
+    SportTypeRefComm,BetTypeRefComm,isLiveComm,TableComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
+    SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
+    isDeleted,TableBettrans)
+SELECT RealProductId,ProductID,SportType,BetType,isLicensee,isLive,Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
+    SportTypeRefComm,BetTypeRefComm,isLiveComm,TableComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
+    SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
+    isDeleted,TableBettrans
+FROM dbo.SportBettypeSettingMatrix sbsm WITH (NOLOCK);
 
 /********************************************    MBC    ********************************************/
 --EXCLUDE INDO site
@@ -123,7 +107,7 @@ SELECT RealProductId,TMP.ProductID,SportType,BetType,isLicensee,isLive,
     SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
     SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
     isDeleted,TableBettrans
-FROM dbo.SportBettypeSettingMatrix_UAT TMP
+FROM #tbl_Matrix_UAT_242260 TMP
 INNER JOIN #tbl_LC_GROUPED_BETTYPE_242260 p ON TMP.RealProductId = p.ProductID AND TMP.isLicensee = 0
 CROSS APPLY (
     SELECT si.Site, si.SiteLabel
@@ -155,7 +139,7 @@ SELECT RealProductId,ProductID,SportType,BetType,isLicensee,isLive,
     SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
     SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
     isDeleted,TableBettrans
-FROM dbo.SportBettypeSettingMatrix_UAT TMP WITH (NOLOCK)
+FROM #tbl_Matrix_UAT_242260 TMP WITH (NOLOCK)
 CROSS APPLY (
     SELECT si.Site, si.SiteLabel
     FROM Site si WITH (NOLOCK)
@@ -186,7 +170,7 @@ SELECT RealProductId,ProductID,SportType,BetType,isLicensee,isLive,
     SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
     SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
     isDeleted,TableBettrans
-FROM dbo.SportBettypeSettingMatrix_UAT TMP WITH (NOLOCK)
+FROM #tbl_Matrix_UAT_242260 TMP WITH (NOLOCK)
 CROSS APPLY (
     SELECT si.Site, si.SiteLabel
     FROM Site si WITH (NOLOCK)
@@ -221,6 +205,10 @@ BEGIN
 
 END
 
+DELETE sbsm
+FROM #tbl_Matrix_UAT_242260 sbsm WITH (NOLOCK)
+WHERE sbsm.ProductID = 41 AND sbsm.Site = 'All' AND sbsm.isLicensee = 0 AND sbsm.isDeleted = 0
+AND EXISTS (SELECT TOP 1 1 FROM #tbl_LC_GROUPED_BETTYPE_242260 B WHERE B.ProductID = sbsm.RealProductId);
 
 MERGE [dbo].[SportBettypeSettingMatrix_UAT] [t]
 USING #tbl_Matrix_UAT_242260 [tvp] 

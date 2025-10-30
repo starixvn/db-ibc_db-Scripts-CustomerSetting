@@ -18,20 +18,46 @@ FROM ProductSettingProfile WITH (NOLOCK);
 
 /*PT - Live Casino 1*/
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime) 
-VALUES (385, 18, 9916, 2400, 0, 41, 90, 0, 0, 1, 0, 2, 3, 0, NULL, 41, NULL, 330, 1, NULL, 3, 153, 3, 12, 1, 0, 2, 1, 0, dbo.f_GetDateTime2());
+VALUES (385, 18, 9916, 2400, 0, 41, 90, 0, 0, 1, 0, 2, 3, 0, NULL, 41, NULL, 330, 1, NULL, 3, 153, 3, 12, 2, 0, 2, 1, 0, dbo.f_GetDateTime2());
 /*PT - Live Casino 2*/
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime) 
-VALUES (386, 18, 9917, 2400, 0, 41, 90, 0, 0, 1, 0, 2, 3, 0, NULL, 41, NULL, 330, 1, NULL, 3, 153, 3, 13, 1, 0, 2, 1, 0, dbo.f_GetDateTime2());
+VALUES (386, 18, 9917, 2400, 0, 41, 90, 0, 0, 1, 0, 2, 3, 0, NULL, 41, NULL, 330, 1, NULL, 3, 153, 3, 13, 3, 0, 2, 1, 0, dbo.f_GetDateTime2());
 
 /*Comm - Live Casino 1*/
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime) 
-VALUES (387, 19, 9916, 2400, 0, 41, 0, 0.008, 0, 1, 0, 2, 2, 0, 0.0005, 41, NULL, 330, 1, NULL, 3, 156, 2, 14, 1, 0, 2, 1, 0, dbo.f_GetDateTime2());
+VALUES (387, 19, 9916, 2400, 0, 41, 0, 0.008, 0, 1, 0, 2, 2, 0, 0.0005, 41, NULL, 330, 1, NULL, 3, 156, 2, 14, 2, 0, 2, 1, 0, dbo.f_GetDateTime2());
 /*Comm - Live Casino 2*/
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, OfferType, RepUpdateTime) 
-VALUES (388, 19, 9917, 2400, 0, 41, 0, 0.008, 0, 1, 0, 2, 2, 0, 0.0005, 41, NULL, 330, 1, NULL, 3, 156, 2, 15, 1, 0, 2, 1, 0, dbo.f_GetDateTime2());
+VALUES (388, 19, 9917, 2400, 0, 41, 0, 0.008, 0, 1, 0, 2, 2, 0, 0.0005, 41, NULL, 330, 1, NULL, 3, 156, 2, 15, 3, 0, 2, 1, 0, dbo.f_GetDateTime2());
 
+/*PT - RNG Casino*/
 INSERT INTO ProductSettingProfile_UAT (ProductSettingID, SettingType, SportType, BetType, IsLive, ProductID, MaxPT, MaxDiscount, IsSync, IsHidden, IsDisabled, SettingLevel, DisplayOrder, SettingStatus, IntervalValue, RealProductId, MaxChoice, Parent_ProductSettingID, Child_DisplayOrder, SubType, GroupID, GroupType, GroupTypeOrder, SubGroupID, SubGroupOrder, CreationStatus, DisplayType, MarketType, RepUpdateTime, OfferType) 
-VALUES (389, 18, 9906, 4001, 0, 53, 90, 0.01, 0, 1, 0, 2, 3, 0, NULL, 53, NULL, NULL, 2, NULL, 3, 153, 3, 11, 1, 0, 2, 1, dbo.f_GetDateTime2(), 0);
+VALUES (389, 18, 9906, 4001, 0, 53, 90, 0.01, 0, 1, 0, 2, 3, 0, NULL, 53, NULL, NULL, 2, NULL, 3, 153, 3, 11, 4, 0, 2, 1, dbo.f_GetDateTime2(), 0);
+
+/*PT - Other RNG Casino*/
+UPDATE ProductSettingProfile_UAT
+SET SubGroupOrder = 5,
+    RepUpdateTime = dbo.f_GetDateTime2()
+WHERE ProductSettingID = 368;
+
+/*PT - IBC Bet Live Casino*/
+UPDATE ProductSettingProfile_UAT
+SET SubGroupOrder = 6,
+    RepUpdateTime = dbo.f_GetDateTime2()
+WHERE ProductSettingID = 209;
+
+
+/*Comm  - IBC Bet Live Casino*/
+UPDATE ProductSettingProfile_UAT
+SET SubGroupOrder = 4,
+    RepUpdateTime = dbo.f_GetDateTime2()
+WHERE ProductSettingID = 220;
+
+/*Remove setting IBCBet Live Casino*/
+DELETE FROM ProductSettingProfile_UAT WITH (ROWLOCK)
+OUTPUT DELETED.ProductSettingID, dbo.f_GetDateTime2()
+INTO dbo.ProductSettingProfile_UAT_Del_InHouse(ProductSettingID, RepUpdateTime)
+WHERE SportType = 242; 
 
 
 SELECT ProductSettingID,SettingType,SportType,BetType,IsLive,ProductID,MaxPT,MaxDiscount,IsSync,IsHidden,IsDisabled,SettingLevel,DisplayOrder,SettingStatus,IntervalValue,RealProductId,MaxChoice,Parent_ProductSettingID,Child_DisplayOrder,SubType
@@ -88,6 +114,12 @@ WHERE
     AND BetType = 2400 
     AND SportType IN (9911)
     AND SettingType in (18,19);*/
+
+/*Remove setting IBCBet Live Casino*/
+DELETE FROM ProductProfileSiteCurrency_UAT WITH (ROWLOCK)
+OUTPUT DELETED.ProductSettingID, DELETED.siteid, DELETED.Currency, dbo.f_GetDateTime2()
+INTO dbo.ProductProfileSiteCurrency_UAT_Del_InHouse(ProductSettingID, siteid, Currency, RepUpdateTime)
+WHERE ProductSettingID IN (92,209,220)
 
 
 SELECT siteid, Currency, ProductSettingID, RepUpdateTime 
