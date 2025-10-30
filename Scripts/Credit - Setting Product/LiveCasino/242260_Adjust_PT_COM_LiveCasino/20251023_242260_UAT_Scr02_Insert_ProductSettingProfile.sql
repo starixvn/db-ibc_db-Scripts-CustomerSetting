@@ -51,17 +51,26 @@ FROM ProductProfileSiteCurrency WITH (NOLOCK);
 
 /*MBC*/
 
+--EXCLUDE INDO site
 INSERT INTO ProductProfileSiteCurrency_UAT(siteid, Currency, ProductSettingID, RepUpdateTime)
 SELECT siteid, 0 AS Currency, psp.ProductSettingID, dbo.f_GetDateTime2() AS RepUpdateTime
 FROM ProductSettingProfile_UAT AS psp WITH (NOLOCK) 
     CROSS JOIN (select Site, siteid, SiteLabel
 					from site with (nolock) 
-					where SiteLabel in ('MBC') and isLicensee = 0 and isActive = 1) AS si
+					where SiteLabel in ('MBC') and isLicensee = 0 and isActive = 1 AND Site NOT IN ('INDO')) AS si
 WHERE 
     psp.ProductSettingID IN (385,386,387,388,389);
-    /*ProductID = 41 
-    AND BetType = 2400 
-    AND SportType IN (9916,9917);*/
+
+
+--INDO site, No changes on PT, applies remove comm
+INSERT INTO ProductProfileSiteCurrency_UAT(siteid, Currency, ProductSettingID, RepUpdateTime)
+SELECT siteid, 0 AS Currency, psp.ProductSettingID, dbo.f_GetDateTime2() AS RepUpdateTime
+FROM ProductSettingProfile_UAT AS psp WITH (NOLOCK) 
+    CROSS JOIN (select Site, siteid, SiteLabel
+					from site with (nolock) 
+					where Site IN ('INDO')) AS si
+WHERE 
+    psp.ProductSettingID IN (331,228);
 
 
 /*'789y','IBC'*/

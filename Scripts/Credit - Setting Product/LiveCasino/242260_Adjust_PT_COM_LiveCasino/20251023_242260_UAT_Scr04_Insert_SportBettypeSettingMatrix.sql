@@ -107,7 +107,7 @@ BEGIN
 END
 
 /********************************************    MBC    ********************************************/
-
+--EXCLUDE INDO site
 INSERT INTO #tbl_Matrix_UAT_242260(RealProductId,ProductID,SportType,BetType,isLicensee,isLive,
     Site,isActive,
     SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
@@ -131,13 +131,44 @@ CROSS APPLY (
     WHERE si.isActive = 1
         AND si.isLicensee = 0
         AND si.SiteLabel IN ('MBC')
-        --AND Site NOT IN ('INDO','755555')
+        AND Site NOT IN ('INDO')
 ) AS s
 WHERE TMP.Site <> S.site
 AND TMP.isLicensee = 0
 AND TMP.ProductID = 41
 AND TMP.isDeleted = 0
 AND TMP.Site = 'All'
+;
+
+--INDO site, No changes on PT, applies remove comm
+INSERT INTO #tbl_Matrix_UAT_242260(RealProductId,ProductID,SportType,BetType,isLicensee,isLive,
+    Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
+    SportTypeRefComm,BetTypeRefComm,isLiveComm,TableComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
+    SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
+    isDeleted,TableBettrans)
+SELECT RealProductId,ProductID,SportType,BetType,isLicensee,isLive,
+    s.Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,
+    NULL SportTypeRefComm,NULL BetTypeRefComm,isLiveComm,NULL TableComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,IsLiveBetSetting,TableBetSetting,
+    SporttypeRefWinlossLimit,BettypeRefWinlossLimit,
+    isDeleted,TableBettrans
+FROM dbo.SportBettypeSettingMatrix_UAT TMP WITH (NOLOCK)
+CROSS APPLY (
+    SELECT si.Site, si.SiteLabel
+    FROM Site si WITH (NOLOCK)
+    WHERE si.isActive = 1
+        AND si.isLicensee = 0
+        AND si.Site IN ('INDO')
+) AS s
+WHERE TMP.Site <> S.site
+AND TMP.isLicensee = 0
+AND TMP.ProductID = 41
+AND TMP.isDeleted = 0
+AND TMP.Site = 'All'
+AND EXISTS (SELECT TOP 1 1 FROM #tbl_LC_GROUPED_BETTYPE_242260 b WHERE TMP.RealProductId = b.ProductID)
 ;
 
 /********************************************    IBC, 789y    ********************************************/
