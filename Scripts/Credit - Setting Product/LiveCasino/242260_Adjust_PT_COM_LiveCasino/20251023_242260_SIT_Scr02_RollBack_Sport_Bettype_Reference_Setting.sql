@@ -10,7 +10,7 @@ USE [bodb02];
 
 CREATE TABLE #tbl_Site_242260(
     siteid	int,
-    site	nvarchar(50),
+    site	varchar(50),
     SiteLabel	varchar(50)
 );
 
@@ -30,7 +30,9 @@ WHERE si.isActive = 1
 
 
 INSERT INTO #tbl_SportType_242260(SportType)
-        SELECT 211--Allbet
+SELECT 138--ON Casino
+UNION ALL SELECT 211--Allbet
+        /*SELECT 211--Allbet
 UNION ALL SELECT 244--SA Gaming
 UNION ALL SELECT 176--FGG
 
@@ -47,27 +49,41 @@ UNION ALL SELECT 239--BG
 UNION ALL SELECT 159--YeeBet
 UNION ALL SELECT 136--W Casino
 UNION ALL SELECT 144--GPI Live Casino
+UNION ALL SELECT 119--OFA Live*/
 ;
 
+
+INSERT INTO dbo.Sport_Bettype_Reference_Setting(
+    SportType,BetType,isLicensee,isLive,
+    Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,StructureVerPT,
+    SportTypeRefComm,BetTypeRefComm,TableComm,StructureVerComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,TableBetSetting,StructureVerBetSetting,
+    IsLiveComm,IsLiveBetSetting)
+SELECT 
+    TMP.SportType,BetType,isLicensee,isLive,
+    'All' AS Site,isActive,
+    SportTypeRefPT,BetTypeRefPT,isLivePT,TablePT,StructureVerPT,
+    SportTypeRefComm,BetTypeRefComm,TableComm,StructureVerComm,
+    SportTypeRefBetSetting,BetTypeRefBetSetting,TableBetSetting,StructureVerBetSetting,
+    IsLiveComm,IsLiveBetSetting
+FROM dbo.Sport_Bettype_Reference_Setting AS TMP WITH (NOLOCK)
+    INNER JOIN #tbl_SportType_242260 AS SP ON TMP.SportType = SP.SportType
+    INNER JOIN (SELECT TOP 1 Site FROM #tbl_Site_242260 WHERE SiteLabel = '789y') SI ON SI.Site = TMP.Site /*Site = 'All'*/
+WHERE
+    TMP.isLicensee = 0
+;
 
 
 /*Site <> 'All'*/
 DELETE TMP
 FROM dbo.Sport_Bettype_Reference_Setting AS TMP WITH (ROWLOCK)
     INNER JOIN #tbl_SportType_242260 AS SP ON TMP.SportType = SP.SportType
-    INNER JOIN #tbl_Site_242260 SI ON SI.Site = TMP.Site 
+    --INNER JOIN #tbl_Site_242260 SI ON SI.Site = TMP.Site 
 AND TMP.isLicensee = 0
+    AND TMP.Site <> 'All'
 ;
 
-
-UPDATE TMP
-SET TMP.isActive = 1
-FROM dbo.Sport_Bettype_Reference_Setting AS TMP WITH (ROWLOCK)
-    INNER JOIN #tbl_SportType_242260 AS SP ON TMP.SportType = SP.SportType
-WHERE
-    TMP.isLicensee = 0
-    AND TMP.Site = 'All'
-    AND TMP.isActive = 0;
 
 
 DROP TABLE #tbl_Site_242260;

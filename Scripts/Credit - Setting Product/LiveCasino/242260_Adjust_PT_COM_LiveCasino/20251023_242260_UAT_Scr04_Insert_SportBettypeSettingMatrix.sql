@@ -61,7 +61,7 @@ SELECT
     2400 AS BetTypeRefPT,
     NULL AS SportTypeRefComm,
     NULL AS BetTypeRefComm
-FROM (VALUES (51),(57),(76),(90),(96),(98),(101),(107)
+FROM (VALUES (51),(57),(76),(90),(96),(98),(101),(107),(113)
 ) AS G3 (ProductID);
 
 /*DELETE SportBettypeSettingMatrix_UAT;*/

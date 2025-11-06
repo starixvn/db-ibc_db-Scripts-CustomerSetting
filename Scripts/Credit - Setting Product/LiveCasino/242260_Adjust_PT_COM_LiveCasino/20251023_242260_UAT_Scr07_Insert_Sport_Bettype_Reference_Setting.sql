@@ -42,7 +42,7 @@ CREATE TABLE #tbl_Reference_Setting_242260(
 
 CREATE TABLE #tbl_Site_242260(
     siteid	int,
-    site	nvarchar(50),
+    site	varchar(50),
     SiteLabel	varchar(50)
 );
 
@@ -81,6 +81,8 @@ UNION ALL SELECT 239--BG
 UNION ALL SELECT 159--YeeBet
 UNION ALL SELECT 136--W Casino
 UNION ALL SELECT 144--GPI Live Casino
+
+UNION ALL SELECT 119--OFA Live
 ;
 
 INSERT INTO #tbl_Reference_Setting_242260(
@@ -165,6 +167,7 @@ WHERE TMP.SiteLabel = 'MBC'
 159--YeeBet
 136--W Casino
 144--GPI Live Casino
+119--OFA Live
 */
 
 UPDATE TMP 
@@ -173,7 +176,7 @@ SET SportTypeRefPT = 9917,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144, 119)
 ;
 
 
@@ -208,6 +211,7 @@ WHERE TMP.SiteLabel = 'MBC'
 159--YeeBet
 136--W Casino
 144--GPI Live Casino
+119--OFA Live
 */
 
 UPDATE TMP 
@@ -217,7 +221,7 @@ SET SportTypeRefComm = NULL,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144, 119)
 ;
 
 

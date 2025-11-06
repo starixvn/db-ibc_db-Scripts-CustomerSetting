@@ -42,7 +42,7 @@ CREATE TABLE #tbl_Reference_Setting_242260(
 
 CREATE TABLE #tbl_Site_242260(
     siteid	int,
-    site	nvarchar(50),
+    site	varchar(50),
     SiteLabel	varchar(50)
 );
 
@@ -65,6 +65,7 @@ WHERE si.isActive = 1
 
 INSERT INTO #tbl_SportType_242260(SportType)
 SELECT 138--ON Casino
+UNION ALL SELECT 211--Allbet
         /*SELECT 211--Allbet
 UNION ALL SELECT 244--SA Gaming
 UNION ALL SELECT 176--FGG
@@ -81,7 +82,8 @@ UNION ALL SELECT 233--WM
 UNION ALL SELECT 239--BG
 UNION ALL SELECT 159--YeeBet
 UNION ALL SELECT 136--W Casino
-UNION ALL SELECT 144--GPI Live Casino*/
+UNION ALL SELECT 144--GPI Live Casino
+UNION ALL SELECT 119--OFA Live*/
 ;
 
 INSERT INTO #tbl_Reference_Setting_242260(
@@ -127,11 +129,10 @@ BEGIN
         IsLiveComm,IsLiveBetSetting,SiteLabel
     FROM dbo.Sport_Bettype_Reference_Setting AS TMP WITH (NOLOCK)
         INNER JOIN #tbl_SportType_242260 AS SP ON TMP.SportType = SP.SportType
-        INNER JOIN (SELECT TOP 1 Site FROM #tbl_Site_242260) SI ON SI.Site = TMP.Site /*Site = 'All'*/
+        INNER JOIN (SELECT TOP 1 CAST(Site AS VARCHAR(50)) Site FROM #tbl_Site_242260) SI ON SI.Site = TMP.Site /*Site = 'All'*/
         CROSS JOIN #tbl_Site_242260 AS SI2
     WHERE
         TMP.isLicensee = 0
-        AND TMP.isActive = 1
     ;
 
 END
@@ -168,6 +169,7 @@ WHERE TMP.SiteLabel = 'MBC'
 159--YeeBet
 136--W Casino
 144--GPI Live Casino
+119--OFA Live
 */
 
 UPDATE TMP 
@@ -176,7 +178,7 @@ SET SportTypeRefPT = 9917,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144, 119)
 ;
 
 
@@ -211,6 +213,7 @@ WHERE TMP.SiteLabel = 'MBC'
 159--YeeBet
 136--W Casino
 144--GPI Live Casino
+119--OFA Live
 */
 
 UPDATE TMP 
@@ -220,7 +223,7 @@ SET SportTypeRefComm = NULL,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144, 119)
 ;
 
 
@@ -248,7 +251,6 @@ IF EXISTS (
     WHERE
         TMP.isLicensee = 0
         AND TMP.Site = 'All'
-        AND TMP.isActive = 1
 )
 BEGIN
 
@@ -258,7 +260,6 @@ BEGIN
     WHERE
         TMP.isLicensee = 0
         AND TMP.Site = 'All'
-        AND TMP.isActive = 1
 
 END
 
