@@ -47,20 +47,6 @@ BEGIN
 		AND cs.SportType = 9911
 		AND cs.BetType = 2400
 
-	INSERT INTO [dbo].[CustDiscount3rd_Agent]
-		([CustID]
-		,[SportType]
-		,[BetType]
-		,[Discount]
-		,[RepUpdateTime])
-	SELECT CustID, t.SportType, t.BetType, Discount, dbo.f_GetDateTime2()
-	FROM CustDiscount3rd_Agent cs WITH(NOLOCK)
-		CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-						UNION ALL SELECT 9917, 2400) AS t
-	WHERE custid IN (SELECT custid FROM @tmpCust)
-		AND cs.SportType = 9911
-		AND cs.BetType = 2400   	
-
 	DELETE @tmpCust	
 END
 
@@ -93,23 +79,6 @@ BEGIN
 	WHERE custid IN (SELECT custid FROM @tmpCust)
 		AND cs.SportType = 9911
 		AND cs.BetType = 2400
-
-	INSERT INTO [dbo].[CustDiscount3rd_Member]
-		([CustID]
-		,[SportType]
-		,[BetType]
-		,[PlayerDiscount]
-		,[AgentDiscount]
-		,[MasterDiscount]
-		,[SuperDiscount]
-		,[RepUpdateTime])
-	SELECT CustID, t.SportType, t.BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount, dbo.f_GetDateTime2()
-	FROM CustDiscount3rd_Member cs WITH(NOLOCK)
-		CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-						UNION ALL SELECT 9917, 2400) AS t
-	WHERE custid IN (SELECT custid FROM @tmpCust)
-		AND cs.SportType = 9911
-		AND cs.BetType = 2400   
 
 	DELETE @tmpCust		
 END

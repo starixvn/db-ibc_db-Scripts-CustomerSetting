@@ -6,7 +6,6 @@
 */
 DECLARE @maxCustid INT = xxx
 DECLARE @__delaytime VARCHAR(10)
-SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
 
 CREATE TABLE #tblSMA(CustID INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, isfinished BIT DEFAULT(0))
 CREATE TABLE #tblDirectMember (CustID INT PRIMARY KEY,srecommend INT, mrecommend INT, recommend INT)
@@ -61,6 +60,7 @@ SELECT DISTINCT ci.custid, ci.roleid, ci.srecommend
 		AND c.Enabled=1				
 		AND c.custid NOT IN (SELECT mrecommend FROM #PhoneBetting)		
 		AND ci.custid <= @maxCustid
+		AND ci.srecommend <> 15 -- SA-IN
 
 --Direct agents exclude who has  phone betting	members
 INSERT INTO #tblSMA(CustID,roleid,srecommend,mrecommend)
@@ -73,6 +73,7 @@ WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustI
 	AND c.Enabled=1		
 	AND c.custid NOT IN (SELECT recommend FROM #PhoneBetting)		
 	AND ci.custid <= @maxCustid
+	AND ci.srecommend <> 15 -- SA-IN
 
 --Direct members 
 INSERT INTO #tblDirectMember(CustID,srecommend,mrecommend,recommend)
@@ -84,7 +85,8 @@ WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustI
 	AND ci.site IN ('BEST-ODDS','611111','733333','755555','222223','7aa666','KORIBC','722222','XYZBet')		
 	AND c.Enabled=1				
 	AND ci.custid <= @maxCustid
-
+	AND ci.srecommend <> 15 -- SA-IN
+	
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @custid INT, @roleid TINYINT, @srecommend INT, @mrecommend INT, @recommend INT
 
@@ -169,22 +171,12 @@ BEGIN
 		WHERE custid IN (SELECT custid FROM @tmpCust)
 			AND cs.SportType = 9911
 			AND cs.BetType = 2400
-
-		INSERT INTO [dbo].[CustDiscount3rd_Agent]
-           ([CustID]
-           ,[SportType]
-           ,[BetType]
-           ,[Discount]
-           ,[RepUpdateTime])
-		SELECT CustID, t.SportType, t.BetType, Discount, dbo.f_GetDateTime2()
-		FROM CustDiscount3rd_Agent cs WITH(NOLOCK)
-			CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-						 UNION ALL SELECT 9917, 2400) AS t
-		WHERE custid IN (SELECT custid FROM @tmpCust)
-			AND cs.SportType = 9911
-			AND cs.BetType = 2400
+			AND NOT EXISTS (SELECT 1 FROM dbo.CustPTSetting3rd_Agent cs2 WITH(NOLOCK) WHERE cs2.CustID = cs.CustID AND cs2.SportType = t.SportType AND cs2.BetType = t.BetType)
 
 		DELETE @tmpCust	
+
+		SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
+		WAITFOR DELAY @__delaytime 
 	END
 
 	WHILE (1=1)
@@ -216,28 +208,14 @@ BEGIN
 		WHERE custid IN (SELECT custid FROM @tmpCust)
 			AND cs.SportType = 9911
 			AND cs.BetType = 2400
-
-		INSERT INTO [dbo].[CustDiscount3rd_Member]
-           ([CustID]
-           ,[SportType]
-           ,[BetType]
-           ,[PlayerDiscount]
-           ,[AgentDiscount]
-           ,[MasterDiscount]
-           ,[SuperDiscount]
-           ,[RepUpdateTime])
-		SELECT CustID, t.SportType, t.BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount, dbo.f_GetDateTime2()
-		FROM CustDiscount3rd_Member cs WITH(NOLOCK)
-			CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-						 UNION ALL SELECT 9917, 2400) AS t
-		WHERE custid IN (SELECT custid FROM @tmpCust)
-			AND cs.SportType = 9911
-			AND cs.BetType = 2400
+			AND NOT EXISTS (SELECT 1 FROM dbo.CustPTSetting3rd_Member cs2 WITH(NOLOCK) WHERE cs2.CustID = cs.CustID AND cs2.SportType = t.SportType AND cs2.BetType = t.BetType)
 
 		DELETE @tmpCust		
-	END
 
-	WAITFOR DELAY @__delaytime 
+		SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
+		WAITFOR DELAY @__delaytime 
+	END
+	
 END	
 
 --Insert for dummy accounts
@@ -281,38 +259,7 @@ FROM  CustPTSetting3rd_Agent cs WITH(NOLOCK)
 WHERE custid IN (SELECT DISTINCT custid FROM T)
 	AND cs.SportType = 9911
 	AND cs.BetType = 2400
-
-;WITH t AS (
-	SELECT DISTINCT srecommend AS CustID
-	FROM #tblSMA
-	WHERE roleid IN (2,3)
-	UNION 
-	SELECT DISTINCT mrecommend AS CustID
-	FROM #tblSMA
-	WHERE roleid IN (2)
-	UNION 
-	SELECT DISTINCT srecommend AS CustID
-	FROM #tblDirectMember
-	UNION 
-	SELECT DISTINCT mrecommend AS CustID
-	FROM #tblDirectMember
-	UNION 
-	SELECT DISTINCT recommend AS CustID
-	FROM #tblDirectMember
-)
-INSERT INTO [dbo].[CustDiscount3rd_Agent]
-           ([CustID]
-           ,[SportType]
-           ,[BetType]
-           ,[Discount]
-           ,[RepUpdateTime])
-SELECT CustID, t.SportType, t.BetType, Discount, dbo.f_GetDateTime2()
-FROM CustDiscount3rd_Agent cs WITH(NOLOCK)
-	CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-					UNION ALL SELECT 9917, 2400) AS t
-WHERE custid IN (SELECT custid FROM T)
-	AND cs.SportType = 9911
-	AND cs.BetType = 2400
+	AND NOT EXISTS (SELECT 1 FROM dbo.CustPTSetting3rd_Agent cs2 WITH(NOLOCK) WHERE cs2.CustID = cs.CustID AND cs2.SportType = t.SportType AND cs2.BetType = t.BetType)
 
 --insert for direct members
 WHILE (1=1)
@@ -343,25 +290,12 @@ BEGIN
 	WHERE custid IN (SELECT custid FROM @tmpCust)
 		AND cs.SportType = 9911
 		AND cs.BetType = 2400
-
-	INSERT INTO [dbo].[CustDiscount3rd_Member]
-			([CustID]
-			,[SportType]
-			,[BetType]
-			,[PlayerDiscount]
-			,[AgentDiscount]
-			,[MasterDiscount]
-			,[SuperDiscount]
-			,[RepUpdateTime])
-	SELECT CustID, t.SportType, t.BetType, PlayerDiscount, AgentDiscount, MasterDiscount, SuperDiscount, dbo.f_GetDateTime2()
-	FROM CustDiscount3rd_Member cs WITH(NOLOCK)
-		CROSS APPLY (SELECT 9916 as SportType, 2400 as BetType			
-						UNION ALL SELECT 9917, 2400) AS t
-	WHERE custid IN (SELECT custid FROM @tmpCust)
-		AND cs.SportType = 9911
-		AND cs.BetType = 2400
+		AND NOT EXISTS (SELECT 1 FROM dbo.CustPTSetting3rd_Member cs2 WITH(NOLOCK) WHERE cs2.CustID = cs.CustID AND cs2.SportType = t.SportType AND cs2.BetType = t.BetType)
 
 	DELETE @tmpCust	
+	
+	SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
+	WAITFOR DELAY @__delaytime 
 END 
 
 DROP TABLE #tblSMA	

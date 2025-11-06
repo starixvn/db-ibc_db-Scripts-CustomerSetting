@@ -6,6 +6,7 @@
 */
 DECLARE @maxCustid INT =xxx
 DECLARE @LastUpdateTime DATETIME = 'yyy'
+DECLARE @__delaytime VARCHAR(10)
 
 CREATE TABLE #tblSMA(CustID INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, isfinished BIT DEFAULT(0))
 CREATE TABLE #tblDirectMember (CustID INT PRIMARY KEY,srecommend INT, mrecommend INT, recommend INT)
@@ -84,7 +85,7 @@ WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustI
 	AND c.Enabled=1				
 	AND ci.custid <= @maxCustid
 
---get list customer have changed PT/Comm during copying settings
+--get list customer have changed PT during copying settings
 INSERT INTO #tblCust(CustID)
 SELECT ci.custid
 FROM CustPTSetting3rd_Agent cs1 WITH(NOLOCK)
@@ -138,47 +139,11 @@ BEGIN
 		AND cs2.BetType = 2400	
 
 	DELETE @tmpCust	
+
+	SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
+	WAITFOR DELAY @__delaytime 
 END
 
---get list customer have changed Discount during copying settings
-INSERT INTO #tblCust(CustID)
-SELECT ci.custid
-FROM CustDiscount3rd_Agent cs1 WITH(NOLOCK)
-	INNER JOIN custinfo ci WITH (NOLOCK) ON cs1.custid = ci.custid
-	INNER JOIN CustDiscount3rd_Agent cs2 WITH(NOLOCK) ON ci.custid = cs2.custid
-WHERE cs1.SportType = 9911
-	AND cs1.BetType = 2400
-	AND cs2.SportType = 9916
-	AND cs2.BetType = 2400
-	AND ci.custid <= @maxCustid
-	AND (ci.srecommend IN (SELECT custid FROM #tblSMA WHERE roleid = 4)
-		OR ci.mrecommend IN (SELECT custid FROM #tblSMA WHERE roleid = 3)
-		OR ci.recommend IN (SELECT custid FROM #tblSMA WHERE roleid = 2))
-	AND ci.roleid IN (2,3,4)
-	AND cs1.RepUpdateTime >= @LastUpdateTime
-	AND (cs1.Discount <> cs2.Discount) 
-
-WHILE (1=1)
-BEGIN
-	DELETE TOP (1000) t
-	OUTPUT DELETED.CustID INTO @tmpCust(custid)
-	FROM #tblCust t
-	
-	IF @@ROWCOUNT =0 BREAK;
-
-	UPDATE cs
-	SET cs.Discount = cs2.Discount,
-			cs.RepUpdateTime = dbo.f_GetDateTime2()
-	FROM CustDiscount3rd_Agent cs WITH(ROWLOCK)
-		INNER JOIN CustDiscount3rd_Agent cs2 WITH(ROWLOCK) ON cs.CustID = cs2.CustID
-	WHERE cs.custid IN (SELECT custid FROM @tmpCust)
-		AND cs.SportType IN (9916,9917)
-		AND cs.BetType = 2400
-		AND cs2.SportType = 9911
-		AND cs2.BetType = 2400
-
-	DELETE @tmpCust		
-END	
 
 --get list members change settings
 INSERT INTO #tblCust(CustID)
@@ -232,53 +197,9 @@ BEGIN
 		AND cs2.BetType = 2400
 
 	DELETE @tmpCust	
-END
 
-INSERT INTO #tblCust(CustID)
-SELECT DISTINCT ci.custid
-FROM CustDiscount3rd_Member cs1 WITH(NOLOCK)
-	INNER JOIN custinfo ci WITH (NOLOCK) ON cs1.custid = ci.custid
-	INNER JOIN CustDiscount3rd_Member cs2 WITH(NOLOCK) ON ci.custid = cs2.custid
-WHERE cs1.SportType = 9911
-	AND cs1.BetType = 2400
-	AND cs2.SportType = 9916
-	AND cs2.BetType = 2400
-	AND ci.custid <= @maxCustid
-	AND (ci.srecommend IN (SELECT custid FROM #tblSMA WHERE roleid = 4)
-		OR ci.mrecommend IN (SELECT custid FROM #tblSMA WHERE roleid = 3)
-		OR ci.recommend IN (SELECT custid FROM #tblSMA WHERE roleid = 2)
-		OR ci.custid IN (SELECT custid FROM #tblDirectMember))
-	AND ci.roleid = 1	
-	AND cs1.RepUpdateTime >= @LastUpdateTime
-	AND (cs2.PlayerDiscount <> cs1.PlayerDiscount 
-		OR cs2.AgentDiscount <> cs1.AgentDiscount 
-		OR cs2.MasterDiscount <> cs1.MasterDiscount 
-		OR cs2.SuperDiscount <> cs1.SuperDiscount)
-
-
-WHILE (1=1)
-BEGIN
-	DELETE TOP (1000) t
-	OUTPUT DELETED.CustID INTO @tmpCust(custid)
-	FROM #tblCust t
-	
-	IF @@ROWCOUNT =0 BREAK;
-
-	UPDATE cs
-	SET cs.PlayerDiscount = cs2.PlayerDiscount,
-			cs.AgentDiscount = cs2.AgentDiscount,
-			cs.MasterDiscount = cs2.MasterDiscount,
-			cs.SuperDiscount = cs2.SuperDiscount,
-			cs.RepUpdateTime = dbo.f_GetDateTime2()
-	FROM CustDiscount3rd_Member cs WITH(ROWLOCK)
-		INNER JOIN CustDiscount3rd_Member cs2 WITH(ROWLOCK) ON cs.CustID = cs2.CustID
-	WHERE cs.custid IN (SELECT custid FROM @tmpCust)
-		AND cs.SportType IN (9916,9917)
-		AND cs.BetType = 2400
-		AND cs2.SportType = 9911
-		AND cs2.BetType = 2400
-
-	DELETE @tmpCust
+	SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
+	WAITFOR DELAY @__delaytime 
 END
 		
 DROP TABLE #tblSMA	

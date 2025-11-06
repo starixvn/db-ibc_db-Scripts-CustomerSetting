@@ -5,7 +5,6 @@
 	DB: DBCust/CustDB	
 */
 DECLARE @__delaytime VARCHAR(10)
-SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
 
 CREATE TABLE #tblSMA(CustID INT, roleid TINYINT, srecommend INT, mrecommend INT, recommend INT, isfinished BIT DEFAULT(0))
 CREATE TABLE #tblDirectMember (CustID INT PRIMARY KEY,srecommend INT, mrecommend INT, recommend INT)
@@ -83,13 +82,10 @@ WHERE  EXISTS (SELECT custid FROM dbo.CustDirectAccount WITH(NOLOCK) WHERE CustI
 -- For deployer info
 DECLARE @super_cnt INT, @index INT = 0, @custid INT, @roleid TINYINT, @srecommend INT, @mrecommend INT, @recommend INT
 
-DECLARE @PT SMALLMONEY = 90,
-		@Discount DECIMAL(9,8) = 0.008,
-        @xmlDiscount VARCHAR(MAX),
+DECLARE @PT SMALLMONEY = 90,		
         @xmlPT VARCHAR(MAX)
 
-SELECT @xmlPT = '<ROOT><PT SportType="9917" BetType="2400" IsLive="0"/></ROOT>',
-	@xmlDiscount = '<ROOT><Discount SportType="9916" BetType="2400" Discount="0.008"/></ROOT>'
+SELECT @xmlPT = '<ROOT><PT SportType="9917" BetType="2400" IsLive="0"/></ROOT>'
 
 SET @super_cnt = (SELECT COUNT(*) FROM #tblSMA )
 
@@ -168,7 +164,8 @@ BEGIN
 	ELSE IF @roleid = 2
 	BEGIN
 		UPDATE cs
-		SET cs.AgentPT = @PT
+		SET cs.MasterPT = 0
+			,cs.AgentPT = @PT
 			,cs.MinPT = @PT
 			,RepUpdateTime = dbo.f_GetDateTime2()	
 		FROM CustPTSetting3rd_Agent cs WITH(UPDLOCK,ROWLOCK)
@@ -193,13 +190,7 @@ BEGIN
 			,@SportBettypeXML = @xmlPT
 	END
 
-	--Update Comm
-	EXEC dbo.Acc_DynamicCustSetting3rd_06
-			@CustId			= @custid,
-			@RoleId			= @RoleId,
-			@SettingType		= 19,
-			@Discount_XML		= @xmlDiscount
-
+	SELECT @__delaytime = dbo.f_DelayTime('CS_Adhoc')
 	WAITFOR DELAY @__delaytime
 END    
 
@@ -222,23 +213,6 @@ WHERE SportType = 9917
 	AND BetType = 2400	
 	AND cs.custid IN (SELECT DISTINCT CustID FROM t)
 
---update Comm for dummy supers
-;WITH t AS (
-	SELECT DISTINCT srecommend AS CustID
-	FROM #tblSMA
-	WHERE roleid IN (2,3)	
-	UNION 
-	SELECT DISTINCT srecommend AS CustID
-	FROM #tblDirectMember
-)
-UPDATE cs
-SET Discount = @Discount	
-	,RepUpdateTime = dbo.f_GetDateTime2()
-FROM CustDiscount3rd_Agent cs WITH(UPDLOCK,ROWLOCK)	
-WHERE SportType = 9916
-	AND BetType = 2400	
-	AND cs.custid IN (SELECT DISTINCT CustID FROM t)
-
 --update PT for dummy masters
 ;WITH t AS (
 	SELECT DISTINCT mrecommend AS CustID
@@ -254,16 +228,9 @@ WHERE SportType = 9917
 	AND BetType = 2400		
 	AND cs.custid IN (SELECT CustID FROM t)
 
---update Comm for dummy masters
-;WITH t AS (
-	SELECT DISTINCT mrecommend AS CustID
-	FROM #tblSMA
-	WHERE roleid IN (2)		
-)
-UPDATE cs
-SET Discount = @Discount	
-	,RepUpdateTime = dbo.f_GetDateTime2()
-FROM CustDiscount3rd_Agent cs WITH(UPDLOCK,ROWLOCK)	
-WHERE SportType = 9916
-	AND BetType = 2400	
-	AND cs.custid IN (SELECT DISTINCT CustID FROM t)
+DROP TABLE #tblSMA	
+DROP TABLE #tblCust
+DROP TABLE #tblDirectMember
+DROP TABLE #dummySuper	
+DROP TABLE #PhoneBetting
+GO
