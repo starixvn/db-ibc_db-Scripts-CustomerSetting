@@ -143,6 +143,7 @@ END
 170--PP Live Casino
 225--ION
 228--WE Live Casino
+243--AE Sexy
 */
 
 UPDATE TMP 
@@ -151,12 +152,11 @@ SET SportTypeRefPT = 9916,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (211, 244, 176, 170, 225, 228)
+    AND TMP.SportType IN (211, 244, 176, 170, 225, 228, 243)
 ;
 
 -----------------MBC PT 90%
 /*
-243--AE Sexy
 138--ON Casino
 129--Playtech Live
 124--Microgaming Live
@@ -173,46 +173,33 @@ SET SportTypeRefPT = 9917,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (243, 138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
 ;
 
-
------------------MBC COMM 0.8
-/*
-211--Allbet
-244--SA Gaming
-*/
-
-UPDATE TMP 
-SET SportTypeRefComm = 9916,
-    BetTypeRefComm = 2400
-FROM #tbl_Reference_Setting_242260 AS TMP
-WHERE TMP.SiteLabel = 'MBC'
-    AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (211, 244)
-;
 
 -----------------MBC COMM 0.5
 /*
+not change dummy SportType
+211--Allbet
+244--SA Gaming
 176--FGG
 170--PP Live Casino
 225--ION
 228--WE Live Casino
+243--AE Sexy
 */
 
 UPDATE TMP 
-SET SportTypeRefComm = 9917,
+SET SportTypeRefComm = 9911,
     BetTypeRefComm = 2400
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (176, 170, 225, 228)
+    AND TMP.SportType IN (211, 244, 176, 170, 225, 228, 243)
 ;
-
 
 -----------------MBC COMM 0
 /*
-243--AE Sexy
 138--ON Casino
 129--Playtech Live
 124--Microgaming Live
@@ -230,7 +217,7 @@ SET SportTypeRefComm = NULL,
 FROM #tbl_Reference_Setting_242260 AS TMP
 WHERE TMP.SiteLabel = 'MBC'
     AND TMP.Site <> 'INDO'
-    AND TMP.SportType IN (243, 138, 129, 124, 233, 239, 159, 136, 144)
+    AND TMP.SportType IN (138, 129, 124, 233, 239, 159, 136, 144)
 ;
 
 
@@ -238,7 +225,10 @@ WHERE TMP.SiteLabel = 'MBC'
 /*All product*/
 
 UPDATE TMP 
-SET SportTypeRefComm = NULL,
+SET 
+    SportTypeRefPT = 9911,
+    BetTypeRefPT = 2400,
+    SportTypeRefComm = NULL,
     BetTypeRefComm = NULL,
     TableComm = NULL
 FROM #tbl_Reference_Setting_242260 AS TMP

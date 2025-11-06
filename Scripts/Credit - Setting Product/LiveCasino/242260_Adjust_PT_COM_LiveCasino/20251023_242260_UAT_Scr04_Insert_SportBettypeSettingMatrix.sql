@@ -50,18 +50,9 @@ SELECT
     ProductID,
     9916 AS SportTypeRefPT,/*85*/
     2400 AS BetTypeRefPT,
-    9916 AS SportTypeRefComm,/*0.8*/
+    9911 AS SportTypeRefComm,/*not change dummy sportType*/
     2400 AS BetTypeRefComm
-FROM (VALUES (21),(39)
-) AS G2 (ProductID)
-UNION ALL
-SELECT 
-    ProductID,
-    9916 AS SportTypeRefPT,/*85*/
-    2400 AS BetTypeRefPT,
-    9917 AS SportTypeRefComm,/*0.5*/
-    2400 AS BetTypeRefComm
-FROM (VALUES (65),(52),(80),(70)
+FROM (VALUES (21),(39),(65),(52),(80),(70),(45)
 ) AS G2 (ProductID)
 UNION ALL
 SELECT 
@@ -70,7 +61,7 @@ SELECT
     2400 AS BetTypeRefPT,
     NULL AS SportTypeRefComm,
     NULL AS BetTypeRefComm
-FROM (VALUES (45),(51),(57),(76),(90),(96),(98),(101),(107)
+FROM (VALUES (51),(57),(76),(90),(96),(98),(101),(107)
 ) AS G3 (ProductID);
 
 /*DELETE SportBettypeSettingMatrix_UAT;*/
