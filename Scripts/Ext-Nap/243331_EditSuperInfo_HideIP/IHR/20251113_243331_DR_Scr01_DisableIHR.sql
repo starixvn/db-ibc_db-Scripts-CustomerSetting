@@ -1,0 +1,15 @@
+/*<info serverAlias="DBCUST-CustDB"></info>*/
+/*
+	Created: 20251113@Dave
+	Task: EXT - Allow Headline to hide IP info of their downlines [Redmine:#243331]
+	DB: DBCUST.CustDB
+*/
+
+IF EXISTS (SELECT 1 FROM dbo.RepInfo WITH (NOLOCK) WHERE [name] = 'CustSuper')
+BEGIN
+	UPDATE RepInfo
+	SET active = 0
+	WHERE [name] =  'CustSuper';
+	SELECT 'Deactivated RepInfo entry for CustSuper' AS Message;
+END
+GO
